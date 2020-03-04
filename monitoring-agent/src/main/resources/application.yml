@@ -1,0 +1,31 @@
+##############################################server配置#################################################
+server:
+  servlet:
+    context-path: /monitoring-agent
+  undertow:
+    accesslog:
+      #Undertow日志存放目录
+      dir: logs/monitoring-agent
+      #是否启动日志
+      enabled: true 
+      #日志格式
+      pattern: common
+      #日志文件名前缀
+      prefix: access_log
+      #日志文件名后缀
+      suffix: .log
+
+  
+###############################################spring配置#################################################
+spring:
+  #main:
+    #支持名称相同的bean的覆盖
+    #allow-bean-definition-overriding: true
+  application:
+    name: monitoring-agent
+  profiles:
+    active:
+    - dev
+  devtools:
+    livereload:
+      port: 35730

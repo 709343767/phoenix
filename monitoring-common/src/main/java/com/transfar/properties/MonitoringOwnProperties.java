@@ -1,0 +1,27 @@
+package com.transfar.properties;
+
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+import lombok.experimental.Accessors;
+
+/**
+ * <p>
+ * 与自己相关的监控配置
+ * </p>
+ *
+ * @author 皮锋
+ * @custom.date 2020年3月4日 下午3:07:32
+ */
+@Data
+@ToString
+@NoArgsConstructor
+@Accessors(chain = true)
+public class MonitoringOwnProperties {
+
+	/**
+	 * 实例名称
+	 */
+	private String instanceName;
+
+}

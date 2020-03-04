@@ -1,0 +1,26 @@
+package com.transfar.business.annotation;
+
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+/**
+ * <p>
+ * 自定义代理接口注解
+ * </p>
+ *
+ * @author 皮锋
+ * @custom.date 2020年3月4日 下午1:58:22
+ */
+@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+public @interface TargetInf {
+
+    /**
+     * 指定接口
+     */
+    Class<?> inf();
+}
