@@ -7,21 +7,21 @@ import lombok.experimental.Accessors;
 
 /**
  * <p>
- * 与自己相关的监控属性
+ * 心跳属性
  * </p>
  *
  * @author 皮锋
- * @custom.date 2020年3月4日 下午3:07:32
+ * @custom.date 2020年3月5日 下午3:23:02
  */
 @Data
 @ToString
 @NoArgsConstructor
 @Accessors(chain = true)
-public class MonitoringOwnProperties {
+public class MonitoringHeartbeatProperties {
 
 	/**
-	 * 实例名称
+	 * 心跳频率
 	 */
-	private String instanceName;
+	private long rate;
 
 }

@@ -5,7 +5,6 @@ import java.util.List;
 import org.hyperic.sigar.SigarException;
 import org.junit.Test;
 
-import com.transfar.domain.server.AppServerDomain;
 import com.transfar.domain.server.CpuDomain;
 import com.transfar.domain.server.JvmDomain;
 import com.transfar.domain.server.MemoryDomain;
@@ -32,12 +31,11 @@ public class ServerTest {
 	 * @author 皮锋
 	 * @custom.date 2020年3月3日 下午2:10:39
 	 */
-	@Test
-	public void testGetAppServerInfo() {
-		AppServerDomain appServerVo = SigarUtils.getAppServerInfo();
-		System.out.println(appServerVo.toString());
-
-	}
+	// @Test
+	// public void testGetAppServerInfo() {
+	// AppServerDomain appServerVo = SigarUtils.getAppServerInfo();
+	// System.out.println(appServerVo.toString());
+	// }
 
 	/**
 	 * <p>

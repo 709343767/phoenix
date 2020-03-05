@@ -5,15 +5,10 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.InetAddress;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 import java.util.TimeZone;
-
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
 
 import org.hyperic.jni.ArchNotSupportedException;
 import org.hyperic.sigar.CpuInfo;
@@ -24,12 +19,8 @@ import org.hyperic.sigar.NetInterfaceConfig;
 import org.hyperic.sigar.Sigar;
 import org.hyperic.sigar.SigarException;
 import org.hyperic.sigar.SigarLoader;
-import org.springframework.core.io.DefaultResourceLoader;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.ResourceLoader;
 
 import com.google.common.collect.Lists;
-import com.transfar.domain.server.AppServerDomain;
 import com.transfar.domain.server.CpuDomain;
 import com.transfar.domain.server.JvmDomain;
 import com.transfar.domain.server.MemoryDomain;
@@ -37,6 +28,7 @@ import com.transfar.domain.server.NetDomain;
 import com.transfar.domain.server.OsDomain;
 import com.transfar.domain.server.ServerInfoDomain;
 
+import lombok.Cleanup;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -97,63 +89,50 @@ public final class SigarUtils {
 		SigarLoader loader = new SigarLoader(Sigar.class);
 		String lib = loader.getLibraryName();
 		log.info("初始化Sigar库文件：{}", lib);
-		ResourceLoader resourceLoader = new DefaultResourceLoader();
-		Resource resource = resourceLoader.getResource("classpath:/sigar.so/" + lib);
-		if (resource.exists()) {
-			InputStream is = resource.getInputStream();
-			// 当前文件夹路径
-			String currentDir = props.getProperty("user.dir");
-			File tempDir = new File(
-					currentDir + File.separator + "tmp" + File.separator + "sigar" + File.separator + "lib");
-			if (!tempDir.exists()) {
-				tempDir.mkdirs();
-			}
-			BufferedOutputStream os = new BufferedOutputStream(new FileOutputStream(new File(tempDir, lib), false));
-			int lentgh;
-			while ((lentgh = is.read()) != -1) {
-				os.write(lentgh);
-			}
-			is.close();
-			os.close();
-			System.setProperty("org.hyperic.sigar.path", tempDir.getCanonicalPath());
-			log.info("org.hyperic.sigar.path：{}", System.getProperty("org.hyperic.sigar.path"));
+		@Cleanup
+		InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream("sigar.so/" + lib);
+		// 当前文件夹路径
+		String currentDir = props.getProperty("user.dir");
+		File tempDir = new File(
+				currentDir + File.separator + "tmp" + File.separator + "sigar" + File.separator + "lib");
+		if (!tempDir.exists()) {
+			tempDir.mkdirs();
 		}
-
+		@Cleanup
+		BufferedOutputStream os = new BufferedOutputStream(new FileOutputStream(new File(tempDir, lib), false));
+		int lentgh;
+		assert is != null;
+		while ((lentgh = is.read()) != -1) {
+			os.write(lentgh);
+		}
+		System.setProperty("org.hyperic.sigar.path", tempDir.getCanonicalPath());
+		log.info("org.hyperic.sigar.path：{}", System.getProperty("org.hyperic.sigar.path"));
 	}
 
-	/**
-	 * <p>
-	 * 获取应用服务器信息
-	 * </p>
+	/*
+	 * <p> 获取应用服务器信息 </p>
 	 *
 	 * @return AppServerDomain
+	 * 
 	 * @author 皮锋
+	 * 
 	 * @custom.date 2020年3月3日 下午1:49:16
 	 */
-	public static AppServerDomain getAppServerInfo() {
-		try {
-			InetAddress address = InetAddress.getLocalHost();
-			HttpServletRequest request = ServletContextUtils.getRequest();
-			ServletContext application = request.getSession().getServletContext();
-			// ip
-			String ip = address.getHostAddress();
-			// url
-			String url = request.getScheme() // 请求头
-					+ "://" + address.getHostAddress() // 服务器地址
-					+ ":" + request.getServerPort() // 端口号
-					+ request.getContextPath(); // 项目名称
-
-			// 服务器类型
-			String serverType = application.getServerInfo();
-			// 服务器时间
-			Date serverTime = new Date();
-			return AppServerDomain.builder().serverIP(ip).serverURL(url).serverType(serverType).serverTime(serverTime)
-					.build();
-		} catch (Exception e) {
-			// 没有应用服务器，返回空对象
-			return AppServerDomain.builder().build();
-		}
-	}
+	/*
+	 * public static AppServerDomain getAppServerInfo() { try { InetAddress address
+	 * = InetAddress.getLocalHost(); HttpServletRequest request =
+	 * ServletContextUtils.getRequest(); ServletContext application =
+	 * request.getSession().getServletContext(); // ip String ip =
+	 * address.getHostAddress(); // url String url = request.getScheme() // 请求头 +
+	 * "://" + address.getHostAddress() // 服务器地址 + ":" + request.getServerPort() //
+	 * 端口号 + request.getContextPath(); // 项目名称
+	 * 
+	 * // 服务器类型 String serverType = application.getServerInfo(); // 服务器时间 Date
+	 * serverTime = new Date(); return
+	 * AppServerDomain.builder().serverIP(ip).serverURL(url).serverType(serverType).
+	 * serverTime(serverTime) .build(); } catch (Exception e) { // 没有应用服务器，返回空对象
+	 * return AppServerDomain.builder().build(); } }
+	 */
 
 	/**
 	 * <p>
@@ -298,7 +277,7 @@ public final class SigarUtils {
 	 */
 	public static ServerInfoDomain getServerInfo() throws SigarException {
 		return ServerInfoDomain.builder()//
-				.appServerDomain(getAppServerInfo())//
+				// .appServerDomain(getAppServerInfo())//
 				.cpuDomain(getCpuInfo())//
 				.jvmDomain(getJvmInfo())//
 				.memoryDomain(getMemoryInfo())//

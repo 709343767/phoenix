@@ -2,9 +2,11 @@ package com.transfar.business.plug.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.alibaba.fastjson.JSON;
 import com.transfar.business.plug.service.IHeartbeatService;
 import com.transfar.dto.HeartbeatPackage;
 
@@ -35,14 +37,15 @@ public class HeartbeatController {
 	 * 监控代理程序接收监控客户端程序发的心跳包，并返回结果
 	 * </p>
 	 *
-	 * @param heartbeatPackage 心跳包对象
+	 * @param request 请求参数
 	 * @return HeartbeatPackage
 	 * @author 皮锋
 	 * @custom.date 2020年3月4日 下午12:27:47
 	 */
 	@ApiOperation(value = "监控代理程序接收监控客户端程序发的心跳包，并返回结果", notes = "接收心跳包")
 	@PostMapping("/accept-heartbeat-package")
-	public HeartbeatPackage acceptHeartbeatPackage(HeartbeatPackage heartbeatPackage) {
+	public HeartbeatPackage acceptHeartbeatPackage(@RequestBody(required = true) String request) {
+		HeartbeatPackage heartbeatPackage = JSON.parseObject(request, HeartbeatPackage.class);
 		return this.heartbeatService.dealHeartbeatPackage(heartbeatPackage);
 	}
 

@@ -1,13 +1,17 @@
 package com.transfar.util;
 
-import lombok.Cleanup;
-import lombok.SneakyThrows;
-import lombok.extern.slf4j.Slf4j;
-
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.Properties;
 import java.util.ResourceBundle;
+
+import lombok.Cleanup;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * <p>
@@ -104,10 +108,10 @@ public final class PropertiesUtils {
 	 * @param filePath 文件路径
 	 * @return Properties
 	 * @author 皮锋
+	 * @throws IOException IO异常
 	 * @custom.date 2020年3月5日 上午11:41:13
 	 */
-	@SneakyThrows
-	public static Properties loadProperties(final String filePath) {
+	public static Properties loadProperties(final String filePath) throws IOException {
 		// 属性集合对象
 		Properties properties = new Properties();
 		// 获取路径并转换成流
