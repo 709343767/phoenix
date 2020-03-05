@@ -6,7 +6,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.transfar.dto.HeartbeatDto;
+import com.transfar.business.server.dto.ServerResponseHeartbeatPackage;
+import com.transfar.dto.HeartbeatPackage;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -29,15 +30,17 @@ public class HeartbeatController {
 	 * 监控服务端程序接收监控代理程序发的心跳包，并返回结果
 	 * </p>
 	 *
-	 * @param heartbeatDto 心跳对象
-	 * @return HeartbeatDto
+	 * @param heartbeatPackage 心跳包对象
+	 * @return HeartbeatPackage
 	 * @author 皮锋
 	 * @custom.date 2020年3月4日 下午12:27:47
 	 */
 	@ApiOperation(value = "监控服务端程序接收监控代理程序发的心跳包，并返回结果", notes = "接收心跳包")
 	@PostMapping("/accept-heartbeat-package")
-	public HeartbeatDto acceptHeartbeatPackage(HeartbeatDto heartbeatDto) {
-		return new HeartbeatDto().setInstanceName("server").setDateTime(new Date()).setResult(true);
+	public HeartbeatPackage acceptHeartbeatPackage(HeartbeatPackage heartbeatPackage) {
+		return new ServerResponseHeartbeatPackage()//
+				.setDateTime(new Date())//
+				.setResult(true);
 	}
 
 }

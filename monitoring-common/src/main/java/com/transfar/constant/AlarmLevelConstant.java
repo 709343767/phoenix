@@ -1,4 +1,4 @@
-package com.transfar.common;
+package com.transfar.constant;
 
 /**
  * <p>
@@ -8,7 +8,7 @@ package com.transfar.common;
  * @author 皮锋
  * @custom.date 2020/3/3 10:06
  */
-public final class AlarmLevel {
+public final class AlarmLevelConstant {
 
     /**
      * 消息

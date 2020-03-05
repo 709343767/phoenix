@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.transfar.business.server.service.IHeartbeatService;
-import com.transfar.dto.HeartbeatDto;
+import com.transfar.dto.HeartbeatPackage;
 
 /**
  * <p>
@@ -38,19 +38,19 @@ public class HeartbeatServiceImpl implements IHeartbeatService {
 	 * 给服务端发心跳包
 	 * </p>
 	 *
-	 * @param heartbeatDto 心跳对象
-	 * @return HeartbeatDto
+	 * @param heartbeatPackage 心跳包对象
+	 * @return HeartbeatPackage
 	 * @author 皮锋
 	 * @custom.date 2020年3月4日 下午2:16:07
 	 */
 	@Override
-	public HeartbeatDto sendHeartbeatPackage(HeartbeatDto heartbeatDto) {
+	public HeartbeatPackage sendHeartbeatPackage(HeartbeatPackage heartbeatPackage) {
 		// String url = ConfigAnalysis.getServerUrl() + MAPPING_URL;
 		HttpHeaders headers = new HttpHeaders();
 		headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-		HttpEntity<HeartbeatDto> entity = new HttpEntity<>(heartbeatDto, headers);
-		ResponseEntity<HeartbeatDto> responseEntity = this.restTemplate.exchange(MAPPING_URL, HttpMethod.POST, entity,
-				HeartbeatDto.class);
+		HttpEntity<HeartbeatPackage> entity = new HttpEntity<>(heartbeatPackage, headers);
+		ResponseEntity<HeartbeatPackage> responseEntity = this.restTemplate.exchange(MAPPING_URL, HttpMethod.POST,
+				entity, HeartbeatPackage.class);
 		return responseEntity.getBody();
 	}
 

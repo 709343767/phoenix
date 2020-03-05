@@ -30,7 +30,7 @@ import lombok.experimental.Accessors;
 @AllArgsConstructor
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public class HeartbeatDto extends SuperBean implements Serializable {
+public class HeartbeatPackage extends SuperBean implements Serializable {
 
 	/**
 	 * serialVersionUID
@@ -48,6 +48,18 @@ public class HeartbeatDto extends SuperBean implements Serializable {
 	 */
 	@ApiModelProperty(value = "时间")
 	private Date dateTime;
+
+	/**
+	 * 端点（服务端、代理端、客户端）
+	 */
+	@ApiModelProperty(value = "端点（服务端、代理端、客户端）")
+	private String endpoint;
+
+	/**
+	 * 应用实例ID
+	 */
+	@ApiModelProperty(value = "应用实例ID")
+	private String instanceId;
 
 	/**
 	 * 应用实例名

@@ -14,7 +14,7 @@
 
 	<!-- 项目基本信息 -->
 	<artifactId>monitoring-common</artifactId>
-	<packaging>pom</packaging>
+	<packaging>jar</packaging>
 	<name>monitoring-common</name>
 	<description>监控项目公共模块</description>
 
