@@ -47,6 +47,7 @@ public class HeartbeatServiceImpl implements IHeartbeatService {
 	public HeartbeatPackage sendHeartbeatPackage(HeartbeatPackage heartbeatPackage) {
 		// String url = ConfigAnalysis.getServerUrl() + MAPPING_URL;
 		HttpHeaders headers = new HttpHeaders();
+		// headers.add("Context-type", "text/html;charset=utf-8");
 		headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
 		HttpEntity<HeartbeatPackage> entity = new HttpEntity<>(heartbeatPackage, headers);
 		ResponseEntity<HeartbeatPackage> responseEntity = this.restTemplate.exchange(MAPPING_URL, HttpMethod.POST,

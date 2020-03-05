@@ -1,4 +1,4 @@
-package com.transfar.business.plug.dto;
+package com.transfar.business.dto;
 
 import com.transfar.business.core.ConfigLoader;
 import com.transfar.constant.EndpointTypeConstant;
