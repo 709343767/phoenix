@@ -8,7 +8,7 @@ import org.apache.http.client.ClientProtocolException;
 import com.transfar.constant.EndpointTypeConstant;
 import com.transfar.constant.UrlConstants;
 import com.transfar.dto.HeartbeatPackage;
-import com.transfar.util.InstanceIdUtils;
+import com.transfar.util.InstanceUtils;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -30,13 +30,13 @@ public class HeartbeatTask implements Runnable {
 			HeartbeatPackage heartbeatPackage = new HeartbeatPackage();
 			// heartbeatPackage.setId(StrUtils.getUUID());
 			heartbeatPackage.setEndpoint(EndpointTypeConstant.CLIENT);
-			heartbeatPackage.setInstanceId(InstanceIdUtils.getInstanceId());
-			heartbeatPackage.setInstanceName(ConfigLoader.monitoringProperties.getOwnProperties().getInstanceName());
+			heartbeatPackage.setInstanceId(InstanceUtils.getInstanceId());
+			heartbeatPackage.setInstanceName(InstanceUtils.getInstanceName());
 			heartbeatPackage.setDateTime(new Date());
 
 			// 发送请求
 			String result = Send.send(UrlConstants.HEARTBEAT_URL, heartbeatPackage.toJsonString());
-			System.out.println("心跳包响应消息：" + result);
+			log.info("心跳包响应消息：{}", result);
 		} catch (ClientProtocolException e) {
 			log.error("客户端协议异常！", e);
 		} catch (IOException e) {

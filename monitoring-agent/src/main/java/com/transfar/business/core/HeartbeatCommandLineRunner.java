@@ -1,13 +1,15 @@
 package com.transfar.business.core;
 
-import com.transfar.business.dto.AgentRequestHeartbeatPackage;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
+
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
-import java.util.Date;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import com.transfar.business.dto.AgentRequestHeartbeatPackage;
 
 /**
  * <p>
@@ -20,20 +22,26 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class HeartbeatCommandLineRunner implements CommandLineRunner {
 
-    @Override
-    public void run(String... args) {
-        // 重新开启线程，让他单独去做我们想要做的操作，此时CommandLineRunner执行的操作和主线程是相互独立的，抛出异常并不会影响到主线程
-        Thread thread = new Thread(() -> {
-            ScheduledExecutorService seService = Executors.newScheduledThreadPool(1,
-                    r -> new Thread(r, "monitoring-heartbeat-pool-thread-1"));
-            seService.scheduleAtFixedRate(new HeartbeatScheduledExecutor(), 30,
-                    ConfigLoader.monitoringProperties.getHeartbeatProperties().getRate(), TimeUnit.SECONDS);
-        });
-        // 设置守护线程
-        thread.setDaemon(true);
-        // 开始执行分进程
-        thread.start();
-    }
+	@Override
+	public void run(String... args) {
+		// 重新开启线程，让他单独去做我们想要做的操作，此时CommandLineRunner执行的操作和主线程是相互独立的，抛出异常并不会影响到主线程
+		Thread thread = new Thread(() -> {
+			final ScheduledExecutorService seService = Executors.newScheduledThreadPool(5, new ThreadFactory() {
+				AtomicInteger atomic = new AtomicInteger();
+
+				@Override
+				public Thread newThread(Runnable r) {
+					return new Thread(r, "monitoring-heartbeat-pool-thread-" + this.atomic.getAndIncrement());
+				}
+			});
+			seService.scheduleAtFixedRate(new HeartbeatScheduledExecutor(), 30,
+					ConfigLoader.monitoringProperties.getHeartbeatProperties().getRate(), TimeUnit.SECONDS);
+		});
+		// 设置守护线程
+		thread.setDaemon(true);
+		// 开始执行分进程
+		thread.start();
+	}
 }
 
 /**
@@ -46,11 +54,10 @@ public class HeartbeatCommandLineRunner implements CommandLineRunner {
  */
 class HeartbeatScheduledExecutor implements Runnable {
 
-    @Override
-    public void run() {
-        AgentRequestHeartbeatPackage heartbeatPackage = new AgentRequestHeartbeatPackage();
-        heartbeatPackage.setDateTime(new Date());
-        // 向服务端发送心跳包
-        MethodExecuteHandler.sendHeartbeatPackage2Server(heartbeatPackage);
-    }
+	@Override
+	public void run() {
+		AgentRequestHeartbeatPackage heartbeatPackage = new AgentRequestHeartbeatPackage();
+		// 向服务端发送心跳包
+		MethodExecuteHandler.sendHeartbeatPackage2Server(heartbeatPackage);
+	}
 }

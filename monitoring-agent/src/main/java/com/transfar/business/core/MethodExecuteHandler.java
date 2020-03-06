@@ -1,7 +1,5 @@
 package com.transfar.business.core;
 
-import java.util.Date;
-
 import com.transfar.business.dto.AgentResponseHeartbeatPackage;
 import com.transfar.dto.AlarmPackage;
 import com.transfar.dto.HeartbeatPackage;
@@ -38,8 +36,7 @@ public class MethodExecuteHandler {
 			result = (HeartbeatPackage) object;
 		} catch (Exception e) {
 			result = new AgentResponseHeartbeatPackage()//
-					.setResult(false)//
-					.setDateTime(new Date());
+					.setResult(false);
 		}
 		return result;
 	}

@@ -1,5 +1,7 @@
 package com.transfar.business.dto;
 
+import java.util.Date;
+
 import com.transfar.constant.EndpointTypeConstant;
 import com.transfar.dto.HeartbeatPackage;
 import com.transfar.util.InstanceUtils;
@@ -24,7 +26,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
 public class AgentRequestHeartbeatPackage extends HeartbeatPackage {
-	
+
 	/**
 	 * serialVersionUID
 	 */
@@ -32,7 +34,7 @@ public class AgentRequestHeartbeatPackage extends HeartbeatPackage {
 
 	/**
 	 * <p>
-	 * 在构造方法中设置：实例ID、实例名称、端点类型
+	 * 在构造方法中已经设置了：实例ID、实例名称、端点类型、时间
 	 * </p>
 	 * 
 	 * @author 皮锋
@@ -41,6 +43,7 @@ public class AgentRequestHeartbeatPackage extends HeartbeatPackage {
 		this.setInstanceId();
 		this.setInstanceName();
 		this.setEndpoint();
+		this.setDateTime();
 	}
 
 	/**
@@ -77,5 +80,17 @@ public class AgentRequestHeartbeatPackage extends HeartbeatPackage {
 	 */
 	private void setEndpoint() {
 		super.setEndpoint(EndpointTypeConstant.AGENT);
+	}
+
+	/**
+	 * <p>
+	 * 设置时间
+	 * </p>
+	 *
+	 * @author 皮锋
+	 * @custom.date 2020年3月6日 下午7:59:53
+	 */
+	private void setDateTime() {
+		super.setDateTime(new Date());
 	}
 }

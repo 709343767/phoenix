@@ -1,9 +1,13 @@
 package com.transfar.core;
 
 import java.io.IOException;
+import java.util.Date;
 
+import com.transfar.constant.EndpointTypeConstant;
 import com.transfar.constant.UrlConstants;
+import com.transfar.domain.Alarm;
 import com.transfar.dto.AlarmPackage;
+import com.transfar.util.InstanceUtils;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -71,13 +75,20 @@ public class MonitoringPlug {
 	 * 发送告警
 	 * </p>
 	 *
-	 * @param alarmPackage 告警信息
+	 * @param alarm 告警信息
 	 * @author 皮锋
 	 * @return boolean
 	 * @custom.date 2020年3月6日 上午10:17:44
 	 */
-	public static boolean sendAlarm(AlarmPackage alarmPackage) {
+	public static boolean sendAlarm(Alarm alarm) {
 		try {
+			AlarmPackage alarmPackage = new AlarmPackage();
+			alarmPackage.setAlarmTime(new Date());
+			alarmPackage.setEndpoint(EndpointTypeConstant.CLIENT);
+			alarmPackage.setInstanceId(InstanceUtils.getInstanceId());
+			alarmPackage.setInstanceName(InstanceUtils.getInstanceName());
+			alarmPackage.setLevel(alarm.getLevel().name());
+			alarmPackage.setMsg(alarm.getMsg());
 			String result = Send.send(UrlConstants.ALARM_URL, alarmPackage.toJsonString());
 			return Boolean.parseBoolean(result);
 		} catch (IOException e) {

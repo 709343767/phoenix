@@ -7,13 +7,13 @@ import com.transfar.core.ConfigLoader;
 
 /**
  * <p>
- * 应用实例ID工具类
+ * 应用实例工具类
  * </p>
  *
  * @author 皮锋
  * @custom.date 2020年3月4日 下午10:41:27
  */
-public class InstanceIdUtils {
+public class InstanceUtils {
 
 	/**
 	 * <p>
@@ -45,9 +45,22 @@ public class InstanceIdUtils {
 	 * @return 应用实例ID
 	 */
 	public static String getInstanceId() {
-		String instanceName = ConfigLoader.monitoringProperties.getOwnProperties().getInstanceName();
+		String instanceName = getInstanceName();
 		String md5 = MD5Utils.getMD5String(instanceName);
 		return md5 + getJavaPid();
+	}
+
+	/**
+	 * <p>
+	 * 获取应用实例名字
+	 * </p>
+	 *
+	 * @author 皮锋
+	 * @custom.date 2020年3月6日 下午9:16:00
+	 * @return 应用实例名字
+	 */
+	public static String getInstanceName() {
+		return ConfigLoader.monitoringProperties.getOwnProperties().getInstanceName();
 	}
 
 	public static void main(String[] args) throws InterruptedException {
