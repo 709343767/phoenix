@@ -28,6 +28,6 @@ public enum AlarmLevelEnum {
 	/**
 	 * 严重
 	 */
-	FATAL;
+	FATAL
 
 }
