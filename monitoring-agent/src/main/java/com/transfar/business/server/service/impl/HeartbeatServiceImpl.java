@@ -25,13 +25,13 @@ import com.transfar.dto.HeartbeatPackage;
 @Service
 public class HeartbeatServiceImpl implements IHeartbeatService {
 
+	@Autowired
+	private RestTemplate restTemplate;
+
 	/**
 	 * 接收心跳的包映射地址
 	 */
 	private static final String MAPPING_URL = "/heartbeat/accept-heartbeat-package";
-
-	@Autowired
-	private RestTemplate restTemplate;
 
 	/**
 	 * <p>
@@ -41,11 +41,11 @@ public class HeartbeatServiceImpl implements IHeartbeatService {
 	 * @param heartbeatPackage 心跳包对象
 	 * @return HeartbeatPackage
 	 * @author 皮锋
+	 * @throws Exception 所有异常
 	 * @custom.date 2020年3月4日 下午2:16:07
 	 */
 	@Override
-	public HeartbeatPackage sendHeartbeatPackage(HeartbeatPackage heartbeatPackage) {
-		// String url = ConfigAnalysis.getServerUrl() + MAPPING_URL;
+	public HeartbeatPackage sendHeartbeatPackage(HeartbeatPackage heartbeatPackage) throws Exception {
 		HttpHeaders headers = new HttpHeaders();
 		// headers.add("Context-type", "text/html;charset=utf-8");
 		headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));

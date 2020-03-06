@@ -5,7 +5,7 @@ import java.util.Properties;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.transfar.exception.NotFoundConfigException;
+import com.transfar.exception.NotFoundConfigParamException;
 import com.transfar.exception.NotFoundConfigFileException;
 import com.transfar.properties.MonitoringAgentProperties;
 import com.transfar.properties.MonitoringHeartbeatProperties;
@@ -37,12 +37,12 @@ public class ConfigLoader {
 	 * @param configPath 配置文件路径
 	 * @param configName 配置文件名称
 	 * @author 皮锋
-	 * @throws NotFoundConfigException     找不到配置信息异常
-	 * @throws NotFoundConfigFileException 找不到配置文件异常
+	 * @throws NotFoundConfigParamException 找不到配置信息异常
+	 * @throws NotFoundConfigFileException  找不到配置文件异常
 	 * @custom.date 2020年3月5日 下午3:36:32
 	 */
 	public static void load(String configPath, String configName)
-			throws NotFoundConfigException, NotFoundConfigFileException {
+			throws NotFoundConfigParamException, NotFoundConfigFileException {
 		// 如果没有填写配置文件路径，默认在根路径
 		if (StringUtils.isBlank(configPath)) {
 			configPath = "";
@@ -69,9 +69,9 @@ public class ConfigLoader {
 	 * @author 皮锋
 	 * @custom.date 2020年3月5日 下午3:51:47
 	 * @param properties 配置信息
-	 * @throws NotFoundConfigException 找不到配置信息异常
+	 * @throws NotFoundConfigParamException 找不到配置信息异常
 	 */
-	private static void analysis(Properties properties) throws NotFoundConfigException {
+	private static void analysis(Properties properties) throws NotFoundConfigParamException {
 		// 监控服务端url
 		String serverUrl = StringUtils.trimToNull(properties.getProperty("monitoring.server.url"));
 		// 监控服务端用户名
@@ -91,9 +91,13 @@ public class ConfigLoader {
 		long heartbeatRate = StringUtils.isBlank(heartbeatRateStr) ? 30L : Long.parseLong(heartbeatRateStr);
 		// 没有配置连接
 		if (StringUtils.isBlank(serverUrl) && StringUtils.isBlank(agentUrl)) {
-			throw new NotFoundConfigException("监控程序找不到服务！");
+			throw new NotFoundConfigParamException("监控程序找不到服务！");
 		}
 		// 用户名密码暂不做处理
+		// 没有实例名称
+		if (StringUtils.isBlank(instanceName)) {
+			throw new NotFoundConfigParamException("监控程序找不到实例名称！");
+		}
 		// 封装数据
 		wrap(serverUrl, serverUserName, serverPassword, agentUrl, agentUsername, agentPassword, instanceName,
 				heartbeatRate);

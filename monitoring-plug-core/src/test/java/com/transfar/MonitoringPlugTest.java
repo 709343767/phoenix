@@ -1,7 +1,5 @@
 package com.transfar;
 
-import org.junit.Test;
-
 import com.transfar.core.MonitoringPlug;
 
 /**
@@ -14,11 +12,6 @@ import com.transfar.core.MonitoringPlug;
  */
 public class MonitoringPlugTest {
 
-	@Test
-	public void testStart() {
-		MonitoringPlug.start();
-	}
-	
 	public static void main(String[] args) {
 		MonitoringPlug.start();
 	}

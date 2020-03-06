@@ -17,6 +17,11 @@ public class NotFoundHostException extends Exception {
 
 	public NotFoundHostException() {
 		// log.error("找不到主机！");
+		super();
+	}
+
+	public NotFoundHostException(String message) {
+		super(message);
 	}
 
 }

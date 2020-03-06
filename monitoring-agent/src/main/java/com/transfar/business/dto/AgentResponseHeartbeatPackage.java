@@ -1,9 +1,8 @@
 package com.transfar.business.dto;
 
-import com.transfar.business.core.ConfigLoader;
 import com.transfar.constant.EndpointTypeConstant;
 import com.transfar.dto.HeartbeatPackage;
-import com.transfar.util.InstanceIdUtils;
+import com.transfar.util.InstanceUtils;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -27,6 +26,11 @@ import lombok.experimental.Accessors;
 public class AgentResponseHeartbeatPackage extends HeartbeatPackage {
 
 	/**
+	 * serialVersionUID
+	 */
+	private static final long serialVersionUID = -8080309817629513401L;
+
+	/**
 	 * <p>
 	 * 在构造方法中设置：实例ID、实例名称、端点类型
 	 * </p>
@@ -40,11 +44,6 @@ public class AgentResponseHeartbeatPackage extends HeartbeatPackage {
 	}
 
 	/**
-	 * serialVersionUID
-	 */
-	private static final long serialVersionUID = -8080309817629513401L;
-
-	/**
 	 * <p>
 	 * 设置实例ID
 	 * </p>
@@ -53,7 +52,7 @@ public class AgentResponseHeartbeatPackage extends HeartbeatPackage {
 	 * @custom.date 2020年3月5日 上午12:08:43
 	 */
 	private void setInstanceId() {
-		super.setInstanceId(InstanceIdUtils.getInstanceId());
+		super.setInstanceId(InstanceUtils.getInstanceId());
 	}
 
 	/**
@@ -65,7 +64,7 @@ public class AgentResponseHeartbeatPackage extends HeartbeatPackage {
 	 * @custom.date 2020年3月5日 上午12:08:59
 	 */
 	private void setInstanceName() {
-		super.setInstanceName(ConfigLoader.getInstanceName());
+		super.setInstanceName(InstanceUtils.getInstanceName());
 	}
 
 	/**

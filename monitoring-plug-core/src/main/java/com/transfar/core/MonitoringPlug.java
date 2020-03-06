@@ -1,5 +1,7 @@
 package com.transfar.core;
 
+import com.transfar.dto.Alarm;
+
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -59,6 +61,19 @@ public class MonitoringPlug {
 		}
 		// 2.开始定时发送心跳包
 		HeartbeatTaskScheduler.run();
+	}
+
+	/**
+	 * <p>
+	 * 发送告警
+	 * </p>
+	 *
+	 * @param alarm 告警信息
+	 * @author 皮锋
+	 * @custom.date 2020年3月6日 上午10:17:44
+	 */
+	public static void monitor(Alarm alarm) {
+		AlarmHandler.handleAlarm(alarm);
 	}
 
 }

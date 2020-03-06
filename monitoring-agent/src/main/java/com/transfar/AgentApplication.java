@@ -2,8 +2,8 @@ package com.transfar;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.scheduling.annotation.EnableScheduling;
 
 import com.transfar.config.UniqueBeanNameGenerator;
 
@@ -19,12 +19,17 @@ import com.transfar.config.UniqueBeanNameGenerator;
 @SpringBootApplication
 @ComponentScan(nameGenerator = UniqueBeanNameGenerator.class)
 // 启用spring的任务调度
-@EnableScheduling
+// @EnableScheduling
 // 启用事务管理
 public class AgentApplication {
 
-    public static void main(String[] args) {
-        SpringApplication.run(AgentApplication.class, args);
-    }
+	/**
+	 * 配置应用上下文
+	 */
+	public static ConfigurableApplicationContext applicationContext;
+
+	public static void main(String[] args) {
+		applicationContext = SpringApplication.run(AgentApplication.class, args);
+	}
 
 }

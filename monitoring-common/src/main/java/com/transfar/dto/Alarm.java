@@ -1,9 +1,11 @@
 package com.transfar.dto;
 
 import java.io.Serializable;
+import java.lang.reflect.Method;
 import java.util.Date;
 
-import com.transfar.common.SuperBean;
+import com.transfar.common.InstanceBean;
+import com.transfar.util.StrUtils;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -29,40 +31,36 @@ import lombok.experimental.Accessors;
 @AllArgsConstructor
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public class AlarmDto extends SuperBean implements Serializable {
+public class Alarm extends InstanceBean implements Serializable {
 
 	/**
 	 * serialVersionUID
 	 */
 	private static final long serialVersionUID = -8198453286095801334L;
+
 	/**
 	 * ID
 	 */
-	private Integer id;
+	private String id = StrUtils.getUUID();
+
 	/**
 	 * 告警时间
 	 */
-	private Date dateTime;
+	private Date alarmTime;
+
 	/**
 	 * 告警内容
 	 */
 	private String msg;
+
 	/**
 	 * 告警级别
 	 */
 	private String level;
-	/**
-	 * 设备
-	 */
-	private String device;
-	/**
-	 * 应用
-	 */
-	private String app;
 
 	/**
 	 * 方法
 	 */
-	private String method;
+	private Method method;
 
 }

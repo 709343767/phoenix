@@ -7,8 +7,6 @@ import org.apache.http.client.ClientProtocolException;
 
 import com.transfar.constant.EndpointTypeConstant;
 import com.transfar.dto.HeartbeatPackage;
-import com.transfar.exception.NotFoundHostException;
-import com.transfar.util.HttpUtils;
 import com.transfar.util.InstanceIdUtils;
 
 import lombok.extern.slf4j.Slf4j;
@@ -27,7 +25,7 @@ public class HeartbeatTask implements Runnable {
 	/**
 	 * 接收心跳的包映射地址
 	 */
-	private static final String MAPPING_URL = "/heartbeat/accept-heartbeat-package";
+	private static final String URL = HostChoiceHandler.choiceHost().getUrl() + "/heartbeat/accept-heartbeat-package";
 
 	@Override
 	public void run() {
@@ -40,14 +38,9 @@ public class HeartbeatTask implements Runnable {
 			heartbeatPackage.setInstanceName(ConfigLoader.monitoringProperties.getOwnProperties().getInstanceName());
 			heartbeatPackage.setDateTime(new Date());
 
-			// 获取url
-			String url = HostChoiceHandler.choiceHost().getUrl() + MAPPING_URL;
 			// 发送请求
-			HttpUtils httpClient = HttpUtils.getInstance();
-			String result = httpClient.sendHttpPostByJSON(url, heartbeatPackage.toJsonString());
+			String result = Send.send(URL, heartbeatPackage.toJsonString());
 			System.out.println("心跳包响应消息：" + result);
-		} catch (NotFoundHostException e) {
-			log.error("找不到主机异常！", e);
 		} catch (ClientProtocolException e) {
 			log.error("客户端协议异常！", e);
 		} catch (IOException e) {

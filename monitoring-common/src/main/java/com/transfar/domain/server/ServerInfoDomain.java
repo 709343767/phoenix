@@ -26,31 +26,31 @@ public class ServerInfoDomain extends SuperBean {
 	/**
 	 * 应用服务器信息
 	 */
-	private AppServerDomain appServerDomain;
+	protected AppServerDomain appServerDomain;
 
 	/**
 	 * 操作系统信息
 	 */
-	private OsDomain osDomain;
+	protected OsDomain osDomain;
 
 	/**
 	 * 内存信息
 	 */
-	private MemoryDomain memoryDomain;
+	protected MemoryDomain memoryDomain;
 
 	/**
 	 * Cpu信息
 	 */
-	private CpuDomain cpuDomain;
+	protected CpuDomain cpuDomain;
 
 	/**
 	 * 网卡信息
 	 */
-	private NetDomain netDomain;
+	protected NetDomain netDomain;
 
 	/**
 	 * JVM信息
 	 */
-	private JvmDomain jvmDomain;
+	protected JvmDomain jvmDomain;
 
 }

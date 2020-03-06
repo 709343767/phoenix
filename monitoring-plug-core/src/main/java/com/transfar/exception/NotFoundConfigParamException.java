@@ -8,18 +8,18 @@ package com.transfar.exception;
  * @author 皮锋
  * @custom.date 2020年3月5日 下午10:37:44
  */
-public class NotFoundConfigException extends Exception {
+public class NotFoundConfigParamException extends Exception {
 
 	/**
 	 * serialVersionUID
 	 */
 	private static final long serialVersionUID = 6546543050835301134L;
 
-	public NotFoundConfigException() {
+	public NotFoundConfigParamException() {
 		super();
 	}
 
-	public NotFoundConfigException(String message) {
+	public NotFoundConfigParamException(String message) {
 		super(message);
 	}
 
