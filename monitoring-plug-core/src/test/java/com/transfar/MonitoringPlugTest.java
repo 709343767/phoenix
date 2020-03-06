@@ -1,6 +1,11 @@
 package com.transfar;
 
+import java.util.Date;
+
+import com.transfar.constant.AlarmLevelConstant;
+import com.transfar.constant.EndpointTypeConstant;
 import com.transfar.core.MonitoringPlug;
+import com.transfar.dto.AlarmPackage;
 
 /**
  * <p>
@@ -12,8 +17,20 @@ import com.transfar.core.MonitoringPlug;
  */
 public class MonitoringPlugTest {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws InterruptedException {
 		MonitoringPlug.start();
+		// 发送告警
+		while (true) {
+			AlarmPackage alarmPackage = new AlarmPackage();
+			alarmPackage.setAlarmTime(new Date());
+			alarmPackage.setEndpoint(EndpointTypeConstant.CLIENT);
+			alarmPackage.setLevel(AlarmLevelConstant.WARN);
+			alarmPackage.setMsg("测试");
+			boolean result = MonitoringPlug.sendAlarm(alarmPackage);
+			System.out.println("发送告警：" + result);
+			Thread.sleep(60000);
+		}
+
 	}
 
 }

@@ -1,6 +1,9 @@
 package com.transfar.core;
 
-import com.transfar.dto.Alarm;
+import java.io.IOException;
+
+import com.transfar.constant.UrlConstants;
+import com.transfar.dto.AlarmPackage;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -68,12 +71,19 @@ public class MonitoringPlug {
 	 * 发送告警
 	 * </p>
 	 *
-	 * @param alarm 告警信息
+	 * @param alarmPackage 告警信息
 	 * @author 皮锋
+	 * @return boolean
 	 * @custom.date 2020年3月6日 上午10:17:44
 	 */
-	public static void monitor(Alarm alarm) {
-		AlarmHandler.handleAlarm(alarm);
+	public static boolean sendAlarm(AlarmPackage alarmPackage) {
+		try {
+			String result = Send.send(UrlConstants.ALARM_URL, alarmPackage.toJsonString());
+			return Boolean.parseBoolean(result);
+		} catch (IOException e) {
+			log.error("发送告警信息异常！", e);
+			return false;
+		}
 	}
 
 }

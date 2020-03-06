@@ -1,7 +1,6 @@
 package com.transfar.dto;
 
 import java.io.Serializable;
-import java.lang.reflect.Method;
 import java.util.Date;
 
 import com.transfar.common.InstanceBean;
@@ -31,7 +30,7 @@ import lombok.experimental.Accessors;
 @AllArgsConstructor
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public class Alarm extends InstanceBean implements Serializable {
+public class AlarmPackage extends InstanceBean implements Serializable {
 
 	/**
 	 * serialVersionUID
@@ -57,10 +56,5 @@ public class Alarm extends InstanceBean implements Serializable {
 	 * 告警级别
 	 */
 	private String level;
-
-	/**
-	 * 方法
-	 */
-	private Method method;
 
 }

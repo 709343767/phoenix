@@ -6,6 +6,7 @@ import java.util.Date;
 import org.apache.http.client.ClientProtocolException;
 
 import com.transfar.constant.EndpointTypeConstant;
+import com.transfar.constant.UrlConstants;
 import com.transfar.dto.HeartbeatPackage;
 import com.transfar.util.InstanceIdUtils;
 
@@ -22,11 +23,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class HeartbeatTask implements Runnable {
 
-	/**
-	 * 接收心跳的包映射地址
-	 */
-	private static final String URL = HostChoiceHandler.choiceHost().getUrl() + "/heartbeat/accept-heartbeat-package";
-
 	@Override
 	public void run() {
 		try {
@@ -39,7 +35,7 @@ public class HeartbeatTask implements Runnable {
 			heartbeatPackage.setDateTime(new Date());
 
 			// 发送请求
-			String result = Send.send(URL, heartbeatPackage.toJsonString());
+			String result = Send.send(UrlConstants.HEARTBEAT_URL, heartbeatPackage.toJsonString());
 			System.out.println("心跳包响应消息：" + result);
 		} catch (ClientProtocolException e) {
 			log.error("客户端协议异常！", e);
