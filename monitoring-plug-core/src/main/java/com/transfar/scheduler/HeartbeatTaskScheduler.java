@@ -1,4 +1,4 @@
-package com.transfar.core;
+package com.transfar.scheduler;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -6,6 +6,7 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import com.transfar.core.ConfigLoader;
 import com.transfar.task.HeartbeatTask;
 
 /**

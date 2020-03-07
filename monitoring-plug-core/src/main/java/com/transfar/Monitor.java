@@ -4,12 +4,12 @@ import java.io.IOException;
 
 import com.transfar.constant.UrlConstants;
 import com.transfar.core.ConfigLoader;
-import com.transfar.core.HeartbeatTaskScheduler;
 import com.transfar.core.PackageConstructor;
 import com.transfar.core.Sender;
-import com.transfar.core.ServerTaskScheduler;
 import com.transfar.domain.Alarm;
 import com.transfar.dto.AlarmPackage;
+import com.transfar.scheduler.HeartbeatTaskScheduler;
+import com.transfar.scheduler.ServerTaskScheduler;
 
 import lombok.extern.slf4j.Slf4j;
 
