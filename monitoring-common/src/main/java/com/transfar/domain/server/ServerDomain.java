@@ -2,9 +2,10 @@ package com.transfar.domain.server;
 
 import com.transfar.common.SuperBean;
 
-import lombok.Builder;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
@@ -17,16 +18,17 @@ import lombok.experimental.Accessors;
  * @custom.date 2020/3/3 11:26
  */
 @Data
-@Builder
 @ToString
+@NoArgsConstructor
+@AllArgsConstructor
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
 public final class ServerDomain extends SuperBean {
 
-	/**
+	/*
 	 * 应用服务器信息
 	 */
-	private AppServerDomain appServerDomain;
+	//private AppServerDomain appServerDomain;
 
 	/**
 	 * 操作系统信息

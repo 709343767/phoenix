@@ -20,4 +20,9 @@ public final class Urlconstants {
 	 */
 	public static final String ALARM_URL = "/alarm/accept-alarm-package";
 
+	/**
+	 * 发送服务器信息包URL地址
+	 */
+	public static final String SERVER_URL = "/server/accept-server-package";
+
 }

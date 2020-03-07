@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.transfar.common.SuperBean;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -21,6 +22,7 @@ import lombok.experimental.Accessors;
 @Data
 @ToString
 @NoArgsConstructor
+@AllArgsConstructor
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
 public final class CpuDomain extends SuperBean {

@@ -2,11 +2,16 @@ package com.transfar.core;
 
 import java.util.Date;
 
+import org.hyperic.sigar.SigarException;
+
 import com.transfar.constant.EndpointTypeConstant;
 import com.transfar.domain.Alarm;
+import com.transfar.domain.server.ServerDomain;
 import com.transfar.dto.AlarmPackage;
 import com.transfar.dto.HeartbeatPackage;
+import com.transfar.dto.ServerPackage;
 import com.transfar.util.InstanceUtils;
+import com.transfar.util.SigarUtils;
 
 /**
  * <p>
@@ -55,6 +60,27 @@ public class PackageConstructor {
 		heartbeatPackage.setInstanceName(InstanceUtils.getInstanceName());
 		heartbeatPackage.setDateTime(new Date());
 		return heartbeatPackage;
+	}
+
+	/**
+	 * <p>
+	 * 构建服务器数据包
+	 * </p>
+	 *
+	 * @author 皮锋
+	 * @custom.date 2020年3月7日 下午4:51:51
+	 * @return ServerPackage
+	 * @throws SigarException Sigar异常
+	 */
+	public static ServerPackage structureServerPackage() throws SigarException {
+		ServerPackage serverPackage = new ServerPackage();
+		serverPackage.setDateTime(new Date());
+		serverPackage.setEndpoint(EndpointTypeConstant.CLIENT);
+		serverPackage.setInstanceId(InstanceUtils.getInstanceId());
+		serverPackage.setInstanceName(InstanceUtils.getInstanceName());
+		ServerDomain serverDomain = SigarUtils.getServerInfo();
+		serverPackage.setServerDomain(serverDomain);
+		return serverPackage;
 	}
 
 }

@@ -146,12 +146,12 @@ public final class SigarUtils {
 	public static OsDomain getOsInfo() {
 		Calendar cal = Calendar.getInstance();
 		TimeZone timeZone = cal.getTimeZone();
-		return OsDomain.builder()//
-				.osName(props.getProperty("os.name") + " " + props.getProperty("os.arch"))//
-				.osVersion(props.getProperty("os.version"))//
-				.userName(props.getProperty("user.name"))//
-				.userHome(props.getProperty("user.home"))//
-				.osTimeZone(timeZone.getDisplayName()).build();
+		return new OsDomain()//
+				.setOsName(props.getProperty("os.name") + " " + props.getProperty("os.arch"))//
+				.setOsVersion(props.getProperty("os.version"))//
+				.setUserName(props.getProperty("user.name"))//
+				.setUserHome(props.getProperty("user.home"))//
+				.setOsTimeZone(timeZone.getDisplayName());
 	}
 
 	/**
@@ -166,12 +166,11 @@ public final class SigarUtils {
 	 */
 	public static MemoryDomain getMemoryInfo() throws SigarException {
 		Mem mem = sigar.getMem();
-		return MemoryDomain.builder()//
-				.memTotal(String.format("%.2f", mem.getTotal() / dividend) + "M")//
-				.memUsed(String.format("%.2f", mem.getUsed() / dividend) + "M")//
-				.memFree(String.format("%.2f", mem.getFree() / dividend) + "M")//
-				.menUsedPercent(String.format("%.2f", mem.getUsedPercent()) + "%")//
-				.build();
+		return new MemoryDomain()//
+				.setMemTotal(String.format("%.2f", mem.getTotal() / dividend) + "M")//
+				.setMemUsed(String.format("%.2f", mem.getUsed() / dividend) + "M")//
+				.setMemFree(String.format("%.2f", mem.getFree() / dividend) + "M")//
+				.setMenUsedPercent(String.format("%.2f", mem.getUsedPercent()) + "%");
 	}
 
 	/**
@@ -254,15 +253,14 @@ public final class SigarUtils {
 	 */
 	public static JvmDomain getJvmInfo() {
 		Runtime runTime = Runtime.getRuntime();
-		return JvmDomain.builder()//
-				.javaPath(props.getProperty("java.home"))//
-				.javaVendor(props.getProperty("java.vendor"))//
-				.javaVersion(props.getProperty("java.version"))//
-				.javaName(props.getProperty("java.specification.name"))//
-				.jvmVersion(props.getProperty("java.vm.version"))//
-				.jvmTotalMemory(String.format("%.2f", runTime.totalMemory() / dividend) + "M")//
-				.jvmFreeMemory(String.format("%.2f", runTime.freeMemory() / dividend) + "M")//
-				.build();
+		return new JvmDomain()//
+				.setJavaPath(props.getProperty("java.home"))//
+				.setJavaVendor(props.getProperty("java.vendor"))//
+				.setJavaVersion(props.getProperty("java.version"))//
+				.setJavaName(props.getProperty("java.specification.name"))//
+				.setJvmVersion(props.getProperty("java.vm.version"))//
+				.setJvmTotalMemory(String.format("%.2f", runTime.totalMemory() / dividend) + "M")//
+				.setJvmFreeMemory(String.format("%.2f", runTime.freeMemory() / dividend) + "M");
 	}
 
 	/**
@@ -276,14 +274,13 @@ public final class SigarUtils {
 	 * @custom.date 2020年3月3日 下午4:25:30
 	 */
 	public static ServerDomain getServerInfo() throws SigarException {
-		return ServerDomain.builder()//
+		return new ServerDomain()//
 				// .appServerDomain(getAppServerInfo())//
-				.cpuDomain(getCpuInfo())//
-				.jvmDomain(getJvmInfo())//
-				.memoryDomain(getMemoryInfo())//
-				.netDomain(getNetInfo())//
-				.osDomain(getOsInfo())//
-				.build();
+				.setCpuDomain(getCpuInfo())//
+				.setJvmDomain(getJvmInfo())//
+				.setMemoryDomain(getMemoryInfo())//
+				.setNetDomain(getNetInfo())//
+				.setOsDomain(getOsInfo());
 	}
 
 }

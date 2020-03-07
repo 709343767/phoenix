@@ -23,4 +23,9 @@ public final class UrlConstants {
 	 */
 	public static final String ALARM_URL = HostChoiceHandler.choiceHost().getUrl() + "/alarm/accept-alarm-package";
 
+	/**
+	 * 发送服务器信息地址
+	 */
+	public static final String SERVER_URL = HostChoiceHandler.choiceHost().getUrl() + "/server/accept-server-package";
+
 }

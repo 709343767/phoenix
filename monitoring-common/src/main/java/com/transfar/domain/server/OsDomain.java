@@ -2,9 +2,10 @@ package com.transfar.domain.server;
 
 import com.transfar.common.SuperBean;
 
-import lombok.Builder;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 /**
@@ -16,7 +17,8 @@ import lombok.experimental.Accessors;
  * @custom.date 2020年3月3日 下午2:08:48
  */
 @Data
-@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
 public final class OsDomain extends SuperBean {

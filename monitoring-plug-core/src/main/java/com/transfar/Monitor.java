@@ -7,6 +7,7 @@ import com.transfar.core.ConfigLoader;
 import com.transfar.core.HeartbeatTaskScheduler;
 import com.transfar.core.PackageConstructor;
 import com.transfar.core.Sender;
+import com.transfar.core.ServerTaskScheduler;
 import com.transfar.domain.Alarm;
 import com.transfar.dto.AlarmPackage;
 
@@ -70,7 +71,7 @@ public class Monitor {
 		// 2.开始定时发送心跳包
 		HeartbeatTaskScheduler.run();
 		// 3.开始定时发送服务器信息包
-
+		ServerTaskScheduler.run();
 	}
 
 	/**

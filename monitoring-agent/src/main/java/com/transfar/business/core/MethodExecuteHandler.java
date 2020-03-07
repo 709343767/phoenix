@@ -3,6 +3,7 @@ package com.transfar.business.core;
 import com.transfar.business.dto.AgentResponseHeartbeatPackage;
 import com.transfar.dto.AlarmPackage;
 import com.transfar.dto.HeartbeatPackage;
+import com.transfar.dto.ServerPackage;
 
 /**
  * <p>
@@ -48,7 +49,7 @@ public class MethodExecuteHandler {
 	 *
 	 * @author 皮锋
 	 * @custom.date 2020年3月6日 下午3:23:56
-	 * @param alarmPackage 告警
+	 * @param alarmPackage 告警包
 	 * @return Boolean
 	 */
 	public static Boolean sendAlarmPackage2Server(AlarmPackage alarmPackage) {
@@ -60,6 +61,32 @@ public class MethodExecuteHandler {
 		try {
 			assert invoker != null;
 			invoker.invoke(alarmPackage);
+			result = true;
+		} catch (Exception e) {
+			result = false;
+		}
+		return result;
+	}
+
+	/**
+	 * <p>
+	 * 向服务端发送服务器信息包
+	 * </p>
+	 *
+	 * @author 皮锋
+	 * @custom.date 2020年3月7日 下午5:18:32
+	 * @param serverPackage 服务器信息包
+	 * @return Boolean
+	 */
+	public static Boolean sendServerPackage2Server(ServerPackage serverPackage) {
+		// 通过命令执行器管理器，获取指定的命令执行器
+		Invoker invoker = InvokerHolder.getInvoker(com.transfar.business.server.service.IServerService.class,
+				"sendServerPackage");
+		// 执行命令，返回执行结果
+		Boolean result;
+		try {
+			assert invoker != null;
+			invoker.invoke(serverPackage);
 			result = true;
 		} catch (Exception e) {
 			result = false;
