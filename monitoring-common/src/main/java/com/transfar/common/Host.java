@@ -19,7 +19,7 @@ import lombok.experimental.Accessors;
 @ToString
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public class Host extends SuperBean {
+public final class Host extends SuperBean {
 	/**
 	 * URL
 	 */

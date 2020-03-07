@@ -91,12 +91,12 @@ public class ConfigLoader {
 		long heartbeatRate = StringUtils.isBlank(heartbeatRateStr) ? 30L : Long.parseLong(heartbeatRateStr);
 		// 没有配置连接
 		if (StringUtils.isBlank(serverUrl) && StringUtils.isBlank(agentUrl)) {
-			throw new NotFoundConfigParamException("监控程序找不到服务！");
+			throw new NotFoundConfigParamException("监控程序找不到任何服务/代理配置！");
 		}
 		// 用户名密码暂不做处理
 		// 没有实例名称
 		if (StringUtils.isBlank(instanceName)) {
-			throw new NotFoundConfigParamException("监控程序找不到实例名称！");
+			throw new NotFoundConfigParamException("监控程序找不到实例名称配置！");
 		}
 		// 封装数据
 		wrap(serverUrl, serverUserName, serverPassword, agentUrl, agentUsername, agentPassword, instanceName,

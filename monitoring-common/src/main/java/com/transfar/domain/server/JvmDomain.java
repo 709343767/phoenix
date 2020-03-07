@@ -19,7 +19,7 @@ import lombok.experimental.Accessors;
 @Builder
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public class JvmDomain extends SuperBean {
+public final class JvmDomain extends SuperBean {
 	/**
 	 * java安路径
 	 */

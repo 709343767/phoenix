@@ -104,8 +104,8 @@ public class HttpUtils {
 	 * @param json 请求数据
 	 * @return 返回数据
 	 * @author 皮锋
-	 * @throws IOException
-	 * @throws ClientProtocolException
+	 * @throws IOException IO异常
+	 * @throws ClientProtocolException 客户端协议异常
 	 * @custom.date 2020年3月5日 下午5:33:56
 	 */
 	public String sendHttpPostByJSON(String url, String json) throws ClientProtocolException, IOException {

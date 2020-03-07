@@ -1,26 +1,27 @@
-package com.transfar.core;
+package com.transfar;
 
 import java.io.IOException;
-import java.util.Date;
 
-import com.transfar.constant.EndpointTypeConstant;
 import com.transfar.constant.UrlConstants;
+import com.transfar.core.ConfigLoader;
+import com.transfar.core.HeartbeatTaskScheduler;
+import com.transfar.core.PackageConstructor;
+import com.transfar.core.Sender;
 import com.transfar.domain.Alarm;
 import com.transfar.dto.AlarmPackage;
-import com.transfar.util.InstanceUtils;
 
 import lombok.extern.slf4j.Slf4j;
 
 /**
  * <p>
- * 监控客户端插件主类
+ * 监控客户端入口类
  * </p>
  *
  * @author 皮锋
  * @custom.date 2020年3月5日 下午3:00:25
  */
 @Slf4j
-public class MonitoringPlug {
+public class Monitor {
 
 	/**
 	 * <p>
@@ -68,6 +69,8 @@ public class MonitoringPlug {
 		}
 		// 2.开始定时发送心跳包
 		HeartbeatTaskScheduler.run();
+		// 3.开始定时发送服务器信息包
+
 	}
 
 	/**
@@ -82,14 +85,9 @@ public class MonitoringPlug {
 	 */
 	public static boolean sendAlarm(Alarm alarm) {
 		try {
-			AlarmPackage alarmPackage = new AlarmPackage();
-			alarmPackage.setAlarmTime(new Date());
-			alarmPackage.setEndpoint(EndpointTypeConstant.CLIENT);
-			alarmPackage.setInstanceId(InstanceUtils.getInstanceId());
-			alarmPackage.setInstanceName(InstanceUtils.getInstanceName());
-			alarmPackage.setLevel(alarm.getLevel().name());
-			alarmPackage.setMsg(alarm.getMsg());
-			String result = Send.send(UrlConstants.ALARM_URL, alarmPackage.toJsonString());
+			// 构造告警数据包
+			AlarmPackage alarmPackage = PackageConstructor.structureAlarmPackage(alarm);
+			String result = Sender.send(UrlConstants.ALARM_URL, alarmPackage.toJsonString());
 			return Boolean.parseBoolean(result);
 		} catch (IOException e) {
 			log.error("发送告警信息异常！", e);

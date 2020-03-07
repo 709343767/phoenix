@@ -21,36 +21,36 @@ import lombok.experimental.Accessors;
 @ToString
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public class ServerInfoDomain extends SuperBean {
+public final class ServerDomain extends SuperBean {
 
 	/**
 	 * 应用服务器信息
 	 */
-	protected AppServerDomain appServerDomain;
+	private AppServerDomain appServerDomain;
 
 	/**
 	 * 操作系统信息
 	 */
-	protected OsDomain osDomain;
+	private OsDomain osDomain;
 
 	/**
 	 * 内存信息
 	 */
-	protected MemoryDomain memoryDomain;
+	private MemoryDomain memoryDomain;
 
 	/**
 	 * Cpu信息
 	 */
-	protected CpuDomain cpuDomain;
+	private CpuDomain cpuDomain;
 
 	/**
 	 * 网卡信息
 	 */
-	protected NetDomain netDomain;
+	private NetDomain netDomain;
 
 	/**
 	 * JVM信息
 	 */
-	protected JvmDomain jvmDomain;
+	private JvmDomain jvmDomain;
 
 }

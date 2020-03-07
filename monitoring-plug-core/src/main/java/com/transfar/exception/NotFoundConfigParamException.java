@@ -2,7 +2,7 @@ package com.transfar.exception;
 
 /**
  * <p>
- * 找不到配置信息异常
+ * 找不到配置参数异常
  * </p>
  *
  * @author 皮锋

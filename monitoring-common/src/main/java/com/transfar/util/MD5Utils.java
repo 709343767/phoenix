@@ -17,6 +17,17 @@ import lombok.extern.slf4j.Slf4j;
 public final class MD5Utils {
 
 	/**
+	 * 
+	 * <p>
+	 * 私有化构造方法
+	 * </p>
+	 * 
+	 * @author 皮锋
+	 */
+	private MD5Utils() {
+	}
+
+	/**
 	 * 默认的密码字符串组合，用来将字节转换成 16 进制表示的字符,apache校验下载的文件的正确性用的就是默认的这个组合
 	 */
 	private static char hexDigits[] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e',

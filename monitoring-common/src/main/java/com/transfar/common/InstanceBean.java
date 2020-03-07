@@ -1,10 +1,8 @@
 package com.transfar.common;
 
 import io.swagger.annotations.ApiModelProperty;
-import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
@@ -20,11 +18,9 @@ import lombok.experimental.Accessors;
 @Getter
 @Setter
 @ToString
-@NoArgsConstructor
-@AllArgsConstructor
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public class InstanceBean extends SuperBean {
+public abstract class InstanceBean extends SuperBean {
 
 	/**
 	 * 端点（服务端、代理端、客户端）

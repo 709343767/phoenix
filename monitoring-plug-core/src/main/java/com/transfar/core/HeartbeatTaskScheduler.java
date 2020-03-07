@@ -6,6 +6,8 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import com.transfar.task.HeartbeatTask;
+
 /**
  * <p>
  * 心跳任务调度器

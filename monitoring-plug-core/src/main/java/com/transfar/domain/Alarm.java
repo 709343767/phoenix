@@ -4,14 +4,24 @@ import com.transfar.common.SuperBean;
 import com.transfar.constant.AlarmLevelEnum;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
+/**
+ * <p>
+ * 告警
+ * </p>
+ *
+ * @author 皮锋
+ * @custom.date 2020年3月7日 下午2:35:27
+ */
 @Data
 @ToString
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
@@ -26,6 +36,6 @@ public class Alarm extends SuperBean {
 	/**
 	 * 告警级别
 	 */
-	private AlarmLevelEnum level;
+	private AlarmLevelEnum alarmLevel;
 
 }

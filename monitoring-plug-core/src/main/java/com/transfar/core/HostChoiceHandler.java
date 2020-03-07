@@ -3,8 +3,11 @@ package com.transfar.core;
 import org.apache.commons.lang3.StringUtils;
 
 import com.transfar.common.Host;
+import com.transfar.exception.NotFoundHostException;
 import com.transfar.properties.MonitoringAgentProperties;
 import com.transfar.properties.MonitoringServerProperties;
+
+import lombok.SneakyThrows;
 
 /**
  * <p>
@@ -47,6 +50,7 @@ public class HostChoiceHandler {
 	 * @author 皮锋
 	 * @custom.date 2020年3月5日 下午7:33:49
 	 */
+	@SneakyThrows
 	public static Host choiceHost() {
 		// 优先选择直连服务端，服务端配置为空，有代理端配置时选择代理端
 		String serverUrl = SERVER_PROPERTIES.getUrl();
@@ -59,9 +63,11 @@ public class HostChoiceHandler {
 			// 主机为服务端
 			return Host.builder().url(serverUrl + SERVER_NAME).username(serverUserName).password(serverPassword)
 					.build();
-		} else {
+		} else if (StringUtils.isNotBlank(agentUrl)) {
 			// 主机为代理端
 			return Host.builder().url(agentUrl + AGENT_NAME).username(agentUserName).password(agentPassword).build();
+		} else {
+			throw new NotFoundHostException("监控程序找不到主机！");
 		}
 	}
 

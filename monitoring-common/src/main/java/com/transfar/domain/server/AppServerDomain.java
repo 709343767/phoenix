@@ -21,7 +21,7 @@ import lombok.experimental.Accessors;
 @Builder
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public class AppServerDomain extends SuperBean {
+public final class AppServerDomain extends SuperBean {
 	/**
 	 * 服务器IP
 	 */

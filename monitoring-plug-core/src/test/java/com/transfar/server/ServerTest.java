@@ -10,7 +10,7 @@ import com.transfar.domain.server.JvmDomain;
 import com.transfar.domain.server.MemoryDomain;
 import com.transfar.domain.server.NetDomain;
 import com.transfar.domain.server.OsDomain;
-import com.transfar.domain.server.ServerInfoDomain;
+import com.transfar.domain.server.ServerDomain;
 import com.transfar.util.SigarUtils;
 
 /**
@@ -128,7 +128,7 @@ public class ServerTest {
 	@Test
 	public void testGetServerInfo() throws SigarException {
 		// while (true) {
-		ServerInfoDomain serverInfoVo = SigarUtils.getServerInfo();
+		ServerDomain serverInfoVo = SigarUtils.getServerInfo();
 		System.out.println(serverInfoVo.toJsonString());
 		System.out.println();
 		// Thread.sleep(10000);

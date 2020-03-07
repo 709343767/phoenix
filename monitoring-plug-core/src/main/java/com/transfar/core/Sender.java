@@ -8,13 +8,13 @@ import com.transfar.util.HttpUtils;
 
 /**
  * <p>
- * 发送数据
+ * 数据发送者
  * </p>
  *
  * @author 皮锋
  * @custom.date 2020年3月6日 上午10:20:09
  */
-public class Send {
+public class Sender {
 
 	/**
 	 * <p>
@@ -23,7 +23,7 @@ public class Send {
 	 *
 	 * @author 皮锋
 	 * @custom.date 2020年3月6日 上午10:21:25
-	 * @param url  UR地址
+	 * @param url  URL地址
 	 * @param json JSON字符串格式的数据
 	 * @return 服务端返回值
 	 * @throws IOException             IO异常

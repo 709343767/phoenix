@@ -3,7 +3,7 @@ package com.transfar.dto;
 import java.util.Date;
 
 import com.transfar.common.InstanceBean;
-import com.transfar.domain.server.ServerInfoDomain;
+import com.transfar.domain.server.ServerDomain;
 import com.transfar.util.StrUtils;
 
 import io.swagger.annotations.ApiModelProperty;
@@ -30,19 +30,19 @@ import lombok.experimental.Accessors;
 @AllArgsConstructor
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public class ServerInfo extends InstanceBean {
-
-	/**
-	 * 服务器信息
-	 */
-	@ApiModelProperty(value = "服务器信息")
-	private ServerInfoDomain serverInfoDomain;
+public class ServerPackage extends InstanceBean {
 
 	/**
 	 * ID
 	 */
 	@ApiModelProperty(value = "ID")
 	private String id = StrUtils.getUUID();
+
+	/**
+	 * 服务器信息
+	 */
+	@ApiModelProperty(value = "服务器信息")
+	private ServerDomain serverDomain;
 
 	/**
 	 * 时间

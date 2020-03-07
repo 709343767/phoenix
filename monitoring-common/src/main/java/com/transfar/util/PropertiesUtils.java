@@ -69,7 +69,7 @@ public final class PropertiesUtils {
 
 	/**
 	 * <p>
-	 * 读取资源属性文件（properties），无缓存方式
+	 * 读取资源属性文件（properties）
 	 * </p>
 	 *
 	 * @param filePath 文件路径
@@ -134,7 +134,7 @@ public final class PropertiesUtils {
 
 	/**
 	 * <p>
-	 * 读取资源属性文件（properties），无缓存方式
+	 * 读取资源属性文件（properties）
 	 * </p>
 	 *
 	 * @param filePath 文件路径

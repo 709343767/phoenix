@@ -23,7 +23,7 @@ import lombok.experimental.Accessors;
 @NoArgsConstructor
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public class NetDomain extends SuperBean {
+public final class NetDomain extends SuperBean {
 
 	/**
 	 * 网卡总数

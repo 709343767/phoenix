@@ -26,7 +26,7 @@ import com.transfar.domain.server.JvmDomain;
 import com.transfar.domain.server.MemoryDomain;
 import com.transfar.domain.server.NetDomain;
 import com.transfar.domain.server.OsDomain;
-import com.transfar.domain.server.ServerInfoDomain;
+import com.transfar.domain.server.ServerDomain;
 
 import lombok.Cleanup;
 import lombok.extern.slf4j.Slf4j;
@@ -270,13 +270,13 @@ public final class SigarUtils {
 	 * 获取服务器信息
 	 * </p>
 	 *
-	 * @return ServerInfoDomain
+	 * @return ServerDomain
 	 * @throws SigarException Sigar异常
 	 * @author 皮锋
 	 * @custom.date 2020年3月3日 下午4:25:30
 	 */
-	public static ServerInfoDomain getServerInfo() throws SigarException {
-		return ServerInfoDomain.builder()//
+	public static ServerDomain getServerInfo() throws SigarException {
+		return ServerDomain.builder()//
 				// .appServerDomain(getAppServerInfo())//
 				.cpuDomain(getCpuInfo())//
 				.jvmDomain(getJvmInfo())//

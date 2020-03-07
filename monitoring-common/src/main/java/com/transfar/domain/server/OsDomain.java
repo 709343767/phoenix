@@ -19,7 +19,7 @@ import lombok.experimental.Accessors;
 @Builder
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public class OsDomain extends SuperBean {
+public final class OsDomain extends SuperBean {
 
 	/**
 	 * 操作系统名称

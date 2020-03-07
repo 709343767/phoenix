@@ -19,7 +19,7 @@ import lombok.experimental.Accessors;
 @Builder
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public class MemoryDomain extends SuperBean {
+public final class MemoryDomain extends SuperBean {
 
 	/**
 	 * 物理内存总量

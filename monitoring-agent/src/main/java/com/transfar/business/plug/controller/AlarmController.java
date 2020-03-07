@@ -40,6 +40,7 @@ public class AlarmController {
 	 * @param request 请求参数
 	 * @author 皮锋
 	 * @custom.date 2020年3月6日 下午3:00:54
+	 * @return Boolean
 	 */
 	@ApiOperation(value = "监控代理程序接收监控客户端程序发的告警包，并返回结果", notes = "接收告警包")
 	@PostMapping("/accept-alarm-package")
