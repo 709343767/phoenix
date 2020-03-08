@@ -8,6 +8,7 @@ import org.springframework.context.annotation.PropertySource;
 import com.transfar.properties.MonitoringHeartbeatProperties;
 import com.transfar.properties.MonitoringOwnProperties;
 import com.transfar.properties.MonitoringProperties;
+import com.transfar.properties.MonitoringServerInfoProperties;
 import com.transfar.properties.MonitoringServerProperties;
 
 import lombok.extern.slf4j.Slf4j;
@@ -56,6 +57,12 @@ public class MonitoringAgentConfig {
 	private String heartbeatRate;
 
 	/**
+	 * 与服务端发服务器信息的频率（秒）
+	 */
+	@Value("${monitoring.server-info.rate}")
+	private String serverInfoRate;
+
+	/**
 	 * <p>
 	 * 把配置信息实例化到spring容器
 	 * </p>
@@ -75,9 +82,12 @@ public class MonitoringAgentConfig {
 		ownProperties.setInstanceName(this.instanceName);
 		MonitoringHeartbeatProperties heartbeatProperties = new MonitoringHeartbeatProperties();
 		heartbeatProperties.setRate(Long.parseLong(this.heartbeatRate));
+		MonitoringServerInfoProperties monitoringServerInfoProperties = new MonitoringServerInfoProperties();
+		monitoringServerInfoProperties.setRate(Long.parseLong(this.serverInfoRate));
 		monitoringProperties.setServerProperties(serverProperties);
 		monitoringProperties.setOwnProperties(ownProperties);
 		monitoringProperties.setHeartbeatProperties(heartbeatProperties);
+		monitoringProperties.setMonitoringServerInfoProperties(monitoringServerInfoProperties);
 		log.info("监控配置加载成功！");
 		return monitoringProperties;
 	}

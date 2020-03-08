@@ -1,6 +1,6 @@
 package com.transfar.constant;
 
-import com.transfar.core.HostChoiceHandler;
+import com.transfar.core.ConfigLoader;
 
 /**
  * <p>
@@ -13,19 +13,23 @@ import com.transfar.core.HostChoiceHandler;
 public final class UrlConstants {
 
 	/**
+	 * 服务根路径
+	 */
+	private static final String ROOT_URI = ConfigLoader.monitoringProperties.getServerProperties().getUrl();
+
+	/**
 	 * 心跳地址
 	 */
-	public static final String HEARTBEAT_URL = HostChoiceHandler.choiceHost().getUrl()
-			+ "/heartbeat/accept-heartbeat-package";
+	public static final String HEARTBEAT_URL = ROOT_URI + "/heartbeat/accept-heartbeat-package";
 
 	/**
 	 * 告警地址
 	 */
-	public static final String ALARM_URL = HostChoiceHandler.choiceHost().getUrl() + "/alarm/accept-alarm-package";
+	public static final String ALARM_URL = ROOT_URI + "/alarm/accept-alarm-package";
 
 	/**
 	 * 发送服务器信息地址
 	 */
-	public static final String SERVER_URL = HostChoiceHandler.choiceHost().getUrl() + "/server/accept-server-package";
+	public static final String SERVER_URL = ROOT_URI + "/server/accept-server-package";
 
 }

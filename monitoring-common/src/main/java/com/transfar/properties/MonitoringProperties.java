@@ -25,11 +25,6 @@ public class MonitoringProperties {
 	private MonitoringServerProperties serverProperties;
 
 	/**
-	 * 与代理端相关的监控属性
-	 */
-	private MonitoringAgentProperties agentProperties;
-
-	/**
 	 * 与自己相关的监控属性
 	 */
 	private MonitoringOwnProperties ownProperties;
@@ -38,5 +33,10 @@ public class MonitoringProperties {
 	 * 心跳属性
 	 */
 	private MonitoringHeartbeatProperties heartbeatProperties;
+
+	/**
+	 * 服务器信息属性
+	 */
+	private MonitoringServerInfoProperties monitoringServerInfoProperties;
 
 }

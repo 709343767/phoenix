@@ -38,10 +38,9 @@ public class ServerServiceImpl implements IServerService {
 	 * @param serverPackage 服务器信息包
 	 * @custom.date 2020年3月7日 下午5:24:47
 	 * @return Boolean
-	 * @throws Exception 所有异常
 	 */
 	@Override
-	public Boolean sendServerPackage(ServerPackage serverPackage) throws Exception {
+	public Boolean sendServerPackage(ServerPackage serverPackage) {
 		HttpHeaders headers = new HttpHeaders();
 		// headers.add("Context-type", "text/html;charset=utf-8");
 		headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));

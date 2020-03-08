@@ -28,5 +28,5 @@ public interface IServerService {
 	 */
 	// 加了注解的方法将会添加到命令执行器管理器，注册到bean容器
 	@TargetMethod(method = "sendServerPackage")
-	public Boolean sendServerPackage(ServerPackage serverPackage) throws Exception;
+	Boolean sendServerPackage(ServerPackage serverPackage) throws Exception;
 }

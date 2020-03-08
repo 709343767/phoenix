@@ -26,7 +26,7 @@ public class HeartbeatTask implements Runnable {
 	public void run() {
 		try {
 			// 构建心跳数据包
-			HeartbeatPackage heartbeatPackage = PackageConstructor.structureHeartbeatPackage();
+			HeartbeatPackage heartbeatPackage = new PackageConstructor().structureHeartbeatPackage();
 			// 发送请求
 			String result = Sender.send(UrlConstants.HEARTBEAT_URL, heartbeatPackage.toJsonString());
 			log.info("心跳包响应消息：{}", result);

@@ -1,5 +1,7 @@
 package com.transfar.domain;
 
+import java.nio.charset.Charset;
+
 import com.transfar.common.SuperBean;
 import com.transfar.constant.AlarmLevelEnum;
 
@@ -37,5 +39,10 @@ public class Alarm extends SuperBean {
 	 * 告警级别
 	 */
 	private AlarmLevelEnum alarmLevel;
+
+	/**
+	 * 字符集
+	 */
+	private Charset charset;
 
 }

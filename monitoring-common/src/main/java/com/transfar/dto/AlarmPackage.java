@@ -1,18 +1,11 @@
 package com.transfar.dto;
 
+import com.transfar.common.InstanceBean;
+import lombok.*;
+import lombok.experimental.Accessors;
+
 import java.io.Serializable;
 import java.util.Date;
-
-import com.transfar.common.InstanceBean;
-import com.transfar.util.StrUtils;
-
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
-import lombok.experimental.Accessors;
 
 /**
  * <p>
@@ -32,29 +25,29 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = true)
 public class AlarmPackage extends InstanceBean implements Serializable {
 
-	/**
-	 * serialVersionUID
-	 */
-	private static final long serialVersionUID = -8198453286095801334L;
+    /**
+     * serialVersionUID
+     */
+    private static final long serialVersionUID = -8198453286095801334L;
 
-	/**
-	 * ID
-	 */
-	private String id = StrUtils.getUUID();
+    /**
+     * ID
+     */
+    private String id;
 
-	/**
-	 * 告警时间
-	 */
-	private Date alarmTime;
+    /**
+     * 告警时间
+     */
+    private Date alarmTime;
 
-	/**
-	 * 告警内容
-	 */
-	private String msg;
+    /**
+     * 告警内容
+     */
+    private String msg;
 
-	/**
-	 * 告警级别
-	 */
-	private String level;
+    /**
+     * 告警级别
+     */
+    private String level;
 
 }

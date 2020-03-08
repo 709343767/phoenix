@@ -87,7 +87,7 @@ public class Monitor {
 	public static boolean sendAlarm(Alarm alarm) {
 		try {
 			// 构造告警数据包
-			AlarmPackage alarmPackage = PackageConstructor.structureAlarmPackage(alarm);
+			AlarmPackage alarmPackage = new PackageConstructor().structureAlarmPackage(alarm);
 			String result = Sender.send(UrlConstants.ALARM_URL, alarmPackage.toJsonString());
 			return Boolean.parseBoolean(result);
 		} catch (IOException e) {

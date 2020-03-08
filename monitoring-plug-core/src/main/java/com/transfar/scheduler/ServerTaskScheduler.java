@@ -6,6 +6,7 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import com.transfar.core.ConfigLoader;
 import com.transfar.task.ServerTask;
 
 /**
@@ -38,7 +39,9 @@ public class ServerTaskScheduler {
 				return new Thread(r, "monitoring-server-pool-thread-" + this.atomic.getAndIncrement());
 			}
 		});
-		seService.scheduleAtFixedRate(new ServerTask(), 30, 300, TimeUnit.SECONDS);
+		// 发送服务器信息的频率
+		long rate = ConfigLoader.monitoringProperties.getMonitoringServerInfoProperties().getRate();
+		seService.scheduleAtFixedRate(new ServerTask(), 30, rate, TimeUnit.SECONDS);
 		// });
 		// 设置线程名
 		// thread.setName("monitoring-server-thread");

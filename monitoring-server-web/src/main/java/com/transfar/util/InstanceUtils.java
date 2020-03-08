@@ -11,7 +11,7 @@ import java.lang.management.RuntimeMXBean;
  * @author 皮锋
  * @custom.date 2020年3月4日 下午10:41:27
  */
-public class InstanceIdUtils {
+public class InstanceUtils {
 
 	/**
 	 * <p>
@@ -43,9 +43,22 @@ public class InstanceIdUtils {
 	 * @return 应用实例ID
 	 */
 	public static String getInstanceId() {
-		String instanceName = "monitoring-server-web";
+		String instanceName = getInstanceName();
 		String md5 = MD5Utils.getMD5String(instanceName);
 		return md5 + getJavaPid();
+	}
+
+	/**
+	 * <p>
+	 * 获取应用实例名称
+	 * </p>
+	 *
+	 * @author 皮锋
+	 * @custom.date 2020年3月8日 下午3:35:21
+	 * @return 应用实例名称
+	 */
+	public static String getInstanceName() {
+		return "monitoring-server-web";
 	}
 
 	public static void main(String[] args) throws InterruptedException {

@@ -38,10 +38,9 @@ public class AlarmServiceImpl implements IAlarmService {
 	 * @custom.date 2020年3月6日 下午3:27:17
 	 * @param alarmPackage 告警包
 	 * @return Boolean
-	 * @throws Exception 所有异常
 	 */
 	@Override
-	public Boolean sendAlarmPackage(AlarmPackage alarmPackage) throws Exception {
+	public Boolean sendAlarmPackage(AlarmPackage alarmPackage) {
 		HttpHeaders headers = new HttpHeaders();
 		// headers.add("Context-type", "text/html;charset=utf-8");
 		headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));

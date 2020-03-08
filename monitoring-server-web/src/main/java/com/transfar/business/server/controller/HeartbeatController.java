@@ -1,14 +1,12 @@
 package com.transfar.business.server.controller;
 
-import java.util.Date;
-
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSON;
-import com.transfar.business.server.dto.ServerResponseHeartbeatPackage;
+import com.transfar.business.server.core.PackageConstructor;
 import com.transfar.dto.HeartbeatPackage;
 
 import io.swagger.annotations.Api;
@@ -44,9 +42,7 @@ public class HeartbeatController {
 	public HeartbeatPackage acceptHeartbeatPackage(@RequestBody(required = true) String request) {
 		HeartbeatPackage heartbeatPackage = JSON.parseObject(request, HeartbeatPackage.class);
 		log.info(heartbeatPackage.toJsonString());
-		return new ServerResponseHeartbeatPackage()//
-				.setDateTime(new Date())//
-				.setResult(true);
+		return new PackageConstructor().structureHeartbeatPackage();
 	}
 
 }

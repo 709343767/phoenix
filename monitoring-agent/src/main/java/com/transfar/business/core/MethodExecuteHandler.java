@@ -1,6 +1,5 @@
 package com.transfar.business.core;
 
-import com.transfar.business.dto.AgentResponseHeartbeatPackage;
 import com.transfar.dto.AlarmPackage;
 import com.transfar.dto.HeartbeatPackage;
 import com.transfar.dto.ServerPackage;
@@ -36,7 +35,7 @@ public class MethodExecuteHandler {
 			Object object = invoker.invoke(heartbeatPackage);
 			result = (HeartbeatPackage) object;
 		} catch (Exception e) {
-			result = new AgentResponseHeartbeatPackage()//
+			result = new PackageConstructor().structureHeartbeatPackage()//
 					.setResult(false);
 		}
 		return result;
@@ -57,7 +56,7 @@ public class MethodExecuteHandler {
 		Invoker invoker = InvokerHolder.getInvoker(com.transfar.business.server.service.IAlarmService.class,
 				"sendAlarmPackage");
 		// 执行命令，返回执行结果
-		Boolean result;
+		boolean result;
 		try {
 			assert invoker != null;
 			invoker.invoke(alarmPackage);
@@ -83,7 +82,7 @@ public class MethodExecuteHandler {
 		Invoker invoker = InvokerHolder.getInvoker(com.transfar.business.server.service.IServerService.class,
 				"sendServerPackage");
 		// 执行命令，返回执行结果
-		Boolean result;
+		boolean result;
 		try {
 			assert invoker != null;
 			invoker.invoke(serverPackage);

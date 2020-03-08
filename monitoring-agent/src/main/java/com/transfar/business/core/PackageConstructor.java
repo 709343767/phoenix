@@ -1,11 +1,9 @@
-package com.transfar.core;
+package com.transfar.business.core;
 
-import java.nio.charset.Charset;
 import java.util.Date;
 
 import org.hyperic.sigar.SigarException;
 
-import com.google.common.base.Charsets;
 import com.transfar.constant.EndpointTypeConstant;
 import com.transfar.domain.Alarm;
 import com.transfar.domain.server.ServerDomain;
@@ -23,7 +21,7 @@ import com.transfar.util.StrUtils;
  * </p>
  *
  * @author 皮锋
- * @custom.date 2020年3月7日 下午2:52:50
+ * @custom.date 2020年3月8日 下午12:16:59
  */
 public class PackageConstructor implements IPackageConstructor {
 
@@ -32,27 +30,21 @@ public class PackageConstructor implements IPackageConstructor {
 	 * 构造告警数据包
 	 * </p>
 	 *
-	 * @param alarm 告警信息
-	 * @return AlarmPackage
 	 * @author 皮锋
 	 * @custom.date 2020年3月7日 下午3:02:46
+	 * @param alarm 告警信息
+	 * @return AlarmPackage
 	 */
 	@Override
 	public AlarmPackage structureAlarmPackage(Alarm alarm) {
 		AlarmPackage alarmPackage = new AlarmPackage();
 		alarmPackage.setId(StrUtils.getUUID());
 		alarmPackage.setAlarmTime(new Date());
-		alarmPackage.setEndpoint(EndpointTypeConstant.CLIENT);
+		alarmPackage.setEndpoint(EndpointTypeConstant.AGENT);
 		alarmPackage.setInstanceId(InstanceUtils.getInstanceId());
 		alarmPackage.setInstanceName(InstanceUtils.getInstanceName());
 		alarmPackage.setLevel(alarm.getAlarmLevel().name());
-		Charset charset = alarm.getCharset();
-		// 设置了字符集
-		if (null != charset) {
-			alarmPackage.setMsg(new String(alarm.getMsg().getBytes(Charsets.UTF_8), Charsets.UTF_8));
-		} else {
-			alarmPackage.setMsg(alarm.getMsg());
-		}
+		alarmPackage.setMsg(alarm.getMsg());
 		return alarmPackage;
 	}
 
@@ -61,15 +53,15 @@ public class PackageConstructor implements IPackageConstructor {
 	 * 构建心跳数据包
 	 * </p>
 	 *
-	 * @return HeartbeatPackage
 	 * @author 皮锋
 	 * @custom.date 2020年3月7日 下午3:54:30
+	 * @return HeartbeatPackage
 	 */
 	@Override
 	public HeartbeatPackage structureHeartbeatPackage() {
 		HeartbeatPackage heartbeatPackage = new HeartbeatPackage();
 		heartbeatPackage.setId(StrUtils.getUUID());
-		heartbeatPackage.setEndpoint(EndpointTypeConstant.CLIENT);
+		heartbeatPackage.setEndpoint(EndpointTypeConstant.AGENT);
 		heartbeatPackage.setInstanceId(InstanceUtils.getInstanceId());
 		heartbeatPackage.setInstanceName(InstanceUtils.getInstanceName());
 		heartbeatPackage.setDateTime(new Date());
@@ -82,17 +74,17 @@ public class PackageConstructor implements IPackageConstructor {
 	 * 构建服务器数据包
 	 * </p>
 	 *
-	 * @return ServerPackage
-	 * @throws SigarException Sigar异常
 	 * @author 皮锋
 	 * @custom.date 2020年3月7日 下午4:51:51
+	 * @return ServerPackage
+	 * @throws SigarException Sigar异常
 	 */
 	@Override
 	public ServerPackage structureServerPackage() throws SigarException {
 		ServerPackage serverPackage = new ServerPackage();
 		serverPackage.setId(StrUtils.getUUID());
 		serverPackage.setDateTime(new Date());
-		serverPackage.setEndpoint(EndpointTypeConstant.CLIENT);
+		serverPackage.setEndpoint(EndpointTypeConstant.AGENT);
 		serverPackage.setInstanceId(InstanceUtils.getInstanceId());
 		serverPackage.setInstanceName(InstanceUtils.getInstanceName());
 		ServerDomain serverDomain = SigarUtils.getServerInfo();

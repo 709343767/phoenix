@@ -41,7 +41,7 @@ public class RestTemplateConfig {
 	 */
 	@Bean
 	public RestTemplate restTemplate() {
-		String rootUri = this.monitoringProperties.getServerProperties().getUrl() + "/monitoring-server-web";
+		String rootUri = this.monitoringProperties.getServerProperties().getUrl();
 		RestTemplate restTemplate = new RestTemplateBuilder()//
 				// .basicAuthorization("username", "password")
 				// 5秒

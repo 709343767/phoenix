@@ -27,7 +27,7 @@ public class ServerTask implements Runnable {
 	public void run() {
 		try {
 			// 构建服务器数据包
-			ServerPackage serverPackage = PackageConstructor.structureServerPackage();
+			ServerPackage serverPackage = new PackageConstructor().structureServerPackage();
 			// 发送请求
 			String result = Sender.send(UrlConstants.SERVER_URL, serverPackage.toJsonString());
 			log.info("服务器包响应消息：{}", result);

@@ -1,19 +1,12 @@
 package com.transfar.dto;
 
-import java.util.Date;
-
 import com.transfar.common.InstanceBean;
 import com.transfar.domain.server.ServerDomain;
-import com.transfar.util.StrUtils;
-
 import io.swagger.annotations.ApiModelProperty;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import lombok.experimental.Accessors;
+
+import java.util.Date;
 
 /**
  * <p>
@@ -32,22 +25,22 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = true)
 public class ServerPackage extends InstanceBean {
 
-	/**
-	 * ID
-	 */
-	@ApiModelProperty(value = "ID")
-	private String id = StrUtils.getUUID();
+    /**
+     * ID
+     */
+    @ApiModelProperty(value = "ID")
+    private String id;
 
-	/**
-	 * 服务器信息
-	 */
-	@ApiModelProperty(value = "服务器信息")
-	private ServerDomain serverDomain;
+    /**
+     * 服务器信息
+     */
+    @ApiModelProperty(value = "服务器信息")
+    private ServerDomain serverDomain;
 
-	/**
-	 * 时间
-	 */
-	@ApiModelProperty(value = "时间")
-	private Date dateTime;
+    /**
+     * 时间
+     */
+    @ApiModelProperty(value = "时间")
+    private Date dateTime;
 
 }

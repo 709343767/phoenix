@@ -1,5 +1,7 @@
 package com.transfar;
 
+import java.nio.charset.Charset;
+
 import com.transfar.constant.AlarmLevelEnum;
 import com.transfar.domain.Alarm;
 
@@ -23,6 +25,7 @@ public class MonitorTest {
 			Alarm alarm = new Alarm();
 			alarm.setAlarmLevel(AlarmLevelEnum.WARN);
 			alarm.setMsg("测试");
+			alarm.setCharset(Charset.forName("gbk"));
 			boolean result = Monitor.sendAlarm(alarm);
 			log.info("发送告警：{}", result);
 			Thread.sleep(60000);
