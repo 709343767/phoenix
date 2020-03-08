@@ -25,34 +25,39 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = true)
 public final class ServerDomain extends SuperBean {
 
-	/*
-	 * 应用服务器信息
-	 */
-	//private AppServerDomain appServerDomain;
+    /*
+     * 应用服务器信息
+     */
+    //private AppServerDomain appServerDomain;
 
-	/**
-	 * 操作系统信息
-	 */
-	private OsDomain osDomain;
+    /**
+     * 操作系统信息
+     */
+    private OsDomain osDomain;
 
-	/**
-	 * 内存信息
-	 */
-	private MemoryDomain memoryDomain;
+    /**
+     * 内存信息
+     */
+    private MemoryDomain memoryDomain;
 
-	/**
-	 * Cpu信息
-	 */
-	private CpuDomain cpuDomain;
+    /**
+     * Cpu信息
+     */
+    private CpuDomain cpuDomain;
 
-	/**
-	 * 网卡信息
-	 */
-	private NetDomain netDomain;
+    /**
+     * 网卡信息
+     */
+    private NetDomain netDomain;
 
-	/**
-	 * JVM信息
-	 */
-	private JvmDomain jvmDomain;
+    /**
+     * JVM信息
+     */
+    private JvmDomain jvmDomain;
+
+    /**
+     * 磁盘信息
+     */
+    private DiskDomain diskDomain;
 
 }
