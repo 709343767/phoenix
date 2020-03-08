@@ -19,7 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 public class MonitorTest {
 
 	public static void main(String[] args) throws InterruptedException {
-		Monitor.start();
+		Monitor.start("", "monitor.properties");
 		// 发送告警
 		while (true) {
 			Alarm alarm = new Alarm();

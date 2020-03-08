@@ -19,3 +19,5 @@
 /monitoring-plug-core/tmp/
 /monitoring-agent/tmp/
 /monitoring-server-web/tmp/
+/tmp/
+/logs/
