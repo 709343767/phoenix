@@ -6,7 +6,7 @@ import java.util.Date;
 import org.hyperic.sigar.SigarException;
 
 import com.google.common.base.Charsets;
-import com.transfar.constant.EndpointTypeConstant;
+import com.transfar.constant.EndpointTypeConstants;
 import com.transfar.domain.Alarm;
 import com.transfar.domain.server.ServerDomain;
 import com.transfar.dto.AlarmPackage;
@@ -42,7 +42,7 @@ public class PackageConstructor implements IPackageConstructor {
 		AlarmPackage alarmPackage = new AlarmPackage();
 		alarmPackage.setId(StrUtils.getUUID());
 		alarmPackage.setAlarmTime(new Date());
-		alarmPackage.setEndpoint(EndpointTypeConstant.CLIENT);
+		alarmPackage.setEndpoint(EndpointTypeConstants.CLIENT);
 		alarmPackage.setInstanceId(InstanceUtils.getInstanceId());
 		alarmPackage.setInstanceName(InstanceUtils.getInstanceName());
 		alarmPackage.setLevel(alarm.getAlarmLevel().name());
@@ -69,7 +69,7 @@ public class PackageConstructor implements IPackageConstructor {
 	public HeartbeatPackage structureHeartbeatPackage() {
 		HeartbeatPackage heartbeatPackage = new HeartbeatPackage();
 		heartbeatPackage.setId(StrUtils.getUUID());
-		heartbeatPackage.setEndpoint(EndpointTypeConstant.CLIENT);
+		heartbeatPackage.setEndpoint(EndpointTypeConstants.CLIENT);
 		heartbeatPackage.setInstanceId(InstanceUtils.getInstanceId());
 		heartbeatPackage.setInstanceName(InstanceUtils.getInstanceName());
 		heartbeatPackage.setDateTime(new Date());
@@ -92,7 +92,7 @@ public class PackageConstructor implements IPackageConstructor {
 		ServerPackage serverPackage = new ServerPackage();
 		serverPackage.setId(StrUtils.getUUID());
 		serverPackage.setDateTime(new Date());
-		serverPackage.setEndpoint(EndpointTypeConstant.CLIENT);
+		serverPackage.setEndpoint(EndpointTypeConstants.CLIENT);
 		serverPackage.setInstanceId(InstanceUtils.getInstanceId());
 		serverPackage.setInstanceName(InstanceUtils.getInstanceName());
 		ServerDomain serverDomain = SigarUtils.getServerInfo();

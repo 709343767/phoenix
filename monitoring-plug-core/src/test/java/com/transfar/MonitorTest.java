@@ -2,7 +2,7 @@ package com.transfar;
 
 import java.nio.charset.Charset;
 
-import com.transfar.constant.AlarmLevelEnum;
+import com.transfar.constant.AlarmLevelEnums;
 import com.transfar.domain.Alarm;
 
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +23,7 @@ public class MonitorTest {
 		// 发送告警
 		while (true) {
 			Alarm alarm = new Alarm();
-			alarm.setAlarmLevel(AlarmLevelEnum.WARN);
+			alarm.setAlarmLevel(AlarmLevelEnums.WARN);
 			alarm.setMsg("测试");
 			alarm.setCharset(Charset.forName("gbk"));
 			boolean result = Monitor.sendAlarm(alarm);

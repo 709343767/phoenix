@@ -8,7 +8,7 @@ package com.transfar.constant;
  * @author 皮锋
  * @custom.date 2020/3/3 10:06
  */
-public enum AlarmLevelEnum {
+public enum AlarmLevelEnums {
 
 	/**
 	 * 消息

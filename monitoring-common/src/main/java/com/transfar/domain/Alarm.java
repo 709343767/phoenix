@@ -3,7 +3,7 @@ package com.transfar.domain;
 import java.nio.charset.Charset;
 
 import com.transfar.common.SuperBean;
-import com.transfar.constant.AlarmLevelEnum;
+import com.transfar.constant.AlarmLevelEnums;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -38,7 +38,7 @@ public class Alarm extends SuperBean {
 	/**
 	 * 告警级别
 	 */
-	private AlarmLevelEnum alarmLevel;
+	private AlarmLevelEnums alarmLevel;
 
 	/**
 	 * 字符集

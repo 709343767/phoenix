@@ -4,7 +4,7 @@ import java.util.Date;
 
 import org.hyperic.sigar.SigarException;
 
-import com.transfar.constant.EndpointTypeConstant;
+import com.transfar.constant.EndpointTypeConstants;
 import com.transfar.domain.Alarm;
 import com.transfar.dto.AlarmPackage;
 import com.transfar.dto.HeartbeatPackage;
@@ -41,7 +41,7 @@ public class PackageConstructor implements IPackageConstructor {
 	public HeartbeatPackage structureHeartbeatPackage() {
 		HeartbeatPackage heartbeatPackage = new HeartbeatPackage();
 		heartbeatPackage.setId(StrUtils.getUUID());
-		heartbeatPackage.setEndpoint(EndpointTypeConstant.SERVER);
+		heartbeatPackage.setEndpoint(EndpointTypeConstants.SERVER);
 		heartbeatPackage.setInstanceId(InstanceUtils.getInstanceId());
 		heartbeatPackage.setInstanceName(InstanceUtils.getInstanceName());
 		heartbeatPackage.setDateTime(new Date());

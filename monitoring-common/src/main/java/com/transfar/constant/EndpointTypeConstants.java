@@ -8,7 +8,7 @@ package com.transfar.constant;
  * @author 皮锋
  * @custom.date 2020年3月4日 下午10:30:27
  */
-public final class EndpointTypeConstant {
+public final class EndpointTypeConstants {
 
 	/**
 	 * 服务端
