@@ -25,34 +25,39 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = true)
 public class AlarmPackage extends InstanceBean implements Serializable {
 
-	/**
-	 * serialVersionUID
-	 */
-	private static final long serialVersionUID = -8198453286095801334L;
+    /**
+     * serialVersionUID
+     */
+    private static final long serialVersionUID = -8198453286095801334L;
 
-	/**
-	 * ID
-	 */
-	private String id;
+    /**
+     * ID
+     */
+    private String id;
 
-	/**
-	 * 告警时间
-	 */
-	private Date alarmTime;
+    /**
+     * 告警时间
+     */
+    private Date alarmTime;
 
-	/**
-	 * 告警内容
-	 */
-	private String msg;
+    /**
+     * 告警内容
+     */
+    private String msg;
 
-	/**
-	 * 告警级别
-	 */
-	private String level;
+    /**
+     * 告警级别
+     */
+    private String level;
 
-	/**
-	 * 是否是测试告警包
-	 */
-	private boolean isTest;
+    /**
+     * 是否是测试告警包
+     */
+    private boolean isTest;
+
+    /**
+     * 告警内容标题
+     */
+    private String title;
 
 }

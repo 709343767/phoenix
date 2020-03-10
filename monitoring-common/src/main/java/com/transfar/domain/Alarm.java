@@ -30,24 +30,29 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = true)
 public class Alarm extends SuperBean {
 
-	/**
-	 * 告警内容
-	 */
-	private String msg;
+    /**
+     * 告警内容
+     */
+    private String msg;
 
-	/**
-	 * 告警级别
-	 */
-	private AlarmLevelEnums alarmLevel;
+    /**
+     * 告警级别
+     */
+    private AlarmLevelEnums alarmLevel;
 
-	/**
-	 * 字符集
-	 */
-	private Charset charset;
+    /**
+     * 字符集
+     */
+    private Charset charset;
 
-	/**
-	 * 是否是测试告警
-	 */
-	private boolean isTest;
+    /**
+     * 是否是测试告警
+     */
+    private boolean isTest;
+
+    /**
+     * 告警内容标题
+     */
+    private String title;
 
 }
