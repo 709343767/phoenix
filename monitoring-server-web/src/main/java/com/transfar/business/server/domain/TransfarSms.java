@@ -25,43 +25,43 @@ import lombok.ToString;
 @AllArgsConstructor
 public class TransfarSms extends SuperBean {
 
-	/**
-	 * 手机号码，多个手机号码用英文逗号隔开
-	 */
-	private String phone;
+    /**
+     * 手机号码，多个手机号码用英文逗号隔开
+     */
+    private String phone;
 
-	/**
-	 * 短信类型
-	 */
-	private String type;
+    /**
+     * 短信类型
+     */
+    private String type;
 
-	/**
-	 * 短信内容
-	 */
-	private String content;
+    /**
+     * 短信内容
+     */
+    private String content;
 
-	/**
-	 * 身份
-	 */
-	private String identity;
+    /**
+     * 身份
+     */
+    private String identity;
 
-	/**
-	 * <p>
-	 * 传入手机号码数组，返回手机号码字符串，号码之间用英文逗号分隔
-	 * </p>
-	 *
-	 * @author 皮锋
-	 * @custom.date 2020年3月10日 下午3:07:14
-	 * @param phones 手机号码数组
-	 * @return 手机号码字符串
-	 */
-	public static String getPhones(String[] phones) {
-		StringBuffer buffer = new StringBuffer();
-		for (int i = 0; i < phones.length; i++) {
-			buffer.append(phones[i]).append(",");
-		}
-		String str = buffer.toString();
-		return str.substring(0, str.length() - 1);
-	}
+    /**
+     * <p>
+     * 传入手机号码数组，返回手机号码字符串，号码之间用英文逗号分隔
+     * </p>
+     *
+     * @param phones 手机号码数组
+     * @return 手机号码字符串
+     * @author 皮锋
+     * @custom.date 2020年3月10日 下午3:07:14
+     */
+    public static String getPhones(String[] phones) {
+        StringBuilder buffer = new StringBuilder();
+        for (String s : phones) {
+            buffer.append(s).append(",");
+        }
+        String str = buffer.toString();
+        return str.substring(0, str.length() - 1);
+    }
 
 }

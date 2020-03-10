@@ -12,16 +12,16 @@ import com.transfar.dto.AlarmPackage;
  */
 public interface IAlarmService {
 
-	/**
-	 * <p>
-	 * 处理心跳包
-	 * </p>
-	 *
-	 * @author 皮锋
-	 * @custom.date 2020年3月10日 下午1:33:55
-	 * @param alarmPackage 心跳包
-	 * @return Boolean
-	 */
-	Boolean dealAlarmPackage(AlarmPackage alarmPackage);
+    /**
+     * <p>
+     * 处理告警包
+     * </p>
+     *
+     * @param alarmPackage 告警包
+     * @return Boolean
+     * @author 皮锋
+     * @custom.date 2020年3月10日 下午1:33:55
+     */
+    Boolean dealAlarmPackage(AlarmPackage alarmPackage);
 
 }

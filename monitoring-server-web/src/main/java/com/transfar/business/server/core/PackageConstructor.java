@@ -1,9 +1,5 @@
 package com.transfar.business.server.core;
 
-import java.util.Date;
-
-import org.hyperic.sigar.SigarException;
-
 import com.transfar.constant.EndpointTypeConstants;
 import com.transfar.domain.Alarm;
 import com.transfar.dto.AlarmPackage;
@@ -12,6 +8,8 @@ import com.transfar.dto.ServerPackage;
 import com.transfar.inf.IPackageConstructor;
 import com.transfar.util.InstanceUtils;
 import com.transfar.util.StrUtils;
+
+import java.util.Date;
 
 /**
  * <p>
@@ -50,7 +48,7 @@ public class PackageConstructor implements IPackageConstructor {
 	}
 
 	@Override
-	public ServerPackage structureServerPackage() throws SigarException {
+	public ServerPackage structureServerPackage() {
 		return null;
 	}
 

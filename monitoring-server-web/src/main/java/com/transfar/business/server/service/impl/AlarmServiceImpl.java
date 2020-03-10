@@ -37,10 +37,10 @@ public class AlarmServiceImpl implements IAlarmService {
 
     /**
      * <p>
-     * 处理心跳包
+     * 处理告警包
      * </p>
      *
-     * @param alarmPackage 心跳包
+     * @param alarmPackage 告警包
      * @return Boolean
      * @author 皮锋
      * @custom.date 2020年3月10日 下午1:33:55
@@ -60,7 +60,7 @@ public class AlarmServiceImpl implements IAlarmService {
         String level = alarmPackage.getLevel();
         // 告警方式
         String alarmType = this.config.getAlarmProperties().getType();
-        // 短信告警
+        // 告警方式为短信告警
         if (StringUtils.equalsIgnoreCase(alarmType, AlarmTypeEnums.SMS.name())) {
             // 处理短信告警
             result = this.dealSmsAlarm(msg, level);
@@ -81,22 +81,20 @@ public class AlarmServiceImpl implements IAlarmService {
      */
     private boolean dealSmsAlarm(String msg, String level) {
         // 返回结构结果
-        boolean result;
+        boolean result = false;
         // 短信接口商家
         String enterprise = this.config.getAlarmProperties().getSmsProperties().getEnterprise();
-        // 判断短信接口公司，不同的公司调用不同的接口
+        // 判断短信接口商家，不同的商家调用不同的接口
         if (StringUtils.equalsIgnoreCase(EnterpriseConstants.TRANSFAR, enterprise)) {
-        	// 调用创发短信接口
+            // 调用创发短信接口
             result = this.callTransfarSmsApi(msg, level);
-        } else {
-            result = false;
         }
         return result;
     }
 
     /**
      * <p>
-     * TODO
+     * 封装数据，调用创发公司的短信接口发送短信
      * </p>
      *
      * @param msg   告警内容
