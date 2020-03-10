@@ -45,4 +45,9 @@ public class Alarm extends SuperBean {
 	 */
 	private Charset charset;
 
+	/**
+	 * 是否是测试告警
+	 */
+	private boolean isTest;
+
 }

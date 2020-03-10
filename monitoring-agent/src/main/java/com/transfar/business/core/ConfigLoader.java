@@ -1,7 +1,7 @@
 package com.transfar.business.core;
 
 import com.transfar.AgentApplication;
-import com.transfar.properties.MonitoringProperties;
+import com.transfar.property.MonitoringProperties;
 
 /**
  * <p>

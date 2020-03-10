@@ -21,15 +21,16 @@ public class MonitorTest {
 	public static void main(String[] args) throws InterruptedException {
 		Monitor.start("", "monitor.properties");
 		// 发送告警
-		while (true) {
+		//while (true) {
 			Alarm alarm = new Alarm();
+			alarm.setTest(false);
 			alarm.setAlarmLevel(AlarmLevelEnums.WARN);
-			alarm.setMsg("测试");
+			alarm.setMsg("测试监控系统短信功能！");
 			alarm.setCharset(Charset.forName("gbk"));
 			boolean result = Monitor.sendAlarm(alarm);
 			log.info("发送告警：{}", result);
 			Thread.sleep(60000);
-		}
+		//}
 
 	}
 

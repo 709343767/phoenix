@@ -46,6 +46,7 @@ public class PackageConstructor implements IPackageConstructor {
 		alarmPackage.setInstanceId(InstanceUtils.getInstanceId());
 		alarmPackage.setInstanceName(InstanceUtils.getInstanceName());
 		alarmPackage.setLevel(alarm.getAlarmLevel().name());
+		alarmPackage.setTest(alarm.isTest());
 		Charset charset = alarm.getCharset();
 		// 设置了字符集
 		if (null != charset) {

@@ -1,4 +1,4 @@
-package com.transfar.properties;
+package com.transfar.property;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

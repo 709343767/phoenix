@@ -45,6 +45,7 @@ public class PackageConstructor implements IPackageConstructor {
 		alarmPackage.setInstanceName(InstanceUtils.getInstanceName());
 		alarmPackage.setLevel(alarm.getAlarmLevel().name());
 		alarmPackage.setMsg(alarm.getMsg());
+		alarmPackage.setTest(alarm.isTest());
 		return alarmPackage;
 	}
 

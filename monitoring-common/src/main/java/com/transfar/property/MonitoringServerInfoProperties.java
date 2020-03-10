@@ -1,4 +1,4 @@
-package com.transfar.properties;
+package com.transfar.property;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -7,20 +7,20 @@ import lombok.experimental.Accessors;
 
 /**
  * <p>
- * 心跳属性
+ * 服务器信息属性
  * </p>
  *
  * @author 皮锋
- * @custom.date 2020年3月5日 下午3:23:02
+ * @custom.date 2020年3月8日 下午2:27:42
  */
 @Data
 @ToString
 @NoArgsConstructor
 @Accessors(chain = true)
-public class MonitoringHeartbeatProperties {
+public class MonitoringServerInfoProperties {
 
 	/**
-	 * 心跳频率
+	 * 发送服务器信息的频率
 	 */
 	private long rate;
 

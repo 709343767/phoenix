@@ -6,6 +6,8 @@ import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -17,9 +19,10 @@ import lombok.extern.slf4j.Slf4j;
  * @author 皮锋
  * @custom.date 2020年1月20日 上午10:58:31
  */
+@SuppressWarnings("deprecation")
 @Configuration
 @Slf4j
-public class RestTemplateConfig {
+public class RestTemplateConfig extends WebMvcConfigurerAdapter {
 
 	/**
 	 * <p>
@@ -41,6 +44,21 @@ public class RestTemplateConfig {
 				.build();
 		log.info("RestTemplate配置成功！");
 		return restTemplate;
+	}
+
+	/**
+	 * <p>
+	 * favorPathExtension表示支持后缀匹配，属性ignoreAcceptHeader默认为fasle，表示accept-header匹配，defaultContentType开启默认匹配。<br>
+	 * 例如：请求aaa.xx，若设置<entry key="xx" value="application/xml"/> 也能匹配以xml返回。<br>
+	 * 根据以上条件进行一一匹配最终，得到相关并符合的策略初始化ContentNegotiationManager
+	 * </p>
+	 * 
+	 * @author 皮锋
+	 * @custom.date 2020年3月4日 下午3:46:33
+	 */
+	@Override
+	public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
+		configurer.favorPathExtension(false);
 	}
 
 }

@@ -7,11 +7,11 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.transfar.exception.NotFoundConfigFileException;
 import com.transfar.exception.NotFoundConfigParamException;
-import com.transfar.properties.MonitoringHeartbeatProperties;
-import com.transfar.properties.MonitoringOwnProperties;
-import com.transfar.properties.MonitoringProperties;
-import com.transfar.properties.MonitoringServerInfoProperties;
-import com.transfar.properties.MonitoringServerProperties;
+import com.transfar.property.MonitoringHeartbeatProperties;
+import com.transfar.property.MonitoringOwnProperties;
+import com.transfar.property.MonitoringProperties;
+import com.transfar.property.MonitoringServerInfoProperties;
+import com.transfar.property.MonitoringServerProperties;
 import com.transfar.util.PropertiesUtils;
 
 /**

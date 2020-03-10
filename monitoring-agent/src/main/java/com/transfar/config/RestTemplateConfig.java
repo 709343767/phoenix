@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
 
-import com.transfar.properties.MonitoringProperties;
+import com.transfar.property.MonitoringProperties;
 
 import lombok.extern.slf4j.Slf4j;
 
