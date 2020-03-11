@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 
 import com.transfar.business.core.MethodExecuteHandler;
 import com.transfar.business.plug.service.IServerService;
+import com.transfar.dto.BaseResponsePackage;
 import com.transfar.dto.ServerPackage;
 
 /**
@@ -25,10 +26,10 @@ public class ServerServiceImpl implements IServerService {
 	 * @author 皮锋
 	 * @custom.date 2020年3月7日 下午5:14:29
 	 * @param serverPackage 服务器信息包
-	 * @return Boolean
+	 * @return BaseResponsePackage
 	 */
 	@Override
-	public Boolean dealServerPackage(ServerPackage serverPackage) {
+	public BaseResponsePackage dealServerPackage(ServerPackage serverPackage) {
 		// 把服务器信息包转发到服务端
 		return MethodExecuteHandler.sendServerPackage2Server(serverPackage);
 	}

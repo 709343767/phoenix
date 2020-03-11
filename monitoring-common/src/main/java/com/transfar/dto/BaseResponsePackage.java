@@ -1,20 +1,26 @@
 package com.transfar.dto;
 
-import com.transfar.common.InstanceBean;
-import io.swagger.annotations.ApiModelProperty;
-import lombok.*;
-import lombok.experimental.Accessors;
-
 import java.io.Serializable;
 import java.util.Date;
 
+import com.transfar.common.InstanceBean;
+
+import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+import lombok.experimental.Accessors;
+
 /**
  * <p>
- * 心跳包传输层对象
+ * 基础响应包
  * </p>
  *
  * @author 皮锋
- * @custom.date 2020年3月4日 下午12:20:06
+ * @custom.date 2020年3月11日 上午9:40:59
  */
 @Getter
 @Setter
@@ -23,13 +29,13 @@ import java.util.Date;
 @AllArgsConstructor
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public class HeartbeatPackage extends InstanceBean implements Serializable {
+public class BaseResponsePackage extends InstanceBean implements Serializable {
 
 	/**
 	 * serialVersionUID
 	 */
-	private static final long serialVersionUID = -1227833279912325068L;
-
+	private static final long serialVersionUID = -8909786365854143972L;
+	
 	/**
 	 * ID
 	 */
@@ -43,9 +49,8 @@ public class HeartbeatPackage extends InstanceBean implements Serializable {
 	private Date dateTime;
 
 	/**
-	 * 心跳频率
+	 * 响应结果
 	 */
-	@ApiModelProperty(value = "心跳频率")
-	private Long rate;
-
+	@ApiModelProperty(value = "响应结果")
+	private Boolean result;
 }

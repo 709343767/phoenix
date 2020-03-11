@@ -1,6 +1,7 @@
 package com.transfar.business.plug.service;
 
 import com.transfar.dto.AlarmPackage;
+import com.transfar.dto.BaseResponsePackage;
 
 /**
  * <p>
@@ -20,8 +21,8 @@ public interface IAlarmService {
 	 * @author 皮锋
 	 * @custom.date 2020年3月6日 下午3:09:12
 	 * @param heartbeatPackage 告警包
-	 * @return Boolean
+	 * @return BaseResponsePackage
 	 */
-	Boolean dealAlarmPackage(AlarmPackage heartbeatPackage);
+	BaseResponsePackage dealAlarmPackage(AlarmPackage heartbeatPackage);
 
 }

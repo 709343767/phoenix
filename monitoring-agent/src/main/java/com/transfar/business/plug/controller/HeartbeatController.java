@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSON;
 import com.transfar.business.plug.service.IHeartbeatService;
+import com.transfar.dto.BaseResponsePackage;
 import com.transfar.dto.HeartbeatPackage;
 
 import io.swagger.annotations.Api;
@@ -38,13 +39,13 @@ public class HeartbeatController {
 	 * </p>
 	 *
 	 * @param request 请求参数
-	 * @return HeartbeatPackage
+	 * @return BaseResponsePackage
 	 * @author 皮锋
 	 * @custom.date 2020年3月4日 下午12:27:47
 	 */
 	@ApiOperation(value = "监控代理程序接收监控客户端程序发的心跳包，并返回结果", notes = "接收心跳包")
 	@PostMapping("/accept-heartbeat-package")
-	public HeartbeatPackage acceptHeartbeatPackage(@RequestBody(required = true) String request) {
+	public BaseResponsePackage acceptHeartbeatPackage(@RequestBody(required = true) String request) {
 		HeartbeatPackage heartbeatPackage = JSON.parseObject(request, HeartbeatPackage.class);
 		return this.heartbeatService.dealHeartbeatPackage(heartbeatPackage);
 	}

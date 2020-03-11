@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import com.transfar.business.core.MethodExecuteHandler;
 import com.transfar.business.plug.service.IAlarmService;
 import com.transfar.dto.AlarmPackage;
+import com.transfar.dto.BaseResponsePackage;
 
 /**
  * <p> 
@@ -25,10 +26,10 @@ public class AlarmServiceImpl implements IAlarmService{
 	 * @author 皮锋
 	 * @custom.date 2020年3月6日 下午3:09:12
 	 * @param heartbeatPackage 告警包
-	 * @return Boolean
+	 * @return BaseResponsePackage
 	 */
 	@Override
-	public Boolean dealAlarmPackage(AlarmPackage heartbeatPackage) {
+	public BaseResponsePackage dealAlarmPackage(AlarmPackage heartbeatPackage) {
 		// 把告警包转发到服务端
 		return MethodExecuteHandler.sendAlarmPackage2Server(heartbeatPackage);
 	}

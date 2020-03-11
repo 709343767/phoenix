@@ -4,6 +4,7 @@ import org.hyperic.sigar.SigarException;
 
 import com.transfar.domain.Alarm;
 import com.transfar.dto.AlarmPackage;
+import com.transfar.dto.BaseResponsePackage;
 import com.transfar.dto.HeartbeatPackage;
 import com.transfar.dto.ServerPackage;
 
@@ -51,5 +52,27 @@ public interface IPackageConstructor {
 	 * @throws SigarException Sigar异常
 	 */
 	ServerPackage structureServerPackage() throws SigarException;
+
+	/**
+	 * <p>
+	 * 构建请求成功的基础响应包
+	 * </p>
+	 *
+	 * @author 皮锋
+	 * @custom.date 2020年3月11日 上午9:52:37
+	 * @return BaseResponsePackage
+	 */
+	BaseResponsePackage structureBaseResponsePackageBySuccess();
+
+	/**
+	 * <p>
+	 * 构建请求失败的基础响应包
+	 * </p>
+	 *
+	 * @author 皮锋
+	 * @custom.date 2020年3月11日 上午9:52:48
+	 * @return BaseResponsePackage
+	 */
+	BaseResponsePackage structureBaseResponsePackageByFail();
 
 }

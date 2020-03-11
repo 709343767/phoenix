@@ -1,6 +1,7 @@
 package com.transfar.business.core;
 
 import com.transfar.dto.AlarmPackage;
+import com.transfar.dto.BaseResponsePackage;
 import com.transfar.dto.HeartbeatPackage;
 import com.transfar.dto.ServerPackage;
 
@@ -22,21 +23,20 @@ public class MethodExecuteHandler {
 	 * @author 皮锋
 	 * @custom.date 2020年3月5日 上午11:01:46
 	 * @param heartbeatPackage 心跳包
-	 * @return HeartbeatPackage
+	 * @return BaseResponsePackage
 	 */
-	public static HeartbeatPackage sendHeartbeatPackage2Server(HeartbeatPackage heartbeatPackage) {
+	public static BaseResponsePackage sendHeartbeatPackage2Server(HeartbeatPackage heartbeatPackage) {
 		// 通过命令执行器管理器，获取指定的命令执行器
 		Invoker invoker = InvokerHolder.getInvoker(com.transfar.business.server.service.IHeartbeatService.class,
 				"sendHeartbeatPackage");
 		// 执行命令，返回执行结果
-		HeartbeatPackage result;
+		BaseResponsePackage result;
 		try {
 			assert invoker != null;
 			Object object = invoker.invoke(heartbeatPackage);
-			result = (HeartbeatPackage) object;
+			result = (BaseResponsePackage) object;
 		} catch (Exception e) {
-			result = new PackageConstructor().structureHeartbeatPackage()//
-					.setResult(false);
+			result = new PackageConstructor().structureBaseResponsePackageByFail();
 		}
 		return result;
 	}
@@ -49,20 +49,20 @@ public class MethodExecuteHandler {
 	 * @author 皮锋
 	 * @custom.date 2020年3月6日 下午3:23:56
 	 * @param alarmPackage 告警包
-	 * @return Boolean
+	 * @return BaseResponsePackage
 	 */
-	public static Boolean sendAlarmPackage2Server(AlarmPackage alarmPackage) {
+	public static BaseResponsePackage sendAlarmPackage2Server(AlarmPackage alarmPackage) {
 		// 通过命令执行器管理器，获取指定的命令执行器
 		Invoker invoker = InvokerHolder.getInvoker(com.transfar.business.server.service.IAlarmService.class,
 				"sendAlarmPackage");
 		// 执行命令，返回执行结果
-		boolean result;
+		BaseResponsePackage result;
 		try {
 			assert invoker != null;
-			invoker.invoke(alarmPackage);
-			result = true;
+			Object object = invoker.invoke(alarmPackage);
+			result = (BaseResponsePackage) object;
 		} catch (Exception e) {
-			result = false;
+			result = new PackageConstructor().structureBaseResponsePackageByFail();
 		}
 		return result;
 	}
@@ -75,20 +75,20 @@ public class MethodExecuteHandler {
 	 * @author 皮锋
 	 * @custom.date 2020年3月7日 下午5:18:32
 	 * @param serverPackage 服务器信息包
-	 * @return Boolean
+	 * @return BaseResponsePackage
 	 */
-	public static Boolean sendServerPackage2Server(ServerPackage serverPackage) {
+	public static BaseResponsePackage sendServerPackage2Server(ServerPackage serverPackage) {
 		// 通过命令执行器管理器，获取指定的命令执行器
 		Invoker invoker = InvokerHolder.getInvoker(com.transfar.business.server.service.IServerService.class,
 				"sendServerPackage");
 		// 执行命令，返回执行结果
-		boolean result;
+		BaseResponsePackage result;
 		try {
 			assert invoker != null;
-			invoker.invoke(serverPackage);
-			result = true;
+			Object object = invoker.invoke(serverPackage);
+			result = (BaseResponsePackage) object;
 		} catch (Exception e) {
-			result = false;
+			result = new PackageConstructor().structureBaseResponsePackageByFail();
 		}
 		return result;
 	}

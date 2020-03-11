@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSON;
 import com.transfar.business.plug.service.IServerService;
+import com.transfar.dto.BaseResponsePackage;
 import com.transfar.dto.ServerPackage;
 
 import io.swagger.annotations.Api;
@@ -40,11 +41,11 @@ public class ServerController {
 	 * @param request 请求参数
 	 * @author 皮锋
 	 * @custom.date 2020年3月6日 下午3:00:54
-	 * @return Boolean
+	 * @return BaseResponsePackage
 	 */
 	@ApiOperation(value = "监控代理程序接收监控客户端程序发的服务器信息包，并返回结果", notes = "接收服务器信息包")
 	@PostMapping("/accept-server-package")
-	public Boolean acceptServerPackage(@RequestBody(required = true) String request) {
+	public BaseResponsePackage acceptServerPackage(@RequestBody(required = true) String request) {
 		ServerPackage serverPackage = JSON.parseObject(request, ServerPackage.class);
 		return this.serverService.dealServerPackage(serverPackage);
 	}

@@ -14,6 +14,7 @@ import org.springframework.web.client.RestTemplate;
 import com.transfar.business.constant.Urlconstants;
 import com.transfar.business.server.service.IAlarmService;
 import com.transfar.dto.AlarmPackage;
+import com.transfar.dto.BaseResponsePackage;
 
 /**
  * <p>
@@ -37,16 +38,16 @@ public class AlarmServiceImpl implements IAlarmService {
 	 * @author 皮锋
 	 * @custom.date 2020年3月6日 下午3:27:17
 	 * @param alarmPackage 告警包
-	 * @return Boolean
+	 * @return BaseResponsePackage
 	 */
 	@Override
-	public Boolean sendAlarmPackage(AlarmPackage alarmPackage) {
+	public BaseResponsePackage sendAlarmPackage(AlarmPackage alarmPackage) {
 		HttpHeaders headers = new HttpHeaders();
 		// headers.add("Context-type", "text/html;charset=utf-8");
 		headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
 		HttpEntity<AlarmPackage> entity = new HttpEntity<>(alarmPackage, headers);
-		ResponseEntity<Boolean> responseEntity = this.restTemplate.exchange(Urlconstants.ALARM_URL, HttpMethod.POST,
-				entity, Boolean.class);
+		ResponseEntity<BaseResponsePackage> responseEntity = this.restTemplate.exchange(Urlconstants.ALARM_URL,
+				HttpMethod.POST, entity, BaseResponsePackage.class);
 		return responseEntity.getBody();
 	}
 

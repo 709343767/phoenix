@@ -13,6 +13,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.transfar.business.constant.Urlconstants;
 import com.transfar.business.server.service.IServerService;
+import com.transfar.dto.BaseResponsePackage;
 import com.transfar.dto.ServerPackage;
 
 /**
@@ -37,16 +38,16 @@ public class ServerServiceImpl implements IServerService {
 	 * @author 皮锋
 	 * @param serverPackage 服务器信息包
 	 * @custom.date 2020年3月7日 下午5:24:47
-	 * @return Boolean
+	 * @return BaseResponsePackage
 	 */
 	@Override
-	public Boolean sendServerPackage(ServerPackage serverPackage) {
+	public BaseResponsePackage sendServerPackage(ServerPackage serverPackage) {
 		HttpHeaders headers = new HttpHeaders();
 		// headers.add("Context-type", "text/html;charset=utf-8");
 		headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
 		HttpEntity<ServerPackage> entity = new HttpEntity<>(serverPackage, headers);
-		ResponseEntity<Boolean> responseEntity = this.restTemplate.exchange(Urlconstants.SERVER_URL, HttpMethod.POST,
-				entity, Boolean.class);
+		ResponseEntity<BaseResponsePackage> responseEntity = this.restTemplate.exchange(Urlconstants.SERVER_URL,
+				HttpMethod.POST, entity, BaseResponsePackage.class);
 		return responseEntity.getBody();
 	}
 

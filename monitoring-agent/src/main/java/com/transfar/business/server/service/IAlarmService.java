@@ -3,6 +3,7 @@ package com.transfar.business.server.service;
 import com.transfar.business.annotation.TargetInf;
 import com.transfar.business.annotation.TargetMethod;
 import com.transfar.dto.AlarmPackage;
+import com.transfar.dto.BaseResponsePackage;
 
 /**
  * <p>
@@ -23,10 +24,10 @@ public interface IAlarmService {
 	 * @author 皮锋
 	 * @custom.date 2020年3月6日 下午3:27:17
 	 * @param alarmPackage 告警包
-	 * @return Boolean
+	 * @return BaseResponsePackage
 	 * @throws Exception 所有异常
 	 */
 	// 加了注解的方法将会添加到命令执行器管理器，注册到bean容器
 	@TargetMethod(method = "sendAlarmPackage")
-	Boolean sendAlarmPackage(AlarmPackage alarmPackage) throws Exception;
+	BaseResponsePackage sendAlarmPackage(AlarmPackage alarmPackage) throws Exception;
 }

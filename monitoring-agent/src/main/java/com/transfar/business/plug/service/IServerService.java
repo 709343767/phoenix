@@ -1,5 +1,6 @@
 package com.transfar.business.plug.service;
 
+import com.transfar.dto.BaseResponsePackage;
 import com.transfar.dto.ServerPackage;
 
 /**
@@ -20,8 +21,8 @@ public interface IServerService {
 	 * @author 皮锋
 	 * @custom.date 2020年3月7日 下午5:14:29
 	 * @param serverPackage 服务器信息包
-	 * @return Boolean
+	 * @return BaseResponsePackage
 	 */
-	Boolean dealServerPackage(ServerPackage serverPackage);
+	BaseResponsePackage dealServerPackage(ServerPackage serverPackage);
 
 }

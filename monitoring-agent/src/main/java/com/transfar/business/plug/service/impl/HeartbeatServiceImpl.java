@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 
 import com.transfar.business.core.MethodExecuteHandler;
 import com.transfar.business.plug.service.IHeartbeatService;
+import com.transfar.dto.BaseResponsePackage;
 import com.transfar.dto.HeartbeatPackage;
 
 /**
@@ -23,12 +24,12 @@ public class HeartbeatServiceImpl implements IHeartbeatService {
 	 * </p>
 	 *
 	 * @param heartbeatPackage 心跳包对象
-	 * @return HeartbeatPackage
+	 * @return BaseResponsePackage
 	 * @author 皮锋
 	 * @custom.date 2020年3月4日 下午1:47:28
 	 */
 	@Override
-	public HeartbeatPackage dealHeartbeatPackage(HeartbeatPackage heartbeatPackage) {
+	public BaseResponsePackage dealHeartbeatPackage(HeartbeatPackage heartbeatPackage) {
 		// 把心跳包转发到服务端
 		return MethodExecuteHandler.sendHeartbeatPackage2Server(heartbeatPackage);
 	}

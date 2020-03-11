@@ -2,6 +2,7 @@ package com.transfar.business.server.service;
 
 import com.transfar.business.annotation.TargetInf;
 import com.transfar.business.annotation.TargetMethod;
+import com.transfar.dto.BaseResponsePackage;
 import com.transfar.dto.HeartbeatPackage;
 
 /**
@@ -24,10 +25,10 @@ public interface IHeartbeatService {
 	 * @custom.date 2020年3月4日 下午2:16:07
 	 * @param heartbeatPackage 心跳包对象
 	 * @throws Exception 所有异常
-	 * @return HeartbeatPackage
+	 * @return BaseResponsePackage
 	 */
 	// 加了注解的方法将会添加到命令执行器管理器，注册到bean容器
 	@TargetMethod(method = "sendHeartbeatPackage")
-	HeartbeatPackage sendHeartbeatPackage(HeartbeatPackage heartbeatPackage) throws Exception;
+	BaseResponsePackage sendHeartbeatPackage(HeartbeatPackage heartbeatPackage) throws Exception;
 
 }

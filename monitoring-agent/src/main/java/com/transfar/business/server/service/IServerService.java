@@ -2,6 +2,7 @@ package com.transfar.business.server.service;
 
 import com.transfar.business.annotation.TargetInf;
 import com.transfar.business.annotation.TargetMethod;
+import com.transfar.dto.BaseResponsePackage;
 import com.transfar.dto.ServerPackage;
 
 /**
@@ -23,10 +24,10 @@ public interface IServerService {
 	 * @author 皮锋
 	 * @param serverPackage 服务器信息包
 	 * @custom.date 2020年3月7日 下午5:24:47
-	 * @return Boolean
+	 * @return BaseResponsePackage
 	 * @throws Exception 所有异常
 	 */
 	// 加了注解的方法将会添加到命令执行器管理器，注册到bean容器
 	@TargetMethod(method = "sendServerPackage")
-	Boolean sendServerPackage(ServerPackage serverPackage) throws Exception;
+	BaseResponsePackage sendServerPackage(ServerPackage serverPackage) throws Exception;
 }

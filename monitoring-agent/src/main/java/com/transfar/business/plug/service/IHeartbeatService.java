@@ -1,5 +1,6 @@
 package com.transfar.business.plug.service;
 
+import com.transfar.dto.BaseResponsePackage;
 import com.transfar.dto.HeartbeatPackage;
 
 /**
@@ -18,10 +19,10 @@ public interface IHeartbeatService {
 	 * </p>
 	 *
 	 * @param heartbeatPackage 心跳包对象
-	 * @return HeartbeatPackage
+	 * @return BaseResponsePackage
 	 * @author 皮锋
 	 * @custom.date 2020年3月4日 下午1:47:28
 	 */
-	HeartbeatPackage dealHeartbeatPackage(HeartbeatPackage heartbeatPackage);
+	BaseResponsePackage dealHeartbeatPackage(HeartbeatPackage heartbeatPackage);
 
 }
