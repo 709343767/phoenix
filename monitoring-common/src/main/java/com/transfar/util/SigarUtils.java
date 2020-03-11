@@ -79,7 +79,8 @@ public final class SigarUtils {
         File tempDir = new File(
                 currentDir + File.separator + "tmp" + File.separator + "sigar" + File.separator + "lib");
         if (!tempDir.exists()) {
-            tempDir.mkdirs();
+            boolean isMkdirs = tempDir.mkdirs();
+            log.debug("创建Sigar库文件夹：{}", isMkdirs);
         }
         @Cleanup
         BufferedOutputStream os = new BufferedOutputStream(new FileOutputStream(new File(tempDir, lib), false));

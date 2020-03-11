@@ -16,7 +16,7 @@ public class ConfigLoader {
 	/**
 	 * 监控配置
 	 */
-	public static MonitoringProperties monitoringProperties = getConfig();
+	public static final MonitoringProperties monitoringProperties = getConfig();
 
 	/**
 	 * <p>

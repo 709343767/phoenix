@@ -3,6 +3,8 @@ package com.transfar.util;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import com.google.common.base.Charsets;
+
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -53,7 +55,7 @@ public final class MD5Utils {
      * @custom.date 2020年3月4日 下午11:23:54
      */
     public static String getMD5String(String s) {
-        return getMD5String(s.getBytes());
+        return getMD5String(s.getBytes(Charsets.UTF_8));
     }
 
     /**

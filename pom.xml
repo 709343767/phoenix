@@ -198,6 +198,7 @@
 
     <!-- 构建 -->
     <build>
+        <defaultGoal>package</defaultGoal>
         <pluginManagement>
             <plugins>
                 <!--编译插件 -->
@@ -239,6 +240,80 @@
                 </plugin>
             </plugins>
         </pluginManagement>
+
+        <resources>
+            <resource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <!-- 为了解决mybatis sql 配置文件的编译问题 -->
+                    <include>**/*.xml</include>
+                </includes>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <!-- 如果加了上面的配置，必须加入这个配置，不然resources目录下的东西不会进编译目录 -->
+                    <include>**/*.*</include>
+                </includes>
+            </resource>
+        </resources>
+        <plugins>
+            <!-- 为Java项目生成静态HTML网站的插件 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
+                <!-- 国际化定义当地语言 -->
+                <configuration>
+                    <locales>zh_CN</locales>
+                </configuration>
+            </plugin>
+            <!-- 项目信息报告插件 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-project-info-reports-plugin</artifactId>
+                <version>3.0.0</version>
+            </plugin>
+            <!-- 生成java代码交叉引用和源代码的html格式插件 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jxr-plugin</artifactId>
+                <version>2.5</version>
+            </plugin>
+            <!-- 生成java doc插件 -->
+            <!-- http://maven.apache.org/plugins/maven-javadoc-plugin/javadoc-mojo.html -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <configuration>
+                    <additionalJOptions>
+                        <additionalJOption>-J-Xmx180m</additionalJOption>
+                    </additionalJOptions>
+                    <charset>${project.build.sourceEncoding}</charset>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                    <docencoding>${project.build.sourceEncoding}</docencoding>
+                    <destDir>target/javadoc</destDir>
+                    <show>private</show>
+                    <!-- 解析自定义注释 -->
+                    <!-- MAVEN_OPTS=-Dfile.encoding=UTF-8;JAVA_TOOL_OPTIONS=-Dfile.encoding=UTF-8 -->
+                    <tags>
+                        <tag>
+                            <name>custom.date</name>
+                            <placement>a</placement>
+                            <head>时间</head>
+                        </tag>
+                    </tags>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
     </build>
 
     <!-- 仓库 -->
