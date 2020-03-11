@@ -22,19 +22,19 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class HeartbeatTask implements Runnable {
 
-	@Override
-	public void run() {
-		try {
-			// 构建心跳数据包
-			HeartbeatPackage heartbeatPackage = new PackageConstructor().structureHeartbeatPackage();
-			// 发送请求
-			String result = Sender.send(UrlConstants.HEARTBEAT_URL, heartbeatPackage.toJsonString());
-			log.info("心跳包响应消息：{}", result);
-		} catch (ClientProtocolException e) {
-			log.error("客户端协议异常！", e);
-		} catch (IOException e) {
-			log.error("IO异常！", e);
-		}
-	}
+    @Override
+    public void run() {
+        try {
+            // 构建心跳数据包
+            HeartbeatPackage heartbeatPackage = new PackageConstructor().structureHeartbeatPackage();
+            // 发送请求
+            String result = Sender.send(UrlConstants.HEARTBEAT_URL, heartbeatPackage.toJsonString());
+            log.debug("心跳包响应消息：{}", result);
+        } catch (ClientProtocolException e) {
+            log.error("客户端协议异常！", e);
+        } catch (IOException e) {
+            log.error("IO异常！", e);
+        }
+    }
 
 }

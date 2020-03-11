@@ -40,7 +40,7 @@ public class Monitor {
 
 	/**
 	 * <p>
-	 * 开启监控
+	 * 开启监控，自定义配置文件路径和名字
 	 * </p>
 	 *
 	 * @author 皮锋

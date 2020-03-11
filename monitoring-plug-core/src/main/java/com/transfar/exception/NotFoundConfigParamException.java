@@ -10,17 +10,17 @@ package com.transfar.exception;
  */
 public class NotFoundConfigParamException extends Exception {
 
-	/**
-	 * serialVersionUID
-	 */
-	private static final long serialVersionUID = 6546543050835301134L;
+    /**
+     * serialVersionUID
+     */
+    private static final long serialVersionUID = 6546543050835301134L;
 
-	public NotFoundConfigParamException() {
-		super();
-	}
+    public NotFoundConfigParamException() {
+        super();
+    }
 
-	public NotFoundConfigParamException(String message) {
-		super(message);
-	}
+    public NotFoundConfigParamException(String message) {
+        super(message);
+    }
 
 }

@@ -27,28 +27,28 @@ import com.transfar.dto.BaseResponsePackage;
 @Service
 public class AlarmServiceImpl implements IAlarmService {
 
-	@Autowired
-	private RestTemplate restTemplate;
+    @Autowired
+    private RestTemplate restTemplate;
 
-	/**
-	 * <p>
-	 * 给服务端发告警包
-	 * </p>
-	 *
-	 * @author 皮锋
-	 * @custom.date 2020年3月6日 下午3:27:17
-	 * @param alarmPackage 告警包
-	 * @return BaseResponsePackage
-	 */
-	@Override
-	public BaseResponsePackage sendAlarmPackage(AlarmPackage alarmPackage) {
-		HttpHeaders headers = new HttpHeaders();
-		// headers.add("Context-type", "text/html;charset=utf-8");
-		headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-		HttpEntity<AlarmPackage> entity = new HttpEntity<>(alarmPackage, headers);
-		ResponseEntity<BaseResponsePackage> responseEntity = this.restTemplate.exchange(Urlconstants.ALARM_URL,
-				HttpMethod.POST, entity, BaseResponsePackage.class);
-		return responseEntity.getBody();
-	}
+    /**
+     * <p>
+     * 给服务端发告警包
+     * </p>
+     *
+     * @param alarmPackage 告警包
+     * @return BaseResponsePackage
+     * @author 皮锋
+     * @custom.date 2020年3月6日 下午3:27:17
+     */
+    @Override
+    public BaseResponsePackage sendAlarmPackage(AlarmPackage alarmPackage) {
+        HttpHeaders headers = new HttpHeaders();
+        // headers.add("Context-type", "text/html;charset=utf-8");
+        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+        HttpEntity<AlarmPackage> entity = new HttpEntity<>(alarmPackage, headers);
+        ResponseEntity<BaseResponsePackage> responseEntity = this.restTemplate.exchange(Urlconstants.ALARM_URL,
+                HttpMethod.POST, entity, BaseResponsePackage.class);
+        return responseEntity.getBody();
+    }
 
 }

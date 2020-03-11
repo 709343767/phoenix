@@ -24,34 +24,34 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class RestTemplateConfig {
 
-	/**
-	 * 监控属性
-	 */
-	@Autowired
-	private MonitoringProperties monitoringProperties;
+    /**
+     * 监控属性
+     */
+    @Autowired
+    private MonitoringProperties monitoringProperties;
 
-	/**
-	 * <p>
-	 * 构造RestTemplate实例，把RestTemplate实例作为一个JavaBean交给Spring管理
-	 * </p>
-	 *
-	 * @return RestTemplate
-	 * @author 皮锋
-	 * @custom.date 2020年3月4日 下午3:46:33
-	 */
-	@Bean
-	public RestTemplate restTemplate() {
-		String rootUri = this.monitoringProperties.getServerProperties().getUrl();
-		RestTemplate restTemplate = new RestTemplateBuilder()//
-				// .basicAuthorization("username", "password")
-				// 5秒
-				.setConnectTimeout(Duration.ofSeconds(5))
-				// 5秒
-				.setReadTimeout(Duration.ofSeconds(5))//
-				.rootUri(rootUri) //
-				.build();
-		log.info("RestTemplate配置成功！");
-		return restTemplate;
-	}
+    /**
+     * <p>
+     * 构造RestTemplate实例，把RestTemplate实例作为一个JavaBean交给Spring管理
+     * </p>
+     *
+     * @return RestTemplate
+     * @author 皮锋
+     * @custom.date 2020年3月4日 下午3:46:33
+     */
+    @Bean
+    public RestTemplate restTemplate() {
+        String rootUri = this.monitoringProperties.getServerProperties().getUrl();
+        RestTemplate restTemplate = new RestTemplateBuilder()//
+                // .basicAuthorization("username", "password")
+                // 5秒
+                .setConnectTimeout(Duration.ofSeconds(5))
+                // 5秒
+                .setReadTimeout(Duration.ofSeconds(5))//
+                .rootUri(rootUri) //
+                .build();
+        log.info("RestTemplate配置成功！");
+        return restTemplate;
+    }
 
 }

@@ -23,21 +23,21 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ServerTask implements Runnable {
 
-	@Override
-	public void run() {
-		try {
-			// 构建服务器数据包
-			ServerPackage serverPackage = new PackageConstructor().structureServerPackage();
-			// 发送请求
-			String result = Sender.send(UrlConstants.SERVER_URL, serverPackage.toJsonString());
-			log.info("服务器包响应消息：{}", result);
-		} catch (ClientProtocolException e) {
-			log.error("客户端协议异常！", e);
-		} catch (IOException e) {
-			log.error("IO异常！", e);
-		} catch (SigarException e) {
-			log.error("Sigar异常！", e);
-		}
-	}
+    @Override
+    public void run() {
+        try {
+            // 构建服务器数据包
+            ServerPackage serverPackage = new PackageConstructor().structureServerPackage();
+            // 发送请求
+            String result = Sender.send(UrlConstants.SERVER_URL, serverPackage.toJsonString());
+            log.debug("服务器包响应消息：{}", result);
+        } catch (ClientProtocolException e) {
+            log.error("客户端协议异常！", e);
+        } catch (IOException e) {
+            log.error("IO异常！", e);
+        } catch (SigarException e) {
+            log.error("Sigar异常！", e);
+        }
+    }
 
 }

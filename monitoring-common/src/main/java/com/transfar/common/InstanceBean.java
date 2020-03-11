@@ -22,22 +22,22 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = true)
 public abstract class InstanceBean extends SuperBean {
 
-	/**
-	 * 端点（服务端、代理端、客户端）
-	 */
-	@ApiModelProperty(value = "端点（服务端、代理端、客户端）")
-	protected String endpoint;
+    /**
+     * 端点（服务端、代理端、客户端）
+     */
+    @ApiModelProperty(value = "端点（服务端、代理端、客户端）")
+    protected String endpoint;
 
-	/**
-	 * 应用实例ID
-	 */
-	@ApiModelProperty(value = "应用实例ID")
-	protected String instanceId;
+    /**
+     * 应用实例ID
+     */
+    @ApiModelProperty(value = "应用实例ID")
+    protected String instanceId;
 
-	/**
-	 * 应用实例名
-	 */
-	@ApiModelProperty(value = "应用实例名")
-	protected String instanceName;
+    /**
+     * 应用实例名
+     */
+    @ApiModelProperty(value = "应用实例名")
+    protected String instanceName;
 
 }

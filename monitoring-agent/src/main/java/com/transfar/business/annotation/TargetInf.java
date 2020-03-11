@@ -20,13 +20,13 @@ import java.lang.annotation.Target;
 public @interface TargetInf {
 
     /**
-     * <p> 
+     * <p>
      * 指定接口
      * </p>
      *
+     * @return Class
      * @author 皮锋
      * @custom.date 2020年3月7日 上午11:32:20
-     * @return Class
      */
     Class<?> inf();
 }

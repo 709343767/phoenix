@@ -18,61 +18,61 @@ import com.transfar.dto.ServerPackage;
  */
 public interface IPackageConstructor {
 
-	/**
-	 * <p>
-	 * 构造告警数据包
-	 * </p>
-	 *
-	 * @author 皮锋
-	 * @custom.date 2020年3月7日 下午3:02:46
-	 * @param alarm 告警信息
-	 * @return AlarmPackage
-	 */
-	AlarmPackage structureAlarmPackage(Alarm alarm);
+    /**
+     * <p>
+     * 构造告警数据包
+     * </p>
+     *
+     * @param alarm 告警信息
+     * @return AlarmPackage
+     * @author 皮锋
+     * @custom.date 2020年3月7日 下午3:02:46
+     */
+    AlarmPackage structureAlarmPackage(Alarm alarm);
 
-	/**
-	 * <p>
-	 * 构建心跳数据包
-	 * </p>
-	 *
-	 * @author 皮锋
-	 * @custom.date 2020年3月7日 下午3:54:30
-	 * @return HeartbeatPackage
-	 */
-	HeartbeatPackage structureHeartbeatPackage();
+    /**
+     * <p>
+     * 构建心跳数据包
+     * </p>
+     *
+     * @return HeartbeatPackage
+     * @author 皮锋
+     * @custom.date 2020年3月7日 下午3:54:30
+     */
+    HeartbeatPackage structureHeartbeatPackage();
 
-	/**
-	 * <p>
-	 * 构建服务器数据包
-	 * </p>
-	 *
-	 * @author 皮锋
-	 * @custom.date 2020年3月7日 下午4:51:51
-	 * @return ServerPackage
-	 * @throws SigarException Sigar异常
-	 */
-	ServerPackage structureServerPackage() throws SigarException;
+    /**
+     * <p>
+     * 构建服务器数据包
+     * </p>
+     *
+     * @return ServerPackage
+     * @throws SigarException Sigar异常
+     * @author 皮锋
+     * @custom.date 2020年3月7日 下午4:51:51
+     */
+    ServerPackage structureServerPackage() throws SigarException;
 
-	/**
-	 * <p>
-	 * 构建请求成功的基础响应包
-	 * </p>
-	 *
-	 * @author 皮锋
-	 * @custom.date 2020年3月11日 上午9:52:37
-	 * @return BaseResponsePackage
-	 */
-	BaseResponsePackage structureBaseResponsePackageBySuccess();
+    /**
+     * <p>
+     * 构建请求成功的基础响应包
+     * </p>
+     *
+     * @return BaseResponsePackage
+     * @author 皮锋
+     * @custom.date 2020年3月11日 上午9:52:37
+     */
+    BaseResponsePackage structureBaseResponsePackageBySuccess();
 
-	/**
-	 * <p>
-	 * 构建请求失败的基础响应包
-	 * </p>
-	 *
-	 * @author 皮锋
-	 * @custom.date 2020年3月11日 上午9:52:48
-	 * @return BaseResponsePackage
-	 */
-	BaseResponsePackage structureBaseResponsePackageByFail();
+    /**
+     * <p>
+     * 构建请求失败的基础响应包
+     * </p>
+     *
+     * @return BaseResponsePackage
+     * @author 皮锋
+     * @custom.date 2020年3月11日 上午9:52:48
+     */
+    BaseResponsePackage structureBaseResponsePackageByFail();
 
 }

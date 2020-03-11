@@ -22,26 +22,26 @@ import com.transfar.dto.HeartbeatPackage;
 @Component
 public class HeartbeatCommandLineRunner implements CommandLineRunner {
 
-	@Override
-	public void run(String... args) {
-		// 重新开启线程，让他单独去做我们想要做的操作，此时CommandLineRunner执行的操作和主线程是相互独立的，抛出异常并不会影响到主线程
-		Thread thread = new Thread(() -> {
-			final ScheduledExecutorService seService = Executors.newScheduledThreadPool(5, new ThreadFactory() {
-				AtomicInteger atomic = new AtomicInteger();
+    @Override
+    public void run(String... args) {
+        // 重新开启线程，让他单独去做我们想要做的操作，此时CommandLineRunner执行的操作和主线程是相互独立的，抛出异常并不会影响到主线程
+        Thread thread = new Thread(() -> {
+            final ScheduledExecutorService seService = Executors.newScheduledThreadPool(5, new ThreadFactory() {
+                AtomicInteger atomic = new AtomicInteger();
 
-				@Override
-				public Thread newThread(Runnable r) {
-					return new Thread(r, "monitoring-heartbeat-pool-thread-" + this.atomic.getAndIncrement());
-				}
-			});
-			seService.scheduleAtFixedRate(new HeartbeatScheduledExecutor(), 30,
-					ConfigLoader.monitoringProperties.getHeartbeatProperties().getRate(), TimeUnit.SECONDS);
-		});
-		// 设置守护线程
-		thread.setDaemon(true);
-		// 开始执行分进程
-		thread.start();
-	}
+                @Override
+                public Thread newThread(Runnable r) {
+                    return new Thread(r, "monitoring-heartbeat-pool-thread-" + this.atomic.getAndIncrement());
+                }
+            });
+            seService.scheduleAtFixedRate(new HeartbeatScheduledExecutor(), 30,
+                    ConfigLoader.monitoringProperties.getHeartbeatProperties().getRate(), TimeUnit.SECONDS);
+        });
+        // 设置守护线程
+        thread.setDaemon(true);
+        // 开始执行分进程
+        thread.start();
+    }
 }
 
 /**
@@ -54,10 +54,10 @@ public class HeartbeatCommandLineRunner implements CommandLineRunner {
  */
 class HeartbeatScheduledExecutor implements Runnable {
 
-	@Override
-	public void run() {
-		HeartbeatPackage heartbeatPackage = new PackageConstructor().structureHeartbeatPackage();
-		// 向服务端发送心跳包
-		MethodExecuteHandler.sendHeartbeatPackage2Server(heartbeatPackage);
-	}
+    @Override
+    public void run() {
+        HeartbeatPackage heartbeatPackage = new PackageConstructor().structureHeartbeatPackage();
+        // 向服务端发送心跳包
+        MethodExecuteHandler.sendHeartbeatPackage2Server(heartbeatPackage);
+    }
 }

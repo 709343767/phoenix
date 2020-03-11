@@ -19,33 +19,33 @@ import com.transfar.task.ServerTask;
  */
 public class ServerTaskScheduler {
 
-	/**
-	 * <p>
-	 * 开始定时发送服务器信息包
-	 * </p>
-	 *
-	 * @author 皮锋
-	 * @custom.date 2020年3月7日 下午4:43:35
-	 */
-	public static void run() {
-		// 重新开启线程，让他单独去做我们想要做的操作，抛出异常并不会影响到主线程
-		// Thread thread = new Thread(() -> {
-		// AtomicInteger atomic = new AtomicInteger();
-		final ScheduledExecutorService seService = Executors.newScheduledThreadPool(5, new ThreadFactory() {
-			AtomicInteger atomic = new AtomicInteger();
+    /**
+     * <p>
+     * 开始定时发送服务器信息包
+     * </p>
+     *
+     * @author 皮锋
+     * @custom.date 2020年3月7日 下午4:43:35
+     */
+    public static void run() {
+        // 重新开启线程，让他单独去做我们想要做的操作，抛出异常并不会影响到主线程
+        // Thread thread = new Thread(() -> {
+        // AtomicInteger atomic = new AtomicInteger();
+        final ScheduledExecutorService seService = Executors.newScheduledThreadPool(5, new ThreadFactory() {
+            AtomicInteger atomic = new AtomicInteger();
 
-			@Override
-			public Thread newThread(Runnable r) {
-				return new Thread(r, "monitoring-server-pool-thread-" + this.atomic.getAndIncrement());
-			}
-		});
-		// 发送服务器信息的频率
-		long rate = ConfigLoader.monitoringProperties.getMonitoringServerInfoProperties().getRate();
-		seService.scheduleAtFixedRate(new ServerTask(), 30, rate, TimeUnit.SECONDS);
-		// });
-		// 设置线程名
-		// thread.setName("monitoring-server-thread");
-		// 开始执行分进程
-		// thread.start();
-	}
+            @Override
+            public Thread newThread(Runnable r) {
+                return new Thread(r, "monitoring-server-pool-thread-" + this.atomic.getAndIncrement());
+            }
+        });
+        // 发送服务器信息的频率
+        long rate = ConfigLoader.monitoringProperties.getMonitoringServerInfoProperties().getRate();
+        seService.scheduleAtFixedRate(new ServerTask(), 30, rate, TimeUnit.SECONDS);
+        // });
+        // 设置线程名
+        // thread.setName("monitoring-server-thread");
+        // 开始执行分进程
+        // thread.start();
+    }
 }

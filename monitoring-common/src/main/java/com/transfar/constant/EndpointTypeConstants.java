@@ -10,19 +10,19 @@ package com.transfar.constant;
  */
 public final class EndpointTypeConstants {
 
-	/**
-	 * 服务端
-	 */
-	public static final String SERVER = "server";
+    /**
+     * 服务端
+     */
+    public static final String SERVER = "server";
 
-	/**
-	 * 代理端
-	 */
-	public static final String AGENT = "agent";
+    /**
+     * 代理端
+     */
+    public static final String AGENT = "agent";
 
-	/**
-	 * 客户端
-	 */
-	public static final String CLIENT = "client";
+    /**
+     * 客户端
+     */
+    public static final String CLIENT = "client";
 
 }

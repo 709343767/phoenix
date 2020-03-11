@@ -19,25 +19,25 @@ import org.springframework.util.StringUtils;
  */
 public class UniqueBeanNameGenerator extends AnnotationBeanNameGenerator {
 
-	/**
-	 * <p>
-	 * 生成Bean名字
-	 * </p>
-	 *
-	 * @param definition Bean定义
-	 * @param registry   Bean定义注册处，该类的作用主要是向注册表中注册BeanDefinition实例
-	 * @return Bean名字
-	 * @author 皮锋
-	 * @custom.date 2020/2/15 13:46
-	 */
-	@Override
-	public String generateBeanName(BeanDefinition definition, BeanDefinitionRegistry registry) {
-		// 全限定类名
-		String beanName = definition.getBeanClassName();
-		if (StringUtils.hasText(beanName)) {
-			return beanName;
-		}
-		return super.buildDefaultBeanName(definition, registry);
-	}
+    /**
+     * <p>
+     * 生成Bean名字
+     * </p>
+     *
+     * @param definition Bean定义
+     * @param registry   Bean定义注册处，该类的作用主要是向注册表中注册BeanDefinition实例
+     * @return Bean名字
+     * @author 皮锋
+     * @custom.date 2020/2/15 13:46
+     */
+    @Override
+    public String generateBeanName(BeanDefinition definition, BeanDefinitionRegistry registry) {
+        // 全限定类名
+        String beanName = definition.getBeanClassName();
+        if (StringUtils.hasText(beanName)) {
+            return beanName;
+        }
+        return super.buildDefaultBeanName(definition, registry);
+    }
 
 }

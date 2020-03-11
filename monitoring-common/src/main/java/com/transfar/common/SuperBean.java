@@ -13,17 +13,17 @@ import com.alibaba.fastjson.serializer.SerializerFeature;
  */
 public abstract class SuperBean {
 
-	/**
-	 * <p>
-	 * 对象转Json字符串
-	 * </p>
-	 *
-	 * @return Json
-	 * @author 皮锋
-	 * @custom.date 2020年3月4日 上午10:16:43
-	 */
-	public String toJsonString() {
-		return JSON.toJSONString(this, SerializerFeature.WriteMapNullValue);
-	}
+    /**
+     * <p>
+     * 对象转Json字符串
+     * </p>
+     *
+     * @return Json
+     * @author 皮锋
+     * @custom.date 2020年3月4日 上午10:16:43
+     */
+    public String toJsonString() {
+        return JSON.toJSONString(this, SerializerFeature.WriteMapNullValue);
+    }
 
 }

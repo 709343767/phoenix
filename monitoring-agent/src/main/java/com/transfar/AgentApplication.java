@@ -23,13 +23,13 @@ import com.transfar.config.UniqueBeanNameGenerator;
 // 启用事务管理
 public class AgentApplication {
 
-	/**
-	 * 配置应用上下文
-	 */
-	public static ConfigurableApplicationContext applicationContext;
+    /**
+     * 配置应用上下文
+     */
+    public static ConfigurableApplicationContext applicationContext;
 
-	public static void main(String[] args) {
-		applicationContext = SpringApplication.run(AgentApplication.class, args);
-	}
+    public static void main(String[] args) {
+        applicationContext = SpringApplication.run(AgentApplication.class, args);
+    }
 
 }

@@ -13,22 +13,22 @@ import com.transfar.property.MonitoringProperties;
  */
 public class ConfigLoader {
 
-	/**
-	 * 监控配置
-	 */
-	public static final MonitoringProperties monitoringProperties = getConfig();
+    /**
+     * 监控配置
+     */
+    public static final MonitoringProperties monitoringProperties = getConfig();
 
-	/**
-	 * <p>
-	 * 获取监控配置
-	 * </p>
-	 *
-	 * @author 皮锋
-	 * @custom.date 2020年3月6日 下午12:11:43
-	 * @return MonitoringProperties
-	 */
-	private static MonitoringProperties getConfig() {
-		return AgentApplication.applicationContext.getBean(MonitoringProperties.class);
-	}
+    /**
+     * <p>
+     * 获取监控配置
+     * </p>
+     *
+     * @return MonitoringProperties
+     * @author 皮锋
+     * @custom.date 2020年3月6日 下午12:11:43
+     */
+    private static MonitoringProperties getConfig() {
+        return AgentApplication.applicationContext.getBean(MonitoringProperties.class);
+    }
 
 }

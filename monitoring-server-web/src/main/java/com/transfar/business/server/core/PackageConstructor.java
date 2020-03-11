@@ -22,62 +22,62 @@ import com.transfar.util.StrUtils;
  */
 public class PackageConstructor implements IPackageConstructor {
 
-	@Override
-	public AlarmPackage structureAlarmPackage(Alarm alarm) {
-		return null;
-	}
+    @Override
+    public AlarmPackage structureAlarmPackage(Alarm alarm) {
+        return null;
+    }
 
-	@Override
-	public HeartbeatPackage structureHeartbeatPackage() {
-		return null;
-	}
+    @Override
+    public HeartbeatPackage structureHeartbeatPackage() {
+        return null;
+    }
 
-	@Override
-	public ServerPackage structureServerPackage() {
-		return null;
-	}
+    @Override
+    public ServerPackage structureServerPackage() {
+        return null;
+    }
 
-	/**
-	 * <p>
-	 * 构建请求成功的基础响应包
-	 * </p>
-	 *
-	 * @author 皮锋
-	 * @custom.date 2020年3月11日 上午9:52:37
-	 * @return BaseResponsePackage
-	 */
-	@Override
-	public BaseResponsePackage structureBaseResponsePackageBySuccess() {
-		BaseResponsePackage baseResponsePackage = new BaseResponsePackage();
-		baseResponsePackage.setEndpoint(EndpointTypeConstants.SERVER);
-		baseResponsePackage.setInstanceId(InstanceUtils.getInstanceId());
-		baseResponsePackage.setInstanceName(InstanceUtils.getInstanceName());
-		baseResponsePackage.setId(StrUtils.getUUID());
-		baseResponsePackage.setDateTime(new Date());
-		baseResponsePackage.setResult(true);
-		return baseResponsePackage;
+    /**
+     * <p>
+     * 构建请求成功的基础响应包
+     * </p>
+     *
+     * @return BaseResponsePackage
+     * @author 皮锋
+     * @custom.date 2020年3月11日 上午9:52:37
+     */
+    @Override
+    public BaseResponsePackage structureBaseResponsePackageBySuccess() {
+        BaseResponsePackage baseResponsePackage = new BaseResponsePackage();
+        baseResponsePackage.setEndpoint(EndpointTypeConstants.SERVER);
+        baseResponsePackage.setInstanceId(InstanceUtils.getInstanceId());
+        baseResponsePackage.setInstanceName(InstanceUtils.getInstanceName());
+        baseResponsePackage.setId(StrUtils.getUUID());
+        baseResponsePackage.setDateTime(new Date());
+        baseResponsePackage.setResult(true);
+        return baseResponsePackage;
 
-	}
+    }
 
-	/**
-	 * <p>
-	 * 构建请求失败的基础响应包
-	 * </p>
-	 *
-	 * @author 皮锋
-	 * @custom.date 2020年3月11日 上午9:52:48
-	 * @return BaseResponsePackage
-	 */
-	@Override
-	public BaseResponsePackage structureBaseResponsePackageByFail() {
-		BaseResponsePackage baseResponsePackage = new BaseResponsePackage();
-		baseResponsePackage.setEndpoint(EndpointTypeConstants.SERVER);
-		baseResponsePackage.setInstanceId(InstanceUtils.getInstanceId());
-		baseResponsePackage.setInstanceName(InstanceUtils.getInstanceName());
-		baseResponsePackage.setId(StrUtils.getUUID());
-		baseResponsePackage.setDateTime(new Date());
-		baseResponsePackage.setResult(false);
-		return baseResponsePackage;
-	}
+    /**
+     * <p>
+     * 构建请求失败的基础响应包
+     * </p>
+     *
+     * @return BaseResponsePackage
+     * @author 皮锋
+     * @custom.date 2020年3月11日 上午9:52:48
+     */
+    @Override
+    public BaseResponsePackage structureBaseResponsePackageByFail() {
+        BaseResponsePackage baseResponsePackage = new BaseResponsePackage();
+        baseResponsePackage.setEndpoint(EndpointTypeConstants.SERVER);
+        baseResponsePackage.setInstanceId(InstanceUtils.getInstanceId());
+        baseResponsePackage.setInstanceName(InstanceUtils.getInstanceName());
+        baseResponsePackage.setId(StrUtils.getUUID());
+        baseResponsePackage.setDateTime(new Date());
+        baseResponsePackage.setResult(false);
+        return baseResponsePackage;
+    }
 
 }

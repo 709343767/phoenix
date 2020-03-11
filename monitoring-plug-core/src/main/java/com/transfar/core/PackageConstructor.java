@@ -1,10 +1,5 @@
 package com.transfar.core;
 
-import java.nio.charset.Charset;
-import java.util.Date;
-
-import org.hyperic.sigar.SigarException;
-
 import com.google.common.base.Charsets;
 import com.transfar.constant.EndpointTypeConstants;
 import com.transfar.domain.Alarm;
@@ -17,6 +12,10 @@ import com.transfar.inf.IPackageConstructor;
 import com.transfar.util.InstanceUtils;
 import com.transfar.util.SigarUtils;
 import com.transfar.util.StrUtils;
+import org.hyperic.sigar.SigarException;
+
+import java.nio.charset.Charset;
+import java.util.Date;
 
 /**
  * <p>

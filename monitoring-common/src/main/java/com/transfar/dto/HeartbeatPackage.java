@@ -25,27 +25,27 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = true)
 public class HeartbeatPackage extends InstanceBean implements Serializable {
 
-	/**
-	 * serialVersionUID
-	 */
-	private static final long serialVersionUID = -1227833279912325068L;
+    /**
+     * serialVersionUID
+     */
+    private static final long serialVersionUID = -1227833279912325068L;
 
-	/**
-	 * ID
-	 */
-	@ApiModelProperty(value = "ID")
-	private String id;
+    /**
+     * ID
+     */
+    @ApiModelProperty(value = "ID")
+    private String id;
 
-	/**
-	 * 时间
-	 */
-	@ApiModelProperty(value = "时间")
-	private Date dateTime;
+    /**
+     * 时间
+     */
+    @ApiModelProperty(value = "时间")
+    private Date dateTime;
 
-	/**
-	 * 心跳频率
-	 */
-	@ApiModelProperty(value = "心跳频率")
-	private Long rate;
+    /**
+     * 心跳频率
+     */
+    @ApiModelProperty(value = "心跳频率")
+    private Long rate;
 
 }

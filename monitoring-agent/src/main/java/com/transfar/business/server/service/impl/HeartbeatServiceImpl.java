@@ -27,28 +27,28 @@ import com.transfar.dto.HeartbeatPackage;
 @Service
 public class HeartbeatServiceImpl implements IHeartbeatService {
 
-	@Autowired
-	private RestTemplate restTemplate;
+    @Autowired
+    private RestTemplate restTemplate;
 
-	/**
-	 * <p>
-	 * 给服务端发心跳包
-	 * </p>
-	 *
-	 * @param heartbeatPackage 心跳包对象
-	 * @return BaseResponsePackage
-	 * @author 皮锋
-	 * @custom.date 2020年3月4日 下午2:16:07
-	 */
-	@Override
-	public BaseResponsePackage sendHeartbeatPackage(HeartbeatPackage heartbeatPackage) {
-		HttpHeaders headers = new HttpHeaders();
-		// headers.add("Context-type", "text/html;charset=utf-8");
-		headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-		HttpEntity<HeartbeatPackage> entity = new HttpEntity<>(heartbeatPackage, headers);
-		ResponseEntity<BaseResponsePackage> responseEntity = this.restTemplate.exchange(Urlconstants.HEARTBEAT_URL,
-				HttpMethod.POST, entity, BaseResponsePackage.class);
-		return responseEntity.getBody();
-	}
+    /**
+     * <p>
+     * 给服务端发心跳包
+     * </p>
+     *
+     * @param heartbeatPackage 心跳包对象
+     * @return BaseResponsePackage
+     * @author 皮锋
+     * @custom.date 2020年3月4日 下午2:16:07
+     */
+    @Override
+    public BaseResponsePackage sendHeartbeatPackage(HeartbeatPackage heartbeatPackage) {
+        HttpHeaders headers = new HttpHeaders();
+        // headers.add("Context-type", "text/html;charset=utf-8");
+        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+        HttpEntity<HeartbeatPackage> entity = new HttpEntity<>(heartbeatPackage, headers);
+        ResponseEntity<BaseResponsePackage> responseEntity = this.restTemplate.exchange(Urlconstants.HEARTBEAT_URL,
+                HttpMethod.POST, entity, BaseResponsePackage.class);
+        return responseEntity.getBody();
+    }
 
 }

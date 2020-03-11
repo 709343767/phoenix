@@ -12,24 +12,24 @@ import com.transfar.core.ConfigLoader;
  */
 public final class UrlConstants {
 
-	/**
-	 * 服务根路径
-	 */
-	private static final String ROOT_URI = ConfigLoader.monitoringProperties.getServerProperties().getUrl();
+    /**
+     * 服务根路径
+     */
+    private static final String ROOT_URI = ConfigLoader.monitoringProperties.getServerProperties().getUrl();
 
-	/**
-	 * 心跳地址
-	 */
-	public static final String HEARTBEAT_URL = ROOT_URI + "/heartbeat/accept-heartbeat-package";
+    /**
+     * 心跳地址
+     */
+    public static final String HEARTBEAT_URL = ROOT_URI + "/heartbeat/accept-heartbeat-package";
 
-	/**
-	 * 告警地址
-	 */
-	public static final String ALARM_URL = ROOT_URI + "/alarm/accept-alarm-package";
+    /**
+     * 告警地址
+     */
+    public static final String ALARM_URL = ROOT_URI + "/alarm/accept-alarm-package";
 
-	/**
-	 * 发送服务器信息地址
-	 */
-	public static final String SERVER_URL = ROOT_URI + "/server/accept-server-package";
+    /**
+     * 发送服务器信息地址
+     */
+    public static final String SERVER_URL = ROOT_URI + "/server/accept-server-package";
 
 }
