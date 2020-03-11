@@ -83,7 +83,7 @@ public class Monitor {
 	 *
 	 * @param alarm 告警信息
 	 * @author 皮锋
-	 * @return BaseResponsePackage
+	 * @return boolean
 	 * @custom.date 2020年3月6日 上午10:17:44
 	 */
 	public static boolean sendAlarm(Alarm alarm) {
