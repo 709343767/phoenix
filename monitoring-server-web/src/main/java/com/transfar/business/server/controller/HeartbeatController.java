@@ -1,5 +1,7 @@
 package com.transfar.business.server.controller;
 
+import com.transfar.business.server.service.IHeartbeatService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,22 +30,32 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class HeartbeatController {
 
-	/**
-	 * <p>
-	 * 监控服务端程序接收监控代理程序发的心跳包，并返回结果
-	 * </p>
-	 *
-	 * @param request 请求参数
-	 * @return BaseResponsePackage
-	 * @author 皮锋
-	 * @custom.date 2020年3月4日 下午12:27:47
-	 */
-	@ApiOperation(value = "监控服务端程序接收监控代理程序发的心跳包，并返回结果", notes = "接收心跳包")
-	@PostMapping("/accept-heartbeat-package")
-	public BaseResponsePackage acceptHeartbeatPackage(@RequestBody(required = true) String request) {
-		HeartbeatPackage heartbeatPackage = JSON.parseObject(request, HeartbeatPackage.class);
-		log.info(heartbeatPackage.toJsonString());
-		return new PackageConstructor().structureBaseResponsePackageBySuccess();
-	}
+    /**
+     * 心跳服务接口
+     */
+    @Autowired
+    private IHeartbeatService heartbeatService;
+
+    /**
+     * <p>
+     * 监控服务端程序接收监控代理程序发的心跳包，并返回结果
+     * </p>
+     *
+     * @param request 请求参数
+     * @return BaseResponsePackage
+     * @author 皮锋
+     * @custom.date 2020年3月4日 下午12:27:47
+     */
+    @ApiOperation(value = "监控服务端程序接收监控代理程序发的心跳包，并返回结果", notes = "接收心跳包")
+    @PostMapping("/accept-heartbeat-package")
+    public BaseResponsePackage acceptHeartbeatPackage(@RequestBody(required = true) String request) {
+        HeartbeatPackage heartbeatPackage = JSON.parseObject(request, HeartbeatPackage.class);
+        boolean b = this.heartbeatService.dealHeartbeatPackage(heartbeatPackage);
+        if (b) {
+            return new PackageConstructor().structureBaseResponsePackageBySuccess();
+        } else {
+            return new PackageConstructor().structureBaseResponsePackageByFail();
+        }
+    }
 
 }

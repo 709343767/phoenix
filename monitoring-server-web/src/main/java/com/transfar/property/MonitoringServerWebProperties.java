@@ -21,9 +21,14 @@ import lombok.ToString;
 @EqualsAndHashCode
 public class MonitoringServerWebProperties {
 
-	/**
-	 * 告警属性
-	 */
-	private MonitoringAlarmProperties alarmProperties;
+    /**
+     * 监控阈值
+     */
+    private int threshold;
+
+    /**
+     * 告警属性
+     */
+    private MonitoringAlarmProperties alarmProperties;
 
 }
