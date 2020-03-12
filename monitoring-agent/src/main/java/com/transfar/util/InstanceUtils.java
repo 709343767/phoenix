@@ -4,6 +4,7 @@ import java.lang.management.ManagementFactory;
 import java.lang.management.RuntimeMXBean;
 
 import com.transfar.business.core.ConfigLoader;
+import com.transfar.config.ContextUtils;
 
 /**
  * <p>
@@ -46,6 +47,8 @@ public class InstanceUtils {
 	 */
 	public static String getInstanceId() {
 		String mac = LocalMacUtils.getLocalMac();
+		String rootUrl=ContextUtils.getRootUrl();
+		System.out.println(rootUrl);
 		return mac + getJavaPid();
 	}
 

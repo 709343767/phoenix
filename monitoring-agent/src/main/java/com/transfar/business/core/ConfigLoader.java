@@ -2,6 +2,7 @@ package com.transfar.business.core;
 
 import com.transfar.AgentApplication;
 import com.transfar.property.MonitoringProperties;
+import org.springframework.boot.autoconfigure.web.ServerProperties;
 
 /**
  * <p>
@@ -16,19 +17,18 @@ public class ConfigLoader {
     /**
      * 监控配置
      */
-    public static final MonitoringProperties monitoringProperties = getConfig();
+    public static final MonitoringProperties monitoringProperties = AgentApplication.applicationContext
+            .getBean(MonitoringProperties.class);
 
     /**
-     * <p>
-     * 获取监控配置
-     * </p>
-     *
-     * @return MonitoringProperties
-     * @author 皮锋
-     * @custom.date 2020年3月6日 下午12:11:43
+     * 项目端口号
      */
-    private static MonitoringProperties getConfig() {
-        return AgentApplication.applicationContext.getBean(MonitoringProperties.class);
-    }
+    public static final int serverPort = AgentApplication.serverPort;
+
+    /**
+     * 服务器配置
+     */
+    public static final ServerProperties serverProperties =
+            AgentApplication.applicationContext.getBean(ServerProperties.class);
 
 }
