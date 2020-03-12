@@ -45,9 +45,8 @@ public class InstanceUtils {
 	 * @return 应用实例ID
 	 */
 	public static String getInstanceId() {
-		String instanceName = getInstanceName();
-		String md5 = MD5Utils.getMD5String(instanceName);
-		return md5 + getJavaPid();
+		String mac = LocalMacUtils.getLocalMac();
+		return mac + getJavaPid();
 	}
 
 	/**
