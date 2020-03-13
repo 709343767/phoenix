@@ -12,22 +12,19 @@
         <!-- <relativePath>../pom.xml</relativePath> -->
     </parent>
 
-    <!-- 项目基本信息 -->
-    <artifactId>monitoring-plug-core</artifactId>
-    <packaging>jar</packaging>
-    <name>monitoring-plug-core</name>
-    <description>监控客户端插件</description>
 
-    <!-- 属性 -->
-    <properties>
-    </properties>
+    <!-- 项目基本信息 -->
+    <artifactId>monitoring-plug-core-spring-boot-starter</artifactId>
+    <packaging>jar</packaging>
+    <name>monitoring-plug-core-spring-boot-starter</name>
+    <description>监控项目客户端与springboot集成的starter</description>
 
     <!-- 依赖 -->
     <dependencies>
-        <!-- 项目公共模块依赖 -->
+        <!-- 监控客户端插件 -->
         <dependency>
             <groupId>com.transfar</groupId>
-            <artifactId>monitoring-common</artifactId>
+            <artifactId>monitoring-plug-core</artifactId>
         </dependency>
 
         <!--lombok依赖 -->
@@ -36,20 +33,15 @@
             <artifactId>lombok</artifactId>
             <optional>true</optional>
         </dependency>
-        <!-- junit单元测试依赖 -->
+        <!-- springboot依赖 -->
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <!-- HTTP协议的客户端/服务器编程工具包依赖 -->
-        <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpclient</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpcore</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
         </dependency>
     </dependencies>
 

@@ -1,0 +1,1 @@
+com.transfar.annotation.EnableMonitoringPlug=\com.transfar.autoconfigure.MonitoringPlugAutoConfiguration
