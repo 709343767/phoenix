@@ -21,7 +21,7 @@ import com.transfar.Monitor;
 public class MonitoringPlugAutoConfiguration implements InitializingBean {
 
 	@Override
-	public void afterPropertiesSet() throws Exception {
+	public void afterPropertiesSet() {
 		// 开启监控
 		Monitor.start();
 	}
