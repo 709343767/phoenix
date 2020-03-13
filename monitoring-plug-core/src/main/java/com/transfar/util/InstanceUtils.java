@@ -61,7 +61,7 @@ public class InstanceUtils {
 			return instanceId;
 		}
 		String mac = LocalMacUtils.getLocalMac();
-		instanceId = mac + getInstanceName();
+		instanceId = MD5Utils.encrypt16(mac + getInstanceName());
 		return instanceId;
 	}
 
