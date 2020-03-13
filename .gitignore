@@ -21,3 +21,5 @@
 /monitoring-server-web/tmp/
 /tmp/
 /logs/
+/monitoring-plug-core-spring-boot-starter/.settings/
+/monitoring-plug-core-spring-boot-starter/target/
