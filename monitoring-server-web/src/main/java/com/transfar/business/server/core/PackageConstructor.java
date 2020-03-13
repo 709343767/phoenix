@@ -22,9 +22,29 @@ import com.transfar.util.StrUtils;
  */
 public class PackageConstructor implements IPackageConstructor {
 
+    /**
+     * <p>
+     * 构建告警包
+     * </p>
+     *
+     * @param alarm 告警
+     * @return AlarmPackage
+     * @author 皮锋
+     * @custom.date 2020/3/13 11:14
+     */
     @Override
     public AlarmPackage structureAlarmPackage(Alarm alarm) {
-        return null;
+        AlarmPackage alarmPackage = new AlarmPackage();
+        alarmPackage.setEndpoint(EndpointTypeConstants.SERVER);
+        alarmPackage.setInstanceId(InstanceUtils.getInstanceId());
+        alarmPackage.setInstanceName(InstanceUtils.getInstanceName());
+        alarmPackage.setTitle(alarm.getTitle());
+        alarmPackage.setId(StrUtils.getUUID());
+        alarmPackage.setMsg(alarm.getMsg());
+        alarmPackage.setAlarmTime(new Date());
+        alarmPackage.setLevel(alarm.getAlarmLevel().name());
+        alarmPackage.setTest(false);
+        return alarmPackage;
     }
 
     @Override

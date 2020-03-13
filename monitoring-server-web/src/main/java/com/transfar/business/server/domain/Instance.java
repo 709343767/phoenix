@@ -39,4 +39,9 @@ public class Instance extends InstanceBean {
      */
     private Date dateTime;
 
+    /**
+     * 是否已经发送过告警消息
+     */
+    private boolean isAlarm;
+
 }

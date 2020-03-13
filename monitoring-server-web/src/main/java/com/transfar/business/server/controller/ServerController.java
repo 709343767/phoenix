@@ -40,7 +40,7 @@ public class ServerController {
 	 */
 	@ApiOperation(value = "监控服务端程序接收监控代理程序发的服务器信息包，并返回结果", notes = "接收服务器信息包")
 	@PostMapping("/accept-server-package")
-	public BaseResponsePackage acceptServerPackage(@RequestBody(required = true) String request) {
+	public BaseResponsePackage acceptServerPackage(@RequestBody String request) {
 		ServerPackage serverPackage = JSON.parseObject(request, ServerPackage.class);
 		log.info(serverPackage.toJsonString());
 		return new PackageConstructor().structureBaseResponsePackageBySuccess();

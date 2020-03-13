@@ -21,14 +21,19 @@ import lombok.ToString;
 @EqualsAndHashCode
 public class MonitoringAlarmProperties {
 
-	/**
-	 * 告警方式
-	 */
-	private String type;
+    /**
+     * 告警是否打开
+     */
+    private boolean enable;
 
-	/**
-	 * 短信配置属性
-	 */
-	private MonitoringSmsProperties smsProperties;
+    /**
+     * 告警方式
+     */
+    private String type;
+
+    /**
+     * 短信配置属性
+     */
+    private MonitoringSmsProperties smsProperties;
 
 }

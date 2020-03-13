@@ -1,19 +1,17 @@
 package com.transfar.business.server.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.alibaba.fastjson.JSON;
 import com.transfar.business.server.core.PackageConstructor;
 import com.transfar.business.server.service.IAlarmService;
 import com.transfar.dto.AlarmPackage;
 import com.transfar.dto.BaseResponsePackage;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * <p>
@@ -46,7 +44,7 @@ public class AlarmController {
      */
     @ApiOperation(value = "监控服务端程序接收监控代理程序发的告警包，并返回结果", notes = "接收告警包")
     @PostMapping("/accept-alarm-package")
-    public BaseResponsePackage acceptAlarmPackage(@RequestBody(required = true) String request) {
+    public BaseResponsePackage acceptAlarmPackage(@RequestBody String request) {
         AlarmPackage alarmPackage = JSON.parseObject(request, AlarmPackage.class);
         boolean b = this.alarmService.dealAlarmPackage(alarmPackage);
         if (b) {

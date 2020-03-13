@@ -3,7 +3,6 @@ package com.transfar.business.server.service.impl;
 import com.transfar.business.server.domain.TransfarSms;
 import com.transfar.business.server.service.IAlarmService;
 import com.transfar.business.server.service.ISmsService;
-import com.transfar.constant.AlarmLevelEnums;
 import com.transfar.constant.AlarmTypeEnums;
 import com.transfar.constant.EnterpriseConstants;
 import com.transfar.dto.AlarmPackage;
@@ -49,13 +48,19 @@ public class AlarmServiceImpl implements IAlarmService {
     public Boolean dealAlarmPackage(AlarmPackage alarmPackage) {
         // 返回结果
         boolean result = false;
-        // 告警级别
-        String level = alarmPackage.getLevel();
-        // 是测试告警信息或者告警级别是INFO，不做处理，直接返回true
-        if (alarmPackage.isTest() || StringUtils.equalsIgnoreCase(level, AlarmLevelEnums.INFO.name())) {
+        //告警开关是否打开
+        boolean enable = config.getAlarmProperties().isEnable();
+        if (!enable) {
+            // 停止往下执行
+            return false;
+        }
+        // 是测试告警信息，不做处理，直接返回true，代表告警成功
+        if (alarmPackage.isTest()) {
             // 停止往下执行
             return true;
         }
+        // 告警级别
+        String level = alarmPackage.getLevel();
         // 告警内容
         String msg = alarmPackage.getMsg();
         // 没有告警内容，不做处理，直接返回false
@@ -63,7 +68,7 @@ public class AlarmServiceImpl implements IAlarmService {
             // 停止往下执行
             return false;
         }
-        // 告警内容级别
+        // 告警内容标题
         String alarmTitle = alarmPackage.getTitle();
         // 告警方式
         String alarmType = this.config.getAlarmProperties().getType();
