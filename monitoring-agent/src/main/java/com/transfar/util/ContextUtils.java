@@ -1,4 +1,4 @@
-package com.transfar.config;
+package com.transfar.util;
 
 import com.transfar.business.core.ConfigLoader;
 import lombok.SneakyThrows;

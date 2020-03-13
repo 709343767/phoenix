@@ -3,8 +3,9 @@ package com.transfar.util;
 import java.lang.management.ManagementFactory;
 import java.lang.management.RuntimeMXBean;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.transfar.business.core.ConfigLoader;
-import com.transfar.config.ContextUtils;
 
 /**
  * <p>
@@ -17,6 +18,16 @@ import com.transfar.config.ContextUtils;
 public class InstanceUtils {
 
 	/**
+	 * 应用实例ID
+	 */
+	private static String instanceId;
+
+	/**
+	 * 应用实例名字
+	 */
+	private static String instanceName;
+
+	/**
 	 * <p>
 	 * 获取java进程PID
 	 * </p>
@@ -25,7 +36,7 @@ public class InstanceUtils {
 	 * @author 皮锋
 	 * @custom.date 2020年3月4日 下午10:48:07
 	 */
-	private static String getJavaPid() {
+	public static String getJavaPid() {
 		String pid = null;
 		RuntimeMXBean runtime = ManagementFactory.getRuntimeMXBean();
 		String name = runtime.getName();
@@ -46,10 +57,13 @@ public class InstanceUtils {
 	 * @custom.date 2020年3月4日 下午11:12:46
 	 */
 	public static String getInstanceId() {
-		String mac = LocalMacUtils.getLocalMac();
-		String rootUrl=ContextUtils.getRootUrl();
-		System.out.println(rootUrl);
-		return mac + getJavaPid();
+		if (StringUtils.isNotEmpty(instanceId)) {
+			return instanceId;
+		}
+		// String mac = LocalMacUtils.getLocalMac();
+		String rootUrl = ContextUtils.getRootUrl();
+		instanceId = MD5Utils.encrypt16(rootUrl);
+		return instanceId;
 	}
 
 	/**
@@ -62,7 +76,11 @@ public class InstanceUtils {
 	 * @custom.date 2020年3月4日 下午11:12:46
 	 */
 	public static String getInstanceName() {
-		return ConfigLoader.monitoringProperties.getOwnProperties().getInstanceName();
+		if (StringUtils.isNotEmpty(instanceName)) {
+			return instanceName;
+		}
+		instanceName = ConfigLoader.monitoringProperties.getOwnProperties().getInstanceName();
+		return instanceName;
 	}
 
 }

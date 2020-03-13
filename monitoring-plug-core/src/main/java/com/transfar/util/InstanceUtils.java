@@ -3,6 +3,8 @@ package com.transfar.util;
 import java.lang.management.ManagementFactory;
 import java.lang.management.RuntimeMXBean;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.transfar.core.ConfigLoader;
 
 /**
@@ -16,6 +18,16 @@ import com.transfar.core.ConfigLoader;
 public class InstanceUtils {
 
 	/**
+	 * 应用ID
+	 */
+	private static String instanceId;
+
+	/**
+	 * 应用名字
+	 */
+	private static String insranceName;
+
+	/**
 	 * <p>
 	 * 获取java进程PID
 	 * </p>
@@ -24,7 +36,7 @@ public class InstanceUtils {
 	 * @custom.date 2020年3月4日 下午10:48:07
 	 * @return PID
 	 */
-	private static String getJavaPid() {
+	public static String getJavaPid() {
 		String pid = null;
 		RuntimeMXBean runtime = ManagementFactory.getRuntimeMXBean();
 		String name = runtime.getName();
@@ -45,8 +57,12 @@ public class InstanceUtils {
 	 * @return 应用实例ID
 	 */
 	public static String getInstanceId() {
+		if (StringUtils.isNotEmpty(instanceId)) {
+			return instanceId;
+		}
 		String mac = LocalMacUtils.getLocalMac();
-		return mac + getJavaPid();
+		instanceId = mac + getInstanceName();
+		return instanceId;
 	}
 
 	/**
@@ -59,7 +75,11 @@ public class InstanceUtils {
 	 * @return 应用实例名字
 	 */
 	public static String getInstanceName() {
-		return ConfigLoader.monitoringProperties.getOwnProperties().getInstanceName();
+		if (StringUtils.isNotEmpty(insranceName)) {
+			return insranceName;
+		}
+		insranceName = ConfigLoader.monitoringProperties.getOwnProperties().getInstanceName();
+		return insranceName;
 	}
 
 	public static void main(String[] args) throws InterruptedException {

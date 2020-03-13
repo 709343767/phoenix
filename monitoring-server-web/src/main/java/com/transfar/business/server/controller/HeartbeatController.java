@@ -1,6 +1,5 @@
 package com.transfar.business.server.controller;
 
-import com.transfar.business.server.service.IHeartbeatService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -9,12 +8,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSON;
 import com.transfar.business.server.core.PackageConstructor;
+import com.transfar.business.server.service.IHeartbeatService;
 import com.transfar.dto.BaseResponsePackage;
 import com.transfar.dto.HeartbeatPackage;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * <p>
@@ -27,7 +26,6 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequestMapping("/heartbeat")
 @Api(tags = "心跳")
-@Slf4j
 public class HeartbeatController {
 
     /**
