@@ -1,7 +1,6 @@
 package com.transfar.autoconfigure;
 
 import com.transfar.Monitor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -18,14 +17,14 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 // 只应用于spring boot项目
 @ConditionalOnClass({SpringBootApplication.class})
-@Slf4j
+// @Slf4j
 public class MonitoringPlugAutoConfiguration implements InitializingBean {
 
     @Override
     public void afterPropertiesSet() {
         // 开启监控
         Monitor.start();
-        log.info("监控功能开启成功！");
+        // log.info("监控功能开启成功！");
     }
 
 }
