@@ -90,7 +90,7 @@ public class InstanceCommandLineRunner implements CommandLineRunner {
                             }
                         }
                         // 打印当前应用池中的所有应用
-                        log.info("当前应用实例池中的应用：{}", this.instancePool.toJsonString());
+                        log.info("当前应用实例池大小：{}，详细信息：{}", this.instancePool.size(), this.instancePool.toJsonString());
                     }, 30, 30
                     , TimeUnit.SECONDS);
         });
