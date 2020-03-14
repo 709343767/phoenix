@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- 监控父项目 -->
+    <parent>
+        <artifactId>monitoring</artifactId>
+        <groupId>com.transfar</groupId>
+        <version>${revision}</version>
+        <!-- <relativePath>../pom.xml</relativePath> -->
+    </parent>
+
+    <!-- 项目基本信息 -->
+    <artifactId>monitoring-plug-core-spring-mvc-integrator</artifactId>
+    <packaging>jar</packaging>
+    <name>monitoring-plug-core-spring-mvc-integrator</name>
+    <description>监控项目客户端与springmvc集成的integrator</description>
+
+    <!-- 依赖 -->
+    <dependencies>
+        <!-- 监控客户端插件 -->
+        <dependency>
+            <groupId>com.transfar</groupId>
+            <artifactId>monitoring-plug-core</artifactId>
+        </dependency>
+
+        <!--lombok依赖 -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <!-- servlet依赖 -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
+    <!-- 构建 -->
+    <build>
+        <!-- <finalName>myblogs-commons</finalName> -->
+        <defaultGoal>package</defaultGoal>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

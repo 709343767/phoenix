@@ -23,3 +23,5 @@
 /logs/
 /monitoring-plug-core-spring-boot-starter/.settings/
 /monitoring-plug-core-spring-boot-starter/target/
+/monitoring-plug-core-spring-mvc-integrator/.settings/
+/monitoring-plug-core-spring-mvc-integrator/target/
