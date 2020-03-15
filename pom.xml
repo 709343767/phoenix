@@ -272,10 +272,6 @@
                     <!-- 如果加了上面的配置，必须加入这个配置，不然resources目录下的东西不会进编译目录 -->
                     <include>**/*.*</include>
                 </includes>
-                <excludes>
-                	<!-- 排除掉监控配置文件 -->
-                	<exclude>monitoring.properties</exclude>
-                </excludes>
             </resource>
         </resources>
         <plugins>

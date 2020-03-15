@@ -8,6 +8,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.util.Objects;
 
@@ -58,7 +59,7 @@ public class ContextUtils {
      */
     @SneakyThrows
     public static String getRootUrl() {
-        InetAddress address = InetAddress.getLocalHost();
+        InetAddress address = Inet4Address.getLocalHost();
         String contextPath = StringUtils.isBlank(ConfigLoader.serverProperties.getServlet().getContextPath()) ? "" : ConfigLoader.serverProperties.getServlet().getContextPath();
         return "http://" + address.getHostAddress() + ":" + ConfigLoader.serverPort + contextPath;
     }

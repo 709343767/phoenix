@@ -1,0 +1,20 @@
+package com.transfar.exception;
+
+/**
+ * <p>
+ * 错误的监听器配置异常
+ * </p>
+ *
+ * @author 皮锋
+ * @custom.date 2020/3/15 14:30
+ */
+public class BadListenerConfigException extends Exception {
+
+    public BadListenerConfigException() {
+        super();
+    }
+
+    public BadListenerConfigException(String message) {
+        super(message);
+    }
+}

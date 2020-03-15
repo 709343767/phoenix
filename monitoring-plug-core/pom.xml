@@ -57,6 +57,15 @@
     <build>
         <!-- <finalName>myblogs-commons</finalName> -->
         <defaultGoal>package</defaultGoal>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <excludes>
+                    <!-- 排除掉监控配置文件 -->
+                    <exclude>monitoring.properties</exclude>
+                </excludes>
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
