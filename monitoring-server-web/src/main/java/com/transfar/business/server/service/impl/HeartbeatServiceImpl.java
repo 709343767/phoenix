@@ -45,7 +45,7 @@ public class HeartbeatServiceImpl implements IHeartbeatService {
     public boolean dealHeartbeatPackage(HeartbeatPackage heartbeatPackage) {
         // 把应用实例交给应用实例池，交给应用实例池管理
         String key = heartbeatPackage.getInstanceId();
-        // 判读池中是否已经有了这个实例，有就设置成在线，并且更新时间，没有就添加一个
+        // 判读池中是否已经有了这个实例，有就设置成在线，并且更新在线状态、时间、误差时间，没有就添加一个
         Instance poolInstance = this.instancePool.get(key);
         if (poolInstance == null) {
             Instance instance = new Instance();
@@ -62,6 +62,7 @@ public class HeartbeatServiceImpl implements IHeartbeatService {
         } else {
             poolInstance.setOnline(true);
             poolInstance.setDateTime(heartbeatPackage.getDateTime());
+            poolInstance.setThresholdSecond((int) (heartbeatPackage.getRate() * config.getThreshold()));
             this.instancePool.replace(key, poolInstance);
         }
         return true;
