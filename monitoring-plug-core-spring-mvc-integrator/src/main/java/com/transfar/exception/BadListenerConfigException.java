@@ -10,7 +10,12 @@ package com.transfar.exception;
  */
 public class BadListenerConfigException extends Exception {
 
-    public BadListenerConfigException() {
+    /**
+	 * serialVersionUID
+	 */	
+	private static final long serialVersionUID = -1672157366010494089L;
+
+	public BadListenerConfigException() {
         super();
     }
 

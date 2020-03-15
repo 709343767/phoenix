@@ -4,8 +4,6 @@ import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 
-import org.apache.commons.lang3.StringUtils;
-
 /**
  * <p>
  * 本机MAC地址工具类
