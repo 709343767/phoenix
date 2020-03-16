@@ -40,4 +40,10 @@ public abstract class InstanceBean extends SuperBean {
     @ApiModelProperty(value = "应用实例名")
     protected String instanceName;
 
+    /**
+     * IP地址
+     */
+    @ApiModelProperty(value = "IP地址")
+    protected String ip;
+
 }

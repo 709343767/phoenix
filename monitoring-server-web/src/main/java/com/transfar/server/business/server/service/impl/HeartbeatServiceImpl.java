@@ -54,6 +54,7 @@ public class HeartbeatServiceImpl implements IHeartbeatService {
             instance.setEndpoint(heartbeatPackage.getEndpoint());
             instance.setInstanceId(heartbeatPackage.getInstanceId());
             instance.setInstanceName(heartbeatPackage.getInstanceName());
+            instance.setIp(heartbeatPackage.getIp());
             // 实例状态信息
             instance.setOnline(true);
             instance.setDateTime(heartbeatPackage.getDateTime());

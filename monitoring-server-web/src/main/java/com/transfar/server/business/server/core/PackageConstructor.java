@@ -1,7 +1,5 @@
 package com.transfar.server.business.server.core;
 
-import java.util.Date;
-
 import com.transfar.common.constant.EndpointTypeConstants;
 import com.transfar.common.domain.Alarm;
 import com.transfar.common.dto.AlarmPackage;
@@ -9,8 +7,11 @@ import com.transfar.common.dto.BaseResponsePackage;
 import com.transfar.common.dto.HeartbeatPackage;
 import com.transfar.common.dto.ServerPackage;
 import com.transfar.common.inf.IPackageConstructor;
+import com.transfar.common.util.LocalNetUtils;
 import com.transfar.common.util.StrUtils;
 import com.transfar.server.util.InstanceUtils;
+
+import java.util.Date;
 
 /**
  * <p>
@@ -38,6 +39,7 @@ public class PackageConstructor implements IPackageConstructor {
         alarmPackage.setEndpoint(EndpointTypeConstants.SERVER);
         alarmPackage.setInstanceId(InstanceUtils.getInstanceId());
         alarmPackage.setInstanceName(InstanceUtils.getInstanceName());
+        alarmPackage.setIp(LocalNetUtils.getLocalHostAddress());
         alarmPackage.setTitle(alarm.getTitle());
         alarmPackage.setId(StrUtils.getUUID());
         alarmPackage.setMsg(alarm.getMsg());
@@ -72,6 +74,7 @@ public class PackageConstructor implements IPackageConstructor {
         baseResponsePackage.setEndpoint(EndpointTypeConstants.SERVER);
         baseResponsePackage.setInstanceId(InstanceUtils.getInstanceId());
         baseResponsePackage.setInstanceName(InstanceUtils.getInstanceName());
+        baseResponsePackage.setIp(LocalNetUtils.getLocalHostAddress());
         baseResponsePackage.setId(StrUtils.getUUID());
         baseResponsePackage.setDateTime(new Date());
         baseResponsePackage.setResult(true);
@@ -94,6 +97,7 @@ public class PackageConstructor implements IPackageConstructor {
         baseResponsePackage.setEndpoint(EndpointTypeConstants.SERVER);
         baseResponsePackage.setInstanceId(InstanceUtils.getInstanceId());
         baseResponsePackage.setInstanceName(InstanceUtils.getInstanceName());
+        baseResponsePackage.setIp(LocalNetUtils.getLocalHostAddress());
         baseResponsePackage.setId(StrUtils.getUUID());
         baseResponsePackage.setDateTime(new Date());
         baseResponsePackage.setResult(false);
