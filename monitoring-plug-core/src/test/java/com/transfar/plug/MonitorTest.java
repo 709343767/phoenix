@@ -1,12 +1,10 @@
 package com.transfar.plug;
 
-import java.nio.charset.Charset;
-
 import com.transfar.common.constant.AlarmLevelEnums;
 import com.transfar.common.domain.Alarm;
-import com.transfar.plug.Monitor;
-
 import lombok.extern.slf4j.Slf4j;
+
+import java.nio.charset.Charset;
 
 /**
  * <p>

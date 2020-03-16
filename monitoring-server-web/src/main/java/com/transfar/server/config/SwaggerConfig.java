@@ -28,7 +28,7 @@ public class SwaggerConfig {
     /**
      * Swagger要扫描的包路径
      */
-    private static final String BASE_PACKAGE = "com.transfar.business";
+    private static final String BASE_PACKAGE = "com.transfar.server.business";
 
     /**
      * <p>

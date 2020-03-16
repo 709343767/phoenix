@@ -62,7 +62,7 @@
                 <directory>src/main/resources</directory>
                 <excludes>
                     <!-- 排除掉监控配置文件 -->
-                    <exclude>monitoring.properties</exclude>
+                    <!-- <exclude>monitoring.properties</exclude> -->
                 </excludes>
             </resource>
         </resources>

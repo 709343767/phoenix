@@ -5,7 +5,7 @@ import java.lang.management.RuntimeMXBean;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.transfar.common.util.LocalMacUtils;
+import com.transfar.common.util.LocalNetUtils;
 import com.transfar.common.util.MD5Utils;
 import com.transfar.plug.core.ConfigLoader;
 
@@ -62,8 +62,14 @@ public class InstanceUtils {
         if (StringUtils.isNotEmpty(instanceId)) {
             return instanceId;
         }
-        String mac = LocalMacUtils.getLocalMac();
-        String ip = LocalMacUtils.getLocalHostAddress();
+        // 配置文件中的ID
+        String id = ConfigLoader.monitoringProperties.getOwnProperties().getInstanceId();
+        if (StringUtils.isNotBlank(id)) {
+            instanceId = id;
+            return instanceId;
+        }
+        String mac = LocalNetUtils.getLocalMac();
+        String ip = LocalNetUtils.getLocalHostAddress();
         instanceId = MD5Utils.encrypt16(mac + ip + getInstanceName());
         return instanceId;
     }

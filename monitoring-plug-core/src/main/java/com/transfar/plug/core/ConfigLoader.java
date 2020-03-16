@@ -78,6 +78,8 @@ public class ConfigLoader {
         String serverUserName = StringUtils.trimToNull(properties.getProperty("monitoring.server.username"));
         // 监控服务端密码
         String serverPassword = StringUtils.trimToNull(properties.getProperty("monitoring.server.password"));
+        // 实例ID
+        String instanceId = StringUtils.trimToNull(properties.getProperty("monitoring.own.instance.id"));
         // 实例名称
         String instanceName = StringUtils.trimToNull(properties.getProperty("monitoring.own.instance.name"));
         // 缺省[与服务端或者代理端发心跳包的频率（秒），默认30秒]
@@ -96,7 +98,7 @@ public class ConfigLoader {
             throw new NotFoundConfigParamException("监控程序找不到实例名称配置！");
         }
         // 封装数据
-        wrap(serverUrl, serverUserName, serverPassword, instanceName, heartbeatRate, serverInfoRate);
+        wrap(serverUrl, serverUserName, serverPassword, instanceId, instanceName, heartbeatRate, serverInfoRate);
     }
 
     /**
@@ -107,13 +109,14 @@ public class ConfigLoader {
      * @param serverUrl      监控服务端url
      * @param serverUserName 监控服务端用户名
      * @param serverPassword 监控服务端密码
+     * @param instanceId     实例ID
      * @param instanceName   实例名称
      * @param heartbeatRate  缺省[与服务端或者代理端发心跳包的频率（秒），默认30秒]
      * @param serverInfoRate 缺省[与服务端或者代理端发服务器信息包的频率（秒），默认60秒]
      * @author 皮锋
      * @custom.date 2020年3月5日 下午4:36:33
      */
-    private static void wrap(String serverUrl, String serverUserName, String serverPassword, String instanceName,
+    private static void wrap(String serverUrl, String serverUserName, String serverPassword, String instanceId, String instanceName,
                              long heartbeatRate, long serverInfoRate) {
         MonitoringServerProperties serverProperties = new MonitoringServerProperties();
         serverProperties.setUrl(serverUrl);
@@ -121,6 +124,7 @@ public class ConfigLoader {
         serverProperties.setPassword(serverPassword);
         monitoringProperties.setServerProperties(serverProperties);
         MonitoringOwnProperties ownProperties = new MonitoringOwnProperties();
+        ownProperties.setInstanceId(instanceId);
         ownProperties.setInstanceName(instanceName);
         monitoringProperties.setOwnProperties(ownProperties);
         MonitoringHeartbeatProperties heartbeatProperties = new MonitoringHeartbeatProperties();

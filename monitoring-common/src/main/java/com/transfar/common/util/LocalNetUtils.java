@@ -12,7 +12,7 @@ import java.net.NetworkInterface;
  * @author 皮锋
  * @custom.date 2020/3/12 11:20
  */
-public class LocalMacUtils {
+public class LocalNetUtils {
 
     /**
      * <p>

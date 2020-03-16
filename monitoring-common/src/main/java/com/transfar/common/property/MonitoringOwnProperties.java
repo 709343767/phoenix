@@ -19,9 +19,14 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class MonitoringOwnProperties {
 
-	/**
-	 * 实例名称
-	 */
-	private String instanceName;
+    /**
+     * 实例ID
+     */
+    private String instanceId;
+
+    /**
+     * 实例名称
+     */
+    private String instanceName;
 
 }
