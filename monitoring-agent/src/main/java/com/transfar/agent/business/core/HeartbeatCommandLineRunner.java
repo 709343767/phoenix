@@ -1,15 +1,16 @@
 package com.transfar.agent.business.core;
 
+import com.transfar.common.dto.HeartbeatPackage;
+import com.transfar.common.property.MonitoringProperties;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.stereotype.Component;
+
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
-
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.stereotype.Component;
-
-import com.transfar.common.dto.HeartbeatPackage;
 
 /**
  * <p>
@@ -21,6 +22,12 @@ import com.transfar.common.dto.HeartbeatPackage;
  */
 @Component
 public class HeartbeatCommandLineRunner implements CommandLineRunner {
+
+    /**
+     * 监控配置属性
+     */
+    @Autowired
+    private MonitoringProperties monitoringProperties;
 
     @Override
     public void run(String... args) {
@@ -35,7 +42,7 @@ public class HeartbeatCommandLineRunner implements CommandLineRunner {
                 }
             });
             seService.scheduleAtFixedRate(new HeartbeatScheduledExecutor(), 30,
-                    ConfigLoader.monitoringProperties.getHeartbeatProperties().getRate(), TimeUnit.SECONDS);
+                    this.monitoringProperties.getHeartbeatProperties().getRate(), TimeUnit.SECONDS);
         });
         // 设置守护线程
         thread.setDaemon(true);

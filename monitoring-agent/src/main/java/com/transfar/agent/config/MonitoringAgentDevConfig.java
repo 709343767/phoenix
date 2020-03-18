@@ -53,6 +53,12 @@ public class MonitoringAgentDevConfig {
     private String heartbeatRate;
 
     /**
+     * 是否发送服务器信息
+     */
+    @Value("${monitoring.server-info.enable}")
+    private String serverInfoEnable;
+
+    /**
      * 与服务端发服务器信息的频率（秒）
      */
     @Value("${monitoring.server-info.rate}")
@@ -79,6 +85,7 @@ public class MonitoringAgentDevConfig {
         MonitoringHeartbeatProperties heartbeatProperties = new MonitoringHeartbeatProperties();
         heartbeatProperties.setRate(Long.parseLong(this.heartbeatRate));
         MonitoringServerInfoProperties monitoringServerInfoProperties = new MonitoringServerInfoProperties();
+        monitoringServerInfoProperties.setEnable(Boolean.parseBoolean(this.serverInfoEnable));
         monitoringServerInfoProperties.setRate(Long.parseLong(this.serverInfoRate));
         monitoringProperties.setServerProperties(serverProperties);
         monitoringProperties.setOwnProperties(ownProperties);

@@ -20,6 +20,11 @@ import lombok.experimental.Accessors;
 public class MonitoringServerInfoProperties {
 
 	/**
+	 * 是否采集服务器信息
+	 */
+	private boolean enable;
+
+	/**
 	 * 发送服务器信息的频率
 	 */
 	private long rate;
