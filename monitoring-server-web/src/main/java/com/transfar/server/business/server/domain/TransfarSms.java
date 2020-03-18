@@ -26,7 +26,7 @@ import lombok.ToString;
 public class TransfarSms extends SuperBean {
 
     /**
-     * 手机号码，多个手机号码用英文逗号隔开
+     * 手机号码，多个手机号码用英文分号隔开
      */
     private String phone;
 
@@ -47,7 +47,7 @@ public class TransfarSms extends SuperBean {
 
     /**
      * <p>
-     * 传入手机号码数组，返回手机号码字符串，号码之间用英文逗号分隔
+     * 传入手机号码数组，返回手机号码字符串，号码之间用英文分号分隔
      * </p>
      *
      * @param phones 手机号码数组
@@ -58,7 +58,7 @@ public class TransfarSms extends SuperBean {
     public static String getPhones(String[] phones) {
         StringBuilder buffer = new StringBuilder();
         for (String s : phones) {
-            buffer.append(s).append(",");
+            buffer.append(s).append(";");
         }
         String str = buffer.toString();
         return str.substring(0, str.length() - 1);
