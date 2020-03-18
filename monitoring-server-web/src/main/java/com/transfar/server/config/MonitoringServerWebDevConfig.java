@@ -1,30 +1,30 @@
 package com.transfar.server.config;
 
-import java.io.IOException;
-import java.util.Properties;
-
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-
 import com.transfar.common.util.PropertiesUtils;
 import com.transfar.server.property.MonitoringAlarmProperties;
 import com.transfar.server.property.MonitoringServerWebProperties;
 import com.transfar.server.property.MonitoringSmsProperties;
-
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
+
+import java.io.IOException;
+import java.util.Properties;
 
 /**
  * <p>
- * 监控服务端配置
+ * 开发环境的监控服务端配置
  * </p>
  *
  * @author 皮锋
- * @custom.date 2020年3月10日 下午2:13:47
+ * @custom.date 2020/3/18 13:46
  */
 @Configuration
 @Slf4j
-public class MonitoringServerWebConfig {
+@Profile("dev")
+public class MonitoringServerWebDevConfig {
 
     /*
      * 监控配置属性
@@ -43,7 +43,7 @@ public class MonitoringServerWebConfig {
      */
     @Bean
     public MonitoringServerWebProperties loadConfig() throws IOException {
-        Properties properties = PropertiesUtils.loadProperties("monitoring.properties");
+        Properties properties = PropertiesUtils.loadProperties("monitoring-dev.properties");
         // 监控阈值(默认值为5)
         String thresholdStr = StringUtils.trimToNull(properties.getProperty("monitoring.threshold"));
         int threshold = StringUtils.isBlank(thresholdStr) ? 5 : Integer.parseInt(thresholdStr);
@@ -97,8 +97,7 @@ public class MonitoringServerWebConfig {
         MonitoringServerWebProperties monitoringServerWebProperties = new MonitoringServerWebProperties();
         monitoringServerWebProperties.setAlarmProperties(alarmProperties);
         monitoringServerWebProperties.setThreshold(threshold);
-        log.info("监控配置加载成功！");
+        log.info("开发环境监控配置加载成功！");
         return monitoringServerWebProperties;
     }
-
 }
