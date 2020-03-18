@@ -352,7 +352,7 @@
         <!-- 私有仓库 -->
         <repository>
             <id>maven-hngs-group</id>
-            <url>http://localhost:8081/repository/maven-hngs-group/</url>
+            <url>http://10.43.1.77:8081/repository/maven-hngs-group/</url>
             <releases>
                 <enabled>true</enabled>
             </releases>
@@ -363,7 +363,7 @@
             </snapshots>
         </repository>
         <!-- 阿里云仓库 -->
-        <repository>
+       <repository>
             <id>maven-ali</id>
             <url>http://maven.aliyun.com/nexus/content/groups/public</url>
             <releases>
@@ -382,12 +382,12 @@
         <repository>
             <id>maven-hngs-releases</id>
             <name>maven-hngs-releases</name>
-            <url>http://localhost:8081/repository/maven-hngs-releases/</url>
+            <url>http://10.43.1.77:8081/repository/maven-hngs-releases/</url>
         </repository>
         <snapshotRepository>
             <id>maven-hngs-snapshots</id>
             <name>maven-hngs-snapshots</name>
-            <url>http://localhost:8081/repository/maven-hngs-snapshots/</url>
+            <url>http://10.43.1.77:8081/repository/maven-hngs-snapshots/</url>
         </snapshotRepository>
     </distributionManagement>
 
