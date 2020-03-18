@@ -1,30 +1,26 @@
 package com.transfar.agent.config;
 
+import com.transfar.common.property.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.PropertySource;
-
-import com.transfar.common.property.MonitoringHeartbeatProperties;
-import com.transfar.common.property.MonitoringOwnProperties;
-import com.transfar.common.property.MonitoringProperties;
-import com.transfar.common.property.MonitoringServerInfoProperties;
-import com.transfar.common.property.MonitoringServerProperties;
-
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * <p>
- * 监控代理程序配置
+ * 开发环境监控代理程序配置
  * </p>
  *
  * @author 皮锋
  * @custom.date 2020年3月6日 上午10:47:52
  */
 @Configuration
-@PropertySource("classpath:monitoring.properties")
+@Profile("dev")
+@PropertySource("classpath:monitoring-dev.properties")
 @Slf4j
-public class MonitoringAgentConfig {
+public class MonitoringAgentDevConfig {
 
     /**
      * URL
@@ -88,7 +84,7 @@ public class MonitoringAgentConfig {
         monitoringProperties.setOwnProperties(ownProperties);
         monitoringProperties.setHeartbeatProperties(heartbeatProperties);
         monitoringProperties.setMonitoringServerInfoProperties(monitoringServerInfoProperties);
-        log.info("监控配置加载成功！");
+        log.info("开发环境监控配置加载成功！");
         return monitoringProperties;
     }
 
