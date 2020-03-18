@@ -1,11 +1,10 @@
 package com.transfar.server.business.server.domain;
 
+import com.transfar.common.common.InstanceBean;
 import lombok.*;
 import lombok.experimental.Accessors;
 
 import java.util.Date;
-
-import com.transfar.common.common.InstanceBean;
 
 /**
  * <p>
@@ -36,13 +35,23 @@ public class Instance extends InstanceBean {
     private boolean isOnline;
 
     /**
+     * 是否网络可连接
+     */
+    private boolean isOnConnect;
+
+    /**
      * 最后一次通过心跳包更新的时间
      */
     private Date dateTime;
 
     /**
-     * 是否已经发送过告警消息
+     * 是否已经发送过离线告警消息
      */
-    private boolean isAlarm;
+    private boolean isLineAlarm;
+
+    /**
+     * 是否已经发送过断网告警消息
+     */
+    private boolean isConnectAlarm;
 
 }

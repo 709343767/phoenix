@@ -57,12 +57,14 @@ public class HeartbeatServiceImpl implements IHeartbeatService {
             instance.setIp(heartbeatPackage.getIp());
             // 实例状态信息
             instance.setOnline(true);
+            instance.setOnConnect(true);
             instance.setDateTime(heartbeatPackage.getDateTime());
             instance.setThresholdSecond((int) (heartbeatPackage.getRate() * config.getThreshold()));
             // 加入到应用实例池
             this.instancePool.put(key, instance);
         } else {
             poolInstance.setOnline(true);
+            poolInstance.setOnConnect(true);
             poolInstance.setDateTime(heartbeatPackage.getDateTime());
             poolInstance.setThresholdSecond((int) (heartbeatPackage.getRate() * config.getThreshold()));
             this.instancePool.replace(key, poolInstance);

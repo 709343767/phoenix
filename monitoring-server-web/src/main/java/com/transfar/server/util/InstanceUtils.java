@@ -2,7 +2,7 @@ package com.transfar.server.util;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.transfar.common.util.LocalNetUtils;
+import com.transfar.common.util.NetUtils;
 import com.transfar.common.util.MD5Utils;
 
 import java.lang.management.ManagementFactory;
@@ -61,8 +61,8 @@ public class InstanceUtils {
         if (StringUtils.isNotEmpty(instanceId)) {
             return instanceId;
         }
-        String mac = LocalNetUtils.getLocalMac();
-        String ip = LocalNetUtils.getLocalHostAddress();
+        String mac = NetUtils.getLocalMac();
+        String ip = NetUtils.getLocalHostAddress();
         instanceId = MD5Utils.encrypt16(mac + ip + getInstanceName());
         return instanceId;
     }

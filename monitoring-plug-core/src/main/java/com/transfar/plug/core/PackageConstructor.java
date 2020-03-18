@@ -9,7 +9,7 @@ import com.transfar.common.dto.BaseResponsePackage;
 import com.transfar.common.dto.HeartbeatPackage;
 import com.transfar.common.dto.ServerPackage;
 import com.transfar.common.inf.IPackageConstructor;
-import com.transfar.common.util.LocalNetUtils;
+import com.transfar.common.util.NetUtils;
 import com.transfar.common.util.SigarUtils;
 import com.transfar.common.util.StrUtils;
 import com.transfar.plug.util.InstanceUtils;
@@ -46,7 +46,7 @@ public class PackageConstructor implements IPackageConstructor {
         alarmPackage.setEndpoint(EndpointTypeConstants.CLIENT);
         alarmPackage.setInstanceId(InstanceUtils.getInstanceId());
         alarmPackage.setInstanceName(InstanceUtils.getInstanceName());
-        alarmPackage.setIp(LocalNetUtils.getLocalHostAddress());
+        alarmPackage.setIp(NetUtils.getLocalHostAddress());
         alarmPackage.setLevel(alarm.getAlarmLevel().name());
         alarmPackage.setTest(alarm.isTest());
         alarmPackage.setTitle(alarm.getTitle());
@@ -76,7 +76,7 @@ public class PackageConstructor implements IPackageConstructor {
         heartbeatPackage.setEndpoint(EndpointTypeConstants.CLIENT);
         heartbeatPackage.setInstanceId(InstanceUtils.getInstanceId());
         heartbeatPackage.setInstanceName(InstanceUtils.getInstanceName());
-        heartbeatPackage.setIp(LocalNetUtils.getLocalHostAddress());
+        heartbeatPackage.setIp(NetUtils.getLocalHostAddress());
         heartbeatPackage.setDateTime(new Date());
         heartbeatPackage.setRate(ConfigLoader.monitoringProperties.getHeartbeatProperties().getRate());
         return heartbeatPackage;
@@ -100,7 +100,7 @@ public class PackageConstructor implements IPackageConstructor {
         serverPackage.setEndpoint(EndpointTypeConstants.CLIENT);
         serverPackage.setInstanceId(InstanceUtils.getInstanceId());
         serverPackage.setInstanceName(InstanceUtils.getInstanceName());
-        serverPackage.setIp(LocalNetUtils.getLocalHostAddress());
+        serverPackage.setIp(NetUtils.getLocalHostAddress());
         ServerDomain serverDomain = SigarUtils.getServerInfo();
         serverPackage.setServerDomain(serverDomain);
         return serverPackage;
