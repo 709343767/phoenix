@@ -11,9 +11,9 @@ server:
       #日志格式
       pattern: common
       #日志文件名前缀
-      prefix: access_log
+      #prefix: access_log
       #日志文件名后缀
-      suffix: .log
+      #suffix: .log
 
   
 ###############################################spring配置#################################################

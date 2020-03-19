@@ -1,12 +1,13 @@
 package com.transfar.common.dto;
 
+import com.transfar.common.common.InstanceBean;
+import com.transfar.common.domain.Alarm;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 import java.util.Date;
-
-import com.transfar.common.common.InstanceBean;
 
 /**
  * <p>
@@ -34,31 +35,19 @@ public class AlarmPackage extends InstanceBean implements Serializable {
     /**
      * ID
      */
+    @ApiModelProperty(value = "ID")
     private String id;
 
     /**
-     * 告警时间
+     * 告警对象
      */
-    private Date alarmTime;
+    @ApiModelProperty(value = "告警对象")
+    private Alarm alarm;
 
     /**
-     * 告警内容
+     * 时间
      */
-    private String msg;
-
-    /**
-     * 告警级别
-     */
-    private String level;
-
-    /**
-     * 是否是测试告警包
-     */
-    private boolean isTest;
-
-    /**
-     * 告警内容标题
-     */
-    private String title;
+    @ApiModelProperty(value = "时间")
+    private Date dateTime;
 
 }

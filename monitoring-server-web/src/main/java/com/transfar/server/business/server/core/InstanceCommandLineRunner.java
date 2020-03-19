@@ -72,6 +72,10 @@ public class InstanceCommandLineRunner implements CommandLineRunner {
 					// 判决时间
 					DateTime judgeDateTime = new DateTime(dateTime).plusSeconds(thresholdSecond);
 					if (judgeDateTime.isBeforeNow()) {
+						// 已经断网 或者 已经离线
+						if ((!instance.isOnConnect()) || (!instance.isOnline())) {
+							continue;
+						}
 						// 判断网络是不是断了
 						boolean ping = NetUtils.ping(instance.getIp());
 						// 网络不通
@@ -105,7 +109,8 @@ public class InstanceCommandLineRunner implements CommandLineRunner {
 							this.sendAlarmInfo("网络恢复", AlarmLevelEnums.INFO, instance);
 							instance.setConnectAlarm(false);
 							instancePool.replace(key, instance);
-						} else if (isLineAlarm) {
+						}
+						if (isLineAlarm) {
 							// 发送在线通知信息
 							this.sendAlarmInfo("应用程序在线", AlarmLevelEnums.INFO, instance);
 							instance.setLineAlarm(false);
@@ -136,8 +141,8 @@ public class InstanceCommandLineRunner implements CommandLineRunner {
 	 */
 	private synchronized void sendAlarmInfo(String title, AlarmLevelEnums alarmLevelEnums, Instance instance) {
 		new Thread(() -> {
-			String msg = "应用ID：" + instance.getInstanceId() + "，应用名称：" + instance.getInstanceName() + ",应用端点："
-					+ instance.getEndpoint() + ",IP地址：" + instance.getIp();
+			String msg = "应用ID：" + instance.getInstanceId() + "，应用名称：" + instance.getInstanceName() + "，应用端点："
+					+ instance.getEndpoint() + "，IP地址：" + instance.getIp();
 			Alarm alarm = Alarm.builder().title(title)//
 					.msg(msg)//
 					.alarmLevel(alarmLevelEnums)//

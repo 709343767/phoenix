@@ -1,5 +1,6 @@
 package com.transfar.server.business.server.core;
 
+import com.google.common.base.Charsets;
 import com.transfar.common.constant.EndpointTypeConstants;
 import com.transfar.common.domain.Alarm;
 import com.transfar.common.dto.AlarmPackage;
@@ -11,6 +12,7 @@ import com.transfar.common.util.NetUtils;
 import com.transfar.common.util.StrUtils;
 import com.transfar.server.util.InstanceUtils;
 
+import java.nio.charset.Charset;
 import java.util.Date;
 
 /**
@@ -35,18 +37,22 @@ public class PackageConstructor implements IPackageConstructor {
      */
     @Override
     public AlarmPackage structureAlarmPackage(Alarm alarm) {
-        AlarmPackage alarmPackage = new AlarmPackage();
-        alarmPackage.setEndpoint(EndpointTypeConstants.SERVER);
-        alarmPackage.setInstanceId(InstanceUtils.getInstanceId());
-        alarmPackage.setInstanceName(InstanceUtils.getInstanceName());
-        alarmPackage.setIp(NetUtils.getLocalHostAddress());
-        alarmPackage.setTitle(alarm.getTitle());
-        alarmPackage.setId(StrUtils.getUUID());
-        alarmPackage.setMsg(alarm.getMsg());
-        alarmPackage.setAlarmTime(new Date());
-        alarmPackage.setLevel(alarm.getAlarmLevel().name());
-        alarmPackage.setTest(false);
-        return alarmPackage;
+    	AlarmPackage alarmPackage = new AlarmPackage();
+		alarmPackage.setId(StrUtils.getUUID());
+		alarmPackage.setDateTime(new Date());
+		alarmPackage.setEndpoint(EndpointTypeConstants.SERVER);
+		alarmPackage.setInstanceId(InstanceUtils.getInstanceId());
+		alarmPackage.setInstanceName(InstanceUtils.getInstanceName());
+		alarmPackage.setIp(NetUtils.getLocalHostAddress());
+		// 判断字符集
+		Charset charset = alarm.getCharset();
+		// 设置了字符集
+		if (null != charset) {
+			alarm.setMsg(new String(alarm.getMsg().getBytes(Charsets.UTF_8), Charsets.UTF_8));
+			alarm.setCharset(Charsets.UTF_8);
+		}
+		alarmPackage.setAlarm(alarm);
+		return alarmPackage;
     }
 
     @Override

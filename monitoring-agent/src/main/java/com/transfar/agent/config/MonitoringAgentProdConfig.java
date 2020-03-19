@@ -55,7 +55,7 @@ public class MonitoringAgentProdConfig {
     /**
      * 是否发送服务器信息
      */
-    @Value("monitoring.server-info.enable")
+    @Value("${monitoring.server-info.enable}")
     private String serverInfoEnable;
 
     /**
