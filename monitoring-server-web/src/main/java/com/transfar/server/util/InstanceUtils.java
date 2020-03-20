@@ -62,7 +62,7 @@ public class InstanceUtils {
             return instanceId;
         }
         String mac = NetUtils.getLocalMac();
-        String ip = NetUtils.getLocalHostAddress();
+        String ip = NetUtils.getLocalIp();
         instanceId = MD5Utils.encrypt16(mac + ip + getInstanceName());
         return instanceId;
     }

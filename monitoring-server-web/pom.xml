@@ -16,6 +16,7 @@
     <artifactId>monitoring-server-web</artifactId>
     <packaging>jar</packaging>
     <name>monitoring-server-web</name>
+    <version>${revision}</version>
     <description>监控项目web服务端</description>
 
     <!-- 依赖 -->

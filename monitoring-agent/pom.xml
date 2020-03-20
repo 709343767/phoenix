@@ -16,6 +16,7 @@
 	<artifactId>monitoring-agent</artifactId>
 	<packaging>jar</packaging>
 	<name>monitoring-agent</name>
+	<version>${revision}</version>
 	<description>监控代理程序</description>
 
 	<!-- 属性 -->
@@ -98,7 +99,6 @@
 
 	<!-- 构建 -->
 	<build>
-		<!-- <finalName>myblogs-show-web</finalName> -->
 		<defaultGoal>package</defaultGoal>
 		<plugins>
 			<plugin>

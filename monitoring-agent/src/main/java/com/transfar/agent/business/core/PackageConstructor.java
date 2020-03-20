@@ -47,7 +47,7 @@ public class PackageConstructor implements IPackageConstructor {
 		alarmPackage.setEndpoint(EndpointTypeConstants.AGENT);
 		alarmPackage.setInstanceId(InstanceUtils.getInstanceId());
 		alarmPackage.setInstanceName(InstanceUtils.getInstanceName());
-		alarmPackage.setIp(NetUtils.getLocalHostAddress());
+		alarmPackage.setIp(NetUtils.getLocalIp());
 		// 判断字符集
 		Charset charset = alarm.getCharset();
 		// 设置了字符集
@@ -75,7 +75,7 @@ public class PackageConstructor implements IPackageConstructor {
 		heartbeatPackage.setEndpoint(EndpointTypeConstants.AGENT);
 		heartbeatPackage.setInstanceId(InstanceUtils.getInstanceId());
 		heartbeatPackage.setInstanceName(InstanceUtils.getInstanceName());
-		heartbeatPackage.setIp(NetUtils.getLocalHostAddress());
+		heartbeatPackage.setIp(NetUtils.getLocalIp());
 		heartbeatPackage.setDateTime(new Date());
 		heartbeatPackage.setRate(ConfigLoader.monitoringProperties.getHeartbeatProperties().getRate());
 		return heartbeatPackage;
@@ -99,7 +99,7 @@ public class PackageConstructor implements IPackageConstructor {
 		serverPackage.setEndpoint(EndpointTypeConstants.AGENT);
 		serverPackage.setInstanceId(InstanceUtils.getInstanceId());
 		serverPackage.setInstanceName(InstanceUtils.getInstanceName());
-		serverPackage.setIp(NetUtils.getLocalHostAddress());
+		serverPackage.setIp(NetUtils.getLocalIp());
 		ServerDomain serverDomain = SigarUtils.getServerInfo();
 		serverPackage.setServerDomain(serverDomain);
 		return serverPackage;
@@ -120,7 +120,7 @@ public class PackageConstructor implements IPackageConstructor {
 		baseResponsePackage.setEndpoint(EndpointTypeConstants.AGENT);
 		baseResponsePackage.setInstanceId(InstanceUtils.getInstanceId());
 		baseResponsePackage.setInstanceName(InstanceUtils.getInstanceName());
-		baseResponsePackage.setIp(NetUtils.getLocalHostAddress());
+		baseResponsePackage.setIp(NetUtils.getLocalIp());
 		baseResponsePackage.setDateTime(new Date());
 		baseResponsePackage.setId(StrUtils.getUUID());
 		baseResponsePackage.setResult(true);
@@ -142,7 +142,7 @@ public class PackageConstructor implements IPackageConstructor {
 		baseResponsePackage.setEndpoint(EndpointTypeConstants.AGENT);
 		baseResponsePackage.setInstanceId(InstanceUtils.getInstanceId());
 		baseResponsePackage.setInstanceName(InstanceUtils.getInstanceName());
-		baseResponsePackage.setIp(NetUtils.getLocalHostAddress());
+		baseResponsePackage.setIp(NetUtils.getLocalIp());
 		baseResponsePackage.setDateTime(new Date());
 		baseResponsePackage.setId(StrUtils.getUUID());
 		baseResponsePackage.setResult(false);

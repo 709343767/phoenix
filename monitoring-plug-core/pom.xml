@@ -8,7 +8,7 @@
     <parent>
         <artifactId>monitoring</artifactId>
         <groupId>com.transfar</groupId>
-        <version>${revision}</version>
+        <version>0.0.1-RELEASE</version>
         <!-- <relativePath>../pom.xml</relativePath> -->
     </parent>
 
@@ -16,6 +16,7 @@
     <artifactId>monitoring-plug-core</artifactId>
     <packaging>jar</packaging>
     <name>monitoring-plug-core</name>
+    <version>${revision}</version>
     <description>监控客户端插件</description>
 
     <!-- 属性 -->
@@ -55,7 +56,6 @@
 
     <!-- 构建 -->
     <build>
-        <!-- <finalName>myblogs-commons</finalName> -->
         <defaultGoal>package</defaultGoal>
         <resources>
             <resource>

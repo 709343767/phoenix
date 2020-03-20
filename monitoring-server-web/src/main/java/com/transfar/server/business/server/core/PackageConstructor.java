@@ -43,7 +43,7 @@ public class PackageConstructor implements IPackageConstructor {
 		alarmPackage.setEndpoint(EndpointTypeConstants.SERVER);
 		alarmPackage.setInstanceId(InstanceUtils.getInstanceId());
 		alarmPackage.setInstanceName(InstanceUtils.getInstanceName());
-		alarmPackage.setIp(NetUtils.getLocalHostAddress());
+		alarmPackage.setIp(NetUtils.getLocalIp());
 		// 判断字符集
 		Charset charset = alarm.getCharset();
 		// 设置了字符集
@@ -80,7 +80,7 @@ public class PackageConstructor implements IPackageConstructor {
         baseResponsePackage.setEndpoint(EndpointTypeConstants.SERVER);
         baseResponsePackage.setInstanceId(InstanceUtils.getInstanceId());
         baseResponsePackage.setInstanceName(InstanceUtils.getInstanceName());
-        baseResponsePackage.setIp(NetUtils.getLocalHostAddress());
+        baseResponsePackage.setIp(NetUtils.getLocalIp());
         baseResponsePackage.setId(StrUtils.getUUID());
         baseResponsePackage.setDateTime(new Date());
         baseResponsePackage.setResult(true);
@@ -103,7 +103,7 @@ public class PackageConstructor implements IPackageConstructor {
         baseResponsePackage.setEndpoint(EndpointTypeConstants.SERVER);
         baseResponsePackage.setInstanceId(InstanceUtils.getInstanceId());
         baseResponsePackage.setInstanceName(InstanceUtils.getInstanceName());
-        baseResponsePackage.setIp(NetUtils.getLocalHostAddress());
+        baseResponsePackage.setIp(NetUtils.getLocalIp());
         baseResponsePackage.setId(StrUtils.getUUID());
         baseResponsePackage.setDateTime(new Date());
         baseResponsePackage.setResult(false);

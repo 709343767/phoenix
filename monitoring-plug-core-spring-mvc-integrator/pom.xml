@@ -8,7 +8,7 @@
     <parent>
         <artifactId>monitoring</artifactId>
         <groupId>com.transfar</groupId>
-        <version>${revision}</version>
+        <version>0.0.1-RELEASE</version>
         <!-- <relativePath>../pom.xml</relativePath> -->
     </parent>
 
@@ -16,6 +16,7 @@
     <artifactId>monitoring-plug-core-spring-mvc-integrator</artifactId>
     <packaging>jar</packaging>
     <name>monitoring-plug-core-spring-mvc-integrator</name>
+    <version>${revision}</version>
     <description>监控项目客户端与springmvc集成的integrator</description>
 
     <!-- 依赖 -->
@@ -42,7 +43,6 @@
 
     <!-- 构建 -->
     <build>
-        <!-- <finalName>myblogs-commons</finalName> -->
         <defaultGoal>package</defaultGoal>
         <plugins>
             <plugin>
