@@ -9,14 +9,13 @@
 		<artifactId>monitoring</artifactId>
 		<groupId>com.transfar</groupId>
 		<version>${revision}</version>
-		<!-- <relativePath>../pom.xml</relativePath> -->
+		<relativePath>..</relativePath>
 	</parent>
 
 	<!-- 项目基本信息 -->
 	<artifactId>monitoring-agent</artifactId>
 	<packaging>jar</packaging>
 	<name>monitoring-agent</name>
-	<version>${revision}</version>
 	<description>监控代理程序</description>
 
 	<!-- 属性 -->

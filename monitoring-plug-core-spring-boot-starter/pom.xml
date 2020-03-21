@@ -8,10 +8,9 @@
     <parent>
         <artifactId>monitoring</artifactId>
         <groupId>com.transfar</groupId>
-        <version>0.0.1-RELEASE</version>
-        <!-- <relativePath>../pom.xml</relativePath> -->
+        <version>${revision}</version>
+        <relativePath>..</relativePath>
     </parent>
-
 
     <!-- 项目基本信息 -->
     <artifactId>monitoring-plug-core-spring-boot-starter</artifactId>
