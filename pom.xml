@@ -411,6 +411,8 @@
             <id>maven-hngs-snapshots</id>
             <name>maven-hngs-snapshots</name>
             <url>http://10.43.1.77:8081/repository/maven-hngs-snapshots/</url>
+            <!-- 发布的时候，是否为Snapshot版本分配一个包含时间戳的构建号 -->
+            <uniqueVersion>false</uniqueVersion>
         </snapshotRepository>
     </distributionManagement>
 
