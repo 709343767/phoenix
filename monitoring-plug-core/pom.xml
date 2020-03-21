@@ -16,7 +16,6 @@
     <artifactId>monitoring-plug-core</artifactId>
     <packaging>jar</packaging>
     <name>monitoring-plug-core</name>
-    <version>${revision}</version>
     <description>监控客户端插件</description>
 
     <!-- 属性 -->

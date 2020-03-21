@@ -16,7 +16,6 @@
 	<artifactId>monitoring-common</artifactId>
 	<packaging>jar</packaging>
 	<name>monitoring-common</name>
-	<version>${revision}</version>
 	<description>监控项目公共模块</description>
 
 	<!-- 依赖 -->

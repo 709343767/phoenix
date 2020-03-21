@@ -16,7 +16,6 @@
     <artifactId>monitoring-plug-core-spring-mvc-integrator</artifactId>
     <packaging>jar</packaging>
     <name>monitoring-plug-core-spring-mvc-integrator</name>
-    <version>${revision}</version>
     <description>监控项目客户端与springmvc集成的integrator</description>
 
     <!-- 依赖 -->

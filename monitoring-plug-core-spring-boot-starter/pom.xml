@@ -16,7 +16,6 @@
     <artifactId>monitoring-plug-core-spring-boot-starter</artifactId>
     <packaging>jar</packaging>
     <name>monitoring-plug-core-spring-boot-starter</name>
-    <version>${revision}</version>
     <description>监控项目客户端与springboot集成的starter</description>
 
     <!-- 依赖 -->
