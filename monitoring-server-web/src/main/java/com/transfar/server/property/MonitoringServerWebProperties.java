@@ -1,10 +1,6 @@
 package com.transfar.server.property;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 /**
  * <p>
@@ -30,5 +26,10 @@ public class MonitoringServerWebProperties {
      * 告警属性
      */
     private MonitoringAlarmProperties alarmProperties;
+
+    /**
+     * 网络属性
+     */
+    private MonitoringNetworkProperties networkProperties;
 
 }

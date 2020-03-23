@@ -3,6 +3,7 @@ package com.transfar.server.config;
 import java.io.IOException;
 import java.util.Properties;
 
+import com.transfar.server.property.MonitoringNetworkProperties;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -63,7 +64,11 @@ public class MonitoringServerWebProdConfig {
         String alarmSmsProtocol = StringUtils.trimToNull(properties.getProperty("monitoring.alarm.sms.protocol"));
         // 告警短信接口商家
         String alarmSmsEnterprise = StringUtils.trimToNull(properties.getProperty("monitoring.alarm.sms.enterprise"));
-        return wrap(threshold, alarmEnable, alarmType, alarmSmsPhoneNumbers, alarmSmsAddress, alarmSmsProtocol, alarmSmsEnterprise);
+        // 缺省[是否监控网络(默认打开)]
+        String monitoringEnableStr = StringUtils.trimToNull(properties.getProperty("monitoring.network.enable"));
+        boolean monitoringEnable = StringUtils.isBlank(monitoringEnableStr) || Boolean.parseBoolean(monitoringEnableStr);
+        return wrap(threshold, alarmEnable, alarmType, alarmSmsPhoneNumbers, alarmSmsAddress, alarmSmsProtocol,
+                alarmSmsEnterprise, monitoringEnable);
     }
 
     /**
@@ -78,12 +83,15 @@ public class MonitoringServerWebProdConfig {
      * @param alarmSmsAddress      告警短信地址
      * @param alarmSmsProtocol     告警短信协议
      * @param alarmSmsEnterprise   告警短信接口商家
+     * @param monitoringEnable     网络监控是否打开
      * @return MonitoringServerWebProperties
      * @author 皮锋
      * @custom.date 2020年3月10日 下午2:39:38
      */
-    private MonitoringServerWebProperties wrap(int threshold, boolean alarmEnable, String alarmType, String alarmSmsPhoneNumbers, String alarmSmsAddress,
-                                               String alarmSmsProtocol, String alarmSmsEnterprise) {
+    private MonitoringServerWebProperties wrap(int threshold, boolean alarmEnable, String alarmType,
+                                               String alarmSmsPhoneNumbers, String alarmSmsAddress,
+                                               String alarmSmsProtocol, String alarmSmsEnterprise,
+                                               boolean monitoringEnable) {
         // 告警属性
         MonitoringAlarmProperties alarmProperties = new MonitoringAlarmProperties();
         alarmProperties.setEnable(alarmEnable);
@@ -92,13 +100,16 @@ public class MonitoringServerWebProdConfig {
         MonitoringSmsProperties smsProperties = new MonitoringSmsProperties();
         smsProperties.setAddress(alarmSmsAddress);
         smsProperties.setEnterprise(alarmSmsEnterprise);
-        smsProperties.setPhoneNumbers(alarmSmsPhoneNumbers != null ? alarmSmsPhoneNumbers.split(",") : null);
+        smsProperties.setPhoneNumbers(alarmSmsPhoneNumbers != null ? alarmSmsPhoneNumbers.split(";") : null);
         smsProperties.setProtocol(alarmSmsProtocol);
         alarmProperties.setSmsProperties(smsProperties);
+        MonitoringNetworkProperties networkProperties = new MonitoringNetworkProperties();
+        networkProperties.setMonitoringEnable(monitoringEnable);
         // 所有监控属性
         MonitoringServerWebProperties monitoringServerWebProperties = new MonitoringServerWebProperties();
         monitoringServerWebProperties.setAlarmProperties(alarmProperties);
         monitoringServerWebProperties.setThreshold(threshold);
+        monitoringServerWebProperties.setNetworkProperties(networkProperties);
         log.info("生产环境监控配置加载成功！");
         return monitoringServerWebProperties;
     }

@@ -1,15 +1,14 @@
 package com.transfar.server.config;
 
-import java.time.Duration;
-
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import lombok.extern.slf4j.Slf4j;
+import java.time.Duration;
 
 /**
  * <p>
@@ -19,10 +18,9 @@ import lombok.extern.slf4j.Slf4j;
  * @author 皮锋
  * @custom.date 2020年1月20日 上午10:58:31
  */
-@SuppressWarnings("deprecation")
 @Configuration
 @Slf4j
-public class RestTemplateConfig extends WebMvcConfigurerAdapter {
+public class RestTemplateConfig implements WebMvcConfigurer {
 
     /**
      * <p>
