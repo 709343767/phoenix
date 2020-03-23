@@ -46,7 +46,7 @@ public class Alarm extends SuperBean {
     private Charset charset;
 
     /**
-     * 是否是测试告警
+     * 是否是测试告警，测试告警服务端不发送告警消息
      */
     private boolean isTest;
 
