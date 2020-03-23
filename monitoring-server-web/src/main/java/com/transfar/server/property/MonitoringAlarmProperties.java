@@ -1,10 +1,6 @@
 package com.transfar.server.property;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 /**
  * <p>
@@ -25,6 +21,11 @@ public class MonitoringAlarmProperties {
      * 告警是否打开
      */
     private boolean enable;
+
+    /**
+     * 告警级别，四级：INFO < WARN < ERROR < FATAL
+     */
+    private String level;
 
     /**
      * 告警方式
