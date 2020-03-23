@@ -36,7 +36,7 @@ public class HeartbeatController {
 
     /**
      * <p>
-     * 监控服务端程序接收监控代理程序发的心跳包，并返回结果
+     * 监控服务端程序接收监控代理程序或者监控客户端程序发的心跳包，并返回结果
      * </p>
      *
      * @param request 请求参数
@@ -44,7 +44,7 @@ public class HeartbeatController {
      * @author 皮锋
      * @custom.date 2020年3月4日 下午12:27:47
      */
-    @ApiOperation(value = "监控服务端程序接收监控代理程序发的心跳包，并返回结果", notes = "接收心跳包")
+    @ApiOperation(value = "监控服务端程序接收监控代理程序或者监控客户端程序发的心跳包，并返回结果", notes = "接收心跳包")
     @PostMapping("/accept-heartbeat-package")
     public BaseResponsePackage acceptHeartbeatPackage(@RequestBody String request) {
         HeartbeatPackage heartbeatPackage = JSON.parseObject(request, HeartbeatPackage.class);

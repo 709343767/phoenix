@@ -35,7 +35,7 @@ public class AlarmController {
 
     /**
      * <p>
-     * 监控服务端程序接收监控代理程序发的告警包，并返回结果
+     * 监控服务端程序接收监控代理程序或者监控客户端程序发的告警包，并返回结果
      * </p>
      *
      * @param request 请求参数
@@ -43,7 +43,7 @@ public class AlarmController {
      * @author 皮锋
      * @custom.date 2020年3月6日 下午3:49:45
      */
-    @ApiOperation(value = "监控服务端程序接收监控代理程序发的告警包，并返回结果", notes = "接收告警包")
+    @ApiOperation(value = "监控服务端程序接收监控代理程序或者监控客户端程序发的告警包，并返回结果", notes = "接收告警包")
     @PostMapping("/accept-alarm-package")
     public BaseResponsePackage acceptAlarmPackage(@RequestBody String request) {
         AlarmPackage alarmPackage = JSON.parseObject(request, AlarmPackage.class);
