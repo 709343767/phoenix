@@ -1,6 +1,5 @@
 package com.transfar.server.business.server.service.impl;
 
-import com.transfar.common.constant.AlarmLevelEnums;
 import com.transfar.common.domain.Alarm;
 import com.transfar.common.dto.AlarmPackage;
 import com.transfar.server.business.server.domain.TransfarSms;
@@ -9,6 +8,7 @@ import com.transfar.server.business.server.service.ISmsService;
 import com.transfar.server.constant.AlarmTypeEnums;
 import com.transfar.server.constant.EnterpriseConstants;
 import com.transfar.server.property.MonitoringServerWebProperties;
+import com.transfar.server.util.AlarmUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,17 +61,18 @@ public class AlarmServiceImpl implements IAlarmService {
         }
         // 获取告警信息
         Alarm alarm = alarmPackage.getAlarm();
-        // 是测试告警信息，不做处理，直接返回
-        if (alarm.isTest()) {
-            log.warn("当前为测试信息，不发送告警消息！");
+        // 告警级别
+        String level = alarm.getAlarmLevel().name();
+        // 告警级别小于配置的告警级别，不做处理，直接返回
+        String configAlarmLevel = this.config.getAlarmProperties().getLevel();
+        if (!AlarmUtils.isAlarm(configAlarmLevel, level)) {
+            log.warn("小于配置的告警级别，不发送告警消息！");
             // 停止往下执行
             return true;
         }
-        // 告警级别
-        String level = alarm.getAlarmLevel().name();
-        // INFO信息，不做处理，直接返回
-        if (StringUtils.equalsIgnoreCase(level, AlarmLevelEnums.INFO.name())) {
-            log.warn("当前为INFO信息，不发送告警消息！");
+        // 是测试告警信息，不做处理，直接返回
+        if (alarm.isTest()) {
+            log.warn("当前为测试信息，不发送告警消息！");
             // 停止往下执行
             return true;
         }
