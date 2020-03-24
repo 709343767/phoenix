@@ -28,6 +28,7 @@ public class MonitoringPropertiesLoader {
      *
      * @param configFileName 配置文件名字
      * @return MonitoringServerWebProperties
+     * @throws IOException IO异常
      * @author 皮锋
      * @custom.date 2020/3/23 14:16
      */
