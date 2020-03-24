@@ -1,5 +1,6 @@
 package com.transfar.server.config;
 
+import com.transfar.common.constant.AlarmLevelEnums;
 import com.transfar.common.util.PropertiesUtils;
 import com.transfar.server.property.MonitoringAlarmProperties;
 import com.transfar.server.property.MonitoringNetworkProperties;
@@ -39,7 +40,8 @@ public class MonitoringPropertiesLoader {
         String alarmEnableStr = StringUtils.trimToNull(properties.getProperty("monitoring.alarm.enable"));
         boolean alarmEnable = StringUtils.isBlank(alarmEnableStr) || Boolean.parseBoolean(alarmEnableStr);
         // 缺省[监控告警级别，四级：INFO < WARN < ERROR < FATAL，(默认WARN，level >= WARN告警)]
-        String alarmLevel = StringUtils.trimToNull(properties.getProperty("monitoring.alarm.level"));
+        String alarmLevelTmp = StringUtils.trimToNull(properties.getProperty("monitoring.alarm.level"));
+        String alarmLevel = StringUtils.isBlank(alarmLevelTmp) ? AlarmLevelEnums.WARN.name() : alarmLevelTmp;
         // 告警类型
         String alarmType = StringUtils.trimToNull(properties.getProperty("monitoring.alarm.type"));
         // 告警短信号码
