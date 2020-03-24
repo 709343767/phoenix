@@ -110,8 +110,11 @@ public class InstanceCommandLineRunner implements CommandLineRunner {
                         this.onLine(key, instance);
                     }
                 }
-                // 打印当前应用池中的所有应用
-                log.info("当前应用实例池大小：{}，详细信息：{}", this.instancePool.size(), this.instancePool.toJsonString());
+                // 打印当前应用池中的所有应用情况
+                log.info("当前应用实例池大小：{}，在线：{}，离线：{}，详细信息：{}", this.instancePool.size(), //
+                        this.instancePool.entrySet().stream().filter((e) -> e.getValue().isOnline()).count(), //
+                        this.instancePool.entrySet().stream().filter((e) -> !e.getValue().isOnline()).count(), //
+                        this.instancePool.toJsonString());
             }, 30, 30, TimeUnit.SECONDS);
         });
         // 设置守护线程
@@ -225,7 +228,8 @@ public class InstanceCommandLineRunner implements CommandLineRunner {
         new Thread(() -> {
             String msg = "应用ID：" + instance.getInstanceId() + "，应用名称：" + instance.getInstanceName() + "，应用端点："
                     + instance.getEndpoint() + "，IP地址：" + instance.getIp();
-            Alarm alarm = Alarm.builder().title(title)//
+            Alarm alarm = Alarm.builder()//
+                    .title(title)//
                     .msg(msg)//
                     .alarmLevel(alarmLevelEnums)//
                     .build();

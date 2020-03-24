@@ -53,15 +53,15 @@ public class AlarmServiceImpl implements IAlarmService {
         // 返回结果
         boolean result = false;
         // 告警开关是否打开
-        boolean enable = config.getAlarmProperties().isEnable();
+        boolean enable = this.config.getAlarmProperties().isEnable();
         if (!enable) {
             log.warn("告警开关没有打开，不发送告警消息！");
             // 停止往下执行
-            return false;
+            return true;
         }
         // 获取告警信息
         Alarm alarm = alarmPackage.getAlarm();
-        // 是测试告警信息，不做处理，直接返回true，代表告警成功
+        // 是测试告警信息，不做处理，直接返回
         if (alarm.isTest()) {
             log.warn("当前为测试信息，不发送告警消息！");
             // 停止往下执行
@@ -69,19 +69,19 @@ public class AlarmServiceImpl implements IAlarmService {
         }
         // 告警级别
         String level = alarm.getAlarmLevel().name();
-        // INFO信息，不做处理，直接返回true，代表告警成功
+        // INFO信息，不做处理，直接返回
         if (StringUtils.equalsIgnoreCase(level, AlarmLevelEnums.INFO.name())) {
             log.warn("当前为INFO信息，不发送告警消息！");
-			// 停止往下执行
-			return true;
+            // 停止往下执行
+            return true;
         }
         // 告警内容
         String msg = alarm.getMsg();
-        // 没有告警内容，不做处理，直接返回false
+        // 没有告警内容，不做处理，直接返回
         if (StringUtils.isBlank(msg)) {
             log.warn("告警内容为空，不发送告警消息！");
             // 停止往下执行
-            return false;
+            return true;
         }
         // 告警内容标题
         String alarmTitle = alarm.getTitle();
