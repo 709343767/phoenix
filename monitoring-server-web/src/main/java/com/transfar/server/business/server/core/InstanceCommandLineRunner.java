@@ -111,9 +111,11 @@ public class InstanceCommandLineRunner implements CommandLineRunner {
                     }
                 }
                 // 打印当前应用池中的所有应用情况
-                log.info("当前应用实例池大小：{}，在线：{}，离线：{}，详细信息：{}", this.instancePool.size(), //
-                        this.instancePool.entrySet().stream().filter((e) -> e.getValue().isOnline()).count(), //
+                log.info("当前应用实例池大小：{}，正常：{}，离线：{}，断网：{}，详细信息：{}", //
+                        this.instancePool.size(), //
+                        this.instancePool.entrySet().stream().filter((e) -> (e.getValue().isOnline() || e.getValue().isOnConnect())).count(), //
                         this.instancePool.entrySet().stream().filter((e) -> !e.getValue().isOnline()).count(), //
+                        this.instancePool.entrySet().stream().filter((e) -> !e.getValue().isOnConnect()).count(), //
                         this.instancePool.toJsonString());
             }, 30, 30, TimeUnit.SECONDS);
         });
