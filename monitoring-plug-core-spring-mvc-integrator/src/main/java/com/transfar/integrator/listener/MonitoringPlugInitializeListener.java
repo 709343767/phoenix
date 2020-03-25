@@ -1,7 +1,7 @@
-package com.transfar.plug.listener;
+package com.transfar.integrator.listener;
 
+import com.transfar.integrator.exception.BadListenerConfigException;
 import com.transfar.plug.Monitor;
-import com.transfar.plug.exception.BadListenerConfigException;
 
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.StringUtils;
@@ -59,7 +59,7 @@ public class MonitoringPlugInitializeListener implements ServletContextListener 
                 + " <param-value>classpath:conf/monitoring.properties</param-value>\r\n" //
                 + "</context-param>\r\n" //
                 + "<listener>\r\n" //
-                + " <listener-class>com.transfar.plug.listener.MonitoringPlugInitializeListener</listener-class>\r\n" //
+                + " <listener-class>com.transfar.integrator.listener.MonitoringPlugInitializeListener</listener-class>\r\n" //
                 + "</listener>\r\n";
         // 返回值
         String[] result = new String[2];

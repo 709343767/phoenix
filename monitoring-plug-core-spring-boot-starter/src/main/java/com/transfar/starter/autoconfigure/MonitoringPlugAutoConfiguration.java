@@ -1,4 +1,4 @@
-package com.transfar.plug.autoconfigure;
+package com.transfar.starter.autoconfigure;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
@@ -10,8 +10,8 @@ import org.springframework.core.annotation.AnnotationAttributes;
 import org.springframework.core.type.AnnotationMetadata;
 
 import com.transfar.plug.Monitor;
-import com.transfar.plug.annotation.EnableMonitoringPlug;
-import com.transfar.plug.exception.BadAnnotateParamException;
+import com.transfar.starter.annotation.EnableMonitoringPlug;
+import com.transfar.starter.exception.BadAnnotateParamException;
 
 import lombok.SneakyThrows;
 

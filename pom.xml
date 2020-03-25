@@ -338,9 +338,9 @@
                         <id>attach-javadocs</id>
                         <phase>package</phase>
                         <goals>
-                            <goal>jar</goal>
                             <!-- 生成聚合的javadoc -->
                             <goal>aggregate</goal>
+                            <goal>jar</goal>
                         </goals>
                     </execution>
                 </executions>

@@ -1,4 +1,4 @@
-package com.transfar.plug.selector;
+package com.transfar.starter.selector;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -9,7 +9,7 @@ import org.springframework.context.annotation.DeferredImportSelector;
 import org.springframework.core.io.support.SpringFactoriesLoader;
 import org.springframework.core.type.AnnotationMetadata;
 
-import com.transfar.plug.annotation.EnableMonitoringPlug;
+import com.transfar.starter.annotation.EnableMonitoringPlug;
 
 /**
  * <p>

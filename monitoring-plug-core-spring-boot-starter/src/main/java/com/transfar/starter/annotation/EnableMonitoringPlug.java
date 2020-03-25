@@ -1,8 +1,8 @@
-package com.transfar.plug.annotation;
+package com.transfar.starter.annotation;
 
 import org.springframework.context.annotation.Import;
 
-import com.transfar.plug.selector.EnableMonitoringPlugSelector;
+import com.transfar.starter.selector.EnableMonitoringPlugSelector;
 
 import java.lang.annotation.*;
 
