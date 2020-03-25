@@ -23,7 +23,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * <p>
- * 在容器启动后，定时扫描应用实例池中的所有应用，实时更新应用实例状态
+ * 在容器启动后，定时扫描应用实例池中的所有应用，实时更新应用实例状态，发送告警
  * </p>
  *
  * @author 皮锋
@@ -142,7 +142,7 @@ public class InstanceCommandLineRunner implements CommandLineRunner {
             // 发送在线通知信息
             this.sendAlarmInfo("应用程序在线", AlarmLevelEnums.WARN, instance);
             instance.setLineAlarm(false);
-            instancePool.replace(key, instance);
+            this.instancePool.replace(key, instance);
         }
     }
 
@@ -161,9 +161,9 @@ public class InstanceCommandLineRunner implements CommandLineRunner {
         boolean isConnectAlarm = instance.isConnectAlarm();
         if (isConnectAlarm) {
             // 发送来网通知信息
-            this.sendAlarmInfo("网络恢复", AlarmLevelEnums.WARN, instance);
+            // this.sendAlarmInfo("网络恢复", AlarmLevelEnums.WARN, instance);
             instance.setConnectAlarm(false);
-            instancePool.replace(key, instance);
+            this.instancePool.replace(key, instance);
         }
     }
 
@@ -188,7 +188,7 @@ public class InstanceCommandLineRunner implements CommandLineRunner {
             this.sendAlarmInfo("应用程序离线", AlarmLevelEnums.FATAL, instance);
             instance.setLineAlarm(true);
         }
-        instancePool.replace(key, instance);
+        this.instancePool.replace(key, instance);
     }
 
     /**
@@ -209,10 +209,10 @@ public class InstanceCommandLineRunner implements CommandLineRunner {
         // 没发送断网告警
         if (!isConnectAlarm) {
             // 发送断网告警信息
-            this.sendAlarmInfo("网络中断", AlarmLevelEnums.FATAL, instance);
+            // this.sendAlarmInfo("网络中断", AlarmLevelEnums.FATAL, instance);
             instance.setConnectAlarm(true);
         }
-        instancePool.replace(key, instance);
+        this.instancePool.replace(key, instance);
     }
 
     /**

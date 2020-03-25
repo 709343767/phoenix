@@ -1,15 +1,14 @@
 package com.transfar.server.business.server.domain;
 
+import com.transfar.common.abs.SuperBean;
 import lombok.*;
 import lombok.experimental.Accessors;
 
 import java.util.Date;
 
-import com.transfar.common.abs.SuperBean;
-
 /**
  * <p>
- * IP地址
+ * 网络信息
  * </p>
  *
  * @author 皮锋
@@ -23,7 +22,7 @@ import com.transfar.common.abs.SuperBean;
 @AllArgsConstructor
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public class Ip extends SuperBean {
+public class Net extends SuperBean {
 
     /**
      * 允许多少秒内没更新是正常情况
@@ -44,5 +43,10 @@ public class Ip extends SuperBean {
      * 是否已经发送过断网告警消息
      */
     private boolean isConnectAlarm;
+
+    /**
+     * IP地址
+     */
+    private String ip;
 
 }
