@@ -5,17 +5,12 @@ import com.transfar.common.dto.HeartbeatPackage;
 import com.transfar.server.business.server.core.NetPool;
 import com.transfar.server.business.server.domain.Net;
 import com.transfar.server.property.MonitoringServerWebProperties;
-import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
-
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * <p>
@@ -65,24 +60,24 @@ public class NetAspect {
     @Before("tangentPoint()")
     public void addIp2NetPool(JoinPoint joinPoint) {
         // 接收到请求，记录请求内容
-        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        assert attributes != null;
-        HttpServletRequest request = attributes.getRequest();
+        // ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        // assert attributes != null;
+        // HttpServletRequest request = attributes.getRequest();
         String args = String.valueOf(joinPoint.getArgs()[0]);
         HeartbeatPackage heartbeatPackage = JSON.parseObject(args, HeartbeatPackage.class);
         // 请求地址中的IP
-        String requestIp = request.getRemoteAddr();
+        // String requestIp = request.getRemoteAddr();
         // 不是本机地址
-        if (!StringUtils.equals("127.0.0.1", requestIp)) {
-            // 更新网络信息池
-            this.updateNetPool(requestIp, heartbeatPackage);
-        }
+        // if (!StringUtils.equals("127.0.0.1", requestIp)) {
+        // 更新网络信息池
+        //   this.updateNetPool(requestIp, heartbeatPackage);
+        // }
         // 请求包中的IP
         String packageIp = heartbeatPackage.getIp();
-        if (!StringUtils.equals(packageIp, requestIp)) {
-            // 更新网络信息池
-            this.updateNetPool(packageIp, heartbeatPackage);
-        }
+        // if (!StringUtils.equals(packageIp, requestIp)) {
+        // 更新网络信息池
+        this.updateNetPool(packageIp, heartbeatPackage);
+        // }
     }
 
     /**
