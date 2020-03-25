@@ -112,7 +112,7 @@ public class NetCommandLineRunner implements CommandLineRunner {
                         this.netPool.entrySet().stream().filter((e) -> e.getValue().isOnConnect()).count(), //
                         this.netPool.entrySet().stream().filter((e) -> !e.getValue().isOnConnect()).count(), //
                         this.netPool.toJsonString());
-            }, 60, 30, TimeUnit.SECONDS);
+            }, 45, 30, TimeUnit.SECONDS);
         });
         // 设置守护线程
         thread.setDaemon(true);
