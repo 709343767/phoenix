@@ -10,6 +10,8 @@ import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.nio.charset.Charset;
 import java.util.Enumeration;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * <p>
@@ -145,29 +147,51 @@ public class NetUtils {
             Process process;
             // Windows系统
             if (isWindowsOs()) {
-                process = Runtime.getRuntime().exec("ping " + address + " -n 8");
+                process = Runtime.getRuntime().exec("ping " + address + " -n 5");
             } else {
-                process = Runtime.getRuntime().exec("ping " + address + " -c 8");
+                process = Runtime.getRuntime().exec("ping " + address + " -c 5");
             }
-            assert process != null;
-            @Cleanup
-            InputStream inputStream = process.getInputStream();
-            @Cleanup
-            InputStreamReader inputStreamReader = new InputStreamReader(inputStream, Charset.forName("GBK"));
-            @Cleanup
-            BufferedReader buf = new BufferedReader(inputStreamReader);
-            String line;
-            StringBuilder buffer = new StringBuilder();
-            while ((line = buf.readLine()) != null) {
-                buffer.append(line).append("\r\n");
+            if (process == null) {
+                result = false;
+            } else {
+                @Cleanup
+                InputStream inputStream = process.getInputStream();
+                @Cleanup
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream, Charset.forName("GBK"));
+                @Cleanup
+                BufferedReader buf = new BufferedReader(inputStreamReader);
+                String line;
+                int connectedCount = 0;
+                while ((line = buf.readLine()) != null) {
+                    connectedCount += getCheckResult(line);
+                }
+                // 有收到数据包
+                result = connectedCount == 5;
             }
-            String msg = buffer.toString();
-            // 有收到数据包
-            result = (!msg.contains("100%") || !msg.contains("loss")) && (!msg.contains("100%") || !msg.contains("丢失"));
         } catch (Exception e) {
             result = false;
         }
         return result;
+    }
+
+    /**
+     * <p>
+     * 若line含有=18ms TTL=16字样，说明已经ping通，返回1，否则返回0
+     * </p>
+     *
+     * @param line ping返回的数据
+     * @return 0或者1
+     * @author 皮锋
+     * @custom.date 2020/3/25 21:15
+     */
+    private static int getCheckResult(String line) {
+        // System.out.println("控制台输出的结果为:"+line);
+        Pattern pattern = Pattern.compile("(\\d+ms)(\\s+)(TTL=\\d+)", Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(line);
+        if (matcher.find()) {
+            return 1;
+        }
+        return 0;
     }
 
     public static void main(String[] args) {
