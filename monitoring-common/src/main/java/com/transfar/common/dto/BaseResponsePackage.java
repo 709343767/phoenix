@@ -3,7 +3,7 @@ package com.transfar.common.dto;
 import java.io.Serializable;
 import java.util.Date;
 
-import com.transfar.common.common.InstanceBean;
+import com.transfar.common.abs.InstanceBean;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;

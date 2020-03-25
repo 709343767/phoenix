@@ -1,20 +1,20 @@
 package com.transfar.server.business.server.core;
 
 import com.transfar.common.inf.ISuper;
-import com.transfar.server.business.server.domain.Instance;
+import com.transfar.server.business.server.domain.Ip;
 import org.springframework.stereotype.Component;
 
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * <p>
- * 应用实例池，维护哪些应用在线，哪些应用离线
+ * IP池，维护哪些IP可通，哪些IP不通
  * </p>
  *
  * @author 皮锋
- * @custom.date 2020年3月9日 上午10:53:52
+ * @custom.date 2020/3/25 10:33
  */
 @SuppressWarnings("serial")
 @Component
-public class InstancePool extends ConcurrentHashMap<String, Instance> implements ISuper {
+public class IpPool extends ConcurrentHashMap<String, Ip> implements ISuper {
 }

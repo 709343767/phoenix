@@ -8,7 +8,7 @@ import lombok.experimental.Accessors;
 
 import java.util.List;
 
-import com.transfar.common.common.SuperBean;
+import com.transfar.common.abs.SuperBean;
 
 /**
  * <p>

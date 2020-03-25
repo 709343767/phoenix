@@ -6,7 +6,7 @@ import lombok.experimental.Accessors;
 
 import java.util.Date;
 
-import com.transfar.common.common.InstanceBean;
+import com.transfar.common.abs.InstanceBean;
 import com.transfar.common.domain.server.ServerDomain;
 
 /**

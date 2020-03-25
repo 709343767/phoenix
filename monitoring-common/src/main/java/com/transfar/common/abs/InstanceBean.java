@@ -1,4 +1,4 @@
-package com.transfar.common.common;
+package com.transfar.common.abs;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.EqualsAndHashCode;

@@ -2,7 +2,7 @@ package com.transfar.common.domain;
 
 import java.nio.charset.Charset;
 
-import com.transfar.common.common.SuperBean;
+import com.transfar.common.abs.SuperBean;
 import com.transfar.common.constant.AlarmLevelEnums;
 
 import lombok.AllArgsConstructor;

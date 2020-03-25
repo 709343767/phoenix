@@ -1,6 +1,6 @@
 package com.transfar.common.domain.server;
 
-import com.transfar.common.common.SuperBean;
+import com.transfar.common.abs.SuperBean;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

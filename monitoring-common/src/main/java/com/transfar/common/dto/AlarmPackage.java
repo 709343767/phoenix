@@ -1,6 +1,6 @@
 package com.transfar.common.dto;
 
-import com.transfar.common.common.InstanceBean;
+import com.transfar.common.abs.InstanceBean;
 import com.transfar.common.domain.Alarm;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;

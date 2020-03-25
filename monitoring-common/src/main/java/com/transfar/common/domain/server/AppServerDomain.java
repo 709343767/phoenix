@@ -2,7 +2,7 @@ package com.transfar.common.domain.server;
 
 import java.util.Date;
 
-import com.transfar.common.common.SuperBean;
+import com.transfar.common.abs.SuperBean;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
