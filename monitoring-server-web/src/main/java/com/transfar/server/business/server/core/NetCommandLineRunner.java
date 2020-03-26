@@ -137,9 +137,9 @@ public class NetCommandLineRunner implements CommandLineRunner {
             // 发送来网通知信息
             this.sendAlarmInfo("网络恢复", AlarmLevelEnums.WARN, net);
             net.setConnectAlarm(false);
-            net.setDateTime(new Date());
-            this.netPool.replace(key, net);
         }
+        net.setDateTime(new Date());
+        this.netPool.replace(key, net);
     }
 
     /**
@@ -183,7 +183,7 @@ public class NetCommandLineRunner implements CommandLineRunner {
             ZoneId zoneId = ZoneId.systemDefault();
             LocalDateTime localDateTime = instant.atZone(zoneId).toLocalDateTime();
             String dateTime = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(localDateTime);
-            String msg = "IP地址：" + net.getIp() + "，时间：" + dateTime;
+            String msg = "IP地址：" + NetUtils.getLocalIp() + "到" + net.getIp() + "，时间：" + dateTime;
             Alarm alarm = Alarm.builder()//
                     .title(title)//
                     .msg(msg)//
