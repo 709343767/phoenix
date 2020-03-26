@@ -37,6 +37,6 @@ public class MonitoringProperties {
 	/**
 	 * 服务器信息属性
 	 */
-	private MonitoringServerInfoProperties monitoringServerInfoProperties;
+	private MonitoringServerInfoProperties serverInfoProperties;
 
 }

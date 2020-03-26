@@ -90,7 +90,7 @@ public class MonitoringAgentProdConfig {
         monitoringProperties.setServerProperties(serverProperties);
         monitoringProperties.setOwnProperties(ownProperties);
         monitoringProperties.setHeartbeatProperties(heartbeatProperties);
-        monitoringProperties.setMonitoringServerInfoProperties(monitoringServerInfoProperties);
+        monitoringProperties.setServerInfoProperties(monitoringServerInfoProperties);
         log.info("生产环境监控配置加载成功！");
         return monitoringProperties;
     }

@@ -17,4 +17,23 @@ import java.util.concurrent.ConcurrentHashMap;
 @SuppressWarnings("serial")
 @Component
 public class MemoryPool extends ConcurrentHashMap<String, Memory> implements ISuper {
+
+    /**
+     * <p>
+     * 更新服务器内存信息池
+     * </p>
+     *
+     * @param key    服务器内存信息键
+     * @param memory 服务器内存信息
+     * @author 皮锋
+     * @custom.date 2020/3/26 15:53
+     */
+    public void updateMemoryPool(String key, Memory memory) {
+        Memory poolMemory = this.get(key);
+        if (poolMemory == null) {
+            this.put(key, memory);
+        } else {
+            this.replace(key, memory);
+        }
+    }
 }

@@ -29,7 +29,7 @@ public class ServerTaskScheduler {
 	 */
 	public static void run() {
 		// 是否发送服务器信息
-		boolean serverInfoEnable = ConfigLoader.monitoringProperties.getMonitoringServerInfoProperties().isEnable();
+		boolean serverInfoEnable = ConfigLoader.monitoringProperties.getServerInfoProperties().isEnable();
 		if (serverInfoEnable) {
 			// 重新开启线程，让他单独去做我们想要做的操作，抛出异常并不会影响到主线程
 			// Thread thread = new Thread(() -> {
@@ -43,7 +43,7 @@ public class ServerTaskScheduler {
 				}
 			});
 			// 发送服务器信息的频率
-			long rate = ConfigLoader.monitoringProperties.getMonitoringServerInfoProperties().getRate();
+			long rate = ConfigLoader.monitoringProperties.getServerInfoProperties().getRate();
 			seService.scheduleAtFixedRate(new ServerTask(), 30, rate, TimeUnit.SECONDS);
 			// });
 			// 设置线程名

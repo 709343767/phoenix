@@ -1,13 +1,12 @@
 package com.transfar.common.dto;
 
+import com.transfar.common.abs.InstanceBean;
+import com.transfar.common.domain.server.ServerDomain;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 import lombok.experimental.Accessors;
 
 import java.util.Date;
-
-import com.transfar.common.abs.InstanceBean;
-import com.transfar.common.domain.server.ServerDomain;
 
 /**
  * <p>
@@ -43,5 +42,11 @@ public class ServerPackage extends InstanceBean {
      */
     @ApiModelProperty(value = "时间")
     private Date dateTime;
+
+    /**
+     * 传输频率
+     */
+    @ApiModelProperty(value = "传输频率")
+    private Long rate;
 
 }

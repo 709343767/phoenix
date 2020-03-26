@@ -3,7 +3,9 @@ package com.transfar.server.business.server.service.impl;
 import com.transfar.common.domain.server.*;
 import com.transfar.common.dto.ServerPackage;
 import com.transfar.server.business.server.core.MemoryPool;
+import com.transfar.server.business.server.domain.Memory;
 import com.transfar.server.business.server.service.IServerService;
+import com.transfar.server.property.MonitoringServerWebProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +27,12 @@ public class ServerServiceImpl implements IServerService {
     private MemoryPool memoryPool;
 
     /**
+     * 监控配置属性
+     */
+    @Autowired
+    private MonitoringServerWebProperties config;
+
+    /**
      * <p>
      * 处理服务器信息包
      * </p>
@@ -37,7 +45,7 @@ public class ServerServiceImpl implements IServerService {
     @Override
     public boolean dealServerPackage(ServerPackage serverPackage) {
         // IP地址
-        String ip=serverPackage.getIp();
+        String ip = serverPackage.getIp();
         // 服务器信息
         ServerDomain serverDomain = serverPackage.getServerDomain();
         // 操作系统信息
@@ -52,6 +60,14 @@ public class ServerServiceImpl implements IServerService {
         JvmDomain jvmDomain = serverDomain.getJvmDomain();
         // 磁盘信息
         DiskDomain diskDomain = serverDomain.getDiskDomain();
+
+        Memory memory = new Memory();
+        memory.setIp(ip);
+        memory.setDateTime(serverPackage.getDateTime());
+        memory.setThresholdSecond((int) (serverPackage.getRate() * config.getThreshold()));
+        memory.setMemoryDomain(memoryDomain);
+        // 更新服务器内存信息池
+        this.memoryPool.updateMemoryPool(ip, memory);
         return false;
     }
 }

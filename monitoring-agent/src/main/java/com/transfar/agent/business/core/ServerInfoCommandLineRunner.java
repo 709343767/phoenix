@@ -48,11 +48,11 @@ public class ServerInfoCommandLineRunner implements CommandLineRunner, Disposabl
     @Override
     public void run(String... args) {
         // 是否发送服务器信息
-        boolean serverInfoEnable = this.monitoringProperties.getMonitoringServerInfoProperties().isEnable();
+        boolean serverInfoEnable = this.monitoringProperties.getServerInfoProperties().isEnable();
         if (serverInfoEnable) {
             // 重新开启线程，让他单独去做我们想要做的操作，此时CommandLineRunner执行的操作和主线程是相互独立的，抛出异常并不会影响到主线程
             Thread thread = new Thread(() -> this.seService.scheduleAtFixedRate(new ServerInfoScheduledExecutor(), 30,
-                    this.monitoringProperties.getMonitoringServerInfoProperties().getRate(), TimeUnit.SECONDS));
+                    this.monitoringProperties.getServerInfoProperties().getRate(), TimeUnit.SECONDS));
             // 设置守护线程
             thread.setDaemon(true);
             // 开始执行分进程

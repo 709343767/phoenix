@@ -139,7 +139,7 @@ public class ConfigLoader {
         MonitoringServerInfoProperties monitoringServerInfoProperties = new MonitoringServerInfoProperties();
         monitoringServerInfoProperties.setEnable(serverInfoEnable);
         monitoringServerInfoProperties.setRate(serverInfoRate);
-        monitoringProperties.setMonitoringServerInfoProperties(monitoringServerInfoProperties);
+        monitoringProperties.setServerInfoProperties(monitoringServerInfoProperties);
     }
 
 }
