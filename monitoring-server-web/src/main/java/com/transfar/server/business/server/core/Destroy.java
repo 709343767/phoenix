@@ -33,6 +33,8 @@ public class Destroy implements DisposableBean {
      * <p>
      * 在Spring容器销毁时清空资源
      * </p>
+     * 1.清空应用实例池；<br>
+     * 2.清空网络信息池；<br>
      *
      * @author 皮锋
      * @custom.date 2020/3/25 16:43

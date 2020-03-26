@@ -247,6 +247,7 @@ public class InstanceCommandLineRunner implements CommandLineRunner, DisposableB
      * <p>
      * 在spring容器销毁时关闭线程池
      * </p>
+     * 关闭线程池：monitoring-instance-pool-thread
      *
      * @author 皮锋
      * @custom.date 2020/3/26 9:54

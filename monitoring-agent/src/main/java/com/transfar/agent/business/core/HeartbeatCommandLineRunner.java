@@ -59,6 +59,7 @@ public class HeartbeatCommandLineRunner implements CommandLineRunner, Disposable
      * <p>
      * 在spring容器销毁时关闭线程池
      * </p>
+     * 关闭线程池：monitoring-heartbeat-pool-thread
      *
      * @author 皮锋
      * @custom.date 2020/3/26 10:05
