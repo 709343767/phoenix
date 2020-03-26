@@ -68,50 +68,50 @@ public class NetCommandLineRunner implements CommandLineRunner {
                 }
             });
             seService.scheduleAtFixedRate(() -> {
-                // 循环所有网络信息
-                for (Map.Entry<String, Net> entry : this.netPool.entrySet()) {
-                    String key = entry.getKey();
-                    Net net = entry.getValue();
-                    // 允许的误差时间
-                    int thresholdSecond = net.getThresholdSecond();
-                    // 最后一次更新的时间
-                    Date dateTime = net.getDateTime();
-                    // 网络监控是否打开
-                    boolean monitoringEnable = this.monitoringServerWebProperties.getNetworkProperties().isMonitoringEnable();
-                    // 判决时间
-                    DateTime judgeDateTime = new DateTime(dateTime).plusSeconds(thresholdSecond);
-                    // 注册上来的IP失去响应
-                    if (judgeDateTime.isBeforeNow()) {
-                        // 已经断网
-                        if (!net.isOnConnect()) {
-                            continue;
-                        }
-                        // 打开了网络监控
-                        if (monitoringEnable) {
+                // 网络监控是否打开
+                boolean monitoringEnable = this.monitoringServerWebProperties.getNetworkProperties().isMonitoringEnable();
+                // 打开了网络监控
+                if (monitoringEnable) {
+                    // 循环所有网络信息
+                    for (Map.Entry<String, Net> entry : this.netPool.entrySet()) {
+                        String key = entry.getKey();
+                        Net net = entry.getValue();
+                        // 允许的误差时间
+                        int thresholdSecond = net.getThresholdSecond();
+                        // 最后一次更新的时间
+                        Date dateTime = net.getDateTime();
+                        // 判决时间
+                        DateTime judgeDateTime = new DateTime(dateTime).plusSeconds(thresholdSecond);
+                        // 注册上来的IP失去响应
+                        if (judgeDateTime.isBeforeNow()) {
+                            // 已经断网
+                            if (!net.isOnConnect()) {
+                                continue;
+                            }
                             // 判断网络是不是断了
                             boolean ping = NetUtils.ping(net.getIp());
                             // 网络不通
                             if (!ping) {
                                 // 断网
                                 this.disConnect(key, net);
+                            } else {
+                                // 网络恢复连接
+                                this.recoverConnect(key, net);
                             }
                         }
-                    }
-                    // 注册上来的IP恢复响应
-                    else {
-                        // 打开了网络监控
-                        if (monitoringEnable) {
+                        // 注册上来的IP恢复响应
+                        else {
                             // 网络恢复连接
                             this.recoverConnect(key, net);
                         }
                     }
+                    // 打印当前网络信息池中的所有网络信息情况
+                    log.info("当前网络信息池大小：{}，正常：{}，断网：{}，详细信息：{}", //
+                            this.netPool.size(), //
+                            this.netPool.entrySet().stream().filter((e) -> e.getValue().isOnConnect()).count(), //
+                            this.netPool.entrySet().stream().filter((e) -> !e.getValue().isOnConnect()).count(), //
+                            this.netPool.toJsonString());
                 }
-                // 打印当前网络信息池中的所有网络信息情况
-                log.info("当前网络信息池大小：{}，正常：{}，断网：{}，详细信息：{}", //
-                        this.netPool.size(), //
-                        this.netPool.entrySet().stream().filter((e) -> e.getValue().isOnConnect()).count(), //
-                        this.netPool.entrySet().stream().filter((e) -> !e.getValue().isOnConnect()).count(), //
-                        this.netPool.toJsonString());
             }, 45, 30, TimeUnit.SECONDS);
         });
         // 设置守护线程
@@ -137,6 +137,7 @@ public class NetCommandLineRunner implements CommandLineRunner {
             // 发送来网通知信息
             this.sendAlarmInfo("网络恢复", AlarmLevelEnums.WARN, net);
             net.setConnectAlarm(false);
+            net.setDateTime(new Date());
             this.netPool.replace(key, net);
         }
     }
