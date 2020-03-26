@@ -30,6 +30,11 @@ public class Destroy implements DisposableBean {
     private NetPool netPool;
 
     /**
+     * 服务器内存信息池
+     */
+    private MemoryPool memoryPool;
+
+    /**
      * <p>
      * 在Spring容器销毁时清空资源
      * </p>
@@ -45,5 +50,7 @@ public class Destroy implements DisposableBean {
         log.info("应用实例池已经清空！");
         this.netPool.clear();
         log.info("网络信息池已经清空！");
+        this.memoryPool.clear();
+        log.info("服务器内存信息池已经清空！");
     }
 }
