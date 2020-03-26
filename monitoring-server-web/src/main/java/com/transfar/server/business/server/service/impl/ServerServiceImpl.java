@@ -2,7 +2,9 @@ package com.transfar.server.business.server.service.impl;
 
 import com.transfar.common.domain.server.*;
 import com.transfar.common.dto.ServerPackage;
+import com.transfar.server.business.server.core.MemoryPool;
 import com.transfar.server.business.server.service.IServerService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -17,6 +19,12 @@ import org.springframework.stereotype.Service;
 public class ServerServiceImpl implements IServerService {
 
     /**
+     * 服务器内存信息池
+     */
+    @Autowired
+    private MemoryPool memoryPool;
+
+    /**
      * <p>
      * 处理服务器信息包
      * </p>
@@ -28,6 +36,8 @@ public class ServerServiceImpl implements IServerService {
      */
     @Override
     public boolean dealServerPackage(ServerPackage serverPackage) {
+        // IP地址
+        String ip=serverPackage.getIp();
         // 服务器信息
         ServerDomain serverDomain = serverPackage.getServerDomain();
         // 操作系统信息

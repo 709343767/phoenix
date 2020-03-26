@@ -59,56 +59,18 @@ public class NetAspect {
      */
     @Before("tangentPoint()")
     public void addIp2NetPool(JoinPoint joinPoint) {
-        // 接收到请求，记录请求内容
-        // ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        // assert attributes != null;
-        // HttpServletRequest request = attributes.getRequest();
         String args = String.valueOf(joinPoint.getArgs()[0]);
         HeartbeatPackage heartbeatPackage = JSON.parseObject(args, HeartbeatPackage.class);
-        // 请求地址中的IP
-        // String requestIp = request.getRemoteAddr();
-        // 不是本机地址
-        // if (!StringUtils.equals("127.0.0.1", requestIp)) {
-        // 更新网络信息池
-        //   this.updateNetPool(requestIp, heartbeatPackage);
-        // }
         // 请求包中的IP
         String packageIp = heartbeatPackage.getIp();
-        // if (!StringUtils.equals(packageIp, requestIp)) {
+        // 网络信息
+        Net net = new Net();
+        net.setDateTime(heartbeatPackage.getDateTime());
+        net.setOnConnect(true);
+        net.setThresholdSecond((int) (heartbeatPackage.getRate() * config.getThreshold()));
+        net.setIp(packageIp);
         // 更新网络信息池
-        this.updateNetPool(packageIp, heartbeatPackage);
-        // }
-    }
-
-    /**
-     * <p>
-     * 更新网络信息池
-     * </p>
-     *
-     * @param ip               IP地址
-     * @param heartbeatPackage 心跳包
-     * @author 皮锋
-     * @custom.date 2020/3/25 12:28
-     */
-    private void updateNetPool(String ip, HeartbeatPackage heartbeatPackage) {
-        Net poolNet = netPool.get(ip);
-        // 网络信息池中没有当前IP，添加
-        if (poolNet == null) {
-            Net net = new Net();
-            net.setDateTime(heartbeatPackage.getDateTime());
-            net.setOnConnect(true);
-            net.setThresholdSecond((int) (heartbeatPackage.getRate() * config.getThreshold()));
-            net.setIp(ip);
-            this.netPool.put(ip, net);
-        }
-        // 网络信息池中有当前IP，替换
-        else {
-            poolNet.setDateTime(heartbeatPackage.getDateTime());
-            poolNet.setOnConnect(true);
-            poolNet.setThresholdSecond((int) (heartbeatPackage.getRate() * config.getThreshold()));
-            poolNet.setIp(ip);
-            this.netPool.replace(ip, poolNet);
-        }
+        this.netPool.updateNetPool(packageIp, net);
     }
 
 }

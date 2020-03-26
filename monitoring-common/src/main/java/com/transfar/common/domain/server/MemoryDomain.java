@@ -21,30 +21,30 @@ import lombok.experimental.Accessors;
 @AllArgsConstructor
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public final class MemoryDomain extends SuperBean {
+public class MemoryDomain extends SuperBean {
 
-	/**
-	 * 物理内存总量
-	 */
-	private String memTotal;
-	/**
-	 * 物理内存使用量
-	 */
-	private String memUsed;
-	/**
-	 * 物理内存剩余量
-	 */
-	private String memFree;
+    /**
+     * 物理内存总量
+     */
+    private String memTotal;
+    /**
+     * 物理内存使用量
+     */
+    private String memUsed;
+    /**
+     * 物理内存剩余量
+     */
+    private String memFree;
 
-	/**
-	 * 物理内存使用率
-	 */
-	private String menUsedPercent;
+    /**
+     * 物理内存使用率
+     */
+    private String menUsedPercent;
 
-	@Override
-	public String toString() {
-		return "MemoryVo [物理内存总量=" + memTotal + ", 物理内存使用量=" + memUsed + ", 物理内存剩余量=" + memFree + ", 物理内存使用率="
-				+ menUsedPercent + "]";
-	}
+    @Override
+    public String toString() {
+        return "MemoryVo [物理内存总量=" + memTotal + ", 物理内存使用量=" + memUsed + ", 物理内存剩余量=" + memFree + ", 物理内存使用率="
+                + menUsedPercent + "]";
+    }
 
 }
