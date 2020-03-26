@@ -9,6 +9,7 @@ import com.transfar.server.business.server.service.IAlarmService;
 import com.transfar.server.property.MonitoringServerWebProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.joda.time.DateTime;
+import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -31,7 +32,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 @Slf4j
 @Component
-public class InstanceCommandLineRunner implements CommandLineRunner {
+public class InstanceCommandLineRunner implements CommandLineRunner, DisposableBean {
 
     /**
      * 应用实例池
@@ -51,74 +52,76 @@ public class InstanceCommandLineRunner implements CommandLineRunner {
     @Autowired
     private MonitoringServerWebProperties monitoringServerWebProperties;
 
+    /**
+     * 延迟/周期执行线程池
+     */
+    private final ScheduledExecutorService seService = Executors.newScheduledThreadPool(5, new ThreadFactory() {
+        AtomicInteger atomic = new AtomicInteger();
+
+        @Override
+        public Thread newThread(Runnable r) {
+            return new Thread(r, "monitoring-instance-pool-thread-" + this.atomic.getAndIncrement());
+        }
+    });
+
     @Override
     public void run(String... args) {
         // 重新开启线程，让他单独去做我们想要做的操作，此时CommandLineRunner执行的操作和主线程是相互独立的，抛出异常并不会影响到主线程
-        Thread thread = new Thread(() -> {
-            final ScheduledExecutorService seService = Executors.newScheduledThreadPool(5, new ThreadFactory() {
-                AtomicInteger atomic = new AtomicInteger();
-
-                @Override
-                public Thread newThread(Runnable r) {
-                    return new Thread(r, "monitoring-instance-pool-thread-" + this.atomic.getAndIncrement());
-                }
-            });
-            seService.scheduleAtFixedRate(() -> {
-                // 循环所有应用实例
-                for (Map.Entry<String, Instance> entry : this.instancePool.entrySet()) {
-                    String key = entry.getKey();
-                    Instance instance = entry.getValue();
-                    // 允许的误差时间
-                    int thresholdSecond = instance.getThresholdSecond();
-                    // 最后一次通过心跳包更新的时间
-                    Date dateTime = instance.getDateTime();
-                    // 网络监控是否打开
-                    boolean monitoringEnable = this.monitoringServerWebProperties.getNetworkProperties().isMonitoringEnable();
-                    // 判决时间
-                    DateTime judgeDateTime = new DateTime(dateTime).plusSeconds(thresholdSecond);
-                    // 注册上来的服务失去响应
-                    if (judgeDateTime.isBeforeNow()) {
-                        // 已经断网 或者 已经离线
-                        if ((!instance.isOnConnect()) || (!instance.isOnline())) {
-                            continue;
-                        }
-                        // 打开了网络监控
-                        if (monitoringEnable) {
-                            // 判断网络是不是断了
-                            boolean ping = NetUtils.ping(instance.getIp());
-                            // 网络不通
-                            if (!ping) {
-                                // 断网
-                                this.disConnect(key, instance);
-                            } else {
-                                // 离线
-                                this.offLine(key, instance);
-                            }
+        Thread thread = new Thread(() -> this.seService.scheduleAtFixedRate(() -> {
+            // 循环所有应用实例
+            for (Map.Entry<String, Instance> entry : this.instancePool.entrySet()) {
+                String key = entry.getKey();
+                Instance instance = entry.getValue();
+                // 允许的误差时间
+                int thresholdSecond = instance.getThresholdSecond();
+                // 最后一次通过心跳包更新的时间
+                Date dateTime = instance.getDateTime();
+                // 网络监控是否打开
+                boolean monitoringEnable = this.monitoringServerWebProperties.getNetworkProperties().isMonitoringEnable();
+                // 判决时间
+                DateTime judgeDateTime = new DateTime(dateTime).plusSeconds(thresholdSecond);
+                // 注册上来的服务失去响应
+                if (judgeDateTime.isBeforeNow()) {
+                    // 已经断网 或者 已经离线
+                    if ((!instance.isOnConnect()) || (!instance.isOnline())) {
+                        continue;
+                    }
+                    // 打开了网络监控
+                    if (monitoringEnable) {
+                        // 判断网络是不是断了
+                        boolean ping = NetUtils.ping(instance.getIp());
+                        // 网络不通
+                        if (!ping) {
+                            // 断网
+                            this.disConnect(key, instance);
                         } else {
                             // 离线
                             this.offLine(key, instance);
                         }
-                    }
-                    // 注册上来的服务恢复响应
-                    else {
-                        // 打开了网络监控
-                        if (monitoringEnable) {
-                            // 网络恢复连接
-                            this.recoverConnect(key, instance);
-                        }
-                        // 恢复在线
-                        this.onLine(key, instance);
+                    } else {
+                        // 离线
+                        this.offLine(key, instance);
                     }
                 }
-                // 打印当前应用池中的所有应用情况
-                log.info("当前应用实例池大小：{}，正常：{}，离线：{}，断网：{}，详细信息：{}", //
-                        this.instancePool.size(), //
-                        this.instancePool.entrySet().stream().filter((e) -> (e.getValue().isOnline() && e.getValue().isOnConnect())).count(), //
-                        this.instancePool.entrySet().stream().filter((e) -> !e.getValue().isOnline()).count(), //
-                        this.instancePool.entrySet().stream().filter((e) -> !e.getValue().isOnConnect()).count(), //
-                        this.instancePool.toJsonString());
-            }, 30, 30, TimeUnit.SECONDS);
-        });
+                // 注册上来的服务恢复响应
+                else {
+                    // 打开了网络监控
+                    if (monitoringEnable) {
+                        // 网络恢复连接
+                        this.recoverConnect(key, instance);
+                    }
+                    // 恢复在线
+                    this.onLine(key, instance);
+                }
+            }
+            // 打印当前应用池中的所有应用情况
+            log.info("当前应用实例池大小：{}，正常：{}，离线：{}，断网：{}，详细信息：{}", //
+                    this.instancePool.size(), //
+                    this.instancePool.entrySet().stream().filter((e) -> (e.getValue().isOnline() && e.getValue().isOnConnect())).count(), //
+                    this.instancePool.entrySet().stream().filter((e) -> !e.getValue().isOnline()).count(), //
+                    this.instancePool.entrySet().stream().filter((e) -> !e.getValue().isOnConnect()).count(), //
+                    this.instancePool.toJsonString());
+        }, 30, 30, TimeUnit.SECONDS));
         // 设置守护线程
         thread.setDaemon(true);
         // 开始执行分进程
@@ -238,5 +241,21 @@ public class InstanceCommandLineRunner implements CommandLineRunner {
             AlarmPackage alarmPackage = new PackageConstructor().structureAlarmPackage(alarm);
             alarmService.dealAlarmPackage(alarmPackage);
         }).start();
+    }
+
+    /**
+     * <p>
+     * 在spring容器销毁时关闭线程池
+     * </p>
+     *
+     * @author 皮锋
+     * @custom.date 2020/3/26 9:54
+     */
+    @Override
+    public void destroy() {
+        if (!this.seService.isShutdown()) {
+            this.seService.shutdown();
+            log.info("延迟/周期执行线程池“monitoring-instance-pool-thread”已经关闭！");
+        }
     }
 }
