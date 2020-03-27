@@ -11,7 +11,7 @@ import com.alibaba.fastjson.serializer.SerializerFeature;
  * @author 皮锋
  * @custom.date 2020/3/25 10:49
  */
-public interface ISuper {
+public interface ISuperBean {
 
     /**
      * <p>

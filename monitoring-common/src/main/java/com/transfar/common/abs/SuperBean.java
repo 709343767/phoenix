@@ -1,6 +1,6 @@
 package com.transfar.common.abs;
 
-import com.transfar.common.inf.ISuper;
+import com.transfar.common.inf.ISuperBean;
 
 /**
  * <p>
@@ -10,5 +10,5 @@ import com.transfar.common.inf.ISuper;
  * @author 皮锋
  * @custom.date 2020年3月4日 上午10:16:00
  */
-public abstract class SuperBean implements ISuper {
+public abstract class SuperBean implements ISuperBean {
 }

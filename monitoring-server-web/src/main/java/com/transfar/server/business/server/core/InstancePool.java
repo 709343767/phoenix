@@ -1,6 +1,6 @@
 package com.transfar.server.business.server.core;
 
-import com.transfar.common.inf.ISuper;
+import com.transfar.common.inf.ISuperBean;
 import com.transfar.server.business.server.domain.Instance;
 import org.springframework.stereotype.Component;
 
@@ -16,7 +16,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 @SuppressWarnings("serial")
 @Component
-public class InstancePool extends ConcurrentHashMap<String, Instance> implements ISuper {
+public class InstancePool extends ConcurrentHashMap<String, Instance> implements ISuperBean {
 
     /**
      * <p>
