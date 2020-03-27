@@ -5,7 +5,6 @@ import com.transfar.common.dto.ServerPackage;
 import com.transfar.server.business.server.core.MemoryPool;
 import com.transfar.server.business.server.domain.Memory;
 import com.transfar.server.business.server.service.IServerService;
-import com.transfar.server.property.MonitoringServerWebProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,12 +24,6 @@ public class ServerServiceImpl implements IServerService {
      */
     @Autowired
     private MemoryPool memoryPool;
-
-    /**
-     * 监控配置属性
-     */
-    @Autowired
-    private MonitoringServerWebProperties config;
 
     /**
      * <p>
@@ -63,9 +56,11 @@ public class ServerServiceImpl implements IServerService {
 
         Memory memory = new Memory();
         memory.setIp(ip);
-        memory.setDateTime(serverPackage.getDateTime());
-        memory.setThresholdSecond((int) (serverPackage.getRate() * config.getThreshold()));
+        memory.setRate(serverPackage.getRate());
         memory.setMemoryDomain(memoryDomain);
+        memory.setNum(this.memoryPool.get(ip) != null ? this.memoryPool.get(ip).getNum() : 0);
+        memory.setAlarm(this.memoryPool.get(ip) != null && this.memoryPool.get(ip).isAlarm());
+        memory.setOverLoad(this.memoryPool.get(ip) != null && this.memoryPool.get(ip).isOverLoad());
         // 更新服务器内存信息池
         this.memoryPool.updateMemoryPool(ip, memory);
         return false;

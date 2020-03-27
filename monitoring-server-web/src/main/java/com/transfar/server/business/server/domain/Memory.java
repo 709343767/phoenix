@@ -5,8 +5,6 @@ import com.transfar.common.domain.server.MemoryDomain;
 import lombok.*;
 import lombok.experimental.Accessors;
 
-import java.util.Date;
-
 /**
  * <p>
  * 服务器内存
@@ -26,9 +24,14 @@ import java.util.Date;
 public class Memory extends SuperBean {
 
     /**
-     * 允许多少秒内内存过载是正常情况
+     * 内存过载次数
      */
-    private int thresholdSecond;
+    private int num;
+
+    /**
+     * 内存信息获取频率
+     */
+    private long rate;
 
     /**
      * 是否已经发送过内存过载告警消息
@@ -36,9 +39,9 @@ public class Memory extends SuperBean {
     private boolean isAlarm;
 
     /**
-     * 最后一次通过服务器信息包更新的时间
+     * 是否确认内存过载
      */
-    private Date dateTime;
+    private boolean isOverLoad;
 
     /**
      * IP地址

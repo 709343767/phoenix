@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Slf4j
-public class Destroy implements DisposableBean {
+public class PreDestroy implements DisposableBean {
 
     /**
      * 应用实例池

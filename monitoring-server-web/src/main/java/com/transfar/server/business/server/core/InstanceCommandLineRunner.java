@@ -121,7 +121,7 @@ public class InstanceCommandLineRunner implements CommandLineRunner, DisposableB
                     this.instancePool.entrySet().stream().filter((e) -> !e.getValue().isOnline()).count(), //
                     this.instancePool.entrySet().stream().filter((e) -> !e.getValue().isOnConnect()).count(), //
                     this.instancePool.toJsonString());
-        }, 30, 30, TimeUnit.SECONDS));
+        }, 5, 30, TimeUnit.SECONDS));
         // 设置守护线程
         thread.setDaemon(true);
         // 开始执行分进程
