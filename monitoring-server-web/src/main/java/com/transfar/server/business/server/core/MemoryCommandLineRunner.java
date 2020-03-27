@@ -73,7 +73,7 @@ public class MemoryCommandLineRunner implements CommandLineRunner, DisposableBea
                 // 物理内存使用率
                 double usedPercent = Double.parseDouble(menUsedPercent.substring(0, menUsedPercent.length() - 1));
                 // 物理内存占用率超过90%
-                if (usedPercent > 20) {
+                if (usedPercent > 90) {
                     int num = memory.getNum();
                     long rate = memory.getRate();
                     memory.setNum(num + 1);
