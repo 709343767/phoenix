@@ -25,7 +25,7 @@ import lombok.experimental.Accessors;
 @AllArgsConstructor
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public final class CpuDomain extends SuperBean {
+public class CpuDomain extends SuperBean {
 
 	/**
 	 * cpu总数

@@ -36,6 +36,12 @@ public class PreDestroy implements DisposableBean {
     private MemoryPool memoryPool;
 
     /**
+     * 服务器CPU信息池
+     */
+    @Autowired
+    private CpuPool cpuPool;
+
+    /**
      * <p>
      * 在Spring容器销毁时清空资源
      * </p>
@@ -53,5 +59,7 @@ public class PreDestroy implements DisposableBean {
         log.info("网络信息池已经清空！");
         this.memoryPool.clear();
         log.info("服务器内存信息池已经清空！");
+        this.cpuPool.clear();
+        log.info("服务器CPU信息池已经清空！");
     }
 }

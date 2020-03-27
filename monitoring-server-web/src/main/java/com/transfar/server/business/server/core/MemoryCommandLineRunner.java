@@ -112,6 +112,8 @@ public class MemoryCommandLineRunner implements CommandLineRunner, DisposableBea
     private void dealMemoryNotOverLoad(String key, Memory memory) {
         memory.setOverLoad(false);
         memory.setAlarm(false);
+        // 过载次数恢复为0
+        memory.setNum(0);
         this.memoryPool.replace(key, memory);
     }
 
