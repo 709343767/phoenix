@@ -7,7 +7,7 @@ server:
       #Undertow日志存放目录
       dir: logs/monitoring-server-web
       #是否启动日志
-      enabled: true 
+      enabled: true
       #日志格式
       pattern: common
       #日志文件名前缀
@@ -15,17 +15,28 @@ server:
       #日志文件名后缀
       #suffix: .log
 
-  
+
 ###############################################spring配置#################################################
 spring:
   #main:
-    #支持名称相同的bean的覆盖
-    #allow-bean-definition-overriding: true
+  #支持名称相同的bean的覆盖
+  #allow-bean-definition-overriding: true
   application:
     name: monitoring-server-web
   profiles:
     active:
-    - dev
+      - dev
   devtools:
     livereload:
       port: 35731
+
+
+############################################springboot端点配置#############################################
+management:
+  endpoint:
+    shutdown:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: shutdown

@@ -1,0 +1,1 @@
+curl -X POST http://localhost:16000/monitoring-server-web/actuator/shutdown
