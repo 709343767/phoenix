@@ -32,6 +32,7 @@ public class PreDestroy implements DisposableBean {
     /**
      * 服务器内存信息池
      */
+    @Autowired
     private MemoryPool memoryPool;
 
     /**
