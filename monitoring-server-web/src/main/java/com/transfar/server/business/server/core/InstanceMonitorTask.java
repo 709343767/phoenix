@@ -12,6 +12,7 @@ import org.joda.time.DateTime;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -24,7 +25,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * <p>
- * 在容器启动后，定时扫描应用实例池中的所有应用，实时更新应用实例状态，发送告警
+ * 在容器启动后，定时扫描应用实例池中的所有应用实例，实时更新应用实例状态，发送告警
  * </p>
  *
  * @author 皮锋
@@ -32,7 +33,8 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 @Slf4j
 @Component
-public class InstanceCommandLineRunner implements CommandLineRunner, DisposableBean {
+@Order(1)
+public class InstanceMonitorTask implements CommandLineRunner, DisposableBean {
 
     /**
      * 应用实例池

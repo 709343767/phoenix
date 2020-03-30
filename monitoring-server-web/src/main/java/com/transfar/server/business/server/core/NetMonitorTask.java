@@ -12,6 +12,7 @@ import org.joda.time.DateTime;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
@@ -36,7 +37,8 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 @Slf4j
 @Component
-public class NetCommandLineRunner implements CommandLineRunner, DisposableBean {
+@Order(2)
+public class NetMonitorTask implements CommandLineRunner, DisposableBean {
 
     /**
      * 网络信息池

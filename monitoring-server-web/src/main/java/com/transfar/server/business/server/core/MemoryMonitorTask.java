@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
@@ -29,7 +30,8 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 @Component
 @Slf4j
-public class MemoryCommandLineRunner implements CommandLineRunner, DisposableBean {
+@Order(3)
+public class MemoryMonitorTask implements CommandLineRunner, DisposableBean {
 
     /**
      * 服务器内存信息池
