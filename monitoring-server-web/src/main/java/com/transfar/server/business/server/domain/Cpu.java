@@ -5,6 +5,7 @@ import com.transfar.common.domain.server.CpuDomain;
 import lombok.*;
 import lombok.experimental.Accessors;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 
@@ -88,6 +89,10 @@ public class Cpu extends SuperBean {
      */
     public static double calculateAvgCpuCombined(CpuDomain cpuDomain) {
         List<CpuDomain.CpuInfoDomain> cpuInfoDomains = cpuDomain.getCpuList();
+        // 集合对象为空
+        if (CollectionUtils.isEmpty(cpuInfoDomains)) {
+            return 0;
+        }
         // 和
         double sum = 0;
         for (CpuDomain.CpuInfoDomain cpuInfoDomain : cpuInfoDomains) {
