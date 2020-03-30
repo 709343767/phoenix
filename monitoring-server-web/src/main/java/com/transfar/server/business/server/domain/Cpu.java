@@ -7,6 +7,7 @@ import lombok.experimental.Accessors;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.CollectionUtils;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -103,7 +104,10 @@ public class Cpu extends SuperBean {
             }
             sum += num;
         }
-        return sum / cpuInfoDomains.size();
+        double avg = sum / cpuInfoDomains.size();
+        // 四舍五入保留两位小数
+        BigDecimal b = new BigDecimal(avg);
+        return b.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
     }
 
 }

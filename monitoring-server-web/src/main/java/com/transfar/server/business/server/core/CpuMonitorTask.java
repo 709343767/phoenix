@@ -1,5 +1,8 @@
 package com.transfar.server.business.server.core;
 
+import com.transfar.common.constant.AlarmLevelEnums;
+import com.transfar.common.domain.Alarm;
+import com.transfar.common.dto.AlarmPackage;
 import com.transfar.server.business.server.domain.Cpu;
 import com.transfar.server.business.server.service.IAlarmService;
 import com.transfar.server.property.MonitoringServerWebProperties;
@@ -66,7 +69,36 @@ public class CpuMonitorTask implements CommandLineRunner, DisposableBean {
         Thread thread = new Thread(() -> this.seService.scheduleAtFixedRate(() -> {
             // 循环所有服务器CPU信息
             for (Map.Entry<String, Cpu> entry : this.cpuPool.entrySet()) {
-
+                String key = entry.getKey();
+                Cpu cpu = entry.getValue();
+                // 最终确认CPU过载的阈值
+                long threshold = (int) (cpu.getRate() / 30) * this.monitoringServerWebProperties.getThreshold();
+                // 平均CPU使用率
+                double avgCpuCombined = cpu.getAvgCpuCombined();
+                // 平均CPU使用率大于90%
+                if (avgCpuCombined > 90) {
+                    int num90 = cpu.getNum90();
+                    cpu.setNum90(num90 + 1);
+                    if (num90 > threshold) {
+                        // 处理CPU过载90%
+                        this.dealCpuOverLoad90(key, cpu);
+                    }
+                } else {
+                    //处理从过载90%恢复CPU正常
+                    this.dealCpuNotOverLoad90(key, cpu);
+                }
+                // 平均CPU使用率大于100%
+                if (avgCpuCombined > 100) {
+                    int num100 = cpu.getNum100();
+                    cpu.setNum100(num100 + 1);
+                    if (num100 > threshold) {
+                        // 处理CPU过载100%
+                        this.dealCpuOverLoad100(key, cpu);
+                    }
+                } else {
+                    // 处理从过载100%恢复CPU正常
+                    this.dealCpuNotOverLoad100(key, cpu);
+                }
             }
             log.info("当前服务器CPU信息池大小：{}，CPU过载90%：{}，CPU过载100%：{}，详细信息：{}",//
                     this.cpuPool.size(),//
@@ -79,6 +111,106 @@ public class CpuMonitorTask implements CommandLineRunner, DisposableBean {
         thread.setDaemon(true);
         // 开始执行分进程
         thread.start();
+    }
+
+    /**
+     * <p>
+     * 处理从过载100%恢复CPU正常
+     * </p>
+     *
+     * @param key 服务器CPU键
+     * @param cpu 服务器CPU
+     * @author 皮锋
+     * @custom.date 2020/3/30 10:48
+     */
+    private void dealCpuNotOverLoad100(String key, Cpu cpu) {
+        cpu.setAlarm100(false);
+        cpu.setOverLoad100(false);
+        cpu.setNum100(0);
+        this.cpuPool.replace(key, cpu);
+    }
+
+    /**
+     * <p>
+     * 处理从过载90%恢复CPU正常
+     * </p>
+     *
+     * @param key 服务器CPU键
+     * @param cpu 服务器CPU
+     * @author 皮锋
+     * @custom.date 2020/3/30 10:48
+     */
+    private void dealCpuNotOverLoad90(String key, Cpu cpu) {
+        cpu.setAlarm90(false);
+        cpu.setOverLoad90(false);
+        cpu.setNum90(0);
+        this.cpuPool.replace(key, cpu);
+    }
+
+    /**
+     * <p>
+     * 处理CPU过载100%
+     * </p>
+     *
+     * @param key 服务器CPU键
+     * @param cpu 服务器CPU
+     * @author 皮锋
+     * @custom.date 2020/3/30 10:38
+     */
+    private void dealCpuOverLoad100(String key, Cpu cpu) {
+        cpu.setOverLoad100(true);
+        // 是否已经发送过CPU过载100%告警消息
+        boolean isAlarm = cpu.isAlarm100();
+        if (!isAlarm) {
+            this.sendAlarmInfo("CPU过载100%", AlarmLevelEnums.FATAL, cpu);
+            cpu.setAlarm100(true);
+        }
+        this.cpuPool.replace(key, cpu);
+    }
+
+    /**
+     * <p>
+     * 处理CPU过载90%
+     * </p>
+     *
+     * @param key 服务器CPU键
+     * @param cpu 服务器CPU
+     * @author 皮锋
+     * @custom.date 2020/3/30 10:38
+     */
+    private void dealCpuOverLoad90(String key, Cpu cpu) {
+        cpu.setOverLoad90(true);
+        // 是否已经发送过CPU过载90%告警消息
+        boolean isAlarm = cpu.isAlarm90();
+        if (!isAlarm) {
+            this.sendAlarmInfo("CPU过载90%", AlarmLevelEnums.WARN, cpu);
+            cpu.setAlarm90(true);
+        }
+        this.cpuPool.replace(key, cpu);
+    }
+
+    /**
+     * <p>
+     * 发送告警信息
+     * </p>
+     *
+     * @param title           告警标题
+     * @param alarmLevelEnums 告警级别
+     * @param cpu             CPU信息
+     * @author 皮锋
+     * @custom.date 2020/3/30 10:40
+     */
+    private synchronized void sendAlarmInfo(String title, AlarmLevelEnums alarmLevelEnums, Cpu cpu) {
+        new Thread(() -> {
+            String msg = "IP地址：" + cpu.getIp() + "，CPU使用率：" + cpu.getAvgCpuCombined() + "%";
+            Alarm alarm = Alarm.builder()//
+                    .title(title)//
+                    .msg(msg)//
+                    .alarmLevel(alarmLevelEnums)//
+                    .build();
+            AlarmPackage alarmPackage = new PackageConstructor().structureAlarmPackage(alarm);
+            alarmService.dealAlarmPackage(alarmPackage);
+        }).start();
     }
 
     /**
