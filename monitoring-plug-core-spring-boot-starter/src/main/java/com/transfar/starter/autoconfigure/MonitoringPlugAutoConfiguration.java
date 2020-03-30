@@ -1,5 +1,9 @@
 package com.transfar.starter.autoconfigure;
 
+import com.transfar.plug.Monitor;
+import com.transfar.starter.annotation.EnableMonitoringPlug;
+import com.transfar.starter.exception.BadAnnotateParamException;
+import lombok.SneakyThrows;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -8,12 +12,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportBeanDefinitionRegistrar;
 import org.springframework.core.annotation.AnnotationAttributes;
 import org.springframework.core.type.AnnotationMetadata;
-
-import com.transfar.plug.Monitor;
-import com.transfar.starter.annotation.EnableMonitoringPlug;
-import com.transfar.starter.exception.BadAnnotateParamException;
-
-import lombok.SneakyThrows;
 
 /**
  * <p>
@@ -38,11 +36,15 @@ public class MonitoringPlugAutoConfiguration implements ImportBeanDefinitionRegi
         String configFilePath = attributes.getString("configFilePath");
         // 配置文件名字
         String configFileName = attributes.getString("configFileName");
-        // 有设置配置文件路径和名字
-        if (StringUtils.isNotBlank(configFilePath) && StringUtils.isNotBlank(configFileName)) {
-            // 解析配置文件路径
-            String path = this.analysisConfigFilePath(configFilePath);
-            Monitor.start(path, configFileName);
+        // 有设置配置文件路径或者名字
+        if (StringUtils.isNotBlank(configFilePath) || StringUtils.isNotBlank(configFileName)) {
+            if (StringUtils.isNotBlank(configFilePath)) {
+                // 解析配置文件路径
+                String path = this.analysisConfigFilePath(configFilePath);
+                Monitor.start(path, configFileName);
+            } else {
+                Monitor.start(configFilePath, configFileName);
+            }
         } else {
             Monitor.start();
         }
