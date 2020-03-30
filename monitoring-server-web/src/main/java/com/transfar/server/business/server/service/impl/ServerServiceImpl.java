@@ -3,12 +3,17 @@ package com.transfar.server.business.server.service.impl;
 import com.transfar.common.domain.server.*;
 import com.transfar.common.dto.ServerPackage;
 import com.transfar.server.business.server.core.CpuPool;
+import com.transfar.server.business.server.core.DiskMonitor;
+import com.transfar.server.business.server.core.DiskPool;
 import com.transfar.server.business.server.core.MemoryPool;
 import com.transfar.server.business.server.domain.Cpu;
+import com.transfar.server.business.server.domain.Disk;
 import com.transfar.server.business.server.domain.Memory;
 import com.transfar.server.business.server.service.IServerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * <p>
@@ -32,6 +37,18 @@ public class ServerServiceImpl implements IServerService {
      */
     @Autowired
     private CpuPool cpuPool;
+
+    /**
+     * 服务器磁盘信息池
+     */
+    @Autowired
+    private DiskPool diskPool;
+
+    /**
+     * 服务器磁盘监控器，更新磁盘状态，发送告警
+     */
+    @Autowired
+    private DiskMonitor diskMonitor;
 
     /**
      * <p>
@@ -66,9 +83,10 @@ public class ServerServiceImpl implements IServerService {
         memory.setIp(ip);
         memory.setRate(serverPackage.getRate());
         memory.setMemoryDomain(memoryDomain);
-        memory.setNum(this.memoryPool.get(ip) != null ? this.memoryPool.get(ip).getNum() : 0);
-        memory.setAlarm(this.memoryPool.get(ip) != null && this.memoryPool.get(ip).isAlarm());
-        memory.setOverLoad(this.memoryPool.get(ip) != null && this.memoryPool.get(ip).isOverLoad());
+        Memory poolMemory = this.memoryPool.get(ip);
+        memory.setNum(poolMemory != null ? poolMemory.getNum() : 0);
+        memory.setAlarm(poolMemory != null && poolMemory.isAlarm());
+        memory.setOverLoad(poolMemory != null && poolMemory.isOverLoad());
         // 更新服务器内存信息池
         this.memoryPool.updateMemoryPool(ip, memory);
 
@@ -77,14 +95,37 @@ public class ServerServiceImpl implements IServerService {
         cpu.setRate(serverPackage.getRate());
         cpu.setCpuDomain(cpuDomain);
         cpu.setAvgCpuCombined(Cpu.calculateAvgCpuCombined(cpuDomain));
-        cpu.setNum90(this.cpuPool.get(ip) != null ? this.cpuPool.get(ip).getNum90() : 0);
-        cpu.setAlarm90(this.cpuPool.get(ip) != null && this.cpuPool.get(ip).isAlarm90());
-        cpu.setOverLoad90(this.cpuPool.get(ip) != null && this.cpuPool.get(ip).isOverLoad90());
-        cpu.setNum100(this.cpuPool.get(ip) != null ? this.cpuPool.get(ip).getNum100() : 0);
-        cpu.setAlarm100(this.cpuPool.get(ip) != null && this.cpuPool.get(ip).isAlarm100());
-        cpu.setOverLoad100(this.cpuPool.get(ip) != null && this.cpuPool.get(ip).isOverLoad100());
+        Cpu poolCpu = this.cpuPool.get(ip);
+        cpu.setNum90(poolCpu != null ? poolCpu.getNum90() : 0);
+        cpu.setAlarm90(poolCpu != null && poolCpu.isAlarm90());
+        cpu.setOverLoad90(poolCpu != null && poolCpu.isOverLoad90());
+        cpu.setNum100(poolCpu != null ? poolCpu.getNum100() : 0);
+        cpu.setAlarm100(poolCpu != null && poolCpu.isAlarm100());
+        cpu.setOverLoad100(poolCpu != null && poolCpu.isOverLoad100());
         // 更新服务器CPU信息池
         this.cpuPool.updateMemoryPool(ip, cpu);
+
+        Disk disk = new Disk();
+        ConcurrentHashMap<String, Disk.Subregion> subregionConcurrentHashMap = new ConcurrentHashMap<>();
+        for (DiskDomain.DiskInfoDomain diskInfoDomain : diskDomain.getDiskInfoList()) {
+            Disk.Subregion subregion = new Disk.Subregion();
+            // 盘符名字
+            String devName = diskInfoDomain.getDevName();
+            // 盘符使用率
+            double usePercent = Disk.calculateUsePercent(diskInfoDomain.getUsePercent());
+            subregion.setUsePercent(usePercent);
+            subregion.setDevName(devName);
+            Disk.Subregion poolDiskSubregion = this.diskPool.get(ip) != null ? this.diskPool.get(ip).getSubregionConcurrentHashMap().get(devName) : null;
+            subregion.setAlarm(poolDiskSubregion != null && poolDiskSubregion.isAlarm());
+            subregion.setOverLoad(poolDiskSubregion != null && poolDiskSubregion.isOverLoad());
+            subregionConcurrentHashMap.put(devName, subregion);
+        }
+        disk.setIp(ip);
+        disk.setSubregionConcurrentHashMap(subregionConcurrentHashMap);
+        this.diskPool.updateMemoryPool(ip, disk);
+        // 调用磁盘监控
+        this.diskMonitor.monitor();
+
 
         return false;
     }

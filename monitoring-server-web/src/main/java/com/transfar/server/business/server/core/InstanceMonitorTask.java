@@ -241,7 +241,7 @@ public class InstanceMonitorTask implements CommandLineRunner, DisposableBean {
                     .alarmLevel(alarmLevelEnums)//
                     .build();
             AlarmPackage alarmPackage = new PackageConstructor().structureAlarmPackage(alarm);
-            alarmService.dealAlarmPackage(alarmPackage);
+            this.alarmService.dealAlarmPackage(alarmPackage);
         }).start();
     }
 

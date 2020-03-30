@@ -23,7 +23,7 @@ import com.transfar.common.abs.SuperBean;
 @AllArgsConstructor
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public final class DiskDomain extends SuperBean {
+public class DiskDomain extends SuperBean {
 
     /**
      * 磁盘数量
