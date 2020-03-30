@@ -212,7 +212,7 @@ public class NetMonitorTask implements CommandLineRunner, DisposableBean {
     public void destroy() {
         if (!this.seService.isShutdown()) {
             this.seService.shutdown();
-            log.info("延迟/周期执行线程池“monitoring-net-pool-thread”已经关闭！");
+            log.info("周期执行线程池“monitoring-net-pool-thread”已经关闭！");
         }
     }
 }
