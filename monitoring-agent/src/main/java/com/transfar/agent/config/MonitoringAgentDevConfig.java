@@ -1,5 +1,6 @@
 package com.transfar.agent.config;
 
+import com.transfar.common.exception.ErrorConfigParamException;
 import com.transfar.common.property.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -70,11 +71,12 @@ public class MonitoringAgentDevConfig {
      * </p>
      *
      * @return MonitoringProperties
+     * @throws ErrorConfigParamException 错误的配置参数异常
      * @author 皮锋
      * @custom.date 2020年3月6日 上午11:08:17
      */
     @Bean
-    public MonitoringProperties monitoringProperties() {
+    public MonitoringProperties monitoringProperties() throws ErrorConfigParamException {
         MonitoringProperties monitoringProperties = new MonitoringProperties();
         MonitoringServerProperties serverProperties = new MonitoringServerProperties();
         serverProperties.setUrl(this.url);
@@ -83,10 +85,22 @@ public class MonitoringAgentDevConfig {
         MonitoringOwnProperties ownProperties = new MonitoringOwnProperties();
         ownProperties.setInstanceName(this.instanceName);
         MonitoringHeartbeatProperties heartbeatProperties = new MonitoringHeartbeatProperties();
-        heartbeatProperties.setRate(Long.parseLong(this.heartbeatRate));
+        // 心跳频率
+        long heartbeatRate = Long.parseLong(this.heartbeatRate);
+        // 频率配置不正确
+        if (heartbeatRate < 30) {
+            throw new ErrorConfigParamException("心跳频率最小不能小于30秒！");
+        }
+        heartbeatProperties.setRate(heartbeatRate);
         MonitoringServerInfoProperties monitoringServerInfoProperties = new MonitoringServerInfoProperties();
         monitoringServerInfoProperties.setEnable(Boolean.parseBoolean(this.serverInfoEnable));
-        monitoringServerInfoProperties.setRate(Long.parseLong(this.serverInfoRate));
+        // 发送服务器信息频率
+        long serverInfoRate = Long.parseLong(this.serverInfoRate);
+        // 频率配置不正确
+        if (serverInfoRate < 30) {
+            throw new ErrorConfigParamException("获取服务器信息频率最小不能小于30秒！");
+        }
+        monitoringServerInfoProperties.setRate(serverInfoRate);
         monitoringProperties.setServerProperties(serverProperties);
         monitoringProperties.setOwnProperties(ownProperties);
         monitoringProperties.setHeartbeatProperties(heartbeatProperties);

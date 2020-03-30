@@ -1,4 +1,4 @@
-package com.transfar.plug.exception;
+package com.transfar.common.exception;
 
 /**
  * <p>
