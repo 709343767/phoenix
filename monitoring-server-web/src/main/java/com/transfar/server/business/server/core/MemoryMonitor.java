@@ -3,21 +3,18 @@ package com.transfar.server.business.server.core;
 import com.transfar.common.constant.AlarmLevelEnums;
 import com.transfar.common.domain.Alarm;
 import com.transfar.common.dto.AlarmPackage;
+import com.transfar.common.inf.ICallback;
 import com.transfar.server.business.server.domain.Memory;
 import com.transfar.server.business.server.service.IAlarmService;
 import com.transfar.server.property.MonitoringServerWebProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
-import java.util.Map;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -30,8 +27,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 @Component
 @Slf4j
-@Order(3)
-public class MemoryMonitorTask implements CommandLineRunner, DisposableBean {
+public class MemoryMonitor implements ICallback, DisposableBean {
 
     /**
      * 服务器内存信息池
@@ -52,9 +48,9 @@ public class MemoryMonitorTask implements CommandLineRunner, DisposableBean {
     private MonitoringServerWebProperties monitoringServerWebProperties;
 
     /**
-     * 延迟/周期执行线程池
+     * 线程池
      */
-    private final ScheduledExecutorService seService = Executors.newScheduledThreadPool(5, new ThreadFactory() {
+    private ExecutorService seService = Executors.newCachedThreadPool(new ThreadFactory() {
         AtomicInteger atomic = new AtomicInteger();
 
         @Override
@@ -63,42 +59,42 @@ public class MemoryMonitorTask implements CommandLineRunner, DisposableBean {
         }
     });
 
+    /**
+     * <p>
+     * 监控内存使用率，发送内存过载告警信息
+     * </p>
+     *
+     * @param obj 回调参数
+     * @author 皮锋
+     * @custom.date 2020/3/30 22:01
+     */
     @Override
-    public void run(String... args) {
-        // 重新开启线程，让他单独去做我们想要做的操作，此时CommandLineRunner执行的操作和主线程是相互独立的，抛出异常并不会影响到主线程
-        Thread thread = new Thread(() -> this.seService.scheduleAtFixedRate(() -> {
-            // 循环所有服务器内存信息
-            for (Map.Entry<String, Memory> entry : this.memoryPool.entrySet()) {
-                String key = entry.getKey();
-                Memory memory = entry.getValue();
-                String menUsedPercent = memory.getMemoryDomain().getMenUsedPercent();
-                // 物理内存使用率
-                double usedPercent = Double.parseDouble(menUsedPercent.substring(0, menUsedPercent.length() - 1));
-                // 物理内存占用率超过90%
-                if (usedPercent > 90) {
-                    int num = memory.getNum();
-                    long rate = memory.getRate();
-                    memory.setNum(num + 1);
-                    // 最终确认内存过载的阈值
-                    int threshold = (int) (rate / 30) * this.monitoringServerWebProperties.getThreshold();
-                    if (num > threshold) {
-                        // 处理物理内存过载
-                        this.dealMemoryOverLoad(key, memory);
-                    }
-                } else {
-                    // 处理物理内存正常
-                    this.dealMemoryNotOverLoad(key, memory);
+    public void event(Object... obj) {
+        this.seService.execute(() -> {
+            String key = String.valueOf(obj[0]);
+            Memory memory = this.memoryPool.get(key);
+            String menUsedPercent = memory.getMemoryDomain().getMenUsedPercent();
+            // 物理内存使用率
+            double usedPercent = Double.parseDouble(menUsedPercent.substring(0, menUsedPercent.length() - 1));
+            // 物理内存占用率超过90%
+            if (usedPercent > 90) {
+                int num = memory.getNum();
+                memory.setNum(num + 1);
+                // 最终确认内存过载的阈值
+                int threshold = this.monitoringServerWebProperties.getThreshold();
+                if (num > threshold) {
+                    // 处理物理内存过载
+                    this.dealMemoryOverLoad(key, memory);
                 }
+            } else {
+                // 处理物理内存正常
+                this.dealMemoryNotOverLoad(key, memory);
             }
             log.info("当前服务器内存信息池大小：{}，内存过载：{}，详细信息：{}",//
                     this.memoryPool.size(),//
                     this.memoryPool.entrySet().stream().filter((e) -> e.getValue().isOverLoad()).count(),//
                     this.memoryPool.toJsonString());
-        }, 15, 30, TimeUnit.SECONDS));
-        // 设置守护线程
-        thread.setDaemon(true);
-        // 开始执行分进程
-        thread.start();
+        });
     }
 
     /**
@@ -151,8 +147,8 @@ public class MemoryMonitorTask implements CommandLineRunner, DisposableBean {
      * @author 皮锋
      * @custom.date 2020/3/25 14:46
      */
-    private void sendAlarmInfo(String title, AlarmLevelEnums alarmLevelEnums, Memory memory) {
-        new Thread(() -> {
+    private synchronized void sendAlarmInfo(String title, AlarmLevelEnums alarmLevelEnums, Memory memory) {
+        this.seService.execute(() -> {
             String msg = "IP地址：" + memory.getIp() + "，内存使用率：" + memory.getMemoryDomain().getMenUsedPercent();
             Alarm alarm = Alarm.builder()//
                     .title(title)//
@@ -161,7 +157,7 @@ public class MemoryMonitorTask implements CommandLineRunner, DisposableBean {
                     .build();
             AlarmPackage alarmPackage = new PackageConstructor().structureAlarmPackage(alarm);
             this.alarmService.dealAlarmPackage(alarmPackage);
-        }).start();
+        });
     }
 
     /**
@@ -177,7 +173,7 @@ public class MemoryMonitorTask implements CommandLineRunner, DisposableBean {
     public void destroy() {
         if (!this.seService.isShutdown()) {
             this.seService.shutdown();
-            log.info("延迟/周期执行线程池“monitoring-memory-pool-thread”已经关闭！");
+            log.info("线程池“monitoring-memory-pool-thread”已经关闭！");
         }
     }
 }

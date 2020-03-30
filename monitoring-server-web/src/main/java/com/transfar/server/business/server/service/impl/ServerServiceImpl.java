@@ -2,8 +2,8 @@ package com.transfar.server.business.server.service.impl;
 
 import com.transfar.common.domain.server.*;
 import com.transfar.common.dto.ServerPackage;
+import com.transfar.common.inf.ICallback;
 import com.transfar.server.business.server.core.CpuPool;
-import com.transfar.server.business.server.core.DiskMonitor;
 import com.transfar.server.business.server.core.DiskPool;
 import com.transfar.server.business.server.core.MemoryPool;
 import com.transfar.server.business.server.domain.Cpu;
@@ -13,6 +13,7 @@ import com.transfar.server.business.server.service.IServerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -25,6 +26,12 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 @Service
 public class ServerServiceImpl implements IServerService {
+
+    /**
+     * 回调接口
+     */
+    @Autowired
+    private List<ICallback> callbacks;
 
     /**
      * 服务器内存信息池
@@ -43,12 +50,6 @@ public class ServerServiceImpl implements IServerService {
      */
     @Autowired
     private DiskPool diskPool;
-
-    /**
-     * 服务器磁盘监控器，更新磁盘状态，发送告警
-     */
-    @Autowired
-    private DiskMonitor diskMonitor;
 
     /**
      * <p>
@@ -123,10 +124,10 @@ public class ServerServiceImpl implements IServerService {
         disk.setIp(ip);
         disk.setSubregionConcurrentHashMap(subregionConcurrentHashMap);
         this.diskPool.updateMemoryPool(ip, disk);
-        // 调用磁盘监控
-        this.diskMonitor.monitor();
+        // 调用监控回调接口
+        this.callbacks.forEach(e -> e.event(ip));
 
-
-        return false;
+        return true;
     }
+
 }

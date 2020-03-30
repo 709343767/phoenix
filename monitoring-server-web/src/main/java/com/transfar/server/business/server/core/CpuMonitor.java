@@ -3,26 +3,23 @@ package com.transfar.server.business.server.core;
 import com.transfar.common.constant.AlarmLevelEnums;
 import com.transfar.common.domain.Alarm;
 import com.transfar.common.dto.AlarmPackage;
+import com.transfar.common.inf.ICallback;
 import com.transfar.server.business.server.domain.Cpu;
 import com.transfar.server.business.server.service.IAlarmService;
 import com.transfar.server.property.MonitoringServerWebProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
-import java.util.Map;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * <p>
- * 在容器启动后，定时扫描所有服务器CPU信息，实时更新状态，发送告警
+ * 服务器CPU信息监控，实时更新状态，发送告警
  * </p>
  *
  * @author 皮锋
@@ -30,8 +27,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 @Component
 @Slf4j
-@Order(4)
-public class CpuMonitorTask implements CommandLineRunner, DisposableBean {
+public class CpuMonitor implements ICallback, DisposableBean {
 
     /**
      * 服务器CPU信息池
@@ -52,9 +48,9 @@ public class CpuMonitorTask implements CommandLineRunner, DisposableBean {
     private MonitoringServerWebProperties monitoringServerWebProperties;
 
     /**
-     * 延迟/周期执行线程池
+     * 线程池
      */
-    private final ScheduledExecutorService seService = Executors.newScheduledThreadPool(5, new ThreadFactory() {
+    private ExecutorService seService = Executors.newCachedThreadPool(new ThreadFactory() {
         AtomicInteger atomic = new AtomicInteger();
 
         @Override
@@ -63,42 +59,47 @@ public class CpuMonitorTask implements CommandLineRunner, DisposableBean {
         }
     });
 
+    /**
+     * <p>
+     * 监控CPU使用率，发送CPU过载告警信息
+     * </p>
+     *
+     * @param obj 回调参数
+     * @author 皮锋
+     * @custom.date 2020/3/30 21:56
+     */
     @Override
-    public void run(String... args) {
-        // 重新开启线程，让他单独去做我们想要做的操作，此时CommandLineRunner执行的操作和主线程是相互独立的，抛出异常并不会影响到主线程
-        Thread thread = new Thread(() -> this.seService.scheduleAtFixedRate(() -> {
-            // 循环所有服务器CPU信息
-            for (Map.Entry<String, Cpu> entry : this.cpuPool.entrySet()) {
-                String key = entry.getKey();
-                Cpu cpu = entry.getValue();
-                // 最终确认CPU过载的阈值
-                long threshold = (int) (cpu.getRate() / 30) * this.monitoringServerWebProperties.getThreshold();
-                // 平均CPU使用率
-                double avgCpuCombined = cpu.getAvgCpuCombined();
-                // 平均CPU使用率大于90%
-                if (avgCpuCombined > 90) {
-                    int num90 = cpu.getNum90();
-                    cpu.setNum90(num90 + 1);
-                    if (num90 > threshold) {
-                        // 处理CPU过载90%
-                        this.dealCpuOverLoad90(key, cpu);
-                    }
-                } else {
-                    //处理从过载90%恢复CPU正常
-                    this.dealCpuNotOverLoad90(key, cpu);
+    public void event(Object... obj) {
+        this.seService.execute(() -> {
+            String key = String.valueOf(obj[0]);
+            Cpu cpu = this.cpuPool.get(key);
+            // 最终确认CPU过载的阈值
+            long threshold = this.monitoringServerWebProperties.getThreshold();
+            // 平均CPU使用率
+            double avgCpuCombined = cpu.getAvgCpuCombined();
+            // 平均CPU使用率大于90%
+            if (avgCpuCombined > 90) {
+                int num90 = cpu.getNum90();
+                cpu.setNum90(num90 + 1);
+                if (num90 > threshold) {
+                    // 处理CPU过载90%
+                    this.dealCpuOverLoad90(key, cpu);
                 }
-                // 平均CPU使用率大于100%
-                if (avgCpuCombined > 100) {
-                    int num100 = cpu.getNum100();
-                    cpu.setNum100(num100 + 1);
-                    if (num100 > threshold) {
-                        // 处理CPU过载100%
-                        this.dealCpuOverLoad100(key, cpu);
-                    }
-                } else {
-                    // 处理从过载100%恢复CPU正常
-                    this.dealCpuNotOverLoad100(key, cpu);
+            } else {
+                //处理从过载90%恢复CPU正常
+                this.dealCpuNotOverLoad90(key, cpu);
+            }
+            // 平均CPU使用率大于100%
+            if (avgCpuCombined > 100) {
+                int num100 = cpu.getNum100();
+                cpu.setNum100(num100 + 1);
+                if (num100 > threshold) {
+                    // 处理CPU过载100%
+                    this.dealCpuOverLoad100(key, cpu);
                 }
+            } else {
+                // 处理从过载100%恢复CPU正常
+                this.dealCpuNotOverLoad100(key, cpu);
             }
             log.info("当前服务器CPU信息池大小：{}，CPU过载90%：{}，CPU过载100%：{}，详细信息：{}",//
                     this.cpuPool.size(),//
@@ -106,11 +107,7 @@ public class CpuMonitorTask implements CommandLineRunner, DisposableBean {
                     this.cpuPool.entrySet().stream().filter((e) -> e.getValue().isOverLoad100()).count(),//
                     this.cpuPool.toJsonString()
             );
-        }, 20, 30, TimeUnit.SECONDS));
-        // 设置守护线程
-        thread.setDaemon(true);
-        // 开始执行分进程
-        thread.start();
+        });
     }
 
     /**
@@ -201,7 +198,7 @@ public class CpuMonitorTask implements CommandLineRunner, DisposableBean {
      * @custom.date 2020/3/30 10:40
      */
     private synchronized void sendAlarmInfo(String title, AlarmLevelEnums alarmLevelEnums, Cpu cpu) {
-        new Thread(() -> {
+        this.seService.execute(() -> {
             String msg = "IP地址：" + cpu.getIp() + "，CPU使用率：" + cpu.getAvgCpuCombined() + "%";
             Alarm alarm = Alarm.builder()//
                     .title(title)//
@@ -210,7 +207,7 @@ public class CpuMonitorTask implements CommandLineRunner, DisposableBean {
                     .build();
             AlarmPackage alarmPackage = new PackageConstructor().structureAlarmPackage(alarm);
             this.alarmService.dealAlarmPackage(alarmPackage);
-        }).start();
+        });
     }
 
     /**
@@ -226,7 +223,7 @@ public class CpuMonitorTask implements CommandLineRunner, DisposableBean {
     public void destroy() {
         if (!this.seService.isShutdown()) {
             this.seService.shutdown();
-            log.info("延迟/周期执行线程池“monitoring-cpu-pool-thread”已经关闭！");
+            log.info("线程池“monitoring-cpu-pool-thread”已经关闭！");
         }
     }
 }
