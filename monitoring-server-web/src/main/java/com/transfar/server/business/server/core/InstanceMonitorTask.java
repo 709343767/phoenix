@@ -13,6 +13,7 @@ import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -72,7 +73,6 @@ public class InstanceMonitorTask implements CommandLineRunner, DisposableBean {
         Thread thread = new Thread(() -> this.seService.scheduleAtFixedRate(() -> {
             // 循环所有应用实例
             for (Map.Entry<String, Instance> entry : this.instancePool.entrySet()) {
-                String key = entry.getKey();
                 Instance instance = entry.getValue();
                 // 允许的误差时间
                 int thresholdSecond = instance.getThresholdSecond();
@@ -95,14 +95,14 @@ public class InstanceMonitorTask implements CommandLineRunner, DisposableBean {
                         // 网络不通
                         if (!ping) {
                             // 断网
-                            this.disConnect(key, instance);
+                            this.disConnect(instance);
                         } else {
                             // 离线
-                            this.offLine(key, instance);
+                            this.offLine(instance);
                         }
                     } else {
                         // 离线
-                        this.offLine(key, instance);
+                        this.offLine(instance);
                     }
                 }
                 // 注册上来的服务恢复响应
@@ -110,10 +110,10 @@ public class InstanceMonitorTask implements CommandLineRunner, DisposableBean {
                     // 打开了网络监控
                     if (monitoringEnable) {
                         // 网络恢复连接
-                        this.recoverConnect(key, instance);
+                        this.recoverConnect(instance);
                     }
                     // 恢复在线
-                    this.onLine(key, instance);
+                    this.onLine(instance);
                 }
             }
             // 打印当前应用池中的所有应用情况
@@ -135,19 +135,17 @@ public class InstanceMonitorTask implements CommandLineRunner, DisposableBean {
      * 处理恢复在线
      * </p>
      *
-     * @param key      实例键
      * @param instance 实例
      * @author 皮锋
      * @custom.date 2020/3/23 11:58
      */
-    private void onLine(String key, Instance instance) {
+    private void onLine(Instance instance) {
         // 是否已经发过离线告警信息
         boolean isLineAlarm = instance.isLineAlarm();
         if (isLineAlarm) {
             // 发送在线通知信息
-            this.sendAlarmInfo("应用程序在线", AlarmLevelEnums.WARN, instance);
+            this.sendAlarmInfo("应用程序在线", AlarmLevelEnums.FATAL, instance);
             instance.setLineAlarm(false);
-            this.instancePool.replace(key, instance);
         }
     }
 
@@ -156,19 +154,17 @@ public class InstanceMonitorTask implements CommandLineRunner, DisposableBean {
      * 处理恢复网络
      * </p>
      *
-     * @param key      实例键
      * @param instance 实例
      * @author 皮锋
      * @custom.date 2020/3/23 11:56
      */
-    private void recoverConnect(String key, Instance instance) {
+    private void recoverConnect(Instance instance) {
         // 是否已经发过断网告警信息
         boolean isConnectAlarm = instance.isConnectAlarm();
         if (isConnectAlarm) {
             // 发送来网通知信息
             // this.sendAlarmInfo("网络恢复", AlarmLevelEnums.WARN, instance);
             instance.setConnectAlarm(false);
-            this.instancePool.replace(key, instance);
         }
     }
 
@@ -177,12 +173,11 @@ public class InstanceMonitorTask implements CommandLineRunner, DisposableBean {
      * 处理离线
      * </p>
      *
-     * @param key      实例键
      * @param instance 实例
      * @author 皮锋
      * @custom.date 2020/3/23 11:40
      */
-    private void offLine(String key, Instance instance) {
+    private void offLine(Instance instance) {
         // 离线
         instance.setOnline(false);
         // 是否已经发过离线告警信息
@@ -193,7 +188,6 @@ public class InstanceMonitorTask implements CommandLineRunner, DisposableBean {
             this.sendAlarmInfo("应用程序离线", AlarmLevelEnums.FATAL, instance);
             instance.setLineAlarm(true);
         }
-        this.instancePool.replace(key, instance);
     }
 
     /**
@@ -201,12 +195,11 @@ public class InstanceMonitorTask implements CommandLineRunner, DisposableBean {
      * 处理断网
      * </p>
      *
-     * @param key      实例键
      * @param instance 实例
      * @author 皮锋
      * @custom.date 2020/3/23 11:41
      */
-    private void disConnect(String key, Instance instance) {
+    private void disConnect(Instance instance) {
         // 断网
         instance.setOnConnect(false);
         // 是否已经发过断网告警信息
@@ -217,7 +210,6 @@ public class InstanceMonitorTask implements CommandLineRunner, DisposableBean {
             // this.sendAlarmInfo("网络中断", AlarmLevelEnums.FATAL, instance);
             instance.setConnectAlarm(true);
         }
-        this.instancePool.replace(key, instance);
     }
 
     /**
@@ -231,18 +223,17 @@ public class InstanceMonitorTask implements CommandLineRunner, DisposableBean {
      * @author 皮锋
      * @custom.date 2020/3/13 11:20
      */
-    private synchronized void sendAlarmInfo(String title, AlarmLevelEnums alarmLevelEnums, Instance instance) {
-        new Thread(() -> {
-            String msg = "应用ID：" + instance.getInstanceId() + "，应用名称：" + instance.getInstanceName() + "，应用端点："
-                    + instance.getEndpoint() + "，IP地址：" + instance.getIp();
-            Alarm alarm = Alarm.builder()//
-                    .title(title)//
-                    .msg(msg)//
-                    .alarmLevel(alarmLevelEnums)//
-                    .build();
-            AlarmPackage alarmPackage = new PackageConstructor().structureAlarmPackage(alarm);
-            this.alarmService.dealAlarmPackage(alarmPackage);
-        }).start();
+    @Async
+    public synchronized void sendAlarmInfo(String title, AlarmLevelEnums alarmLevelEnums, Instance instance) {
+        String msg = "应用ID：" + instance.getInstanceId() + "，应用名称：" + instance.getInstanceName() + "，应用端点："
+                + instance.getEndpoint() + "，IP地址：" + instance.getIp();
+        Alarm alarm = Alarm.builder()//
+                .title(title)//
+                .msg(msg)//
+                .alarmLevel(alarmLevelEnums)//
+                .build();
+        AlarmPackage alarmPackage = new PackageConstructor().structureAlarmPackage(alarm);
+        this.alarmService.dealAlarmPackage(alarmPackage);
     }
 
     /**

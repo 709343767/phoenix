@@ -67,6 +67,7 @@ public class NetAspect {
         Net net = new Net();
         net.setDateTime(heartbeatPackage.getDateTime());
         net.setOnConnect(true);
+        net.setConnectAlarm(this.netPool.get(packageIp) != null && this.netPool.get(packageIp).isConnectAlarm());
         net.setThresholdSecond((int) (heartbeatPackage.getRate() * config.getThreshold()));
         net.setIp(packageIp);
         // 更新网络信息池

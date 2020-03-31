@@ -13,6 +13,7 @@ import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
@@ -80,7 +81,6 @@ public class NetMonitorTask implements CommandLineRunner, DisposableBean {
             if (monitoringEnable) {
                 // 循环所有网络信息
                 for (Map.Entry<String, Net> entry : this.netPool.entrySet()) {
-                    String key = entry.getKey();
                     Net net = entry.getValue();
                     // 允许的误差时间
                     int thresholdSecond = net.getThresholdSecond();
@@ -99,16 +99,16 @@ public class NetMonitorTask implements CommandLineRunner, DisposableBean {
                         // 网络不通
                         if (!ping) {
                             // 断网
-                            this.disConnect(key, net);
+                            this.disConnect(net);
                         } else {
                             // 网络恢复连接
-                            this.recoverConnect(key, net);
+                            this.recoverConnect(net);
                         }
                     }
                     // 注册上来的IP恢复响应
                     else {
                         // 网络恢复连接
-                        this.recoverConnect(key, net);
+                        this.recoverConnect(net);
                     }
                 }
                 // 打印当前网络信息池中的所有网络信息情况
@@ -130,21 +130,19 @@ public class NetMonitorTask implements CommandLineRunner, DisposableBean {
      * 处理恢复网络
      * </p>
      *
-     * @param key 网络信息键
      * @param net 网络信息
      * @author 皮锋
      * @custom.date 2020/3/25 14:20
      */
-    private void recoverConnect(String key, Net net) {
+    private void recoverConnect(Net net) {
         // 是否已经发过断网告警信息
         boolean isConnectAlarm = net.isConnectAlarm();
         if (isConnectAlarm) {
             // 发送来网通知信息
-            this.sendAlarmInfo("网络恢复", AlarmLevelEnums.WARN, net);
+            this.sendAlarmInfo("网络恢复", AlarmLevelEnums.FATAL, net);
             net.setConnectAlarm(false);
         }
         net.setDateTime(new Date());
-        this.netPool.replace(key, net);
     }
 
     /**
@@ -152,12 +150,11 @@ public class NetMonitorTask implements CommandLineRunner, DisposableBean {
      * 处理断网
      * </p>
      *
-     * @param key 网络信息键
      * @param net 网络信息
      * @author 皮锋
      * @custom.date 2020/3/25 14:20
      */
-    private void disConnect(String key, Net net) {
+    private void disConnect(Net net) {
         // 断网
         net.setOnConnect(false);
         // 是否已经发过断网告警信息
@@ -168,7 +165,6 @@ public class NetMonitorTask implements CommandLineRunner, DisposableBean {
             this.sendAlarmInfo("网络中断", AlarmLevelEnums.FATAL, net);
             net.setConnectAlarm(true);
         }
-        this.netPool.replace(key, net);
     }
 
     /**
@@ -182,21 +178,20 @@ public class NetMonitorTask implements CommandLineRunner, DisposableBean {
      * @author 皮锋
      * @custom.date 2020/3/25 14:46
      */
-    private synchronized void sendAlarmInfo(String title, AlarmLevelEnums alarmLevelEnums, Net net) {
-        new Thread(() -> {
-            Instant instant = net.getDateTime().toInstant();
-            ZoneId zoneId = ZoneId.systemDefault();
-            LocalDateTime localDateTime = instant.atZone(zoneId).toLocalDateTime();
-            String dateTime = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(localDateTime);
-            String msg = "IP地址：" + NetUtils.getLocalIp() + "到" + net.getIp() + "，时间：" + dateTime;
-            Alarm alarm = Alarm.builder()//
-                    .title(title)//
-                    .msg(msg)//
-                    .alarmLevel(alarmLevelEnums)//
-                    .build();
-            AlarmPackage alarmPackage = new PackageConstructor().structureAlarmPackage(alarm);
-            this.alarmService.dealAlarmPackage(alarmPackage);
-        }).start();
+    @Async
+    public synchronized void sendAlarmInfo(String title, AlarmLevelEnums alarmLevelEnums, Net net) {
+        Instant instant = net.getDateTime().toInstant();
+        ZoneId zoneId = ZoneId.systemDefault();
+        LocalDateTime localDateTime = instant.atZone(zoneId).toLocalDateTime();
+        String dateTime = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(localDateTime);
+        String msg = "IP地址：" + NetUtils.getLocalIp() + "到" + net.getIp() + "，时间：" + dateTime;
+        Alarm alarm = Alarm.builder()//
+                .title(title)//
+                .msg(msg)//
+                .alarmLevel(alarmLevelEnums)//
+                .build();
+        AlarmPackage alarmPackage = new PackageConstructor().structureAlarmPackage(alarm);
+        this.alarmService.dealAlarmPackage(alarmPackage);
     }
 
     /**

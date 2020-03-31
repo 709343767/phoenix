@@ -25,3 +25,5 @@
 /monitoring-plug-core-spring-boot-starter/target/
 /monitoring-plug-core-spring-mvc-integrator/.settings/
 /monitoring-plug-core-spring-mvc-integrator/target/
+/ini/
+/monitoring-server-web/ini/
