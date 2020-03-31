@@ -5,7 +5,7 @@ import lombok.*;
 import lombok.experimental.Accessors;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.Map;
 
 /**
  * <p>
@@ -34,7 +34,7 @@ public class Disk extends SuperBean {
     /**
      * 服务器磁盘分区
      */
-    private ConcurrentHashMap<String, Subregion> subregionConcurrentHashMap;
+    private Map<String, Subregion> subregionMap;
 
     /**
      * <p>

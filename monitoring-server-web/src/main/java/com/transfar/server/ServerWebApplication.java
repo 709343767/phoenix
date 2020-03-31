@@ -1,11 +1,11 @@
 package com.transfar.server;
 
+import com.transfar.server.config.UniqueBeanNameGenerator;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
-
-import com.transfar.server.config.UniqueBeanNameGenerator;
 
 /**
  * <p>
@@ -20,11 +20,12 @@ import com.transfar.server.config.UniqueBeanNameGenerator;
 @ComponentScan(nameGenerator = UniqueBeanNameGenerator.class)
 // 启用spring的任务调度
 @EnableScheduling
+@EnableAsync
 // 启用事务管理
 public class ServerWebApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(ServerWebApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(ServerWebApplication.class, args);
+    }
 
 }

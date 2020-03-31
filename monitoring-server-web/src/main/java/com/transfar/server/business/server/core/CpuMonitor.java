@@ -3,19 +3,14 @@ package com.transfar.server.business.server.core;
 import com.transfar.common.constant.AlarmLevelEnums;
 import com.transfar.common.domain.Alarm;
 import com.transfar.common.dto.AlarmPackage;
-import com.transfar.common.inf.ICallback;
 import com.transfar.server.business.server.domain.Cpu;
 import com.transfar.server.business.server.service.IAlarmService;
+import com.transfar.server.inf.IServerMonitoringListener;
 import com.transfar.server.property.MonitoringServerWebProperties;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
-
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * <p>
@@ -27,7 +22,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 @Component
 @Slf4j
-public class CpuMonitor implements ICallback, DisposableBean {
+public class CpuMonitor implements IServerMonitoringListener {
 
     /**
      * 服务器CPU信息池
@@ -48,18 +43,6 @@ public class CpuMonitor implements ICallback, DisposableBean {
     private MonitoringServerWebProperties monitoringServerWebProperties;
 
     /**
-     * 线程池
-     */
-    private ExecutorService seService = Executors.newCachedThreadPool(new ThreadFactory() {
-        AtomicInteger atomic = new AtomicInteger();
-
-        @Override
-        public Thread newThread(Runnable r) {
-            return new Thread(r, "monitoring-cpu-pool-thread-" + this.atomic.getAndIncrement());
-        }
-    });
-
-    /**
      * <p>
      * 监控CPU使用率，发送CPU过载告警信息
      * </p>
@@ -68,46 +51,53 @@ public class CpuMonitor implements ICallback, DisposableBean {
      * @author 皮锋
      * @custom.date 2020/3/30 21:56
      */
+    @Async
     @Override
-    public void event(Object... obj) {
-        this.seService.execute(() -> {
-            String key = String.valueOf(obj[0]);
-            Cpu cpu = this.cpuPool.get(key);
-            // 最终确认CPU过载的阈值
-            long threshold = this.monitoringServerWebProperties.getThreshold();
-            // 平均CPU使用率
-            double avgCpuCombined = cpu.getAvgCpuCombined();
-            // 平均CPU使用率大于90%
-            if (avgCpuCombined > 90) {
+    public synchronized void wakeUp(Object... obj) {
+        String key = String.valueOf(obj[0]);
+        Cpu cpu = this.cpuPool.get(key);
+        // 最终确认CPU过载的阈值
+        long threshold = this.monitoringServerWebProperties.getThreshold();
+        // 平均CPU使用率
+        double avgCpuCombined = cpu.getAvgCpuCombined();
+        // 平均CPU使用率大于90%
+        if (avgCpuCombined > 90) {
+            boolean isOverLoad90 = cpu.isOverLoad90();
+            // 没有标记平均CPU使用率大于90%
+            if (!isOverLoad90) {
                 int num90 = cpu.getNum90();
                 cpu.setNum90(num90 + 1);
                 if (num90 > threshold) {
                     // 处理CPU过载90%
-                    this.dealCpuOverLoad90(key, cpu);
+                    this.dealCpuOverLoad90(cpu);
                 }
-            } else {
-                //处理从过载90%恢复CPU正常
-                this.dealCpuNotOverLoad90(key, cpu);
             }
-            // 平均CPU使用率大于100%
-            if (avgCpuCombined > 100) {
+        } else {
+            //处理从过载90%恢复CPU正常
+            this.dealCpuNotOverLoad90(cpu);
+        }
+        // 平均CPU使用率大于100%
+        if (avgCpuCombined > 100) {
+            boolean isOverLoad100 = cpu.isOverLoad100();
+            // 没有标记平均CPU使用率大于90%
+            if (!isOverLoad100) {
                 int num100 = cpu.getNum100();
                 cpu.setNum100(num100 + 1);
                 if (num100 > threshold) {
                     // 处理CPU过载100%
-                    this.dealCpuOverLoad100(key, cpu);
+                    this.dealCpuOverLoad100(cpu);
                 }
-            } else {
-                // 处理从过载100%恢复CPU正常
-                this.dealCpuNotOverLoad100(key, cpu);
             }
-            log.info("当前服务器CPU信息池大小：{}，CPU过载90%：{}，CPU过载100%：{}，详细信息：{}",//
-                    this.cpuPool.size(),//
-                    this.cpuPool.entrySet().stream().filter((e) -> e.getValue().isOverLoad90()).count(),//
-                    this.cpuPool.entrySet().stream().filter((e) -> e.getValue().isOverLoad100()).count(),//
-                    this.cpuPool.toJsonString()
-            );
-        });
+        } else {
+            // 处理从过载100%恢复CPU正常
+            this.dealCpuNotOverLoad100(cpu);
+        }
+        log.info("CPU信息池大小：{}，CPU过载90%：{}，CPU过载100%：{}，详细信息：{}",//
+                this.cpuPool.size(),//
+                this.cpuPool.entrySet().stream().filter((e) -> e.getValue().isOverLoad90()).count(),//
+                this.cpuPool.entrySet().stream().filter((e) -> e.getValue().isOverLoad100()).count(),//
+                this.cpuPool.toJsonString()
+        );
     }
 
     /**
@@ -115,16 +105,14 @@ public class CpuMonitor implements ICallback, DisposableBean {
      * 处理从过载100%恢复CPU正常
      * </p>
      *
-     * @param key 服务器CPU键
      * @param cpu 服务器CPU
      * @author 皮锋
      * @custom.date 2020/3/30 10:48
      */
-    private void dealCpuNotOverLoad100(String key, Cpu cpu) {
+    private void dealCpuNotOverLoad100(Cpu cpu) {
         cpu.setAlarm100(false);
         cpu.setOverLoad100(false);
         cpu.setNum100(0);
-        this.cpuPool.replace(key, cpu);
     }
 
     /**
@@ -132,16 +120,14 @@ public class CpuMonitor implements ICallback, DisposableBean {
      * 处理从过载90%恢复CPU正常
      * </p>
      *
-     * @param key 服务器CPU键
      * @param cpu 服务器CPU
      * @author 皮锋
      * @custom.date 2020/3/30 10:48
      */
-    private void dealCpuNotOverLoad90(String key, Cpu cpu) {
+    private void dealCpuNotOverLoad90(Cpu cpu) {
         cpu.setAlarm90(false);
         cpu.setOverLoad90(false);
         cpu.setNum90(0);
-        this.cpuPool.replace(key, cpu);
     }
 
     /**
@@ -149,12 +135,11 @@ public class CpuMonitor implements ICallback, DisposableBean {
      * 处理CPU过载100%
      * </p>
      *
-     * @param key 服务器CPU键
      * @param cpu 服务器CPU
      * @author 皮锋
      * @custom.date 2020/3/30 10:38
      */
-    private void dealCpuOverLoad100(String key, Cpu cpu) {
+    private void dealCpuOverLoad100(Cpu cpu) {
         cpu.setOverLoad100(true);
         // 是否已经发送过CPU过载100%告警消息
         boolean isAlarm = cpu.isAlarm100();
@@ -162,7 +147,6 @@ public class CpuMonitor implements ICallback, DisposableBean {
             this.sendAlarmInfo("CPU过载100%", AlarmLevelEnums.FATAL, cpu);
             cpu.setAlarm100(true);
         }
-        this.cpuPool.replace(key, cpu);
     }
 
     /**
@@ -170,12 +154,11 @@ public class CpuMonitor implements ICallback, DisposableBean {
      * 处理CPU过载90%
      * </p>
      *
-     * @param key 服务器CPU键
      * @param cpu 服务器CPU
      * @author 皮锋
      * @custom.date 2020/3/30 10:38
      */
-    private void dealCpuOverLoad90(String key, Cpu cpu) {
+    private void dealCpuOverLoad90(Cpu cpu) {
         cpu.setOverLoad90(true);
         // 是否已经发送过CPU过载90%告警消息
         boolean isAlarm = cpu.isAlarm90();
@@ -183,7 +166,6 @@ public class CpuMonitor implements ICallback, DisposableBean {
             this.sendAlarmInfo("CPU过载90%", AlarmLevelEnums.WARN, cpu);
             cpu.setAlarm90(true);
         }
-        this.cpuPool.replace(key, cpu);
     }
 
     /**
@@ -197,33 +179,16 @@ public class CpuMonitor implements ICallback, DisposableBean {
      * @author 皮锋
      * @custom.date 2020/3/30 10:40
      */
-    private synchronized void sendAlarmInfo(String title, AlarmLevelEnums alarmLevelEnums, Cpu cpu) {
-        this.seService.execute(() -> {
-            String msg = "IP地址：" + cpu.getIp() + "，CPU使用率：" + cpu.getAvgCpuCombined() + "%";
-            Alarm alarm = Alarm.builder()//
-                    .title(title)//
-                    .msg(msg)//
-                    .alarmLevel(alarmLevelEnums)//
-                    .build();
-            AlarmPackage alarmPackage = new PackageConstructor().structureAlarmPackage(alarm);
-            this.alarmService.dealAlarmPackage(alarmPackage);
-        });
+    @Async
+    public void sendAlarmInfo(String title, AlarmLevelEnums alarmLevelEnums, Cpu cpu) {
+        String msg = "IP地址：" + cpu.getIp() + "，CPU使用率：" + cpu.getAvgCpuCombined() + "%";
+        Alarm alarm = Alarm.builder()//
+                .title(title)//
+                .msg(msg)//
+                .alarmLevel(alarmLevelEnums)//
+                .build();
+        AlarmPackage alarmPackage = new PackageConstructor().structureAlarmPackage(alarm);
+        this.alarmService.dealAlarmPackage(alarmPackage);
     }
 
-    /**
-     * <p>
-     * 在spring容器销毁时关闭线程池
-     * </p>
-     * 关闭线程池：monitoring-cpu-pool-thread
-     *
-     * @author 皮锋
-     * @custom.date 2020/3/26 16:33
-     */
-    @Override
-    public void destroy() {
-        if (!this.seService.isShutdown()) {
-            this.seService.shutdown();
-            log.info("线程池“monitoring-cpu-pool-thread”已经关闭！");
-        }
-    }
 }
