@@ -90,10 +90,10 @@ public class NetMonitorTask implements CommandLineRunner, DisposableBean {
                     DateTime judgeDateTime = new DateTime(dateTime).plusSeconds(thresholdSecond);
                     // 注册上来的IP失去响应
                     if (judgeDateTime.isBeforeNow()) {
-                        // 已经断网
-                        if (!net.isOnConnect()) {
-                            continue;
-                        }
+                        // 已经断网，也需要继续判断，防止没有应用向服务端发心跳包，这种情况要主动ping
+                        // if (!net.isOnConnect()) {
+                        //    continue;
+                        // }
                         // 判断网络是不是断了
                         boolean ping = NetUtils.ping(net.getIp());
                         // 网络不通
@@ -102,13 +102,13 @@ public class NetMonitorTask implements CommandLineRunner, DisposableBean {
                             this.disConnect(net);
                         } else {
                             // 网络恢复连接
-                            this.recoverConnect(net);
+                            this.recoverConnect(net, true);
                         }
                     }
                     // 注册上来的IP恢复响应
                     else {
                         // 网络恢复连接
-                        this.recoverConnect(net);
+                        this.recoverConnect(net, false);
                     }
                 }
                 // 打印当前网络信息池中的所有网络信息情况
@@ -130,11 +130,12 @@ public class NetMonitorTask implements CommandLineRunner, DisposableBean {
      * 处理恢复网络
      * </p>
      *
-     * @param net 网络信息
+     * @param net               网络信息
+     * @param isRefreshDateTime 是否刷新最后一次更新的时间
      * @author 皮锋
      * @custom.date 2020/3/25 14:20
      */
-    private void recoverConnect(Net net) {
+    private void recoverConnect(Net net, boolean isRefreshDateTime) {
         // 是否已经发过断网告警信息
         boolean isConnectAlarm = net.isConnectAlarm();
         if (isConnectAlarm) {
@@ -142,7 +143,10 @@ public class NetMonitorTask implements CommandLineRunner, DisposableBean {
             this.sendAlarmInfo("网络恢复", AlarmLevelEnums.FATAL, net);
             net.setConnectAlarm(false);
         }
-        net.setDateTime(new Date());
+        // 是否刷新最后一次更新的时间
+        if (isRefreshDateTime) {
+            net.setDateTime(new Date());
+        }
     }
 
     /**
