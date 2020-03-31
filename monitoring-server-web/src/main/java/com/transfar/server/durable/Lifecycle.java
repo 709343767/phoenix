@@ -82,7 +82,7 @@ public class Lifecycle implements InitializingBean, DisposableBean {
             }
             log.info("把文件系统中的应用实例池内容加载到Spring容器成功！");
         } catch (IOException ignored) {
-            log.error("把文件系统中的应用实例池内容加载到Spring容器异常！");
+            log.info("把文件系统中的应用实例池内容加载到Spring容器异常！");
         }
         try {
             String netPoolStr = FileUtils.readFileToString(new File(FileNameConstants.NET_POOL), Charsets.UTF_8);
@@ -93,7 +93,7 @@ public class Lifecycle implements InitializingBean, DisposableBean {
             }
             log.info("把文件系统中的网络信息池内容加载到Spring容器成功！");
         } catch (IOException ignored) {
-            log.error("把文件系统中的网络信息池内容加载到Spring容器异常！");
+            log.info("把文件系统中的网络信息池内容加载到Spring容器异常！");
         }
         try {
             String memoryPoolStr = FileUtils.readFileToString(new File(FileNameConstants.MEMORY_POOL), Charsets.UTF_8);
@@ -104,7 +104,7 @@ public class Lifecycle implements InitializingBean, DisposableBean {
             }
             log.info("把文件系统中的服务器内存信息池内容加载到Spring容器成功！");
         } catch (IOException ignored) {
-            log.error("把文件系统中的服务器内存信息池内容加载到Spring容器异常！");
+            log.info("把文件系统中的服务器内存信息池内容加载到Spring容器异常！");
         }
         try {
             String cpuPoolStr = FileUtils.readFileToString(new File(FileNameConstants.CPU_POOL), Charsets.UTF_8);
@@ -115,7 +115,7 @@ public class Lifecycle implements InitializingBean, DisposableBean {
             }
             log.info("把文件系统中的服务器CPU信息池内容加载到Spring容器成功！");
         } catch (IOException ignored) {
-            log.error("把文件系统中的服务器CPU信息池内容加载到Spring容器异常！");
+            log.info("把文件系统中的服务器CPU信息池内容加载到Spring容器异常！");
         }
         try {
             String diskPoolStr = FileUtils.readFileToString(new File(FileNameConstants.DISK_POOL), Charsets.UTF_8);
@@ -126,7 +126,7 @@ public class Lifecycle implements InitializingBean, DisposableBean {
             }
             log.info("把文件系统中的服务器磁盘信息池内容加载到Spring容器成功！");
         } catch (IOException ignored) {
-            log.error("把文件系统中的服务器磁盘信息池内容加载到Spring容器异常！");
+            log.info("把文件系统中的服务器磁盘信息池内容加载到Spring容器异常！");
         }
     }
 
