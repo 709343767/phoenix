@@ -118,7 +118,7 @@ public class NetMonitorTask implements CommandLineRunner, DisposableBean {
                         this.netPool.entrySet().stream().filter((e) -> !e.getValue().isOnConnect()).count(), //
                         this.netPool.toJsonString());
             }
-        }, 310, 30, TimeUnit.SECONDS));
+        }, 10, 30, TimeUnit.SECONDS));
         // 设置守护线程
         thread.setDaemon(true);
         // 开始执行分进程
