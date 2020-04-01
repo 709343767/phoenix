@@ -15,6 +15,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
+import java.util.Date;
 import java.util.Map;
 
 /**
@@ -92,11 +93,15 @@ public class PersistPoolLifecycle implements InitializingBean, DisposableBean {
             if (StringUtils.isNotBlank(instancePoolStr)) {
                 Map<String, Instance> map = JSON.parseObject(instancePoolStr, new TypeReference<Map<String, Instance>>() {
                 });
-                // for (Map.Entry<String, Instance> entry : map.entrySet()) {
-                // 设置为已经发送告警，防止重复告警
-                // entry.getValue().setLineAlarm(true);
-                // entry.getValue().setConnectAlarm(true);
-                // }
+                for (Map.Entry<String, Instance> entry : map.entrySet()) {
+                    Instance instance = entry.getValue();
+                    boolean isOnline = instance.isOnline();
+                    boolean isOnConnect = instance.isOnConnect();
+                    // 如果之前是在线状态且网络正常，把最后一次通过心跳包更新的时间更新到当前时间
+                    if (isOnline && isOnConnect) {
+                        instance.setDateTime(new Date());
+                    }
+                }
                 this.instancePool.putAll(map);
             }
             log.info("把文件系统中的应用实例池内容加载到Spring容器成功！");
@@ -108,10 +113,14 @@ public class PersistPoolLifecycle implements InitializingBean, DisposableBean {
             if (StringUtils.isNotBlank(netPoolStr)) {
                 Map<String, Net> map = JSON.parseObject(netPoolStr, new TypeReference<Map<String, Net>>() {
                 });
-                // for (Map.Entry<String, Net> entry : map.entrySet()) {
-                // 设置为已经发送告警，防止重复告警
-                // entry.getValue().setConnectAlarm(true);
-                // }
+                for (Map.Entry<String, Net> entry : map.entrySet()) {
+                    Net net = entry.getValue();
+                    boolean isOnConnect = net.isOnConnect();
+                    // 如果之前是网络可连接状态，把最后一次通过心跳包更新的时间更新到当前时间
+                    if (isOnConnect) {
+                        net.setDateTime(new Date());
+                    }
+                }
                 this.netPool.putAll(map);
             }
             log.info("把文件系统中的网络信息池内容加载到Spring容器成功！");
