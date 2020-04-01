@@ -1,16 +1,14 @@
 package com.transfar.agent.util;
 
+import com.transfar.agent.business.core.ConfigLoader;
+import com.transfar.common.util.NetUtils;
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import com.transfar.agent.business.core.ConfigLoader;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.net.Inet4Address;
-import java.net.InetAddress;
 import java.util.Objects;
 
 /**
@@ -60,9 +58,8 @@ public class ContextUtils {
      */
     @SneakyThrows
     public static String getRootUrl() {
-        InetAddress address = Inet4Address.getLocalHost();
         String contextPath = StringUtils.isBlank(ConfigLoader.serverProperties.getServlet().getContextPath()) ? "" : ConfigLoader.serverProperties.getServlet().getContextPath();
-        return "http://" + address.getHostAddress() + ":" + ConfigLoader.serverPort + contextPath;
+        return "http://" + NetUtils.getLocalIp() + ":" + ConfigLoader.serverPort + contextPath;
     }
 
 }
