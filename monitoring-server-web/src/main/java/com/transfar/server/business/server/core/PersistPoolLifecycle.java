@@ -1,9 +1,8 @@
-package com.transfar.server.durable;
+package com.transfar.server.business.server.core;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 import com.google.common.base.Charsets;
-import com.transfar.server.business.server.core.*;
 import com.transfar.server.business.server.domain.*;
 import com.transfar.server.constant.FileNameConstants;
 import lombok.extern.slf4j.Slf4j;
@@ -20,10 +19,10 @@ import java.util.Map;
 
 /**
  * <p>
- * 生命周期管理
+ * 持久化所有信息池
  * </p>
- * 1.在Spring容器初始化时加载一些资源；<br>
- * 2.在Spring容器销毁时清空一些资源；<br>
+ * 1.在Spring容器初始化时从文件系统中加载所有信息池内容到Spring容器；<br>
+ * 2.在Spring容器销毁时持久化所有Spring容器中的信息池内容到文件系统；<br>
  * 3.定时每十分钟把所有Spring容器中的信息池内容持久化到文件系统<br>
  *
  * @author 皮锋
@@ -31,7 +30,7 @@ import java.util.Map;
  */
 @Component
 @Slf4j
-public class Lifecycle implements InitializingBean, DisposableBean {
+public class PersistPoolLifecycle implements InitializingBean, DisposableBean {
 
     /**
      * 应用实例池
