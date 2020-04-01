@@ -1,6 +1,18 @@
 package com.transfar.server.business.server.service.impl;
 
-import com.transfar.common.domain.server.*;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.transfar.common.domain.server.CpuDomain;
+import com.transfar.common.domain.server.DiskDomain;
+import com.transfar.common.domain.server.JvmDomain;
+import com.transfar.common.domain.server.MemoryDomain;
+import com.transfar.common.domain.server.NetDomain;
+import com.transfar.common.domain.server.OsDomain;
+import com.transfar.common.domain.server.ServerDomain;
 import com.transfar.common.dto.ServerPackage;
 import com.transfar.server.business.server.core.CpuPool;
 import com.transfar.server.business.server.core.DiskPool;
@@ -9,13 +21,6 @@ import com.transfar.server.business.server.domain.Cpu;
 import com.transfar.server.business.server.domain.Disk;
 import com.transfar.server.business.server.domain.Memory;
 import com.transfar.server.business.server.service.IServerService;
-import com.transfar.server.inf.IServerMonitoringListener;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * <p>
@@ -27,12 +32,6 @@ import java.util.Map;
  */
 @Service
 public class ServerServiceImpl implements IServerService {
-
-    /**
-     * 服务器信息监听器
-     */
-    @Autowired
-    private List<IServerMonitoringListener> serverMonitoringListeners;
 
     /**
      * 服务器内存信息池
@@ -107,8 +106,6 @@ public class ServerServiceImpl implements IServerService {
         this.refreshCpu(ip, cpuDomain);
         // 刷新服务器磁盘信息
         this.refreshDisk(ip, diskDomain);
-        // 调用监听器回调接口
-        this.serverMonitoringListeners.forEach(e -> e.wakeUp(ip));
     }
 
     /**
