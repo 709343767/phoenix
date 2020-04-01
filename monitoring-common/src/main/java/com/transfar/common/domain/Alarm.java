@@ -1,17 +1,12 @@
 package com.transfar.common.domain;
 
-import java.nio.charset.Charset;
-
 import com.transfar.common.abs.SuperBean;
 import com.transfar.common.constant.AlarmLevelEnums;
-
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import com.transfar.common.constant.AlarmTypeEnums;
+import lombok.*;
 import lombok.experimental.Accessors;
+
+import java.nio.charset.Charset;
 
 /**
  * <p>
@@ -30,35 +25,40 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = true)
 public class Alarm extends SuperBean {
 
-	/**
-	 * 告警内容
-	 */
-	private String msg;
+    /**
+     * 告警内容
+     */
+    private String msg;
 
-	/**
-	 * 告警级别，默认为：WARN
-	 */
-	@Builder.Default
-	private AlarmLevelEnums alarmLevel = AlarmLevelEnums.WARN;
+    /**
+     * 告警级别，默认为：WARN
+     */
+    @Builder.Default
+    private AlarmLevelEnums alarmLevel = AlarmLevelEnums.WARN;
 
-	/**
-	 * 字符集，如果当前字符集不是UTF-8，请指明字符集
-	 */
-	private Charset charset;
+    /**
+     * 告警类型
+     */
+    private AlarmTypeEnums alarmTypeEnums;
 
-	/**
-	 * 是否是测试告警，测试告警服务端不发送告警消息
-	 */
-	private boolean isTest;
+    /**
+     * 字符集，如果当前字符集不是UTF-8，请指明字符集
+     */
+    private Charset charset;
 
-	/**
-	 * 告警内容标题
-	 */
-	private String title;
+    /**
+     * 是否是测试告警，测试告警服务端不发送告警消息
+     */
+    private boolean isTest;
 
-	/**
-	 * 编码
-	 */
-	private String code;
+    /**
+     * 告警内容标题
+     */
+    private String title;
+
+    /**
+     * 编码
+     */
+    private String code;
 
 }
