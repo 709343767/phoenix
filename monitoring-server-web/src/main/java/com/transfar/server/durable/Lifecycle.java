@@ -12,10 +12,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Map;
 
 /**
@@ -23,7 +23,8 @@ import java.util.Map;
  * 生命周期管理
  * </p>
  * 1.在Spring容器初始化时加载一些资源；<br>
- * 2.在Spring容器销毁时清空一些资源<br>
+ * 2.在Spring容器销毁时清空一些资源；<br>
+ * 3.定时每十分钟把所有Spring容器中的信息池内容持久化到文件系统<br>
  *
  * @author 皮锋
  * @custom.date 2020/3/25 16:38
@@ -64,6 +65,20 @@ public class Lifecycle implements InitializingBean, DisposableBean {
 
     /**
      * <p>
+     * 定时每十分钟把所有Spring容器中的信息池内容持久化到文件系统
+     * </p>
+     *
+     * @author 皮锋
+     * @custom.date 2020/4/1 9:51
+     */
+    @Scheduled(cron = "0 */10 * * * ?")
+    public void durable() {
+        // 把Spring容器中的信息池内容存入文件系统
+        this.storePools();
+    }
+
+    /**
+     * <p>
      * 在Spring容器初始化时加载资源
      * </p>
      * 1.把持久化到文件系统的信息池内容加载到Spring容器
@@ -78,10 +93,15 @@ public class Lifecycle implements InitializingBean, DisposableBean {
             if (StringUtils.isNotBlank(instancePoolStr)) {
                 Map<String, Instance> map = JSON.parseObject(instancePoolStr, new TypeReference<Map<String, Instance>>() {
                 });
+                // for (Map.Entry<String, Instance> entry : map.entrySet()) {
+                // 设置为已经发送告警，防止重复告警
+                // entry.getValue().setLineAlarm(true);
+                // entry.getValue().setConnectAlarm(true);
+                // }
                 this.instancePool.putAll(map);
             }
             log.info("把文件系统中的应用实例池内容加载到Spring容器成功！");
-        } catch (IOException ignored) {
+        } catch (Exception ignored) {
             log.info("把文件系统中的应用实例池内容加载到Spring容器异常！");
         }
         try {
@@ -89,10 +109,14 @@ public class Lifecycle implements InitializingBean, DisposableBean {
             if (StringUtils.isNotBlank(netPoolStr)) {
                 Map<String, Net> map = JSON.parseObject(netPoolStr, new TypeReference<Map<String, Net>>() {
                 });
+                // for (Map.Entry<String, Net> entry : map.entrySet()) {
+                // 设置为已经发送告警，防止重复告警
+                // entry.getValue().setConnectAlarm(true);
+                // }
                 this.netPool.putAll(map);
             }
             log.info("把文件系统中的网络信息池内容加载到Spring容器成功！");
-        } catch (IOException ignored) {
+        } catch (Exception ignored) {
             log.info("把文件系统中的网络信息池内容加载到Spring容器异常！");
         }
         try {
@@ -103,7 +127,7 @@ public class Lifecycle implements InitializingBean, DisposableBean {
                 this.memoryPool.putAll(map);
             }
             log.info("把文件系统中的服务器内存信息池内容加载到Spring容器成功！");
-        } catch (IOException ignored) {
+        } catch (Exception ignored) {
             log.info("把文件系统中的服务器内存信息池内容加载到Spring容器异常！");
         }
         try {
@@ -114,7 +138,7 @@ public class Lifecycle implements InitializingBean, DisposableBean {
                 this.cpuPool.putAll(map);
             }
             log.info("把文件系统中的服务器CPU信息池内容加载到Spring容器成功！");
-        } catch (IOException ignored) {
+        } catch (Exception ignored) {
             log.info("把文件系统中的服务器CPU信息池内容加载到Spring容器异常！");
         }
         try {
@@ -125,7 +149,7 @@ public class Lifecycle implements InitializingBean, DisposableBean {
                 this.diskPool.putAll(map);
             }
             log.info("把文件系统中的服务器磁盘信息池内容加载到Spring容器成功！");
-        } catch (IOException ignored) {
+        } catch (Exception ignored) {
             log.info("把文件系统中的服务器磁盘信息池内容加载到Spring容器异常！");
         }
     }
@@ -156,40 +180,40 @@ public class Lifecycle implements InitializingBean, DisposableBean {
      * @author 皮锋
      * @custom.date 2020年3月31日 下午3:40:05
      */
-    public void storePools() {
+    private void storePools() {
         try {
             FileUtils.writeStringToFile(new File(FileNameConstants.INSTANCE_POOL), this.instancePool.toJsonString(),
                     Charsets.UTF_8, false);
             log.info("把Spring容器中的应用实例池内容存入文件系统成功！");
-        } catch (IOException e) {
+        } catch (Exception e) {
             log.error("把Spring容器中的应用实例池内容存入文件系统异常！");
         }
         try {
             FileUtils.writeStringToFile(new File(FileNameConstants.NET_POOL), this.netPool.toJsonString(),
                     Charsets.UTF_8, false);
             log.info("把Spring容器中的网络信息池内容存入文件系统成功！");
-        } catch (IOException e) {
+        } catch (Exception e) {
             log.error("把Spring容器中的网络信息池内容存入文件系统异常！");
         }
         try {
             FileUtils.writeStringToFile(new File(FileNameConstants.MEMORY_POOL), this.memoryPool.toJsonString(),
                     Charsets.UTF_8, false);
             log.info("把Spring容器中的服务器内存信息池内容存入文件系统成功！");
-        } catch (IOException e) {
+        } catch (Exception e) {
             log.error("把Spring容器中的服务器内存信息池内容存入文件系统异常！");
         }
         try {
             FileUtils.writeStringToFile(new File(FileNameConstants.CPU_POOL), this.cpuPool.toJsonString(),
                     Charsets.UTF_8, false);
             log.info("把Spring容器中的服务器CPU信息池内容存入文件系统成功！");
-        } catch (IOException e) {
+        } catch (Exception e) {
             log.error("把Spring容器中的服务器CPU信息池内容存入文件系统异常！");
         }
         try {
             FileUtils.writeStringToFile(new File(FileNameConstants.DISK_POOL), this.diskPool.toJsonString(),
                     Charsets.UTF_8, false);
             log.info("把Spring容器中的服务器磁盘信息池内容存入文件系统成功！");
-        } catch (IOException e) {
+        } catch (Exception e) {
             log.error("把Spring容器中的服务器磁盘信息池内容存入文件系统异常！");
         }
     }

@@ -140,6 +140,7 @@ public class InstanceMonitorTask implements CommandLineRunner, DisposableBean {
      * @custom.date 2020/3/23 11:58
      */
     private void onLine(Instance instance) {
+        instance.setOnline(true);
         // 是否已经发过离线告警信息
         boolean isLineAlarm = instance.isLineAlarm();
         if (isLineAlarm) {
@@ -159,6 +160,7 @@ public class InstanceMonitorTask implements CommandLineRunner, DisposableBean {
      * @custom.date 2020/3/23 11:56
      */
     private void recoverConnect(Instance instance) {
+        instance.setOnConnect(true);
         // 是否已经发过断网告警信息
         boolean isConnectAlarm = instance.isConnectAlarm();
         if (isConnectAlarm) {

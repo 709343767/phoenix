@@ -136,6 +136,7 @@ public class NetMonitorTask implements CommandLineRunner, DisposableBean {
      * @custom.date 2020/3/25 14:20
      */
     private void recoverConnect(Net net, boolean isRefreshDateTime) {
+        net.setOnConnect(true);
         // 是否已经发过断网告警信息
         boolean isConnectAlarm = net.isConnectAlarm();
         if (isConnectAlarm) {
