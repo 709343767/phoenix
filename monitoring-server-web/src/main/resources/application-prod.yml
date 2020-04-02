@@ -6,3 +6,63 @@ server:
 ###############################################日志配置####################################################
 logging:
   config: classpath:log-prod.xml
+
+
+###############################################数据源配置##################################################
+spring:  
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      #数据源配置
+      driver-class-name: oracle.jdbc.OracleDriver
+      #url: jdbc:oracle:thin:@(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=192.168.12.12)(PORT=1521))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=hngsdb)))
+      url: jdbc:oracle:thin:@(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=10.143.4.85)(PORT=1521))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=hngsdb)))
+      username: oms
+      password: hngs$2020
+      #初始化来连接大小
+      initial-size: 5
+      #连接池中最小的空闲连接数
+      min-idle: 5
+      #连接池中使用的最大连接数量
+      max-active: 100
+      #获取连接的最大等待时间，单位毫秒
+      max-wait: 60000
+      #间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+      time-between-eviction-runs-millis: 60000
+      #一个连接在池中最小生存的时间，单位是毫秒
+      min-evictable-idle-time-millis: 300000
+      #用来检测连接是否有效的sql，要求是一个查询语句
+      validation-query: SELECT 1 FROM DUAL
+      #建议配置为true，不影响性能，并且保证安全性。 申请连接的时候检测，如果空闲时间大于timeBetweenEvictionRunsMillis，执行validationQuery检测连接是否有效 
+      test-while-idle: true
+      #申请连接时执行validationQuery检测连接是否有效，做了这个配置会降低性能
+      test-on-borrow: false
+      #归还连接时执行validationQuery检测连接是否有效，做了这个配置会降低性能
+      test-on-return: false
+      #标记是否删除泄露的连接
+      remove-abandoned: true
+      #泄露的连接可以被删除的超时时间（秒），该值应设置为应用程序查询可能执行的最长时间，1800秒，也就是30分钟
+      remove-abandoned-timeout: 1800
+      #删除泄露的连接时是否输出错误日志
+      log-abandoned: true
+      #打开PSCache，并且指定每个连接上PSCache的大小，PSCache对支持游标的数据库性能提升巨大，比如说oracle
+      pool-prepared-statements: true
+      #要启用PSCache，必须配置大于0，当大于0时，poolPreparedStatements自动触发修改为true
+      max-pool-prepared-statement-per-connection-size: 20
+      #监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙
+      filter:
+        commons-log:
+          connection-logger-name: stat,wall,slf4j
+      #通过connectProperties属性来打开mergeSql功能；慢SQL记录
+      connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+      #合并多个DruidDataSource的监控数据
+      use-global-data-source-stat: true
+      #web监控
+      web-stat-filter:
+        enabled: true
+        url-pattern: '/*'
+        exclusions: '*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*'
+      stat-view-servlet:
+        login-username: admin
+        login-password: 123456
+        reset-enable: false
