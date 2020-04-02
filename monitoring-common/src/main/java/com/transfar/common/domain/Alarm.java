@@ -39,7 +39,7 @@ public class Alarm extends SuperBean {
     /**
      * 告警类型
      */
-    private AlarmTypeEnums alarmTypeEnums;
+    private AlarmTypeEnums alarmType;
 
     /**
      * 字符集，如果当前字符集不是UTF-8，请指明字符集

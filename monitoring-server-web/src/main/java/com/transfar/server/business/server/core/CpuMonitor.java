@@ -1,6 +1,7 @@
 package com.transfar.server.business.server.core;
 
 import com.transfar.common.constant.AlarmLevelEnums;
+import com.transfar.common.constant.AlarmTypeEnums;
 import com.transfar.common.domain.Alarm;
 import com.transfar.common.dto.AlarmPackage;
 import com.transfar.server.business.server.domain.Cpu;
@@ -186,6 +187,7 @@ public class CpuMonitor implements IServerMonitoringListener {
                 .title(title)//
                 .msg(msg)//
                 .alarmLevel(alarmLevelEnums)//
+                .alarmType(AlarmTypeEnums.SERVER)//
                 .build();
         AlarmPackage alarmPackage = new PackageConstructor().structureAlarmPackage(alarm);
         this.alarmService.dealAlarmPackage(alarmPackage);

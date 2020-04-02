@@ -1,6 +1,7 @@
 package com.transfar.server.business.server.core;
 
 import com.transfar.common.constant.AlarmLevelEnums;
+import com.transfar.common.constant.AlarmTypeEnums;
 import com.transfar.common.domain.Alarm;
 import com.transfar.common.dto.AlarmPackage;
 import com.transfar.common.util.NetUtils;
@@ -194,6 +195,7 @@ public class NetMonitorTask implements CommandLineRunner, DisposableBean {
                 .title(title)//
                 .msg(msg)//
                 .alarmLevel(alarmLevelEnums)//
+                .alarmType(AlarmTypeEnums.NET)//
                 .build();
         AlarmPackage alarmPackage = new PackageConstructor().structureAlarmPackage(alarm);
         this.alarmService.dealAlarmPackage(alarmPackage);
