@@ -186,7 +186,8 @@ public class NetUtils {
      */
     private static int getCheckResult(String line) {
         // System.out.println("控制台输出的结果为:"+line);
-        Pattern pattern = Pattern.compile("(\\d+ms)(\\s+)(TTL=\\d+)", Pattern.CASE_INSENSITIVE);
+        Pattern pattern = Pattern.compile("((\\d+ms)(\\s+)(TTL=\\d+))|((TTL=\\d+)(\\s+)(\\S*\\d+\\s*ms))",
+                Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(line);
         if (matcher.find()) {
             return 1;
