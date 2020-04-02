@@ -56,8 +56,8 @@ public class MonitorAlarmDefinition {
     /**
      * 告警级别
      */
-    @TableField("LEVEL")
-    private String level;
+    @TableField("GRADE")
+    private String grade;
 
     /**
      * 告警编码

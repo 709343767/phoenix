@@ -101,7 +101,7 @@ public class AlarmServiceImpl implements IAlarmService {
             lambdaQueryWrapper.eq(MonitorAlarmDefinition::getCode, code);
             MonitorAlarmDefinition monitorAlarmDefinition = this.monitorAlarmDefinitionDao.selectOne(lambdaQueryWrapper);
             if (monitorAlarmDefinition != null) {
-                String dbLevel = monitorAlarmDefinition.getLevel();
+                String dbLevel = monitorAlarmDefinition.getGrade();
                 if (StringUtils.isNotBlank(dbLevel)) {
                     level = dbLevel;
                 }
