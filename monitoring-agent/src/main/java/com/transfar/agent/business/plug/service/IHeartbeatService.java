@@ -18,7 +18,7 @@ public interface IHeartbeatService {
 	 * 处理心跳包
 	 * </p>
 	 *
-	 * @param heartbeatPackage 心跳包对象
+	 * @param heartbeatPackage 心跳包
 	 * @return BaseResponsePackage
 	 * @author 皮锋
 	 * @custom.date 2020年3月4日 下午1:47:28

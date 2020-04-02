@@ -1,11 +1,10 @@
 package com.transfar.agent.business.plug.service.impl;
 
-import org.springframework.stereotype.Service;
-
 import com.transfar.agent.business.core.MethodExecuteHandler;
 import com.transfar.agent.business.plug.service.IServerService;
 import com.transfar.common.dto.BaseResponsePackage;
 import com.transfar.common.dto.ServerPackage;
+import org.springframework.stereotype.Service;
 
 /**
  * <p>
@@ -18,20 +17,20 @@ import com.transfar.common.dto.ServerPackage;
 @Service
 public class ServerServiceImpl implements IServerService {
 
-	/**
-	 * <p>
-	 * 处理服务器信息包
-	 * </p>
-	 *
-	 * @author 皮锋
-	 * @custom.date 2020年3月7日 下午5:14:29
-	 * @param serverPackage 服务器信息包
-	 * @return BaseResponsePackage
-	 */
-	@Override
-	public BaseResponsePackage dealServerPackage(ServerPackage serverPackage) {
-		// 把服务器信息包转发到服务端
-		return MethodExecuteHandler.sendServerPackage2Server(serverPackage);
-	}
+    /**
+     * <p>
+     * 处理服务器信息包
+     * </p>
+     *
+     * @param serverPackage 服务器信息包
+     * @return BaseResponsePackage
+     * @author 皮锋
+     * @custom.date 2020年3月7日 下午5:14:29
+     */
+    @Override
+    public BaseResponsePackage dealServerPackage(ServerPackage serverPackage) {
+        // 把服务器信息包转发到服务端
+        return MethodExecuteHandler.sendServerPackage2Server(serverPackage);
+    }
 
 }

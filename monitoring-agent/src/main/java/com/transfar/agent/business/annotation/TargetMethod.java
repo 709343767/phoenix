@@ -8,7 +8,7 @@ import java.lang.annotation.Target;
 
 /**
  * <p>
- * 自定义代理方法注解
+ * 自定义指定代理方法的注解
  * </p>
  *
  * @author 皮锋
