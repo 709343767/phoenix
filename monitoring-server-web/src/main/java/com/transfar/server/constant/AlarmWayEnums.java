@@ -2,13 +2,13 @@ package com.transfar.server.constant;
 
 /**
  * <p>
- * 告警类型
+ * 告警方式
  * </p>
  *
  * @author 皮锋
  * @custom.date 2020年3月9日 下午6:08:58
  */
-public enum AlarmTypeEnums {
+public enum AlarmWayEnums {
 
 	/**
 	 * 短信

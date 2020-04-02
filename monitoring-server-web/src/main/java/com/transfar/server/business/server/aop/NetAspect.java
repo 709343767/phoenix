@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
  * <p>
  * 获取网络信息的切面
  * </p>
+ * 获取IP地址，把IP地址加入到Spring容器中的网络信息池
  *
  * @author 皮锋
  * @custom.date 2020/3/25 9:38

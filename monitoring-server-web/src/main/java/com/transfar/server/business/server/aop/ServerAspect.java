@@ -26,8 +26,10 @@ import java.util.Map;
 
 /**
  * <p>
- * 在服务器信息包处理完成之后通过切面，刷新Spring容器中的服务器信息池，调用服务器信息监听器回调接口
+ * 处理服务器信息切面
  * </p>
+ * 1.把所有服务器信息添加或更新到Spring容器中的服务器信息池；<br>
+ * 2.在所有服务器信息添加或更新到Spring容器中的服务器信息池之后，调用服务器信息监听器回调接口<br>
  *
  * @author 皮锋
  * @custom.date 2020年4月1日 下午3:21:19
@@ -82,7 +84,7 @@ public class ServerAspect {
      * @custom.date 2020年4月1日 下午3:34:06
      */
     @AfterReturning("tangentPoint()")
-    public void wakeUp(JoinPoint joinPoint) {
+    public void refreshAndWakeUp(JoinPoint joinPoint) {
         String args = String.valueOf(joinPoint.getArgs()[0]);
         ServerPackage serverPackage = JSON.parseObject(args, ServerPackage.class);
         // IP地址

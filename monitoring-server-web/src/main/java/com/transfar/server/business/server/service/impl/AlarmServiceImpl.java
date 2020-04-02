@@ -1,5 +1,9 @@
 package com.transfar.server.business.server.service.impl;
 
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.transfar.common.domain.Alarm;
 import com.transfar.common.dto.AlarmPackage;
@@ -8,14 +12,12 @@ import com.transfar.server.business.server.domain.TransfarSms;
 import com.transfar.server.business.server.entity.MonitorAlarmDefinition;
 import com.transfar.server.business.server.service.IAlarmService;
 import com.transfar.server.business.server.service.ISmsService;
-import com.transfar.server.constant.AlarmTypeEnums;
+import com.transfar.server.constant.AlarmWayEnums;
 import com.transfar.server.constant.EnterpriseConstants;
 import com.transfar.server.property.MonitoringServerWebProperties;
 import com.transfar.server.util.AlarmUtils;
+
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 /**
  * <p>
@@ -127,10 +129,10 @@ public class AlarmServiceImpl implements IAlarmService {
         // 告警方式
         String alarmType = this.config.getAlarmProperties().getType();
         // 告警方式为短信告警
-        if (StringUtils.equalsIgnoreCase(alarmType, AlarmTypeEnums.SMS.name())) {
+        if (StringUtils.equalsIgnoreCase(alarmType, AlarmWayEnums.SMS.name())) {
             // 处理短信告警
             result = this.dealSmsAlarm(alarmTitle, msg, level);
-        } else if (StringUtils.equalsIgnoreCase(alarmType, AlarmTypeEnums.MAIL.name())) {
+        } else if (StringUtils.equalsIgnoreCase(alarmType, AlarmWayEnums.MAIL.name())) {
             // 处理邮件告警
         }
         return result;
