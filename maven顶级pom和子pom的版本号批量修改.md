@@ -3,7 +3,7 @@
 还好，maven为我们提供了以下三个命令（需要进入顶级pom所在的目录）来帮助我们解决这个问题。
 
 #1.设置新的版本号
-mvn versions:set -DnewVersion=1.1.3
+mvn versions:set -DnewVersion=0.0.2-RELEASE
 
 #2.当新版本号设置不正确时可以撤销新版本号的设置
 
