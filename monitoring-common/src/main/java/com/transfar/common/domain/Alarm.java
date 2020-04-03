@@ -57,7 +57,8 @@ public class Alarm extends SuperBean {
     private String title;
 
     /**
-     * 编码
+     * 编码，每一个自定义的业务告警，都可以设置一个唯一的编码，用此编码来查找数据库中对应的告警级别，如果不设置编码，将直接使用设置的告警级别。<br>
+     * 注意：编码在数据库中对应的告警级别 会 覆盖直接设置的告警级别。
      */
     private String code;
 

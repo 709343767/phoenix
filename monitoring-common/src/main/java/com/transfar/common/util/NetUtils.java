@@ -176,7 +176,7 @@ public class NetUtils {
 
     /**
      * <p>
-     * 若line含有=18ms TTL=16字样，说明已经ping通，返回1，否则返回0
+     * 检测ping返回值是否是网络正常的返回值
      * </p>
      *
      * @param line ping返回的数据
@@ -185,7 +185,7 @@ public class NetUtils {
      * @custom.date 2020/3/25 21:15
      */
     private static int getCheckResult(String line) {
-        // System.out.println("控制台输出的结果为:"+line);
+        // 若line含有=18ms TTL=16字样，说明已经ping通，返回1，否则返回0
         Pattern pattern = Pattern.compile("((\\d+ms)(\\s+)(TTL=\\d+))|((TTL=\\d+)(\\s+)(\\S*\\d+\\s*ms))",
                 Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(line);
