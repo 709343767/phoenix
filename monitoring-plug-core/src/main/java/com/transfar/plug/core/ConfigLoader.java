@@ -5,7 +5,6 @@ import com.transfar.common.exception.NotFoundConfigFileException;
 import com.transfar.common.exception.NotFoundConfigParamException;
 import com.transfar.common.property.*;
 import com.transfar.common.util.PropertiesUtils;
-
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
@@ -13,7 +12,7 @@ import java.util.Properties;
 
 /**
  * <p>
- * 加载监控配置文件信息
+ * 监控客户端加载监控配置文件信息
  * </p>
  *
  * @author 皮锋

@@ -2,12 +2,11 @@ package com.transfar.agent.business.core;
 
 import com.transfar.agent.AgentApplication;
 import com.transfar.common.property.MonitoringProperties;
-
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 
 /**
  * <p>
- * 加载配置
+ * 监控代理端加载配置
  * </p>
  *
  * @author 皮锋
