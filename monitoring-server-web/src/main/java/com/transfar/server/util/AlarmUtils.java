@@ -15,7 +15,7 @@ public class AlarmUtils {
 
     /**
      * <p>
-     * 判断是否告警，当 ”当前的告警级别” 大于等于 “配置的告警级别“ 时，返回true
+     * 判断是否告警，当 “当前的告警级别” 大于等于 “配置的告警级别” 时，返回true
      * </p>
      *
      * @param configAlarmLevel 配置的告警级别
