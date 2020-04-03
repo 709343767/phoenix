@@ -5,11 +5,9 @@ import com.transfar.server.business.server.service.ISmsService;
 import com.transfar.server.property.MonitoringServerWebProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.*;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-
-import java.util.Collections;
 
 /**
  * <p>
@@ -44,18 +42,18 @@ public class SmsServiceImpl implements ISmsService {
      */
     @Override
     public String sendSmsByTransfarApi(TransfarSms sms) {
-        HttpHeaders headers = new HttpHeaders();
-        // headers.add("Context-type", "text/html;charset=utf-8");
-        headers.setAccept(Collections.singletonList(MediaType.ALL));
-        HttpEntity<TransfarSms> entity = new HttpEntity<>(sms, headers);
         String alarmSmsAddress = this.config.getAlarmProperties().getSmsProperties().getAddress();
         // URL地址
         String url = alarmSmsAddress + "?phone=" + sms.getPhone() + "&type=" + sms.getType() + "&content="
                 + sms.getContent() + "&identity=" + sms.getIdentity();
         log.info("创发的短信接口URL：{}", url);
-        ResponseEntity<String> responseEntity = this.restTemplate
-                .exchange(url, HttpMethod.GET, entity, String.class);
-        return responseEntity.getBody();
+        try {
+            ResponseEntity<String> responseEntity = this.restTemplate.getForEntity(url, String.class);
+            return responseEntity.getBody();
+        } catch (Exception e) {
+            log.error("调用创发的短信接口发送短信异常！", e);
+            return "null";
+        }
     }
 
 }
