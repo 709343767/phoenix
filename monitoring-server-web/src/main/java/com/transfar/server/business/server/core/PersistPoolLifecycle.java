@@ -71,7 +71,7 @@ public class PersistPoolLifecycle implements InitializingBean, DisposableBean {
      * @author 皮锋
      * @custom.date 2020/4/1 9:51
      */
-    @Scheduled(cron = "0 */10 * * * ?")
+    @Scheduled(cron = "0 0/10 * * * ?")
     public void durable() {
         // 把Spring容器中的信息池内容存入文件系统
         this.storePools();
