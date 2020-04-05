@@ -1,9 +1,9 @@
 package com.transfar.plug;
 
-import java.io.IOException;
-
 import com.alibaba.fastjson.JSON;
+import com.transfar.common.constant.ResultMsgConstants;
 import com.transfar.common.domain.Alarm;
+import com.transfar.common.domain.Result;
 import com.transfar.common.dto.AlarmPackage;
 import com.transfar.common.dto.BaseResponsePackage;
 import com.transfar.plug.constant.UrlConstants;
@@ -12,8 +12,9 @@ import com.transfar.plug.core.PackageConstructor;
 import com.transfar.plug.core.Sender;
 import com.transfar.plug.scheduler.HeartbeatTaskScheduler;
 import com.transfar.plug.scheduler.ServerTaskScheduler;
-
 import lombok.extern.slf4j.Slf4j;
+
+import java.io.IOException;
 
 /**
  * <p>
@@ -83,11 +84,11 @@ public class Monitor {
      * </p>
      *
      * @param alarm 告警信息
-     * @return boolean
+     * @return Result
      * @author 皮锋
      * @custom.date 2020年3月6日 上午10:17:44
      */
-    public static boolean sendAlarm(Alarm alarm) {
+    public static Result sendAlarm(Alarm alarm) {
         try {
             // 构造告警数据包
             AlarmPackage alarmPackage = new PackageConstructor().structureAlarmPackage(alarm);
@@ -96,7 +97,7 @@ public class Monitor {
             return baseResponsePackage.getResult();
         } catch (IOException e) {
             log.error("监控程序发送告警信息异常！", e);
-            return false;
+            return Result.builder().isSuccess(false).msg(ResultMsgConstants.FAILURE).build();
         }
     }
 

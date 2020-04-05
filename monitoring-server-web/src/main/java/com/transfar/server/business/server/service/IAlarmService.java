@@ -1,5 +1,6 @@
 package com.transfar.server.business.server.service;
 
+import com.transfar.common.domain.Result;
 import com.transfar.common.dto.AlarmPackage;
 
 /**
@@ -18,10 +19,10 @@ public interface IAlarmService {
      * </p>
      *
      * @param alarmPackage 告警包
-     * @return Boolean
+     * @return Result
      * @author 皮锋
      * @custom.date 2020年3月10日 下午1:33:55
      */
-    Boolean dealAlarmPackage(AlarmPackage alarmPackage);
+    Result dealAlarmPackage(AlarmPackage alarmPackage);
 
 }

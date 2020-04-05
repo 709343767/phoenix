@@ -2,7 +2,9 @@ package com.transfar.server.business.server.core;
 
 import com.google.common.base.Charsets;
 import com.transfar.common.constant.EndpointTypeConstants;
+import com.transfar.common.constant.ResultMsgConstants;
 import com.transfar.common.domain.Alarm;
+import com.transfar.common.domain.Result;
 import com.transfar.common.dto.AlarmPackage;
 import com.transfar.common.dto.BaseResponsePackage;
 import com.transfar.common.dto.HeartbeatPackage;
@@ -37,22 +39,22 @@ public class PackageConstructor implements IPackageConstructor {
      */
     @Override
     public AlarmPackage structureAlarmPackage(Alarm alarm) {
-    	AlarmPackage alarmPackage = new AlarmPackage();
-		alarmPackage.setId(StrUtils.getUUID());
-		alarmPackage.setDateTime(new Date());
-		alarmPackage.setEndpoint(EndpointTypeConstants.SERVER);
-		alarmPackage.setInstanceId(InstanceUtils.getInstanceId());
-		alarmPackage.setInstanceName(InstanceUtils.getInstanceName());
-		alarmPackage.setIp(NetUtils.getLocalIp());
-		// 判断字符集
-		Charset charset = alarm.getCharset();
-		// 设置了字符集
-		if (null != charset) {
-			alarm.setMsg(new String(alarm.getMsg().getBytes(Charsets.UTF_8), Charsets.UTF_8));
-			alarm.setCharset(Charsets.UTF_8);
-		}
-		alarmPackage.setAlarm(alarm);
-		return alarmPackage;
+        AlarmPackage alarmPackage = new AlarmPackage();
+        alarmPackage.setId(StrUtils.getUUID());
+        alarmPackage.setDateTime(new Date());
+        alarmPackage.setEndpoint(EndpointTypeConstants.SERVER);
+        alarmPackage.setInstanceId(InstanceUtils.getInstanceId());
+        alarmPackage.setInstanceName(InstanceUtils.getInstanceName());
+        alarmPackage.setIp(NetUtils.getLocalIp());
+        // 判断字符集
+        Charset charset = alarm.getCharset();
+        // 设置了字符集
+        if (null != charset) {
+            alarm.setMsg(new String(alarm.getMsg().getBytes(Charsets.UTF_8), Charsets.UTF_8));
+            alarm.setCharset(Charsets.UTF_8);
+        }
+        alarmPackage.setAlarm(alarm);
+        return alarmPackage;
     }
 
     @Override
@@ -83,9 +85,8 @@ public class PackageConstructor implements IPackageConstructor {
         baseResponsePackage.setIp(NetUtils.getLocalIp());
         baseResponsePackage.setId(StrUtils.getUUID());
         baseResponsePackage.setDateTime(new Date());
-        baseResponsePackage.setResult(true);
+        baseResponsePackage.setResult(Result.builder().isSuccess(true).msg(ResultMsgConstants.SUCCESS).build());
         return baseResponsePackage;
-
     }
 
     /**
@@ -93,12 +94,13 @@ public class PackageConstructor implements IPackageConstructor {
      * 构建请求失败的基础响应包
      * </p>
      *
+     * @param msg 返回信息
      * @return BaseResponsePackage
      * @author 皮锋
      * @custom.date 2020年3月11日 上午9:52:48
      */
     @Override
-    public BaseResponsePackage structureBaseResponsePackageByFail() {
+    public BaseResponsePackage structureBaseResponsePackageByFail(String msg) {
         BaseResponsePackage baseResponsePackage = new BaseResponsePackage();
         baseResponsePackage.setEndpoint(EndpointTypeConstants.SERVER);
         baseResponsePackage.setInstanceId(InstanceUtils.getInstanceId());
@@ -106,7 +108,11 @@ public class PackageConstructor implements IPackageConstructor {
         baseResponsePackage.setIp(NetUtils.getLocalIp());
         baseResponsePackage.setId(StrUtils.getUUID());
         baseResponsePackage.setDateTime(new Date());
-        baseResponsePackage.setResult(false);
+        if (null == msg) {
+            baseResponsePackage.setResult(Result.builder().isSuccess(false).msg(ResultMsgConstants.FAILURE).build());
+        } else {
+            baseResponsePackage.setResult(Result.builder().isSuccess(false).msg(msg).build());
+        }
         return baseResponsePackage;
     }
 

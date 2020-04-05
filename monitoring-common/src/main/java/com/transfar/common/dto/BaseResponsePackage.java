@@ -1,18 +1,13 @@
 package com.transfar.common.dto;
 
+import com.transfar.common.abs.InstanceBean;
+import com.transfar.common.domain.Result;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.*;
+import lombok.experimental.Accessors;
+
 import java.io.Serializable;
 import java.util.Date;
-
-import com.transfar.common.abs.InstanceBean;
-
-import io.swagger.annotations.ApiModelProperty;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
-import lombok.experimental.Accessors;
 
 /**
  * <p>
@@ -31,26 +26,27 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = true)
 public class BaseResponsePackage extends InstanceBean implements Serializable {
 
-	/**
-	 * serialVersionUID
-	 */
-	private static final long serialVersionUID = -8909786365854143972L;
-	
-	/**
-	 * ID
-	 */
-	@ApiModelProperty(value = "ID")
-	private String id;
+    /**
+     * serialVersionUID
+     */
+    private static final long serialVersionUID = -8909786365854143972L;
 
-	/**
-	 * 时间
-	 */
-	@ApiModelProperty(value = "时间")
-	private Date dateTime;
+    /**
+     * ID
+     */
+    @ApiModelProperty(value = "ID")
+    private String id;
 
-	/**
-	 * 响应结果
-	 */
-	@ApiModelProperty(value = "响应结果")
-	private Boolean result;
+    /**
+     * 时间
+     */
+    @ApiModelProperty(value = "时间")
+    private Date dateTime;
+
+    /**
+     * 响应结果
+     */
+    @ApiModelProperty(value = "响应结果")
+    private Result result;
+
 }

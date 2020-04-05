@@ -1,12 +1,11 @@
 package com.transfar.common.inf;
 
-import org.hyperic.sigar.SigarException;
-
 import com.transfar.common.domain.Alarm;
 import com.transfar.common.dto.AlarmPackage;
 import com.transfar.common.dto.BaseResponsePackage;
 import com.transfar.common.dto.HeartbeatPackage;
 import com.transfar.common.dto.ServerPackage;
+import org.hyperic.sigar.SigarException;
 
 /**
  * <p>
@@ -69,10 +68,11 @@ public interface IPackageConstructor {
      * 构建请求失败的基础响应包
      * </p>
      *
+     * @param msg 返回信息
      * @return BaseResponsePackage
      * @author 皮锋
      * @custom.date 2020年3月11日 上午9:52:48
      */
-    BaseResponsePackage structureBaseResponsePackageByFail();
+    BaseResponsePackage structureBaseResponsePackageByFail(String msg);
 
 }

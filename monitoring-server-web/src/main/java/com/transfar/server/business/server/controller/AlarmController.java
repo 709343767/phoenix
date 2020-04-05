@@ -1,11 +1,11 @@
 package com.transfar.server.business.server.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.transfar.common.domain.Result;
 import com.transfar.common.dto.AlarmPackage;
 import com.transfar.common.dto.BaseResponsePackage;
 import com.transfar.server.business.server.core.PackageConstructor;
 import com.transfar.server.business.server.service.IAlarmService;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,13 +47,13 @@ public class AlarmController {
     @PostMapping("/accept-alarm-package")
     public BaseResponsePackage acceptAlarmPackage(@RequestBody String request) {
         AlarmPackage alarmPackage = JSON.parseObject(request, AlarmPackage.class);
-        boolean b = this.alarmService.dealAlarmPackage(alarmPackage);
-        if (b) {
+        Result result = this.alarmService.dealAlarmPackage(alarmPackage);
+        if (result.isSuccess()) {
             // 成功
             return new PackageConstructor().structureBaseResponsePackageBySuccess();
         } else {
             // 失败
-            return new PackageConstructor().structureBaseResponsePackageByFail();
+            return new PackageConstructor().structureBaseResponsePackageByFail(result.getMsg());
         }
     }
 }

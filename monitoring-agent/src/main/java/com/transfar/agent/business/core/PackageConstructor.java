@@ -3,7 +3,9 @@ package com.transfar.agent.business.core;
 import com.google.common.base.Charsets;
 import com.transfar.agent.util.InstanceUtils;
 import com.transfar.common.constant.EndpointTypeConstants;
+import com.transfar.common.constant.ResultMsgConstants;
 import com.transfar.common.domain.Alarm;
+import com.transfar.common.domain.Result;
 import com.transfar.common.domain.server.ServerDomain;
 import com.transfar.common.dto.AlarmPackage;
 import com.transfar.common.dto.BaseResponsePackage;
@@ -123,7 +125,7 @@ public class PackageConstructor implements IPackageConstructor {
         baseResponsePackage.setIp(NetUtils.getLocalIp());
         baseResponsePackage.setDateTime(new Date());
         baseResponsePackage.setId(StrUtils.getUUID());
-        baseResponsePackage.setResult(true);
+        baseResponsePackage.setResult(Result.builder().isSuccess(true).msg(ResultMsgConstants.SUCCESS).build());
         return baseResponsePackage;
     }
 
@@ -132,12 +134,13 @@ public class PackageConstructor implements IPackageConstructor {
      * 构建请求失败的基础响应包
      * </p>
      *
+     * @param msg 返回信息
      * @return BaseResponsePackage
      * @author 皮锋
      * @custom.date 2020年3月11日 上午9:52:48
      */
     @Override
-    public BaseResponsePackage structureBaseResponsePackageByFail() {
+    public BaseResponsePackage structureBaseResponsePackageByFail(String msg) {
         BaseResponsePackage baseResponsePackage = new BaseResponsePackage();
         baseResponsePackage.setEndpoint(EndpointTypeConstants.AGENT);
         baseResponsePackage.setInstanceId(InstanceUtils.getInstanceId());
@@ -145,7 +148,11 @@ public class PackageConstructor implements IPackageConstructor {
         baseResponsePackage.setIp(NetUtils.getLocalIp());
         baseResponsePackage.setDateTime(new Date());
         baseResponsePackage.setId(StrUtils.getUUID());
-        baseResponsePackage.setResult(false);
+        if (null == msg) {
+            baseResponsePackage.setResult(Result.builder().isSuccess(false).msg(ResultMsgConstants.FAILURE).build());
+        } else {
+            baseResponsePackage.setResult(Result.builder().isSuccess(false).msg(msg).build());
+        }
         return baseResponsePackage;
     }
 

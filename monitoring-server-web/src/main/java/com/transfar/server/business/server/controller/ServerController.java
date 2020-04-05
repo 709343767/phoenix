@@ -52,7 +52,7 @@ public class ServerController {
             return new PackageConstructor().structureBaseResponsePackageBySuccess();
         } else {
             // 失败
-            return new PackageConstructor().structureBaseResponsePackageByFail();
+            return new PackageConstructor().structureBaseResponsePackageByFail(null);
         }
     }
 

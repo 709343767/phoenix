@@ -88,7 +88,7 @@ public class MethodExecuteHandler {
             Object object = invoker.invoke(pkg);
             result = (BaseResponsePackage) object;
         } catch (Exception e) {
-            result = new PackageConstructor().structureBaseResponsePackageByFail();
+            result = new PackageConstructor().structureBaseResponsePackageByFail(e.getMessage());
         }
         return result;
     }

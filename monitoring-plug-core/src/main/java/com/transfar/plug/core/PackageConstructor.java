@@ -111,7 +111,7 @@ public class PackageConstructor implements IPackageConstructor {
     }
 
     @Override
-    public BaseResponsePackage structureBaseResponsePackageByFail() {
+    public BaseResponsePackage structureBaseResponsePackageByFail(String msg) {
         return null;
     }
 

@@ -52,7 +52,7 @@ public class HeartbeatController {
         if (b) {
             return new PackageConstructor().structureBaseResponsePackageBySuccess();
         } else {
-            return new PackageConstructor().structureBaseResponsePackageByFail();
+            return new PackageConstructor().structureBaseResponsePackageByFail(null);
         }
     }
 

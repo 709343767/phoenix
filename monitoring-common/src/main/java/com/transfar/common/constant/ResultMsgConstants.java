@@ -13,11 +13,11 @@ public final class ResultMsgConstants {
     /**
      * 成功
      */
-    public static final String SUCCESS = "success";
+    public static final String SUCCESS = "成功！";
 
     /**
      * 失败
      */
-    public static final String FAILURE = "failure";
+    public static final String FAILURE = "失败！";
 
 }
