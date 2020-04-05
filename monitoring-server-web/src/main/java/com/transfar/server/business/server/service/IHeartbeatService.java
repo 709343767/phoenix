@@ -1,5 +1,6 @@
 package com.transfar.server.business.server.service;
 
+import com.transfar.common.domain.Result;
 import com.transfar.common.dto.HeartbeatPackage;
 
 /**
@@ -18,9 +19,9 @@ public interface IHeartbeatService {
      * </p>
      *
      * @param heartbeatPackage 心跳包
-     * @return boolean
+     * @return Result
      * @author 皮锋
      * @custom.date 2020/3/12 10:18
      */
-    boolean dealHeartbeatPackage(HeartbeatPackage heartbeatPackage);
+    Result dealHeartbeatPackage(HeartbeatPackage heartbeatPackage);
 }

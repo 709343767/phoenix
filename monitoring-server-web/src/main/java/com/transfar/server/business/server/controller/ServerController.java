@@ -1,6 +1,7 @@
 package com.transfar.server.business.server.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.transfar.common.domain.Result;
 import com.transfar.common.dto.BaseResponsePackage;
 import com.transfar.common.dto.ServerPackage;
 import com.transfar.server.business.server.core.PackageConstructor;
@@ -46,13 +47,13 @@ public class ServerController {
     @PostMapping("/accept-server-package")
     public BaseResponsePackage acceptServerPackage(@RequestBody String request) {
         ServerPackage serverPackage = JSON.parseObject(request, ServerPackage.class);
-        boolean result = this.serverService.dealServerPackage(serverPackage);
-        if (result) {
+        Result result = this.serverService.dealServerPackage(serverPackage);
+        if (result.isSuccess()) {
             // 成功
             return new PackageConstructor().structureBaseResponsePackageBySuccess();
         } else {
             // 失败
-            return new PackageConstructor().structureBaseResponsePackageByFail(null);
+            return new PackageConstructor().structureBaseResponsePackageByFail(result.getMsg());
         }
     }
 

@@ -1,5 +1,7 @@
 package com.transfar.server.business.server.service.impl;
 
+import com.transfar.common.constant.ResultMsgConstants;
+import com.transfar.common.domain.Result;
 import com.transfar.common.dto.HeartbeatPackage;
 import com.transfar.server.business.server.core.InstancePool;
 import com.transfar.server.business.server.domain.Instance;
@@ -37,12 +39,14 @@ public class HeartbeatServiceImpl implements IHeartbeatService {
      * </p>
      *
      * @param heartbeatPackage 心跳包
-     * @return boolean
+     * @return Result
      * @author 皮锋
      * @custom.date 2020/3/12 10:18
      */
     @Override
-    public boolean dealHeartbeatPackage(HeartbeatPackage heartbeatPackage) {
+    public Result dealHeartbeatPackage(HeartbeatPackage heartbeatPackage) {
+    	// 返回结果
+    	Result result=new Result();
         // 把应用实例交给应用实例池，交给应用实例池管理
         String key = heartbeatPackage.getInstanceId();
         Instance instance = new Instance();
@@ -60,6 +64,6 @@ public class HeartbeatServiceImpl implements IHeartbeatService {
         instance.setThresholdSecond((int) (heartbeatPackage.getRate() * config.getThreshold()));
         // 更新应用实例池
         this.instancePool.updateInstancePool(key, instance);
-        return true;
+        return result.setSuccess(true).setMsg(ResultMsgConstants.SUCCESS);
     }
 }

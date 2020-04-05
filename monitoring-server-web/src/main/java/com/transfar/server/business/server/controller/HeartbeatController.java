@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSON;
+import com.transfar.common.domain.Result;
 import com.transfar.common.dto.BaseResponsePackage;
 import com.transfar.common.dto.HeartbeatPackage;
 import com.transfar.server.business.server.core.PackageConstructor;
@@ -48,11 +49,11 @@ public class HeartbeatController {
     @PostMapping("/accept-heartbeat-package")
     public BaseResponsePackage acceptHeartbeatPackage(@RequestBody String request) {
         HeartbeatPackage heartbeatPackage = JSON.parseObject(request, HeartbeatPackage.class);
-        boolean b = this.heartbeatService.dealHeartbeatPackage(heartbeatPackage);
-        if (b) {
+        Result result = this.heartbeatService.dealHeartbeatPackage(heartbeatPackage);
+        if (result.isSuccess()) {
             return new PackageConstructor().structureBaseResponsePackageBySuccess();
         } else {
-            return new PackageConstructor().structureBaseResponsePackageByFail(null);
+            return new PackageConstructor().structureBaseResponsePackageByFail(result.getMsg());
         }
     }
 

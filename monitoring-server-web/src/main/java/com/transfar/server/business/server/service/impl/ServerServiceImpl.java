@@ -1,5 +1,7 @@
 package com.transfar.server.business.server.service.impl;
 
+import com.transfar.common.constant.ResultMsgConstants;
+import com.transfar.common.domain.Result;
 import com.transfar.common.domain.server.*;
 import com.transfar.common.dto.ServerPackage;
 import com.transfar.server.business.server.service.IServerService;
@@ -22,12 +24,14 @@ public class ServerServiceImpl implements IServerService {
      * </p>
      *
      * @param serverPackage 服务器信息包
-     * @return boolean
+     * @return Result
      * @author 皮锋
      * @custom.date 2020/3/23 15:29
      */
     @Override
-    public boolean dealServerPackage(ServerPackage serverPackage) {
+    public Result dealServerPackage(ServerPackage serverPackage) {
+    	// 返回结果
+    	Result result=new Result();
         // IP地址
         String ip = serverPackage.getIp();
         // 服务器信息
@@ -45,7 +49,7 @@ public class ServerServiceImpl implements IServerService {
         // 磁盘信息
         DiskDomain diskDomain = serverDomain.getDiskDomain();
         // 存数据库
-        return true;
+        return result.setSuccess(true).setMsg(ResultMsgConstants.SUCCESS);
     }
 
 }
