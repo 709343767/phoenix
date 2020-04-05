@@ -8,6 +8,7 @@ import com.transfar.server.business.server.domain.Cpu;
 import com.transfar.server.business.server.service.IAlarmService;
 import com.transfar.server.inf.IServerMonitoringListener;
 import com.transfar.server.property.MonitoringServerWebProperties;
+import lombok.Synchronized;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
@@ -53,8 +54,9 @@ public class CpuMonitor implements IServerMonitoringListener {
      * @custom.date 2020/3/30 21:56
      */
     @Async
+    @Synchronized
     @Override
-    public synchronized void wakeUp(Object... obj) {
+    public void wakeUp(Object... obj) {
         String key = String.valueOf(obj[0]);
         Cpu cpu = this.cpuPool.get(key);
         // 最终确认CPU过载的阈值
@@ -74,7 +76,7 @@ public class CpuMonitor implements IServerMonitoringListener {
                 }
             }
         } else {
-            //处理从过载90%恢复CPU正常
+            // 处理从过载90%恢复CPU正常
             this.dealCpuNotOverLoad90(cpu);
         }
         // 平均CPU使用率大于100%
@@ -93,12 +95,11 @@ public class CpuMonitor implements IServerMonitoringListener {
             // 处理从过载100%恢复CPU正常
             this.dealCpuNotOverLoad100(cpu);
         }
-        log.info("CPU信息池大小：{}，CPU过载90%：{}，CPU过载100%：{}，详细信息：{}",//
-                this.cpuPool.size(),//
-                this.cpuPool.entrySet().stream().filter((e) -> e.getValue().isOverLoad90()).count(),//
-                this.cpuPool.entrySet().stream().filter((e) -> e.getValue().isOverLoad100()).count(),//
-                this.cpuPool.toJsonString()
-        );
+        log.info("CPU信息池大小：{}，CPU过载90%：{}，CPU过载100%：{}，详细信息：{}", //
+                this.cpuPool.size(), //
+                this.cpuPool.entrySet().stream().filter((e) -> e.getValue().isOverLoad90()).count(), //
+                this.cpuPool.entrySet().stream().filter((e) -> e.getValue().isOverLoad100()).count(), //
+                this.cpuPool.toJsonString());
     }
 
     /**

@@ -8,6 +8,7 @@ import com.transfar.common.util.NetUtils;
 import com.transfar.server.business.server.domain.Instance;
 import com.transfar.server.business.server.service.IAlarmService;
 import com.transfar.server.property.MonitoringServerWebProperties;
+import lombok.Synchronized;
 import lombok.extern.slf4j.Slf4j;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.DisposableBean;
@@ -80,7 +81,8 @@ public class InstanceMonitorTask implements CommandLineRunner, DisposableBean {
                 // 最后一次通过心跳包更新的时间
                 Date dateTime = instance.getDateTime();
                 // 网络监控是否打开
-                boolean monitoringEnable = this.monitoringServerWebProperties.getNetworkProperties().isMonitoringEnable();
+                boolean monitoringEnable = this.monitoringServerWebProperties.getNetworkProperties()
+                        .isMonitoringEnable();
                 // 判决时间
                 DateTime judgeDateTime = new DateTime(dateTime).plusSeconds(thresholdSecond);
                 // 注册上来的服务失去响应
@@ -120,7 +122,8 @@ public class InstanceMonitorTask implements CommandLineRunner, DisposableBean {
             // 打印当前应用池中的所有应用情况
             log.info("当前应用实例池大小：{}，正常：{}，离线：{}，断网：{}，详细信息：{}", //
                     this.instancePool.size(), //
-                    this.instancePool.entrySet().stream().filter((e) -> (e.getValue().isOnline() && e.getValue().isOnConnect())).count(), //
+                    this.instancePool.entrySet().stream()
+                            .filter((e) -> (e.getValue().isOnline() && e.getValue().isOnConnect())).count(), //
                     this.instancePool.entrySet().stream().filter((e) -> !e.getValue().isOnline()).count(), //
                     this.instancePool.entrySet().stream().filter((e) -> !e.getValue().isOnConnect()).count(), //
                     this.instancePool.toJsonString());
@@ -227,7 +230,8 @@ public class InstanceMonitorTask implements CommandLineRunner, DisposableBean {
      * @custom.date 2020/3/13 11:20
      */
     @Async
-    public synchronized void sendAlarmInfo(String title, AlarmLevelEnums alarmLevelEnums, Instance instance) {
+    @Synchronized
+    public void sendAlarmInfo(String title, AlarmLevelEnums alarmLevelEnums, Instance instance) {
         String msg = "应用ID：" + instance.getInstanceId() + "，应用名称：" + instance.getInstanceName() + "，应用端点："
                 + instance.getEndpoint() + "，IP地址：" + instance.getIp();
         Alarm alarm = Alarm.builder()//

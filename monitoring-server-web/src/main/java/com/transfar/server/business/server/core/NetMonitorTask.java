@@ -8,6 +8,7 @@ import com.transfar.common.util.NetUtils;
 import com.transfar.server.business.server.domain.Net;
 import com.transfar.server.business.server.service.IAlarmService;
 import com.transfar.server.property.MonitoringServerWebProperties;
+import lombok.Synchronized;
 import lombok.extern.slf4j.Slf4j;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.DisposableBean;
@@ -93,7 +94,7 @@ public class NetMonitorTask implements CommandLineRunner, DisposableBean {
                     if (judgeDateTime.isBeforeNow()) {
                         // 已经断网，也需要继续判断，防止没有应用向服务端发心跳包，这种情况要主动ping
                         // if (!net.isOnConnect()) {
-                        //    continue;
+                        // continue;
                         // }
                         // 判断网络是不是断了
                         boolean ping = NetUtils.ping(net.getIp());
@@ -185,7 +186,8 @@ public class NetMonitorTask implements CommandLineRunner, DisposableBean {
      * @custom.date 2020/3/25 14:46
      */
     @Async
-    public synchronized void sendAlarmInfo(String title, AlarmLevelEnums alarmLevelEnums, Net net) {
+    @Synchronized
+    public void sendAlarmInfo(String title, AlarmLevelEnums alarmLevelEnums, Net net) {
         Instant instant = net.getDateTime().toInstant();
         ZoneId zoneId = ZoneId.systemDefault();
         LocalDateTime localDateTime = instant.atZone(zoneId).toLocalDateTime();

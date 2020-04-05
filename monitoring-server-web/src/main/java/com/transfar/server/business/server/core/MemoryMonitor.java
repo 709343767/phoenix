@@ -8,6 +8,7 @@ import com.transfar.server.business.server.domain.Memory;
 import com.transfar.server.business.server.service.IAlarmService;
 import com.transfar.server.inf.IServerMonitoringListener;
 import com.transfar.server.property.MonitoringServerWebProperties;
+import lombok.Synchronized;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
@@ -53,8 +54,9 @@ public class MemoryMonitor implements IServerMonitoringListener {
      * @custom.date 2020/3/30 22:01
      */
     @Async
+    @Synchronized
     @Override
-    public synchronized void wakeUp(Object... obj) {
+    public void wakeUp(Object... obj) {
         String key = String.valueOf(obj[0]);
         Memory memory = this.memoryPool.get(key);
         // 物理内存使用率
@@ -77,9 +79,9 @@ public class MemoryMonitor implements IServerMonitoringListener {
             // 处理物理内存正常
             this.dealMemoryNotOverLoad(memory);
         }
-        log.info("内存信息池大小：{}，内存过载：{}，详细信息：{}",//
-                this.memoryPool.size(),//
-                this.memoryPool.entrySet().stream().filter((e) -> e.getValue().isOverLoad()).count(),//
+        log.info("内存信息池大小：{}，内存过载：{}，详细信息：{}", //
+                this.memoryPool.size(), //
+                this.memoryPool.entrySet().stream().filter((e) -> e.getValue().isOverLoad()).count(), //
                 this.memoryPool.toJsonString());
     }
 

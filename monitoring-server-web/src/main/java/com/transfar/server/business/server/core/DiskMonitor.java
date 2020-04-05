@@ -7,6 +7,7 @@ import com.transfar.common.dto.AlarmPackage;
 import com.transfar.server.business.server.domain.Disk;
 import com.transfar.server.business.server.service.IAlarmService;
 import com.transfar.server.inf.IServerMonitoringListener;
+import lombok.Synchronized;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
@@ -48,8 +49,9 @@ public class DiskMonitor implements IServerMonitoringListener {
      * @custom.date 2020/3/30 15:35
      */
     @Async
+    @Synchronized
     @Override
-    public synchronized void wakeUp(Object... obj) {
+    public void wakeUp(Object... obj) {
         String key = String.valueOf(obj[0]);
         Disk disk = this.diskPool.get(key);
         Map<String, Disk.Subregion> subregionMap = disk.getSubregionMap();
@@ -74,8 +76,8 @@ public class DiskMonitor implements IServerMonitoringListener {
                 subregion.setOverLoad(false);
             }
         }
-        log.info("磁盘信息池大小：{}，详细信息：{}",//
-                this.diskPool.size(),//
+        log.info("磁盘信息池大小：{}，详细信息：{}", //
+                this.diskPool.size(), //
                 this.diskPool.toJsonString());
     }
 
