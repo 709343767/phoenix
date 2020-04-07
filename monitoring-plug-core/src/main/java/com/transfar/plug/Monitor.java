@@ -1,7 +1,6 @@
 package com.transfar.plug;
 
 import com.alibaba.fastjson.JSON;
-import com.transfar.common.constant.ResultMsgConstants;
 import com.transfar.common.domain.Alarm;
 import com.transfar.common.domain.Result;
 import com.transfar.common.dto.AlarmPackage;
@@ -97,7 +96,7 @@ public class Monitor {
             return baseResponsePackage.getResult();
         } catch (IOException e) {
             log.error("监控程序发送告警信息异常！", e);
-            return Result.builder().isSuccess(false).msg(ResultMsgConstants.FAILURE).build();
+            return Result.builder().isSuccess(false).msg(e.getMessage()).build();
         }
     }
 
