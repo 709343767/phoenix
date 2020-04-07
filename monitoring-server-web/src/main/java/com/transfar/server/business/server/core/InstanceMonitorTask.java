@@ -28,7 +28,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * <p>
- * 在容器启动后，定时扫描应用实例池中的所有应用实例，实时更新应用实例状态，发送告警
+ * 在项目启动后，定时扫描应用实例池中的所有应用实例，实时更新应用实例状态，发送告警
  * </p>
  *
  * @author 皮锋
@@ -69,10 +69,20 @@ public class InstanceMonitorTask implements CommandLineRunner, DisposableBean {
         }
     });
 
+    /**
+     * <p>
+     * 项目启动完成后延迟5秒钟启动定时任务，扫描应用实例池中的所有应用实例，实时更新应用实例状态，发送告警，
+     * 然后在一次执行结束和下一次执行开始之间延迟30秒。
+     * </p>
+     *
+     * @param args 传入的主方法参数
+     * @author 皮锋
+     * @custom.date 2020/4/7 22:00
+     */
     @Override
     public void run(String... args) {
         // 重新开启线程，让他单独去做我们想要做的操作，此时CommandLineRunner执行的操作和主线程是相互独立的，抛出异常并不会影响到主线程
-        Thread thread = new Thread(() -> this.seService.scheduleAtFixedRate(() -> {
+        Thread thread = new Thread(() -> this.seService.scheduleWithFixedDelay(() -> {
             // 循环所有应用实例
             for (Map.Entry<String, Instance> entry : this.instancePool.entrySet()) {
                 Instance instance = entry.getValue();
