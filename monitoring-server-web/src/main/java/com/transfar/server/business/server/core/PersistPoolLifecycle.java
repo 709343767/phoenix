@@ -65,7 +65,8 @@ public class PersistPoolLifecycle implements InitializingBean, DisposableBean {
 
     /**
      * <p>
-     * 定时每十分钟把所有Spring容器中的信息池内容持久化到文件系统
+     * 定时每十分钟把所有Spring容器中的信息池内容持久化到文件系统，<br>
+     * {@code @Scheduled(cron = "0 0/10 * * * ?")}
      * </p>
      *
      * @author 皮锋
