@@ -2,7 +2,6 @@ package com.transfar.server.business.server.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.transfar.server.business.server.entity.MonitorAlarmDefinition;
-import org.springframework.stereotype.Repository;
 
 /**
  * <p>
@@ -12,7 +11,6 @@ import org.springframework.stereotype.Repository;
  * @author 皮锋
  * @custom.date 2020/4/2 10:09
  */
-@Repository
 public interface IMonitorAlarmDefinitionDao extends BaseMapper<MonitorAlarmDefinition> {
 
 }
