@@ -87,48 +87,52 @@ public class NetMonitorTask implements CommandLineRunner, DisposableBean {
     public void run(String... args) {
         // 重新开启线程，让他单独去做我们想要做的操作，此时CommandLineRunner执行的操作和主线程是相互独立的，抛出异常并不会影响到主线程
         Thread thread = new Thread(() -> this.seService.scheduleWithFixedDelay(() -> {
-            // 网络监控是否打开
-            boolean monitoringEnable = this.monitoringServerWebProperties.getNetworkProperties().isMonitoringEnable();
-            // 打开了网络监控
-            if (monitoringEnable) {
-                // 循环所有网络信息
-                for (Map.Entry<String, Net> entry : this.netPool.entrySet()) {
-                    Net net = entry.getValue();
-                    // 允许的误差时间
-                    int thresholdSecond = net.getThresholdSecond();
-                    // 最后一次更新的时间
-                    Date dateTime = net.getDateTime();
-                    // 判决时间
-                    DateTime judgeDateTime = new DateTime(dateTime).plusSeconds(thresholdSecond);
-                    // 注册上来的IP失去响应
-                    if (judgeDateTime.isBeforeNow()) {
-                        // 已经断网，也需要继续判断，防止没有应用向服务端发心跳包，这种情况要主动ping
-                        // if (!net.isOnConnect()) {
-                        // continue;
-                        // }
-                        // 判断网络是不是断了
-                        boolean ping = NetUtils.ping(net.getIp());
-                        // 网络不通
-                        if (!ping) {
-                            // 断网
-                            this.disConnect(net);
-                        } else {
+            try {
+                // 网络监控是否打开
+                boolean monitoringEnable = this.monitoringServerWebProperties.getNetworkProperties().isMonitoringEnable();
+                // 打开了网络监控
+                if (monitoringEnable) {
+                    // 循环所有网络信息
+                    for (Map.Entry<String, Net> entry : this.netPool.entrySet()) {
+                        Net net = entry.getValue();
+                        // 允许的误差时间
+                        int thresholdSecond = net.getThresholdSecond();
+                        // 最后一次更新的时间
+                        Date dateTime = net.getDateTime();
+                        // 判决时间
+                        DateTime judgeDateTime = new DateTime(dateTime).plusSeconds(thresholdSecond);
+                        // 注册上来的IP失去响应
+                        if (judgeDateTime.isBeforeNow()) {
+                            // 已经断网，也需要继续判断，防止没有应用向服务端发心跳包，这种情况要主动ping
+                            // if (!net.isOnConnect()) {
+                            // continue;
+                            // }
+                            // 判断网络是不是断了
+                            boolean ping = NetUtils.ping(net.getIp());
+                            // 网络不通
+                            if (!ping) {
+                                // 断网
+                                this.disConnect(net);
+                            } else {
+                                // 网络恢复连接
+                                this.recoverConnect(net, true);
+                            }
+                        }
+                        // 注册上来的IP恢复响应
+                        else {
                             // 网络恢复连接
-                            this.recoverConnect(net, true);
+                            this.recoverConnect(net, false);
                         }
                     }
-                    // 注册上来的IP恢复响应
-                    else {
-                        // 网络恢复连接
-                        this.recoverConnect(net, false);
-                    }
+                    // 打印当前网络信息池中的所有网络信息情况
+                    log.info("当前网络信息池大小：{}，正常：{}，断网：{}，详细信息：{}", //
+                            this.netPool.size(), //
+                            this.netPool.entrySet().stream().filter((e) -> e.getValue().isOnConnect()).count(), //
+                            this.netPool.entrySet().stream().filter((e) -> !e.getValue().isOnConnect()).count(), //
+                            this.netPool.toJsonString());
                 }
-                // 打印当前网络信息池中的所有网络信息情况
-                log.info("当前网络信息池大小：{}，正常：{}，断网：{}，详细信息：{}", //
-                        this.netPool.size(), //
-                        this.netPool.entrySet().stream().filter((e) -> e.getValue().isOnConnect()).count(), //
-                        this.netPool.entrySet().stream().filter((e) -> !e.getValue().isOnConnect()).count(), //
-                        this.netPool.toJsonString());
+            } catch (Exception e) {
+                log.error("定时扫描网络信息池中的所有IP异常！", e);
             }
         }, 10, 30, TimeUnit.SECONDS));
         // 设置守护线程

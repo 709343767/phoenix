@@ -83,60 +83,64 @@ public class InstanceMonitorTask implements CommandLineRunner, DisposableBean {
     public void run(String... args) {
         // 重新开启线程，让他单独去做我们想要做的操作，此时CommandLineRunner执行的操作和主线程是相互独立的，抛出异常并不会影响到主线程
         Thread thread = new Thread(() -> this.seService.scheduleWithFixedDelay(() -> {
-            // 循环所有应用实例
-            for (Map.Entry<String, Instance> entry : this.instancePool.entrySet()) {
-                Instance instance = entry.getValue();
-                // 允许的误差时间
-                int thresholdSecond = instance.getThresholdSecond();
-                // 最后一次通过心跳包更新的时间
-                Date dateTime = instance.getDateTime();
-                // 网络监控是否打开
-                boolean monitoringEnable = this.monitoringServerWebProperties.getNetworkProperties()
-                        .isMonitoringEnable();
-                // 判决时间
-                DateTime judgeDateTime = new DateTime(dateTime).plusSeconds(thresholdSecond);
-                // 注册上来的服务失去响应
-                if (judgeDateTime.isBeforeNow()) {
-                    // 已经断网 或者 已经离线
-                    if ((!instance.isOnConnect()) || (!instance.isOnline())) {
-                        continue;
-                    }
-                    // 打开了网络监控
-                    if (monitoringEnable) {
-                        // 判断网络是不是断了
-                        boolean ping = NetUtils.ping(instance.getIp());
-                        // 网络不通
-                        if (!ping) {
-                            // 断网
-                            this.disConnect(instance);
+            try {
+                // 循环所有应用实例
+                for (Map.Entry<String, Instance> entry : this.instancePool.entrySet()) {
+                    Instance instance = entry.getValue();
+                    // 允许的误差时间
+                    int thresholdSecond = instance.getThresholdSecond();
+                    // 最后一次通过心跳包更新的时间
+                    Date dateTime = instance.getDateTime();
+                    // 网络监控是否打开
+                    boolean monitoringEnable = this.monitoringServerWebProperties.getNetworkProperties()
+                            .isMonitoringEnable();
+                    // 判决时间
+                    DateTime judgeDateTime = new DateTime(dateTime).plusSeconds(thresholdSecond);
+                    // 注册上来的服务失去响应
+                    if (judgeDateTime.isBeforeNow()) {
+                        // 已经断网 或者 已经离线
+                        if ((!instance.isOnConnect()) || (!instance.isOnline())) {
+                            continue;
+                        }
+                        // 打开了网络监控
+                        if (monitoringEnable) {
+                            // 判断网络是不是断了
+                            boolean ping = NetUtils.ping(instance.getIp());
+                            // 网络不通
+                            if (!ping) {
+                                // 断网
+                                this.disConnect(instance);
+                            } else {
+                                // 离线
+                                this.offLine(instance);
+                            }
                         } else {
                             // 离线
                             this.offLine(instance);
                         }
-                    } else {
-                        // 离线
-                        this.offLine(instance);
+                    }
+                    // 注册上来的服务恢复响应
+                    else {
+                        // 打开了网络监控
+                        if (monitoringEnable) {
+                            // 网络恢复连接
+                            this.recoverConnect(instance);
+                        }
+                        // 恢复在线
+                        this.onLine(instance);
                     }
                 }
-                // 注册上来的服务恢复响应
-                else {
-                    // 打开了网络监控
-                    if (monitoringEnable) {
-                        // 网络恢复连接
-                        this.recoverConnect(instance);
-                    }
-                    // 恢复在线
-                    this.onLine(instance);
-                }
+                // 打印当前应用池中的所有应用情况
+                log.info("当前应用实例池大小：{}，正常：{}，离线：{}，断网：{}，详细信息：{}", //
+                        this.instancePool.size(), //
+                        this.instancePool.entrySet().stream()
+                                .filter((e) -> (e.getValue().isOnline() && e.getValue().isOnConnect())).count(), //
+                        this.instancePool.entrySet().stream().filter((e) -> !e.getValue().isOnline()).count(), //
+                        this.instancePool.entrySet().stream().filter((e) -> !e.getValue().isOnConnect()).count(), //
+                        this.instancePool.toJsonString());
+            } catch (Exception e) {
+                log.error("定时扫描应用实例池中的所有应用实例异常！", e);
             }
-            // 打印当前应用池中的所有应用情况
-            log.info("当前应用实例池大小：{}，正常：{}，离线：{}，断网：{}，详细信息：{}", //
-                    this.instancePool.size(), //
-                    this.instancePool.entrySet().stream()
-                            .filter((e) -> (e.getValue().isOnline() && e.getValue().isOnConnect())).count(), //
-                    this.instancePool.entrySet().stream().filter((e) -> !e.getValue().isOnline()).count(), //
-                    this.instancePool.entrySet().stream().filter((e) -> !e.getValue().isOnConnect()).count(), //
-                    this.instancePool.toJsonString());
         }, 5, 30, TimeUnit.SECONDS));
         // 设置守护线程
         thread.setDaemon(true);
