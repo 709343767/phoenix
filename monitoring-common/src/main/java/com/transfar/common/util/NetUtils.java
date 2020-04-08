@@ -1,6 +1,7 @@
 package com.transfar.common.util;
 
 import lombok.Cleanup;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -10,8 +11,6 @@ import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.nio.charset.Charset;
 import java.util.Enumeration;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * <p>
@@ -166,7 +165,7 @@ public class NetUtils {
                     connectedCount += getCheckResult(line);
                 }
                 // 有收到数据包
-                result = connectedCount == 5;
+                result = connectedCount >= 1;
             }
         } catch (Exception e) {
             result = false;
@@ -186,10 +185,14 @@ public class NetUtils {
      */
     private static int getCheckResult(String line) {
         // 若line含有=18ms TTL=16字样，说明已经ping通，返回1，否则返回0
-        Pattern pattern = Pattern.compile("((\\d+ms)(\\s+)(TTL=\\d+))|((TTL=\\d+)(\\s+)(\\S*\\d+\\s*ms))",
-                Pattern.CASE_INSENSITIVE);
-        Matcher matcher = pattern.matcher(line);
-        if (matcher.find()) {
+        //Pattern pattern = Pattern.compile("((\\d+ms)(\\s+)(TTL=\\d+))|((TTL=\\d+)(\\s+)(\\S*\\d+\\s*ms))",
+        //        Pattern.CASE_INSENSITIVE);
+        //Matcher matcher = pattern.matcher(line);
+        //if (matcher.find()) {
+        //    return 1;
+        //}
+        //return 0;
+        if (StringUtils.containsIgnoreCase(line, "ms") && StringUtils.containsIgnoreCase(line, "ttl")) {
             return 1;
         }
         return 0;
