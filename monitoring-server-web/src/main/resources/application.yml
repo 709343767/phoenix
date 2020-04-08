@@ -30,7 +30,7 @@ spring:
     livereload:
       port: 35731
 
-      
+
 #############################################mybatis-plus配置############################################# 
 mybatis-plus:
   #启动时是否检查MyBatis XML文件的存在，默认不检查
@@ -73,3 +73,6 @@ management:
     web:
       exposure:
         include: shutdown
+  server:
+    #处于安全考虑，只允许在本地进行关闭操作
+    address: 127.0.0.1
