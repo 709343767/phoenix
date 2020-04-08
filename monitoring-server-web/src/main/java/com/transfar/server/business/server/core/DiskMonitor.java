@@ -7,7 +7,6 @@ import com.transfar.common.dto.AlarmPackage;
 import com.transfar.server.business.server.domain.Disk;
 import com.transfar.server.business.server.service.IAlarmService;
 import com.transfar.server.inf.IServerMonitoringListener;
-import lombok.Synchronized;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
@@ -49,7 +48,6 @@ public class DiskMonitor implements IServerMonitoringListener {
      * @custom.date 2020/3/30 15:35
      */
     @Async
-    @Synchronized
     @Override
     public void wakeUp(Object... obj) {
         String key = String.valueOf(obj[0]);

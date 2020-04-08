@@ -8,7 +8,6 @@ import com.transfar.server.business.server.domain.Cpu;
 import com.transfar.server.business.server.service.IAlarmService;
 import com.transfar.server.inf.IServerMonitoringListener;
 import com.transfar.server.property.MonitoringServerWebProperties;
-import lombok.Synchronized;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
@@ -54,7 +53,6 @@ public class CpuMonitor implements IServerMonitoringListener {
      * @custom.date 2020/3/30 21:56
      */
     @Async
-    @Synchronized
     @Override
     public void wakeUp(Object... obj) {
         String key = String.valueOf(obj[0]);
