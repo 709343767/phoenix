@@ -141,7 +141,7 @@ public class NetUtils {
      * @author 皮锋
      * @custom.date 2020/3/18 22:22
      */
-    public static synchronized boolean ping(String address) {
+    public static boolean ping(String address) {
         boolean result;
         try {
             Process process;
