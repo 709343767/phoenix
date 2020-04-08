@@ -8,7 +8,6 @@ import com.transfar.common.util.NetUtils;
 import com.transfar.server.business.server.domain.Instance;
 import com.transfar.server.business.server.service.IAlarmService;
 import com.transfar.server.property.MonitoringServerWebProperties;
-import lombok.Synchronized;
 import lombok.extern.slf4j.Slf4j;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.DisposableBean;
@@ -244,7 +243,6 @@ public class InstanceMonitorTask implements CommandLineRunner, DisposableBean {
      * @custom.date 2020/3/13 11:20
      */
     @Async
-    @Synchronized
     public void sendAlarmInfo(String title, AlarmLevelEnums alarmLevelEnums, Instance instance) {
         String msg = "应用ID：" + instance.getInstanceId() + "，应用名称：" + instance.getInstanceName() + "，应用端点："
                 + instance.getEndpoint() + "，IP地址：" + instance.getIp();
