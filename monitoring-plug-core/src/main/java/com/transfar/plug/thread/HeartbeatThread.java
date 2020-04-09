@@ -1,4 +1,4 @@
-package com.transfar.plug.task;
+package com.transfar.plug.thread;
 
 import java.io.IOException;
 
@@ -13,14 +13,14 @@ import lombok.extern.slf4j.Slf4j;
 
 /**
  * <p>
- * 心跳任务
+ * 心跳线程
  * </p>
  *
  * @author 皮锋
  * @custom.date 2020年3月5日 下午2:50:46
  */
 @Slf4j
-public class HeartbeatTask implements Runnable {
+public class HeartbeatThread implements Runnable {
 
     /**
      * <p>

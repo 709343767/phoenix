@@ -1,4 +1,4 @@
-package com.transfar.plug.task;
+package com.transfar.plug.thread;
 
 import java.io.IOException;
 
@@ -14,14 +14,14 @@ import lombok.extern.slf4j.Slf4j;
 
 /**
  * <p>
- * 发送服务器信息任务
+ * 发送服务器信息线程
  * </p>
  *
  * @author 皮锋
  * @custom.date 2020年3月7日 下午4:48:48
  */
 @Slf4j
-public class ServerTask implements Runnable {
+public class ServerThread implements Runnable {
 
     /**
      * <p>

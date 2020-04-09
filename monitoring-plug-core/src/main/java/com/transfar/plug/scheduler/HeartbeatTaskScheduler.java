@@ -1,13 +1,13 @@
 package com.transfar.plug.scheduler;
 
+import com.transfar.plug.core.ConfigLoader;
+import com.transfar.plug.thread.HeartbeatThread;
+
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
-
-import com.transfar.plug.core.ConfigLoader;
-import com.transfar.plug.task.HeartbeatTask;
 
 /**
  * <p>
@@ -21,7 +21,8 @@ public class HeartbeatTaskScheduler {
 
     /**
      * <p>
-     * 开始定时发送心跳包
+     * 延时15秒后定时发送心跳包，发送心跳包的频率一般为监控配置文件中配置的心跳频率，如果监控配置文件中没配置心跳频率，
+     * 则由类{@link ConfigLoader}提供默认心跳频率。
      * </p>
      *
      * @author 皮锋
@@ -41,7 +42,7 @@ public class HeartbeatTaskScheduler {
         });
         // 心跳频率
         long rate = ConfigLoader.monitoringProperties.getHeartbeatProperties().getRate();
-        seService.scheduleAtFixedRate(new HeartbeatTask(), 30, rate, TimeUnit.SECONDS);
+        seService.scheduleAtFixedRate(new HeartbeatThread(), 15, rate, TimeUnit.SECONDS);
         // });
         // 设置线程名
         // thread.setName("monitoring-heartbeat-thread");
