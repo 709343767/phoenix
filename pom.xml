@@ -1,486 +1,487 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-	<!-- 父项目 -->
-	<parent>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.2.3.RELEASE</version>
-		<relativePath />
-	</parent>
+    <!-- 父项目 -->
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.2.3.RELEASE</version>
+        <relativePath/>
+    </parent>
 
-	<!-- 项目基本信息 -->
-	<groupId>com.transfar</groupId>
-	<artifactId>monitoring</artifactId>
-	<version>${revision}</version>
-	<modules>
-		<module>monitoring-common</module>
-		<module>monitoring-plug-core</module>
-		<module>monitoring-agent</module>
-		<module>monitoring-server-web</module>
-		<module>monitoring-plug-core-spring-boot-starter</module>
-		<module>monitoring-plug-core-spring-mvc-integrator</module>
-	</modules>
-	<packaging>pom</packaging>
-	<name>monitoring</name>
-	<description>自定义监控，用于监控java应用运行情况</description>
+    <!-- 项目基本信息 -->
+    <groupId>com.transfar</groupId>
+    <artifactId>monitoring</artifactId>
+    <version>${revision}</version>
+    <modules>
+        <module>monitoring-common</module>
+        <module>monitoring-plug-core</module>
+        <module>monitoring-agent</module>
+        <module>monitoring-server-web</module>
+        <module>monitoring-plug-core-spring-boot-starter</module>
+        <module>monitoring-plug-core-spring-mvc-integrator</module>
+    </modules>
+    <packaging>pom</packaging>
+    <name>monitoring</name>
+    <description>自定义监控，用于监控java应用运行情况</description>
 
-	<!-- 属性 -->
-	<properties>
-		<!-- <revision>0.0.1-SNAPSHOT</revision> -->
-		<revision>0.0.2-RELEASE</revision>
-		<maven-jar-plugin.version>3.1.1</maven-jar-plugin.version>
-		<java.version>1.8</java.version>
-		<maven.compiler.source>${java.version}</maven.compiler.source>
-		<maven.compiler.target>${java.version}</maven.compiler.target>
-		<!-- <resource.delimiter>@</resource.delimiter> -->
-		<!-- 文件拷贝时的编码 -->
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<!-- 编译时的编码 -->
-		<maven.compiler.encoding>UTF-8</maven.compiler.encoding>
-		<!-- alibaba的fastjson版本 -->
-		<fastjson.version>1.2.56</fastjson.version>
-		<!-- guava基本工具版本 -->
-		<guava.version>20.0</guava.version>
-		<!-- commons工具包版本 -->
-		<commons-io.version>2.6</commons-io.version>
-		<commons-beanutils.version>1.7.0</commons-beanutils.version>
-		<commons-collections.version>3.2.2</commons-collections.version>
-		<commons-fileupload.version>1.3.3</commons-fileupload.version>
-		<commons-logging.version>1.2</commons-logging.version>
-		<!-- netty版本 -->
-		<netty-all.version>4.1.42.Final</netty-all.version>
-		<!-- sigar版本 -->
-		<sigar.version>1.6.4</sigar.version>
-		<!-- cglib动态代理版本 -->
-		<cglib.version>3.3.0</cglib.version>
-		<!-- servlet-api版本 -->
-		<servlet-api.version>2.5</servlet-api.version>
-		<!--swagger版本 -->
-		<swagger.version>2.9.2</swagger.version>
-		<swagger-ui.version>2.9.2</swagger-ui.version>
-		<swagger-annotations.version>1.5.21</swagger-annotations.version>
-		<swagger-models.version>1.5.21</swagger-models.version>
-		<!-- mybatis-plus-boot-starter版本 -->
-		<mybatis-plus-boot-starter.version>3.1.2</mybatis-plus-boot-starter.version>
-		<!-- mybatis-plus代码生成器版本 -->
-		<mybatis-plus-generator.version>3.1.2</mybatis-plus-generator.version>
-		<!-- velocity模板引擎版本 -->
-		<velocity-engine-core.version>2.1</velocity-engine-core.version>
-		<!-- alibaba的druid数据库连接池版本 -->
-		<druid-spring-boot-starter.version>1.1.10</druid-spring-boot-starter.version>
-		<!-- pagehelper分页插件版本 -->
-		<pagehelper.version>5.1.10</pagehelper.version>
-		<!-- oracle驱动版本 -->
-		<ojdbc6.version>11.2.0.3</ojdbc6.version>
-	</properties>
+    <!-- 属性 -->
+    <properties>
+        <!-- <revision>0.0.1-SNAPSHOT</revision> -->
+        <revision>0.0.2-RELEASE</revision>
+        <maven-jar-plugin.version>3.1.1</maven-jar-plugin.version>
+        <java.version>1.8</java.version>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
+        <!-- <resource.delimiter>@</resource.delimiter> -->
+        <!-- 文件拷贝时的编码 -->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <!-- 编译时的编码 -->
+        <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
+        <!-- alibaba的fastjson版本 -->
+        <fastjson.version>1.2.56</fastjson.version>
+        <!-- guava基本工具版本 -->
+        <guava.version>20.0</guava.version>
+        <!-- commons工具包版本 -->
+        <commons-io.version>2.6</commons-io.version>
+        <commons-beanutils.version>1.7.0</commons-beanutils.version>
+        <commons-collections.version>3.2.2</commons-collections.version>
+        <commons-fileupload.version>1.3.3</commons-fileupload.version>
+        <commons-logging.version>1.2</commons-logging.version>
+        <!-- netty版本 -->
+        <netty-all.version>4.1.42.Final</netty-all.version>
+        <!-- sigar版本 -->
+        <sigar.version>1.6.4</sigar.version>
+        <!-- cglib动态代理版本 -->
+        <cglib.version>3.3.0</cglib.version>
+        <!-- servlet-api版本 -->
+        <servlet-api.version>2.5</servlet-api.version>
+        <!--swagger版本 -->
+        <swagger.version>2.9.2</swagger.version>
+        <swagger-ui.version>2.9.2</swagger-ui.version>
+        <swagger-annotations.version>1.5.21</swagger-annotations.version>
+        <swagger-models.version>1.5.21</swagger-models.version>
+        <!-- mybatis-plus-boot-starter版本 -->
+        <mybatis-plus-boot-starter.version>3.1.2</mybatis-plus-boot-starter.version>
+        <!-- mybatis-plus代码生成器版本 -->
+        <mybatis-plus-generator.version>3.1.2</mybatis-plus-generator.version>
+        <!-- velocity模板引擎版本 -->
+        <velocity-engine-core.version>2.1</velocity-engine-core.version>
+        <!-- alibaba的druid数据库连接池版本 -->
+        <druid-spring-boot-starter.version>1.1.10</druid-spring-boot-starter.version>
+        <!-- pagehelper分页插件版本 -->
+        <pagehelper.version>5.1.10</pagehelper.version>
+        <!-- oracle驱动版本 -->
+        <ojdbc6.version>11.2.0.3</ojdbc6.version>
+    </properties>
 
-	<!-- 依赖管理 -->
-	<dependencyManagement>
-		<dependencies>
-			<!-- 公共模块 -->
-			<dependency>
-				<groupId>com.transfar</groupId>
-				<artifactId>monitoring-common</artifactId>
-				<version>${revision}</version>
-			</dependency>
-			<!-- 监控客户端插件 -->
-			<dependency>
-				<groupId>com.transfar</groupId>
-				<artifactId>monitoring-plug-core</artifactId>
-				<version>${revision}</version>
-			</dependency>
-			<!-- 监控代理端 -->
-			<dependency>
-				<groupId>com.transfar</groupId>
-				<artifactId>monitoring-agent</artifactId>
-				<version>${revision}</version>
-			</dependency>
-			<!-- 监控服务端 -->
-			<dependency>
-				<groupId>com.transfar</groupId>
-				<artifactId>monitoring-server-web</artifactId>
-				<version>${revision}</version>
-			</dependency>
-			<!-- 监控项目客户端与springboot集成的starter -->
-			<dependency>
-				<groupId>com.transfar</groupId>
-				<artifactId>monitoring-plug-core-spring-boot-starter</artifactId>
-				<version>${revision}</version>
-			</dependency>
-			<!-- 监控项目客户端与springmvc集成的integrator -->
-			<dependency>
-				<groupId>com.transfar</groupId>
-				<artifactId>monitoring-plug-core-spring-mvc-integrator</artifactId>
-				<version>${revision}</version>
-			</dependency>
+    <!-- 依赖管理 -->
+    <dependencyManagement>
+        <dependencies>
+            <!-- 公共模块 -->
+            <dependency>
+                <groupId>com.transfar</groupId>
+                <artifactId>monitoring-common</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <!-- 监控客户端插件 -->
+            <dependency>
+                <groupId>com.transfar</groupId>
+                <artifactId>monitoring-plug-core</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <!-- 监控代理端 -->
+            <dependency>
+                <groupId>com.transfar</groupId>
+                <artifactId>monitoring-agent</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <!-- 监控服务端 -->
+            <dependency>
+                <groupId>com.transfar</groupId>
+                <artifactId>monitoring-server-web</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <!-- 监控项目客户端与springboot集成的starter -->
+            <dependency>
+                <groupId>com.transfar</groupId>
+                <artifactId>monitoring-plug-core-spring-boot-starter</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <!-- 监控项目客户端与springmvc集成的integrator -->
+            <dependency>
+                <groupId>com.transfar</groupId>
+                <artifactId>monitoring-plug-core-spring-mvc-integrator</artifactId>
+                <version>${revision}</version>
+            </dependency>
 
-			<!-- alibaba的fastjson依赖 -->
-			<dependency>
-				<groupId>com.alibaba</groupId>
-				<artifactId>fastjson</artifactId>
-				<version>${fastjson.version}</version>
-			</dependency>
-			<!-- guava基本工具依赖 -->
-			<dependency>
-				<groupId>com.google.guava</groupId>
-				<artifactId>guava</artifactId>
-				<version>${guava.version}</version>
-			</dependency>
-			<!-- commons工具包依赖 -->
-			<dependency>
-				<groupId>commons-io</groupId>
-				<artifactId>commons-io</artifactId>
-				<version>${commons-io.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>commons-collections</groupId>
-				<artifactId>commons-collections</artifactId>
-				<version>${commons-collections.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>commons-beanutils</groupId>
-				<artifactId>commons-beanutils</artifactId>
-				<version>${commons-beanutils.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>commons-fileupload</groupId>
-				<artifactId>commons-fileupload</artifactId>
-				<version>${commons-fileupload.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>commons-logging</groupId>
-				<artifactId>commons-logging</artifactId>
-				<version>${commons-logging.version}</version>
-			</dependency>
-			<!-- netty依赖 -->
-			<dependency>
-				<groupId>io.netty</groupId>
-				<artifactId>netty-all</artifactId>
-				<version>${netty-all.version}</version>
-			</dependency>
-			<!-- sigar依赖 -->
-			<dependency>
-				<groupId>org.fusesource</groupId>
-				<artifactId>sigar</artifactId>
-				<version>${sigar.version}</version>
-			</dependency>
-			<!-- cglib动态代理依赖 -->
-			<dependency>
-				<groupId>cglib</groupId>
-				<artifactId>cglib</artifactId>
-				<version>${cglib.version}</version>
-			</dependency>
-			<!-- servlet依赖 -->
-			<dependency>
-				<groupId>javax.servlet</groupId>
-				<artifactId>servlet-api</artifactId>
-				<version>${servlet-api.version}</version>
-				<scope>provided</scope>
-			</dependency>
-			<!-- swagger依赖 -->
-			<dependency>
-				<groupId>io.springfox</groupId>
-				<artifactId>springfox-swagger2</artifactId>
-				<exclusions>
-					<exclusion>
-						<groupId>io.swagger</groupId>
-						<artifactId>swagger-annotations</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>io.swagger</groupId>
-						<artifactId>swagger-models</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>org.slf4j</groupId>
-						<artifactId>slf4j-api</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>org.springframework</groupId>
-						<artifactId>spring-aop</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>org.springframework</groupId>
-						<artifactId>spring-beans</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>org.springframework</groupId>
-						<artifactId>spring-context</artifactId>
-					</exclusion>
-				</exclusions>
-				<version>${swagger.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>io.swagger</groupId>
-				<artifactId>swagger-annotations</artifactId>
-				<version>${swagger-annotations.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>io.swagger</groupId>
-				<artifactId>swagger-models</artifactId>
-				<version>${swagger-models.version}</version>
-				<exclusions>
-					<exclusion>
-						<groupId>org.slf4j</groupId>
-						<artifactId>slf4j-api</artifactId>
-					</exclusion>
-				</exclusions>
-			</dependency>
-			<dependency>
-				<groupId>io.springfox</groupId>
-				<artifactId>springfox-swagger-ui</artifactId>
-				<version>${swagger-ui.version}</version>
-			</dependency>
-			<!-- mybatis-plus依赖 -->
-			<dependency>
-				<groupId>com.baomidou</groupId>
-				<artifactId>mybatis-plus-boot-starter</artifactId>
-				<version>${mybatis-plus-boot-starter.version}</version>
-			</dependency>
-			<!-- mybatis-plus代码生成器依赖 -->
-			<dependency>
-				<groupId>com.baomidou</groupId>
-				<artifactId>mybatis-plus-generator</artifactId>
-				<version>${mybatis-plus-generator.version}</version>
-			</dependency>
-			<!-- velocity模板引擎依赖 -->
-			<dependency>
-				<groupId>org.apache.velocity</groupId>
-				<artifactId>velocity-engine-core</artifactId>
-				<version>${velocity-engine-core.version}</version>
-			</dependency>
-			<!-- alibaba的druid数据库连接池依赖 -->
-			<dependency>
-				<groupId>com.alibaba</groupId>
-				<artifactId>druid-spring-boot-starter</artifactId>
-				<version>${druid-spring-boot-starter.version}</version>
-			</dependency>
-			<!-- pagehelper分页插件依赖 -->
-			<dependency>
-				<groupId>com.github.pagehelper</groupId>
-				<artifactId>pagehelper</artifactId>
-				<version>${pagehelper.version}</version>
-			</dependency>
-			<!-- oracle数据库驱动 -->
-			<dependency>
-				<groupId>com.oracle</groupId>
-				<artifactId>ojdbc6</artifactId>
-				<version>${ojdbc6.version}</version>
-				<scope>runtime</scope>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
+            <!-- alibaba的fastjson依赖 -->
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>fastjson</artifactId>
+                <version>${fastjson.version}</version>
+            </dependency>
+            <!-- guava基本工具依赖 -->
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>${guava.version}</version>
+            </dependency>
+            <!-- commons工具包依赖 -->
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>${commons-io.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-collections</groupId>
+                <artifactId>commons-collections</artifactId>
+                <version>${commons-collections.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-beanutils</groupId>
+                <artifactId>commons-beanutils</artifactId>
+                <version>${commons-beanutils.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-fileupload</groupId>
+                <artifactId>commons-fileupload</artifactId>
+                <version>${commons-fileupload.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-logging</groupId>
+                <artifactId>commons-logging</artifactId>
+                <version>${commons-logging.version}</version>
+            </dependency>
+            <!-- netty依赖 -->
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-all</artifactId>
+                <version>${netty-all.version}</version>
+            </dependency>
+            <!-- sigar依赖 -->
+            <dependency>
+                <groupId>org.fusesource</groupId>
+                <artifactId>sigar</artifactId>
+                <version>${sigar.version}</version>
+            </dependency>
+            <!-- cglib动态代理依赖 -->
+            <dependency>
+                <groupId>cglib</groupId>
+                <artifactId>cglib</artifactId>
+                <version>${cglib.version}</version>
+            </dependency>
+            <!-- servlet依赖 -->
+            <dependency>
+                <groupId>javax.servlet</groupId>
+                <artifactId>servlet-api</artifactId>
+                <version>${servlet-api.version}</version>
+                <scope>provided</scope>
+            </dependency>
+            <!-- swagger依赖 -->
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-swagger2</artifactId>
+                <exclusions>
+                    <exclusion>
+                        <groupId>io.swagger</groupId>
+                        <artifactId>swagger-annotations</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>io.swagger</groupId>
+                        <artifactId>swagger-models</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-api</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-aop</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-beans</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-context</artifactId>
+                    </exclusion>
+                </exclusions>
+                <version>${swagger.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.swagger</groupId>
+                <artifactId>swagger-annotations</artifactId>
+                <version>${swagger-annotations.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.swagger</groupId>
+                <artifactId>swagger-models</artifactId>
+                <version>${swagger-models.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-api</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-swagger-ui</artifactId>
+                <version>${swagger-ui.version}</version>
+            </dependency>
+            <!-- mybatis-plus依赖 -->
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-boot-starter</artifactId>
+                <version>${mybatis-plus-boot-starter.version}</version>
+            </dependency>
+            <!-- mybatis-plus代码生成器依赖 -->
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-generator</artifactId>
+                <version>${mybatis-plus-generator.version}</version>
+            </dependency>
+            <!-- velocity模板引擎依赖 -->
+            <dependency>
+                <groupId>org.apache.velocity</groupId>
+                <artifactId>velocity-engine-core</artifactId>
+                <version>${velocity-engine-core.version}</version>
+            </dependency>
+            <!-- alibaba的druid数据库连接池依赖 -->
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>druid-spring-boot-starter</artifactId>
+                <version>${druid-spring-boot-starter.version}</version>
+            </dependency>
+            <!-- pagehelper分页插件依赖 -->
+            <dependency>
+                <groupId>com.github.pagehelper</groupId>
+                <artifactId>pagehelper</artifactId>
+                <version>${pagehelper.version}</version>
+            </dependency>
+            <!-- oracle数据库驱动 -->
+            <dependency>
+                <groupId>com.oracle</groupId>
+                <artifactId>ojdbc6</artifactId>
+                <version>${ojdbc6.version}</version>
+                <scope>runtime</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
-	<!-- 构建 -->
-	<build>
-		<defaultGoal>package</defaultGoal>
-		<pluginManagement>
-			<plugins>
-				<!--编译插件 -->
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-compiler-plugin</artifactId>
-					<configuration>
-						<source>${java.version}</source>
-						<target>${java.version}</target>
-						<encoding>${project.build.sourceEncoding}</encoding>
-					</configuration>
-				</plugin>
-				<!--单元测试插件 -->
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-surefire-plugin</artifactId>
-					<configuration>
-						<skipTests>true</skipTests>
-					</configuration>
-				</plugin>
-				<!--打包插件 -->
-				<plugin>
-					<groupId>org.springframework.boot</groupId>
-					<artifactId>spring-boot-maven-plugin</artifactId>
-					<configuration>
-						<layout>ZIP</layout>
-						<fork>true</fork>
-						<executable>true</executable>
-					</configuration>
-					<executions>
-						<execution>
-							<goals>
-								<!--可以把依赖的包都打包到生成的Jar包中 -->
-								<goal>repackage</goal>
-								<goal>build-info</goal>
-							</goals>
-						</execution>
-					</executions>
-				</plugin>
-			</plugins>
-		</pluginManagement>
+    <!-- 构建 -->
+    <build>
+        <defaultGoal>package</defaultGoal>
+        <pluginManagement>
+            <plugins>
+                <!--编译插件 -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <configuration>
+                        <source>${java.version}</source>
+                        <target>${java.version}</target>
+                        <encoding>${project.build.sourceEncoding}</encoding>
+                    </configuration>
+                </plugin>
+                <!--单元测试插件 -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <configuration>
+                        <skipTests>true</skipTests>
+                    </configuration>
+                </plugin>
+                <!--打包插件 -->
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                    <configuration>
+                        <layout>ZIP</layout>
+                        <fork>true</fork>
+                        <!-- 这个配置非常重要，使打包好的jar包具备可执行权限 -->
+                        <executable>true</executable>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <!--可以把依赖的包都打包到生成的Jar包中 -->
+                                <goal>repackage</goal>
+                                <goal>build-info</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+            </plugins>
+        </pluginManagement>
 
-		<resources>
-			<resource>
-				<directory>src/main/java</directory>
-				<includes>
-					<!-- 为了解决mybatis sql 配置文件的编译问题 -->
-					<include>**/*.xml</include>
-				</includes>
-			</resource>
-			<resource>
-				<directory>src/main/resources</directory>
-				<includes>
-					<!-- 如果加了上面的配置，必须加入这个配置，不然resources目录下的东西不会进编译目录 -->
-					<include>**/*.*</include>
-				</includes>
-			</resource>
-		</resources>
-		<plugins>
-			<!-- 为Java项目生成静态HTML网站的插件 -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-site-plugin</artifactId>
-				<!-- 国际化定义当地语言 -->
-				<configuration>
-					<locales>zh_CN</locales>
-				</configuration>
-			</plugin>
-			<!-- 项目信息报告插件 -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-project-info-reports-plugin</artifactId>
-				<version>3.0.0</version>
-			</plugin>
-			<!-- 生成java代码交叉引用和源代码的html格式插件 -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jxr-plugin</artifactId>
-				<version>2.5</version>
-			</plugin>
-			<!-- 生成java doc插件 -->
-			<!-- http://maven.apache.org/plugins/maven-javadoc-plugin/javadoc-mojo.html -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<configuration>
-					<additionalJOptions>
-						<additionalJOption>-J-Xmx180m</additionalJOption>
-					</additionalJOptions>
-					<charset>${project.build.sourceEncoding}</charset>
-					<encoding>${project.build.sourceEncoding}</encoding>
-					<docencoding>${project.build.sourceEncoding}</docencoding>
-					<destDir>target/javadoc</destDir>
-					<show>private</show>
-					<!-- 解析自定义注释 -->
-					<!-- MAVEN_OPTS=-Dfile.encoding=UTF-8;JAVA_TOOL_OPTIONS=-Dfile.encoding=UTF-8 -->
-					<tags>
-						<tag>
-							<name>custom.date</name>
-							<placement>a</placement>
-							<head>时间</head>
-						</tag>
-					</tags>
-				</configuration>
-				<executions>
-					<execution>
-						<id>attach-javadocs</id>
-						<phase>package</phase>
-						<goals>
-							<!-- 生成聚合的javadoc -->
-							<goal>aggregate</goal>
-							<goal>jar</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<!-- 打包发布源码插件 -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-source-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>attach-sources</id>
-						<goals>
-							<goal>jar</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
-	</build>
+        <resources>
+            <resource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <!-- 为了解决mybatis sql 配置文件的编译问题 -->
+                    <include>**/*.xml</include>
+                </includes>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <!-- 如果加了上面的配置，必须加入这个配置，不然resources目录下的东西不会进编译目录 -->
+                    <include>**/*.*</include>
+                </includes>
+            </resource>
+        </resources>
+        <plugins>
+            <!-- 为Java项目生成静态HTML网站的插件 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
+                <!-- 国际化定义当地语言 -->
+                <configuration>
+                    <locales>zh_CN</locales>
+                </configuration>
+            </plugin>
+            <!-- 项目信息报告插件 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-project-info-reports-plugin</artifactId>
+                <version>3.0.0</version>
+            </plugin>
+            <!-- 生成java代码交叉引用和源代码的html格式插件 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jxr-plugin</artifactId>
+                <version>2.5</version>
+            </plugin>
+            <!-- 生成java doc插件 -->
+            <!-- http://maven.apache.org/plugins/maven-javadoc-plugin/javadoc-mojo.html -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <configuration>
+                    <additionalJOptions>
+                        <additionalJOption>-J-Xmx180m</additionalJOption>
+                    </additionalJOptions>
+                    <charset>${project.build.sourceEncoding}</charset>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                    <docencoding>${project.build.sourceEncoding}</docencoding>
+                    <destDir>target/javadoc</destDir>
+                    <show>private</show>
+                    <!-- 解析自定义注释 -->
+                    <!-- MAVEN_OPTS=-Dfile.encoding=UTF-8;JAVA_TOOL_OPTIONS=-Dfile.encoding=UTF-8 -->
+                    <tags>
+                        <tag>
+                            <name>custom.date</name>
+                            <placement>a</placement>
+                            <head>时间</head>
+                        </tag>
+                    </tags>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <phase>package</phase>
+                        <goals>
+                            <!-- 生成聚合的javadoc -->
+                            <goal>aggregate</goal>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- 打包发布源码插件 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 
-	<!-- 仓库 -->
-	<repositories>
-		<!-- 私有仓库 -->
-		<repository>
-			<id>maven-hngs-group</id>
-			<url>http://10.43.1.77:8081/repository/maven-hngs-group/</url>
-			<releases>
-				<!-- 是否激活 -->
-				<enabled>true</enabled>
-				<!-- 更新策略，maven将比较本地（存储在仓库的maven-metadata文件中）和远端的POM时间戳， -->
-				<!-- 配置选项可以设置：always、daily（一天一次，默认），interval:x（x为一整数，单位分钟），never -->
-				<updatePolicy>always</updatePolicy>
-				<!-- maven部署文件到仓库时，也会部署对应的校验和文件，你可以设置：ignore、fail或者warn用于当校验和文件不存在或者检验失败时的处理策略 -->
-				<checksumPolicy>fail</checksumPolicy>
-			</releases>
-			<snapshots>
-				<enabled>true</enabled>
-				<updatePolicy>always</updatePolicy>
-				<checksumPolicy>fail</checksumPolicy>
-			</snapshots>
-		</repository>
-	</repositories>
+    <!-- 仓库 -->
+    <repositories>
+        <!-- 私有仓库 -->
+        <repository>
+            <id>maven-hngs-group</id>
+            <url>http://10.43.1.77:8081/repository/maven-hngs-group/</url>
+            <releases>
+                <!-- 是否激活 -->
+                <enabled>true</enabled>
+                <!-- 更新策略，maven将比较本地（存储在仓库的maven-metadata文件中）和远端的POM时间戳， -->
+                <!-- 配置选项可以设置：always、daily（一天一次，默认），interval:x（x为一整数，单位分钟），never -->
+                <updatePolicy>always</updatePolicy>
+                <!-- maven部署文件到仓库时，也会部署对应的校验和文件，你可以设置：ignore、fail或者warn用于当校验和文件不存在或者检验失败时的处理策略 -->
+                <checksumPolicy>fail</checksumPolicy>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+                <checksumPolicy>fail</checksumPolicy>
+            </snapshots>
+        </repository>
+    </repositories>
 
-	<!-- 仓库插件 -->
-	<pluginRepositories>
-		<pluginRepository>
-			<id>maven-hngs-releases</id>
-			<url>http://10.43.1.77:8081/repository/maven-hngs-group/</url>
-			<releases>
-				<enabled>true</enabled>
-				<updatePolicy>always</updatePolicy>
-				<checksumPolicy>fail</checksumPolicy>
-			</releases>
-			<snapshots>
-				<enabled>true</enabled>
-				<updatePolicy>always</updatePolicy>
-				<checksumPolicy>fail</checksumPolicy>
-			</snapshots>
-		</pluginRepository>
-	</pluginRepositories>
+    <!-- 仓库插件 -->
+    <pluginRepositories>
+        <pluginRepository>
+            <id>maven-hngs-releases</id>
+            <url>http://10.43.1.77:8081/repository/maven-hngs-group/</url>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+                <checksumPolicy>fail</checksumPolicy>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+                <checksumPolicy>fail</checksumPolicy>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
 
-	<!-- 发布 -->
-	<distributionManagement>
-		<repository>
-			<id>maven-hngs-releases</id>
-			<name>maven-hngs-releases</name>
-			<url>http://10.43.1.77:8081/repository/maven-hngs-releases/</url>
-		</repository>
-		<snapshotRepository>
-			<id>maven-hngs-snapshots</id>
-			<name>maven-hngs-snapshots</name>
-			<url>http://10.43.1.77:8081/repository/maven-hngs-snapshots/</url>
-			<!-- 发布的时候，是否为Snapshot版本分配一个包含时间戳的构建号 -->
-			<uniqueVersion>false</uniqueVersion>
-		</snapshotRepository>
-	</distributionManagement>
+    <!-- 发布 -->
+    <distributionManagement>
+        <repository>
+            <id>maven-hngs-releases</id>
+            <name>maven-hngs-releases</name>
+            <url>http://10.43.1.77:8081/repository/maven-hngs-releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>maven-hngs-snapshots</id>
+            <name>maven-hngs-snapshots</name>
+            <url>http://10.43.1.77:8081/repository/maven-hngs-snapshots/</url>
+            <!-- 发布的时候，是否为Snapshot版本分配一个包含时间戳的构建号 -->
+            <uniqueVersion>false</uniqueVersion>
+        </snapshotRepository>
+    </distributionManagement>
 
-	<!-- 开发者 -->
-	<developers>
-		<developer>
-			<name>皮锋</name>
-			<organization>transfar</organization>
-		</developer>
-		<developer>
-			<name>宋磊</name>
-			<organization>transfar</organization>
-		</developer>
-		<developer>
-			<name>欧顺才</name>
-			<organization>transfar</organization>
-		</developer>
-	</developers>
+    <!-- 开发者 -->
+    <developers>
+        <developer>
+            <name>皮锋</name>
+            <organization>transfar</organization>
+        </developer>
+        <developer>
+            <name>宋磊</name>
+            <organization>transfar</organization>
+        </developer>
+        <developer>
+            <name>欧顺才</name>
+            <organization>transfar</organization>
+        </developer>
+    </developers>
 
 </project>
