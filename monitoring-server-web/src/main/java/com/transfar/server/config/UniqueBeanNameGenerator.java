@@ -10,8 +10,9 @@ import org.springframework.util.StringUtils;
  * 唯一的bean名字生成器
  * </p>
  * <ul>
- * <li>spring提供两种beanName生成策略，基于注解的spring-boot默认使用的是AnnotationBeanNameGenerator，它生成beanName的策略就是，取当前类名（不是全限定类名）作为beanName。</li>
- * <li>由此，如果出现不同包结构下同样的类名称，肯定会出现冲突。所以自己覆盖spring提供的默认beanName生成策略。</li>
+ * <li>spring提供两种beanName生成策略，基于注解的spring-boot默认使用的是AnnotationBeanNameGenerator，它生成beanName的策略就是，
+ * 取当前类名（不是全限定类名）作为beanName。</li>
+ * <li>由此，如果出现不同包结构下同样的类名称，肯定会出现冲突。所以自己覆盖spring提供的默认beanName生成策略，使用全限定类名做唯一的bean名字。</li>
  * </ul>
  *
  * @author 皮锋
