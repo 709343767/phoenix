@@ -1,6 +1,6 @@
 #!/bin/bash
 #先通过管理端口关闭进程
-curl -X POST http://localhost:16000/monitoring-agent/actuator/shutdown
+curl -X POST http://localhost:12000/monitoring-agent/actuator/shutdown
 
 #再次通过名称检查进程是否被成功停止
 count=`ps -ef |grep monitoring-agent |grep -v "grep" |wc -l`
