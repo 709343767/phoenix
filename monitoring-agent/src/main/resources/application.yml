@@ -13,7 +13,7 @@ server:
       #日志文件名前缀
       #prefix: access_log
       #日志文件名后缀
-      #suffix: .log
+      #suffix: log
 
   
 ###############################################spring配置#################################################
@@ -29,3 +29,17 @@ spring:
   devtools:
     livereload:
       port: 35730
+
+
+############################################springboot端点配置#############################################
+management:
+  endpoint:
+    shutdown:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: shutdown
+  server:
+    #处于安全考虑，只允许在本地进行关闭操作
+    address: 127.0.0.1
