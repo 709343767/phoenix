@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import java.util.concurrent.Executors;
@@ -24,6 +25,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 @Slf4j
 @Component
+@Order(1)
 public class HeartbeatCommandLineRunner implements CommandLineRunner, DisposableBean {
 
     /**
@@ -44,10 +46,19 @@ public class HeartbeatCommandLineRunner implements CommandLineRunner, Disposable
         }
     });
 
+    /**
+     * <p>
+     * 项目启动完成后延迟5秒钟启动定时任务，定时向服务端发送心跳包，定时任务的执行频率为监控配置文件中所配置的心跳频率。
+     * </p>
+     *
+     * @author 皮锋
+     * @custom.date 2020/4/9 17:12
+     * @param  args 传入的主方法参数
+     */
     @Override
     public void run(String... args) {
         // 重新开启线程，让他单独去做我们想要做的操作，此时CommandLineRunner执行的操作和主线程是相互独立的，抛出异常并不会影响到主线程
-        Thread thread = new Thread(() -> this.seService.scheduleAtFixedRate(new HeartbeatScheduledExecutor(), 30,
+        Thread thread = new Thread(() -> this.seService.scheduleAtFixedRate(new HeartbeatScheduledExecutor(), 5,
                 this.monitoringProperties.getHeartbeatProperties().getRate(), TimeUnit.SECONDS));
         // 设置守护线程
         thread.setDaemon(true);

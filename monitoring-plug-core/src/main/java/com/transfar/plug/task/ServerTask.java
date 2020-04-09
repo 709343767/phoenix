@@ -23,6 +23,14 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ServerTask implements Runnable {
 
+    /**
+     * <p>
+     * 发送服务器信息包
+     * </p>
+     *
+     * @author 皮锋
+     * @custom.date 2020/4/9 17:30
+     */
     @Override
     public void run() {
         try {

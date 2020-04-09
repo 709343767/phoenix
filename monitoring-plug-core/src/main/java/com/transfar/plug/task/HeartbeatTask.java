@@ -22,6 +22,14 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class HeartbeatTask implements Runnable {
 
+    /**
+     * <p>
+     * 发送心跳包
+     * </p>
+     *
+     * @author 皮锋
+     * @custom.date 2020/4/9 17:32
+     */
     @Override
     public void run() {
         try {
