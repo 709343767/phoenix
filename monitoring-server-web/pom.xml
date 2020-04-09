@@ -145,6 +145,7 @@
 
 	<!-- 构建 -->
 	<build>
+		<finalName>monitoring-server-web</finalName>
 		<defaultGoal>package</defaultGoal>
 		<plugins>
 			<plugin>

@@ -98,6 +98,7 @@
 
 	<!-- 构建 -->
 	<build>
+		<finalName>monitoring-agent</finalName>
 		<defaultGoal>package</defaultGoal>
 		<plugins>
 			<plugin>
