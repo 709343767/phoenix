@@ -21,7 +21,7 @@ public class MethodExecuteHandler {
      * </p>
      *
      * @param heartbeatPackage 心跳包
-     * @return BaseResponsePackage
+     * @return {@link BaseResponsePackage}
      * @author 皮锋
      * @custom.date 2020年3月5日 上午11:01:46
      */
@@ -39,7 +39,7 @@ public class MethodExecuteHandler {
      * </p>
      *
      * @param alarmPackage 告警包
-     * @return BaseResponsePackage
+     * @return {@link BaseResponsePackage}
      * @author 皮锋
      * @custom.date 2020年3月6日 下午3:23:56
      */
@@ -57,7 +57,7 @@ public class MethodExecuteHandler {
      * </p>
      *
      * @param serverPackage 服务器信息包
-     * @return BaseResponsePackage
+     * @return {@link BaseResponsePackage}
      * @author 皮锋
      * @custom.date 2020年3月7日 下午5:18:32
      */
@@ -74,9 +74,9 @@ public class MethodExecuteHandler {
      * 执行方法，获取返回结果
      * </p>
      *
-     * @param invoker 命令执行器
+     * @param invoker 命令执行器-{@link Invoker}
      * @param pkg     传输包
-     * @return BaseResponsePackage
+     * @return {@link BaseResponsePackage}
      * @author 皮锋
      * @custom.date 2020/3/11 22:27
      */

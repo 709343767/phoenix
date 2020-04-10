@@ -70,7 +70,7 @@ public class MonitoringAgentDevConfig {
      * 把配置信息实例化到spring容器
      * </p>
      *
-     * @return MonitoringProperties
+     * @return {@link MonitoringProperties}
      * @throws ErrorConfigParamException 错误的配置参数异常
      * @author 皮锋
      * @custom.date 2020年3月6日 上午11:08:17

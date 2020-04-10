@@ -22,7 +22,7 @@ public interface IServerService {
      * </p>
      *
      * @param serverPackage 服务器信息包
-     * @return BaseResponsePackage
+     * @return {@link BaseResponsePackage}
      * @throws Exception 所有异常
      * @author 皮锋
      * @custom.date 2020年3月7日 下午5:24:47

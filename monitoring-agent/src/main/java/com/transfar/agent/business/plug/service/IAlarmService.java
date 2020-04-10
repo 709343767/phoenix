@@ -21,7 +21,7 @@ public interface IAlarmService {
 	 * @author 皮锋
 	 * @custom.date 2020年3月6日 下午3:09:12
 	 * @param heartbeatPackage 告警包
-	 * @return BaseResponsePackage
+	 * @return {@link BaseResponsePackage}
 	 */
 	BaseResponsePackage dealAlarmPackage(AlarmPackage heartbeatPackage);
 

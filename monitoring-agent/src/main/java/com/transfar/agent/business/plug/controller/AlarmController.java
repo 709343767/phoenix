@@ -39,7 +39,7 @@ public class AlarmController {
      * </p>
      *
      * @param request 请求参数
-     * @return BaseResponsePackage
+     * @return {@link BaseResponsePackage}
      * @author 皮锋
      * @custom.date 2020年3月6日 下午3:00:54
      */

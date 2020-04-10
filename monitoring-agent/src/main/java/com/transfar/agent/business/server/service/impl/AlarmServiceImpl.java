@@ -1,20 +1,15 @@
 package com.transfar.agent.business.server.service.impl;
 
-import java.util.Collections;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
-
 import com.transfar.agent.business.constant.Urlconstants;
 import com.transfar.agent.business.server.service.IAlarmService;
 import com.transfar.common.dto.AlarmPackage;
 import com.transfar.common.dto.BaseResponsePackage;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.*;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
+import java.util.Collections;
 
 /**
  * <p>
@@ -36,7 +31,7 @@ public class AlarmServiceImpl implements IAlarmService {
      * </p>
      *
      * @param alarmPackage 告警包
-     * @return BaseResponsePackage
+     * @return {@link BaseResponsePackage}
      * @author 皮锋
      * @custom.date 2020年3月6日 下午3:27:17
      */

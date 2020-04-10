@@ -23,7 +23,7 @@ public class HeartbeatServiceImpl implements IHeartbeatService {
      * </p>
      *
      * @param heartbeatPackage 心跳包
-     * @return BaseResponsePackage
+     * @return {@link BaseResponsePackage}
      * @author 皮锋
      * @custom.date 2020年3月4日 下午1:47:28
      */

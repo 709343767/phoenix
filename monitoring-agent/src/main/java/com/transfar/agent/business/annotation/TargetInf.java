@@ -1,10 +1,6 @@
 package com.transfar.agent.business.annotation;
 
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.lang.annotation.*;
 
 /**
  * <p>
@@ -24,7 +20,7 @@ public @interface TargetInf {
      * 指定接口
      * </p>
      *
-     * @return Class
+     * @return {@link Class}
      * @author 皮锋
      * @custom.date 2020年3月7日 上午11:32:20
      */

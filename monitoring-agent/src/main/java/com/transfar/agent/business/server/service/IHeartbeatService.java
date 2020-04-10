@@ -22,7 +22,7 @@ public interface IHeartbeatService {
      * </p>
      *
      * @param heartbeatPackage 心跳包对象
-     * @return BaseResponsePackage
+     * @return {@link BaseResponsePackage}
      * @throws Exception 所有异常
      * @author 皮锋
      * @custom.date 2020年3月4日 下午2:16:07

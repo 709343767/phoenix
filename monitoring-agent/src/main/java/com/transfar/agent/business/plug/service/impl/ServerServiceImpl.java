@@ -23,7 +23,7 @@ public class ServerServiceImpl implements IServerService {
      * </p>
      *
      * @param serverPackage 服务器信息包
-     * @return BaseResponsePackage
+     * @return {@link BaseResponsePackage}
      * @author 皮锋
      * @custom.date 2020年3月7日 下午5:14:29
      */

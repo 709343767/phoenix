@@ -23,9 +23,9 @@ public class InvokerHolder {
      * 获取执行器
      * </p>
      *
-     * @param clazz  类
+     * @param clazz  类-{@link Class}
      * @param method 方法
-     * @return Invoker
+     * @return {@link Invoker}
      * @author 皮锋
      * @custom.date 2020年3月4日 下午2:02:18
      */
@@ -42,9 +42,9 @@ public class InvokerHolder {
      * 添加执行器
      * </p>
      *
-     * @param clazz   类
+     * @param clazz   类-{@link Class}
      * @param method  方法
-     * @param invoker 命令执行器
+     * @param invoker 命令执行器-{@link Invoker}
      * @author 皮锋
      * @custom.date 2020年3月4日 下午2:02:35
      */

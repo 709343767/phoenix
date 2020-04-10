@@ -22,7 +22,7 @@ public interface IAlarmService {
      * </p>
      *
      * @param alarmPackage 告警包
-     * @return BaseResponsePackage
+     * @return {@link BaseResponsePackage}
      * @throws Exception 所有异常
      * @author 皮锋
      * @custom.date 2020年3月6日 下午3:27:17
