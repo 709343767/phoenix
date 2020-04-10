@@ -46,4 +46,10 @@ public abstract class InstanceBean extends SuperBean {
     @ApiModelProperty(value = "IP地址")
     protected String ip;
 
+    /**
+     * 计算机名
+     */
+    @ApiModelProperty(value = "计算机名")
+    protected String computerName;
+
 }

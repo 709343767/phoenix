@@ -11,6 +11,7 @@ import com.transfar.common.dto.HeartbeatPackage;
 import com.transfar.common.dto.ServerPackage;
 import com.transfar.common.inf.IPackageConstructor;
 import com.transfar.common.util.NetUtils;
+import com.transfar.common.util.SigarUtils;
 import com.transfar.common.util.StrUtils;
 import com.transfar.server.util.InstanceUtils;
 
@@ -46,6 +47,7 @@ public class PackageConstructor implements IPackageConstructor {
         alarmPackage.setInstanceId(InstanceUtils.getInstanceId());
         alarmPackage.setInstanceName(InstanceUtils.getInstanceName());
         alarmPackage.setIp(NetUtils.getLocalIp());
+        alarmPackage.setComputerName(SigarUtils.getComputerName());
         // 判断字符集
         Charset charset = alarm.getCharset();
         // 设置了字符集
@@ -83,6 +85,7 @@ public class PackageConstructor implements IPackageConstructor {
         baseResponsePackage.setInstanceId(InstanceUtils.getInstanceId());
         baseResponsePackage.setInstanceName(InstanceUtils.getInstanceName());
         baseResponsePackage.setIp(NetUtils.getLocalIp());
+        baseResponsePackage.setComputerName(SigarUtils.getComputerName());
         baseResponsePackage.setId(StrUtils.getUUID());
         baseResponsePackage.setDateTime(new Date());
         baseResponsePackage.setResult(Result.builder().isSuccess(true).msg(ResultMsgConstants.SUCCESS).build());
@@ -106,6 +109,7 @@ public class PackageConstructor implements IPackageConstructor {
         baseResponsePackage.setInstanceId(InstanceUtils.getInstanceId());
         baseResponsePackage.setInstanceName(InstanceUtils.getInstanceName());
         baseResponsePackage.setIp(NetUtils.getLocalIp());
+        baseResponsePackage.setComputerName(SigarUtils.getComputerName());
         baseResponsePackage.setId(StrUtils.getUUID());
         baseResponsePackage.setDateTime(new Date());
         if (null == msg) {

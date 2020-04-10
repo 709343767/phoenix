@@ -1,7 +1,6 @@
 package com.transfar.common.domain.server;
 
 import com.transfar.common.abs.SuperBean;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -43,8 +42,8 @@ public class MemoryDomain extends SuperBean {
 
     @Override
     public String toString() {
-        return "MemoryVo [物理内存总量=" + memTotal + ", 物理内存使用量=" + memUsed + ", 物理内存剩余量=" + memFree + ", 物理内存使用率="
-                + menUsedPercent + "]";
+        return "MemoryDomain [物理内存总量=" + memTotal + ", 物理内存使用量=" + memUsed + ", 物理内存剩余量="
+                + memFree + ", 物理内存使用率=" + menUsedPercent + "]";
     }
 
 }

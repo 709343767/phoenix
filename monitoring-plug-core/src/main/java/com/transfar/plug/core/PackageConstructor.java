@@ -47,6 +47,7 @@ public class PackageConstructor implements IPackageConstructor {
         alarmPackage.setInstanceId(InstanceUtils.getInstanceId());
         alarmPackage.setInstanceName(InstanceUtils.getInstanceName());
         alarmPackage.setIp(NetUtils.getLocalIp());
+        alarmPackage.setComputerName(SigarUtils.getComputerName());
         // 判断字符集
         Charset charset = alarm.getCharset();
         // 设置了字符集
@@ -75,6 +76,7 @@ public class PackageConstructor implements IPackageConstructor {
         heartbeatPackage.setInstanceId(InstanceUtils.getInstanceId());
         heartbeatPackage.setInstanceName(InstanceUtils.getInstanceName());
         heartbeatPackage.setIp(NetUtils.getLocalIp());
+        heartbeatPackage.setComputerName(SigarUtils.getComputerName());
         heartbeatPackage.setDateTime(new Date());
         heartbeatPackage.setRate(ConfigLoader.monitoringProperties.getHeartbeatProperties().getRate());
         return heartbeatPackage;
@@ -99,6 +101,7 @@ public class PackageConstructor implements IPackageConstructor {
         serverPackage.setInstanceId(InstanceUtils.getInstanceId());
         serverPackage.setInstanceName(InstanceUtils.getInstanceName());
         serverPackage.setIp(NetUtils.getLocalIp());
+        serverPackage.setComputerName(SigarUtils.getComputerName());
         ServerDomain serverDomain = SigarUtils.getServerInfo();
         serverPackage.setServerDomain(serverDomain);
         serverPackage.setRate(ConfigLoader.monitoringProperties.getServerInfoProperties().getRate());

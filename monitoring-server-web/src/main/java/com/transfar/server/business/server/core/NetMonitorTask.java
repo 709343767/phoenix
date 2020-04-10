@@ -4,7 +4,9 @@ import com.transfar.common.constant.AlarmLevelEnums;
 import com.transfar.common.constant.AlarmTypeEnums;
 import com.transfar.common.domain.Alarm;
 import com.transfar.common.dto.AlarmPackage;
+import com.transfar.common.util.DateTimeUtils;
 import com.transfar.common.util.NetUtils;
+import com.transfar.common.util.SigarUtils;
 import com.transfar.server.business.server.domain.Net;
 import com.transfar.server.business.server.service.IAlarmService;
 import com.transfar.server.property.MonitoringServerWebProperties;
@@ -17,10 +19,6 @@ import org.springframework.core.annotation.Order;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.Executors;
@@ -202,11 +200,10 @@ public class NetMonitorTask implements CommandLineRunner, DisposableBean {
      */
     @Async
     public void sendAlarmInfo(String title, AlarmLevelEnums alarmLevelEnums, Net net) {
-        Instant instant = net.getDateTime().toInstant();
-        ZoneId zoneId = ZoneId.systemDefault();
-        LocalDateTime localDateTime = instant.atZone(zoneId).toLocalDateTime();
-        String dateTime = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(localDateTime);
-        String msg = "IP地址：" + NetUtils.getLocalIp() + "到" + net.getIp() + "，时间：" + dateTime;
+        String dateTime = DateTimeUtils.dateToString(net.getDateTime());
+        String msg = "IP地址：" + NetUtils.getLocalIp() + "到" + net.getIp()
+                + "，服务器：" + SigarUtils.getComputerName() + "到" + net.getComputerName()
+                + "，告警时间：" + dateTime;
         Alarm alarm = Alarm.builder()//
                 .title(title)//
                 .msg(msg)//

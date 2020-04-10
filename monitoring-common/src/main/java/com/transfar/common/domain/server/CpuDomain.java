@@ -57,7 +57,7 @@ public class CpuDomain extends SuperBean {
 
 		@Override
 		public String toString() {
-			return "CpuInfoVo [CPU频率（MHz）=" + cpuMhz + ", CPU剩余率=" + cpuIdle + ", CPU使用率=" + cpuCombined + "]";
+			return "CpuInfoDomain [CPU频率（MHz）=" + cpuMhz + ", CPU剩余率=" + cpuIdle + ", CPU使用率=" + cpuCombined + "]";
 		}
 
 	}

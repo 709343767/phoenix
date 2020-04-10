@@ -1,7 +1,6 @@
 package com.transfar.common.domain.server;
 
 import com.transfar.common.abs.SuperBean;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -23,31 +22,36 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = true)
 public final class OsDomain extends SuperBean {
 
-	/**
-	 * 操作系统名称
-	 */
-	private String osName;
-	/**
-	 * 操作系统版本
-	 */
-	private String osVersion;
-	/**
-	 * 用户名称
-	 */
-	private String userName;
-	/**
-	 * 用户主目录
-	 */
-	private String userHome;
-	/**
-	 * 操作系统时区
-	 */
-	private String osTimeZone;
+    /**
+     * 计算机名
+     */
+    private String computerName;
 
-	@Override
-	public String toString() {
-		return "OsVo [操作系统名称=" + osName + ", 操作系统版本=" + osVersion + ", 用户名称=" + userName + ", 用户主目录=" + userHome
-				+ ", 操作系统时区=" + osTimeZone + "]";
-	}
+    /**
+     * 操作系统名称
+     */
+    private String osName;
+    /**
+     * 操作系统版本
+     */
+    private String osVersion;
+    /**
+     * 用户名称
+     */
+    private String userName;
+    /**
+     * 用户主目录
+     */
+    private String userHome;
+    /**
+     * 操作系统时区
+     */
+    private String osTimeZone;
+
+    @Override
+    public String toString() {
+        return "OsDomain [计算机名=" + computerName + ", 操作系统名称=" + osName + ", 操作系统版本=" + osVersion +
+                ", 用户名称=" + userName + ", 用户主目录=" + userHome + ", 操作系统时区=" + osTimeZone + "]";
+    }
 
 }

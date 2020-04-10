@@ -49,4 +49,9 @@ public class Net extends SuperBean {
      */
     private String ip;
 
+    /**
+     * 计算机名
+     */
+    private String computerName;
+
 }

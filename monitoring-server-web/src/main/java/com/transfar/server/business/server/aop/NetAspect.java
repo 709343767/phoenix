@@ -71,6 +71,7 @@ public class NetAspect {
         net.setConnectAlarm(this.netPool.get(packageIp) != null && this.netPool.get(packageIp).isConnectAlarm());
         net.setThresholdSecond((int) (heartbeatPackage.getRate() * config.getThreshold()));
         net.setIp(packageIp);
+        net.setComputerName(heartbeatPackage.getComputerName());
         // 更新网络信息池
         this.netPool.updateNetPool(packageIp, net);
     }
