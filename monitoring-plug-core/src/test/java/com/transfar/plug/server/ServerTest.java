@@ -1,10 +1,9 @@
 package com.transfar.plug.server;
 
-import org.hyperic.sigar.SigarException;
-import org.junit.Test;
-
 import com.transfar.common.domain.server.*;
 import com.transfar.common.util.SigarUtils;
+import org.hyperic.sigar.SigarException;
+import org.junit.Test;
 
 import java.util.List;
 
@@ -44,6 +43,19 @@ public class ServerTest {
     public void testGetOsInfo() {
         OsDomain osVo = SigarUtils.getOsInfo();
         System.out.println(osVo.toString());
+    }
+
+    /**
+     * <p>
+     * 测试获取计算机名
+     * </p>
+     *
+     * @author 皮锋
+     * @custom.date 2020/4/10 14:18
+     */
+    @Test
+    public void testGetComputerName() {
+        System.out.println(SigarUtils.getComputerName());
     }
 
     /**
