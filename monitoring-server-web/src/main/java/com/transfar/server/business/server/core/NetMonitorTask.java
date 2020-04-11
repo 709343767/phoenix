@@ -203,7 +203,7 @@ public class NetMonitorTask implements CommandLineRunner, DisposableBean {
         String dateTime = DateTimeUtils.dateToString(net.getDateTime());
         String msg = "IP地址：" + NetUtils.getLocalIp() + "到" + net.getIp()
                 + "，服务器：" + SigarUtils.getComputerName() + "到" + net.getComputerName()
-                + "，告警时间：" + dateTime;
+                + "，时间：" + dateTime;
         Alarm alarm = Alarm.builder()//
                 .title(title)//
                 .msg(msg)//
