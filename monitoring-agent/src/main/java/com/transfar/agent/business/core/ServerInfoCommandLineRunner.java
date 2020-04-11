@@ -1,5 +1,6 @@
 package com.transfar.agent.business.core;
 
+import com.transfar.common.dto.BaseResponsePackage;
 import com.transfar.common.dto.ServerPackage;
 import com.transfar.common.property.MonitoringProperties;
 import lombok.extern.slf4j.Slf4j;
@@ -114,7 +115,8 @@ class ServerInfoScheduledExecutor implements Runnable {
         try {
             ServerPackage serverPackage = new PackageConstructor().structureServerPackage();
             // 向服务端发送服务器信息包
-            MethodExecuteHandler.sendServerPackage2Server(serverPackage);
+            BaseResponsePackage baseResponsePackage = MethodExecuteHandler.sendServerPackage2Server(serverPackage);
+            log.info("服务器包响应消息：{}", baseResponsePackage.toJsonString());
         } catch (SigarException e) {
             log.error("Sigar异常！", e);
         }

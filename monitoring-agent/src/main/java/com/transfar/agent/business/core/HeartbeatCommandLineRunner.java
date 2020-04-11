@@ -1,5 +1,6 @@
 package com.transfar.agent.business.core;
 
+import com.transfar.common.dto.BaseResponsePackage;
 import com.transfar.common.dto.HeartbeatPackage;
 import com.transfar.common.property.MonitoringProperties;
 import lombok.extern.slf4j.Slf4j;
@@ -92,6 +93,7 @@ public class HeartbeatCommandLineRunner implements CommandLineRunner, Disposable
  * @author 皮锋
  * @custom.date 2020年3月5日 上午11:27:31
  */
+@Slf4j
 class HeartbeatScheduledExecutor implements Runnable {
 
     /**
@@ -106,6 +108,7 @@ class HeartbeatScheduledExecutor implements Runnable {
     public void run() {
         HeartbeatPackage heartbeatPackage = new PackageConstructor().structureHeartbeatPackage();
         // 向服务端发送心跳包
-        MethodExecuteHandler.sendHeartbeatPackage2Server(heartbeatPackage);
+        BaseResponsePackage baseResponsePackage = MethodExecuteHandler.sendHeartbeatPackage2Server(heartbeatPackage);
+        log.info("心跳包响应消息：{}", baseResponsePackage.toJsonString());
     }
 }
