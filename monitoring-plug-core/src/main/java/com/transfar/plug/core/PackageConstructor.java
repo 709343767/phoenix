@@ -34,7 +34,7 @@ public class PackageConstructor implements IPackageConstructor {
      * </p>
      *
      * @param alarm 告警信息
-     * @return AlarmPackage
+     * @return {@link AlarmPackage}
      * @author 皮锋
      * @custom.date 2020年3月7日 下午3:02:46
      */
@@ -64,7 +64,7 @@ public class PackageConstructor implements IPackageConstructor {
      * 构建心跳数据包
      * </p>
      *
-     * @return HeartbeatPackage
+     * @return {@link HeartbeatPackage}
      * @author 皮锋
      * @custom.date 2020年3月7日 下午3:54:30
      */
@@ -87,7 +87,7 @@ public class PackageConstructor implements IPackageConstructor {
      * 构建服务器数据包
      * </p>
      *
-     * @return ServerPackage
+     * @return {@link ServerPackage}
      * @throws SigarException Sigar异常
      * @author 皮锋
      * @custom.date 2020年3月7日 下午4:51:51

@@ -1,17 +1,12 @@
 package com.transfar.common.util;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import lombok.Cleanup;
+import lombok.extern.slf4j.Slf4j;
+
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.Properties;
 import java.util.ResourceBundle;
-
-import lombok.Cleanup;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * <p>
@@ -106,7 +101,7 @@ public final class PropertiesUtils {
      * </p>
      *
      * @param filePath 文件路径
-     * @return Properties
+     * @return {@link Properties}
      * @throws IOException IO异常
      * @author 皮锋
      * @custom.date 2020年3月5日 上午11:41:13

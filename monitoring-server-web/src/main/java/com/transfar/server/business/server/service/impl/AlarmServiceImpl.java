@@ -55,7 +55,7 @@ public class AlarmServiceImpl implements IAlarmService {
      * </p>
      *
      * @param alarmPackage 告警包
-     * @return Result
+     * @return {@link Result}
      * @author 皮锋
      * @custom.date 2020年3月10日 下午1:33:55
      */

@@ -41,7 +41,7 @@ public class HeartbeatController {
      * </p>
      *
      * @param request 请求参数
-     * @return BaseResponsePackage
+     * @return {@link BaseResponsePackage}
      * @author 皮锋
      * @custom.date 2020年3月4日 下午12:27:47
      */

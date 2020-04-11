@@ -27,7 +27,7 @@ public class MonitoringPropertiesLoader {
      * </p>
      *
      * @param configFileName 配置文件名字
-     * @return MonitoringServerWebProperties
+     * @return {@link MonitoringServerWebProperties}
      * @throws IOException IO异常
      * @author 皮锋
      * @custom.date 2020/3/23 14:16
@@ -74,7 +74,7 @@ public class MonitoringPropertiesLoader {
      * @param alarmSmsProtocol     告警短信协议
      * @param alarmSmsEnterprise   告警短信接口商家
      * @param monitoringEnable     网络监控是否打开
-     * @return MonitoringServerWebProperties
+     * @return {@link MonitoringServerWebProperties}
      * @author 皮锋
      * @custom.date 2020年3月10日 下午2:39:38
      */

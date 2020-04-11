@@ -2,7 +2,6 @@ package com.transfar.integrator.listener;
 
 import com.transfar.integrator.exception.BadListenerConfigException;
 import com.transfar.plug.Monitor;
-
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.StringUtils;
 
@@ -21,6 +20,15 @@ import java.io.File;
 //@Slf4j
 public class MonitoringPlugInitializeListener implements ServletContextListener {
 
+    /**
+     * <p>
+     * 开启监控
+     * </p>
+     *
+     * @param sce Servlet上下文事件
+     * @author 皮锋
+     * @custom.date 2020/4/11 22:30
+     */
     @SneakyThrows
     @Override
     public void contextInitialized(ServletContextEvent sce) {

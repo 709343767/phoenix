@@ -19,7 +19,7 @@ public interface IServerService {
      * </p>
      *
      * @param serverPackage 服务器信息包
-     * @return Result
+     * @return {@link Result}
      * @author 皮锋
      * @custom.date 2020/3/23 15:29
      */

@@ -18,7 +18,7 @@ public interface ISuperBean {
      * 对象转Json字符串
      * </p>
      *
-     * @return Json
+     * @return Json字符串
      * @author 皮锋
      * @custom.date 2020年3月4日 上午10:16:43
      */

@@ -26,7 +26,7 @@ public class MonitoringServerWebProdConfig {
      * 加载配置信息
      * </p>
      *
-     * @return MonitoringServerWebProperties
+     * @return {@link MonitoringServerWebProperties}
      * @throws IOException IO异常
      * @author 皮锋
      * @custom.date 2020年3月10日 下午2:28:37

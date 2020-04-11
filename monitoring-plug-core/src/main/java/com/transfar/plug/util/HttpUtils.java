@@ -81,7 +81,7 @@ public class HttpUtils {
      * 单例模式创建实例(线程安全的)
      * </p>
      *
-     * @return HttpUtils
+     * @return {@link HttpUtils}
      * @author 皮锋
      * @custom.date 2020年3月5日 下午5:33:35
      */

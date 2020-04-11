@@ -125,7 +125,7 @@ public final class SigarUtils {
      * 获取操作系统信息
      * </p>
      *
-     * @return OsDomain
+     * @return {@link OsDomain}
      * @author 皮锋
      * @custom.date 2020年3月3日 下午2:15:45
      */
@@ -159,7 +159,7 @@ public final class SigarUtils {
      * 获取内存信息
      * </p>
      *
-     * @return MemoryDomain
+     * @return {@link MemoryDomain}
      * @throws SigarException Sigar异常
      * @author 皮锋
      * @custom.date 2020年3月3日 下午2:24:41
@@ -178,7 +178,7 @@ public final class SigarUtils {
      * 获取Cpu信息
      * </p>
      *
-     * @return CpuDomain
+     * @return {@link CpuDomain}
      * @throws SigarException Sigar异常
      * @author 皮锋
      * @custom.date 2020年3月3日 下午1:04:04
@@ -210,7 +210,7 @@ public final class SigarUtils {
      * 获取网卡信息
      * </p>
      *
-     * @return NetDomain
+     * @return {@link NetDomain}
      * @throws SigarException Sigar异常
      * @author 皮锋
      * @custom.date 2020年3月3日 下午3:33:08
@@ -247,7 +247,7 @@ public final class SigarUtils {
      * 获取java虚拟机信息
      * </p>
      *
-     * @return JvmDomain
+     * @return {@link JvmDomain}
      * @author 皮锋
      * @custom.date 2020年3月3日 下午4:17:55
      */
@@ -268,7 +268,7 @@ public final class SigarUtils {
      * 获取磁盘信息
      * </p>
      *
-     * @return DiskDomain
+     * @return {@link DiskDomain}
      * @throws SigarException Sigar异常
      * @author 皮锋
      * @custom.date 2020/3/8 21:46
@@ -346,7 +346,7 @@ public final class SigarUtils {
      * 获取服务器信息
      * </p>
      *
-     * @return ServerDomain
+     * @return {@link ServerDomain}
      * @throws SigarException Sigar异常
      * @author 皮锋
      * @custom.date 2020年3月3日 下午4:25:30

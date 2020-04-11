@@ -39,14 +39,14 @@ public class HeartbeatServiceImpl implements IHeartbeatService {
      * </p>
      *
      * @param heartbeatPackage 心跳包
-     * @return Result
+     * @return {@link Result}
      * @author 皮锋
      * @custom.date 2020/3/12 10:18
      */
     @Override
     public Result dealHeartbeatPackage(HeartbeatPackage heartbeatPackage) {
-    	// 返回结果
-    	Result result=new Result();
+        // 返回结果
+        Result result = new Result();
         // 把应用实例交给应用实例池，交给应用实例池管理
         String key = heartbeatPackage.getInstanceId();
         Instance instance = new Instance();

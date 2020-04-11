@@ -51,9 +51,9 @@ public class HeartbeatCommandLineRunner implements CommandLineRunner, Disposable
      * 项目启动完成后延迟5秒钟启动定时任务，定时向服务端发送心跳包，定时任务的执行频率为监控配置文件中所配置的心跳频率。
      * </p>
      *
+     * @param args 传入的主方法参数
      * @author 皮锋
      * @custom.date 2020/4/9 17:12
-     * @param  args 传入的主方法参数
      */
     @Override
     public void run(String... args) {
@@ -94,6 +94,14 @@ public class HeartbeatCommandLineRunner implements CommandLineRunner, Disposable
  */
 class HeartbeatScheduledExecutor implements Runnable {
 
+    /**
+     * <p>
+     * 发送心跳包
+     * </p>
+     *
+     * @author 皮锋
+     * @custom.date 2020/4/11 20:47
+     */
     @Override
     public void run() {
         HeartbeatPackage heartbeatPackage = new PackageConstructor().structureHeartbeatPackage();

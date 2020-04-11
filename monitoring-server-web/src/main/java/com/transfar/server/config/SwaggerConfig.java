@@ -1,9 +1,8 @@
 package com.transfar.server.config;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import lombok.extern.slf4j.Slf4j;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
@@ -35,7 +34,7 @@ public class SwaggerConfig {
      * 创建rest风格的Swagger api
      * </p>
      *
-     * @return Docket
+     * @return {@link Docket}
      * @author 皮锋
      * @custom.date 2020年1月20日 上午10:28:13
      */
@@ -62,7 +61,7 @@ public class SwaggerConfig {
      * 构建详细api文档信息，包括标题、版本号、描述
      * </p>
      *
-     * @return ApiInfo
+     * @return {@link ApiInfo}
      * @author 皮锋
      * @custom.date 2020年1月20日 上午9:58:47
      */

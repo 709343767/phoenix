@@ -53,9 +53,9 @@ public class ServerInfoCommandLineRunner implements CommandLineRunner, Disposabl
      * 定时任务的执行频率为监控配置文件中配置的服务器信息包发送频率。
      * </p>
      *
+     * @param args 传入的主方法参数
      * @author 皮锋
      * @custom.date 2020/4/9 17:17
-     * @param args 传入的主方法参数
      */
     @Override
     public void run(String... args) {
@@ -101,11 +101,19 @@ public class ServerInfoCommandLineRunner implements CommandLineRunner, Disposabl
 @Slf4j
 class ServerInfoScheduledExecutor implements Runnable {
 
+    /**
+     * <p>
+     * 发送服务器信息包
+     * </p>
+     *
+     * @author 皮锋
+     * @custom.date 2020/4/11 20:51
+     */
     @Override
     public void run() {
         try {
             ServerPackage serverPackage = new PackageConstructor().structureServerPackage();
-            // 向服务端发送心跳包
+            // 向服务端发送服务器信息包
             MethodExecuteHandler.sendServerPackage2Server(serverPackage);
         } catch (SigarException e) {
             log.error("Sigar异常！", e);

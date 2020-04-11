@@ -34,7 +34,7 @@ public class PackageConstructor implements IPackageConstructor {
      * </p>
      *
      * @param alarm 告警
-     * @return AlarmPackage
+     * @return {@link AlarmPackage}
      * @author 皮锋
      * @custom.date 2020/3/13 11:14
      */
@@ -74,7 +74,7 @@ public class PackageConstructor implements IPackageConstructor {
      * 构建请求成功的基础响应包
      * </p>
      *
-     * @return BaseResponsePackage
+     * @return {@link BaseResponsePackage}
      * @author 皮锋
      * @custom.date 2020年3月11日 上午9:52:37
      */
@@ -98,7 +98,7 @@ public class PackageConstructor implements IPackageConstructor {
      * </p>
      *
      * @param msg 返回信息
-     * @return BaseResponsePackage
+     * @return {@link BaseResponsePackage}
      * @author 皮锋
      * @custom.date 2020年3月11日 上午9:52:48
      */

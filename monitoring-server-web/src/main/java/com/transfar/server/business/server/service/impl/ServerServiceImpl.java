@@ -24,14 +24,14 @@ public class ServerServiceImpl implements IServerService {
      * </p>
      *
      * @param serverPackage 服务器信息包
-     * @return Result
+     * @return {@link Result}
      * @author 皮锋
      * @custom.date 2020/3/23 15:29
      */
     @Override
     public Result dealServerPackage(ServerPackage serverPackage) {
-    	// 返回结果
-    	Result result=new Result();
+        // 返回结果
+        Result result = new Result();
         // IP地址
         String ip = serverPackage.getIp();
         // 服务器信息

@@ -1,13 +1,9 @@
 package com.transfar.plug.util;
 
-import java.lang.management.ManagementFactory;
-import java.lang.management.RuntimeMXBean;
-
-import org.apache.commons.lang3.StringUtils;
-
-import com.transfar.common.util.NetUtils;
 import com.transfar.common.util.MD5Utils;
+import com.transfar.common.util.NetUtils;
 import com.transfar.plug.core.ConfigLoader;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * <p>
@@ -28,26 +24,6 @@ public class InstanceUtils {
      * 应用名字
      */
     private static String instanceName;
-
-    /**
-     * <p>
-     * 获取java进程PID
-     * </p>
-     *
-     * @return PID
-     * @author 皮锋
-     * @custom.date 2020年3月4日 下午10:48:07
-     */
-    public static String getJavaPid() {
-        String pid = null;
-        RuntimeMXBean runtime = ManagementFactory.getRuntimeMXBean();
-        String name = runtime.getName();
-        int index = name.indexOf("@");
-        if (index != -1) {
-            pid = name.substring(0, index);
-        }
-        return pid;
-    }
 
     /**
      * <p>

@@ -23,7 +23,7 @@ public interface IPackageConstructor {
      * </p>
      *
      * @param alarm 告警信息
-     * @return AlarmPackage
+     * @return {@link AlarmPackage}
      * @author 皮锋
      * @custom.date 2020年3月7日 下午3:02:46
      */
@@ -34,7 +34,7 @@ public interface IPackageConstructor {
      * 构建心跳数据包
      * </p>
      *
-     * @return HeartbeatPackage
+     * @return {@link HeartbeatPackage}
      * @author 皮锋
      * @custom.date 2020年3月7日 下午3:54:30
      */
@@ -45,7 +45,7 @@ public interface IPackageConstructor {
      * 构建服务器数据包
      * </p>
      *
-     * @return ServerPackage
+     * @return {@link ServerPackage}
      * @throws SigarException Sigar异常
      * @author 皮锋
      * @custom.date 2020年3月7日 下午4:51:51
@@ -57,7 +57,7 @@ public interface IPackageConstructor {
      * 构建请求成功的基础响应包
      * </p>
      *
-     * @return BaseResponsePackage
+     * @return {@link BaseResponsePackage}
      * @author 皮锋
      * @custom.date 2020年3月11日 上午9:52:37
      */
@@ -69,7 +69,7 @@ public interface IPackageConstructor {
      * </p>
      *
      * @param msg 返回信息
-     * @return BaseResponsePackage
+     * @return {@link BaseResponsePackage}
      * @author 皮锋
      * @custom.date 2020年3月11日 上午9:52:48
      */

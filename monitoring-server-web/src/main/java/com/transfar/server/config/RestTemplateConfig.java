@@ -27,7 +27,7 @@ public class RestTemplateConfig implements WebMvcConfigurer {
      * 构造RestTemplate实例，把RestTemplate实例作为一个JavaBean交给Spring管理
      * </p>
      *
-     * @return RestTemplate
+     * @return {@link RestTemplate}
      * @author 皮锋
      * @custom.date 2020年3月4日 下午3:46:33
      */

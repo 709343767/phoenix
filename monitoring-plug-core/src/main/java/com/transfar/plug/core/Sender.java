@@ -1,10 +1,9 @@
 package com.transfar.plug.core;
 
-import java.io.IOException;
-
+import com.transfar.plug.util.HttpUtils;
 import org.apache.http.client.ClientProtocolException;
 
-import com.transfar.plug.util.HttpUtils;
+import java.io.IOException;
 
 /**
  * <p>
@@ -23,7 +22,7 @@ public class Sender {
      *
      * @param url  URL地址
      * @param json JSON字符串格式的数据
-     * @return 服务端返回值
+     * @return 服务端或者代理端返回值
      * @throws IOException             IO异常
      * @throws ClientProtocolException 客户端协议异常
      * @author 皮锋

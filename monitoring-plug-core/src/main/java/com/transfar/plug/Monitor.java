@@ -83,7 +83,7 @@ public class Monitor {
      * </p>
      *
      * @param alarm 告警信息
-     * @return Result
+     * @return {@link Result}
      * @author 皮锋
      * @custom.date 2020年3月6日 上午10:17:44
      */

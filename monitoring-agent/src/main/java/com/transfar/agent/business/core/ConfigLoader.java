@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.web.ServerProperties;
 
 /**
  * <p>
- * 监控代理端加载配置
+ * 监控代理端加载配置信息
  * </p>
  *
  * @author 皮锋

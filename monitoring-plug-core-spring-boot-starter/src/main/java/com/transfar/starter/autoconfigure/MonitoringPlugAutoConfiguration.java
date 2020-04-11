@@ -26,6 +26,16 @@ import org.springframework.core.type.AnnotationMetadata;
 @ConditionalOnClass({SpringBootApplication.class})
 public class MonitoringPlugAutoConfiguration implements ImportBeanDefinitionRegistrar {
 
+    /**
+     * <p>
+     * 开启监控
+     * </p>
+     *
+     * @param importingClassMetadata 注释元数据
+     * @param registry               Bean定义注册器
+     * @author 皮锋
+     * @custom.date 2020/4/11 22:26
+     */
     @SneakyThrows
     @Override
     public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry) {

@@ -19,7 +19,7 @@ public interface IHeartbeatService {
      * </p>
      *
      * @param heartbeatPackage 心跳包
-     * @return Result
+     * @return {@link Result}
      * @author 皮锋
      * @custom.date 2020/3/12 10:18
      */

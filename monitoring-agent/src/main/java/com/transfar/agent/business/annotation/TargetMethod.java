@@ -4,7 +4,7 @@ import java.lang.annotation.*;
 
 /**
  * <p>
- * 自定义指定代理方法的注解
+ * 自定义指定代理执行方法的注解
  * </p>
  *
  * @author 皮锋
@@ -17,7 +17,7 @@ public @interface TargetMethod {
 
     /**
      * <p>
-     * 指定方法
+     * 指定代理执行方法
      * </p>
      *
      * @return 方法名
