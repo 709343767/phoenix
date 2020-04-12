@@ -13,7 +13,7 @@ import java.util.*;
 
 /**
  * <p>
- * Sigar工具类
+ * Sigar工具类，获取服务器信息
  * </p>
  *
  * @author 皮锋
@@ -74,22 +74,29 @@ public final class SigarUtils {
         SigarLoader loader = new SigarLoader(Sigar.class);
         String lib = loader.getLibraryName();
         log.info("初始化Sigar库文件：{}", lib);
-        @Cleanup
-        InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream("sigar.so/" + lib);
         // 当前文件夹路径
         String currentDir = props.getProperty("user.dir");
-        File tempDir = new File(
-                currentDir + File.separator + "tmp" + File.separator + "sigar" + File.separator + "lib");
+        File tempDir = new File(currentDir + File.separator + "persistent-monitoring"
+                + File.separator + "sigar" + File.separator + "lib");
+        // 判断文件夹是否存在
         if (!tempDir.exists()) {
             boolean isMkdirs = tempDir.mkdirs();
-            log.debug("创建Sigar库文件夹：{}", isMkdirs);
+            log.info("创建Sigar库文件夹：{}", isMkdirs);
         }
-        @Cleanup
-        BufferedOutputStream os = new BufferedOutputStream(new FileOutputStream(new File(tempDir, lib), false));
-        int lentgh;
-        assert is != null;
-        while ((lentgh = is.read()) != -1) {
-            os.write(lentgh);
+        File file = new File(tempDir, lib);
+        // 判断文件是否存在
+        if (!file.exists()) {
+            @Cleanup
+            InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream("sigar.so/" + lib);
+            @Cleanup
+            FileOutputStream fileOutputStream = new FileOutputStream(file, false);
+            @Cleanup
+            BufferedOutputStream os = new BufferedOutputStream(fileOutputStream);
+            int lentgh;
+            assert is != null;
+            while ((lentgh = is.read()) != -1) {
+                os.write(lentgh);
+            }
         }
         System.setProperty("org.hyperic.sigar.path", tempDir.getCanonicalPath());
         log.info("org.hyperic.sigar.path：{}", System.getProperty("org.hyperic.sigar.path"));
