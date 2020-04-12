@@ -1,6 +1,5 @@
 package com.transfar.agent.config;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.PropertySource;
@@ -16,6 +15,5 @@ import org.springframework.context.annotation.PropertySource;
 @Configuration
 @Profile("prod")
 @PropertySource("classpath:monitoring-prod.properties")
-@Slf4j
 public class MonitoringAgentProdConfig extends AbstractMonitoringAgentConfig {
 }

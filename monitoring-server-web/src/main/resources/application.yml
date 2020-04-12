@@ -5,7 +5,7 @@ server:
   undertow:
     accesslog:
       #Undertow日志存放目录
-      dir: logs/monitoring-server-web
+      dir: persistent-monitoring/logs/monitoring-server-web
       #是否启动日志
       enabled: true
       #日志格式
