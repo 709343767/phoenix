@@ -66,9 +66,15 @@ public class MonitorAlarmDefinition {
     private String code;
 
     /**
-     * 告警定义
+     * 告警标题
      */
-    @TableField("DEFINITION")
-    private String definition;
+    @TableField("TITLE")
+    private String title;
+
+    /**
+     * 告警内容
+     */
+    @TableField("CONTENT")
+    private String content;
 
 }

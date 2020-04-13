@@ -84,44 +84,58 @@ public class AlarmServiceImpl implements IAlarmService {
         // 告警开关是否打开
         boolean enable = this.config.getAlarmProperties().isEnable();
         if (!enable) {
-            String msg = "告警开关没有打开，不发送告警消息！";
-            log.warn(msg);
+            String expMsg = "告警开关没有打开，不发送告警消息！";
+            log.warn(expMsg);
             result.setSuccess(false);
-            result.setMsg(msg);
+            result.setMsg(expMsg);
             // 停止往下执行
             return;
         }
         // 是测试告警信息，不做处理，直接返回
         if (alarm.isTest()) {
-            String msg = "当前为测试信息，不发送告警消息！";
-            log.warn(msg);
+            String expMsg = "当前为测试信息，不发送告警消息！";
+            log.warn(expMsg);
             result.setSuccess(false);
-            result.setMsg(msg);
+            result.setMsg(expMsg);
             // 停止往下执行
             return;
         }
         // 告警级别
         String level = alarm.getAlarmLevel().name();
+        // 告警内容标题
+        String alarmTitle = alarm.getTitle();
+        // 告警内容
+        String msg = alarm.getMsg();
         // 告警代码
         String code = alarm.getCode();
-        // 如果有告警代码，查询数据库中此告警代码对应的告警级别，数据库中的告警级别优先级最高
+        // 如果有告警代码，查询数据库中此告警代码对应的告警级别、告警标题、告警内容，数据库中有就用数据库的
         if (StringUtils.isNotBlank(code)) {
             try {
                 LambdaQueryWrapper<MonitorAlarmDefinition> lambdaQueryWrapper = new LambdaQueryWrapper<>();
                 lambdaQueryWrapper.eq(MonitorAlarmDefinition::getCode, code);
-                MonitorAlarmDefinition monitorAlarmDefinition = this.monitorAlarmDefinitionDao
-                        .selectOne(lambdaQueryWrapper);
+                MonitorAlarmDefinition monitorAlarmDefinition = this.monitorAlarmDefinitionDao.selectOne(lambdaQueryWrapper);
                 if (monitorAlarmDefinition != null) {
+                    // 数据库中的告警级别
                     String dbLevel = monitorAlarmDefinition.getGrade();
                     if (StringUtils.isNotBlank(dbLevel)) {
                         level = dbLevel;
                     }
+                    // 数据库中的告警标题
+                    String dbTitle = monitorAlarmDefinition.getTitle();
+                    if (StringUtils.isNotBlank(dbTitle)) {
+                        alarmTitle = dbTitle;
+                    }
+                    // 数据库中的告警内容
+                    String dbContent = monitorAlarmDefinition.getContent();
+                    if (StringUtils.isNotBlank(dbContent)) {
+                        msg = dbContent;
+                    }
                 }
             } catch (Exception e) {
-                String msg = "根据告警代码从数据库中查询告警级别失败！";
-                log.warn(msg);
+                String expMsg = "根据告警代码从数据库中查询告警级别失败！";
+                log.warn(expMsg);
                 result.setSuccess(false);
-                result.setMsg(msg);
+                result.setMsg(expMsg);
                 // 停止往下执行
                 return;
             }
@@ -129,26 +143,23 @@ public class AlarmServiceImpl implements IAlarmService {
         // 告警级别小于配置的告警级别，不做处理，直接返回
         String configAlarmLevel = this.config.getAlarmProperties().getLevel();
         if (!AlarmUtils.isAlarm(configAlarmLevel, level)) {
-            String msg = "小于配置的告警级别，不发送告警消息！";
-            log.warn(msg);
+            String expMsg = "小于配置的告警级别，不发送告警消息！";
+            log.warn(expMsg);
             result.setSuccess(false);
-            result.setMsg(msg);
+            result.setMsg(expMsg);
             // 停止往下执行
             return;
         }
-        // 告警内容
-        String msg = alarm.getMsg();
+
         // 没有告警内容，不做处理，直接返回
         if (StringUtils.isBlank(msg)) {
-            String msg2 = "告警内容为空，不发送告警消息！";
-            log.warn(msg2);
+            String expMsg = "告警内容为空，不发送告警消息！";
+            log.warn(expMsg);
             result.setSuccess(false);
-            result.setMsg(msg2);
+            result.setMsg(expMsg);
             // 停止往下执行
             return;
         }
-        // 告警内容标题
-        String alarmTitle = alarm.getTitle();
         // 告警方式
         String alarmType = this.config.getAlarmProperties().getType();
         // 告警方式为短信告警
