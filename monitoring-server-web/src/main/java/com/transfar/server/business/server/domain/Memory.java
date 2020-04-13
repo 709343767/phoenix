@@ -45,6 +45,11 @@ public class Memory extends SuperBean {
     private String ip;
 
     /**
+     * 计算机名
+     */
+    private String computerName;
+
+    /**
      * 内存信息
      */
     private MemoryDomain memoryDomain;

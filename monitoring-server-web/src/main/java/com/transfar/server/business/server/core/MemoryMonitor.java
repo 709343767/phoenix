@@ -131,7 +131,7 @@ public class MemoryMonitor implements IServerMonitoringListener {
      */
     @Async
     public void sendAlarmInfo(String title, AlarmLevelEnums alarmLevelEnums, Memory memory) {
-        String msg = "IP地址：" + memory.getIp() + "，内存使用率：" + memory.getMemoryDomain().getMenUsedPercent();
+        String msg = "IP地址：" + memory.getIp() + "，服务器：" + memory.getComputerName() + "，内存使用率：" + memory.getMemoryDomain().getMenUsedPercent();
         Alarm alarm = Alarm.builder()//
                 .title(title)//
                 .msg(msg)//

@@ -64,7 +64,7 @@ public class DiskMonitor implements IServerMonitoringListener {
                 subregion.setOverLoad(true);
                 if (!isAlarm) {
                     // 发送告警
-                    this.sendAlarmInfo("磁盘分区过载", AlarmLevelEnums.WARN, disk.getIp(), subregion);
+                    this.sendAlarmInfo("磁盘分区过载", AlarmLevelEnums.WARN, disk.getIp(), disk, subregion);
                     subregion.setAlarm(true);
                 }
             }
@@ -87,13 +87,15 @@ public class DiskMonitor implements IServerMonitoringListener {
      * @param title           告警标题
      * @param alarmLevelEnums 告警级别
      * @param ip              IP地址
+     * @param disk            磁盘
      * @param subregion       磁盘分区
      * @author 皮锋
      * @custom.date 2020/3/25 14:46
      */
     @Async
-    public void sendAlarmInfo(String title, AlarmLevelEnums alarmLevelEnums, String ip, Disk.Subregion subregion) {
-        String msg = "IP地址：" + ip + "，磁盘分区：" + subregion.getDevName() + "，磁盘分区使用率：" + subregion.getUsePercent();
+    public void sendAlarmInfo(String title, AlarmLevelEnums alarmLevelEnums, String ip, Disk disk, Disk.Subregion subregion) {
+        String msg = "IP地址：" + ip + "，服务器：" + disk.getComputerName()
+                + "，磁盘分区：" + subregion.getDevName() + "，磁盘分区使用率：" + subregion.getUsePercent();
         Alarm alarm = Alarm.builder()//
                 .title(title)//
                 .msg(msg)//

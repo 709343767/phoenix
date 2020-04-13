@@ -68,7 +68,8 @@ public class CpuMonitor implements IServerMonitoringListener {
             if (!isOverLoad90) {
                 int num90 = cpu.getNum90();
                 cpu.setNum90(num90 + 1);
-                if (num90 > threshold) {
+                // 大于两倍监控阈值才认为过载90%是确认的
+                if (num90 > threshold * 2) {
                     // 处理CPU过载90%
                     this.dealCpuOverLoad90(cpu);
                 }
@@ -181,7 +182,7 @@ public class CpuMonitor implements IServerMonitoringListener {
      */
     @Async
     public void sendAlarmInfo(String title, AlarmLevelEnums alarmLevelEnums, Cpu cpu) {
-        String msg = "IP地址：" + cpu.getIp() + "，CPU使用率：" + cpu.getAvgCpuCombined() + "%";
+        String msg = "IP地址：" + cpu.getIp() + "，服务器：" + cpu.getComputerName() + "，CPU使用率：" + cpu.getAvgCpuCombined() + "%";
         Alarm alarm = Alarm.builder()//
                 .title(title)//
                 .msg(msg)//

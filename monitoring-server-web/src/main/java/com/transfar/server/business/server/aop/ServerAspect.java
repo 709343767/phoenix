@@ -89,6 +89,8 @@ public class ServerAspect {
         ServerPackage serverPackage = JSON.parseObject(args, ServerPackage.class);
         // IP地址
         String ip = serverPackage.getIp();
+        // 计算机名
+        String computerName = serverPackage.getComputerName();
         // 服务器信息
         ServerDomain serverDomain = serverPackage.getServerDomain();
         // 内存信息
@@ -98,7 +100,7 @@ public class ServerAspect {
         // 磁盘信息
         DiskDomain diskDomain = serverDomain.getDiskDomain();
         // 刷新服务器信息
-        this.refreshServerInfo(ip, memoryDomain, cpuDomain, diskDomain);
+        this.refreshServerInfo(ip, computerName, memoryDomain, cpuDomain, diskDomain);
         // 调用监听器回调接口
         this.serverMonitoringListeners.forEach(e -> e.wakeUp(ip));
     }
@@ -109,19 +111,20 @@ public class ServerAspect {
      * </p>
      *
      * @param ip           IP地址
+     * @param computerName 计算机名
      * @param memoryDomain 内存信息
      * @param cpuDomain    CPU信息
      * @param diskDomain   磁盘信息
      * @author 皮锋
      * @custom.date 2020/3/31 13:39
      */
-    private void refreshServerInfo(String ip, MemoryDomain memoryDomain, CpuDomain cpuDomain, DiskDomain diskDomain) {
+    private void refreshServerInfo(String ip, String computerName, MemoryDomain memoryDomain, CpuDomain cpuDomain, DiskDomain diskDomain) {
         // 刷新服务器内存信息
-        this.refreshMemory(ip, memoryDomain);
+        this.refreshMemory(ip, computerName, memoryDomain);
         // 刷新服务器CPU信息
-        this.refreshCpu(ip, cpuDomain);
+        this.refreshCpu(ip, computerName, cpuDomain);
         // 刷新服务器磁盘信息
-        this.refreshDisk(ip, diskDomain);
+        this.refreshDisk(ip, computerName, diskDomain);
     }
 
     /**
@@ -129,12 +132,13 @@ public class ServerAspect {
      * 刷新服务器磁盘信息
      * </p>
      *
-     * @param ip         IP地址
-     * @param diskDomain 磁盘信息
+     * @param ip           IP地址
+     * @param computerName 计算机名
+     * @param diskDomain   磁盘信息
      * @author 皮锋
      * @custom.date 2020/3/31 13:44
      */
-    private void refreshDisk(String ip, DiskDomain diskDomain) {
+    private void refreshDisk(String ip, String computerName, DiskDomain diskDomain) {
         Disk disk = new Disk();
         Map<String, Disk.Subregion> subregionMap = new HashMap<>();
         for (DiskDomain.DiskInfoDomain diskInfoDomain : diskDomain.getDiskInfoList()) {
@@ -151,6 +155,7 @@ public class ServerAspect {
             subregionMap.put(devName, subregion);
         }
         disk.setIp(ip);
+        disk.setComputerName(computerName);
         disk.setSubregionMap(subregionMap);
         this.diskPool.updateMemoryPool(ip, disk);
     }
@@ -160,14 +165,16 @@ public class ServerAspect {
      * 刷新服务器CPU信息
      * </p>
      *
-     * @param ip        IP地址
-     * @param cpuDomain CPU信息
+     * @param ip           IP地址
+     * @param computerName 计算机名
+     * @param cpuDomain    CPU信息
      * @author 皮锋
      * @custom.date 2020/3/31 13:43
      */
-    private void refreshCpu(String ip, CpuDomain cpuDomain) {
+    private void refreshCpu(String ip, String computerName, CpuDomain cpuDomain) {
         Cpu cpu = new Cpu();
         cpu.setIp(ip);
+        cpu.setComputerName(computerName);
         cpu.setCpuDomain(cpuDomain);
         cpu.setAvgCpuCombined(Cpu.calculateAvgCpuCombined(cpuDomain));
         Cpu poolCpu = this.cpuPool.get(ip);
@@ -187,13 +194,15 @@ public class ServerAspect {
      * </p>
      *
      * @param ip           IP地址
+     * @param computerName 计算机名
      * @param memoryDomain 内存信息
      * @author 皮锋
      * @custom.date 2020/3/31 13:41
      */
-    private void refreshMemory(String ip, MemoryDomain memoryDomain) {
+    private void refreshMemory(String ip, String computerName, MemoryDomain memoryDomain) {
         Memory memory = new Memory();
         memory.setIp(ip);
+        memory.setComputerName(computerName);
         memory.setMemoryDomain(memoryDomain);
         memory.setUsedPercent(Memory.calculateUsePercent(memoryDomain.getMenUsedPercent()));
         Memory poolMemory = this.memoryPool.get(ip);

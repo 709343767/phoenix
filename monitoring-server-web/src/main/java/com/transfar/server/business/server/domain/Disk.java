@@ -32,6 +32,11 @@ public class Disk extends SuperBean {
     private String ip;
 
     /**
+     * 计算机名
+     */
+    private String computerName;
+
+    /**
      * 服务器磁盘分区
      */
     private Map<String, Subregion> subregionMap;

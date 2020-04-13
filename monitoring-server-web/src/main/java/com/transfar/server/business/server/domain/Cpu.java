@@ -69,6 +69,11 @@ public class Cpu extends SuperBean {
     private String ip;
 
     /**
+     * 计算机名
+     */
+    private String computerName;
+
+    /**
      * CPU信息
      */
     private CpuDomain cpuDomain;
