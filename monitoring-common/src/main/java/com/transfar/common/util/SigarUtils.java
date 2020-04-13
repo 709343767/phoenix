@@ -9,6 +9,7 @@ import org.hyperic.sigar.FileSystem;
 import org.hyperic.sigar.*;
 
 import java.io.*;
+import java.net.InetAddress;
 import java.util.*;
 
 /**
@@ -158,7 +159,16 @@ public final class SigarUtils {
      * @custom.date 2020/4/10 13:56
      */
     public static String getComputerName() {
-        return envs.get("COMPUTERNAME");
+        // Windows操作系统
+        if (OsUtils.isWindowsOs()) {
+            return envs.get("COMPUTERNAME");
+        } else {
+            try {
+                return InetAddress.getLocalHost().getHostName();
+            } catch (Exception e) {
+                return "UnknownHost";
+            }
+        }
     }
 
     /**

@@ -24,24 +24,6 @@ public class NetUtils {
 
     /**
      * <p>
-     * 判断操作系统是不是Windows
-     * </p>
-     *
-     * @return boolean
-     * @author 皮锋
-     * @custom.date 2020年3月20日 上午10:30:30
-     */
-    public static boolean isWindowsOs() {
-        boolean isWindowsOS = false;
-        String osName = System.getProperty("os.name");
-        if (osName.toLowerCase().contains("windows")) {
-            isWindowsOS = true;
-        }
-        return isWindowsOS;
-    }
-
-    /**
-     * <p>
      * 获取本机MAC地址
      * </p>
      *
@@ -85,7 +67,7 @@ public class NetUtils {
     public static String getLocalIp() {
         try {
             // Windows操作系统
-            if (isWindowsOs()) {
+            if (OsUtils.isWindowsOs()) {
                 InetAddress ip4 = Inet4Address.getLocalHost();
                 return ip4.getHostAddress();
             } else {
@@ -145,7 +127,7 @@ public class NetUtils {
         try {
             Process process;
             // Windows系统
-            if (isWindowsOs()) {
+            if (OsUtils.isWindowsOs()) {
                 process = Runtime.getRuntime().exec("ping " + address + " -n 5");
             } else {
                 process = Runtime.getRuntime().exec("ping " + address + " -c 5");
