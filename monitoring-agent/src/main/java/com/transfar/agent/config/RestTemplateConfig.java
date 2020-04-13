@@ -44,10 +44,10 @@ public class RestTemplateConfig {
         String rootUri = this.monitoringProperties.getServerProperties().getUrl();
         RestTemplate restTemplate = new RestTemplateBuilder()//
                 // .basicAuthorization("username", "password")
-                // 5秒
-                .setConnectTimeout(Duration.ofSeconds(5))
-                // 5秒
-                .setReadTimeout(Duration.ofSeconds(5))//
+                // 15秒
+                .setConnectTimeout(Duration.ofSeconds(15))
+                // 15秒
+                .setReadTimeout(Duration.ofSeconds(15))//
                 .rootUri(rootUri) //
                 .build();
         log.info("RestTemplate配置成功！");
