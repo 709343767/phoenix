@@ -245,7 +245,7 @@ public class InstanceMonitorTask implements CommandLineRunner, DisposableBean {
     @Async
     public void sendAlarmInfo(String title, AlarmLevelEnums alarmLevelEnums, Instance instance) {
         String msg = "应用ID：" + instance.getInstanceId() + "，应用名称：" + instance.getInstanceName() + "，应用端点："
-                + instance.getEndpoint() + "，IP地址：" + instance.getIp();
+                + instance.getEndpoint() + "，IP地址：" + instance.getIp() + "，服务器：" + instance.getComputerName();
         Alarm alarm = Alarm.builder()//
                 .title(title)//
                 .msg(msg)//
