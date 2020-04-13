@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50639
 File Encoding         : 65001
 
-Date: 2020-04-02 16:46:45
+Date: 2020-04-13 10:08:49
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -27,6 +27,7 @@ CREATE TABLE `monitor_alarm_definition` (
   `THIRD_CLASS` varchar(255) DEFAULT NULL COMMENT '三级分类',
   `GRADE` varchar(5) DEFAULT NULL COMMENT '告警级别',
   `CODE` varchar(8) DEFAULT NULL COMMENT '告警编码',
-  `DEFINITION` varchar(255) DEFAULT NULL COMMENT '告警定义',
+  `TITLE` varchar(125) DEFAULT NULL COMMENT '告警标题',
+  `CONTENT` varchar(255) DEFAULT NULL COMMENT '告警内容',
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4;
