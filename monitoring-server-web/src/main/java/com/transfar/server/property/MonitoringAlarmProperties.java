@@ -37,4 +37,9 @@ public class MonitoringAlarmProperties {
      */
     private MonitoringSmsProperties smsProperties;
 
+    /**
+     * 邮箱配置属性
+     */
+    private MonitoringMailProperties mailProperties;
+
 }

@@ -6,9 +6,11 @@ import com.transfar.common.domain.Alarm;
 import com.transfar.common.domain.Result;
 import com.transfar.common.dto.AlarmPackage;
 import com.transfar.server.business.server.dao.IMonitorAlarmDefinitionDao;
+import com.transfar.server.business.server.domain.Mail;
 import com.transfar.server.business.server.domain.TransfarSms;
 import com.transfar.server.business.server.entity.MonitorAlarmDefinition;
 import com.transfar.server.business.server.service.IAlarmService;
+import com.transfar.server.business.server.service.IMailService;
 import com.transfar.server.business.server.service.ISmsService;
 import com.transfar.server.constant.AlarmWayEnums;
 import com.transfar.server.constant.EnterpriseConstants;
@@ -36,6 +38,12 @@ public class AlarmServiceImpl implements IAlarmService {
      */
     @Autowired
     private ISmsService smsService;
+
+    /**
+     * 邮箱服务接口
+     */
+    @Autowired
+    private IMailService mailService;
 
     /**
      * 监控配置属性
@@ -168,6 +176,7 @@ public class AlarmServiceImpl implements IAlarmService {
             this.dealSmsAlarm(alarmTitle, msg, level, result);
         } else if (StringUtils.equalsIgnoreCase(alarmType, AlarmWayEnums.MAIL.name())) {
             // 处理邮件告警
+            this.dealMailAlarm(alarmTitle, msg, level, result);
         }
     }
 
@@ -227,6 +236,38 @@ public class AlarmServiceImpl implements IAlarmService {
         else {
             result.setSuccess(false);
             result.setMsg("调用创发公司的短信接口发送短信失败！");
+        }
+    }
+
+    /**
+     * <p>
+     * 处理邮件告警
+     * </p>
+     *
+     * @param alarmTitle 告警信息标题
+     * @param msg        告警信息
+     * @param level      告警级别
+     * @param result     返回结果
+     * @author 皮锋
+     * @custom.date 2020/4/13 13:23
+     */
+    private void dealMailAlarm(String alarmTitle, String msg, String level, Result result) {
+        Mail mail = Mail.builder()//
+                .email(this.config.getAlarmProperties().getMailProperties().getTo())//
+                .title(alarmTitle)//
+                .content(msg)//
+                .level(level)//
+                .build();
+        boolean b = this.mailService.sendHtmlTemplateMail(mail);
+        // 成功
+        if (b) {
+            result.setSuccess(true);
+            result.setMsg(ResultMsgConstants.SUCCESS);
+        }
+        // 失败
+        else {
+            result.setSuccess(false);
+            result.setMsg("发送电子邮件失败！");
         }
     }
 

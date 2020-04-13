@@ -2,10 +2,7 @@ package com.transfar.server.config;
 
 import com.transfar.common.constant.AlarmLevelEnums;
 import com.transfar.common.util.PropertiesUtils;
-import com.transfar.server.property.MonitoringAlarmProperties;
-import com.transfar.server.property.MonitoringNetworkProperties;
-import com.transfar.server.property.MonitoringServerWebProperties;
-import com.transfar.server.property.MonitoringSmsProperties;
+import com.transfar.server.property.*;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
@@ -53,11 +50,13 @@ public class MonitoringPropertiesLoader {
         String alarmSmsProtocol = StringUtils.trimToNull(properties.getProperty("monitoring.alarm.sms.protocol"));
         // 告警短信接口商家
         String alarmSmsEnterprise = StringUtils.trimToNull(properties.getProperty("monitoring.alarm.sms.enterprise"));
+        // 收件人邮箱地址
+        String mailTo = StringUtils.trimToNull(properties.getProperty("monitoring.alarm.mail.to"));
         // 缺省[是否监控网络(默认打开)]
         String monitoringEnableStr = StringUtils.trimToNull(properties.getProperty("monitoring.network.enable"));
         boolean monitoringEnable = StringUtils.isBlank(monitoringEnableStr) || Boolean.parseBoolean(monitoringEnableStr);
         return wrap(threshold, alarmEnable, alarmLevel, alarmType, alarmSmsPhoneNumbers, alarmSmsAddress, alarmSmsProtocol,
-                alarmSmsEnterprise, monitoringEnable);
+                alarmSmsEnterprise, mailTo, monitoringEnable);
     }
 
     /**
@@ -73,6 +72,7 @@ public class MonitoringPropertiesLoader {
      * @param alarmSmsAddress      告警短信地址
      * @param alarmSmsProtocol     告警短信协议
      * @param alarmSmsEnterprise   告警短信接口商家
+     * @param mailTo               收件人邮箱地址
      * @param monitoringEnable     网络监控是否打开
      * @return {@link MonitoringServerWebProperties}
      * @author 皮锋
@@ -81,7 +81,7 @@ public class MonitoringPropertiesLoader {
     private MonitoringServerWebProperties wrap(int threshold, boolean alarmEnable, String alarmLevel, String alarmType,
                                                String alarmSmsPhoneNumbers, String alarmSmsAddress,
                                                String alarmSmsProtocol, String alarmSmsEnterprise,
-                                               boolean monitoringEnable) {
+                                               String mailTo, boolean monitoringEnable) {
         // 告警属性
         MonitoringAlarmProperties alarmProperties = new MonitoringAlarmProperties();
         alarmProperties.setEnable(alarmEnable);
@@ -94,6 +94,10 @@ public class MonitoringPropertiesLoader {
         smsProperties.setPhoneNumbers(alarmSmsPhoneNumbers != null ? alarmSmsPhoneNumbers.split(";") : null);
         smsProperties.setProtocol(alarmSmsProtocol);
         alarmProperties.setSmsProperties(smsProperties);
+        // 邮箱属性
+        MonitoringMailProperties mailProperties = new MonitoringMailProperties();
+        mailProperties.setTo(mailTo != null ? mailTo.split(";") : null);
+        alarmProperties.setMailProperties(mailProperties);
         // 网络属性
         MonitoringNetworkProperties networkProperties = new MonitoringNetworkProperties();
         networkProperties.setMonitoringEnable(monitoringEnable);
