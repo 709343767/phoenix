@@ -21,6 +21,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * <p>
  * 告警服务实现
@@ -158,7 +161,15 @@ public class AlarmServiceImpl implements IAlarmService {
             // 停止往下执行
             return;
         }
-
+        // 没有告警标题，不做处理，直接返回
+        if (StringUtils.isBlank(alarmTitle)) {
+            String expMsg = "告警标题为空，不发送告警消息！";
+            log.warn(expMsg);
+            result.setSuccess(false);
+            result.setMsg(expMsg);
+            // 停止往下执行
+            return;
+        }
         // 没有告警内容，不做处理，直接返回
         if (StringUtils.isBlank(msg)) {
             String expMsg = "告警内容为空，不发送告警消息！";
@@ -169,14 +180,27 @@ public class AlarmServiceImpl implements IAlarmService {
             return;
         }
         // 告警方式
-        String alarmType = this.config.getAlarmProperties().getType();
-        // 告警方式为短信告警
-        if (StringUtils.equalsIgnoreCase(alarmType, AlarmWayEnums.SMS.name())) {
-            // 处理短信告警
-            this.dealSmsAlarm(alarmTitle, msg, level, result);
-        } else if (StringUtils.equalsIgnoreCase(alarmType, AlarmWayEnums.MAIL.name())) {
-            // 处理邮件告警
-            this.dealMailAlarm(alarmTitle, msg, level, result);
+        String[] alarmType = this.config.getAlarmProperties().getType();
+        if (alarmType != null) {
+            List<String> alarmTypeList = Arrays.asList(alarmType);
+            // 告警方式为短信告警和邮件告警
+            if (alarmTypeList.contains(AlarmWayEnums.SMS.name()) && alarmTypeList.contains(AlarmWayEnums.MAIL.name())) {
+                // 处理短信告警
+                this.dealSmsAlarm(alarmTitle, msg, level, result);
+                // 处理邮件告警
+                this.dealMailAlarm(alarmTitle, msg, level, result);
+            } else if (alarmTypeList.contains(AlarmWayEnums.SMS.name())) {
+                // 处理短信告警
+                this.dealSmsAlarm(alarmTitle, msg, level, result);
+            } else if (alarmTypeList.contains(AlarmWayEnums.MAIL.name())) {
+                // 处理邮件告警
+                this.dealMailAlarm(alarmTitle, msg, level, result);
+            }
+        } else {
+            String expMsg = "没有配置告警方式，不发送告警消息！";
+            log.warn(expMsg);
+            result.setSuccess(false);
+            result.setMsg(expMsg);
         }
     }
 

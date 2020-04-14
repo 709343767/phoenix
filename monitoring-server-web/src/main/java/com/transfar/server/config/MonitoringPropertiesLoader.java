@@ -86,7 +86,7 @@ public class MonitoringPropertiesLoader {
         MonitoringAlarmProperties alarmProperties = new MonitoringAlarmProperties();
         alarmProperties.setEnable(alarmEnable);
         alarmProperties.setLevel(alarmLevel);
-        alarmProperties.setType(alarmType);
+        alarmProperties.setType(alarmType != null ? alarmType.split(";") : null);
         // 短信属性
         MonitoringSmsProperties smsProperties = new MonitoringSmsProperties();
         smsProperties.setAddress(alarmSmsAddress);
