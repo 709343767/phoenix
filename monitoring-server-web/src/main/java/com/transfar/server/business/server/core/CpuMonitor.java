@@ -2,6 +2,7 @@ package com.transfar.server.business.server.core;
 
 import com.transfar.common.constant.AlarmLevelEnums;
 import com.transfar.common.constant.AlarmTypeEnums;
+import com.transfar.common.constant.DateTimeStylesEnums;
 import com.transfar.common.domain.Alarm;
 import com.transfar.common.dto.AlarmPackage;
 import com.transfar.server.business.server.domain.Cpu;
@@ -12,6 +13,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  * <p>
@@ -182,7 +186,9 @@ public class CpuMonitor implements IServerMonitoringListener {
      */
     @Async
     public void sendAlarmInfo(String title, AlarmLevelEnums alarmLevelEnums, Cpu cpu) {
-        String msg = "IP地址：" + cpu.getIp() + "，服务器：" + cpu.getComputerName() + "，CPU使用率：" + cpu.getAvgCpuCombined() + "%";
+        String dateTime = DateTimeFormatter.ofPattern(DateTimeStylesEnums.YYYY_MM_DD_HH_MM_SS.getValue()).format(LocalDateTime.now());
+        String msg = "IP地址：" + cpu.getIp() + "，服务器：" + cpu.getComputerName()
+                + "，CPU使用率：" + cpu.getAvgCpuCombined() + "%" + "，时间：" + dateTime;
         Alarm alarm = Alarm.builder()//
                 .title(title)//
                 .msg(msg)//

@@ -4,6 +4,7 @@ import com.transfar.common.constant.AlarmLevelEnums;
 import com.transfar.common.constant.AlarmTypeEnums;
 import com.transfar.common.domain.Alarm;
 import com.transfar.common.dto.AlarmPackage;
+import com.transfar.common.util.DateTimeUtils;
 import com.transfar.common.util.NetUtils;
 import com.transfar.server.business.server.domain.Instance;
 import com.transfar.server.business.server.service.IAlarmService;
@@ -244,8 +245,10 @@ public class InstanceMonitorTask implements CommandLineRunner, DisposableBean {
      */
     @Async
     public void sendAlarmInfo(String title, AlarmLevelEnums alarmLevelEnums, Instance instance) {
-        String msg = "应用ID：" + instance.getInstanceId() + "，应用名称：" + instance.getInstanceName() + "，应用端点："
-                + instance.getEndpoint() + "，IP地址：" + instance.getIp() + "，服务器：" + instance.getComputerName();
+        String msg = "应用ID：" + instance.getInstanceId() + "，应用名称：" + instance.getInstanceName()
+                + "，应用端点：" + instance.getEndpoint() + "，IP地址：" + instance.getIp()
+                + "，服务器：" + instance.getComputerName()
+                + "，时间：" + DateTimeUtils.dateToString(instance.getDateTime());
         Alarm alarm = Alarm.builder()//
                 .title(title)//
                 .msg(msg)//
