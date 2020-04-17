@@ -1,13 +1,11 @@
 package com.transfar.common.dto;
 
-import io.swagger.annotations.ApiModelProperty;
+import com.transfar.common.abs.InstanceBean;
 import lombok.*;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 import java.util.Date;
-
-import com.transfar.common.abs.InstanceBean;
 
 /**
  * <p>
@@ -34,19 +32,16 @@ public class HeartbeatPackage extends InstanceBean implements Serializable {
     /**
      * ID
      */
-    @ApiModelProperty(value = "ID")
     private String id;
 
     /**
      * 时间
      */
-    @ApiModelProperty(value = "时间")
     private Date dateTime;
 
     /**
      * 心跳频率
      */
-    @ApiModelProperty(value = "心跳频率")
     private Long rate;
 
 }

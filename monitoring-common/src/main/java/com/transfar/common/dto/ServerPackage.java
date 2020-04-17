@@ -2,7 +2,6 @@ package com.transfar.common.dto;
 
 import com.transfar.common.abs.InstanceBean;
 import com.transfar.common.domain.server.ServerDomain;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 import lombok.experimental.Accessors;
 
@@ -28,25 +27,21 @@ public class ServerPackage extends InstanceBean {
     /**
      * ID
      */
-    @ApiModelProperty(value = "ID")
     private String id;
 
     /**
      * 服务器信息
      */
-    @ApiModelProperty(value = "服务器信息")
     private ServerDomain serverDomain;
 
     /**
      * 时间
      */
-    @ApiModelProperty(value = "时间")
     private Date dateTime;
 
     /**
      * 传输频率
      */
-    @ApiModelProperty(value = "传输频率")
     private Long rate;
 
 }

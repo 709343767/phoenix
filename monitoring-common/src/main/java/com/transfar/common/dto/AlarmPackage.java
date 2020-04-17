@@ -2,7 +2,6 @@ package com.transfar.common.dto;
 
 import com.transfar.common.abs.InstanceBean;
 import com.transfar.common.domain.Alarm;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 import lombok.experimental.Accessors;
 
@@ -35,19 +34,16 @@ public class AlarmPackage extends InstanceBean implements Serializable {
     /**
      * ID
      */
-    @ApiModelProperty(value = "ID")
     private String id;
 
     /**
      * 告警对象
      */
-    @ApiModelProperty(value = "告警对象")
     private Alarm alarm;
 
     /**
      * 时间
      */
-    @ApiModelProperty(value = "时间")
     private Date dateTime;
 
 }

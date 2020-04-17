@@ -43,7 +43,7 @@ public class AlarmController {
      * @author 皮锋
      * @custom.date 2020年3月6日 下午3:00:54
      */
-    @ApiOperation(value = "监控代理程序接收监控客户端程序发的告警包，并返回结果", notes = "接收告警包")
+    @ApiOperation(value = "接收和响应监控客户端程序发的告警包", notes = "接收告警包")
     @PostMapping("/accept-alarm-package")
     public BaseResponsePackage acceptAlarmPackage(@RequestBody String request) {
         AlarmPackage heartbeatPackage = JSON.parseObject(request, AlarmPackage.class);

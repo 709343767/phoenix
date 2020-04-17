@@ -2,7 +2,6 @@ package com.transfar.common.dto;
 
 import com.transfar.common.abs.InstanceBean;
 import com.transfar.common.domain.Result;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 import lombok.experimental.Accessors;
 
@@ -34,19 +33,16 @@ public class BaseResponsePackage extends InstanceBean implements Serializable {
     /**
      * ID
      */
-    @ApiModelProperty(value = "ID")
     private String id;
 
     /**
      * 时间
      */
-    @ApiModelProperty(value = "时间")
     private Date dateTime;
 
     /**
      * 响应结果
      */
-    @ApiModelProperty(value = "响应结果")
     private Result result;
 
 }
