@@ -187,8 +187,10 @@ public class CpuMonitor implements IServerMonitoringListener {
     @Async
     public void sendAlarmInfo(String title, AlarmLevelEnums alarmLevelEnums, Cpu cpu) {
         String dateTime = DateTimeFormatter.ofPattern(DateTimeStylesEnums.YYYY_MM_DD_HH_MM_SS.getValue()).format(LocalDateTime.now());
-        String msg = "IP地址：" + cpu.getIp() + "，服务器：" + cpu.getComputerName()
-                + "，CPU使用率：" + cpu.getAvgCpuCombined() + "%" + "，时间：" + dateTime;
+        String msg = "IP地址：" + cpu.getIp()
+                + "，<br>服务器：" + cpu.getComputerName()
+                + "，<br>CPU使用率：" + cpu.getAvgCpuCombined()
+                + "%，<br>时间：" + dateTime;
         Alarm alarm = Alarm.builder()//
                 .title(title)//
                 .msg(msg)//

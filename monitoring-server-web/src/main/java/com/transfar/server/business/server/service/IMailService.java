@@ -14,7 +14,7 @@ public interface IMailService {
 
     /**
      * <p>
-     * 发送HTML模板邮件
+     * 发送HTML告警模板邮件
      * </p>
      *
      * @param mail 邮件实体对象
@@ -22,6 +22,6 @@ public interface IMailService {
      * @author 皮锋
      * @custom.date 2020/4/13 11:37
      */
-    boolean sendHtmlTemplateMail(Mail mail);
+    boolean sendAlarmTemplateMail(Mail mail);
 
 }

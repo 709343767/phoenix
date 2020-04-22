@@ -136,9 +136,10 @@ public class MemoryMonitor implements IServerMonitoringListener {
     @Async
     public void sendAlarmInfo(String title, AlarmLevelEnums alarmLevelEnums, Memory memory) {
         String dateTime = DateTimeFormatter.ofPattern(DateTimeStylesEnums.YYYY_MM_DD_HH_MM_SS.getValue()).format(LocalDateTime.now());
-        String msg = "IP地址：" + memory.getIp() + "，服务器：" + memory.getComputerName()
-                + "，内存使用率：" + memory.getMemoryDomain().getMenUsedPercent()
-                + "，时间：" + dateTime;
+        String msg = "IP地址：" + memory.getIp()
+                + "，<br>服务器：" + memory.getComputerName()
+                + "，<br>内存使用率：" + memory.getUsedPercent()
+                + "%，<br>时间：" + dateTime;
         Alarm alarm = Alarm.builder()//
                 .title(title)//
                 .msg(msg)//

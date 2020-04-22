@@ -62,7 +62,7 @@ public class NetMonitorTask implements CommandLineRunner, DisposableBean {
      * 延迟/周期执行线程池
      */
     private final ScheduledExecutorService seService = Executors.newScheduledThreadPool(100, new ThreadFactory() {
-        AtomicInteger atomic = new AtomicInteger();
+        final AtomicInteger atomic = new AtomicInteger();
 
         @Override
         public Thread newThread(Runnable r) {
@@ -202,8 +202,8 @@ public class NetMonitorTask implements CommandLineRunner, DisposableBean {
     public void sendAlarmInfo(String title, AlarmLevelEnums alarmLevelEnums, Net net) {
         String dateTime = DateTimeUtils.dateToString(net.getDateTime());
         String msg = "IP地址：" + NetUtils.getLocalIp() + "到" + net.getIp()
-                + "，服务器：" + SigarUtils.getComputerName() + "到" + net.getComputerName()
-                + "，时间：" + dateTime;
+                + "，<br>服务器：" + SigarUtils.getComputerName() + "到" + net.getComputerName()
+                + "，<br>时间：" + dateTime;
         Alarm alarm = Alarm.builder()//
                 .title(title)//
                 .msg(msg)//

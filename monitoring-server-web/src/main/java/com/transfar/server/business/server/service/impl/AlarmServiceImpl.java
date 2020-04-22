@@ -241,8 +241,10 @@ public class AlarmServiceImpl implements IAlarmService {
     private void callTransfarSmsApi(String alarmTitle, String msg, String level, Result result) {
         String[] phones = this.config.getAlarmProperties().getSmsProperties().getPhoneNumbers();
         String enterprise = this.config.getAlarmProperties().getSmsProperties().getEnterprise();
+        // 短信不支持<br>标签换行
+        String text = msg.replaceAll("<br>", "");
         TransfarSms transfarSms = TransfarSms.builder()//
-                .content(StringUtils.isBlank(alarmTitle) ? msg : ("[" + alarmTitle + "]" + msg))//
+                .content(StringUtils.isBlank(alarmTitle) ? text : ("[" + alarmTitle + "]" + text))//
                 .type(level)//
                 .phone(TransfarSms.getPhones(phones))//
                 .identity(enterprise)//
@@ -282,7 +284,7 @@ public class AlarmServiceImpl implements IAlarmService {
                 .content(msg)//
                 .level(level)//
                 .build();
-        boolean b = this.mailService.sendHtmlTemplateMail(mail);
+        boolean b = this.mailService.sendAlarmTemplateMail(mail);
         // 成功
         if (b) {
             result.setSuccess(true);

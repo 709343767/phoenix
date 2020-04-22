@@ -45,7 +45,7 @@ public class MailServiceImpl implements IMailService {
 
     /**
      * <p>
-     * 发送HTML模板邮件
+     * 发送HTML告警模板邮件
      * </p>
      *
      * @param mail 邮件实体对象
@@ -54,7 +54,7 @@ public class MailServiceImpl implements IMailService {
      * @custom.date 2020/4/13 11:40
      */
     @Override
-    public boolean sendHtmlTemplateMail(Mail mail) {
+    public boolean sendAlarmTemplateMail(Mail mail) {
         try {
             MimeMessage mimeMessage = this.mailSender.createMimeMessage();
             MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage, true);

@@ -67,7 +67,7 @@ public class DiskMonitor implements IServerMonitoringListener {
                 subregion.setOverLoad(true);
                 if (!isAlarm) {
                     // 发送告警
-                    this.sendAlarmInfo("磁盘分区过载", AlarmLevelEnums.WARN, disk.getIp(), disk, subregion);
+                    this.sendAlarmInfo("磁盘分区过载", AlarmLevelEnums.WARN, disk, subregion);
                     subregion.setAlarm(true);
                 }
             }
@@ -89,18 +89,19 @@ public class DiskMonitor implements IServerMonitoringListener {
      *
      * @param title           告警标题
      * @param alarmLevelEnums 告警级别
-     * @param ip              IP地址
      * @param disk            磁盘
      * @param subregion       磁盘分区
      * @author 皮锋
      * @custom.date 2020/3/25 14:46
      */
     @Async
-    public void sendAlarmInfo(String title, AlarmLevelEnums alarmLevelEnums, String ip, Disk disk, Disk.Subregion subregion) {
+    public void sendAlarmInfo(String title, AlarmLevelEnums alarmLevelEnums, Disk disk, Disk.Subregion subregion) {
         String dateTime = DateTimeFormatter.ofPattern(DateTimeStylesEnums.YYYY_MM_DD_HH_MM_SS.getValue()).format(LocalDateTime.now());
-        String msg = "IP地址：" + ip + "，服务器：" + disk.getComputerName()
-                + "，磁盘分区：" + subregion.getDevName() + "，磁盘分区使用率：" + subregion.getUsePercent()
-                + "，时间：" + dateTime;
+        String msg = "IP地址：" + disk.getIp()
+                + "，<br>服务器：" + disk.getComputerName()
+                + "，<br>磁盘分区：" + subregion.getDevName()
+                + "，<br>磁盘分区使用率：" + subregion.getUsePercent()
+                + "%，<br>时间：" + dateTime;
         Alarm alarm = Alarm.builder()//
                 .title(title)//
                 .msg(msg)//

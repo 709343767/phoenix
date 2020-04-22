@@ -61,7 +61,7 @@ public class InstanceMonitorTask implements CommandLineRunner, DisposableBean {
      * 延迟/周期执行线程池
      */
     private final ScheduledExecutorService seService = Executors.newScheduledThreadPool(5, new ThreadFactory() {
-        AtomicInteger atomic = new AtomicInteger();
+        final AtomicInteger atomic = new AtomicInteger();
 
         @Override
         public Thread newThread(Runnable r) {
@@ -163,7 +163,7 @@ public class InstanceMonitorTask implements CommandLineRunner, DisposableBean {
         boolean isLineAlarm = instance.isLineAlarm();
         if (isLineAlarm) {
             // 发送在线通知信息
-            this.sendAlarmInfo("应用程序在线", AlarmLevelEnums.FATAL, instance);
+            this.sendAlarmInfo("应用程序上线", AlarmLevelEnums.FATAL, instance);
             instance.setLineAlarm(false);
         }
     }
@@ -245,10 +245,12 @@ public class InstanceMonitorTask implements CommandLineRunner, DisposableBean {
      */
     @Async
     public void sendAlarmInfo(String title, AlarmLevelEnums alarmLevelEnums, Instance instance) {
-        String msg = "应用ID：" + instance.getInstanceId() + "，应用名称：" + instance.getInstanceName()
-                + "，应用端点：" + instance.getEndpoint() + "，IP地址：" + instance.getIp()
-                + "，服务器：" + instance.getComputerName()
-                + "，时间：" + DateTimeUtils.dateToString(instance.getDateTime());
+        String msg = "应用ID：" + instance.getInstanceId()
+                + "，<br>应用名称：" + instance.getInstanceName()
+                + "，<br>应用端点：" + instance.getEndpoint()
+                + "，<br>IP地址：" + instance.getIp()
+                + "，<br>服务器：" + instance.getComputerName()
+                + "，<br>时间：" + DateTimeUtils.dateToString(instance.getDateTime());
         Alarm alarm = Alarm.builder()//
                 .title(title)//
                 .msg(msg)//
