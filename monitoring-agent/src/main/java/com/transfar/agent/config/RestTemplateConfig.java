@@ -1,16 +1,14 @@
 package com.transfar.agent.config;
 
-import java.time.Duration;
-
+import com.transfar.common.property.MonitoringProperties;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
 
-import com.transfar.common.property.MonitoringProperties;
-
-import lombok.extern.slf4j.Slf4j;
+import java.time.Duration;
 
 /**
  * <p>

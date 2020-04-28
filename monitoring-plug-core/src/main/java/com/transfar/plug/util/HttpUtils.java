@@ -1,9 +1,7 @@
 package com.transfar.plug.util;
 
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.Collections;
-
+import com.google.common.base.Charsets;
+import lombok.Cleanup;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.config.AuthSchemes;
@@ -16,9 +14,9 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
-import com.google.common.base.Charsets;
-
-import lombok.Cleanup;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collections;
 
 // HttpClient是Apache Jakarta Common下的子项目，
 // 用来提供高效的、最新的、功能丰富的支持HTTP协议的客户端编程工具包，并且它支持HTTP协议最新的版本和建议。
@@ -42,7 +40,7 @@ public class HttpUtils {
      * 3.最终，再调用配置器的buillder()方法返回RequestConfig对象。<br>
      */
     @SuppressWarnings("deprecation")
-    private RequestConfig defaultRequestConfig = RequestConfig.custom().setCookieSpec(CookieSpecs.BEST_MATCH)
+    private final RequestConfig defaultRequestConfig = RequestConfig.custom().setCookieSpec(CookieSpecs.BEST_MATCH)
             .setExpectContinueEnabled(true).setStaleConnectionCheckEnabled(true)
             .setTargetPreferredAuthSchemes(Arrays.asList(AuthSchemes.NTLM, AuthSchemes.DIGEST))
             .setProxyPreferredAuthSchemes(Collections.singletonList(AuthSchemes.BASIC)).build();
@@ -50,7 +48,7 @@ public class HttpUtils {
     /**
      * 请求配置
      */
-    private RequestConfig requestConfig = RequestConfig.copy(defaultRequestConfig).setSocketTimeout(15000)
+    private final RequestConfig requestConfig = RequestConfig.copy(defaultRequestConfig).setSocketTimeout(15000)
             .setConnectTimeout(15000).setConnectionRequestTimeout(15000)
             // .setProxy(new HttpHost("myotherproxy", 8080))
             .build();
@@ -58,7 +56,7 @@ public class HttpUtils {
     /**
      * 本地线程
      */
-    private static ThreadLocal<HttpUtils> threadLocal = new ThreadLocal<>();
+    private static final ThreadLocal<HttpUtils> threadLocal = new ThreadLocal<>();
 
     /**
      * 编码方式
