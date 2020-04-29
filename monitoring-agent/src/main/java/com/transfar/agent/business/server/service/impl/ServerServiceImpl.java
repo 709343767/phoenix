@@ -1,15 +1,19 @@
 package com.transfar.agent.business.server.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.transfar.agent.business.constant.Urlconstants;
 import com.transfar.agent.business.server.service.IServerService;
 import com.transfar.common.dto.BaseResponsePackage;
+import com.transfar.common.dto.CiphertextPackage;
 import com.transfar.common.dto.ServerPackage;
+import com.transfar.common.util.DesEncryptUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Collections;
+import java.util.Objects;
 
 /**
  * <p>
@@ -37,13 +41,18 @@ public class ServerServiceImpl implements IServerService {
      */
     @Override
     public BaseResponsePackage sendServerPackage(ServerPackage serverPackage) {
+        // 加密服务器信息包
+        String encrypt = DesEncryptUtils.encrypt(serverPackage.toJsonString());
+        CiphertextPackage ciphertextPackage = new CiphertextPackage(encrypt);
         HttpHeaders headers = new HttpHeaders();
-        // headers.add("Context-type", "text/html;charset=utf-8");
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-        HttpEntity<ServerPackage> entity = new HttpEntity<>(serverPackage, headers);
-        ResponseEntity<BaseResponsePackage> responseEntity = this.restTemplate.exchange(Urlconstants.SERVER_URL,
-                HttpMethod.POST, entity, BaseResponsePackage.class);
-        return responseEntity.getBody();
+        HttpEntity<CiphertextPackage> entity = new HttpEntity<>(ciphertextPackage, headers);
+        ResponseEntity<CiphertextPackage> responseEntity = this.restTemplate.exchange(Urlconstants.SERVER_URL,
+                HttpMethod.POST, entity, CiphertextPackage.class);
+        String ciphertext = Objects.requireNonNull(responseEntity.getBody()).getCiphertext();
+        // 解密服务器响应信息包
+        String decrypt = DesEncryptUtils.decrypt(ciphertext);
+        return JSON.parseObject(decrypt, BaseResponsePackage.class);
     }
 
 }

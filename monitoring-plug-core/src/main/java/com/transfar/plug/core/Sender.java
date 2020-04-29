@@ -1,5 +1,8 @@
 package com.transfar.plug.core;
 
+import com.alibaba.fastjson.JSONObject;
+import com.transfar.common.dto.CiphertextPackage;
+import com.transfar.common.util.DesEncryptUtils;
 import com.transfar.plug.util.HttpUtils;
 import org.apache.http.client.ClientProtocolException;
 
@@ -29,9 +32,16 @@ public class Sender {
      * @custom.date 2020年3月6日 上午10:21:25
      */
     public static String send(final String url, final String json) throws ClientProtocolException, IOException {
+        // 加密请求数据
+        String encrypt = DesEncryptUtils.encrypt(json);
+        CiphertextPackage requestCiphertextPackage = new CiphertextPackage(encrypt);
         // 发送请求
         HttpUtils httpClient = HttpUtils.getInstance();
-        return httpClient.sendHttpPostByJSON(url, json);
+        String result = httpClient.sendHttpPostByJSON(url, requestCiphertextPackage.toJsonString());
+        // 响应结果
+        CiphertextPackage responseCiphertextPackage = JSONObject.parseObject(result, CiphertextPackage.class);
+        // 解密响应数据
+        return DesEncryptUtils.decrypt(responseCiphertextPackage.getCiphertext());
     }
 
 }
