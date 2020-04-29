@@ -54,6 +54,7 @@ public class PackageConstructor implements IPackageConstructor {
         Charset charset = alarm.getCharset();
         // 设置了字符集
         if (null != charset) {
+            alarm.setTitle(new String(alarm.getTitle().getBytes(Charsets.UTF_8), Charsets.UTF_8));
             alarm.setMsg(new String(alarm.getMsg().getBytes(Charsets.UTF_8), Charsets.UTF_8));
             alarm.setCharset(Charsets.UTF_8);
         }
