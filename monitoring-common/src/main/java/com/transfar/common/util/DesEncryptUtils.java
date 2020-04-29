@@ -171,7 +171,7 @@ public class DesEncryptUtils {
 
     /**
      * <p>
-     * MD5校验码组合方法，前16位放MD5Hash码，把MD5验证码byte[]，加密内容byte[]组合的方法
+     * MD5校验码组合方法，前16位放MD5Hash码，把MD5验证码byte[]、加密内容byte[]组合的方法
      * </p>
      *
      * @param md5Byte  加密内容的MD5Hash字节数组
