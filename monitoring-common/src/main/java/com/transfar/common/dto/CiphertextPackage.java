@@ -24,6 +24,11 @@ import java.io.Serializable;
 public class CiphertextPackage extends SuperBean implements Serializable {
 
     /**
+	 * serialVersionUID
+	 */
+	private static final long serialVersionUID = 4928013929736210856L;
+	
+	/**
      * 加密后的数据
      */
     private String ciphertext;

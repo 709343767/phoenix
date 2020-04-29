@@ -1,7 +1,7 @@
 package com.transfar.common.util;
 
-import java.io.IOException;
 import java.security.MessageDigest;
+import java.util.Base64;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
@@ -10,8 +10,6 @@ import javax.crypto.spec.SecretKeySpec;
 import com.google.common.base.Charsets;
 
 import lombok.extern.slf4j.Slf4j;
-import sun.misc.BASE64Decoder;
-import sun.misc.BASE64Encoder;
 
 /**
  * <p>
@@ -21,7 +19,6 @@ import sun.misc.BASE64Encoder;
  * @author 皮锋
  * @custom.date 2020/4/28 15:47
  */
-@SuppressWarnings("restriction")
 @Slf4j
 public class DesEncryptUtils {
 
@@ -40,7 +37,7 @@ public class DesEncryptUtils {
      * @author 皮锋
      * @custom.date 2020/4/28 15:55
      */
-	public static String encrypt(String str) {
+    public static String encrypt(String str) {
         // 使用DES算法使用加密消息体
         String result = null;
         try {
@@ -57,7 +54,7 @@ public class DesEncryptUtils {
             SecretKeySpec deskey = new SecretKeySpec(key, "DES");
             IvParameterSpec ivParam = new IvParameterSpec(iv);
             byte[] temp = DesEncryptUtils.DES_CBC_Encrypt(totalByte, deskey, ivParam);
-            result = new BASE64Encoder().encode(temp);
+            result = Base64.getEncoder().encodeToString(temp);
         } catch (Exception e) {
             log.error("字符串DES加密失败！", e);
         }
@@ -80,8 +77,7 @@ public class DesEncryptUtils {
         String result = null;
         try {
             // base64解码
-            BASE64Decoder decoder = new BASE64Decoder();
-            byte[] encBuf = decoder.decodeBuffer(str);
+            byte[] encBuf = Base64.getDecoder().decode(str);
             // 取密钥和偏转向量
             byte[] key = new byte[8];
             byte[] iv = new byte[8];
@@ -138,6 +134,7 @@ public class DesEncryptUtils {
      * @param deskey    KEY由8位字节数组通过SecretKeySpec类转换而成
      * @param ivParam   IV偏转向量，由6位字节数组通过IvParameterSpec类转换而成
      * @return 解密后的字节数组
+     * @throws Exception 异常
      * @author 皮锋
      * @custom.date 2020/4/28 16:07
      */
@@ -185,16 +182,16 @@ public class DesEncryptUtils {
      */
     private static byte[] addMD5(byte[] md5Byte, byte[] bodyByte) {
         int length = bodyByte.length + md5Byte.length;
-        byte[] resutlByte = new byte[length];
+        byte[] resultByte = new byte[length];
         // 前16位放MD5Hash码
         for (int i = 0; i < length; i++) {
             if (i < md5Byte.length) {
-                resutlByte[i] = md5Byte[i];
+                resultByte[i] = md5Byte[i];
             } else {
-                resutlByte[i] = bodyByte[i - md5Byte.length];
+                resultByte[i] = bodyByte[i - md5Byte.length];
             }
         }
-        return resutlByte;
+        return resultByte;
     }
 
     /**
@@ -210,13 +207,7 @@ public class DesEncryptUtils {
      */
     private static void getKeyIV(String encryptKey, byte[] key, byte[] iv) {
         // 密钥Base64解密
-        BASE64Decoder decoder = new BASE64Decoder();
-        byte[] buf = null;
-        try {
-            buf = decoder.decodeBuffer(encryptKey);
-        } catch (IOException e) {
-            log.error("IO异常！", e);
-        }
+        byte[] buf = Base64.getDecoder().decode(encryptKey);
         // 前8位为key
         int i;
         for (i = 0; i < key.length; i++) {
