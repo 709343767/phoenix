@@ -7,7 +7,7 @@
     <!-- 监控父项目 -->
     <parent>
         <artifactId>monitoring</artifactId>
-        <groupId>com.transfar</groupId>
+        <groupId>com.imby</groupId>
         <version>${revision}</version>
         <relativePath>..</relativePath>
     </parent>

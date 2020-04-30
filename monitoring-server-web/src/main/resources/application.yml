@@ -72,7 +72,7 @@ mybatis-plus:
   mapper-locations:
     - classpath:com/transfar/server/business/**/mapper/*Mapper.xml
   #扫描实体，多个package用逗号或者分号分隔
-  type-aliases-package: com.transfar.server.business.**.entity
+  type-aliases-package: com.imby.server.business.**.entity
   configuration:
     #是否开启缓存
     cache-enabled: false

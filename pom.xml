@@ -13,7 +13,7 @@
     </parent>
 
     <!-- 项目基本信息 -->
-    <groupId>com.transfar</groupId>
+    <groupId>com.imby</groupId>
     <artifactId>monitoring</artifactId>
     <version>${revision}</version>
     <modules>
@@ -85,37 +85,37 @@
         <dependencies>
             <!-- 公共模块 -->
             <dependency>
-                <groupId>com.transfar</groupId>
+                <groupId>com.imby</groupId>
                 <artifactId>monitoring-common</artifactId>
                 <version>${revision}</version>
             </dependency>
             <!-- 监控客户端插件 -->
             <dependency>
-                <groupId>com.transfar</groupId>
+                <groupId>com.imby</groupId>
                 <artifactId>monitoring-plug-core</artifactId>
                 <version>${revision}</version>
             </dependency>
             <!-- 监控代理端 -->
             <dependency>
-                <groupId>com.transfar</groupId>
+                <groupId>com.imby</groupId>
                 <artifactId>monitoring-agent</artifactId>
                 <version>${revision}</version>
             </dependency>
             <!-- 监控服务端 -->
             <dependency>
-                <groupId>com.transfar</groupId>
+                <groupId>com.imby</groupId>
                 <artifactId>monitoring-server-web</artifactId>
                 <version>${revision}</version>
             </dependency>
             <!-- 监控项目客户端与springboot集成的starter -->
             <dependency>
-                <groupId>com.transfar</groupId>
+                <groupId>com.imby</groupId>
                 <artifactId>monitoring-plug-core-spring-boot-starter</artifactId>
                 <version>${revision}</version>
             </dependency>
             <!-- 监控项目客户端与springmvc集成的integrator -->
             <dependency>
-                <groupId>com.transfar</groupId>
+                <groupId>com.imby</groupId>
                 <artifactId>monitoring-plug-core-spring-mvc-integrator</artifactId>
                 <version>${revision}</version>
             </dependency>

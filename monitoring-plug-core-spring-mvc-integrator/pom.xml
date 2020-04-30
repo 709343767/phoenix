@@ -7,7 +7,7 @@
     <!-- 监控父项目 -->
     <parent>
         <artifactId>monitoring</artifactId>
-        <groupId>com.transfar</groupId>
+        <groupId>com.imby</groupId>
         <version>${revision}</version>
         <relativePath>..</relativePath>
     </parent>
@@ -22,7 +22,7 @@
     <dependencies>
         <!-- 监控客户端插件 -->
         <dependency>
-            <groupId>com.transfar</groupId>
+            <groupId>com.imby</groupId>
             <artifactId>monitoring-plug-core</artifactId>
         </dependency>
 
