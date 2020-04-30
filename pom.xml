@@ -479,14 +479,8 @@
         <developer>
             <name>皮锋</name>
             <organization>transfar</organization>
-        </developer>
-        <developer>
-            <name>宋磊</name>
-            <organization>transfar</organization>
-        </developer>
-        <developer>
-            <name>欧顺才</name>
-            <organization>transfar</organization>
+            <email>709343767@qq.com</email>
+            <url>https://blog.csdn.net/Paulangsky</url>
         </developer>
     </developers>
 
