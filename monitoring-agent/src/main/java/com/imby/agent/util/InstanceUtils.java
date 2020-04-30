@@ -1,9 +1,12 @@
 package com.imby.agent.util;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.imby.agent.business.core.ConfigLoader;
 import com.imby.common.util.MD5Utils;
+import com.imby.common.util.NetUtils;
 
-import org.apache.commons.lang3.StringUtils;
+import lombok.SneakyThrows;
 
 /**
  * <p>
@@ -15,50 +18,66 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class InstanceUtils {
 
-    /**
-     * 应用实例ID
-     */
-    private static String instanceId;
+	/**
+	 * 应用实例ID
+	 */
+	private static String instanceId;
 
-    /**
-     * 应用实例名字
-     */
-    private static String instanceName;
+	/**
+	 * 应用实例名字
+	 */
+	private static String instanceName;
 
-    /**
-     * <p>
-     * 获取应用实例ID
-     * </p>
-     *
-     * @return 应用实例ID
-     * @author 皮锋
-     * @custom.date 2020年3月4日 下午11:12:46
-     */
-    public static String getInstanceId() {
-        if (StringUtils.isNotEmpty(instanceId)) {
-            return instanceId;
-        }
-        // String mac = LocalMacUtils.getLocalMac();
-        String rootUrl = ContextUtils.getRootUrl();
-        instanceId = MD5Utils.encrypt16(rootUrl);
-        return instanceId;
-    }
+	/**
+	 * <p>
+	 * 获取应用实例ID
+	 * </p>
+	 *
+	 * @return 应用实例ID
+	 * @author 皮锋
+	 * @custom.date 2020年3月4日 下午11:12:46
+	 */
+	public static String getInstanceId() {
+		if (StringUtils.isNotEmpty(instanceId)) {
+			return instanceId;
+		}
+		// String mac = LocalMacUtils.getLocalMac();
+		String rootUrl = InstanceUtils.getRootUrl();
+		instanceId = MD5Utils.encrypt16(rootUrl);
+		return instanceId;
+	}
 
-    /**
-     * <p>
-     * 获取应用实例名称
-     * </p>
-     *
-     * @return 应用实例名称
-     * @author 皮锋
-     * @custom.date 2020年3月4日 下午11:12:46
-     */
-    public static String getInstanceName() {
-        if (StringUtils.isNotEmpty(instanceName)) {
-            return instanceName;
-        }
-        instanceName = ConfigLoader.monitoringProperties.getOwnProperties().getInstanceName();
-        return instanceName;
-    }
+	/**
+	 * <p>
+	 * 获取应用实例名称
+	 * </p>
+	 *
+	 * @return 应用实例名称
+	 * @author 皮锋
+	 * @custom.date 2020年3月4日 下午11:12:46
+	 */
+	public static String getInstanceName() {
+		if (StringUtils.isNotEmpty(instanceName)) {
+			return instanceName;
+		}
+		instanceName = ConfigLoader.monitoringProperties.getOwnProperties().getInstanceName();
+		return instanceName;
+	}
+
+	/**
+	 * <p>
+	 * 获取项目根路径
+	 * </p>
+	 *
+	 * @return 项目根URL
+	 * @author 皮锋
+	 * @custom.date 2020/3/12 21:46
+	 */
+	@SneakyThrows
+	private static String getRootUrl() {
+		String contextPath = StringUtils.isBlank(ConfigLoader.serverProperties.getServlet().getContextPath()) ? ""
+				: ConfigLoader.serverProperties.getServlet().getContextPath();
+		return "http://" + NetUtils.getLocalIp() + ":" + ConfigLoader.serverPort + contextPath;
+	}
 
 }

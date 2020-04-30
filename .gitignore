@@ -8,6 +8,7 @@
 /monitoring-plug-core/target/
 /monitoring-agent/target/
 /monitoring-common/target/
+/monitoring-common-web/target/
 /monitoring-server-web/target/
 /monitoring-common/.sts4-cache/
 /monitoring-server-web/.settings/

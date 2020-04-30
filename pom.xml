@@ -18,6 +18,7 @@
     <version>${revision}</version>
     <modules>
         <module>monitoring-common</module>
+        <module>monitoring-common-web</module>
         <module>monitoring-plug-core</module>
         <module>monitoring-agent</module>
         <module>monitoring-server-web</module>
@@ -87,6 +88,11 @@
             <dependency>
                 <groupId>com.imby</groupId>
                 <artifactId>monitoring-common</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.imby</groupId>
+                <artifactId>monitoring-common-web</artifactId>
                 <version>${revision}</version>
             </dependency>
             <!-- 监控客户端插件 -->
