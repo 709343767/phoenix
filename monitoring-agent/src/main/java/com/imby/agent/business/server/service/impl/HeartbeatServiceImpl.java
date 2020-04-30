@@ -1,20 +1,12 @@
 package com.imby.agent.business.server.service.impl;
 
-import com.alibaba.fastjson.JSON;
 import com.imby.agent.business.constant.Urlconstants;
 import com.imby.agent.business.server.service.IHeartbeatService;
+import com.imby.agent.business.server.service.IHttpService;
 import com.imby.common.dto.BaseResponsePackage;
-import com.imby.common.dto.CiphertextPackage;
 import com.imby.common.dto.HeartbeatPackage;
-import com.imby.common.util.DesEncryptUtils;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.*;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
-
-import java.util.Collections;
-import java.util.Objects;
 
 /**
  * <p>
@@ -27,8 +19,11 @@ import java.util.Objects;
 @Service
 public class HeartbeatServiceImpl implements IHeartbeatService {
 
+    /**
+     * 跟服务端相关的HTTP服务接口
+     */
     @Autowired
-    private RestTemplate restTemplate;
+    private IHttpService httpService;
 
     /**
      * <p>
@@ -37,23 +32,13 @@ public class HeartbeatServiceImpl implements IHeartbeatService {
      *
      * @param heartbeatPackage 心跳包对象
      * @return {@link BaseResponsePackage}
+     * @throws Exception 所有异常
      * @author 皮锋
      * @custom.date 2020年3月4日 下午2:16:07
      */
     @Override
-    public BaseResponsePackage sendHeartbeatPackage(HeartbeatPackage heartbeatPackage) {
-        // 加密心跳包
-        String encrypt = DesEncryptUtils.encrypt(heartbeatPackage.toJsonString());
-        CiphertextPackage ciphertextPackage = new CiphertextPackage(encrypt);
-        HttpHeaders headers = new HttpHeaders();
-        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-        HttpEntity<CiphertextPackage> entity = new HttpEntity<>(ciphertextPackage, headers);
-        ResponseEntity<CiphertextPackage> responseEntity = this.restTemplate.exchange(Urlconstants.HEARTBEAT_URL,
-                HttpMethod.POST, entity, CiphertextPackage.class);
-        String ciphertext = Objects.requireNonNull(responseEntity.getBody()).getCiphertext();
-        // 解密心跳响应数据包
-        String decrypt = DesEncryptUtils.decrypt(ciphertext);
-        return JSON.parseObject(decrypt, BaseResponsePackage.class);
+    public BaseResponsePackage sendHeartbeatPackage(HeartbeatPackage heartbeatPackage) throws Exception {
+        return this.httpService.sendHttpPost(heartbeatPackage.toJsonString(), Urlconstants.HEARTBEAT_URL);
     }
 
 }
