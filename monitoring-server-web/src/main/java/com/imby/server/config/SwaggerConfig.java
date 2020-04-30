@@ -70,7 +70,7 @@ public class SwaggerConfig {
                 // 页面标题
                 .title("监控服务端程序")
                 // 版本号
-                .version("0.0.1")
+                .version("LATEST-SNAPSHOT")
                 // 描述
                 .description("与监控代理程序或监控客户端程序通信，获取监控信息，维护被监控的应用列表，并且展示监控信息，发送告警通知。")
                 // 构建

@@ -71,7 +71,7 @@ public class SwaggerConfig {
                 // 页面标题
                 .title("监控代理程序")
                 // 版本号
-                .version("0.0.1")
+                .version("LATEST-SNAPSHOT")
                 // 描述
                 .description("1.把请求到此监控代理程序的请求向上传递到服务端；2.定时向服务端发送心跳包；3.定时向服务端发送此监控代理程序所在服务器的服务器信息。")
                 // 构建
