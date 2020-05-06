@@ -11,7 +11,6 @@ import com.imby.plug.core.PackageConstructor;
 import com.imby.plug.core.Sender;
 import com.imby.plug.scheduler.HeartbeatTaskScheduler;
 import com.imby.plug.scheduler.ServerTaskScheduler;
-
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
@@ -69,7 +68,7 @@ public class Monitor {
             ConfigLoader.load(configPath, configName);
             log.info("监控程序加载配置信息成功！");
         } catch (Exception e) {
-            log.error(e.getMessage(), e);
+            log.error("监控程序加载配置信息失败！", e);
             return;
         }
         // 2.开始定时发送心跳包

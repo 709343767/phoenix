@@ -37,7 +37,7 @@ public class ServerTaskScheduler {
             // Thread thread = new Thread(() -> {
             // AtomicInteger atomic = new AtomicInteger();
             final ScheduledExecutorService seService = Executors.newScheduledThreadPool(5, new ThreadFactory() {
-                AtomicInteger atomic = new AtomicInteger();
+                final AtomicInteger atomic = new AtomicInteger();
 
                 @Override
                 public Thread newThread(Runnable r) {

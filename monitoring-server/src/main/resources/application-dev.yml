@@ -14,10 +14,7 @@ spring:
     type: com.alibaba.druid.pool.DruidDataSource
     druid:
       #数据源配置
-      #driver-class-name: oracle.jdbc.OracleDriver
       driver-class-name: com.mysql.cj.jdbc.Driver
-      #url: jdbc:oracle:thin:@(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=10.143.4.85)(PORT=1521))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=hngsdb)))
-      #url: jdbc:oracle:thin:@10.43.1.76:1525:gstest
       url: jdbc:mysql://localhost:3306/monitoring?useSSL=false&serverTimezone=UTC
       username: root
       password: 123456

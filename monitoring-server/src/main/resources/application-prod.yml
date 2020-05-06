@@ -16,7 +16,6 @@ spring:
       #数据源配置
       driver-class-name: oracle.jdbc.OracleDriver
       url: jdbc:oracle:thin:@(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=192.168.12.12)(PORT=1521))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=hngsdb)))
-      #url: jdbc:oracle:thin:@(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=10.143.4.85)(PORT=1521))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=hngsdb)))
       username: oms
       password: hngs$2020
       #初始化来连接大小
