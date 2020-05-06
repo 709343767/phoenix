@@ -41,7 +41,7 @@ public class HttpServiceImpl implements IHttpService {
      *
      * @param json 请求参数
      * @param url  请求地址
-     * @return 响应包
+     * @return {@link BaseResponsePackage}
      * @author 皮锋
      * @custom.date 2020/4/30 16:34
      */

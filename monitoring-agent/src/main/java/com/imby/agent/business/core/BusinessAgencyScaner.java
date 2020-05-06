@@ -27,7 +27,7 @@ public class BusinessAgencyScaner implements BeanPostProcessor {
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
         Class<?> clazz = bean.getClass();
         Class<?>[] interfaces = clazz.getInterfaces();
-        if (interfaces != null && interfaces.length > 0) {
+        if (interfaces.length > 0) {
             // 扫描类的所有接口父类
             for (Class<?> interFace : interfaces) {
                 // 判断是否为代理执行业务的接口类

@@ -27,7 +27,7 @@
     </modules>
     <packaging>pom</packaging>
     <name>monitoring</name>
-    <description>自定义监控，用于监控java应用运行情况</description>
+    <description>自己写的监控框架，用于监控java应用、服务器、数据库、网络。</description>
 
     <!-- 属性 -->
     <properties>
@@ -37,14 +37,13 @@
         <java.version>1.8</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
-        <!-- <resource.delimiter>@</resource.delimiter> -->
         <!-- 文件拷贝时的编码 -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <!-- 编译时的编码 -->
         <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
         <!-- alibaba的fastjson版本 -->
-        <fastjson.version>1.2.56</fastjson.version>
+        <fastjson.version>1.2.62</fastjson.version>
         <!-- guava基本工具版本 -->
         <guava.version>20.0</guava.version>
         <!-- commons工具包版本 -->
@@ -53,8 +52,6 @@
         <commons-collections.version>3.2.2</commons-collections.version>
         <commons-fileupload.version>1.3.3</commons-fileupload.version>
         <commons-logging.version>1.2</commons-logging.version>
-        <!-- netty版本 -->
-        <netty-all.version>4.1.42.Final</netty-all.version>
         <!-- sigar版本 -->
         <sigar.version>1.6.4</sigar.version>
         <!-- cglib动态代理版本 -->
@@ -163,12 +160,6 @@
                 <groupId>commons-logging</groupId>
                 <artifactId>commons-logging</artifactId>
                 <version>${commons-logging.version}</version>
-            </dependency>
-            <!-- netty依赖 -->
-            <dependency>
-                <groupId>io.netty</groupId>
-                <artifactId>netty-all</artifactId>
-                <version>${netty-all.version}</version>
             </dependency>
             <!-- sigar依赖 -->
             <dependency>
