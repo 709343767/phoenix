@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- 监控父项目 -->
+    <parent>
+        <artifactId>monitoring</artifactId>
+        <groupId>com.imby</groupId>
+        <version>${revision}</version>
+        <relativePath>..</relativePath>
+    </parent>
+
+    <!-- 项目基本信息 -->
+    <artifactId>monitoring-client-spring-boot-starter</artifactId>
+    <packaging>jar</packaging>
+    <name>monitoring-client-spring-boot-starter</name>
+    <description>监控项目客户端与springboot集成的starter</description>
+
+    <!-- 依赖 -->
+    <dependencies>
+        <!-- 监控客户端 -->
+        <dependency>
+            <groupId>com.imby</groupId>
+            <artifactId>monitoring-client</artifactId>
+        </dependency>
+
+        <!--lombok依赖 -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <!-- springboot依赖 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
+    </dependencies>
+
+    <!-- 构建 -->
+    <build>
+        <defaultGoal>package</defaultGoal>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
