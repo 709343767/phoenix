@@ -1,11 +1,11 @@
 ##############################################server配置#################################################
 server:
   servlet:
-    context-path: /monitoring-server-web
+    context-path: /monitoring-server
   undertow:
     accesslog:
       #Undertow日志存放目录
-      dir: persistent-monitoring/logs/monitoring-server-web
+      dir: persistent-monitoring/logs/monitoring-server
       #是否启动日志
       enabled: true
       #日志格式
@@ -22,7 +22,7 @@ spring:
   #支持名称相同的bean的覆盖
   #allow-bean-definition-overriding: true
   application:
-    name: monitoring-server-web
+    name: monitoring-server
   profiles:
     active:
       - dev

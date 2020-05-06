@@ -7,7 +7,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import com.imby.server.config.UniqueBeanNameGenerator;
+import com.imby.common.web.toolkit.UniqueBeanNameGenerator;
 
 /**
  * <p>

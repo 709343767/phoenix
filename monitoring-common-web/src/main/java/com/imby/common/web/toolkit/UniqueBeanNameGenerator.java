@@ -1,4 +1,4 @@
-package com.imby.server.config;
+package com.imby.common.web.toolkit;
 
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;

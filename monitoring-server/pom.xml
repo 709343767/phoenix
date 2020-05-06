@@ -13,10 +13,10 @@
     </parent>
 
     <!-- 项目基本信息 -->
-    <artifactId>monitoring-server-web</artifactId>
+    <artifactId>monitoring-server</artifactId>
     <packaging>jar</packaging>
-    <name>monitoring-server-web</name>
-    <description>监控项目web服务端</description>
+    <name>monitoring-server</name>
+    <description>监控项目服务端</description>
 
     <!-- 依赖 -->
     <dependencies>
@@ -96,7 +96,7 @@
 
     <!-- 构建 -->
     <build>
-        <finalName>monitoring-server-web</finalName>
+        <finalName>monitoring-server</finalName>
         <defaultGoal>package</defaultGoal>
         <plugins>
             <plugin>

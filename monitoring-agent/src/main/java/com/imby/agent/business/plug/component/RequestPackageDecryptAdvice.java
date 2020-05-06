@@ -1,20 +1,14 @@
 package com.imby.agent.business.plug.component;
 
-import com.alibaba.fastjson.JSONObject;
-import com.google.common.base.Charsets;
-import com.imby.common.dto.CiphertextPackage;
-import com.imby.common.util.DesEncryptUtils;
+import java.lang.reflect.Type;
 
-import org.apache.commons.io.IOUtils;
 import org.springframework.core.MethodParameter;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpInputMessage;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.RequestBodyAdvice;
 
-import java.io.InputStream;
-import java.lang.reflect.Type;
+import com.imby.common.web.toolkit.MyHttpInputMessage;
 
 /**
  * <p>
@@ -55,34 +49,4 @@ public class RequestPackageDecryptAdvice implements RequestBodyAdvice {
         }
     }
 
-    static class MyHttpInputMessage implements HttpInputMessage {
-
-        private final HttpHeaders headers;
-
-        private final InputStream body;
-
-        public MyHttpInputMessage(HttpInputMessage inputMessage) throws Exception {
-
-            this.headers = inputMessage.getHeaders();
-
-            String bodyStr = IOUtils.toString(inputMessage.getBody(), Charsets.UTF_8);
-            // 密文数据包
-            CiphertextPackage ciphertextPackage = JSONObject.parseObject(bodyStr, CiphertextPackage.class);
-
-            // 解密
-            String decryptStr = DesEncryptUtils.decrypt(ciphertextPackage.getCiphertext());
-
-            this.body = IOUtils.toInputStream(decryptStr, Charsets.UTF_8);
-        }
-
-        @Override
-        public InputStream getBody() {
-            return this.body;
-        }
-
-        @Override
-        public HttpHeaders getHeaders() {
-            return this.headers;
-        }
-    }
 }

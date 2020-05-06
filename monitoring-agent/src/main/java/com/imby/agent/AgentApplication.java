@@ -7,7 +7,7 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 
-import com.imby.agent.config.UniqueBeanNameGenerator;
+import com.imby.common.web.toolkit.UniqueBeanNameGenerator;
 
 /**
  * <p>

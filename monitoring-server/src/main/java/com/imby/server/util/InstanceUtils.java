@@ -54,7 +54,7 @@ public class InstanceUtils {
      * @custom.date 2020年3月8日 下午3:35:21
      */
     public static String getInstanceName() {
-        return "monitoring-server-web";
+        return "monitoring-server";
     }
 
     public static void main(String[] args) throws InterruptedException {
