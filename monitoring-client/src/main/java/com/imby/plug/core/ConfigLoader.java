@@ -33,7 +33,7 @@ public class ConfigLoader {
      *
      * @param configPath 配置文件路径
      * @param configName 配置文件名称
-     * @throws NotFoundConfigParamException 找不到配置信息异常
+     * @throws NotFoundConfigParamException 找不到配置参数异常
      * @throws NotFoundConfigFileException  找不到配置文件异常
      * @throws ErrorConfigParamException    错误的配置参数异常
      * @author 皮锋
@@ -65,7 +65,7 @@ public class ConfigLoader {
      * </p>
      *
      * @param properties 配置信息
-     * @throws NotFoundConfigParamException 找不到配置信息异常
+     * @throws NotFoundConfigParamException 找不到配置参数异常
      * @throws ErrorConfigParamException    错误的配置参数异常
      * @author 皮锋
      * @custom.date 2020年3月5日 下午3:51:47
