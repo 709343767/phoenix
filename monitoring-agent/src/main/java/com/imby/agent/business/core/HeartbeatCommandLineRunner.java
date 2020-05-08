@@ -40,7 +40,7 @@ public class HeartbeatCommandLineRunner implements CommandLineRunner, Disposable
      * 延迟/周期执行线程池
      */
     private final ScheduledExecutorService seService = Executors.newScheduledThreadPool(5, new ThreadFactory() {
-        AtomicInteger atomic = new AtomicInteger();
+        final AtomicInteger atomic = new AtomicInteger();
 
         @Override
         public Thread newThread(Runnable r) {
@@ -64,7 +64,7 @@ public class HeartbeatCommandLineRunner implements CommandLineRunner, Disposable
                 this.monitoringProperties.getHeartbeatProperties().getRate(), TimeUnit.SECONDS));
         // 设置守护线程
         thread.setDaemon(true);
-        // 开始执行分进程
+        // 开始执行线程
         thread.start();
     }
 
