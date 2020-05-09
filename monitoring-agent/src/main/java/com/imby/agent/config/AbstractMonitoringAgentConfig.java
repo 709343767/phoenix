@@ -1,11 +1,12 @@
 package com.imby.agent.config;
 
+import com.imby.common.exception.ErrorConfigParamException;
+import com.imby.common.exception.NotFoundConfigParamException;
+import com.imby.common.property.*;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
-
-import com.imby.common.exception.ErrorConfigParamException;
-import com.imby.common.property.*;
 
 /**
  * <p>
@@ -38,6 +39,12 @@ public abstract class AbstractMonitoringAgentConfig {
     private String password;
 
     /**
+     * 当前应用实例ID
+     */
+    @Value("${monitoring.own.instance.id}")
+    private String instanceId;
+
+    /**
      * 当前应用实例名
      */
     @Value("${monitoring.own.instance.name}")
@@ -67,18 +74,28 @@ public abstract class AbstractMonitoringAgentConfig {
      * </p>
      *
      * @return {@link MonitoringProperties}
-     * @throws ErrorConfigParamException 错误的配置参数异常
+     * @throws ErrorConfigParamException    错误的配置参数异常
+     * @throws NotFoundConfigParamException 找不到配置参数异常
      * @author 皮锋
      * @custom.date 2020年3月6日 上午11:08:17
      */
     @Bean
-    public MonitoringProperties monitoringProperties() throws ErrorConfigParamException {
+    public MonitoringProperties monitoringProperties() throws ErrorConfigParamException, NotFoundConfigParamException {
         MonitoringProperties monitoringProperties = new MonitoringProperties();
         MonitoringServerProperties serverProperties = new MonitoringServerProperties();
+        // 没有配置连接
+        if (StringUtils.isBlank(this.url)) {
+            throw new NotFoundConfigParamException("监控程序找不到监控服务端URL配置！");
+        }
         serverProperties.setUrl(this.url);
         serverProperties.setUsername(this.username);
         serverProperties.setPassword(this.password);
         MonitoringOwnProperties ownProperties = new MonitoringOwnProperties();
+        ownProperties.setInstanceId(this.instanceId);
+        // 没有实例名称
+        if (StringUtils.isBlank(instanceName)) {
+            throw new NotFoundConfigParamException("监控程序找不到实例名称配置！");
+        }
         ownProperties.setInstanceName(this.instanceName);
         MonitoringHeartbeatProperties heartbeatProperties = new MonitoringHeartbeatProperties();
         // 心跳频率

@@ -1,12 +1,11 @@
 package com.imby.plug.core;
 
-import org.apache.commons.lang3.StringUtils;
-
 import com.imby.common.exception.ErrorConfigParamException;
 import com.imby.common.exception.NotFoundConfigFileException;
 import com.imby.common.exception.NotFoundConfigParamException;
 import com.imby.common.property.*;
 import com.imby.common.util.PropertiesUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.util.Properties;
@@ -93,7 +92,7 @@ public class ConfigLoader {
         long serverInfoRate = StringUtils.isBlank(serverInfoRateStr) ? 60L : Long.parseLong(serverInfoRateStr);
         // 没有配置连接
         if (StringUtils.isBlank(serverUrl)) {
-            throw new NotFoundConfigParamException("监控程序找不到任何监控服务端配置！");
+            throw new NotFoundConfigParamException("监控程序找不到监控服务端URL配置！");
         }
         // 用户名密码暂不做处理
         // 没有实例名称
