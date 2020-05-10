@@ -73,7 +73,7 @@ public class MailServiceImpl implements IMailService {
             context.setVariable("level", mail.getLevel());
             context.setVariables(mail.getAttachment());
             // 获取thymeleaf的html模板
-            String emailContent = this.templateEngine.process("/mail/mail-alarm-template", context);
+            String emailContent = this.templateEngine.process("mail/mail-alarm-template", context);
             log.info("告警邮件HTML：\r\n{}", emailContent);
             messageHelper.setText(emailContent, true);
             // 发送邮件
