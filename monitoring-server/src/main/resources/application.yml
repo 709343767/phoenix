@@ -18,6 +18,9 @@ server:
 
 ###############################################spring配置#################################################
 spring:
+  jackson:
+    #设置时区
+    time-zone: GMT+8
   #main:
   #支持名称相同的bean的覆盖
   #allow-bean-definition-overriding: true

@@ -6,20 +6,18 @@ server:
 ###############################################日志配置####################################################     
 logging:
   config: classpath:log-dev.xml
-  
-  
+
+
 ###############################################数据源配置##################################################
-spring:  
+spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     druid:
       #数据源配置
       driver-class-name: com.mysql.cj.jdbc.Driver
-      url: jdbc:mysql://localhost:3306/monitoring?useSSL=false&serverTimezone=UTC
+      url: jdbc:mysql://localhost:3306/monitoring?useSSL=false&serverTimezone=GMT%2b8&useUnicode=true&characterEncoding=utf-8
       username: root
       password: 123456
-      #username: bpm
-      #password: bpm$2018
       #初始化来连接大小
       initial-size: 5
       #连接池中最小的空闲连接数
