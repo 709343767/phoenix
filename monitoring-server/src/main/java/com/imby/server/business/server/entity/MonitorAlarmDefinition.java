@@ -3,9 +3,7 @@ package com.imby.server.business.server.entity;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 import lombok.experimental.Accessors;
 
 /**
@@ -19,6 +17,8 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 @TableName("MONITOR_ALARM_DEFINITION")
 public class MonitorAlarmDefinition {

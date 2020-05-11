@@ -1,15 +1,18 @@
 package com.imby.server.business.server.core;
 
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.imby.common.constant.AlarmLevelEnums;
 import com.imby.common.constant.AlarmTypeEnums;
+import com.imby.common.constant.ZeroOrOneConstants;
 import com.imby.common.domain.Alarm;
 import com.imby.common.dto.AlarmPackage;
 import com.imby.common.util.DateTimeUtils;
 import com.imby.common.util.NetUtils;
+import com.imby.server.business.server.dao.IMonitorInstanceDao;
 import com.imby.server.business.server.domain.Instance;
+import com.imby.server.business.server.entity.MonitorInstance;
 import com.imby.server.business.server.service.IAlarmService;
 import com.imby.server.property.MonitoringServerWebProperties;
-
 import lombok.extern.slf4j.Slf4j;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.DisposableBean;
@@ -29,7 +32,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * <p>
- * 在项目启动后，定时扫描应用实例池中的所有应用实例，实时更新应用实例状态，发送告警
+ * 在项目启动后，定时扫描应用实例池中的所有应用实例，实时更新应用实例状态（应用实例池、数据库），发送告警。
  * </p>
  *
  * @author 皮锋
@@ -57,6 +60,12 @@ public class InstanceMonitorTask implements CommandLineRunner, DisposableBean {
      */
     @Autowired
     private MonitoringServerWebProperties monitoringServerWebProperties;
+
+    /**
+     * 应用实例数据访问对象
+     */
+    @Autowired
+    private IMonitorInstanceDao monitorInstanceDao;
 
     /**
      * 延迟/周期执行线程池
@@ -209,6 +218,8 @@ public class InstanceMonitorTask implements CommandLineRunner, DisposableBean {
             this.sendAlarmInfo("应用程序离线", AlarmLevelEnums.FATAL, instance);
             instance.setLineAlarm(true);
         }
+        // 更新数据库
+        this.updateDb(instance);
     }
 
     /**
@@ -231,6 +242,8 @@ public class InstanceMonitorTask implements CommandLineRunner, DisposableBean {
             // this.sendAlarmInfo("网络中断", AlarmLevelEnums.FATAL, instance);
             instance.setConnectAlarm(true);
         }
+        // 更新数据库
+        this.updateDb(instance);
     }
 
     /**
@@ -260,6 +273,33 @@ public class InstanceMonitorTask implements CommandLineRunner, DisposableBean {
                 .build();
         AlarmPackage alarmPackage = new PackageConstructor().structureAlarmPackage(alarm);
         this.alarmService.dealAlarmPackage(alarmPackage);
+    }
+
+    /**
+     * <p>
+     * 更新数据库中的应用实例
+     * </p>
+     *
+     * @param instance 应用实例
+     * @author 皮锋
+     * @custom.date 2020/5/11 10:18
+     */
+    private void updateDb(Instance instance) {
+        boolean isOnline = instance.isOnline();
+        boolean onConnect = instance.isOnConnect();
+        MonitorInstance monitorInstance = new MonitorInstance();
+        monitorInstance.setUpdateTime(new Date());
+        // 离线
+        if (!isOnline) {
+            monitorInstance.setIsOnLine(ZeroOrOneConstants.ZERO);
+        }
+        // 断网
+        if (!onConnect) {
+            monitorInstance.setIsOnConnect(ZeroOrOneConstants.ZERO);
+        }
+        LambdaUpdateWrapper<MonitorInstance> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+        lambdaUpdateWrapper.eq(MonitorInstance::getInstanceId, instance.getInstanceId());
+        this.monitorInstanceDao.update(monitorInstance, lambdaUpdateWrapper);
     }
 
     /**
