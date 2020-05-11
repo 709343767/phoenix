@@ -8,11 +8,14 @@ import com.imby.common.domain.server.*;
 import com.imby.common.dto.ServerPackage;
 import com.imby.server.business.server.dao.IMonitorServerCpuDao;
 import com.imby.server.business.server.dao.IMonitorServerMemoryDao;
+import com.imby.server.business.server.dao.IMonitorServerNetcardDao;
 import com.imby.server.business.server.dao.IMonitorServerOsDao;
 import com.imby.server.business.server.entity.MonitorServerCpu;
 import com.imby.server.business.server.entity.MonitorServerMemory;
+import com.imby.server.business.server.entity.MonitorServerNetcard;
 import com.imby.server.business.server.entity.MonitorServerOs;
 import com.imby.server.business.server.service.IServerService;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -48,6 +51,12 @@ public class ServerServiceImpl implements IServerService {
     private IMonitorServerCpuDao monitorServerCpuDao;
 
     /**
+     * 服务器网卡数据访问对象
+     */
+    @Autowired
+    private IMonitorServerNetcardDao monitorServerNetcardDao;
+
+    /**
      * <p>
      * 处理服务器信息包
      * </p>
@@ -69,8 +78,10 @@ public class ServerServiceImpl implements IServerService {
         this.operateServerMemory(serverPackage);
         // 把服务器CPU信息添加到数据库
         this.operateServerCpu(serverPackage);
-        // 网卡信息
-        NetDomain netDomain = serverDomain.getNetDomain();
+        // 把服务器网卡信息添加或更新到数据库
+        this.operateServerNetcard(serverPackage);
+
+
         // java虚拟机信息
         JvmDomain jvmDomain = serverDomain.getJvmDomain();
         // 磁盘信息
@@ -78,6 +89,52 @@ public class ServerServiceImpl implements IServerService {
         // 把服务器操作系统信息添加或更新到数据库
         this.operateServerOs(serverPackage);
         return result.setSuccess(true).setMsg(ResultMsgConstants.SUCCESS);
+    }
+
+    /**
+     * <p>
+     * 把服务器网卡信息添加或更新到数据库
+     * </p>
+     *
+     * @param serverPackage 服务器信息包
+     * @author 皮锋
+     * @custom.date 2020/5/11 23:39
+     */
+    private void operateServerNetcard(ServerPackage serverPackage) {
+        // IP地址
+        String ip = serverPackage.getIp();
+        // 服务器信息
+        ServerDomain serverDomain = serverPackage.getServerDomain();
+        // 网卡信息
+        NetDomain netDomain = serverDomain.getNetDomain();
+        LambdaQueryWrapper<MonitorServerNetcard> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(MonitorServerNetcard::getIp, ip);
+        List<MonitorServerNetcard> monitorServerNetcardsDb = this.monitorServerNetcardDao.selectList(lambdaQueryWrapper);
+        // 设置网卡信息
+        List<NetDomain.NetInterfaceConfigDomain> netInterfaceConfigDomains = netDomain.getNetList();
+        for (int i = 0; i < netInterfaceConfigDomains.size(); i++) {
+            NetDomain.NetInterfaceConfigDomain netInterfaceConfigDomain = netInterfaceConfigDomains.get(i);
+            MonitorServerNetcard monitorServerNetcard = new MonitorServerNetcard();
+            monitorServerNetcard.setIp(ip);
+            monitorServerNetcard.setNetNo(i + 1);
+            monitorServerNetcard.setAddress(netInterfaceConfigDomain.getAddress());
+            monitorServerNetcard.setBroadcast(netInterfaceConfigDomain.getBroadcast());
+            monitorServerNetcard.setMask(netInterfaceConfigDomain.getMask());
+            monitorServerNetcard.setName(netInterfaceConfigDomain.getName());
+            monitorServerNetcard.setType(netInterfaceConfigDomain.getType());
+            // 新增网卡信息
+            if (CollectionUtils.isEmpty(monitorServerNetcardsDb)) {
+                monitorServerNetcard.setInsertTime(serverPackage.getDateTime());
+                this.monitorServerNetcardDao.insert(monitorServerNetcard);
+            }
+            // 更新网卡信息
+            else {
+                monitorServerNetcard.setUpdateTime(serverPackage.getDateTime());
+                LambdaUpdateWrapper<MonitorServerNetcard> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+                lambdaUpdateWrapper.eq(MonitorServerNetcard::getIp, ip);
+                this.monitorServerNetcardDao.update(monitorServerNetcard, lambdaUpdateWrapper);
+            }
+        }
     }
 
     /**
