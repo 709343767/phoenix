@@ -12,5 +12,4 @@ import com.imby.server.business.server.entity.MonitorAlarmDefinition;
  * @custom.date 2020/4/2 10:09
  */
 public interface IMonitorAlarmDefinitionDao extends BaseMapper<MonitorAlarmDefinition> {
-
 }
