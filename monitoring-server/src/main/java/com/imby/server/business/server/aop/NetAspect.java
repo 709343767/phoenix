@@ -15,9 +15,9 @@ import org.springframework.stereotype.Component;
 
 /**
  * <p>
- * 获取网络信息的切面
+ * 获取网络信息的切面。
  * </p>
- * 获取IP地址，把IP地址加入到Spring容器中的网络信息池
+ * 获取IP地址，把IP地址加入到Spring容器中的网络信息池。
  *
  * @author 皮锋
  * @custom.date 2020/3/25 9:38
@@ -40,7 +40,7 @@ public class NetAspect {
 
     /**
      * <p>
-     * 定义切入点，切入点为com.imby.server.business.server.controller.HeartbeatController.acceptHeartbeatPackage这一个方法
+     * 定义切入点，切入点为com.imby.server.business.server.controller.HeartbeatController.acceptHeartbeatPackage这一个方法。
      * </p>
      *
      * @author 皮锋
@@ -52,10 +52,10 @@ public class NetAspect {
 
     /**
      * <p>
-     * 通过前置通知，获取IP地址，把IP地址加入到网络信息池
+     * 通过前置通知，获取IP地址，把IP地址加入到网络信息池。
      * </p>
      *
-     * @param joinPoint 提供对连接点上可用状态和有关状态的静态信息的反射访问
+     * @param joinPoint 提供对连接点上可用状态和有关状态的静态信息的反射访问。
      * @author 皮锋
      * @custom.date 2020/3/25 10:18
      */

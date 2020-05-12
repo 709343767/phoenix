@@ -75,8 +75,6 @@ public class ServerServiceImpl implements IServerService {
     @Transactional
     @Override
     public Result dealServerPackage(ServerPackage serverPackage) {
-        // 返回结果
-        Result result = new Result();
         // 把服务器内存信息添加到数据库
         this.operateServerMemory(serverPackage);
         // 把服务器CPU信息添加到数据库
@@ -89,7 +87,8 @@ public class ServerServiceImpl implements IServerService {
         this.operateServerDisk(serverPackage);
         // 把服务器操作系统信息添加或更新到数据库
         this.operateServerOs(serverPackage);
-        return result.setSuccess(true).setMsg(ResultMsgConstants.SUCCESS);
+        // 返回结果
+        return Result.builder().isSuccess(true).msg(ResultMsgConstants.SUCCESS).build();
     }
 
     /**
