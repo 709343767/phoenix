@@ -6,18 +6,12 @@ import com.imby.common.constant.ResultMsgConstants;
 import com.imby.common.domain.Result;
 import com.imby.common.domain.server.*;
 import com.imby.common.dto.ServerPackage;
-import com.imby.server.business.server.dao.IMonitorServerCpuDao;
-import com.imby.server.business.server.dao.IMonitorServerMemoryDao;
-import com.imby.server.business.server.dao.IMonitorServerNetcardDao;
-import com.imby.server.business.server.dao.IMonitorServerOsDao;
-import com.imby.server.business.server.entity.MonitorServerCpu;
-import com.imby.server.business.server.entity.MonitorServerMemory;
-import com.imby.server.business.server.entity.MonitorServerNetcard;
-import com.imby.server.business.server.entity.MonitorServerOs;
+import com.imby.server.business.server.dao.*;
+import com.imby.server.business.server.entity.*;
 import com.imby.server.business.server.service.IServerService;
-import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -57,6 +51,18 @@ public class ServerServiceImpl implements IServerService {
     private IMonitorServerNetcardDao monitorServerNetcardDao;
 
     /**
+     * 服务器JVM信息数据访问对象
+     */
+    @Autowired
+    private IMonitorServerJvmDao monitorServerJvmDao;
+
+    /**
+     * 服务器磁盘数据访问对象
+     */
+    @Autowired
+    private IMonitorServerDiskDao monitorServerDiskDao;
+
+    /**
      * <p>
      * 处理服务器信息包
      * </p>
@@ -66,29 +72,87 @@ public class ServerServiceImpl implements IServerService {
      * @author 皮锋
      * @custom.date 2020/3/23 15:29
      */
+    @Transactional
     @Override
     public Result dealServerPackage(ServerPackage serverPackage) {
         // 返回结果
         Result result = new Result();
-        // IP地址
-        String ip = serverPackage.getIp();
-        // 服务器信息
-        ServerDomain serverDomain = serverPackage.getServerDomain();
         // 把服务器内存信息添加到数据库
         this.operateServerMemory(serverPackage);
         // 把服务器CPU信息添加到数据库
         this.operateServerCpu(serverPackage);
         // 把服务器网卡信息添加或更新到数据库
         this.operateServerNetcard(serverPackage);
-
-
-        // java虚拟机信息
-        JvmDomain jvmDomain = serverDomain.getJvmDomain();
-        // 磁盘信息
-        DiskDomain diskDomain = serverDomain.getDiskDomain();
+        // 把服务器jvm信息添加到数据库
+        this.operateServerJvm(serverPackage);
+        // 把服务器磁盘信息添加到数据库
+        this.operateServerDisk(serverPackage);
         // 把服务器操作系统信息添加或更新到数据库
         this.operateServerOs(serverPackage);
         return result.setSuccess(true).setMsg(ResultMsgConstants.SUCCESS);
+    }
+
+    /**
+     * <p>
+     * 把服务器磁盘信息添加到数据库
+     * </p>
+     *
+     * @param serverPackage 服务器信息包
+     * @author 皮锋
+     * @custom.date 2020/5/12 10:29
+     */
+    private void operateServerDisk(ServerPackage serverPackage) {
+        // IP地址
+        String ip = serverPackage.getIp();
+        // 磁盘信息
+        DiskDomain diskDomain = serverPackage.getServerDomain().getDiskDomain();
+        List<DiskDomain.DiskInfoDomain> diskInfoDomains = diskDomain.getDiskInfoList();
+        for (int i = 0; i < diskInfoDomains.size(); i++) {
+            DiskDomain.DiskInfoDomain diskInfoDomain = diskInfoDomains.get(i);
+            MonitorServerDisk monitorServerDisk = new MonitorServerDisk();
+            monitorServerDisk.setIp(ip);
+            monitorServerDisk.setDiskNo(i + 1);
+            monitorServerDisk.setDevName(diskInfoDomain.getDevName());
+            monitorServerDisk.setDirName(diskInfoDomain.getDirName());
+            monitorServerDisk.setTypeName(diskInfoDomain.getTypeName());
+            monitorServerDisk.setSysTypeName(diskInfoDomain.getSysTypeName());
+            monitorServerDisk.setAvail(diskInfoDomain.getAvail());
+            monitorServerDisk.setFree(diskInfoDomain.getFree());
+            monitorServerDisk.setTotal(diskInfoDomain.getTotal());
+            monitorServerDisk.setUsed(diskInfoDomain.getUsed());
+            monitorServerDisk.setUsePercent(diskInfoDomain.getUsePercent());
+            monitorServerDisk.setInsertTime(serverPackage.getDateTime());
+            monitorServerDisk.setUpdateTime(serverPackage.getDateTime());
+            this.monitorServerDiskDao.insert(monitorServerDisk);
+        }
+    }
+
+    /**
+     * <p>
+     * 把服务器jvm信息添加到数据库
+     * </p>
+     *
+     * @param serverPackage 服务器信息包
+     * @author 皮锋
+     * @custom.date 2020/5/12 10:02
+     */
+    private void operateServerJvm(ServerPackage serverPackage) {
+        // IP地址
+        String ip = serverPackage.getIp();
+        // java虚拟机信息
+        JvmDomain jvmDomain = serverPackage.getServerDomain().getJvmDomain();
+        MonitorServerJvm monitorServerJvm = new MonitorServerJvm();
+        monitorServerJvm.setIp(ip);
+        monitorServerJvm.setJavaName(jvmDomain.getJavaName());
+        monitorServerJvm.setJavaPath(jvmDomain.getJavaPath());
+        monitorServerJvm.setJavaVendor(jvmDomain.getJavaVendor());
+        monitorServerJvm.setJavaVersion(jvmDomain.getJavaVersion());
+        monitorServerJvm.setJvmVersion(jvmDomain.getJvmVersion());
+        monitorServerJvm.setJvmFreeMemory(jvmDomain.getJvmFreeMemory());
+        monitorServerJvm.setJvmTotalMemory(jvmDomain.getJvmTotalMemory());
+        monitorServerJvm.setInsertTime(serverPackage.getDateTime());
+        monitorServerJvm.setUpdateTime(serverPackage.getDateTime());
+        this.monitorServerJvmDao.insert(monitorServerJvm);
     }
 
     /**
@@ -103,13 +167,8 @@ public class ServerServiceImpl implements IServerService {
     private void operateServerNetcard(ServerPackage serverPackage) {
         // IP地址
         String ip = serverPackage.getIp();
-        // 服务器信息
-        ServerDomain serverDomain = serverPackage.getServerDomain();
         // 网卡信息
-        NetDomain netDomain = serverDomain.getNetDomain();
-        LambdaQueryWrapper<MonitorServerNetcard> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-        lambdaQueryWrapper.eq(MonitorServerNetcard::getIp, ip);
-        List<MonitorServerNetcard> monitorServerNetcardsDb = this.monitorServerNetcardDao.selectList(lambdaQueryWrapper);
+        NetDomain netDomain = serverPackage.getServerDomain().getNetDomain();
         // 设置网卡信息
         List<NetDomain.NetInterfaceConfigDomain> netInterfaceConfigDomains = netDomain.getNetList();
         for (int i = 0; i < netInterfaceConfigDomains.size(); i++) {
@@ -122,8 +181,13 @@ public class ServerServiceImpl implements IServerService {
             monitorServerNetcard.setMask(netInterfaceConfigDomain.getMask());
             monitorServerNetcard.setName(netInterfaceConfigDomain.getName());
             monitorServerNetcard.setType(netInterfaceConfigDomain.getType());
+            // 查询数据库中是否有当前网卡信息
+            LambdaQueryWrapper<MonitorServerNetcard> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+            lambdaQueryWrapper.eq(MonitorServerNetcard::getIp, ip);
+            lambdaQueryWrapper.eq(MonitorServerNetcard::getNetNo, i + 1);
+            MonitorServerNetcard monitorServerNetcardDb = this.monitorServerNetcardDao.selectOne(lambdaQueryWrapper);
             // 新增网卡信息
-            if (CollectionUtils.isEmpty(monitorServerNetcardsDb)) {
+            if (monitorServerNetcardDb == null) {
                 monitorServerNetcard.setInsertTime(serverPackage.getDateTime());
                 this.monitorServerNetcardDao.insert(monitorServerNetcard);
             }
@@ -132,6 +196,7 @@ public class ServerServiceImpl implements IServerService {
                 monitorServerNetcard.setUpdateTime(serverPackage.getDateTime());
                 LambdaUpdateWrapper<MonitorServerNetcard> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();
                 lambdaUpdateWrapper.eq(MonitorServerNetcard::getIp, ip);
+                lambdaUpdateWrapper.eq(MonitorServerNetcard::getNetNo, i + 1);
                 this.monitorServerNetcardDao.update(monitorServerNetcard, lambdaUpdateWrapper);
             }
         }
@@ -149,10 +214,8 @@ public class ServerServiceImpl implements IServerService {
     private void operateServerCpu(ServerPackage serverPackage) {
         // IP地址
         String ip = serverPackage.getIp();
-        // 服务器信息
-        ServerDomain serverDomain = serverPackage.getServerDomain();
         // Cpu信息
-        CpuDomain cpuDomain = serverDomain.getCpuDomain();
+        CpuDomain cpuDomain = serverPackage.getServerDomain().getCpuDomain();
         List<CpuDomain.CpuInfoDomain> cpuInfoDomains = cpuDomain.getCpuList();
         for (int i = 0; i < cpuInfoDomains.size(); i++) {
             CpuDomain.CpuInfoDomain cpuInfoDomain = cpuInfoDomains.get(i);
@@ -164,6 +227,7 @@ public class ServerServiceImpl implements IServerService {
             monitorServerCpu.setCpuIdle(cpuInfoDomain.getCpuIdle());
             monitorServerCpu.setInsertTime(serverPackage.getDateTime());
             monitorServerCpu.setUpdateTime(serverPackage.getDateTime());
+            // 以后可能优化成批量插入
             this.monitorServerCpuDao.insert(monitorServerCpu);
         }
     }
@@ -180,10 +244,8 @@ public class ServerServiceImpl implements IServerService {
     private void operateServerMemory(ServerPackage serverPackage) {
         // IP地址
         String ip = serverPackage.getIp();
-        // 服务器信息
-        ServerDomain serverDomain = serverPackage.getServerDomain();
         // 内存信息
-        MemoryDomain memoryDomain = serverDomain.getMemoryDomain();
+        MemoryDomain memoryDomain = serverPackage.getServerDomain().getMemoryDomain();
         MonitorServerMemory monitorServerMemory = new MonitorServerMemory();
         monitorServerMemory.setIp(ip);
         monitorServerMemory.setMenTotal(memoryDomain.getMemTotal());
@@ -207,10 +269,8 @@ public class ServerServiceImpl implements IServerService {
     private void operateServerOs(ServerPackage serverPackage) {
         // IP地址
         String ip = serverPackage.getIp();
-        // 服务器信息
-        ServerDomain serverDomain = serverPackage.getServerDomain();
         // 操作系统信息
-        OsDomain osDomain = serverDomain.getOsDomain();
+        OsDomain osDomain = serverPackage.getServerDomain().getOsDomain();
         LambdaQueryWrapper<MonitorServerOs> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         lambdaQueryWrapper.eq(MonitorServerOs::getIp, ip);
         MonitorServerOs monitorServerDb = this.monitorServerOsDao.selectOne(lambdaQueryWrapper);
