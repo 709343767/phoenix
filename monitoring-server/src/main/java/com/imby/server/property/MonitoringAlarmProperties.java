@@ -30,7 +30,7 @@ public class MonitoringAlarmProperties {
     /**
      * 告警方式
      */
-    private String[] type;
+    private String[] way;
 
     /**
      * 短信配置属性

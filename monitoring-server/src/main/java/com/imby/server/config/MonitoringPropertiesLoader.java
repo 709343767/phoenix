@@ -41,8 +41,8 @@ public class MonitoringPropertiesLoader {
         // 缺省[监控告警级别，四级：INFO < WARN < ERROR < FATAL，(默认WARN，level >= WARN告警)]
         String alarmLevelTmp = StringUtils.trimToNull(properties.getProperty("monitoring.alarm.level"));
         String alarmLevel = StringUtils.isBlank(alarmLevelTmp) ? AlarmLevelEnums.WARN.name() : alarmLevelTmp;
-        // 告警类型
-        String alarmType = StringUtils.trimToNull(properties.getProperty("monitoring.alarm.type"));
+        // 告警方式
+        String alarmWay = StringUtils.trimToNull(properties.getProperty("monitoring.alarm.way"));
         // 告警短信号码
         String alarmSmsPhoneNumbers = StringUtils.trimToNull(properties.getProperty("monitoring.alarm.sms.phone-numbers"));
         // 告警短信地址
@@ -56,7 +56,7 @@ public class MonitoringPropertiesLoader {
         // 缺省[是否监控网络(默认打开)]
         String monitoringEnableStr = StringUtils.trimToNull(properties.getProperty("monitoring.network.enable"));
         boolean monitoringEnable = StringUtils.isBlank(monitoringEnableStr) || Boolean.parseBoolean(monitoringEnableStr);
-        return wrap(threshold, alarmEnable, alarmLevel, alarmType, alarmSmsPhoneNumbers, alarmSmsAddress, alarmSmsProtocol,
+        return wrap(threshold, alarmEnable, alarmLevel, alarmWay, alarmSmsPhoneNumbers, alarmSmsAddress, alarmSmsProtocol,
                 alarmSmsEnterprise, mailTo, monitoringEnable);
     }
 
@@ -68,7 +68,7 @@ public class MonitoringPropertiesLoader {
      * @param threshold            监控阈值
      * @param alarmEnable          告警是否打开
      * @param alarmLevel           告警级别
-     * @param alarmType            告警类型
+     * @param alarmWay             告警方式
      * @param alarmSmsPhoneNumbers 告警短信号码
      * @param alarmSmsAddress      告警短信地址
      * @param alarmSmsProtocol     告警短信协议
@@ -79,7 +79,7 @@ public class MonitoringPropertiesLoader {
      * @author 皮锋
      * @custom.date 2020年3月10日 下午2:39:38
      */
-    private MonitoringServerWebProperties wrap(int threshold, boolean alarmEnable, String alarmLevel, String alarmType,
+    private MonitoringServerWebProperties wrap(int threshold, boolean alarmEnable, String alarmLevel, String alarmWay,
                                                String alarmSmsPhoneNumbers, String alarmSmsAddress,
                                                String alarmSmsProtocol, String alarmSmsEnterprise,
                                                String mailTo, boolean monitoringEnable) {
@@ -87,7 +87,7 @@ public class MonitoringPropertiesLoader {
         MonitoringAlarmProperties alarmProperties = new MonitoringAlarmProperties();
         alarmProperties.setEnable(alarmEnable);
         alarmProperties.setLevel(alarmLevel);
-        alarmProperties.setType(alarmType != null ? alarmType.split(";") : null);
+        alarmProperties.setWay(alarmWay != null ? alarmWay.split(";") : null);
         // 短信属性
         MonitoringSmsProperties smsProperties = new MonitoringSmsProperties();
         smsProperties.setAddress(alarmSmsAddress);
