@@ -62,7 +62,7 @@ public class Invoker {
             return method.invoke(target, paramValues);
         } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
             log.error("代理执行业务方法异常！", e);
-            throw new Exception(e);
+            throw new Exception(e.getCause());
         }
     }
 
