@@ -258,6 +258,7 @@ public class AlarmServiceImpl implements IAlarmService {
      * @param alarmTitle 告警标题
      * @param alarmMsg   告警内容
      * @param alarmWays  告警方式（SMS、MAIL）
+     * @return 插入记录数
      * @author 皮锋
      * @custom.date 2020/5/13 16:21
      */
