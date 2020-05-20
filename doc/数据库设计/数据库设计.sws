@@ -4,8 +4,7 @@
 
 <Workspace>
 	<Local Expanded="Yes">
-		<Model Expanded="Yes" ID="{88086B01-C9E1-11D4-9552-0090277716A9}" Loaded="No" Name="Physical Data Model 1" Type="{CDE44E21-9669-11D1-9914-006097355D9B}" URL="数据库设计.PDM"/>
-		<Model Expanded="Yes" ID="{88086B01-C9E1-11D4-9552-0090277716A9}" Name="Physical Data Model 1" Selected="Yes" Type="{CDE44E21-9669-11D1-9914-006097355D9B}" URL="数据库设计.PDM"/>
+		<Model Expanded="Yes" ID="{88086B01-C9E1-11D4-9552-0090277716A9}" Name="高速公路信息化软件平台" Type="{CDE44E21-9669-11D1-9914-006097355D9B}" URL="/中通服创发/1.项目/1.湖南高速信息化项目/5.管理处信息化项目/1.基线版本/3.详细设计/高速公路信息化软件平台数据结构设计V0.5.PDM"/>
 	</Local>
 	<BrowserModule Name="仓库(&amp;R)"/>
 </Workspace>

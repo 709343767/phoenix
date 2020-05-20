@@ -7,6 +7,9 @@
     <meta name="viewport"
           content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"/>
     <title>PFCLOUD</title>
+    <link rel="icon" href="./images/favicon.ico" th:href="@{/images/favicon.ico}" type="image/x-icon">
+    <link rel="shortcut icon" href="./images/favicon.ico" th:href="@{/images/favicon.ico}" type="image/x-icon">
+    <link rel="bookmark" href="./images/favicon.ico" th:href="@{/images/favicon.ico}" type="image/x-icon">
     <link rel="stylesheet" type="text/css" href="./lib/layui/css/layui.css" th:href="@{/lib/layui/css/layui.css}"/>
     <link rel="stylesheet" type="text/css" href="./css/admin.css" th:href="@{/css/admin.css}"/>
     <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
@@ -23,48 +26,36 @@
         </div>
         <ul class="layui-nav layui-nav-tree" lay-filter="leftNav">
             <li class="layui-nav-item layui-nav-itemed">
-                <a href="javascript:;"><i class="iconfont">&#xe607;</i>仪表盘</a>
+                <a href="javascript:;"><i class="iconfont">&#xe6da;</i>服务器</a>
+                <dl class="layui-nav-child">
+                    <dd><a href="javascript:;" data-url="menu1.html" data-id='1' data-text="操作系统"><span
+                            class="l-line"></span>操作系统</a></dd>
+                    <dd><a href="javascript:;" data-url="menu1.html" data-id='1' data-text="CPU"><span
+                            class="l-line"></span>CPU</a></dd>
+                    <dd><a href="javascript:;" data-url="menu2.html" data-id='2' data-text="内存"><span
+                            class="l-line"></span>内存</a></dd>
+                    <dd><a href="javascript:;" data-url="menu2.html" data-id='2' data-text="磁盘"><span
+                            class="l-line"></span>磁盘</a></dd>
+                    <dd><a href="javascript:;" data-url="menu2.html" data-id='2' data-text="网卡"><span
+                            class="l-line"></span>网卡</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item layui-nav-itemed">
+                <a href="javascript:;"><i class="iconfont">&#xe70c;</i>数据库</a>
                 <dl class="layui-nav-child">
                     <dd><a href="javascript:;" data-url="menu1.html" data-id='1' data-text="服务器"><span
                             class="l-line"></span>服务器</a></dd>
-                    <dd><a href="javascript:;" data-url="menu2.html" data-id='2' data-text="应用"><span
-                            class="l-line"></span>应用</a></dd>
                 </dl>
             </li>
             <li class="layui-nav-item">
-                <a href="javascript:;"><i class="iconfont">&#xe608;</i>内容管理</a>
-                <dl class="layui-nav-child">
-                    <dd><a href="javascript:;" data-url="article-list.html" data-id='3' data-text="文章管理"><span
-                            class="l-line"></span>文章管理</a></dd>
-                    <dd><a href="javascript:;" data-url="danye-list.html" data-id='9' data-text="单页管理"><span
-                            class="l-line"></span>单页管理</a></dd>
-                </dl>
+                <a href="javascript:;" data-url="admin-info.html" data-id='5' data-text="网络"><i class="iconfont">&#xe6f7;</i>网络</a>
             </li>
             <li class="layui-nav-item">
-                <a href="javascript:;"><i class="iconfont">&#xe604;</i>推荐位管理</a>
+                <a href="javascript:;" data-url="admin-info.html" data-id='5' data-text="个人信息"><i class="iconfont">&#xe6b8;</i>个人信息</a>
             </li>
             <li class="layui-nav-item">
-                <a href="javascript:;"><i class="iconfont">&#xe60c;</i>友情链接</a>
-            </li>
-            <li class="layui-nav-item">
-                <a href="javascript:;"><i class="iconfont">&#xe60a;</i>RBAC</a>
-            </li>
-            <li class="layui-nav-item">
-                <a href="javascript:;" data-url="email.html" data-id='4' data-text="邮件系统"><i
-                        class="iconfont">&#xe603;</i>邮件系统</a>
-            </li>
-            <li class="layui-nav-item">
-                <a href="javascript:;"><i class="iconfont">&#xe60d;</i>生成静态</a>
-            </li>
-            <li class="layui-nav-item">
-                <a href="javascript:;"><i class="iconfont">&#xe600;</i>备份管理</a>
-            </li>
-            <li class="layui-nav-item">
-                <a href="javascript:;" data-url="admin-info.html" data-id='5' data-text="个人信息"><i class="iconfont">&#xe606;</i>个人信息</a>
-            </li>
-            <li class="layui-nav-item">
-                <a href="javascript:;" data-url="system.html" data-id='6' data-text="系统设置"><i
-                        class="iconfont">&#xe60b;</i>系统设置</a>
+                <a href="javascript:;" data-url="system.html" data-id='6' data-text="系统设置">
+                    <i class="iconfont">&#xe6ae;</i>系统设置</a>
             </li>
         </ul>
     </div>
@@ -74,12 +65,12 @@
         <div class="main-layout-header">
             <div class="menu-btn" id="hideBtn">
                 <a href="javascript:;">
-                    <span class="iconfont">&#xe60e;</span>
+                    <span class="iconfont">&#xe699;</span>
                 </a>
             </div>
             <ul class="layui-nav" lay-filter="rightNav">
-                <li class="layui-nav-item"><a href="javascript:;" data-url="email.html" data-id='4' data-text="邮件系统"><i
-                        class="iconfont">&#xe603;</i></a></li>
+                <li class="layui-nav-item"><a href="javascript:;" data-url="email.html" data-id='4' data-text="通知"><i
+                        class="iconfont">&#xe713;</i></a></li>
                 <li class="layui-nav-item">
                     <a href="javascript:;" data-url="admin-info.html" data-id='5' data-text="个人信息">超级管理员</a>
                 </li>
