@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport"
           content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"/>
-    <title>PFCLOUD</title>
+    <title>WATCHDOG</title>
     <link rel="icon" href="./images/favicon.ico" th:href="@{/images/favicon.ico}" type="image/x-icon">
     <link rel="shortcut icon" href="./images/favicon.ico" th:href="@{/images/favicon.ico}" type="image/x-icon">
     <link rel="bookmark" href="./images/favicon.ico" th:href="@{/images/favicon.ico}" type="image/x-icon">
@@ -16,31 +16,35 @@
     <script src="./js/html5.min.js" th:src="@{/js/html5.min.js}"></script>
     <script src="./js/respond.min.js" th:src="@{/js/respond.min.js}"></script>
     <![endif]-->
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        var ctxPath = /*[[@{/}]]*/;
+        /*]]>*/
+    </script>
 </head>
 
 <body>
 <div class="m-login-bg">
     <div class="m-login">
-        <h3>PFCLOUD监控平台登录</h3>
+        <h3>WATCHDOG监控平台登录</h3>
         <div class="m-login-warp">
             <form class="layui-form">
                 <div class="layui-form-item">
                     <label>
-                        <input type="text" name="title" required lay-verify="required" placeholder="用户名"
-                               autocomplete="off"
-                               class="layui-input">
+                        <input type="text" name="username" required lay-verify="username" placeholder="用户名"
+                               autocomplete="on" class="layui-input">
                     </label>
                 </div>
                 <div class="layui-form-item">
                     <label>
-                        <input type="text" name="password" required lay-verify="required" placeholder="密码"
-                               autocomplete="off" class="layui-input">
+                        <input type="password" name="password" required lay-verify="password" placeholder="密码"
+                               autocomplete="on" class="layui-input">
                     </label>
                 </div>
                 <div class="layui-form-item">
                     <div class="layui-inline">
                         <label>
-                            <input type="text" name="verity" required lay-verify="required" placeholder="验证码"
+                            <input type="text" name="verity" required lay-verify="verity" placeholder="验证码"
                                    autocomplete="off" class="layui-input">
                         </label>
                     </div>
@@ -51,7 +55,7 @@
                 </div>
                 <div class="layui-form-item m-login-btn">
                     <div class="layui-inline">
-                        <button class="layui-btn layui-btn-normal" lay-submit lay-filter="login">登录</button>
+                        <button class="layui-btn layui-btn-normal" lay-submit lay-filter="dologin">登录</button>
                     </div>
                     <div class="layui-inline">
                         <button type="reset" class="layui-btn layui-btn-primary">取消</button>
@@ -63,25 +67,48 @@
     </div>
 </div>
 <script src="./lib/layui/layui.js" th:src="@{/lib/layui/layui.js}" type="text/javascript" charset="utf-8"></script>
+<script src="./js/jquery-1.11.2.min.js" th:src="@{/js/jquery-1.11.2.min.js}" type="text/javascript"
+        charset="utf-8"></script>
 <script>
     layui.use(['form', 'layedit', 'laydate'], function () {
         var form = layui.form(),
             layer = layui.layer;
         //自定义验证规则
         form.verify({
-            title: function (value) {
+            username: function (value) {
                 if (value.length < 5) {
-                    return '标题至少得5个字符啊';
+                    return '用户名至少5位！';
                 }
             },
-            password: [/(.+){6,12}$/, '密码必须6到12位'],
-            verity: [/(.+){6}$/, '验证码必须是6位'],
+            password: function (value) {
+                if (value.length < 8) {
+                    return '密码至少8位！';
+                }
+            },
+            verity: function (value) {
+                if (value.length != 6) {
+                    return '验证码必须是6位!';
+                }
+            }
         });
         //监听提交
-        form.on('submit(login)', function (data) {
+        form.on('submit(dologin)', function (data) {
             layer.alert(JSON.stringify(data.field), {
                 title: '最终的提交信息'
-            })
+            });
+            $.ajax({
+                type: 'POST',
+                url: ctxPath + 'dologin',
+                data: JSON.stringify(data.field),
+                dataType: 'json',
+                success: function (response) {
+                    layer.msg('登录成功！');
+                    location.href = ctxPath + "index";
+                },
+                error: function (jqXHR) {
+                    layer.msg('登录失败！');
+                }
+            });
             return false;
         });
     });
