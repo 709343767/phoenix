@@ -3,6 +3,7 @@ package com.imby.plug.core;
 import com.google.common.base.Charsets;
 import com.imby.common.constant.EndpointTypeConstants;
 import com.imby.common.domain.Alarm;
+import com.imby.common.domain.Result;
 import com.imby.common.domain.server.ServerDomain;
 import com.imby.common.dto.AlarmPackage;
 import com.imby.common.dto.BaseResponsePackage;
@@ -13,7 +14,6 @@ import com.imby.common.util.NetUtils;
 import com.imby.common.util.SigarUtils;
 import com.imby.common.util.StrUtils;
 import com.imby.plug.util.InstanceUtils;
-
 import org.hyperic.sigar.SigarException;
 
 import java.nio.charset.Charset;
@@ -111,12 +111,7 @@ public class PackageConstructor implements IPackageConstructor {
     }
 
     @Override
-    public BaseResponsePackage structureBaseResponsePackageBySuccess() {
-        return null;
-    }
-
-    @Override
-    public BaseResponsePackage structureBaseResponsePackageByFail(String msg) {
+    public BaseResponsePackage structureBaseResponsePackage(Result result) {
         return null;
     }
 

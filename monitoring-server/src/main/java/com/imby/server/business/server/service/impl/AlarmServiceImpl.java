@@ -339,9 +339,7 @@ public class AlarmServiceImpl implements IAlarmService {
                 .identity(enterprise)//
                 .build();
         // 创发公司短信接口
-        String str = this.smsService.sendSmsByTransfarApi(transfarSms);
-        // 短信发送成功
-        boolean b = (!StringUtils.equalsIgnoreCase("null", str)) && StringUtils.isNotBlank(str);
+        boolean b = this.smsService.sendSmsByTransfarApi(transfarSms);
         // 成功
         if (b) {
             result.setSuccess(true);

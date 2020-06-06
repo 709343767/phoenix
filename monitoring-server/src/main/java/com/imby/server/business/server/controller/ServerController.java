@@ -6,7 +6,6 @@ import com.imby.common.dto.BaseResponsePackage;
 import com.imby.common.dto.ServerPackage;
 import com.imby.server.business.server.core.PackageConstructor;
 import com.imby.server.business.server.service.IServerService;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,13 +48,7 @@ public class ServerController {
     public BaseResponsePackage acceptServerPackage(@RequestBody String request) {
         ServerPackage serverPackage = JSON.parseObject(request, ServerPackage.class);
         Result result = this.serverService.dealServerPackage(serverPackage);
-        if (result.isSuccess()) {
-            // 成功
-            return new PackageConstructor().structureBaseResponsePackageBySuccess();
-        } else {
-            // 失败
-            return new PackageConstructor().structureBaseResponsePackageByFail(result.getMsg());
-        }
+        return new PackageConstructor().structureBaseResponsePackage(result);
     }
 
 }

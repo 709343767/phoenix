@@ -1,12 +1,12 @@
 package com.imby.common.inf;
 
-import org.hyperic.sigar.SigarException;
-
 import com.imby.common.domain.Alarm;
+import com.imby.common.domain.Result;
 import com.imby.common.dto.AlarmPackage;
 import com.imby.common.dto.BaseResponsePackage;
 import com.imby.common.dto.HeartbeatPackage;
 import com.imby.common.dto.ServerPackage;
+import org.hyperic.sigar.SigarException;
 
 /**
  * <p>
@@ -55,25 +55,14 @@ public interface IPackageConstructor {
 
     /**
      * <p>
-     * 构建请求成功的基础响应包
+     * 构建请求基础响应包
      * </p>
      *
-     * @return {@link BaseResponsePackage}
-     * @author 皮锋
-     * @custom.date 2020年3月11日 上午9:52:37
-     */
-    BaseResponsePackage structureBaseResponsePackageBySuccess();
-
-    /**
-     * <p>
-     * 构建请求失败的基础响应包
-     * </p>
-     *
-     * @param msg 返回信息
+     * @param result 返回结果
      * @return {@link BaseResponsePackage}
      * @author 皮锋
      * @custom.date 2020年3月11日 上午9:52:48
      */
-    BaseResponsePackage structureBaseResponsePackageByFail(String msg);
+    BaseResponsePackage structureBaseResponsePackage(Result result);
 
 }

@@ -12,16 +12,16 @@ import com.imby.server.business.server.domain.TransfarSms;
  */
 public interface ISmsService {
 
-	/**
-	 * <p>
-	 * 调用创发的短信接口发送短信
-	 * </p>
-	 *
-	 * @author 皮锋
-	 * @custom.date 2020年3月10日 上午11:01:47
-	 * @param sms 创发短信实体对象
-	 * @return 短信发送结果
-	 */
-	String sendSmsByTransfarApi(TransfarSms sms);
+    /**
+     * <p>
+     * 调用创发的短信接口发送短信
+     * </p>
+     *
+     * @param sms 创发短信实体对象
+     * @return 短信发送结果
+     * @author 皮锋
+     * @custom.date 2020年3月10日 上午11:01:47
+     */
+    boolean sendSmsByTransfarApi(TransfarSms sms);
 
 }

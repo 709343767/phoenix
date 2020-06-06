@@ -1,14 +1,14 @@
 package com.imby.server.business.server.service.impl;
 
+import com.imby.server.business.server.domain.TransfarSms;
+import com.imby.server.business.server.service.ISmsService;
+import com.imby.server.property.MonitoringServerWebProperties;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-
-import com.imby.server.business.server.domain.TransfarSms;
-import com.imby.server.business.server.service.ISmsService;
-import com.imby.server.property.MonitoringServerWebProperties;
 
 /**
  * <p>
@@ -42,7 +42,7 @@ public class SmsServiceImpl implements ISmsService {
      * @custom.date 2020年3月10日 上午11:01:47
      */
     @Override
-    public String sendSmsByTransfarApi(TransfarSms sms) {
+    public boolean sendSmsByTransfarApi(TransfarSms sms) {
         String alarmSmsAddress = this.config.getAlarmProperties().getSmsProperties().getAddress();
         // URL地址
         String url = alarmSmsAddress + "?phone=" + sms.getPhone() + "&type=" + sms.getType() + "&content="
@@ -50,10 +50,12 @@ public class SmsServiceImpl implements ISmsService {
         log.info("创发的短信接口URL：{}", url);
         try {
             ResponseEntity<String> responseEntity = this.restTemplate.getForEntity(url, String.class);
-            return responseEntity.getBody();
+            String body = responseEntity.getBody();
+            // 短信发送成功
+            return StringUtils.isNotBlank(body);
         } catch (Exception e) {
             log.error("调用创发的短信接口发送短信异常！", e);
-            return "null";
+            return false;
         }
     }
 

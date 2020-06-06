@@ -6,7 +6,6 @@ import com.imby.common.dto.BaseResponsePackage;
 import com.imby.common.dto.HeartbeatPackage;
 import com.imby.server.business.server.core.PackageConstructor;
 import com.imby.server.business.server.service.IHeartbeatService;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,11 +48,7 @@ public class HeartbeatController {
     public BaseResponsePackage acceptHeartbeatPackage(@RequestBody String request) {
         HeartbeatPackage heartbeatPackage = JSON.parseObject(request, HeartbeatPackage.class);
         Result result = this.heartbeatService.dealHeartbeatPackage(heartbeatPackage);
-        if (result.isSuccess()) {
-            return new PackageConstructor().structureBaseResponsePackageBySuccess();
-        } else {
-            return new PackageConstructor().structureBaseResponsePackageByFail(result.getMsg());
-        }
+        return new PackageConstructor().structureBaseResponsePackage(result);
     }
 
 }

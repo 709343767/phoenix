@@ -6,7 +6,6 @@ import com.imby.common.dto.AlarmPackage;
 import com.imby.common.dto.BaseResponsePackage;
 import com.imby.server.business.server.core.PackageConstructor;
 import com.imby.server.business.server.service.IAlarmService;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,12 +48,6 @@ public class AlarmController {
     public BaseResponsePackage acceptAlarmPackage(@RequestBody String request) {
         AlarmPackage alarmPackage = JSON.parseObject(request, AlarmPackage.class);
         Result result = this.alarmService.dealAlarmPackage(alarmPackage);
-        if (result.isSuccess()) {
-            // 成功
-            return new PackageConstructor().structureBaseResponsePackageBySuccess();
-        } else {
-            // 失败
-            return new PackageConstructor().structureBaseResponsePackageByFail(result.getMsg());
-        }
+        return new PackageConstructor().structureBaseResponsePackage(result);
     }
 }

@@ -3,7 +3,6 @@ package com.imby.agent.business.core;
 import com.google.common.base.Charsets;
 import com.imby.agent.util.InstanceUtils;
 import com.imby.common.constant.EndpointTypeConstants;
-import com.imby.common.constant.ResultMsgConstants;
 import com.imby.common.domain.Alarm;
 import com.imby.common.domain.Result;
 import com.imby.common.domain.server.ServerDomain;
@@ -15,7 +14,6 @@ import com.imby.common.inf.IPackageConstructor;
 import com.imby.common.util.NetUtils;
 import com.imby.common.util.SigarUtils;
 import com.imby.common.util.StrUtils;
-
 import org.hyperic.sigar.SigarException;
 
 import java.nio.charset.Charset;
@@ -114,39 +112,16 @@ public class PackageConstructor implements IPackageConstructor {
 
     /**
      * <p>
-     * 构建请求成功的基础响应包
-     * </p>
-     *
-     * @return {@link BaseResponsePackage}
-     * @author 皮锋
-     * @custom.date 2020年3月11日 上午9:52:37
-     */
-    @Override
-    public BaseResponsePackage structureBaseResponsePackageBySuccess() {
-        BaseResponsePackage baseResponsePackage = new BaseResponsePackage();
-        baseResponsePackage.setEndpoint(EndpointTypeConstants.AGENT);
-        baseResponsePackage.setInstanceId(InstanceUtils.getInstanceId());
-        baseResponsePackage.setInstanceName(InstanceUtils.getInstanceName());
-        baseResponsePackage.setIp(NetUtils.getLocalIp());
-        baseResponsePackage.setComputerName(SigarUtils.getComputerName());
-        baseResponsePackage.setDateTime(new Date());
-        baseResponsePackage.setId(StrUtils.getUUID());
-        baseResponsePackage.setResult(Result.builder().isSuccess(true).msg(ResultMsgConstants.SUCCESS).build());
-        return baseResponsePackage;
-    }
-
-    /**
-     * <p>
      * 构建请求失败的基础响应包
      * </p>
      *
-     * @param msg 返回信息
+     * @param result 返回结果
      * @return {@link BaseResponsePackage}
      * @author 皮锋
      * @custom.date 2020年3月11日 上午9:52:48
      */
     @Override
-    public BaseResponsePackage structureBaseResponsePackageByFail(String msg) {
+    public BaseResponsePackage structureBaseResponsePackage(Result result) {
         BaseResponsePackage baseResponsePackage = new BaseResponsePackage();
         baseResponsePackage.setEndpoint(EndpointTypeConstants.AGENT);
         baseResponsePackage.setInstanceId(InstanceUtils.getInstanceId());
@@ -155,11 +130,7 @@ public class PackageConstructor implements IPackageConstructor {
         baseResponsePackage.setComputerName(SigarUtils.getComputerName());
         baseResponsePackage.setDateTime(new Date());
         baseResponsePackage.setId(StrUtils.getUUID());
-        if (null == msg) {
-            baseResponsePackage.setResult(Result.builder().isSuccess(false).msg(ResultMsgConstants.FAILURE).build());
-        } else {
-            baseResponsePackage.setResult(Result.builder().isSuccess(false).msg(msg).build());
-        }
+        baseResponsePackage.setResult(result);
         return baseResponsePackage;
     }
 

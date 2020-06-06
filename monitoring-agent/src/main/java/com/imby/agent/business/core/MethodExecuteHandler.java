@@ -1,5 +1,6 @@
 package com.imby.agent.business.core;
 
+import com.imby.common.domain.Result;
 import com.imby.common.dto.AlarmPackage;
 import com.imby.common.dto.BaseResponsePackage;
 import com.imby.common.dto.HeartbeatPackage;
@@ -82,15 +83,16 @@ public class MethodExecuteHandler {
      */
     private static BaseResponsePackage execute(Invoker invoker, Object pkg) {
         // 执行命令，返回执行结果
-        BaseResponsePackage result;
+        BaseResponsePackage responsePackage;
         try {
             assert invoker != null;
             Object object = invoker.invoke(pkg);
-            result = (BaseResponsePackage) object;
+            responsePackage = (BaseResponsePackage) object;
         } catch (Exception e) {
-            result = new PackageConstructor().structureBaseResponsePackageByFail(e.getMessage());
+            Result result = Result.builder().isSuccess(false).msg(e.getMessage()).build();
+            responsePackage = new PackageConstructor().structureBaseResponsePackage(result);
         }
-        return result;
+        return responsePackage;
     }
 
 }
