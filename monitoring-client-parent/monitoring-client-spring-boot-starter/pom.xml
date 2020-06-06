@@ -4,30 +4,26 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <!-- 监控父项目 -->
+    <!-- 监控父项目，为监控客户端父项目 -->
     <parent>
-        <artifactId>monitoring</artifactId>
+        <artifactId>monitoring-client-parent</artifactId>
         <groupId>com.imby</groupId>
         <version>${revision}</version>
         <relativePath>..</relativePath>
     </parent>
 
     <!-- 项目基本信息 -->
-    <artifactId>monitoring-client</artifactId>
+    <artifactId>monitoring-client-spring-boot-starter</artifactId>
+    <name>monitoring-client-spring-boot-starter</name>
     <packaging>jar</packaging>
-    <name>monitoring-client</name>
-    <description>监控客户端</description>
-
-    <!-- 属性 -->
-    <properties>
-    </properties>
+    <description>监控客户端与springboot集成的starter</description>
 
     <!-- 依赖 -->
     <dependencies>
-        <!-- 项目公共模块依赖 -->
+        <!-- 监控客户端模块依赖 -->
         <dependency>
             <groupId>com.imby</groupId>
-            <artifactId>monitoring-common</artifactId>
+            <artifactId>monitoring-client</artifactId>
         </dependency>
 
         <!--lombok依赖 -->
@@ -36,35 +32,21 @@
             <artifactId>lombok</artifactId>
             <optional>true</optional>
         </dependency>
-        <!-- junit单元测试依赖 -->
+        <!-- springboot依赖 -->
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <!-- HTTP协议的客户端/服务器编程工具包依赖 -->
-        <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpclient</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpcore</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
         </dependency>
     </dependencies>
 
     <!-- 构建 -->
     <build>
         <defaultGoal>package</defaultGoal>
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-                <excludes>
-                    <!-- 排除掉监控配置文件 -->
-                    <!-- <exclude>monitoring.properties</exclude> -->
-                </excludes>
-            </resource>
-        </resources>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

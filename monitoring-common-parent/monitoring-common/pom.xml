@@ -4,9 +4,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <!-- 监控父项目 -->
+    <!-- 监控父项目，为监控公共模父项目 -->
     <parent>
-        <artifactId>monitoring</artifactId>
+        <artifactId>monitoring-common-parent</artifactId>
         <groupId>com.imby</groupId>
         <version>${revision}</version>
         <relativePath>..</relativePath>
@@ -14,9 +14,9 @@
 
     <!-- 项目基本信息 -->
     <artifactId>monitoring-common</artifactId>
-    <packaging>jar</packaging>
     <name>monitoring-common</name>
-    <description>监控项目公共模块</description>
+    <packaging>jar</packaging>
+    <description>监控公共模块</description>
 
     <!-- 依赖 -->
     <dependencies>

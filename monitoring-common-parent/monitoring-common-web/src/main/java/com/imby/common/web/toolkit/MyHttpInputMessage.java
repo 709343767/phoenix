@@ -32,7 +32,6 @@ public class MyHttpInputMessage implements HttpInputMessage {
 		String bodyStr = IOUtils.toString(inputMessage.getBody(), Charsets.UTF_8);
 		// 密文数据包
 		CiphertextPackage ciphertextPackage = JSONObject.parseObject(bodyStr, CiphertextPackage.class);
-
 		// 解密
 		String decryptStr = DesEncryptUtils.decrypt(ciphertextPackage.getCiphertext());
 

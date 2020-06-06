@@ -29,3 +29,8 @@
 /ini/
 /monitoring-server/ini/
 /persistent-monitoring/
+/monitoring-client-parent/monitoring-client/target/*
+/monitoring-client-parent/monitoring-client-spring-boot-starter/target/*
+/monitoring-common-parent/monitoring-common/target/*
+/monitoring-client-parent/monitoring-client-spring-mvc-integrator/target/*
+/monitoring-common-parent/monitoring-common-web/target/*

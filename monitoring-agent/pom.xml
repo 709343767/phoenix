@@ -16,15 +16,11 @@
     <artifactId>monitoring-agent</artifactId>
     <packaging>jar</packaging>
     <name>monitoring-agent</name>
-    <description>监控代理程序</description>
-
-    <!-- 属性 -->
-    <properties>
-    </properties>
+    <description>监控代理端</description>
 
     <!-- 依赖 -->
     <dependencies>
-        <!-- 项目公共WEB模块依赖 -->
+        <!-- 监控WEB公共模块依赖 -->
         <dependency>
             <groupId>com.imby</groupId>
             <artifactId>monitoring-common-web</artifactId>
@@ -41,6 +37,12 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
+        </dependency>
+        <!-- 配置文件处理器依赖，绑定配置文件，支持注解 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
         </dependency>
         <!-- 支持热部署依赖 -->
         <dependency>

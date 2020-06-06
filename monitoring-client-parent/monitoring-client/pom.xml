@@ -4,26 +4,26 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <!-- 监控父项目 -->
+    <!-- 监控父项目，为监控客户端父项目 -->
     <parent>
-        <artifactId>monitoring</artifactId>
+        <artifactId>monitoring-client-parent</artifactId>
         <groupId>com.imby</groupId>
         <version>${revision}</version>
         <relativePath>..</relativePath>
     </parent>
 
     <!-- 项目基本信息 -->
-    <artifactId>monitoring-client-spring-mvc-integrator</artifactId>
+    <artifactId>monitoring-client</artifactId>
+    <name>monitoring-client</name>
     <packaging>jar</packaging>
-    <name>monitoring-client-spring-mvc-integrator</name>
-    <description>监控项目客户端与springmvc集成的integrator</description>
+    <description>监控客户端</description>
 
     <!-- 依赖 -->
     <dependencies>
-        <!-- 监控客户端 -->
+        <!-- 监控公共模块依赖 -->
         <dependency>
             <groupId>com.imby</groupId>
-            <artifactId>monitoring-client</artifactId>
+            <artifactId>monitoring-common</artifactId>
         </dependency>
 
         <!--lombok依赖 -->
@@ -32,17 +32,35 @@
             <artifactId>lombok</artifactId>
             <optional>true</optional>
         </dependency>
-        <!-- servlet依赖 -->
+        <!-- junit单元测试依赖 -->
         <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>servlet-api</artifactId>
-            <scope>provided</scope>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <!-- HTTP协议的客户端/服务器编程工具包依赖 -->
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpcore</artifactId>
         </dependency>
     </dependencies>
 
     <!-- 构建 -->
     <build>
         <defaultGoal>package</defaultGoal>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <excludes>
+                    <!-- 排除掉监控配置文件 -->
+                    <!-- <exclude>monitoring.properties</exclude> -->
+                </excludes>
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

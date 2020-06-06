@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- 监控父项目 -->
+    <parent>
+        <artifactId>monitoring</artifactId>
+        <groupId>com.imby</groupId>
+        <version>${revision}</version>
+        <relativePath>..</relativePath>
+    </parent>
+
+    <!-- 项目基本信息 -->
+    <artifactId>monitoring-common-parent</artifactId>
+    <name>monitoring-common-parent</name>
+    <packaging>pom</packaging>
+    <modules>
+        <!-- 监控公共模块 -->
+        <module>monitoring-common</module>
+        <!-- 监控WEB公共模块 -->
+        <module>monitoring-common-web</module>
+    </modules>
+    <description>监控公共模块父工程</description>
+
+    <!-- 依赖管理 -->
+    <dependencyManagement>
+        <dependencies>
+            <!-- 监控公共模块 -->
+            <dependency>
+                <groupId>com.imby</groupId>
+                <artifactId>monitoring-common</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <!-- 监控WEB公共模块 -->
+            <dependency>
+                <groupId>com.imby</groupId>
+                <artifactId>monitoring-common-web</artifactId>
+                <version>${revision}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+</project>

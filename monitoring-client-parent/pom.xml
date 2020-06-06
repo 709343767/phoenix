@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- 监控父项目 -->
+    <parent>
+        <artifactId>monitoring</artifactId>
+        <groupId>com.imby</groupId>
+        <version>${revision}</version>
+        <relativePath>..</relativePath>
+    </parent>
+
+    <!-- 项目基本信息 -->
+    <artifactId>monitoring-client-parent</artifactId>
+    <name>monitoring-client-parent</name>
+    <packaging>pom</packaging>
+    <modules>
+        <!-- 监控客户端 -->
+        <module>monitoring-client</module>
+        <!-- 监控客户端与springboot集成的starter -->
+        <module>monitoring-client-spring-boot-starter</module>
+        <!-- 监控客户端与springmvc集成的integrator -->
+        <module>monitoring-client-spring-mvc-integrator</module>
+    </modules>
+    <description>监控客户端父工程</description>
+
+    <!-- 依赖管理 -->
+    <dependencyManagement>
+        <dependencies>
+            <!-- 监控客户端依赖 -->
+            <dependency>
+                <groupId>com.imby</groupId>
+                <artifactId>monitoring-client</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <!-- 监控项目客户端与springboot集成的starter -->
+            <dependency>
+                <groupId>com.imby</groupId>
+                <artifactId>monitoring-client-spring-boot-starter</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <!-- 监控项目客户端与springmvc集成的integrator -->
+            <dependency>
+                <groupId>com.imby</groupId>
+                <artifactId>monitoring-client-spring-mvc-integrator</artifactId>
+                <version>${revision}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+
+</project>

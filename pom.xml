@@ -17,13 +17,14 @@
     <artifactId>monitoring</artifactId>
     <version>${revision}</version>
     <modules>
-        <module>monitoring-common</module>
-        <module>monitoring-common-web</module>
+        <!-- 监控公共模块父工程 -->
+        <module>monitoring-common-parent</module>
+        <!-- 监控服务端 -->
         <module>monitoring-server</module>
+        <!-- 监控代理端 -->
         <module>monitoring-agent</module>
-        <module>monitoring-client</module>
-        <module>monitoring-client-spring-boot-starter</module>
-        <module>monitoring-client-spring-mvc-integrator</module>
+        <!-- 监控客户端父工程 -->
+        <module>monitoring-client-parent</module>
     </modules>
     <packaging>pom</packaging>
     <name>monitoring</name>
@@ -81,21 +82,46 @@
     <!-- 依赖管理 -->
     <dependencyManagement>
         <dependencies>
-            <!-- 公共模块 -->
+            <!-- 监控公共模块父项目 -->
+            <dependency>
+                <groupId>com.imby</groupId>
+                <artifactId>monitoring-common-parent</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <!-- 监控公共模块 -->
             <dependency>
                 <groupId>com.imby</groupId>
                 <artifactId>monitoring-common</artifactId>
                 <version>${revision}</version>
             </dependency>
+            <!-- 监控WEB公共模块 -->
             <dependency>
                 <groupId>com.imby</groupId>
                 <artifactId>monitoring-common-web</artifactId>
                 <version>${revision}</version>
             </dependency>
-            <!-- 监控客户端 -->
+            <!-- 监控客户端父项目 -->
+            <dependency>
+                <groupId>com.imby</groupId>
+                <artifactId>monitoring-client-parent</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <!-- 监控客户端基础模块 -->
             <dependency>
                 <groupId>com.imby</groupId>
                 <artifactId>monitoring-client</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <!-- 监控客户端与springboot集成的starter -->
+            <dependency>
+                <groupId>com.imby</groupId>
+                <artifactId>monitoring-client-spring-boot-starter</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <!-- 监控客户端与springmvc集成的integrator -->
+            <dependency>
+                <groupId>com.imby</groupId>
+                <artifactId>monitoring-client-spring-mvc-integrator</artifactId>
                 <version>${revision}</version>
             </dependency>
             <!-- 监控代理端 -->
@@ -108,18 +134,6 @@
             <dependency>
                 <groupId>com.imby</groupId>
                 <artifactId>monitoring-server</artifactId>
-                <version>${revision}</version>
-            </dependency>
-            <!-- 监控项目客户端与springboot集成的starter -->
-            <dependency>
-                <groupId>com.imby</groupId>
-                <artifactId>monitoring-client-spring-boot-starter</artifactId>
-                <version>${revision}</version>
-            </dependency>
-            <!-- 监控项目客户端与springmvc集成的integrator -->
-            <dependency>
-                <groupId>com.imby</groupId>
-                <artifactId>monitoring-client-spring-mvc-integrator</artifactId>
                 <version>${revision}</version>
             </dependency>
 
