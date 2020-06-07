@@ -29,7 +29,7 @@ public class MonitorAlarmRecord {
      * 主键ID
      */
     @TableId("ID")
-    private int id;
+    private Long id;
 
     /**
      * UUID，唯一不重复，可用作主键

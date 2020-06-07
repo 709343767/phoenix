@@ -29,7 +29,7 @@ public class MonitorServerNetcard {
      * 主键ID
      */
     @TableId("ID")
-    private int id;
+    private Long id;
 
     /**
      * IP地址

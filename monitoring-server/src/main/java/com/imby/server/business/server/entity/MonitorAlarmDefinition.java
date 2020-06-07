@@ -27,7 +27,7 @@ public class MonitorAlarmDefinition {
      * 主键ID
      */
     @TableId("ID")
-    private int id;
+    private Long id;
 
     /**
      * 告警类型
