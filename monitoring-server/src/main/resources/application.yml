@@ -14,6 +14,8 @@ server:
       #prefix: access_log
       #日志文件名后缀
       #suffix: log
+  #开启优雅停机
+  shutdown: graceful
 
 
 ###############################################spring配置#################################################
@@ -32,6 +34,9 @@ spring:
   devtools:
     livereload:
       port: 35731
+  lifecycle:
+    #设置缓冲期，最大等待时间
+    timeout-per-shutdown-phase: 30s
 
 
   ############################################thymeleaf配置###############################################

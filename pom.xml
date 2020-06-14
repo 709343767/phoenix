@@ -4,14 +4,6 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <!-- 父项目 -->
-    <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.2.3.RELEASE</version>
-        <relativePath/>
-    </parent>
-
     <!-- 项目基本信息 -->
     <groupId>com.imby</groupId>
     <artifactId>monitoring</artifactId>
@@ -32,9 +24,13 @@
 
     <!-- 属性 -->
     <properties>
-        <!-- <revision>0.0.1-SNAPSHOT</revision> -->
+        <!-- 监控框架版本 -->
         <revision>LATEST-SNAPSHOT</revision>
+        <!-- spring-boot-starter-parent版本 -->
+        <spring-boot-starter-parent.version>2.3.0.RELEASE</spring-boot-starter-parent.version>
+        <!-- 解决eclipse中maven报错的问题 -->
         <maven-jar-plugin.version>3.1.1</maven-jar-plugin.version>
+        <!-- java版本 -->
         <java.version>1.8</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
@@ -47,6 +43,8 @@
         <fastjson.version>1.2.62</fastjson.version>
         <!-- guava基本工具版本 -->
         <guava.version>20.0</guava.version>
+        <!-- joda-time时间日期版本 -->
+        <joda-time.version>2.10.6</joda-time.version>
         <!-- commons工具包版本 -->
         <commons-io.version>2.6</commons-io.version>
         <commons-beanutils.version>1.7.0</commons-beanutils.version>
@@ -82,6 +80,15 @@
     <!-- 依赖管理 -->
     <dependencyManagement>
         <dependencies>
+            <!-- spring-boot-starter-parent父项目依赖 -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-parent</artifactId>
+                <version>${spring-boot-starter-parent.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
             <!-- 监控公共模块父项目 -->
             <dependency>
                 <groupId>com.imby</groupId>
@@ -142,6 +149,12 @@
                 <groupId>com.alibaba</groupId>
                 <artifactId>fastjson</artifactId>
                 <version>${fastjson.version}</version>
+            </dependency>
+            <!-- joda-time时间日期依赖 -->
+            <dependency>
+                <groupId>joda-time</groupId>
+                <artifactId>joda-time</artifactId>
+                <version>${joda-time.version}</version>
             </dependency>
             <!-- guava基本工具依赖 -->
             <dependency>
@@ -301,6 +314,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.8.1</version>
                     <configuration>
                         <source>${java.version}</source>
                         <target>${java.version}</target>
@@ -311,6 +325,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
+                    <version>3.0.0-M4</version>
                     <configuration>
                         <skipTests>true</skipTests>
                     </configuration>
@@ -319,6 +334,7 @@
                 <plugin>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-maven-plugin</artifactId>
+                    <version>2.3.1.RELEASE</version>
                     <configuration>
                         <layout>ZIP</layout>
                         <fork>true</fork>
@@ -338,6 +354,7 @@
             </plugins>
         </pluginManagement>
 
+        <!-- 资源 -->
         <resources>
             <resource>
                 <directory>src/main/java</directory>
@@ -354,33 +371,14 @@
                 </includes>
             </resource>
         </resources>
+
         <plugins>
-            <!-- 为Java项目生成静态HTML网站的插件 -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-site-plugin</artifactId>
-                <!-- 国际化定义当地语言 -->
-                <configuration>
-                    <locales>zh_CN</locales>
-                </configuration>
-            </plugin>
-            <!-- 项目信息报告插件 -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-project-info-reports-plugin</artifactId>
-                <version>3.0.0</version>
-            </plugin>
-            <!-- 生成java代码交叉引用和源代码的html格式插件 -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jxr-plugin</artifactId>
-                <version>2.5</version>
-            </plugin>
             <!-- 生成java doc插件 -->
             <!-- http://maven.apache.org/plugins/maven-javadoc-plugin/javadoc-mojo.html -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.2.0</version>
                 <configuration>
                     <additionalJOptions>
                         <additionalJOption>-J-Xmx180m</additionalJOption>
@@ -416,11 +414,13 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
+                <version>3.2.1</version>
                 <executions>
                     <execution>
                         <id>attach-sources</id>
+                        <phase>verify</phase>
                         <goals>
-                            <goal>jar</goal>
+                            <goal>jar-no-fork</goal>
                         </goals>
                     </execution>
                 </executions>
