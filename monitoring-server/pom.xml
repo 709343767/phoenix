@@ -38,6 +38,11 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+        <!-- websocket依赖 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-websocket</artifactId>
+        </dependency>
         <!-- 配置文件处理器依赖，绑定配置文件，支持注解 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
