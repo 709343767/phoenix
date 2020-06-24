@@ -1,1 +1,1 @@
-com.imby.starter.annotation.EnableMonitoringPlug=\com.imby.starter.autoconfigure.MonitoringPlugAutoConfiguration
+com.imby.starter.annotation.EnableMonitoring=\com.imby.starter.autoconfigure.MonitoringPlugAutoConfiguration

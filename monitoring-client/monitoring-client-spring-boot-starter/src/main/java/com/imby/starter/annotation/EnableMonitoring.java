@@ -19,7 +19,7 @@ import java.lang.annotation.*;
 // 导入注册springboot类
 @Import({EnableMonitoringPlugSelector.class})
 @Documented
-public @interface EnableMonitoringPlug {
+public @interface EnableMonitoring {
 
     /**
      * <p>

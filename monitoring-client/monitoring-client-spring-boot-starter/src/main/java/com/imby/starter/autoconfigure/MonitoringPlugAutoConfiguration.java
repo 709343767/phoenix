@@ -1,9 +1,8 @@
 package com.imby.starter.autoconfigure;
 
 import com.imby.plug.Monitor;
-import com.imby.starter.annotation.EnableMonitoringPlug;
+import com.imby.starter.annotation.EnableMonitoring;
 import com.imby.starter.exception.BadAnnotateParamException;
-
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
@@ -41,7 +40,7 @@ public class MonitoringPlugAutoConfiguration implements ImportBeanDefinitionRegi
     @Override
     public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry) {
         AnnotationAttributes attributes = AnnotationAttributes
-                .fromMap(importingClassMetadata.getAnnotationAttributes(EnableMonitoringPlug.class.getName(), true));
+                .fromMap(importingClassMetadata.getAnnotationAttributes(EnableMonitoring.class.getName(), true));
         // 配置文件路径
         assert attributes != null;
         String configFilePath = attributes.getString("configFilePath");
@@ -74,8 +73,8 @@ public class MonitoringPlugAutoConfiguration implements ImportBeanDefinitionRegi
      */
     private String analysisConfigFilePath(String configFilePath) throws BadAnnotateParamException {
         // 异常信息
-        String expMsg = "@EnableMonitoringPlug注解参数有误，请参考如下信息：\r\n"//
-                + "@EnableMonitoringPlug(configFilePath = \"classpath:conf/\", configFileName = \"monitoring.properties\")\r\n";
+        String expMsg = "@EnableMonitoring注解参数有误，请参考如下信息：\r\n"//
+                + "@EnableMonitoring(configFilePath = \"classpath:conf/\", configFileName = \"monitoring.properties\")\r\n";
         if (!StringUtils.containsIgnoreCase(configFilePath, "classpath:")) {
             throw new BadAnnotateParamException(expMsg);
         }

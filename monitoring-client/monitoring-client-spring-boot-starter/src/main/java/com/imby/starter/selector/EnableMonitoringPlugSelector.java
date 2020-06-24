@@ -1,15 +1,14 @@
 package com.imby.starter.selector;
 
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
-import java.util.List;
-
+import com.imby.starter.annotation.EnableMonitoring;
 import org.springframework.beans.factory.BeanClassLoaderAware;
 import org.springframework.context.annotation.DeferredImportSelector;
 import org.springframework.core.io.support.SpringFactoriesLoader;
 import org.springframework.core.type.AnnotationMetadata;
 
-import com.imby.starter.annotation.EnableMonitoringPlug;
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
 
 /**
  * <p>
@@ -38,9 +37,9 @@ public class EnableMonitoringPlugSelector implements DeferredImportSelector, Bea
      */
     @Override
     public String[] selectImports(AnnotationMetadata metadata) {
-        // 从spring.factories中获取的所有通过@EnableMonitoringPlug注解引进来的自动配置类，并进行去重操作
+        // 从spring.factories中获取的所有通过@EnableMonitoring注解引进来的自动配置类，并进行去重操作
         List<String> factories = new ArrayList<>(new LinkedHashSet<>(
-                SpringFactoriesLoader.loadFactoryNames(EnableMonitoringPlug.class, this.beanClassLoader)));
+                SpringFactoriesLoader.loadFactoryNames(EnableMonitoring.class, this.beanClassLoader)));
         if (factories.isEmpty()) {
             throw new IllegalStateException("没找到监控客户端自动配置类！");
         }
