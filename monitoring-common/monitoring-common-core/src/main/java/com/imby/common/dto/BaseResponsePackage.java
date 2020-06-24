@@ -1,13 +1,12 @@
 package com.imby.common.dto;
 
+import com.imby.common.abs.InstanceBean;
+import com.imby.common.domain.Result;
 import lombok.*;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 import java.util.Date;
-
-import com.imby.common.abs.InstanceBean;
-import com.imby.common.domain.Result;
 
 /**
  * <p>
@@ -17,8 +16,7 @@ import com.imby.common.domain.Result;
  * @author 皮锋
  * @custom.date 2020年3月11日 上午9:40:59
  */
-@Getter
-@Setter
+@Data
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor

@@ -1,10 +1,9 @@
 package com.imby.server.business.server.domain;
 
+import com.imby.common.abs.SuperBean;
 import lombok.*;
 import lombok.experimental.Accessors;
 import org.apache.commons.lang3.StringUtils;
-
-import com.imby.common.abs.SuperBean;
 
 import java.util.Map;
 
@@ -16,8 +15,7 @@ import java.util.Map;
  * @author 皮锋
  * @custom.date 2020/3/30 11:54
  */
-@Getter
-@Setter
+@Data
 @ToString
 @Builder
 @NoArgsConstructor

@@ -1,12 +1,11 @@
 package com.imby.server.business.server.domain;
 
+import com.imby.common.abs.SuperBean;
+import com.imby.common.domain.server.CpuDomain;
 import lombok.*;
 import lombok.experimental.Accessors;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.CollectionUtils;
-
-import com.imby.common.abs.SuperBean;
-import com.imby.common.domain.server.CpuDomain;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -19,8 +18,7 @@ import java.util.List;
  * @author 皮锋
  * @custom.date 2020/3/27 14:55
  */
-@Getter
-@Setter
+@Data
 @ToString
 @Builder
 @NoArgsConstructor

@@ -16,7 +16,7 @@ public class InvokerHolder {
     /**
      * 命令执行器
      */
-    private static Map<Class<?>, Map<String, Invoker>> invokers = new HashMap<>();
+    private static final Map<Class<?>, Map<String, Invoker>> invokers = new HashMap<>();
 
     /**
      * <p>

@@ -2,7 +2,6 @@ package com.imby.common.util;
 
 import com.google.common.collect.Lists;
 import com.imby.common.domain.server.*;
-
 import lombok.Cleanup;
 import lombok.extern.slf4j.Slf4j;
 import org.hyperic.jni.ArchNotSupportedException;
@@ -27,12 +26,12 @@ public final class SigarUtils {
     /**
      * 系统属性
      */
-    private static Properties props = System.getProperties();
+    private static final Properties props = System.getProperties();
 
     /**
      * 环境属性
      */
-    private static Map<String, String> envs = System.getenv();
+    private static final Map<String, String> envs = System.getenv();
 
     static {
         try {
@@ -45,12 +44,12 @@ public final class SigarUtils {
     /**
      * 创建Sigar对象
      */
-    private static Sigar sigar = new Sigar();
+    private static final Sigar sigar = new Sigar();
 
     /**
      * 存储单位转M
      */
-    private static double dividend = 1024 * 1024;
+    private static final double dividend = 1024 * 1024;
 
     /**
      * <p>
@@ -321,29 +320,36 @@ public final class SigarUtils {
             // TYPE_UNKNOWN ：未知
             if (type == 0) {
                 // continue;
+                log.debug("{}", "TYPE_UNKNOWN！");
             }
             // TYPE_NONE
             else if (type == 1) {
                 // continue;
+                log.debug("{}", "TYPE_NONE！");
             }
             // TYPE_LOCAL_DISK : 本地硬盘
             else if (type == 2) {
+                log.debug("{}", "TYPE_LOCAL_DISK！");
             }
             // TYPE_NETWORK ：网络
             else if (type == 3) {
                 // continue;
+                log.debug("{}", "TYPE_NETWORK！");
             }
             // TYPE_RAM_DISK ：闪存
             else if (type == 4) {
                 // continue;
+                log.debug("{}", "TYPE_RAM_DISK！");
             }
             // TYPE_CDROM ：光驱
             else if (type == 5) {
+                log.debug("{}", "TYPE_CDROM！");
                 continue;
             }
             // TYPE_SWAP ：页面交换
             else if (type == 6) {
                 // continue;
+                log.debug("{}", "TYPE_SWAP！");
             } else {
                 continue;
             }

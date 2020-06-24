@@ -1,11 +1,10 @@
 package com.imby.server.business.server.domain;
 
+import com.imby.common.abs.SuperBean;
+import com.imby.common.domain.server.MemoryDomain;
 import lombok.*;
 import lombok.experimental.Accessors;
 import org.apache.commons.lang3.StringUtils;
-
-import com.imby.common.abs.SuperBean;
-import com.imby.common.domain.server.MemoryDomain;
 
 /**
  * <p>
@@ -15,8 +14,7 @@ import com.imby.common.domain.server.MemoryDomain;
  * @author 皮锋
  * @custom.date 2020/3/26 14:53
  */
-@Getter
-@Setter
+@Data
 @ToString
 @Builder
 @NoArgsConstructor

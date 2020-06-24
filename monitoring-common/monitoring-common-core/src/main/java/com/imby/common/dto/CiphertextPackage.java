@@ -1,11 +1,10 @@
 package com.imby.common.dto;
 
+import com.imby.common.abs.SuperBean;
 import lombok.*;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
-
-import com.imby.common.abs.SuperBean;
 
 /**
  * <p>
@@ -15,8 +14,7 @@ import com.imby.common.abs.SuperBean;
  * @author 皮锋
  * @custom.date 2020/4/29 12:42
  */
-@Getter
-@Setter
+@Data
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
@@ -25,11 +23,11 @@ import com.imby.common.abs.SuperBean;
 public class CiphertextPackage extends SuperBean implements Serializable {
 
     /**
-	 * serialVersionUID
-	 */
-	private static final long serialVersionUID = 4928013929736210856L;
-	
-	/**
+     * serialVersionUID
+     */
+    private static final long serialVersionUID = 4928013929736210856L;
+
+    /**
      * 加密后的数据
      */
     private String ciphertext;

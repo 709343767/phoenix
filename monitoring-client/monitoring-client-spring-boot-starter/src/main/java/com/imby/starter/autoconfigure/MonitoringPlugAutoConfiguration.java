@@ -2,7 +2,7 @@ package com.imby.starter.autoconfigure;
 
 import com.imby.plug.Monitor;
 import com.imby.starter.annotation.EnableMonitoring;
-import com.imby.starter.exception.BadAnnotateParamException;
+import com.imby.common.exception.BadAnnotateParamException;
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;

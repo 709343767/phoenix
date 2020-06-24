@@ -1,11 +1,10 @@
 package com.imby.common.domain.server;
 
+import com.imby.common.abs.SuperBean;
 import lombok.*;
 import lombok.experimental.Accessors;
 
 import java.util.List;
-
-import com.imby.common.abs.SuperBean;
 
 /**
  * <p>
@@ -33,6 +32,7 @@ public final class NetDomain extends SuperBean {
     private List<NetInterfaceConfigDomain> netList;
 
     @Data
+    @ToString
     @NoArgsConstructor
     @Accessors(chain = true)
     @EqualsAndHashCode(callSuper = true)
@@ -57,12 +57,6 @@ public final class NetDomain extends SuperBean {
          * 广播地址
          */
         String broadcast;
-
-        @Override
-        public String toString() {
-            return "NetInterfaceConfigDomain [网卡名字=" + name + ", 网卡类型=" + type + ", 网卡地址=" + address
-                    + ", 子网掩码=" + mask + ", 广播地址=" + broadcast + "]";
-        }
 
     }
 

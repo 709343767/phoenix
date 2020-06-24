@@ -1,8 +1,7 @@
 package com.imby.integrator.listener;
 
-import com.imby.integrator.exception.BadListenerConfigException;
+import com.imby.common.exception.BadListenerConfigException;
 import com.imby.plug.Monitor;
-
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.StringUtils;
 

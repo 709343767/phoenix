@@ -1,11 +1,10 @@
 package com.imby.server.business.server.domain;
 
+import com.imby.common.abs.InstanceBean;
 import lombok.*;
 import lombok.experimental.Accessors;
 
 import java.util.Date;
-
-import com.imby.common.abs.InstanceBean;
 
 /**
  * <p>
@@ -15,8 +14,7 @@ import com.imby.common.abs.InstanceBean;
  * @author 皮锋
  * @custom.date 2020年3月9日 上午10:49:29
  */
-@Getter
-@Setter
+@Data
 @ToString
 @Builder
 @NoArgsConstructor

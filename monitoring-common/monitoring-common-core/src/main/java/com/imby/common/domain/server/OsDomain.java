@@ -1,11 +1,7 @@
 package com.imby.common.domain.server;
 
 import com.imby.common.abs.SuperBean;
-
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.Accessors;
 
 /**
@@ -17,6 +13,7 @@ import lombok.experimental.Accessors;
  * @custom.date 2020年3月3日 下午2:08:48
  */
 @Data
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
@@ -48,11 +45,5 @@ public final class OsDomain extends SuperBean {
      * 操作系统时区
      */
     private String osTimeZone;
-
-    @Override
-    public String toString() {
-        return "OsDomain [计算机名=" + computerName + ", 操作系统名称=" + osName + ", 操作系统版本=" + osVersion +
-                ", 用户名称=" + userName + ", 用户主目录=" + userHome + ", 操作系统时区=" + osTimeZone + "]";
-    }
 
 }

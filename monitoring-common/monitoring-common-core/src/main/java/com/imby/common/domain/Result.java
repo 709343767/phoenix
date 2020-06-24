@@ -1,14 +1,7 @@
 package com.imby.common.domain;
 
 import com.imby.common.abs.SuperBean;
-
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import lombok.experimental.Accessors;
 
 /**
@@ -19,8 +12,7 @@ import lombok.experimental.Accessors;
  * @author 皮锋
  * @custom.date 2020年4月5日 下午1:27:44
  */
-@Getter
-@Setter
+@Data
 @ToString
 @Builder
 @NoArgsConstructor
@@ -29,14 +21,14 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = true)
 public class Result extends SuperBean {
 
-	/**
-	 * 是否成功
-	 */
-	private boolean isSuccess;
+    /**
+     * 是否成功
+     */
+    private boolean isSuccess;
 
-	/**
-	 * 结果信息
-	 */
-	private String msg;
+    /**
+     * 结果信息
+     */
+    private String msg;
 
 }

@@ -1,11 +1,7 @@
 package com.imby.common.domain.server;
 
 import com.imby.common.abs.SuperBean;
-
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.Accessors;
 
 /**
@@ -17,6 +13,7 @@ import lombok.experimental.Accessors;
  * @custom.date 2020年3月3日 下午2:20:14
  */
 @Data
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
@@ -40,11 +37,5 @@ public class MemoryDomain extends SuperBean {
      * 物理内存使用率
      */
     private String menUsedPercent;
-
-    @Override
-    public String toString() {
-        return "MemoryDomain [物理内存总量=" + memTotal + ", 物理内存使用量=" + memUsed + ", 物理内存剩余量="
-                + memFree + ", 物理内存使用率=" + menUsedPercent + "]";
-    }
 
 }

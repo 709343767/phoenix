@@ -1,14 +1,10 @@
 package com.imby.common.domain.server;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import com.imby.common.abs.SuperBean;
+import lombok.*;
 import lombok.experimental.Accessors;
 
 import java.util.Date;
-
-import com.imby.common.abs.SuperBean;
 
 /**
  * <p>
@@ -19,6 +15,7 @@ import com.imby.common.abs.SuperBean;
  * @custom.date 2020/3/3 13:43
  */
 @Data
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
@@ -40,11 +37,5 @@ public final class AppServerDomain extends SuperBean {
      * 服务器时间
      */
     private Date serverTime;
-
-    @Override
-    public String toString() {
-        return "AppServerDomain [服务器IP=" + serverIP + ", 服务器Url=" + serverURL + ", 服务器类型=" + serverType
-                + ", 服务器时间=" + serverTime + "]";
-    }
 
 }

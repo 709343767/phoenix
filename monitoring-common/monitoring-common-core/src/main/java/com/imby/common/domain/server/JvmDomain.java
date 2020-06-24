@@ -1,11 +1,7 @@
 package com.imby.common.domain.server;
 
 import com.imby.common.abs.SuperBean;
-
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.Accessors;
 
 /**
@@ -17,6 +13,7 @@ import lombok.experimental.Accessors;
  * @custom.date 2020年3月3日 下午4:09:49
  */
 @Data
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
@@ -50,12 +47,5 @@ public final class JvmDomain extends SuperBean {
      * java虚拟机剩余内存
      */
     private String jvmFreeMemory;
-
-    @Override
-    public String toString() {
-        return "JvmDomain [java安路径=" + javaPath + ", java运行时供应商=" + javaVendor + ", java版本=" + javaVersion
-                + ", java运行时名称=" + javaName + ", java虚拟机版本=" + jvmVersion + ", java虚拟机总内存="
-                + jvmTotalMemory + ", java虚拟机剩余内存=" + jvmFreeMemory + "]";
-    }
 
 }

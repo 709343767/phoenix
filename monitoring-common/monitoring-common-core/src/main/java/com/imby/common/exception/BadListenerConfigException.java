@@ -1,4 +1,4 @@
-package com.imby.integrator.exception;
+package com.imby.common.exception;
 
 /**
  * <p>

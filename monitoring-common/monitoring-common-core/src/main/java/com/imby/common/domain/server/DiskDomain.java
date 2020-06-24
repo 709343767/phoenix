@@ -1,14 +1,10 @@
 package com.imby.common.domain.server;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import com.imby.common.abs.SuperBean;
+import lombok.*;
 import lombok.experimental.Accessors;
 
 import java.util.List;
-
-import com.imby.common.abs.SuperBean;
 
 /**
  * <p>
@@ -19,6 +15,7 @@ import com.imby.common.abs.SuperBean;
  * @custom.date 2020/3/8 20:35
  */
 @Data
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
@@ -36,6 +33,7 @@ public class DiskDomain extends SuperBean {
     private List<DiskInfoDomain> diskInfoList;
 
     @Data
+    @ToString
     @NoArgsConstructor
     @Accessors(chain = true)
     @EqualsAndHashCode(callSuper = true)
@@ -85,13 +83,6 @@ public class DiskDomain extends SuperBean {
          * 文件系统资源的利用率
          */
         String usePercent;
-
-        @Override
-        public String toString() {
-            return "DiskInfoDomain [磁盘名称=" + devName + ", 磁盘路径=" + dirName + ", 磁盘类型名=" + typeName
-                    + ", 文件系统=" + sysTypeName + ", 磁盘总大小=" + total + ", 磁盘剩余大小=" + free + ", 磁盘已用大小=" + used
-                    + ", 磁盘可用大小=" + avail + ", 磁盘使用率=" + usePercent + "]";
-        }
 
     }
 

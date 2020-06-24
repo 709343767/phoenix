@@ -1,13 +1,12 @@
 package com.imby.common.dto;
 
+import com.imby.common.abs.InstanceBean;
+import com.imby.common.domain.Alarm;
 import lombok.*;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 import java.util.Date;
-
-import com.imby.common.abs.InstanceBean;
-import com.imby.common.domain.Alarm;
 
 /**
  * <p>
@@ -18,8 +17,7 @@ import com.imby.common.domain.Alarm;
  * @author 皮锋
  * @custom.date 2020/3/3 10:01
  */
-@Getter
-@Setter
+@Data
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
