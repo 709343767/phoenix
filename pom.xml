@@ -10,13 +10,13 @@
     <version>${revision}</version>
     <modules>
         <!-- 监控公共模块父工程 -->
-        <module>monitoring-common-parent</module>
+        <module>monitoring-common</module>
         <!-- 监控服务端 -->
         <module>monitoring-server</module>
         <!-- 监控代理端 -->
         <module>monitoring-agent</module>
         <!-- 监控客户端父工程 -->
-        <module>monitoring-client-parent</module>
+        <module>monitoring-client</module>
     </modules>
     <packaging>pom</packaging>
     <name>monitoring</name>
@@ -92,13 +92,13 @@
             <!-- 监控公共模块父项目 -->
             <dependency>
                 <groupId>com.imby</groupId>
-                <artifactId>monitoring-common-parent</artifactId>
+                <artifactId>monitoring-common</artifactId>
                 <version>${revision}</version>
             </dependency>
             <!-- 监控公共模块 -->
             <dependency>
                 <groupId>com.imby</groupId>
-                <artifactId>monitoring-common</artifactId>
+                <artifactId>monitoring-common-core</artifactId>
                 <version>${revision}</version>
             </dependency>
             <!-- 监控WEB公共模块 -->
@@ -110,13 +110,13 @@
             <!-- 监控客户端父项目 -->
             <dependency>
                 <groupId>com.imby</groupId>
-                <artifactId>monitoring-client-parent</artifactId>
+                <artifactId>monitoring-client</artifactId>
                 <version>${revision}</version>
             </dependency>
             <!-- 监控客户端基础模块 -->
             <dependency>
                 <groupId>com.imby</groupId>
-                <artifactId>monitoring-client</artifactId>
+                <artifactId>monitoring-client-core</artifactId>
                 <version>${revision}</version>
             </dependency>
             <!-- 监控客户端与springboot集成的starter -->

@@ -6,7 +6,7 @@
 
     <!-- 监控父项目，为监控公共模父项目 -->
     <parent>
-        <artifactId>monitoring-common-parent</artifactId>
+        <artifactId>monitoring-common</artifactId>
         <groupId>com.imby</groupId>
         <version>${revision}</version>
         <relativePath>..</relativePath>
@@ -23,7 +23,7 @@
         <!-- 项目公共模块依赖 -->
         <dependency>
             <groupId>com.imby</groupId>
-            <artifactId>monitoring-common</artifactId>
+            <artifactId>monitoring-common-core</artifactId>
         </dependency>
 
         <!--lombok依赖 -->

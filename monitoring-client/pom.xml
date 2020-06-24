@@ -13,12 +13,12 @@
     </parent>
 
     <!-- 项目基本信息 -->
-    <artifactId>monitoring-client-parent</artifactId>
-    <name>monitoring-client-parent</name>
+    <artifactId>monitoring-client</artifactId>
+    <name>monitoring-client</name>
     <packaging>pom</packaging>
     <modules>
         <!-- 监控客户端 -->
-        <module>monitoring-client</module>
+        <module>monitoring-client-core</module>
         <!-- 监控客户端与springboot集成的starter -->
         <module>monitoring-client-spring-boot-starter</module>
         <!-- 监控客户端与springmvc集成的integrator -->
@@ -32,7 +32,7 @@
             <!-- 监控客户端依赖 -->
             <dependency>
                 <groupId>com.imby</groupId>
-                <artifactId>monitoring-client</artifactId>
+                <artifactId>monitoring-client-core</artifactId>
                 <version>${revision}</version>
             </dependency>
             <!-- 监控项目客户端与springboot集成的starter -->

@@ -4,33 +4,61 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <!-- 监控父项目，为监控客户端父项目 -->
+    <!-- 监控父项目，为监控公共模父项目 -->
     <parent>
-        <artifactId>monitoring-client-parent</artifactId>
+        <artifactId>monitoring-common</artifactId>
         <groupId>com.imby</groupId>
         <version>${revision}</version>
         <relativePath>..</relativePath>
     </parent>
 
     <!-- 项目基本信息 -->
-    <artifactId>monitoring-client</artifactId>
-    <name>monitoring-client</name>
+    <artifactId>monitoring-common-core</artifactId>
+    <name>monitoring-common-core</name>
     <packaging>jar</packaging>
-    <description>监控客户端</description>
+    <description>监控公共模块</description>
 
     <!-- 依赖 -->
     <dependencies>
-        <!-- 监控公共模块依赖 -->
+        <!-- alibaba的fastjson依赖 -->
         <dependency>
-            <groupId>com.imby</groupId>
-            <artifactId>monitoring-common</artifactId>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
         </dependency>
-
+        <!-- guava基本工具依赖 -->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+        </dependency>
+        <!-- commons工具包依赖 -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>commons-collections</groupId>
+            <artifactId>commons-collections</artifactId>
+        </dependency>
         <!--lombok依赖 -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
+        </dependency>
+        <!-- slf4j日志依赖 -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+        <!-- 日志实现依赖 -->
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <!-- <scope>test</scope> -->
+        </dependency>
+        <dependency>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging</artifactId>
         </dependency>
         <!-- junit单元测试依赖 -->
         <dependency>
@@ -38,29 +66,16 @@
             <artifactId>junit</artifactId>
             <scope>test</scope>
         </dependency>
-        <!-- HTTP协议的客户端/服务器编程工具包依赖 -->
+        <!-- sigar依赖 -->
         <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpclient</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpcore</artifactId>
+            <groupId>org.fusesource</groupId>
+            <artifactId>sigar</artifactId>
         </dependency>
     </dependencies>
 
     <!-- 构建 -->
     <build>
         <defaultGoal>package</defaultGoal>
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-                <excludes>
-                    <!-- 排除掉监控配置文件 -->
-                    <!-- <exclude>monitoring.properties</exclude> -->
-                </excludes>
-            </resource>
-        </resources>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

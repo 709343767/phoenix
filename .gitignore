@@ -36,3 +36,8 @@
 /monitoring-common-parent/monitoring-common-web/target/*
 /monitoring-common-parent/target/*
 */target/*
+/monitoring-common/monitoring-common-core/target/*
+/monitoring-client/monitoring-client-core/target/*
+/monitoring-common/monitoring-common-web/target/*
+/monitoring-client/monitoring-client-spring-boot-starter/target/*
+/monitoring-client/monitoring-client-spring-mvc-integrator/target/*

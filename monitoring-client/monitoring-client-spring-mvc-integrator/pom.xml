@@ -6,7 +6,7 @@
 
     <!-- 监控父项目，为监控客户端父项目 -->
     <parent>
-        <artifactId>monitoring-client-parent</artifactId>
+        <artifactId>monitoring-client</artifactId>
         <groupId>com.imby</groupId>
         <version>${revision}</version>
         <relativePath>..</relativePath>
@@ -23,7 +23,7 @@
         <!-- 监控客户端模块依赖 -->
         <dependency>
             <groupId>com.imby</groupId>
-            <artifactId>monitoring-client</artifactId>
+            <artifactId>monitoring-client-core</artifactId>
         </dependency>
 
         <!--lombok依赖 -->

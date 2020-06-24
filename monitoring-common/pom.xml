@@ -13,12 +13,12 @@
     </parent>
 
     <!-- 项目基本信息 -->
-    <artifactId>monitoring-common-parent</artifactId>
-    <name>monitoring-common-parent</name>
+    <artifactId>monitoring-common</artifactId>
+    <name>monitoring-common</name>
     <packaging>pom</packaging>
     <modules>
         <!-- 监控公共模块 -->
-        <module>monitoring-common</module>
+        <module>monitoring-common-core</module>
         <!-- 监控WEB公共模块 -->
         <module>monitoring-common-web</module>
     </modules>
@@ -30,7 +30,7 @@
             <!-- 监控公共模块 -->
             <dependency>
                 <groupId>com.imby</groupId>
-                <artifactId>monitoring-common</artifactId>
+                <artifactId>monitoring-common-core</artifactId>
                 <version>${revision}</version>
             </dependency>
             <!-- 监控WEB公共模块 -->
