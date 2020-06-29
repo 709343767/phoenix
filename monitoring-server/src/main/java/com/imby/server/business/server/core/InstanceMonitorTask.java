@@ -8,10 +8,10 @@ import com.imby.common.domain.Alarm;
 import com.imby.common.dto.AlarmPackage;
 import com.imby.common.util.DateTimeUtils;
 import com.imby.common.util.NetUtils;
-import com.imby.server.business.server.dao.IMonitorInstanceDao;
 import com.imby.server.business.server.domain.Instance;
 import com.imby.server.business.server.entity.MonitorInstance;
 import com.imby.server.business.server.service.IAlarmService;
+import com.imby.server.business.server.service.IInstanceService;
 import com.imby.server.property.MonitoringServerWebProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.joda.time.DateTime;
@@ -62,10 +62,10 @@ public class InstanceMonitorTask implements CommandLineRunner, DisposableBean {
     private MonitoringServerWebProperties monitoringServerWebProperties;
 
     /**
-     * 应用实例数据访问对象
+     * 应用实例服务接口
      */
     @Autowired
-    private IMonitorInstanceDao monitorInstanceDao;
+    private IInstanceService instanceService;
 
     /**
      * 延迟/周期执行线程池
@@ -299,7 +299,7 @@ public class InstanceMonitorTask implements CommandLineRunner, DisposableBean {
         }
         LambdaUpdateWrapper<MonitorInstance> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();
         lambdaUpdateWrapper.eq(MonitorInstance::getInstanceId, instance.getInstanceId());
-        this.monitorInstanceDao.update(monitorInstance, lambdaUpdateWrapper);
+        this.instanceService.updateInstance(monitorInstance, lambdaUpdateWrapper);
     }
 
     /**
