@@ -13,7 +13,6 @@ import com.imby.server.business.server.domain.Cpu;
 import com.imby.server.business.server.domain.Disk;
 import com.imby.server.business.server.domain.Memory;
 import com.imby.server.inf.IServerMonitoringListener;
-
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
@@ -24,6 +23,8 @@ import org.springframework.stereotype.Component;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * <p>
@@ -62,6 +63,11 @@ public class ServerAspect {
      */
     @Autowired
     private List<IServerMonitoringListener> serverMonitoringListeners;
+
+    /**
+     * 创建一个线程池，用来调用监听器回调接口，这样不阻塞主线程
+     */
+    private final ExecutorService cachedThreadPool = Executors.newCachedThreadPool();
 
     /**
      * <p>
@@ -103,7 +109,7 @@ public class ServerAspect {
         // 刷新服务器信息
         this.refreshServerInfo(ip, computerName, memoryDomain, cpuDomain, diskDomain);
         // 调用监听器回调接口
-        this.serverMonitoringListeners.forEach(e -> e.wakeUp(ip));
+        this.cachedThreadPool.execute(() -> this.serverMonitoringListeners.forEach(e -> e.wakeUp(ip)));
     }
 
     /**
