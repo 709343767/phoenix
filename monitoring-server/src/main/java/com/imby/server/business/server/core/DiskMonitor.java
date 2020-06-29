@@ -50,7 +50,6 @@ public class DiskMonitor implements IServerMonitoringListener {
      * @author 皮锋
      * @custom.date 2020/3/30 15:35
      */
-    @Async
     @Override
     public void wakeUp(Object... obj) {
         String key = String.valueOf(obj[0]);
