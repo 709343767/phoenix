@@ -29,7 +29,7 @@ public class CpuPool extends ConcurrentHashMap<String, Cpu> implements ISuperBea
      * @author 皮锋
      * @custom.date 2020/3/26 15:53
      */
-    public void updateMemoryPool(String key, Cpu cpu) {
+    public void updateCpuPool(String key, Cpu cpu) {
         Cpu poolCpu = this.get(key);
         if (poolCpu == null) {
             this.put(key, cpu);

@@ -29,7 +29,7 @@ public class DiskPool extends ConcurrentHashMap<String, Disk> implements ISuperB
      * @author 皮锋
      * @custom.date 2020/3/26 15:53
      */
-    public void updateMemoryPool(String key, Disk disk) {
+    public void updateDiskPool(String key, Disk disk) {
         Disk poolDisk = this.get(key);
         if (poolDisk == null) {
             this.put(key, disk);

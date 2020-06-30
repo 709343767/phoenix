@@ -167,7 +167,7 @@ public class ServerAspect {
         disk.setIp(ip);
         disk.setComputerName(computerName);
         disk.setSubregionMap(subregionMap);
-        this.diskPool.updateMemoryPool(ip, disk);
+        this.diskPool.updateDiskPool(ip, disk);
     }
 
     /**
@@ -195,7 +195,7 @@ public class ServerAspect {
         cpu.setAlarm100(poolCpu != null && poolCpu.isAlarm100());
         cpu.setOverLoad100(poolCpu != null && poolCpu.isOverLoad100());
         // 更新服务器CPU信息池
-        this.cpuPool.updateMemoryPool(ip, cpu);
+        this.cpuPool.updateCpuPool(ip, cpu);
     }
 
     /**
