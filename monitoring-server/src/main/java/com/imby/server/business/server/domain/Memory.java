@@ -1,6 +1,6 @@
 package com.imby.server.business.server.domain;
 
-import com.imby.common.abs.SuperBean;
+import com.imby.common.abs.AbstractSuperBean;
 import com.imby.common.domain.server.MemoryDomain;
 import lombok.*;
 import lombok.experimental.Accessors;
@@ -21,7 +21,7 @@ import org.apache.commons.lang3.StringUtils;
 @AllArgsConstructor
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public class Memory extends SuperBean {
+public class Memory extends AbstractSuperBean {
 
     /**
      * 内存过载次数

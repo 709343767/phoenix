@@ -27,7 +27,6 @@ public interface IHeartbeatService {
      * @author 皮锋
      * @custom.date 2020年3月4日 下午2:16:07
      */
-    // 加了注解的方法将会添加到命令执行器管理器，注册到bean容器
     @TargetMethod(method = "sendHeartbeatPackage")
     BaseResponsePackage sendHeartbeatPackage(HeartbeatPackage heartbeatPackage) throws Exception;
 

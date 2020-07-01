@@ -1,10 +1,9 @@
 package com.imby.server.business.server.domain;
 
+import com.imby.common.abs.AbstractSuperBean;
 import lombok.*;
 
 import java.util.Map;
-
-import com.imby.common.abs.SuperBean;
 
 /**
  * <p>
@@ -20,7 +19,7 @@ import com.imby.common.abs.SuperBean;
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class Mail extends SuperBean {
+public class Mail extends AbstractSuperBean {
 
     /**
      * 标题

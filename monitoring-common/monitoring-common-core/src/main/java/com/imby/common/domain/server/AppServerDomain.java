@@ -1,6 +1,6 @@
 package com.imby.common.domain.server;
 
-import com.imby.common.abs.SuperBean;
+import com.imby.common.abs.AbstractSuperBean;
 import lombok.*;
 import lombok.experimental.Accessors;
 
@@ -20,15 +20,15 @@ import java.util.Date;
 @AllArgsConstructor
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public final class AppServerDomain extends SuperBean {
+public final class AppServerDomain extends AbstractSuperBean {
     /**
      * 服务器IP
      */
-    private String serverIP;
+    private String serverIp;
     /**
      * 服务器Url
      */
-    private String serverURL;
+    private String serverUrl;
     /**
      * 服务器类型
      */

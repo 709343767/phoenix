@@ -1,6 +1,6 @@
 package com.imby.common.domain.server;
 
-import com.imby.common.abs.SuperBean;
+import com.imby.common.abs.AbstractSuperBean;
 import lombok.*;
 import lombok.experimental.Accessors;
 
@@ -20,7 +20,7 @@ import java.util.List;
 @AllArgsConstructor
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public class CpuDomain extends SuperBean {
+public class CpuDomain extends AbstractSuperBean {
 
     /**
      * cpu总数
@@ -36,7 +36,7 @@ public class CpuDomain extends SuperBean {
     @NoArgsConstructor
     @Accessors(chain = true)
     @EqualsAndHashCode(callSuper = true)
-    public static class CpuInfoDomain extends SuperBean {
+    public static class CpuInfoDomain extends AbstractSuperBean {
 
         /**
          * CPU频率（MHz）

@@ -150,7 +150,7 @@ public class ServerAspect {
      */
     private void refreshDisk(String ip, String computerName, DiskDomain diskDomain) {
         Disk disk = new Disk();
-        Map<String, Disk.Subregion> subregionMap = new HashMap<>();
+        Map<String, Disk.Subregion> subregionMap = new HashMap<>(16);
         for (DiskDomain.DiskInfoDomain diskInfoDomain : diskDomain.getDiskInfoList()) {
             Disk.Subregion subregion = new Disk.Subregion();
             // 盘符名字

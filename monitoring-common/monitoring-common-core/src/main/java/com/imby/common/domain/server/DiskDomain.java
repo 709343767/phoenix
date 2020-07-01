@@ -1,6 +1,6 @@
 package com.imby.common.domain.server;
 
-import com.imby.common.abs.SuperBean;
+import com.imby.common.abs.AbstractSuperBean;
 import lombok.*;
 import lombok.experimental.Accessors;
 
@@ -20,7 +20,7 @@ import java.util.List;
 @AllArgsConstructor
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public class DiskDomain extends SuperBean {
+public class DiskDomain extends AbstractSuperBean {
 
     /**
      * 磁盘数量
@@ -37,7 +37,7 @@ public class DiskDomain extends SuperBean {
     @NoArgsConstructor
     @Accessors(chain = true)
     @EqualsAndHashCode(callSuper = true)
-    public static class DiskInfoDomain extends SuperBean {
+    public static class DiskInfoDomain extends AbstractSuperBean {
 
         /**
          * 分区的盘符名称

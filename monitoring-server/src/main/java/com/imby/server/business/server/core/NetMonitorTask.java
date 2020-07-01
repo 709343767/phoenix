@@ -10,7 +10,6 @@ import com.imby.common.util.SigarUtils;
 import com.imby.server.business.server.domain.Net;
 import com.imby.server.business.server.service.IAlarmService;
 import com.imby.server.property.MonitoringServerWebProperties;
-
 import lombok.extern.slf4j.Slf4j;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.DisposableBean;
@@ -62,7 +61,7 @@ public class NetMonitorTask implements CommandLineRunner, DisposableBean {
     /**
      * 延迟/周期执行线程池
      */
-    private final ScheduledExecutorService seService = Executors.newScheduledThreadPool(100, new ThreadFactory() {
+    private final ScheduledExecutorService seService = Executors.newScheduledThreadPool(5, new ThreadFactory() {
         final AtomicInteger atomic = new AtomicInteger();
 
         @Override

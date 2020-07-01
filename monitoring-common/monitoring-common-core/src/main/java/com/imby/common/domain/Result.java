@@ -1,6 +1,6 @@
 package com.imby.common.domain;
 
-import com.imby.common.abs.SuperBean;
+import com.imby.common.abs.AbstractSuperBean;
 import lombok.*;
 import lombok.experimental.Accessors;
 
@@ -19,7 +19,7 @@ import lombok.experimental.Accessors;
 @AllArgsConstructor
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public class Result extends SuperBean {
+public class Result extends AbstractSuperBean {
 
     /**
      * 是否成功

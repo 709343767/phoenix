@@ -1,6 +1,6 @@
 package com.imby.server.business.server.domain;
 
-import com.imby.common.abs.SuperBean;
+import com.imby.common.abs.AbstractSuperBean;
 import lombok.*;
 import lombok.experimental.Accessors;
 
@@ -21,7 +21,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public class Net extends SuperBean {
+public class Net extends AbstractSuperBean {
 
     /**
      * 允许多少秒内没更新是正常情况

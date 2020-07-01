@@ -19,7 +19,7 @@ import lombok.experimental.Accessors;
 @ToString
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public abstract class InstanceBean extends SuperBean {
+public abstract class AbstractInstanceBean extends AbstractSuperBean {
 
     /**
      * 端点（服务端、代理端、客户端）

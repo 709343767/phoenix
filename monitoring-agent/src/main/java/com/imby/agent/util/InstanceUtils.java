@@ -40,7 +40,7 @@ public class InstanceUtils {
             return instanceId;
         }
         // 如果配置了实例ID，用配置的ID
-        String id = ConfigLoader.monitoringProperties.getOwnProperties().getInstanceId();
+        String id = ConfigLoader.MONITORING_PROPERTIES.getOwnProperties().getInstanceId();
         if (StringUtils.isNotBlank(id)) {
             instanceId = id;
             return instanceId;
@@ -63,7 +63,7 @@ public class InstanceUtils {
         if (StringUtils.isNotEmpty(instanceName)) {
             return instanceName;
         }
-        instanceName = ConfigLoader.monitoringProperties.getOwnProperties().getInstanceName();
+        instanceName = ConfigLoader.MONITORING_PROPERTIES.getOwnProperties().getInstanceName();
         return instanceName;
     }
 
@@ -78,9 +78,9 @@ public class InstanceUtils {
      */
     @SneakyThrows
     private static String getRootUrl() {
-        String contextPath = StringUtils.isBlank(ConfigLoader.serverProperties.getServlet().getContextPath()) ? ""
-                : ConfigLoader.serverProperties.getServlet().getContextPath();
-        return "http://" + NetUtils.getLocalIp() + ":" + ConfigLoader.serverPort + contextPath;
+        String contextPath = StringUtils.isBlank(ConfigLoader.SERVER_PROPERTIES.getServlet().getContextPath()) ? ""
+                : ConfigLoader.SERVER_PROPERTIES.getServlet().getContextPath();
+        return "http://" + NetUtils.getLocalIp() + ":" + ConfigLoader.SERVER_PORT + contextPath;
     }
 
 }

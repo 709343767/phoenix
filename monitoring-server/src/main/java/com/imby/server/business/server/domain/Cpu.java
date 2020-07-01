@@ -1,6 +1,6 @@
 package com.imby.server.business.server.domain;
 
-import com.imby.common.abs.SuperBean;
+import com.imby.common.abs.AbstractSuperBean;
 import com.imby.common.domain.server.CpuDomain;
 import lombok.*;
 import lombok.experimental.Accessors;
@@ -25,7 +25,7 @@ import java.util.List;
 @AllArgsConstructor
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public class Cpu extends SuperBean {
+public class Cpu extends AbstractSuperBean {
 
     /**
      * CPU过载90%次数

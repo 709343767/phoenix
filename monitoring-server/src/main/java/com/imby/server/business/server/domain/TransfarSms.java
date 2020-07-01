@@ -1,13 +1,7 @@
 package com.imby.server.business.server.domain;
 
-import com.imby.common.abs.SuperBean;
-
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import com.imby.common.abs.AbstractSuperBean;
+import lombok.*;
 
 /**
  * <p>
@@ -23,7 +17,7 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class TransfarSms extends SuperBean {
+public class TransfarSms extends AbstractSuperBean {
 
     /**
      * 手机号码，多个手机号码用英文分号隔开

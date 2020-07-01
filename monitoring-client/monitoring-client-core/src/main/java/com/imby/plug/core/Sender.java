@@ -38,7 +38,7 @@ public class Sender {
         CiphertextPackage requestCiphertextPackage = new CiphertextPackage(encrypt);
         // 发送请求
         HttpUtils httpClient = HttpUtils.getInstance();
-        String result = httpClient.sendHttpPostByJSON(url, requestCiphertextPackage.toJsonString());
+        String result = httpClient.sendHttpPostByJson(url, requestCiphertextPackage.toJsonString());
         // 响应结果
         CiphertextPackage responseCiphertextPackage = JSONObject.parseObject(result, CiphertextPackage.class);
         // 解密响应数据

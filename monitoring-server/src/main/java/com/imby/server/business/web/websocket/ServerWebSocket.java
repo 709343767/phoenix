@@ -1,4 +1,4 @@
-package com.imby.server.business.web.webSocket;
+package com.imby.server.business.web.websocket;
 
 import com.imby.server.inf.IServerMonitoringListener;
 import lombok.extern.slf4j.Slf4j;
@@ -32,7 +32,7 @@ public class ServerWebSocket implements IServerMonitoringListener {
     /**
      * 定义Websocket容器，储存Session
      */
-    private static final CopyOnWriteArraySet<ServerWebSocket> webSocketSet = new CopyOnWriteArraySet<>();
+    private static final CopyOnWriteArraySet<ServerWebSocket> WEB_SOCKET_SET = new CopyOnWriteArraySet<>();
 
     /**
      * <p>
@@ -46,8 +46,8 @@ public class ServerWebSocket implements IServerMonitoringListener {
     @OnOpen
     public void opOpen(Session session) {
         this.session = session;
-        webSocketSet.add(this);
-        log.info("WebSocket连接成功，当前会话数为：{}", webSocketSet.size());
+        WEB_SOCKET_SET.add(this);
+        log.info("WebSocket连接成功，当前会话数为：{}", WEB_SOCKET_SET.size());
     }
 
     /**
@@ -60,8 +60,8 @@ public class ServerWebSocket implements IServerMonitoringListener {
      */
     @OnClose
     public void onClose() {
-        webSocketSet.remove(this);
-        log.info("WebSocket退出成功，当前会话数为：{}", webSocketSet.size());
+        WEB_SOCKET_SET.remove(this);
+        log.info("WebSocket退出成功，当前会话数为：{}", WEB_SOCKET_SET.size());
     }
 
     /**
@@ -89,7 +89,7 @@ public class ServerWebSocket implements IServerMonitoringListener {
      */
     public void sendMessage(String message) {
         //遍历储存的Websocket
-        for (ServerWebSocket webSocket : webSocketSet) {
+        for (ServerWebSocket webSocket : WEB_SOCKET_SET) {
             //发送
             try {
                 webSocket.session.getBasicRemote().sendText(message);

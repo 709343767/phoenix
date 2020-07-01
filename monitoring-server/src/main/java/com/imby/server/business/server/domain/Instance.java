@@ -1,6 +1,6 @@
 package com.imby.server.business.server.domain;
 
-import com.imby.common.abs.InstanceBean;
+import com.imby.common.abs.AbstractInstanceBean;
 import lombok.*;
 import lombok.experimental.Accessors;
 
@@ -21,7 +21,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public class Instance extends InstanceBean {
+public class Instance extends AbstractInstanceBean {
 
     /**
      * 允许多少秒内没收到心跳包是正常情况

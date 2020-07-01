@@ -20,12 +20,12 @@ public class OsUtils {
      * @custom.date 2020年3月20日 上午10:30:30
      */
     public static boolean isWindowsOs() {
-        boolean isWindowsOS = false;
+        boolean isWindowsOs = false;
         String osName = System.getProperty("os.name");
         if (osName.toLowerCase().contains("windows")) {
-            isWindowsOS = true;
+            isWindowsOs = true;
         }
-        return isWindowsOS;
+        return isWindowsOs;
     }
 
 }

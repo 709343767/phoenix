@@ -87,7 +87,6 @@ public class MybatisPlusConfig {
      * @custom.date 2020/2/12 9:43
      */
     @Bean
-    // 设置 dev test 环境开启
     @Profile({"dev", "test"})
     public PerformanceInterceptor performanceInterceptor() {
         PerformanceInterceptor performanceInterceptor = new PerformanceInterceptor();

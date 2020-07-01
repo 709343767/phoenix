@@ -1,6 +1,6 @@
 package com.imby.common.dto;
 
-import com.imby.common.abs.SuperBean;
+import com.imby.common.abs.AbstractSuperBean;
 import lombok.*;
 import lombok.experimental.Accessors;
 
@@ -20,7 +20,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public class CiphertextPackage extends SuperBean implements Serializable {
+public class CiphertextPackage extends AbstractSuperBean implements Serializable {
 
     /**
      * serialVersionUID

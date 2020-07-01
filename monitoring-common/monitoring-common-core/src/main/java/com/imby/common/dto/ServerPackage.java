@@ -1,6 +1,6 @@
 package com.imby.common.dto;
 
-import com.imby.common.abs.InstanceBean;
+import com.imby.common.abs.AbstractInstanceBean;
 import com.imby.common.domain.server.ServerDomain;
 import lombok.*;
 import lombok.experimental.Accessors;
@@ -21,7 +21,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public class ServerPackage extends InstanceBean {
+public class ServerPackage extends AbstractInstanceBean {
 
     /**
      * ID

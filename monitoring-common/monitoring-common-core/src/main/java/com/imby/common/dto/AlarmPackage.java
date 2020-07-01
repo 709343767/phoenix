@@ -1,6 +1,6 @@
 package com.imby.common.dto;
 
-import com.imby.common.abs.InstanceBean;
+import com.imby.common.abs.AbstractInstanceBean;
 import com.imby.common.domain.Alarm;
 import lombok.*;
 import lombok.experimental.Accessors;
@@ -23,7 +23,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public class AlarmPackage extends InstanceBean implements Serializable {
+public class AlarmPackage extends AbstractInstanceBean implements Serializable {
 
     /**
      * serialVersionUID

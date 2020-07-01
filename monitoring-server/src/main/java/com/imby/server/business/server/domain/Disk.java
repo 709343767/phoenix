@@ -1,6 +1,6 @@
 package com.imby.server.business.server.domain;
 
-import com.imby.common.abs.SuperBean;
+import com.imby.common.abs.AbstractSuperBean;
 import lombok.*;
 import lombok.experimental.Accessors;
 import org.apache.commons.lang3.StringUtils;
@@ -22,7 +22,7 @@ import java.util.Map;
 @AllArgsConstructor
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public class Disk extends SuperBean {
+public class Disk extends AbstractSuperBean {
 
 
     /**
@@ -56,7 +56,7 @@ public class Disk extends SuperBean {
     @AllArgsConstructor
     @Accessors(chain = true)
     @EqualsAndHashCode(callSuper = true)
-    public static class Subregion extends SuperBean {
+    public static class Subregion extends AbstractSuperBean {
 
         /**
          * 是否已经发送分区盘符过载告警信息

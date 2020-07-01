@@ -10,5 +10,5 @@ import com.imby.common.inf.ISuperBean;
  * @author 皮锋
  * @custom.date 2020年3月4日 上午10:16:00
  */
-public abstract class SuperBean implements ISuperBean {
+public abstract class AbstractSuperBean implements ISuperBean {
 }

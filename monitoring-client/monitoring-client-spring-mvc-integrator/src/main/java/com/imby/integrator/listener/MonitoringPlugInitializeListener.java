@@ -17,7 +17,6 @@ import java.io.File;
  * @author 皮锋
  * @custom.date 2020/3/14 18:31
  */
-//@Slf4j
 public class MonitoringPlugInitializeListener implements ServletContextListener {
 
     /**

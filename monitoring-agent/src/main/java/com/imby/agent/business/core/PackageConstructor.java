@@ -80,7 +80,7 @@ public class PackageConstructor implements IPackageConstructor {
         heartbeatPackage.setIp(NetUtils.getLocalIp());
         heartbeatPackage.setComputerName(SigarUtils.getComputerName());
         heartbeatPackage.setDateTime(new Date());
-        heartbeatPackage.setRate(ConfigLoader.monitoringProperties.getHeartbeatProperties().getRate());
+        heartbeatPackage.setRate(ConfigLoader.MONITORING_PROPERTIES.getHeartbeatProperties().getRate());
         return heartbeatPackage;
     }
 
@@ -106,7 +106,7 @@ public class PackageConstructor implements IPackageConstructor {
         serverPackage.setComputerName(SigarUtils.getComputerName());
         ServerDomain serverDomain = SigarUtils.getServerInfo();
         serverPackage.setServerDomain(serverDomain);
-        serverPackage.setRate(ConfigLoader.monitoringProperties.getServerInfoProperties().getRate());
+        serverPackage.setRate(ConfigLoader.MONITORING_PROPERTIES.getServerInfoProperties().getRate());
         return serverPackage;
     }
 

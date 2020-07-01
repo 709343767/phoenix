@@ -26,12 +26,12 @@ public final class SigarUtils {
     /**
      * 系统属性
      */
-    private static final Properties props = System.getProperties();
+    private static final Properties PROPS = System.getProperties();
 
     /**
      * 环境属性
      */
-    private static final Map<String, String> envs = System.getenv();
+    private static final Map<String, String> ENVS = System.getenv();
 
     static {
         try {
@@ -44,12 +44,12 @@ public final class SigarUtils {
     /**
      * 创建Sigar对象
      */
-    private static final Sigar sigar = new Sigar();
+    private static final Sigar SIGAR = new Sigar();
 
     /**
      * 存储单位转M
      */
-    private static final double dividend = 1024 * 1024;
+    private static final double DIVIDEND = 1024 * 1024;
 
     /**
      * <p>
@@ -76,7 +76,7 @@ public final class SigarUtils {
         String lib = loader.getLibraryName();
         log.info("初始化Sigar库文件：{}", lib);
         // 当前文件夹路径
-        String currentDir = props.getProperty("user.dir");
+        String currentDir = PROPS.getProperty("user.dir");
         File tempDir = new File(currentDir + File.separator + "persistent-monitoring"
                 + File.separator + "sigar" + File.separator + "lib");
         // 判断文件夹是否存在
@@ -141,10 +141,10 @@ public final class SigarUtils {
         Calendar cal = Calendar.getInstance();
         TimeZone timeZone = cal.getTimeZone();
         return new OsDomain()//
-                .setOsName(props.getProperty("os.name") + " " + props.getProperty("os.arch"))//
-                .setOsVersion(props.getProperty("os.version"))//
-                .setUserName(props.getProperty("user.name"))//
-                .setUserHome(props.getProperty("user.home"))//
+                .setOsName(PROPS.getProperty("os.name") + " " + PROPS.getProperty("os.arch"))//
+                .setOsVersion(PROPS.getProperty("os.version"))//
+                .setUserName(PROPS.getProperty("user.name"))//
+                .setUserHome(PROPS.getProperty("user.home"))//
                 .setOsTimeZone(timeZone.getDisplayName())//
                 .setComputerName(getComputerName());
     }
@@ -161,7 +161,7 @@ public final class SigarUtils {
     public static String getComputerName() {
         // Windows操作系统
         if (OsUtils.isWindowsOs()) {
-            return envs.get("COMPUTERNAME");
+            return ENVS.get("COMPUTERNAME");
         } else {
             try {
                 return InetAddress.getLocalHost().getHostName();
@@ -182,11 +182,11 @@ public final class SigarUtils {
      * @custom.date 2020年3月3日 下午2:24:41
      */
     public static MemoryDomain getMemoryInfo() throws SigarException {
-        Mem mem = sigar.getMem();
+        Mem mem = SIGAR.getMem();
         return new MemoryDomain()//
-                .setMemTotal(String.format("%.2f", mem.getTotal() / dividend) + "M")//
-                .setMemUsed(String.format("%.2f", mem.getUsed() / dividend) + "M")//
-                .setMemFree(String.format("%.2f", mem.getFree() / dividend) + "M")//
+                .setMemTotal(String.format("%.2f", mem.getTotal() / DIVIDEND) + "M")//
+                .setMemUsed(String.format("%.2f", mem.getUsed() / DIVIDEND) + "M")//
+                .setMemFree(String.format("%.2f", mem.getFree() / DIVIDEND) + "M")//
                 .setMenUsedPercent(String.format("%.2f", mem.getUsedPercent()) + "%");
     }
 
@@ -203,8 +203,8 @@ public final class SigarUtils {
     public static CpuDomain getCpuInfo() throws SigarException {
         CpuDomain cpuDomain = new CpuDomain();
 
-        CpuInfo[] cpuInfos = sigar.getCpuInfoList();
-        CpuPerc[] cpuList = sigar.getCpuPercList();
+        CpuInfo[] cpuInfos = SIGAR.getCpuInfoList();
+        CpuPerc[] cpuList = SIGAR.getCpuPercList();
 
         List<CpuDomain.CpuInfoDomain> cpuInfoDomains = Lists.newArrayList();
         for (int m = 0; m < cpuList.length; m++) {
@@ -235,11 +235,11 @@ public final class SigarUtils {
     public static NetDomain getNetInfo() throws SigarException {
         NetDomain netDomain = new NetDomain();
 
-        String[] netInfos = sigar.getNetInterfaceList();
+        String[] netInfos = SIGAR.getNetInterfaceList();
 
         List<NetDomain.NetInterfaceConfigDomain> netInterfaceConfigDomains = Lists.newArrayList();
         for (String info : netInfos) {
-            NetInterfaceConfig netInfo = sigar.getNetInterfaceConfig(info);
+            NetInterfaceConfig netInfo = SIGAR.getNetInterfaceConfig(info);
             if ((NetFlags.LOOPBACK_ADDRESS.equals(netInfo.getAddress())) // 127.0.0.1
                     || (netInfo.getFlags() == 0) // 标识为0
                     || (NetFlags.NULL_HWADDR.equals(netInfo.getHwaddr())) // MAC地址不存在
@@ -271,13 +271,13 @@ public final class SigarUtils {
     public static JvmDomain getJvmInfo() {
         Runtime runTime = Runtime.getRuntime();
         return new JvmDomain()//
-                .setJavaPath(props.getProperty("java.home"))//
-                .setJavaVendor(props.getProperty("java.vendor"))//
-                .setJavaVersion(props.getProperty("java.version"))//
-                .setJavaName(props.getProperty("java.specification.name"))//
-                .setJvmVersion(props.getProperty("java.vm.version"))//
-                .setJvmTotalMemory(String.format("%.2f", runTime.totalMemory() / dividend) + "M")//
-                .setJvmFreeMemory(String.format("%.2f", runTime.freeMemory() / dividend) + "M");
+                .setJavaPath(PROPS.getProperty("java.home"))//
+                .setJavaVendor(PROPS.getProperty("java.vendor"))//
+                .setJavaVersion(PROPS.getProperty("java.version"))//
+                .setJavaName(PROPS.getProperty("java.specification.name"))//
+                .setJvmVersion(PROPS.getProperty("java.vm.version"))//
+                .setJvmTotalMemory(String.format("%.2f", runTime.totalMemory() / DIVIDEND) + "M")//
+                .setJvmFreeMemory(String.format("%.2f", runTime.freeMemory() / DIVIDEND) + "M");
     }
 
     /**
@@ -294,7 +294,7 @@ public final class SigarUtils {
         DiskDomain diskDomain = new DiskDomain();
         List<DiskDomain.DiskInfoDomain> diskInfoDomains = Lists.newArrayList();
 
-        FileSystem[] fileSystemArray = sigar.getFileSystemList();
+        FileSystem[] fileSystemArray = SIGAR.getFileSystemList();
         for (FileSystem fileSystem : fileSystemArray) {
             DiskDomain.DiskInfoDomain diskInfoDomain = new DiskDomain.DiskInfoDomain();
 
@@ -307,7 +307,7 @@ public final class SigarUtils {
             // 磁盘类型
             int type = fileSystem.getType();
             try {
-                fileSystemUsage = sigar.getFileSystemUsage(fileSystem.getDirName());
+                fileSystemUsage = SIGAR.getFileSystemUsage(fileSystem.getDirName());
             }
             // 当fileSystem.getType()为5时会出现该异常——此时文件系统类型为光驱
             catch (SigarException e) {
@@ -353,10 +353,10 @@ public final class SigarUtils {
             } else {
                 continue;
             }
-            diskInfoDomain.setTotal(String.format("%.2f", fileSystemUsage.getTotal() / dividend) + "M");
-            diskInfoDomain.setFree(String.format("%.2f", fileSystemUsage.getFree() / dividend) + "M");
-            diskInfoDomain.setUsed(String.format("%.2f", fileSystemUsage.getUsed() / dividend) + "M");
-            diskInfoDomain.setAvail(String.format("%.2f", fileSystemUsage.getAvail() / dividend) + "M");
+            diskInfoDomain.setTotal(String.format("%.2f", fileSystemUsage.getTotal() / DIVIDEND) + "M");
+            diskInfoDomain.setFree(String.format("%.2f", fileSystemUsage.getFree() / DIVIDEND) + "M");
+            diskInfoDomain.setUsed(String.format("%.2f", fileSystemUsage.getUsed() / DIVIDEND) + "M");
+            diskInfoDomain.setAvail(String.format("%.2f", fileSystemUsage.getAvail() / DIVIDEND) + "M");
             diskInfoDomain.setUsePercent(String.format("%.2f", fileSystemUsage.getUsePercent() * 100) + "%");
             diskInfoDomains.add(diskInfoDomain);
         }

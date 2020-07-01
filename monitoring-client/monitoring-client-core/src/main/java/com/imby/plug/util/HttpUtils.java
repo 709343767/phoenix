@@ -56,7 +56,7 @@ public class HttpUtils {
     /**
      * 本地线程
      */
-    private static final ThreadLocal<HttpUtils> threadLocal = new ThreadLocal<>();
+    private static final ThreadLocal<HttpUtils> THREAD_LOCAL = new ThreadLocal<>();
 
     /**
      * 编码方式
@@ -85,11 +85,11 @@ public class HttpUtils {
      */
     public static HttpUtils getInstance() {
         // 获取ThreadLocal中当前线程共享变量的值
-        HttpUtils instance = threadLocal.get();
+        HttpUtils instance = THREAD_LOCAL.get();
         if (instance == null) {
             instance = new HttpUtils();
             // 设置ThreadLocal中当前线程共享变量的值
-            threadLocal.set(instance);
+            THREAD_LOCAL.set(instance);
         }
         return instance;
     }
@@ -107,7 +107,7 @@ public class HttpUtils {
      * @author 皮锋
      * @custom.date 2020年3月5日 下午5:33:56
      */
-    public String sendHttpPostByJSON(String url, String json) throws ClientProtocolException, IOException {
+    public String sendHttpPostByJson(String url, String json) throws ClientProtocolException, IOException {
         HttpPost httpPost = new HttpPost(url);
         httpPost.setConfig(requestConfig);
         if (null != json) {

@@ -1,6 +1,6 @@
 package com.imby.common.domain.server;
 
-import com.imby.common.abs.SuperBean;
+import com.imby.common.abs.AbstractSuperBean;
 import lombok.*;
 import lombok.experimental.Accessors;
 
@@ -18,7 +18,7 @@ import lombok.experimental.Accessors;
 @AllArgsConstructor
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public class MemoryDomain extends SuperBean {
+public class MemoryDomain extends AbstractSuperBean {
 
     /**
      * 物理内存总量

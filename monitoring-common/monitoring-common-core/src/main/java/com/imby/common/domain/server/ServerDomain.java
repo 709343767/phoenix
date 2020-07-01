@@ -1,12 +1,7 @@
 package com.imby.common.domain.server;
 
-import com.imby.common.abs.SuperBean;
-
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import com.imby.common.abs.AbstractSuperBean;
+import lombok.*;
 import lombok.experimental.Accessors;
 
 /**
@@ -23,7 +18,7 @@ import lombok.experimental.Accessors;
 @AllArgsConstructor
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public final class ServerDomain extends SuperBean {
+public final class ServerDomain extends AbstractSuperBean {
 
     /*
      * 应用服务器信息

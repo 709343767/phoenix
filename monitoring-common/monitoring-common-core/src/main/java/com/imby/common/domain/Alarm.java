@@ -1,13 +1,12 @@
 package com.imby.common.domain;
 
+import com.imby.common.abs.AbstractSuperBean;
+import com.imby.common.constant.AlarmLevelEnums;
+import com.imby.common.constant.AlarmTypeEnums;
 import lombok.*;
 import lombok.experimental.Accessors;
 
 import java.nio.charset.Charset;
-
-import com.imby.common.abs.SuperBean;
-import com.imby.common.constant.AlarmLevelEnums;
-import com.imby.common.constant.AlarmTypeEnums;
 
 /**
  * <p>
@@ -24,7 +23,7 @@ import com.imby.common.constant.AlarmTypeEnums;
 @AllArgsConstructor
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public class Alarm extends SuperBean {
+public class Alarm extends AbstractSuperBean {
 
     /**
      * 告警级别，默认为：WARN

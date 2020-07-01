@@ -18,18 +18,18 @@ public class ConfigLoader {
     /**
      * 监控配置
      */
-    public static final MonitoringProperties monitoringProperties = AgentApplication.applicationContext
+    public static final MonitoringProperties MONITORING_PROPERTIES = AgentApplication.applicationContext
             .getBean(MonitoringProperties.class);
 
     /**
      * 项目端口号
      */
-    public static final int serverPort = AgentApplication.serverPort;
+    public static final int SERVER_PORT = AgentApplication.serverPort;
 
     /**
      * 服务器配置
      */
-    public static final ServerProperties serverProperties =
+    public static final ServerProperties SERVER_PROPERTIES =
             AgentApplication.applicationContext.getBean(ServerProperties.class);
 
 }

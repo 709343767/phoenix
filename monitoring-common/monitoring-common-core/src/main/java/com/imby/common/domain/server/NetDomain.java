@@ -1,6 +1,6 @@
 package com.imby.common.domain.server;
 
-import com.imby.common.abs.SuperBean;
+import com.imby.common.abs.AbstractSuperBean;
 import lombok.*;
 import lombok.experimental.Accessors;
 
@@ -20,7 +20,7 @@ import java.util.List;
 @AllArgsConstructor
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public final class NetDomain extends SuperBean {
+public final class NetDomain extends AbstractSuperBean {
 
     /**
      * 网卡总数
@@ -36,7 +36,7 @@ public final class NetDomain extends SuperBean {
     @NoArgsConstructor
     @Accessors(chain = true)
     @EqualsAndHashCode(callSuper = true)
-    public static class NetInterfaceConfigDomain extends SuperBean {
+    public static class NetInterfaceConfigDomain extends AbstractSuperBean {
         /**
          * 网卡名字
          */

@@ -16,7 +16,7 @@ public class InvokerHolder {
     /**
      * 命令执行器
      */
-    private static final Map<Class<?>, Map<String, Invoker>> invokers = new HashMap<>();
+    private static final Map<Class<?>, Map<String, Invoker>> INVOKERS = new HashMap<>();
 
     /**
      * <p>
@@ -30,7 +30,7 @@ public class InvokerHolder {
      * @custom.date 2020年3月4日 下午2:02:18
      */
     public static Invoker getInvoker(Class<?> clazz, String method) {
-        Map<String, Invoker> map = invokers.get(clazz);
+        Map<String, Invoker> map = INVOKERS.get(clazz);
         if (map != null) {
             return map.get(method);
         }
@@ -49,7 +49,7 @@ public class InvokerHolder {
      * @custom.date 2020年3月4日 下午2:02:35
      */
     public static void addInvoker(Class<?> clazz, String method, Invoker invoker) {
-        Map<String, Invoker> map = invokers.computeIfAbsent(clazz, k -> new HashMap<>());
+        Map<String, Invoker> map = INVOKERS.computeIfAbsent(clazz, k -> new HashMap<>(16));
         map.put(method, invoker);
     }
 
