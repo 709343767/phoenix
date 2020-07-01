@@ -205,17 +205,23 @@ public class AlarmServiceImpl implements IAlarmService {
                 if (alarmTypeList.contains(AlarmWayEnums.SMS.name()) && alarmTypeList.contains(AlarmWayEnums.MAIL.name())) {
                     // 处理短信告警
                     this.dealSmsAlarm(alarmTitle, msg, level, result);
+                    // 告警发送完更新数据库中告警发送结果
+                    this.updateMonitorAlarmRecordToDb(result, uuid, AlarmWayEnums.SMS);
                     // 处理邮件告警
                     this.dealMailAlarm(alarmTitle, msg, level, result);
+                    // 告警发送完更新数据库中告警发送结果
+                    this.updateMonitorAlarmRecordToDb(result, uuid, AlarmWayEnums.MAIL);
                 } else if (alarmTypeList.contains(AlarmWayEnums.SMS.name())) {
                     // 处理短信告警
                     this.dealSmsAlarm(alarmTitle, msg, level, result);
+                    // 告警发送完更新数据库中告警发送结果
+                    this.updateMonitorAlarmRecordToDb(result, uuid, AlarmWayEnums.SMS);
                 } else if (alarmTypeList.contains(AlarmWayEnums.MAIL.name())) {
                     // 处理邮件告警
                     this.dealMailAlarm(alarmTitle, msg, level, result);
+                    // 告警发送完更新数据库中告警发送结果
+                    this.updateMonitorAlarmRecordToDb(result, uuid, AlarmWayEnums.MAIL);
                 }
-                // 告警发送完更新数据库中告警发送结果
-                this.updateMonitorAlarmRecordToDb(result, uuid);
             }
         } else {
             String expMsg = "没有配置告警方式，不发送告警消息！";
@@ -230,18 +236,34 @@ public class AlarmServiceImpl implements IAlarmService {
      * 更新告警信息发送状态
      * </p>
      *
-     * @param result 返回结果
-     * @param uuid   UUID，唯一不重复，可用作主键
+     * @param result        返回结果
+     * @param uuid          UUID，唯一不重复，可用作主键
+     * @param alarmWayEnums 告警方式
      * @author 皮锋
      * @custom.date 2020/5/13 17:04
      */
-    private void updateMonitorAlarmRecordToDb(Result result, String uuid) {
+    private void updateMonitorAlarmRecordToDb(Result result, String uuid, AlarmWayEnums alarmWayEnums) {
         MonitorAlarmRecord monitorAlarmRecord = new MonitorAlarmRecord();
-        if (result.isSuccess()) {
-            monitorAlarmRecord.setStatus(ZeroOrOneConstants.ONE);
-        } else {
-            monitorAlarmRecord.setStatus(ZeroOrOneConstants.ZERO);
+        // 告警方式为短信
+        if (alarmWayEnums == AlarmWayEnums.SMS) {
+            // 更新状态
+            if (result.isSuccess()) {
+                monitorAlarmRecord.setSmsStatus(ZeroOrOneConstants.ONE);
+            } else {
+                monitorAlarmRecord.setSmsStatus(ZeroOrOneConstants.ZERO);
+            }
         }
+        // 告警方式为邮件
+        if (alarmWayEnums == AlarmWayEnums.MAIL) {
+            // 更新状态
+            if (result.isSuccess()) {
+                monitorAlarmRecord.setMailStatus(ZeroOrOneConstants.ONE);
+            } else {
+                monitorAlarmRecord.setMailStatus(ZeroOrOneConstants.ZERO);
+            }
+        }
+        // 更新时间
+        monitorAlarmRecord.setUpdateTime(new Date());
         LambdaUpdateWrapper<MonitorAlarmRecord> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();
         lambdaUpdateWrapper.eq(MonitorAlarmRecord::getCode, uuid);
         this.monitorAlarmRecordDao.update(monitorAlarmRecord, lambdaUpdateWrapper);

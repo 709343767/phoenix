@@ -80,10 +80,16 @@ public class MonitorAlarmRecord {
     private String content;
 
     /**
-     * 告警发送状态（0：失败；1：成功）
+     * 短信告警发送状态（0：失败；1：成功）
      */
-    @TableField("STATUS")
-    private String status;
+    @TableField("SMS_STATUS")
+    private String smsStatus;
+
+    /**
+     * 邮件告警发送状态（0：失败；1：成功）
+     */
+    @TableField("MAIL_STATUS")
+    private String mailStatus;
 
     /**
      * 被告警人手机号码
