@@ -2,7 +2,7 @@ package com.imby.server.util;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.imby.common.util.MD5Utils;
+import com.imby.common.util.Md5Utils;
 import com.imby.common.util.NetUtils;
 
 /**
@@ -40,7 +40,7 @@ public class InstanceUtils {
         }
         String mac = NetUtils.getLocalMac();
         String ip = NetUtils.getLocalIp();
-        instanceId = MD5Utils.encrypt16(mac + ip + getInstanceName());
+        instanceId = Md5Utils.encrypt16(mac + ip + getInstanceName());
         return instanceId;
     }
 

@@ -12,7 +12,7 @@ import java.security.MessageDigest;
  * @author 皮锋
  * @custom.date 2020年3月4日 下午11:18:23
  */
-public final class MD5Utils {
+public final class Md5Utils {
 
     /**
      * 加密算法
@@ -26,7 +26,7 @@ public final class MD5Utils {
      *
      * @author 皮锋
      */
-    private MD5Utils() {
+    private Md5Utils() {
     }
 
     /**

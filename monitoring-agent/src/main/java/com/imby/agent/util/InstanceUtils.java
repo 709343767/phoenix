@@ -1,7 +1,7 @@
 package com.imby.agent.util;
 
 import com.imby.agent.business.core.ConfigLoader;
-import com.imby.common.util.MD5Utils;
+import com.imby.common.util.Md5Utils;
 import com.imby.common.util.NetUtils;
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.StringUtils;
@@ -46,7 +46,7 @@ public class InstanceUtils {
             return instanceId;
         }
         String rootUrl = InstanceUtils.getRootUrl();
-        instanceId = MD5Utils.encrypt16(rootUrl);
+        instanceId = Md5Utils.encrypt16(rootUrl);
         return instanceId;
     }
 
