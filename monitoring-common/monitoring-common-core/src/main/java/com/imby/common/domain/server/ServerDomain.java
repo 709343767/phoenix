@@ -20,11 +20,6 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = true)
 public final class ServerDomain extends AbstractSuperBean {
 
-    /*
-     * 应用服务器信息
-     */
-    //private AppServerDomain appServerDomain;
-
     /**
      * 操作系统信息
      */
