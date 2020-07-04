@@ -27,18 +27,6 @@ public abstract class AbstractMonitoringAgentConfig {
     private String url;
 
     /**
-     * 用户名
-     */
-    @Value("${monitoring.server.username}")
-    private String username;
-
-    /**
-     * 密码
-     */
-    @Value("${monitoring.server.password}")
-    private String password;
-
-    /**
      * 当前应用实例ID
      */
     @Value("${monitoring.own.instance.id}")
@@ -88,8 +76,6 @@ public abstract class AbstractMonitoringAgentConfig {
             throw new NotFoundConfigParamException("监控程序找不到监控服务端URL配置！");
         }
         serverProperties.setUrl(this.url);
-        serverProperties.setUsername(this.username);
-        serverProperties.setPassword(this.password);
         MonitoringOwnProperties ownProperties = new MonitoringOwnProperties();
         ownProperties.setInstanceId(this.instanceId);
         // 没有实例名称

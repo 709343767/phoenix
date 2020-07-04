@@ -1,13 +1,12 @@
 package com.imby.agent;
 
+import com.imby.common.web.toolkit.UniqueBeanNameGenerator;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.context.WebServerInitializedEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
-
-import com.imby.common.web.toolkit.UniqueBeanNameGenerator;
 
 /**
  * <p>
@@ -20,31 +19,28 @@ import com.imby.common.web.toolkit.UniqueBeanNameGenerator;
  */
 @SpringBootApplication
 @ComponentScan(nameGenerator = UniqueBeanNameGenerator.class)
-// 启用spring的任务调度
-// @EnableScheduling
-// 启用事务管理
 public class AgentApplication implements ApplicationListener<WebServerInitializedEvent> {
 
-	/**
-	 * 配置应用上下文
-	 */
-	public static ConfigurableApplicationContext applicationContext;
+    /**
+     * 配置应用上下文
+     */
+    public static ConfigurableApplicationContext applicationContext;
 
-	/**
-	 * 端口号
-	 */
-	public static int serverPort;
+    /**
+     * 端口号
+     */
+    public static int serverPort;
 
-	/**
-	 * 获取当前运行程序的端口号
-	 */
-	@Override
-	public void onApplicationEvent(WebServerInitializedEvent event) {
-		serverPort = event.getWebServer().getPort();
-	}
+    /**
+     * 获取当前运行程序的端口号
+     */
+    @Override
+    public void onApplicationEvent(WebServerInitializedEvent event) {
+        serverPort = event.getWebServer().getPort();
+    }
 
-	public static void main(String[] args) {
-		applicationContext = SpringApplication.run(AgentApplication.class, args);
-	}
+    public static void main(String[] args) {
+        applicationContext = SpringApplication.run(AgentApplication.class, args);
+    }
 
 }

@@ -19,19 +19,9 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class MonitoringServerProperties {
 
-	/**
-	 * 监控服务端url
-	 */
-	private String url;
-
-	/**
-	 * 监控服务端用户名
-	 */
-	private String username;
-
-	/**
-	 * 监控服务端密码
-	 */
-	private String password;
+    /**
+     * 监控服务端url
+     */
+    private String url;
 
 }

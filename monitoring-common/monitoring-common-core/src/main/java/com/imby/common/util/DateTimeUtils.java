@@ -1,12 +1,12 @@
 package com.imby.common.util;
 
+import com.imby.common.constant.DateTimeStylesEnums;
+
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
-
-import com.imby.common.constant.DateTimeStylesEnums;
 
 /**
  * <p>
@@ -59,7 +59,7 @@ public class DateTimeUtils {
      * @custom.date 2020/4/10 16:35
      */
     public static String dateToString(Date date, String parttern) {
-        LocalDateTime localDateTime = date2LocalDateTime(date, null);
+        LocalDateTime localDateTime = date2LocalDateTime(date);
         return DateTimeFormatter.ofPattern(parttern).format(localDateTime);
     }
 
@@ -68,17 +68,14 @@ public class DateTimeUtils {
      * {@link Date}转{@link LocalDateTime}
      * </p>
      *
-     * @param date   {@link Date}
-     * @param zoneId {@link ZoneId}
+     * @param date {@link Date}
      * @return {@link LocalDateTime}
      * @author 皮锋
      * @custom.date 2020/4/10 16:28
      */
-    public static LocalDateTime date2LocalDateTime(Date date, ZoneId zoneId) {
+    public static LocalDateTime date2LocalDateTime(Date date) {
         Instant instant = date.toInstant();
-        if (zoneId == null) {
-            zoneId = ZoneId.systemDefault();
-        }
+        ZoneId zoneId = ZoneId.systemDefault();
         return instant.atZone(zoneId).toLocalDateTime();
     }
 

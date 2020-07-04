@@ -27,7 +27,6 @@ public interface IAlarmService {
      * @author 皮锋
      * @custom.date 2020年3月6日 下午3:27:17
      */
-    // 加了注解的方法将会添加到命令执行器管理器，注册到bean容器
     @TargetMethod(method = "sendAlarmPackage")
     BaseResponsePackage sendAlarmPackage(AlarmPackage alarmPackage) throws Exception;
 }

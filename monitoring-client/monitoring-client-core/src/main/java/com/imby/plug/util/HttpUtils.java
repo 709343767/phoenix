@@ -39,9 +39,9 @@ public class HttpUtils {
      * 2.然后再用其下各种方法配置网络环境；或者已经有配置好的RequestConfig对象（非RequestConfig.Builder）而将此对象拷贝（RequestConfig类的copy()方法）过来返回“配置器“而重新进行其它的网络环境的配置。<br>
      * 3.最终，再调用配置器的buillder()方法返回RequestConfig对象。<br>
      */
-    @SuppressWarnings("deprecation")
-    private final RequestConfig defaultRequestConfig = RequestConfig.custom().setCookieSpec(CookieSpecs.BEST_MATCH)
-            .setExpectContinueEnabled(true).setStaleConnectionCheckEnabled(true)
+    private final RequestConfig defaultRequestConfig = RequestConfig.custom()
+            .setCookieSpec(CookieSpecs.STANDARD)
+            .setExpectContinueEnabled(true)
             .setTargetPreferredAuthSchemes(Arrays.asList(AuthSchemes.NTLM, AuthSchemes.DIGEST))
             .setProxyPreferredAuthSchemes(Collections.singletonList(AuthSchemes.BASIC)).build();
 
@@ -72,6 +72,8 @@ public class HttpUtils {
      * 构造方法私有化
      */
     private HttpUtils() {
+        // 解决阿里巴巴编码规范至少调用一次remove()方法的警告
+        THREAD_LOCAL.remove();
     }
 
     /**

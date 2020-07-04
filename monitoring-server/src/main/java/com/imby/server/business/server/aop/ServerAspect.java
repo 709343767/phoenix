@@ -25,6 +25,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * <p>
@@ -67,7 +69,14 @@ public class ServerAspect {
     /**
      * 创建一个线程池，用来调用监听器回调接口，这样不阻塞主线程
      */
-    private final ExecutorService cachedThreadPool = Executors.newCachedThreadPool();
+    private final ExecutorService cachedThreadPool = Executors.newCachedThreadPool(new ThreadFactory() {
+        final AtomicInteger atomic = new AtomicInteger();
+
+        @Override
+        public Thread newThread(Runnable r) {
+            return new Thread(r, "monitoring-server-listeners-thread-" + this.atomic.getAndIncrement());
+        }
+    });
 
     /**
      * <p>

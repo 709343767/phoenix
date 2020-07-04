@@ -72,10 +72,6 @@ public class ConfigLoader {
     private static void analysis(Properties properties) throws NotFoundConfigParamException, ErrorConfigParamException {
         // 监控服务端url
         String serverUrl = StringUtils.trimToNull(properties.getProperty("monitoring.server.url"));
-        // 监控服务端用户名
-        String serverUserName = StringUtils.trimToNull(properties.getProperty("monitoring.server.username"));
-        // 监控服务端密码
-        String serverPassword = StringUtils.trimToNull(properties.getProperty("monitoring.server.password"));
         // 实例ID
         String instanceId = StringUtils.trimToNull(properties.getProperty("monitoring.own.instance.id"));
         // 实例名称
@@ -94,7 +90,6 @@ public class ConfigLoader {
         if (StringUtils.isBlank(serverUrl)) {
             throw new NotFoundConfigParamException("监控程序找不到监控服务端URL配置！");
         }
-        // 用户名密码暂不做处理
         // 没有实例名称
         if (StringUtils.isBlank(instanceName)) {
             throw new NotFoundConfigParamException("监控程序找不到实例名称配置！");
@@ -107,7 +102,7 @@ public class ConfigLoader {
             throw new ErrorConfigParamException("获取服务器信息频率最小不能小于30秒！");
         }
         // 封装数据
-        wrap(serverUrl, serverUserName, serverPassword, instanceId, instanceName, heartbeatRate, serverInfoEnable,
+        wrap(serverUrl, instanceId, instanceName, heartbeatRate, serverInfoEnable,
                 serverInfoRate);
     }
 
@@ -117,8 +112,6 @@ public class ConfigLoader {
      * </p>
      *
      * @param serverUrl        监控服务端url
-     * @param serverUserName   监控服务端用户名
-     * @param serverPassword   监控服务端密码
      * @param instanceId       实例ID
      * @param instanceName     实例名称
      * @param heartbeatRate    缺省[与服务端或者代理端发心跳包的频率（秒），默认30秒]
@@ -127,12 +120,10 @@ public class ConfigLoader {
      * @author 皮锋
      * @custom.date 2020年3月5日 下午4:36:33
      */
-    private static void wrap(String serverUrl, String serverUserName, String serverPassword, String instanceId,
+    private static void wrap(String serverUrl, String instanceId,
                              String instanceName, long heartbeatRate, boolean serverInfoEnable, long serverInfoRate) {
         MonitoringServerProperties serverProperties = new MonitoringServerProperties();
         serverProperties.setUrl(serverUrl);
-        serverProperties.setUsername(serverUserName);
-        serverProperties.setPassword(serverPassword);
         monitoringProperties.setServerProperties(serverProperties);
         MonitoringOwnProperties ownProperties = new MonitoringOwnProperties();
         ownProperties.setInstanceId(instanceId);
