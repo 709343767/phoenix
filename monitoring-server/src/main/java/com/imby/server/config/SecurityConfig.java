@@ -30,7 +30,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private static final String[] URLS = {
             "/alarm/accept-alarm-package",
             "/heartbeat/accept-heartbeat-package",
-            "/server/accept-server-package"
+            "/server/accept-server-package",
+            "/logout"
     };
 
     /**
@@ -63,6 +64,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(WebSecurity web) {
         // web.ignoring直接绕开spring security的所有filter，直接跳过验证
         web.ignoring().antMatchers(RESOURCES);
+        web.ignoring().antMatchers(URLS);
     }
 
     /**
@@ -77,8 +79,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.authorizeRequests()
-                // 忽略URL
-                .antMatchers(URLS).permitAll()
                 // 所有的访问都必须进行认证处理后才可以正常访问
                 .anyRequest().authenticated()
                 .and()
@@ -87,7 +87,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .usernameParameter("username")
                 .passwordParameter("password")
                 .loginPage("/login")
-                .failureUrl("/login?error")
+                .failureUrl("/login?error=true")
                 .defaultSuccessUrl("/index")
                 .permitAll()
                 .and()
@@ -96,6 +96,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 // 退出登录配置
                 .logout()
+                .invalidateHttpSession(true)
+                .deleteCookies("JSESSIONID")
+                .logoutUrl("/logout")
                 .logoutSuccessUrl("/login?logout")
                 .permitAll();
     }

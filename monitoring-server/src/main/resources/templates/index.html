@@ -17,6 +17,9 @@
     <script src="./js/html5.min.js" th:src="@{/js/html5.min.js}"></script>
     <script src="./js/respond.min.js" th:src="@{/js/respond.min.js}"></script>
     <![endif]-->
+    <script type="text/javascript" charset="utf-8" th:inline="javascript">
+        var ctxPath = /*[[@{/}]]*/'';
+    </script>
 </head>
 <body>
 <div class="main-layout" id='main-layout'>
@@ -74,7 +77,7 @@
                 <li class="layui-nav-item">
                     <a href="javascript:;" data-url="admin-info.html" data-id='5' data-text="个人信息">超级管理员</a>
                 </li>
-                <li class="layui-nav-item"><a href="javascript:;">退出</a></li>
+                <li class="layui-nav-item"><a href="javascript:;" onclick="logout();">退出</a></li>
             </ul>
         </div>
         <!--主体内容-->
@@ -105,9 +108,28 @@
         link: './welcome.html'
     }
 </script>
+<script src="./js/jquery-1.11.2.min.js" th:src="@{/js/jquery-1.11.2.min.js}"></script>
 <script src="./lib/layui/layui.js" th:src="@{/lib/layui/layui.js}" type="text/javascript" charset="utf-8"></script>
 <script src="./js/common.js" th:src="@{/js/common.js}" type="text/javascript" charset="utf-8"></script>
 <script src="./js/main.js" th:src="@{/js/main.js}" type="text/javascript" charset="utf-8"></script>
-
+<script type="text/javascript" charset="utf-8" th:inline="javascript">
+    /**
+     * 退出登录
+     */
+    function logout() {
+        layui.use('layer', function () {
+            var layer = layui.layer;
+            layer.confirm('确定要退出登录吗？', {
+                btn: ['确定', '取消']
+            }, function () {
+                $.post(ctxPath + 'logout', function (data, status) {
+                    layer.msg('退出成功！', {icon: 2});
+                });
+            }, function (index) {
+                layer.close(index);
+            });
+        });
+    }
+</script>
 </body>
 </html>

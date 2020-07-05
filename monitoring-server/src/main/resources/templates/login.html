@@ -65,6 +65,11 @@
                                autocomplete="on" class="layui-input" lay-verify="password">
                     </label>
                 </div>
+                <div class="layui-form-item" th:if="${param.error}">
+                    <label style="color: red;">
+                        用户名或密码错误，请重新输入！
+                    </label>
+                </div>
                 <div class="layui-form-item">
                     <label>
                         <input type="checkbox" name="remember" checked>&nbsp;&nbsp;记住我
