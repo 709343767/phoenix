@@ -1,10 +1,15 @@
 package com.imby.server.config;
 
+import com.imby.server.business.web.service.impl.MonitorUserServiceImpl;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 /**
  * <p>
@@ -20,39 +25,121 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     /**
+     * 忽略URL
+     */
+    private static final String[] URLS = {
+            "/alarm/accept-alarm-package",
+            "/heartbeat/accept-heartbeat-package",
+            "/server/accept-server-package"
+    };
+
+    /**
+     * 忽略静态资源
+     */
+    private static final String[] RESOURCES = {
+            "/css/**",
+            "/fonts/**",
+            "/images/**",
+            "/js/**",
+            "/lib/**",
+            "/favicon.ico",
+            "/webjars/**",
+            "/v2/**",
+            "/swagger-resources/**",
+            "/swagger-ui.html",
+            "/docs.html"
+    };
+
+    /**
      * <p>
-     * 重写configure(HttpSecurity http)的方法，来自定义自己的拦截方法和业务逻辑。
+     * WebSecurity主要针对全局请求忽略规则配置（比如说静态文件，比如说注册页面）、全局HttpFirewall配置、是否debug配置、全局SecurityFilterChain配置、privilegeEvaluator、expressionHandler、securityInterceptor等。
      * </p>
      *
-     * @param httpSecurity http安全对象
+     * @param web {@link WebSecurity}
+     * @author 皮锋
+     * @custom.date 2020/7/4 23:01
+     */
+    @Override
+    public void configure(WebSecurity web) {
+        // web.ignoring直接绕开spring security的所有filter，直接跳过验证
+        web.ignoring().antMatchers(RESOURCES);
+    }
+
+    /**
+     * <p>
+     * HttpSecurity主要针对权限控制配置。
+     * </p>
+     *
+     * @param httpSecurity {@link HttpSecurity}
      * @author 皮锋
      * @custom.date 2020/7/1 15:23
      */
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.authorizeRequests()
-                .antMatchers("/js/**", "/css/**", "/images/*", "/fonts/**", "/**/*.png", "/**/*.jpg").permitAll()
-                .antMatchers("/alarm/accept-alarm-package", "/heartbeat/accept-heartbeat-package", "/server/accept-server-package").permitAll()
+                // 忽略URL
+                .antMatchers(URLS).permitAll()
+                // 所有的访问都必须进行认证处理后才可以正常访问
                 .anyRequest().authenticated()
                 .and()
+                // 登录配置
                 .formLogin()
+                .usernameParameter("username")
+                .passwordParameter("password")
                 .loginPage("/login")
                 .failureUrl("/login?error")
-                .defaultSuccessUrl("/home")
+                .defaultSuccessUrl("/index")
                 .permitAll()
                 .and()
-                .rememberMe().rememberMeParameter("remember-me") //其实默认就是remember-me，这里可以指定更换
+                // 记住我
+                .rememberMe().rememberMeParameter("remember")
                 .and()
+                // 退出登录配置
                 .logout()
-                .logoutSuccessUrl("/login?logout")  //退出登录
-                .permitAll()
-                .and()
-                .csrf().disable();
-
+                .logoutSuccessUrl("/login?logout")
+                .permitAll();
     }
 
-    //@Override
-    //public void configure(AuthenticationManagerBuilder auth) throws Exception {
-    //    auth.userDetailsService(customUserService()).passwordEncoder(passwordEncoder());
-    //}
+    /**
+     * <p>
+     * 自定义认证数据源
+     * </p>
+     *
+     * @param builder {@link AuthenticationManagerBuilder}
+     * @author 皮锋
+     * @custom.date 2020/7/5 14:01
+     */
+    @Override
+    protected void configure(AuthenticationManagerBuilder builder) throws Exception {
+        builder.userDetailsService(this.monitorUserService())
+                .passwordEncoder(passwordEncoder());
+    }
+
+    /**
+     * <p>
+     * 监控用户服务
+     * </p>
+     *
+     * @return {@link MonitorUserServiceImpl}
+     * @author 皮锋
+     * @custom.date 2020/7/5 14:03
+     */
+    @Bean
+    public MonitorUserServiceImpl monitorUserService() {
+        return new MonitorUserServiceImpl();
+    }
+
+    /**
+     * <p>
+     * 密码加密
+     * </p>
+     *
+     * @return {@link BCryptPasswordEncoder}
+     * @author 皮锋
+     * @custom.date 2020/7/5 14:00
+     */
+    @Bean
+    public BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 }

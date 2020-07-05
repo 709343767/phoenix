@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -9,53 +8,71 @@
     <link rel="icon" href="./images/favicon.ico" th:href="@{/images/favicon.ico}" type="image/x-icon">
     <link rel="shortcut icon" href="./images/favicon.ico" th:href="@{/images/favicon.ico}" type="image/x-icon">
     <link rel="bookmark" href="./images/favicon.ico" th:href="@{/images/favicon.ico}" type="image/x-icon">
-    <link rel="stylesheet" type="text/css" href="./lib/layui/css/layui.css" th:href="@{/lib/layui/css/layui.css}"/>
     <link rel="stylesheet" type="text/css" href="./css/login.css" th:href="@{/css/login.css}"/>
+    <link rel="stylesheet" type="text/css" href="./lib/layui/css/layui.css" th:href="@{/lib/layui/css/layui.css}"/>
+    <link rel="stylesheet" type="text/css" href="./lib/icheck/skins/all.css" th:href="@{/lib/icheck/skins/all.css}"/>
     <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
     <!--[if lt IE 9]>
     <script src="./js/html5.min.js" th:src="@{/js/html5.min.js}"></script>
     <script src="./js/respond.min.js" th:src="@{/js/respond.min.js}"></script>
     <![endif]-->
-    <script th:inline="javascript">
-        /*<![CDATA[*/
-        var ctxPath = /*[[@{/}]]*/;
-        /*]]>*/
+    <script src="./js/jquery-1.11.2.min.js" th:src="@{/js/jquery-1.11.2.min.js}"></script>
+    <script src="./lib/icheck/icheck.min.js" th:src="@{/lib/icheck/icheck.min.js}"></script>
+    <script src="./lib/layui/layui.js" th:src="@{/lib/layui/layui.js}"></script>
+    <script type="text/javascript" charset="utf-8">
+        $(document).ready(function () {
+            $('input').iCheck({
+                checkboxClass: 'icheckbox_flat-aero',
+                increaseArea: '20%'
+            });
+
+            layui.use('form', function () {
+                var form = layui.form();
+                // 暴力去掉layui的checkbox框
+                $('.layui-form-checkbox').remove();
+                //自定义验证规则
+                form.verify({
+                    username: function (value) {
+                        if (value.length === 0) {
+                            return '用户名不能为空！';
+                        }
+                    },
+                    password: function (value) {
+                        if (value.length === 0) {
+                            return '密码不能为空！';
+                        }
+                    }
+                });
+            });
+        });
     </script>
 </head>
-
 <body>
 <div class="m-login-bg">
     <div class="m-login">
         <h3>WATCHDOG监控平台登录</h3>
         <div class="m-login-warp">
-            <form class="layui-form">
+            <form class="layui-form" th:action="@{/login}" method="post">
                 <div class="layui-form-item">
                     <label>
-                        <input type="text" name="username" required lay-verify="username" placeholder="用户名"
-                               autocomplete="on" class="layui-input">
+                        <input type="text" name="username" required placeholder="用户名"
+                               autocomplete="on" class="layui-input" lay-verify="username">
                     </label>
                 </div>
                 <div class="layui-form-item">
                     <label>
-                        <input type="password" name="password" required lay-verify="password" placeholder="密码"
-                               autocomplete="on" class="layui-input">
+                        <input type="password" name="password" required placeholder="密码"
+                               autocomplete="on" class="layui-input" lay-verify="password">
                     </label>
                 </div>
                 <div class="layui-form-item">
-                    <div class="layui-inline">
-                        <label>
-                            <input type="text" name="verity" required lay-verify="verity" placeholder="验证码"
-                                   autocomplete="off" class="layui-input">
-                        </label>
-                    </div>
-                    <div class="layui-inline">
-                        <img class="verifyImg" onclick="this.src=this.src+'?c='+Math.random();"
-                             src="./images/login/yzm.jpg" th:src="@{/images/login/yzm.jpg}" alt="验证码"/>
-                    </div>
+                    <label>
+                        <input type="checkbox" name="remember" checked>&nbsp;&nbsp;记住我
+                    </label>
                 </div>
                 <div class="layui-form-item m-login-btn">
                     <div class="layui-inline">
-                        <button class="layui-btn layui-btn-normal" lay-submit lay-filter="dologin">登录</button>
+                        <button type="submit" lay-submit class="layui-btn layui-btn-normal">登录</button>
                     </div>
                     <div class="layui-inline">
                         <button type="reset" class="layui-btn layui-btn-primary">取消</button>
@@ -63,56 +80,8 @@
                 </div>
             </form>
         </div>
-        <p class="copyright">Copyright 2015-2020 by PIFENG</p>
+        <p class="copyright">Copyright 2020-2025 by PIFENG</p>
     </div>
 </div>
-<script src="./lib/layui/layui.js" th:src="@{/lib/layui/layui.js}" type="text/javascript" charset="utf-8"></script>
-<script src="./js/jquery-1.11.2.min.js" th:src="@{/js/jquery-1.11.2.min.js}" type="text/javascript"
-        charset="utf-8"></script>
-<script>
-    layui.use(['form', 'layedit', 'laydate'], function () {
-        var form = layui.form(),
-            layer = layui.layer;
-        //自定义验证规则
-        form.verify({
-            username: function (value) {
-                if (value.length < 5) {
-                    return '用户名至少5位！';
-                }
-            },
-            password: function (value) {
-                if (value.length < 8) {
-                    return '密码至少8位！';
-                }
-            },
-            verity: function (value) {
-                if (value.length != 6) {
-                    return '验证码必须是6位!';
-                }
-            }
-        });
-        //监听提交
-        form.on('submit(dologin)', function (data) {
-            layer.alert(JSON.stringify(data.field), {
-                title: '最终的提交信息'
-            });
-            $.ajax({
-                type: 'POST',
-                url: ctxPath + 'dologin',
-                data: JSON.stringify(data.field),
-                dataType: 'json',
-                success: function (response) {
-                    layer.msg('登录成功！');
-                    location.href = ctxPath + "index";
-                },
-                error: function (jqXHR) {
-                    layer.msg('登录失败！');
-                }
-            });
-            return false;
-        });
-    });
-</script>
 </body>
-
 </html>

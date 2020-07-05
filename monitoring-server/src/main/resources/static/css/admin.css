@@ -1266,8 +1266,8 @@
 }
 @font-face {
   font-family: 'iconfont';
-  src: url('../fonts//iconfont.eot');
-  src: url('../fonts//iconfont.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */ url('../fonts//iconfont.woff') format('woff'), /* Modern Browsers */ url('../fonts//iconfont.ttf') format('truetype'), /* Safari, Android, iOS */ url('../fonts//iconfont.svg#svgFontName') format('svg');
+  src: url('../fonts/iconfont.eot');
+  src: url('../fonts/iconfont.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */ url('../fonts/iconfont.woff') format('woff'), /* Modern Browsers */ url('../fonts/iconfont.ttf') format('truetype'), /* Safari, Android, iOS */ url('../fonts/iconfont.svg#svgFontName') format('svg');
   
   /* IE9 Compat Modes */
   /* Legacy iOS */
