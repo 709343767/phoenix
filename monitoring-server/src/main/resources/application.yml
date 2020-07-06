@@ -2,6 +2,8 @@
 server:
   servlet:
     context-path: /monitoring-server
+    session:
+      timeout: 30m
   undertow:
     accesslog:
       #Undertow日志存放目录

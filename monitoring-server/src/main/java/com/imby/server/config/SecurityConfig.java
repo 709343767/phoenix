@@ -83,7 +83,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 // 登录配置
                 .formLogin()
-                .usernameParameter("username")
+                .usernameParameter("account")
                 .passwordParameter("password")
                 .loginPage("/login")
                 .loginProcessingUrl("/doLogin")
@@ -93,12 +93,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 // 记住我
                 .rememberMe().rememberMeParameter("remember")
+                .tokenValiditySeconds(60 * 60 * 24 * 30)
                 .and()
                 // 退出登录配置
                 .logout()
                 .logoutUrl("/logout")
                 .invalidateHttpSession(true)
-                .deleteCookies("JSESSIONID")
+                .deleteCookies("JSESSIONID", "remember-me")
                 .logoutSuccessUrl("/login?logout=true")
                 .permitAll();
     }

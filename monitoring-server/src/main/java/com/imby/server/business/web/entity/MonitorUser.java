@@ -32,9 +32,13 @@ public class MonitorUser implements Serializable {
     @TableId(value = "ID", type = IdType.AUTO)
     private Long id;
 
+    @ApiModelProperty(value = "账号")
+    @TableField("ACCOUNT")
+    private String account;
+
     @ApiModelProperty(value = "用户名")
-    @TableField("USER_NAME")
-    private String userName;
+    @TableField("USERNAME")
+    private String username;
 
     @ApiModelProperty(value = "密码")
     @TableField("PASSWORD")
