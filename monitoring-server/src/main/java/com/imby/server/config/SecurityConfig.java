@@ -30,8 +30,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private static final String[] URLS = {
             "/alarm/accept-alarm-package",
             "/heartbeat/accept-heartbeat-package",
-            "/server/accept-server-package",
-            "/logout"
+            "/server/accept-server-package"
     };
 
     /**
@@ -87,6 +86,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .usernameParameter("username")
                 .passwordParameter("password")
                 .loginPage("/login")
+                .loginProcessingUrl("/doLogin")
                 .failureUrl("/login?error=true")
                 .defaultSuccessUrl("/index")
                 .permitAll()
@@ -96,10 +96,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 // 退出登录配置
                 .logout()
+                .logoutUrl("/logout")
                 .invalidateHttpSession(true)
                 .deleteCookies("JSESSIONID")
-                .logoutUrl("/logout")
-                .logoutSuccessUrl("/login?logout")
+                .logoutSuccessUrl("/login?logout=true")
                 .permitAll();
     }
 
