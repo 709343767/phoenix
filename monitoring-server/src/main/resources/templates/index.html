@@ -11,7 +11,7 @@
     <link rel="icon" href="./images/favicon.ico" th:href="@{/images/favicon.ico}" type="image/x-icon">
     <link rel="shortcut icon" href="./images/favicon.ico" th:href="@{/images/favicon.ico}" type="image/x-icon">
     <link rel="bookmark" href="./images/favicon.ico" th:href="@{/images/favicon.ico}" type="image/x-icon">
-    <link rel="stylesheet" type="text/css" href="./lib/layui/css/layui.css" th:href="@{/lib/layui/css/layui.css}"/>
+    <link rel="stylesheet" type="text/css" href="./lib/layui/css/layui.css" th:href="@{/lib/layui/css/layui.css}">
     <link rel="stylesheet" type="text/css" href="./css/admin.css" th:href="@{/css/admin.css}"/>
     <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
     <!--[if lt IE 9]>
@@ -55,7 +55,8 @@
                 <a href="javascript:;" data-url="admin-info.html" data-id='5' data-text="网络"><i class="iconfont">&#xe6f7;</i>网络</a>
             </li>
             <li class="layui-nav-item">
-                <a href="javascript:;" data-url="admin-info.html" data-id='5' data-text="个人信息"><i class="iconfont">&#xe6b8;</i>个人信息</a>
+                <a href="javascript:;" th:attr="data-url=@{/user/user-info}" data-id='user-info' data-text="个人信息"><i
+                        class="iconfont">&#xe6b8;</i>个人信息</a>
             </li>
             <li class="layui-nav-item">
                 <a href="javascript:;" data-url="system.html" data-id='6' data-text="系统设置">
@@ -76,7 +77,7 @@
                 <li class="layui-nav-item"><a href="javascript:;" data-url="email.html" data-id='4' data-text="通知"><i
                         class="iconfont">&#xe713;</i></a></li>
                 <li class="layui-nav-item">
-                    <a href="javascript:;" data-url="admin-info.html" data-id='5' data-text="个人信息"
+                    <a href="javascript:;" th:attr="data-url=@{/user/user-info}" data-id='user-info' data-text="个人信息"
                        sec:authentication="principal.usrname">超级管理员</a>
                 </li>
                 <li class="layui-nav-item"><a href="javascript:;" onclick="logout();">退出</a></li>

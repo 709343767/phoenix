@@ -74,6 +74,8 @@ public class MonitorUserServiceImpl extends ServiceImpl<IMonitorUserDao, Monitor
                 grantedAuthorityList.add(new SimpleGrantedAuthority(monitorRole.getRoleName()));
             }
         }
-        return new MonitorUserRealm(monitorUser.getUsername(), account, monitorUser.getPassword(), grantedAuthorityList);
+        return new MonitorUserRealm(monitorUser.getId(), monitorUser.getUsername(), account, monitorUser.getPassword(),
+                monitorUser.getRoleId(), monitorUser.getRegisterTime(), monitorUser.getUpdateTime(), monitorUser.getEmail(),
+                monitorUser.getRemarks(), grantedAuthorityList);
     }
 }

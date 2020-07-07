@@ -101,7 +101,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .invalidateHttpSession(true)
                 .deleteCookies("JSESSIONID", "remember-me")
                 .logoutSuccessUrl("/login?logout=true")
-                .permitAll();
+                .permitAll()
+                .and()
+                // 允许嵌入iframe
+                .headers()
+                .frameOptions()
+                .disable();
     }
 
     /**

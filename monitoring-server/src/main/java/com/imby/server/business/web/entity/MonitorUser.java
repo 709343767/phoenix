@@ -56,5 +56,11 @@ public class MonitorUser implements Serializable {
     @TableField("UPDATE_TIME")
     private Date updateTime;
 
+    @ApiModelProperty(value = "电子邮箱")
+    @TableField("EMAIL")
+    private String email;
 
+    @ApiModelProperty(value = "备注")
+    @TableField("REMARKS")
+    private String remarks;
 }
