@@ -64,7 +64,7 @@
                 </div>
                 <div class="layui-form-item">
                     <div class="layui-input-block">
-                        <button class="layui-btn layui-btn-normal" lay-submit lay-filter="adminInfo">立即提交</button>
+                        <button class="layui-btn layui-btn-normal" lay-submit lay-filter="userInfo">立即提交</button>
                     </div>
                 </div>
             </form>
@@ -72,55 +72,87 @@
         <div class="layui-tab-item">
             <form class="layui-form" v style="width: 90%;padding-top: 20px;">
                 <div class="layui-form-item">
-                    <label class="layui-form-label">用户名：</label>
+                    <label class="layui-form-label">ID：</label>
                     <div class="layui-input-block">
-                        <input type="text" name="username" disabled autocomplete="off"
-                               class="layui-input layui-disabled" value="admin">
+                        <input type="text" name="id" disabled autocomplete="off"
+                               class="layui-input layui-disabled" th:value="${user.id}">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">账号：</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="account" disabled autocomplete="off"
+                               class="layui-input layui-disabled" th:value="${user.account}">
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">旧密码：</label>
                     <div class="layui-input-block">
-                        <input type="password" name="password1" required lay-verify="required" placeholder="请输入密码"
+                        <input type="password" name="oldPassword" required lay-verify="required" placeholder="请输入密码"
                                autocomplete="off" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">新密码：</label>
                     <div class="layui-input-block">
-                        <input type="password" name="password2" required lay-verify="required" placeholder="请输入密码"
+                        <input type="password" name="newPassword1" required lay-verify="required" placeholder="请输入密码"
                                autocomplete="off" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">重复密码：</label>
                     <div class="layui-input-block">
-                        <input type="password" name="password3" required lay-verify="required" placeholder="请输入密码"
+                        <input type="password" name="newPassword2" required lay-verify="required" placeholder="请输入密码"
                                autocomplete="off" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <div class="layui-input-block">
-                        <button class="layui-btn layui-btn-normal" lay-submit lay-filter="adminPassword">立即提交</button>
+                        <button class="layui-btn layui-btn-normal" lay-submit lay-filter="userPassword">立即提交</button>
                     </div>
                 </div>
             </form>
         </div>
     </div>
 </div>
+<script src="./js/jquery-1.11.2.min.js" th:src="@{/js/jquery-1.11.2.min.js}"></script>
 <script src="./lib/layui/layui.js" th:src="@{/lib/layui/layui.js}" type="text/javascript" charset="utf-8"></script>
-<script>
+<script charset="utf-8" th:inline="javascript">
     layui.use(['form', 'element'], function () {
         var form = layui.form();
         var element = layui.element();
         form.render();
         //监听信息提交
-        form.on('submit(adminInfo)', function (data) {
+        form.on('submit(userInfo)', function (data) {
             layer.msg(JSON.stringify(data.field));
             return false;
         });
         //监听密码提交
-        form.on('submit(adminPassword)', function (data) {
+        form.on('submit(userPassword)', function (data) {
+            debugger;
+            var field = data.field;
+            var newPassword1 = field.newPassword1;
+            var newPassword2 = field.newPassword2;
+            // 两次密码输入不相等
+            if (newPassword1 !== newPassword2) {
+                layer.msg('两次输入的新密码不一致，请重新输入！', {icon: 5, shift: 6});
+                return false;
+            }
+            $.ajax({
+                type: 'post',
+                url: ctxPath + 'user/verify-password',
+                data: {'oldPassword': field.oldPassword},
+                dataType: 'json',
+                headers: {
+                    [[${_csrf.headerName}]]: [[${_csrf.token}]]
+                },
+                success: function (result) {
+
+                },
+                error: function () {
+
+                }
+            });
             layer.msg(JSON.stringify(data.field));
             return false;
         });

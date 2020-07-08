@@ -78,4 +78,19 @@ public class MonitorUserServiceImpl extends ServiceImpl<IMonitorUserDao, Monitor
                 monitorUser.getRoleId(), monitorUser.getRegisterTime(), monitorUser.getUpdateTime(), monitorUser.getEmail(),
                 monitorUser.getRemarks(), grantedAuthorityList);
     }
+
+    /**
+     * <p>
+     * 校验密码是否正确
+     * </p>
+     *
+     * @param password 密码
+     * @return 密码是否校验成功
+     * @author 皮锋
+     * @custom.date 2020/7/8 16:59
+     */
+    @Override
+    public boolean verifyPassword(String password) {
+        return false;
+    }
 }
