@@ -80,7 +80,7 @@ mybatis-plus:
   check-config-location: false
   #扫描mapper文件的位置
   mapper-locations:
-    - classpath:com/transfar/server/business/**/mapper/*Mapper.xml
+    - classpath:com/imby/server/business/**/mapper/*Mapper.xml
   #扫描实体，多个package用逗号或者分号分隔
   type-aliases-package: com.imby.server.business.**.entity
   configuration:
