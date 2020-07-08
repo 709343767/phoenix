@@ -3,6 +3,7 @@ package com.imby.server.business.web.controller;
 import com.imby.server.business.web.entity.MonitorUser;
 import com.imby.server.business.web.realm.MonitorUserRealm;
 import com.imby.server.business.web.service.IMonitorUserService;
+import com.imby.server.business.web.vo.MonitorUserVo;
 import com.imby.server.util.SpringSecurityUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -46,7 +47,9 @@ public class UserController {
         ModelAndView mv = new ModelAndView("user/user-info");
         MonitorUserRealm userRealm = SpringSecurityUtils.getCurrentPrincipal();
         MonitorUser monitorUser = this.monitorUserService.getById(userRealm.getId());
-        mv.addObject("user", monitorUser);
+        // 转换成监控用户表现层对象
+        MonitorUserVo monitorUserVo = MonitorUserVo.builder().build().convertFor(monitorUser);
+        mv.addObject("user", monitorUserVo);
         return mv;
     }
 }
