@@ -102,11 +102,7 @@ public class MonitorUserServiceImpl extends ServiceImpl<IMonitorUserDao, Monitor
         String dbPassword = monitorUser.getPassword();
         // 判断输入的原密码和加密后的密码是否一致
         BCryptPasswordEncoder bc = new BCryptPasswordEncoder();
-        boolean matches = bc.matches(password, dbPassword);
-        if (matches) {
-            return true;
-        }
-        return false;
+        return bc.matches(password, dbPassword);
     }
 
     /**
@@ -131,9 +127,6 @@ public class MonitorUserServiceImpl extends ServiceImpl<IMonitorUserDao, Monitor
         LambdaUpdateWrapper<MonitorUser> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();
         lambdaUpdateWrapper.eq(MonitorUser::getId, userId).set(MonitorUser::getPassword, enPassword);
         int result = this.monitorUserDao.update(null, lambdaUpdateWrapper);
-        if (result == 1) {
-            return true;
-        }
-        return false;
+        return result == 1;
     }
 }
