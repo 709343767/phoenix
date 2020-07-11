@@ -24,4 +24,16 @@ public interface IMonitorUserService extends IService<MonitorUser> {
      * @custom.date 2020/7/8 16:59
      */
     boolean verifyPassword(String password);
+
+    /**
+     * <p>
+     * 修改密码
+     * </p>
+     *
+     * @param password 密码
+     * @return 密码是否修改成功
+     * @author 皮锋
+     * @custom.date 2020/7/11 15:27
+     */
+    boolean updatePassword(String password);
 }

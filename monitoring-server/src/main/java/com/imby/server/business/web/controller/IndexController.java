@@ -20,16 +20,16 @@ public class IndexController {
 
     /**
      * <p>
-     * 进入首页
+     * 访问首页
      * </p>
      *
      * @return {@link ModelAndView} 首页
      * @author 皮锋
      * @custom.date 2020/5/16 20:25
      */
-    @ApiOperation(value = "进入首页", notes = "进入首页")
+    @ApiOperation(value = "访问首页")
     @GetMapping("/index")
-    public ModelAndView toIndexPage() {
+    public ModelAndView index() {
         return new ModelAndView("index");
     }
 }

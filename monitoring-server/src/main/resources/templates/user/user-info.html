@@ -86,7 +86,7 @@
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <label class="layui-form-label">旧密码：</label>
+                    <label class="layui-form-label">原密码：</label>
                     <div class="layui-input-block">
                         <input type="password" name="oldPassword" required lay-verify="required" placeholder="请输入密码"
                                autocomplete="off" class="layui-input">
@@ -120,16 +120,14 @@
 <script charset="utf-8" th:inline="javascript">
     layui.use(['form', 'element'], function () {
         var form = layui.form();
-        var element = layui.element();
         form.render();
-        //监听信息提交
+        // 监听信息提交
         form.on('submit(userInfo)', function (data) {
             layer.msg(JSON.stringify(data.field));
             return false;
         });
-        //监听密码提交
+        // 监听密码提交
         form.on('submit(userPassword)', function (data) {
-            debugger;
             var field = data.field;
             var newPassword1 = field.newPassword1;
             var newPassword2 = field.newPassword2;
@@ -138,6 +136,7 @@
                 layer.msg('两次输入的新密码不一致，请重新输入！', {icon: 5, shift: 6});
                 return false;
             }
+            // 校验原密码是否输入正确
             $.ajax({
                 type: 'post',
                 url: ctxPath + 'user/verify-password',
@@ -147,13 +146,35 @@
                     [[${_csrf.headerName}]]: [[${_csrf.token}]]
                 },
                 success: function (result) {
-
+                    if (result) {
+                        // 修改密码
+                        $.ajax({
+                            type: 'post',
+                            url: ctxPath + 'user/update-password',
+                            data: {'newPassword': newPassword1},
+                            dataType: 'json',
+                            headers: {
+                                [[${_csrf.headerName}]]: [[${_csrf.token}]]
+                            },
+                            success: function (result) {
+                                if (result) {
+                                    layer.msg('密码修改成功！', {icon: 6});
+                                } else {
+                                    layer.msg('密码修改失败！', {icon: 5, shift: 6});
+                                }
+                            },
+                            error: function () {
+                                layer.msg('系统错误！', {icon: 5, shift: 6});
+                            }
+                        });
+                    } else {
+                        layer.msg('原密码输入不正确！', {icon: 5, shift: 6});
+                    }
                 },
                 error: function () {
-
+                    layer.msg('系统错误！', {icon: 5, shift: 6});
                 }
             });
-            layer.msg(JSON.stringify(data.field));
             return false;
         });
     });

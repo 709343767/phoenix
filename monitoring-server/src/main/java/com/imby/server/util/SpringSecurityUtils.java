@@ -36,7 +36,7 @@ public class SpringSecurityUtils {
      * @author 皮锋
      * @custom.date 2020/7/7 19:16
      */
-    public static MonitorUserRealm getCurrentPrincipal() {
+    public static MonitorUserRealm getCurrentMonitorUserRealm() {
         return (MonitorUserRealm) getCurrentUserAuthentication().getPrincipal();
     }
 }
