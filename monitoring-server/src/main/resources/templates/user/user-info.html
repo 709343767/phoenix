@@ -129,6 +129,7 @@
         // 监听密码提交
         form.on('submit(userPassword)', function (data) {
             var field = data.field;
+            var oldPassword = field.oldPassword;
             var newPassword1 = field.newPassword1;
             var newPassword2 = field.newPassword2;
             // 两次密码输入不相等
@@ -140,7 +141,7 @@
             $.ajax({
                 type: 'post',
                 url: ctxPath + 'user/verify-password',
-                data: {'oldPassword': field.oldPassword},
+                data: {'oldPassword': oldPassword},
                 dataType: 'json',
                 headers: {
                     [[${_csrf.headerName}]]: [[${_csrf.token}]]
