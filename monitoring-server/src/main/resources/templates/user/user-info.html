@@ -123,7 +123,26 @@
         form.render();
         // 监听信息提交
         form.on('submit(userInfo)', function (data) {
-            layer.msg(JSON.stringify(data.field));
+            // 修改用户信息
+            $.ajax({
+                type: 'post',
+                url: ctxPath + 'user/update-user',
+                data: data.field,
+                dataType: 'json',
+                headers: {
+                    [[${_csrf.headerName}]]: [[${_csrf.token}]]
+                },
+                success: function (result) {
+                    if (result) {
+                        layer.msg('保存成功！', {icon: 6});
+                    } else {
+                        layer.msg('保存失败！', {icon: 5, shift: 6});
+                    }
+                },
+                error: function () {
+                    layer.msg('系统错误！', {icon: 5, shift: 6});
+                }
+            });
             return false;
         });
         // 监听密码提交

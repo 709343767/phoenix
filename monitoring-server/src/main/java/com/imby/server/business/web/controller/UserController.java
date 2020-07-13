@@ -91,4 +91,21 @@ public class UserController {
     public boolean updatePassword(@RequestParam(name = "newPassword") String password) {
         return this.monitorUserService.updatePassword(password);
     }
+
+    /**
+     * <p>
+     * 修改用户信息
+     * </p>
+     *
+     * @param monitorUserVo 用户信息
+     * @return 用户信息是否修改成功
+     * @author 皮锋
+     * @custom.date 2020/7/13 18:55
+     */
+    @ApiOperation(value = "修改用户信息")
+    @PostMapping("/update-user")
+    @ResponseBody
+    public boolean updateUser(MonitorUserVo monitorUserVo) {
+        return this.monitorUserService.updateUser(monitorUserVo);
+    }
 }

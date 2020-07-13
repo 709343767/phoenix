@@ -2,6 +2,7 @@ package com.imby.server.business.web.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.imby.server.business.web.entity.MonitorUser;
+import com.imby.server.business.web.vo.MonitorUserVo;
 
 /**
  * <p>
@@ -36,4 +37,16 @@ public interface IMonitorUserService extends IService<MonitorUser> {
      * @custom.date 2020/7/11 15:27
      */
     boolean updatePassword(String password);
+
+    /**
+     * <p>
+     * 修改用户信息
+     * </p>
+     *
+     * @param monitorUserVo 用户信息
+     * @return 用户信息是否修改成功
+     * @author 皮锋
+     * @custom.date 2020/7/13 18:58
+     */
+    boolean updateUser(MonitorUserVo monitorUserVo);
 }

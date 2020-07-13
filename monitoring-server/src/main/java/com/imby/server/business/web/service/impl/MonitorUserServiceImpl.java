@@ -9,6 +9,7 @@ import com.imby.server.business.web.entity.MonitorRole;
 import com.imby.server.business.web.entity.MonitorUser;
 import com.imby.server.business.web.realm.MonitorUserRealm;
 import com.imby.server.business.web.service.IMonitorUserService;
+import com.imby.server.business.web.vo.MonitorUserVo;
 import com.imby.server.util.SpringSecurityUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -127,6 +128,23 @@ public class MonitorUserServiceImpl extends ServiceImpl<IMonitorUserDao, Monitor
         LambdaUpdateWrapper<MonitorUser> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();
         lambdaUpdateWrapper.eq(MonitorUser::getId, userId).set(MonitorUser::getPassword, enPassword);
         int result = this.monitorUserDao.update(null, lambdaUpdateWrapper);
+        return result == 1;
+    }
+
+    /**
+     * <p>
+     * 修改用户信息
+     * </p>
+     *
+     * @param monitorUserVo 用户信息
+     * @return 用户信息是否修改成功
+     * @author 皮锋
+     * @custom.date 2020/7/13 18:58
+     */
+    @Override
+    public boolean updateUser(MonitorUserVo monitorUserVo) {
+        MonitorUser monitorUser = monitorUserVo.convertToMonitorUser();
+        int result = this.monitorUserDao.updateById(monitorUser);
         return result == 1;
     }
 }

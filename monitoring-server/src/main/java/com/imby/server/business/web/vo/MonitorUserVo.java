@@ -4,10 +4,7 @@ import com.google.common.base.Converter;
 import com.imby.server.business.web.entity.MonitorUser;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.Accessors;
 import org.springframework.beans.BeanUtils;
 
@@ -24,6 +21,8 @@ import org.springframework.beans.BeanUtils;
 @Setter
 @Getter
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @ApiModel(value = "监控用户表现层对象")
 public class MonitorUserVo {
 
