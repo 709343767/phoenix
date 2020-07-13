@@ -41,7 +41,7 @@ public class MonitorServerNetcard {
      * 网卡序号
      */
     @TableField("NET_NO")
-    private int netNo;
+    private Integer netNo;
 
     /**
      * 网卡名字

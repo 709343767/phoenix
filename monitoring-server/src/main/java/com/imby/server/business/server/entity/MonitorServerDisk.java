@@ -41,7 +41,7 @@ public class MonitorServerDisk {
      * 磁盘序号
      */
     @TableField("DISK_NO")
-    private int diskNo;
+    private Integer diskNo;
 
     /**
      * 分区的盘符名称

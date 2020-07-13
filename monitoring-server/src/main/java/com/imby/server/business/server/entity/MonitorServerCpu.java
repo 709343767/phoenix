@@ -41,7 +41,7 @@ public class MonitorServerCpu {
      * CPU序号
      */
     @TableField("CPU_NO")
-    private int cpuNo;
+    private Integer cpuNo;
 
     /**
      * CPU频率
