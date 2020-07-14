@@ -35,6 +35,9 @@ public class MonitorUserVo {
     @ApiModelProperty(value = "用户名")
     private String username;
 
+    @ApiModelProperty(value = "角色ID")
+    private Long roleId;
+
     @ApiModelProperty(value = "电子邮箱")
     private String email;
 

@@ -1,8 +1,11 @@
 package com.imby.server.business.web.controller;
 
+import com.imby.server.business.web.entity.MonitorRole;
 import com.imby.server.business.web.entity.MonitorUser;
 import com.imby.server.business.web.realm.MonitorUserRealm;
+import com.imby.server.business.web.service.IMonitorRoleService;
 import com.imby.server.business.web.service.IMonitorUserService;
+import com.imby.server.business.web.vo.MonitorRoleVo;
 import com.imby.server.business.web.vo.MonitorUserVo;
 import com.imby.server.util.SpringSecurityUtils;
 import io.swagger.annotations.Api;
@@ -13,6 +16,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * <p>
@@ -34,6 +40,12 @@ public class UserController {
     private IMonitorUserService monitorUserService;
 
     /**
+     * 监控用户角色服务类
+     */
+    @Autowired
+    private IMonitorRoleService monitorRoleService;
+
+    /**
      * <p>
      * 访问用户信息页面
      * </p>
@@ -47,10 +59,20 @@ public class UserController {
     public ModelAndView userInfo() {
         ModelAndView mv = new ModelAndView("user/user-info");
         MonitorUserRealm userRealm = SpringSecurityUtils.getCurrentMonitorUserRealm();
+        // 查询当前用户
         MonitorUser monitorUser = this.monitorUserService.getById(userRealm.getId());
         // 转换成监控用户表现层对象
         MonitorUserVo monitorUserVo = MonitorUserVo.builder().build().convertFor(monitorUser);
         mv.addObject("user", monitorUserVo);
+        // 查询角色列表
+        List<MonitorRole> monitorRoles = this.monitorRoleService.list();
+        // 转换成监控用户角色表现层对象
+        List<MonitorRoleVo> monitorRoleVos = new LinkedList<>();
+        for (MonitorRole monitorRole : monitorRoles) {
+            MonitorRoleVo monitorRoleVo = MonitorRoleVo.builder().build().convertFor(monitorRole);
+            monitorRoleVos.add(monitorRoleVo);
+        }
+        mv.addObject("roles", monitorRoleVos);
         return mv;
     }
 

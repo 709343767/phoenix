@@ -22,6 +22,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -144,6 +145,8 @@ public class MonitorUserServiceImpl extends ServiceImpl<IMonitorUserDao, Monitor
     @Override
     public boolean updateUser(MonitorUserVo monitorUserVo) {
         MonitorUser monitorUser = monitorUserVo.convertToMonitorUser();
+        // 设置更新时间
+        monitorUser.setUpdateTime(new Date());
         int result = this.monitorUserDao.updateById(monitorUser);
         return result == 1;
     }

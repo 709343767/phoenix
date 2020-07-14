@@ -49,6 +49,16 @@
                     </div>
                 </div>
                 <div class="layui-form-item">
+                    <label class="layui-form-label">角色：</label>
+                    <div class="layui-input-block">
+                        <select name="roleId">
+                            <option th:selected="${user.roleId==role.id}" th:each="role,roleStat:${roles}"
+                                    th:value="${role.id}" th:text="${role.roleName}">
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
                     <label class="layui-form-label">邮箱：</label>
                     <div class="layui-input-block">
                         <input type="text" name="email" required lay-verify="required" placeholder="请输入邮箱"
