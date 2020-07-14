@@ -42,20 +42,20 @@
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <label class="layui-form-label">姓名：</label>
-                    <div class="layui-input-block">
-                        <input type="text" name="username" required lay-verify="required" placeholder="请输入姓名"
-                               th:value="${user.username}" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-form-item">
                     <label class="layui-form-label">角色：</label>
                     <div class="layui-input-block">
-                        <select name="roleId">
+                        <select name="roleId" disabled>
                             <option th:selected="${user.roleId==role.id}" th:each="role,roleStat:${roles}"
                                     th:value="${role.id}" th:text="${role.roleName}">
                             </option>
                         </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">姓名：</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="username" required lay-verify="required" placeholder="请输入姓名"
+                               th:value="${user.username}" autocomplete="off" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-form-item">
