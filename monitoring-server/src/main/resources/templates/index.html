@@ -78,7 +78,7 @@
                 <li class="layui-nav-item"><a href="javascript:;" data-url="email.html" data-id='4' data-text="通知"><i
                         class="iconfont">&#xe713;</i></a></li>
                 <li class="layui-nav-item">
-                    <a href="javascript:;" th:attr="data-url=@{/user/user-info}" data-id='user-info' data-text="个人信息"
+                    <a href="javascript:;" th:attr="lay-href=@{/user/user-info}" data-id='user-info' data-text="个人信息"
                        sec:authentication="principal.usrname">超级管理员</a>
                 </li>
                 <li class="layui-nav-item"><a href="javascript:;" onclick="logout();">退出</a></li>

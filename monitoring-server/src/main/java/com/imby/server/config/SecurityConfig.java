@@ -37,11 +37,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
      * 忽略静态资源
      */
     private static final String[] RESOURCES = {
-            "/css/**",
-            "/fonts/**",
             "/images/**",
             "/js/**",
+            "/layui/**",
             "/lib/**",
+            "/modules/**",
+            "/style/**",
+            "/tpl/**",
+            "/config.js",
             "/favicon.ico",
             "/webjars/**",
             "/v2/**",

@@ -129,7 +129,7 @@
 <script src="./lib/layui/layui.js" th:src="@{/lib/layui/layui.js}" type="text/javascript" charset="utf-8"></script>
 <script charset="utf-8" th:inline="javascript">
     layui.use(['form', 'element'], function () {
-        var form = layui.form();
+        var form = layui.form;
         form.render();
         // 监听信息提交
         form.on('submit(userInfo)', function (data) {

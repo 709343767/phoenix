@@ -30,7 +30,7 @@ public class LoginController {
     @ApiOperation(value = "访问登录页面")
     @GetMapping("/login")
     public ModelAndView login() {
-        return new ModelAndView("login");
+        return new ModelAndView("user/login");
     }
 
 }
