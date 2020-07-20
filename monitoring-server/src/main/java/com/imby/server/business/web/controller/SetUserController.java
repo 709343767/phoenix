@@ -22,16 +22,16 @@ import java.util.List;
 
 /**
  * <p>
- * 用户
+ * 我的设置
  * </p>
  *
  * @author 皮锋
  * @custom.date 2020/7/7 17:40
  */
 @Controller
-@Api(tags = "用户")
-@RequestMapping("/user")
-public class UserController {
+@Api(tags = "我的设置")
+@RequestMapping("/set/user")
+public class SetUserController {
 
     /**
      * 监控用户服务类
@@ -47,17 +47,17 @@ public class UserController {
 
     /**
      * <p>
-     * 访问用户信息页面
+     * 访问用户基本资料页面
      * </p>
      *
-     * @return {@link ModelAndView} 用户信息页面
+     * @return {@link ModelAndView} 用户基本资料页面
      * @author 皮锋
      * @custom.date 2020/7/7 17:42
      */
-    @ApiOperation(value = "访问用户信息页面")
-    @GetMapping("/user-info")
+    @ApiOperation(value = "访问用户基本资料页面")
+    @GetMapping("/info")
     public ModelAndView userInfo() {
-        ModelAndView mv = new ModelAndView("user/user-info");
+        ModelAndView mv = new ModelAndView("set/user/info");
         MonitorUserRealm userRealm = SpringSecurityUtils.getCurrentMonitorUserRealm();
         // 查询当前用户
         MonitorUser monitorUser = this.monitorUserService.getById(userRealm.getId());

@@ -2,17 +2,17 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
+    <title>WATCHDOG</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport"
-          content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
-    <title>WATCHDOG</title>
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <link rel="icon" href="./images/favicon.ico" th:href="@{/images/favicon.ico}" type="image/x-icon">
     <link rel="shortcut icon" href="./images/favicon.ico" th:href="@{/images/favicon.ico}" type="image/x-icon">
     <link rel="bookmark" href="./images/favicon.ico" th:href="@{/images/favicon.ico}" type="image/x-icon">
-    <link rel="stylesheet" type="text/css" href="./lib/layui/css/layui.css" th:href="@{/lib/layui/css/layui.css}">
-    <link rel="stylesheet" type="text/css" href="./css/admin.css" th:href="@{/css/admin.css}"/>
+    <link rel="stylesheet" href="./layui/css/layui.css" th:href="@{/layui/css/layui.css}" media="all">
+    <link rel="stylesheet" href="./style/admin.css" th:href="@{/style/admin.css}" media="all">
     <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
     <!--[if lt IE 9]>
     <script src="./js/html5.min.js" th:src="@{/js/html5.min.js}"></script>
@@ -22,122 +22,174 @@
         var ctxPath = /*[[@{/}]]*/'';
     </script>
 </head>
-<body>
-<div class="main-layout" id='main-layout'>
-    <!--侧边栏-->
-    <div class="main-layout-side">
-        <div class="m-logo">
-        </div>
-        <ul class="layui-nav layui-nav-tree" lay-filter="leftNav">
-            <li class="layui-nav-item layui-nav-itemed">
-                <a href="javascript:;"><i class="iconfont">&#xe6da;</i>服务器</a>
-                <dl class="layui-nav-child">
-                    <dd><a href="javascript:;" data-url="menu1.html" data-id='1' data-text="操作系统"><span
-                            class="l-line"></span>操作系统</a></dd>
-                    <dd><a href="javascript:;" data-url="menu1.html" data-id='1' data-text="CPU"><span
-                            class="l-line"></span>CPU</a></dd>
-                    <dd><a href="javascript:;" data-url="menu2.html" data-id='2' data-text="内存"><span
-                            class="l-line"></span>内存</a></dd>
-                    <dd><a href="javascript:;" data-url="menu2.html" data-id='2' data-text="磁盘"><span
-                            class="l-line"></span>磁盘</a></dd>
-                    <dd><a href="javascript:;" data-url="menu2.html" data-id='2' data-text="网卡"><span
-                            class="l-line"></span>网卡</a></dd>
-                </dl>
-            </li>
-            <li class="layui-nav-item layui-nav-itemed">
-                <a href="javascript:;"><i class="iconfont">&#xe70c;</i>数据库</a>
-                <dl class="layui-nav-child">
-                    <dd><a href="javascript:;" data-url="menu1.html" data-id='1' data-text="服务器"><span
-                            class="l-line"></span>服务器</a></dd>
-                </dl>
-            </li>
-            <li class="layui-nav-item layui-nav-itemed">
-                <a href="javascript:;" data-url="admin-info.html" data-id='5' data-text="网络">
-                    <i class="iconfont">&#xe6ce;</i>网络</a>
-            </li>
-            <li class="layui-nav-item layui-nav-itemed">
-                <a href="javascript:;" th:attr="data-url=@{/user/user-manage}" data-id='user-manage' data-text="用户管理">
-                    <i class="iconfont">&#xe6b8;</i>用户管理</a>
-            </li>
-            <li class="layui-nav-item layui-nav-itemed">
-                <a href="javascript:;" data-url="system.html" data-id='6' data-text="系统设置">
-                    <i class="iconfont">&#xe6ae;</i>系统设置</a>
-            </li>
-        </ul>
-    </div>
-    <!--右侧内容-->
-    <div class="main-layout-container">
-        <!--头部-->
-        <div class="main-layout-header">
-            <div class="menu-btn" id="hideBtn">
-                <a href="javascript:;">
-                    <span class="iconfont">&#xe699;</span>
-                </a>
-            </div>
-            <ul class="layui-nav" lay-filter="rightNav">
-                <li class="layui-nav-item"><a href="javascript:;" data-url="email.html" data-id='4' data-text="通知"><i
-                        class="iconfont">&#xe713;</i></a></li>
-                <li class="layui-nav-item">
-                    <a href="javascript:;" th:attr="lay-href=@{/user/user-info}" data-id='user-info' data-text="个人信息"
-                       sec:authentication="principal.usrname">超级管理员</a>
+<body class="layui-layout-body">
+<div id="LAY_app">
+    <div class="layui-layout layui-layout-admin">
+        <div class="layui-header">
+            <!-- 头部区域 -->
+            <ul class="layui-nav layui-layout-left">
+                <li class="layui-nav-item layadmin-flexible" lay-unselect>
+                    <a href="javascript:;" layadmin-event="flexible" title="侧边伸缩">
+                        <i class="layui-icon layui-icon-shrink-right" id="LAY_app_flexible"></i>
+                    </a>
                 </li>
-                <li class="layui-nav-item"><a href="javascript:;" onclick="logout();">退出</a></li>
-                <!-- 一个隐藏的表单，用来提交退出登录请求 -->
-                <form th:action="@{/logout}" method="post" style="display: none;">
-                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-                    <input type="submit" value="提交" id="logout-submit">
-                </form>
+                <li class="layui-nav-item" lay-unselect>
+                    <a href="javascript:;" layadmin-event="refresh" title="刷新">
+                        <i class="layui-icon layui-icon-refresh-3"></i>
+                    </a>
+                </li>
+            </ul>
+            <ul class="layui-nav layui-layout-right" lay-filter="layadmin-layout-right">
+                <li class="layui-nav-item" lay-unselect>
+                    <a lay-href="app/message/index.html" layadmin-event="message" lay-text="消息中心">
+                        <i class="layui-icon layui-icon-notice"></i>
+                        <!-- 如果有新消息，则显示小圆点 -->
+                        <span class="layui-badge-dot"></span>
+                    </a>
+                </li>
+                <li class="layui-nav-item layui-hide-xs" lay-unselect>
+                    <a href="javascript:;" layadmin-event="theme">
+                        <i class="layui-icon layui-icon-theme"></i>
+                    </a>
+                </li>
+                <li class="layui-nav-item layui-hide-xs" lay-unselect>
+                    <a href="javascript:;" layadmin-event="fullscreen">
+                        <i class="layui-icon layui-icon-screen-full"></i>
+                    </a>
+                </li>
+                <li class="layui-nav-item" lay-unselect>
+                    <a href="javascript:;">
+                        <cite sec:authentication="principal.usrname">超级管理员</cite>
+                    </a>
+                    <dl class="layui-nav-child">
+                        <dd><a th:attr="lay-href=@{/set/user/info}">基本资料</a></dd>
+                        <dd><a lay-href="set/user/password.html">修改密码</a></dd>
+                        <hr>
+                        <dd layadmin-event="logout" style="text-align: center;"><a>退出</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item layui-hide-xs" lay-unselect>
+                    <a href="javascript:;" layadmin-event="about"><i
+                            class="layui-icon layui-icon-more-vertical"></i></a>
+                </li>
+                <li class="layui-nav-item layui-show-xs-inline-block layui-hide-sm" lay-unselect>
+                    <a href="javascript:;" layadmin-event="more"><i class="layui-icon layui-icon-more-vertical"></i></a>
+                </li>
             </ul>
         </div>
-        <!--主体内容-->
-        <div class="main-layout-body">
-            <!--tab 切换-->
-            <div class="layui-tab layui-tab-brief main-layout-tab" lay-filter="tab" lay-allowClose="true">
-                <ul class="layui-tab-title">
-                    <li class="layui-this welcome">首页</li>
-                </ul>
-                <div class="layui-tab-content">
-                    <div class="layui-tab-item layui-show" style="background: #f5f5f5;">
-                        <!--1-->
-                        <iframe src="welcome.html" width="100%" height="100%" name="iframe" scrolling="auto"
-                                class="iframe" framborder="0"></iframe>
-                        <!--1end-->
-                    </div>
+
+        <!-- 侧边菜单 -->
+        <div class="layui-side layui-side-menu">
+            <div class="layui-side-scroll">
+                <div class="layui-logo" lay-href="home/console.html">
+                    <span>WATCHDOG云监控平台</span>
                 </div>
+
+                <ul class="layui-nav layui-nav-tree" lay-shrink="all" id="LAY-system-side-menu"
+                    lay-filter="layadmin-system-side-menu">
+                    <li data-name="home" class="layui-nav-item layui-nav-itemed">
+                        <a href="javascript:;" lay-tips="主页" lay-direction="2">
+                            <i class="layui-icon layui-icon-home"></i>
+                            <cite>主页</cite>
+                        </a>
+                        <dl class="layui-nav-child">
+                            <dd data-name="console" class="layui-this">
+                                <a lay-href="home/console.html">控制台</a>
+                            </dd>
+                            <dd data-name="console">
+                                <a lay-href="home/homepage1.html">主页一</a>
+                            </dd>
+                            <dd data-name="console">
+                                <a lay-href="home/homepage2.html">主页二</a>
+                            </dd>
+                        </dl>
+                    </li>
+                    <li data-name="user" class="layui-nav-item">
+                        <a href="javascript:;" lay-tips="用户" lay-direction="2">
+                            <i class="layui-icon layui-icon-user"></i>
+                            <cite>用户</cite>
+                        </a>
+                        <dl class="layui-nav-child">
+                            <dd>
+                                <a lay-href="user/user/list.html">网站用户</a>
+                            </dd>
+                            <dd>
+                                <a lay-href="user/administrators/list.html">后台管理员</a>
+                            </dd>
+                            <dd>
+                                <a lay-href="user/administrators/role.html">角色管理</a>
+                            </dd>
+                        </dl>
+                    </li>
+                    <li data-name="set" class="layui-nav-item">
+                        <a href="javascript:;" lay-tips="设置" lay-direction="2">
+                            <i class="layui-icon layui-icon-set"></i>
+                            <cite>设置</cite>
+                        </a>
+                        <dl class="layui-nav-child">
+                            <dd class="layui-nav-itemed">
+                                <a href="javascript:;">系统设置</a>
+                                <dl class="layui-nav-child">
+                                    <dd><a lay-href="set/system/website.html">网站设置</a></dd>
+                                    <dd><a lay-href="set/system/email.html">邮件服务</a></dd>
+                                </dl>
+                            </dd>
+                            <dd class="layui-nav-itemed">
+                                <a href="javascript:;">我的设置</a>
+                                <dl class="layui-nav-child">
+                                    <dd><a th:attr="lay-href=@{/set/user/info}">基本资料</a></dd>
+                                    <dd><a lay-href="set/user/password.html">修改密码</a></dd>
+                                </dl>
+                            </dd>
+                        </dl>
+                    </li>
+                </ul>
             </div>
         </div>
-    </div>
-    <!--遮罩-->
-    <div class="main-mask">
 
+        <!-- 页面标签 -->
+        <div class="layadmin-pagetabs" id="LAY_app_tabs">
+            <div class="layui-icon layadmin-tabs-control layui-icon-prev" layadmin-event="leftPage"></div>
+            <div class="layui-icon layadmin-tabs-control layui-icon-next" layadmin-event="rightPage"></div>
+            <div class="layui-icon layadmin-tabs-control layui-icon-down">
+                <ul class="layui-nav layadmin-tabs-select" lay-filter="layadmin-pagetabs-nav">
+                    <li class="layui-nav-item" lay-unselect>
+                        <a href="javascript:;"></a>
+                        <dl class="layui-nav-child layui-anim-fadein">
+                            <dd layadmin-event="closeThisTabs"><a href="javascript:;">关闭当前标签页</a></dd>
+                            <dd layadmin-event="closeOtherTabs"><a href="javascript:;">关闭其它标签页</a></dd>
+                            <dd layadmin-event="closeAllTabs"><a href="javascript:;">关闭全部标签页</a></dd>
+                        </dl>
+                    </li>
+                </ul>
+            </div>
+            <div class="layui-tab" lay-unauto lay-allowClose="true" lay-filter="layadmin-layout-tabs">
+                <ul class="layui-tab-title" id="LAY_app_tabsheader">
+                    <li lay-id="home/console.html" lay-attr="home/console.html" class="layui-this"><i
+                            class="layui-icon layui-icon-home"></i></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 主体内容 -->
+        <div class="layui-body" id="LAY_app_body">
+            <div class="layadmin-tabsbody-item layui-show">
+                <iframe src="home/console.html" frameborder="0" class="layadmin-iframe"></iframe>
+            </div>
+        </div>
+
+        <!-- 辅助元素，一般用于移动设备下遮罩 -->
+        <div class="layadmin-body-shade" layadmin-event="shade"></div>
     </div>
 </div>
-<script type="text/javascript">
-    var scope = {
-        link: './welcome.html'
-    }
-</script>
-<script src="./js/jquery-1.11.2.min.js" th:src="@{/js/jquery-1.11.2.min.js}"></script>
-<script src="./lib/layui/layui.js" th:src="@{/lib/layui/layui.js}" type="text/javascript" charset="utf-8"></script>
-<script src="./js/common.js" th:src="@{/js/common.js}" type="text/javascript" charset="utf-8"></script>
-<script src="./js/main.js" th:src="@{/js/main.js}" type="text/javascript" charset="utf-8"></script>
-<script type="text/javascript" charset="utf-8" th:inline="javascript">
-    /**
-     * 退出登录
-     */
-    function logout() {
-        layui.use('layer', function () {
-            var layer = layui.layer;
-            layer.confirm('确定要退出登录吗？', {
-                btn: ['确定', '取消']
-            }, function () {
-                // 触发表单提交
-                $('#logout-submit').click();
-            }, function (index) {
-                layer.close(index);
-            });
-        });
-    }
+
+<script src="./layui/layui.js" th:src="@{/layui/layui.js}" charset="utf-8"></script>
+<script>
+    layui.config({
+        base: ctxPath //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use('index');
 </script>
 </body>
 </html>

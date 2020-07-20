@@ -21,6 +21,7 @@ import org.springframework.beans.BeanUtils;
 @Setter
 @Getter
 @Builder
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @ApiModel(value = "监控用户表现层对象")
