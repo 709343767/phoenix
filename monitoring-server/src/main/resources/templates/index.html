@@ -65,15 +65,17 @@
                         <dd><a th:attr="lay-href=@{/set/user/info}">基本资料</a></dd>
                         <dd><a lay-href="set/user/password.html">修改密码</a></dd>
                         <hr>
-                        <dd layadmin-event="logout" style="text-align: center;"><a>退出</a></dd>
+                        <dd style="text-align: center;"><a href="javascript:;" onclick="logout();">退出</a></dd>
+                        <!-- 一个隐藏的表单，用来提交退出登录请求 -->
+                        <form th:action="@{/logout}" method="post" style="display: none;">
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                            <input type="submit" value="提交" id="logout-submit">
+                        </form>
                     </dl>
                 </li>
                 <li class="layui-nav-item layui-hide-xs" lay-unselect>
                     <a href="javascript:;" layadmin-event="about"><i
                             class="layui-icon layui-icon-more-vertical"></i></a>
-                </li>
-                <li class="layui-nav-item layui-show-xs-inline-block layui-hide-sm" lay-unselect>
-                    <a href="javascript:;" layadmin-event="more"><i class="layui-icon layui-icon-more-vertical"></i></a>
                 </li>
             </ul>
         </div>
@@ -182,14 +184,28 @@
         <div class="layadmin-body-shade" layadmin-event="shade"></div>
     </div>
 </div>
-
+<script src="./js/jquery-1.11.2.min.js" th:src="@{/js/jquery-1.11.2.min.js}"></script>
 <script src="./layui/layui.js" th:src="@{/layui/layui.js}" charset="utf-8"></script>
 <script>
     layui.config({
         base: ctxPath //静态资源所在路径
     }).extend({
         index: 'lib/index' //主入口模块
-    }).use('index');
+    }).use(['index', 'layer']);
+
+    /**
+     * 退出登录
+     */
+    function logout() {
+        layer.confirm('确定要退出登录吗？', {
+            btn: ['确定', '取消']
+        }, function () {
+            // 触发表单提交
+            $('#logout-submit').click();
+        }, function (index) {
+            layer.close(index);
+        });
+    }
 </script>
 </body>
 </html>

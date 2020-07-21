@@ -92,15 +92,16 @@
         base: ctxPath //静态资源所在路径
     }).extend({
         index: 'lib/index' //主入口模块
-    }).use(['index', 'set', 'form', 'element'], function () {
+    }).use(['index', 'form', 'element'], function () {
         var form = layui.form;
         form.render();
         //自定义验证规则
         form.verify({
-            username: function (value) {
-                if (value.length === 0) {
-                    return '用户名不能为空！';
-                }
+            username: function (t) {
+                return new RegExp("^[a-zA-Z0-9_一-龥\\s·]+$").test(t)
+                    ? /(^\_)|(\__)|(\_+$)/.test(t)
+                        ? "用户名首尾不能出现下划线'_'" : /^\d+$/.test(t)
+                            ? "用户名不能全为数字" : void 0 : "用户名不能有特殊字符";
             }
         });
         // 监听信息提交
