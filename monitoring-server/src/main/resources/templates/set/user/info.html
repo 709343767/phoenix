@@ -54,7 +54,7 @@
                             <label class="layui-form-label">用户名</label>
                             <div class="layui-input-inline">
                                 <input type="text" name="username" th:value="${user.username}" lay-verify="username"
-                                       autocomplete="off"
+                                       autocomplete="off" lay-verType="tips"
                                        placeholder="请输入用户名" class="layui-input">
                             </div>
                         </div>
@@ -62,8 +62,7 @@
                             <label class="layui-form-label">邮箱</label>
                             <div class="layui-input-inline">
                                 <input type="text" name="email" th:value="${user.email}" lay-verify="email"
-                                       autocomplete="off"
-                                       class="layui-input">
+                                       autocomplete="off" lay-verType="tips" class="layui-input">
                             </div>
                         </div>
                         <div class="layui-form-item layui-form-text">
@@ -92,7 +91,7 @@
         base: ctxPath //静态资源所在路径
     }).extend({
         index: 'lib/index' //主入口模块
-    }).use(['index', 'form', 'element'], function () {
+    }).use(['index', 'form', 'element', 'layer'], function () {
         var form = layui.form;
         form.render();
         //自定义验证规则

@@ -78,6 +78,21 @@ public class SetUserController {
 
     /**
      * <p>
+     * 访问修改密码页面
+     * </p>
+     *
+     * @return {@link ModelAndView} 修改密码页面
+     * @author 皮锋
+     * @custom.date 2020/7/22 11:09
+     */
+    @ApiOperation(value = "访问修改密码页面")
+    @GetMapping("/password")
+    public ModelAndView password() {
+        return new ModelAndView("set/user/password");
+    }
+
+    /**
+     * <p>
      * 校验密码是否正确
      * </p>
      *

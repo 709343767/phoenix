@@ -30,13 +30,13 @@
                 <label class="layadmin-user-login-icon layui-icon layui-icon-username"
                        for="LAY-user-login-username"></label>
                 <input type="text" name="account" id="LAY-user-login-username" lay-verify="account" placeholder="账号"
-                       class="layui-input" autocomplete="on">
+                       class="layui-input" autocomplete="on" lay-verType="tips">
             </div>
             <div class="layui-form-item">
                 <label class="layadmin-user-login-icon layui-icon layui-icon-password"
                        for="LAY-user-login-password"></label>
                 <input type="password" name="password" id="LAY-user-login-password" lay-verify="password"
-                       placeholder="密码" class="layui-input">
+                       placeholder="密码" class="layui-input" lay-verType="tips">
             </div>
             <div class="layui-form-item" th:if="${param.error}">
                 <label style="color: red;">
