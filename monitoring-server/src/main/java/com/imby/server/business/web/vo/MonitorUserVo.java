@@ -1,12 +1,14 @@
 package com.imby.server.business.web.vo;
 
-import com.google.common.base.Converter;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.imby.server.business.web.entity.MonitorUser;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 import lombok.experimental.Accessors;
 import org.springframework.beans.BeanUtils;
+
+import java.util.Date;
 
 /**
  * <p>
@@ -39,11 +41,22 @@ public class MonitorUserVo {
     @ApiModelProperty(value = "角色ID")
     private Long roleId;
 
+    @ApiModelProperty(value = "角色名字")
+    private String roleName;
+
     @ApiModelProperty(value = "电子邮箱")
     private String email;
 
     @ApiModelProperty(value = "备注")
     private String remarks;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @ApiModelProperty(value = "注册时间")
+    private Date registerTime;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @ApiModelProperty(value = "更新时间")
+    private Date updateTime;
 
     /**
      * <p>
@@ -55,8 +68,9 @@ public class MonitorUserVo {
      * @custom.date 2020/7/8 9:20
      */
     public MonitorUser convertToMonitorUser() {
-        MonitorUserVoConvert monitorUserVoConvert = new MonitorUserVoConvert();
-        return monitorUserVoConvert.convert(this);
+        MonitorUser monitorUser = MonitorUser.builder().build();
+        BeanUtils.copyProperties(this, monitorUser);
+        return monitorUser;
     }
 
     /**
@@ -70,34 +84,8 @@ public class MonitorUserVo {
      * @custom.date 2020/7/8 9:22
      */
     public MonitorUserVo convertFor(MonitorUser monitorUser) {
-        MonitorUserVoConvert monitorUserVoConvert = new MonitorUserVoConvert();
-        return monitorUserVoConvert.reverse().convert(monitorUser);
-    }
-
-
-    /**
-     * <p>
-     * MonitorUserVo转换器
-     * </p>
-     *
-     * @author 皮锋
-     * @custom.date 2020年1月20日 下午4:35:20
-     */
-    private static class MonitorUserVoConvert extends Converter<MonitorUserVo, MonitorUser> {
-
-        @Override
-        protected MonitorUser doForward(MonitorUserVo monitorUserVo) {
-            MonitorUser monitorUser = MonitorUser.builder().build();
-            BeanUtils.copyProperties(monitorUserVo, monitorUser);
-            return monitorUser;
-        }
-
-        @Override
-        protected MonitorUserVo doBackward(MonitorUser monitorUser) {
-            MonitorUserVo monitorUserVo = MonitorUserVo.builder().build();
-            BeanUtils.copyProperties(monitorUser, monitorUserVo);
-            return monitorUserVo;
-        }
+        BeanUtils.copyProperties(monitorUser, this);
+        return this;
     }
 
 }

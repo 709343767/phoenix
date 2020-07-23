@@ -1,7 +1,10 @@
 package com.imby.server.business.web.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.imby.server.business.web.dao.IMonitorRoleDao;
 import com.imby.server.business.web.dao.IMonitorUserDao;
@@ -12,6 +15,7 @@ import com.imby.server.business.web.service.IMonitorUserService;
 import com.imby.server.business.web.vo.MonitorUserVo;
 import com.imby.server.util.SpringSecurityUtils;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -23,6 +27,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -149,5 +154,57 @@ public class MonitorUserServiceImpl extends ServiceImpl<IMonitorUserDao, Monitor
         monitorUser.setUpdateTime(new Date());
         int result = this.monitorUserDao.updateById(monitorUser);
         return result == 1;
+    }
+
+    /**
+     * <p>
+     * 获取监控用户列表
+     * </p>
+     *
+     * @param current  当前页
+     * @param size     每页显示条数
+     * @param account  账号
+     * @param username 用户名
+     * @param email    电子邮箱
+     * @return 分页Page对象
+     * @author 皮锋
+     * @custom.date 2020/7/23 16:37
+     */
+    @Override
+    public Page<MonitorUserVo> getMonitorUserList(long current, long size, String account, String username, String email) {
+        // 查询数据库
+        IPage<MonitorUser> ipage = new Page<>(current, size);
+        LambdaQueryWrapper<MonitorUser> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        if (StringUtils.isNotBlank(account)) {
+            lambdaQueryWrapper.eq(MonitorUser::getAccount, account);
+        }
+        if (StringUtils.isNotBlank(account)) {
+            lambdaQueryWrapper.eq(MonitorUser::getUsername, username);
+        }
+        if (StringUtils.isNotBlank(account)) {
+            lambdaQueryWrapper.eq(MonitorUser::getEmail, email);
+        }
+        IPage<MonitorUser> monitorUserPage = this.monitorUserDao.selectPage(ipage, lambdaQueryWrapper);
+        List<MonitorRole> monitorRoles = this.monitorRoleDao.selectList(new QueryWrapper<>());
+        List<MonitorUser> monitorUsers = monitorUserPage.getRecords();
+        // 转换成监控用户表现层对象
+        List<MonitorUserVo> monitorUserVos = new LinkedList<>();
+        for (MonitorUser monitorUser : monitorUsers) {
+            long roleId = monitorUser.getRoleId();
+            // 赋予角色名
+            for (MonitorRole monitorRole : monitorRoles) {
+                long id = monitorRole.getId();
+                String roleName = monitorRole.getRoleName();
+                if (roleId == id) {
+                    MonitorUserVo monitorUserVo = MonitorUserVo.builder().roleName(roleName).build().convertFor(monitorUser);
+                    monitorUserVos.add(monitorUserVo);
+                }
+            }
+        }
+        // 设置返回对象
+        Page<MonitorUserVo> monitorUserVoPage = new Page<>();
+        monitorUserVoPage.setRecords(monitorUserVos);
+        monitorUserVoPage.setTotal(monitorUserPage.getTotal());
+        return monitorUserVoPage;
     }
 }

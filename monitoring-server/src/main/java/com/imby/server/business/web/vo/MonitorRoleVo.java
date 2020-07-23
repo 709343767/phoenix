@@ -1,6 +1,5 @@
 package com.imby.server.business.web.vo;
 
-import com.google.common.base.Converter;
 import com.imby.server.business.web.entity.MonitorRole;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -42,8 +41,9 @@ public class MonitorRoleVo {
      * @custom.date 2020/7/14 10:31
      */
     public MonitorRole convertToMonitorRole() {
-        MonitorRoleVoConvert monitorRoleVoConvert = new MonitorRoleVoConvert();
-        return monitorRoleVoConvert.convert(this);
+        MonitorRole monitorRole = MonitorRole.builder().build();
+        BeanUtils.copyProperties(this, monitorRole);
+        return monitorRole;
     }
 
     /**
@@ -57,33 +57,8 @@ public class MonitorRoleVo {
      * @custom.date 2020/7/14 10:34
      */
     public MonitorRoleVo convertFor(MonitorRole monitorRole) {
-        MonitorRoleVoConvert monitorRoleVoConvert = new MonitorRoleVoConvert();
-        return monitorRoleVoConvert.reverse().convert(monitorRole);
+        BeanUtils.copyProperties(monitorRole, this);
+        return this;
     }
 
-
-    /**
-     * <p>
-     * MonitorRoleVo转换器
-     * </p>
-     *
-     * @author 皮锋
-     * @custom.date 2020/7/14 10:25
-     */
-    private static class MonitorRoleVoConvert extends Converter<MonitorRoleVo, MonitorRole> {
-
-        @Override
-        protected MonitorRole doForward(MonitorRoleVo monitorRoleVo) {
-            MonitorRole monitorRole = MonitorRole.builder().build();
-            BeanUtils.copyProperties(monitorRoleVo, monitorRole);
-            return monitorRole;
-        }
-
-        @Override
-        protected MonitorRoleVo doBackward(MonitorRole monitorRole) {
-            MonitorRoleVo monitorRoleVo = MonitorRoleVo.builder().build();
-            BeanUtils.copyProperties(monitorRole, monitorRoleVo);
-            return monitorRoleVo;
-        }
-    }
 }
