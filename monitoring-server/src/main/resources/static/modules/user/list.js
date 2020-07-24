@@ -3,7 +3,7 @@
     var t = layui.$, i = layui.table;
     layui.form;
     i.render({
-        elem: '#LAY-user-manage',
+        elem: '#user-list-table',
         url: layui.setter.base + 'user/get-monitor-user-list',
         request: {
             pageName: 'current',//页码的参数名称，默认：page
@@ -61,12 +61,11 @@
                 width: 150,
                 align: 'center',
                 fixed: 'right',
-                toolbar: '#table-useradmin-webuser'
+                toolbar: '#user-list-table-toolbar'
             }]],
         page: !0,
         limit: 30,
-        height: 'full-220',
-        text: '对不起，加载出现异常！'
+        height: 'full-220'
     });
     e('user/list', {});
 });

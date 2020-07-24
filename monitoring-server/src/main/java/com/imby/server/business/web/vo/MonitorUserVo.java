@@ -1,6 +1,7 @@
 package com.imby.server.business.web.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.imby.common.inf.ISuperBean;
 import com.imby.server.business.web.entity.MonitorUser;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -20,12 +21,14 @@ import java.util.Date;
  */
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = false)
-@Setter
-@Getter
 @Builder
+@Getter
+@Setter
 @ToString
+@AllArgsConstructor
+@NoArgsConstructor
 @ApiModel(value = "监控用户表现层对象")
-public class MonitorUserVo {
+public class MonitorUserVo implements ISuperBean {
 
     @ApiModelProperty(value = "主键ID")
     private Long id;

@@ -1,12 +1,10 @@
 package com.imby.server.business.web.vo;
 
+import com.imby.common.inf.ISuperBean;
 import com.imby.server.business.web.entity.MonitorRole;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.Accessors;
 import org.springframework.beans.BeanUtils;
 
@@ -20,11 +18,14 @@ import org.springframework.beans.BeanUtils;
  */
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = false)
-@Setter
-@Getter
 @Builder
+@Getter
+@Setter
+@ToString
+@AllArgsConstructor
+@NoArgsConstructor
 @ApiModel(value = "监控用户角色表现层对象")
-public class MonitorRoleVo {
+public class MonitorRoleVo implements ISuperBean {
 
     @ApiModelProperty(value = "角色ID")
     private Long id;
