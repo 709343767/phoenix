@@ -50,7 +50,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/v2/**",
             "/swagger-resources/**",
             "/swagger-ui.html",
-            "/docs.html"
+            "/docs.html",
+            "/druid/**"
     };
 
     /**
