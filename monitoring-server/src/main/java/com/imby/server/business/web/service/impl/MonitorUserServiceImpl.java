@@ -179,10 +179,10 @@ public class MonitorUserServiceImpl extends ServiceImpl<IMonitorUserDao, Monitor
             lambdaQueryWrapper.eq(MonitorUser::getAccount, account);
         }
         if (StringUtils.isNotBlank(account)) {
-            lambdaQueryWrapper.eq(MonitorUser::getUsername, username);
+            lambdaQueryWrapper.like(MonitorUser::getUsername, username);
         }
         if (StringUtils.isNotBlank(account)) {
-            lambdaQueryWrapper.eq(MonitorUser::getEmail, email);
+            lambdaQueryWrapper.like(MonitorUser::getEmail, email);
         }
         IPage<MonitorUser> monitorUserPage = this.monitorUserDao.selectPage(ipage, lambdaQueryWrapper);
         List<MonitorRole> monitorRoles = this.monitorRoleDao.selectList(new QueryWrapper<>());

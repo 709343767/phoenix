@@ -63,13 +63,13 @@ public class UserController {
      * @author 皮锋
      * @custom.date 2020/7/23 16:25
      */
-    @ApiOperation(value = "访问用户列表页面")
+    @ApiOperation(value = "获取监控用户列表")
     @ApiImplicitParams(value = {
             @ApiImplicitParam(name = "current", value = "当前页", required = true, paramType = "query", dataType = "long"),
             @ApiImplicitParam(name = "size", value = "每页显示条数", required = true, paramType = "query", dataType = "long"),
-            @ApiImplicitParam(name = "account", value = "账号", required = true, paramType = "query", dataType = "string"),
-            @ApiImplicitParam(name = "username", value = "用户名", required = true, paramType = "query", dataType = "string"),
-            @ApiImplicitParam(name = "email", value = "电子邮箱", required = true, paramType = "query", dataType = "string")})
+            @ApiImplicitParam(name = "account", value = "账号", paramType = "query", dataType = "string"),
+            @ApiImplicitParam(name = "username", value = "用户名", paramType = "query", dataType = "string"),
+            @ApiImplicitParam(name = "email", value = "电子邮箱", paramType = "query", dataType = "string")})
     @GetMapping("/get-monitor-user-list")
     @ResponseBody
     public LayUiAdminResultVo getMonitorUserList(long current, long size, String account, String username, String email) {

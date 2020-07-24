@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.http.HttpStatus;
 
 /**
  * <p>
@@ -48,8 +49,8 @@ public class LayUiAdminResultVo implements ISuperBean {
      * @custom.date 2020/7/23 18:27
      */
     public LayUiAdminResultVo() {
-        this.code = 200;
-        this.msg = "OK";
+        this.code = HttpStatus.OK.value();
+        this.msg = HttpStatus.OK.getReasonPhrase();
         this.data = null;
     }
 

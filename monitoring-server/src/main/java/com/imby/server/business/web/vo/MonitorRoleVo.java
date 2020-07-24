@@ -3,7 +3,10 @@ package com.imby.server.business.web.vo;
 import com.imby.server.business.web.entity.MonitorRole;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.*;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.experimental.Accessors;
 import org.springframework.beans.BeanUtils;
 
@@ -20,8 +23,6 @@ import org.springframework.beans.BeanUtils;
 @Setter
 @Getter
 @Builder
-@AllArgsConstructor
-@NoArgsConstructor
 @ApiModel(value = "监控用户角色表现层对象")
 public class MonitorRoleVo {
 

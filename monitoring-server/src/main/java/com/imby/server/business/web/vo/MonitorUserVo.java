@@ -24,8 +24,6 @@ import java.util.Date;
 @Getter
 @Builder
 @ToString
-@AllArgsConstructor
-@NoArgsConstructor
 @ApiModel(value = "监控用户表现层对象")
 public class MonitorUserVo {
 

@@ -12,6 +12,8 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
+
 /**
  * <p>
  * 获取心跳信息的切面。
@@ -74,7 +76,7 @@ public class HeartbeatAspect {
         // 实例状态信息
         instance.setOnline(true);
         instance.setOnConnect(true);
-        instance.setDateTime(heartbeatPackage.getDateTime());
+        instance.setDateTime(new Date());
         instance.setLineAlarm(this.instancePool.get(key) != null && this.instancePool.get(key).isLineAlarm());
         instance.setConnectAlarm(this.instancePool.get(key) != null && this.instancePool.get(key).isConnectAlarm());
         instance.setThresholdSecond((int) (heartbeatPackage.getRate() * config.getThreshold()));

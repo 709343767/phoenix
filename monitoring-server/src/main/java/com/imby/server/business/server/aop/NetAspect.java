@@ -5,13 +5,14 @@ import com.imby.common.dto.HeartbeatPackage;
 import com.imby.server.business.server.core.NetPool;
 import com.imby.server.business.server.domain.Net;
 import com.imby.server.property.MonitoringServerWebProperties;
-
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.Date;
 
 /**
  * <p>
@@ -67,7 +68,7 @@ public class NetAspect {
         String packageIp = heartbeatPackage.getIp();
         // 网络信息
         Net net = new Net();
-        net.setDateTime(heartbeatPackage.getDateTime());
+        net.setDateTime(new Date());
         net.setOnConnect(true);
         net.setConnectAlarm(this.netPool.get(packageIp) != null && this.netPool.get(packageIp).isConnectAlarm());
         net.setThresholdSecond((int) (heartbeatPackage.getRate() * config.getThreshold()));
