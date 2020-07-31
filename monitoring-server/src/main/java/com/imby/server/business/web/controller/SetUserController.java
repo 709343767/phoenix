@@ -104,8 +104,8 @@ public class SetUserController {
      */
     @ApiOperation(value = "修改密码")
     @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "oldPassword", value = "原始密码", required = true, paramType = "update", dataType = "string"),
-            @ApiImplicitParam(name = "password", value = "新密码", required = true, paramType = "update", dataType = "string")})
+            @ApiImplicitParam(name = "oldPassword", value = "原始密码", required = true, paramType = "query", dataType = "string"),
+            @ApiImplicitParam(name = "password", value = "新密码", required = true, paramType = "query", dataType = "string")})
     @PostMapping("/update-password")
     @ResponseBody
     public LayUiAdminResultVo updatePassword(@RequestParam(name = "oldPassword") String oldPassword,
