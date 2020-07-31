@@ -3,7 +3,6 @@ package com.imby.plug.util;
 import com.imby.common.util.Md5Utils;
 import com.imby.common.util.NetUtils;
 import com.imby.plug.core.ConfigLoader;
-
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -25,6 +24,11 @@ public class InstanceUtils {
      * 应用名字
      */
     private static String instanceName;
+
+    /**
+     * 应用描述
+     */
+    private static String instanceDesc;
 
     /**
      * <p>
@@ -66,6 +70,23 @@ public class InstanceUtils {
         }
         instanceName = ConfigLoader.monitoringProperties.getOwnProperties().getInstanceName();
         return instanceName;
+    }
+
+    /**
+     * <p>
+     * 获取应用实例描述
+     * </p>
+     *
+     * @return 应用实例描述
+     * @author 皮锋
+     * @custom.date 2020/7/31 17:44
+     */
+    public static String getInstanceDesc() {
+        if (StringUtils.isNotEmpty(instanceDesc)) {
+            return instanceDesc;
+        }
+        instanceDesc = ConfigLoader.monitoringProperties.getOwnProperties().getInstanceDesc();
+        return instanceDesc;
     }
 
     public static void main(String[] args) throws InterruptedException {

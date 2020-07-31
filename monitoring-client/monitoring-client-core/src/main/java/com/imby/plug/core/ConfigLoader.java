@@ -72,10 +72,12 @@ public class ConfigLoader {
     private static void analysis(Properties properties) throws NotFoundConfigParamException, ErrorConfigParamException {
         // 监控服务端url
         String serverUrl = StringUtils.trimToNull(properties.getProperty("monitoring.server.url"));
-        // 实例ID
+        // 缺省[实例ID，如果配置了实例ID，用配置的ID，如果没配置，系统会自动生成一个ID]
         String instanceId = StringUtils.trimToNull(properties.getProperty("monitoring.own.instance.id"));
-        // 实例名称
+        // 必填[实例名称，一般为项目名]
         String instanceName = StringUtils.trimToNull(properties.getProperty("monitoring.own.instance.name"));
+        // 缺省[实例描述，默认没有描述信息]
+        String instanceDesc = StringUtils.trimToEmpty(properties.getProperty("monitoring.own.instance.desc"));
         // 缺省[与服务端或者代理端发心跳包的频率（秒），默认30秒，最小不能小于30秒]
         String heartbeatRateStr = StringUtils.trimToNull(properties.getProperty("monitoring.heartbeat.rate"));
         long heartbeatRate = StringUtils.isBlank(heartbeatRateStr) ? 30L : Long.parseLong(heartbeatRateStr);
@@ -102,7 +104,7 @@ public class ConfigLoader {
             throw new ErrorConfigParamException("获取服务器信息频率最小不能小于30秒！");
         }
         // 封装数据
-        wrap(serverUrl, instanceId, instanceName, heartbeatRate, serverInfoEnable,
+        wrap(serverUrl, instanceId, instanceName, instanceDesc, heartbeatRate, serverInfoEnable,
                 serverInfoRate);
     }
 
@@ -114,6 +116,7 @@ public class ConfigLoader {
      * @param serverUrl        监控服务端url
      * @param instanceId       实例ID
      * @param instanceName     实例名称
+     * @param instanceDesc     实例描述
      * @param heartbeatRate    缺省[与服务端或者代理端发心跳包的频率（秒），默认30秒]
      * @param serverInfoEnable 缺省[是否采集服务器信息，默认false]
      * @param serverInfoRate   缺省[与服务端或者代理端发服务器信息包的频率（秒），默认60秒]
@@ -121,13 +124,14 @@ public class ConfigLoader {
      * @custom.date 2020年3月5日 下午4:36:33
      */
     private static void wrap(String serverUrl, String instanceId,
-                             String instanceName, long heartbeatRate, boolean serverInfoEnable, long serverInfoRate) {
+                             String instanceName, String instanceDesc, long heartbeatRate, boolean serverInfoEnable, long serverInfoRate) {
         MonitoringServerProperties serverProperties = new MonitoringServerProperties();
         serverProperties.setUrl(serverUrl);
         monitoringProperties.setServerProperties(serverProperties);
         MonitoringOwnProperties ownProperties = new MonitoringOwnProperties();
         ownProperties.setInstanceId(instanceId);
         ownProperties.setInstanceName(instanceName);
+        ownProperties.setInstanceDesc(instanceDesc);
         monitoringProperties.setOwnProperties(ownProperties);
         MonitoringHeartbeatProperties heartbeatProperties = new MonitoringHeartbeatProperties();
         heartbeatProperties.setRate(heartbeatRate);

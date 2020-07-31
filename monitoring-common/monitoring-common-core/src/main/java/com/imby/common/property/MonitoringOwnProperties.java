@@ -29,4 +29,9 @@ public class MonitoringOwnProperties {
      */
     private String instanceName;
 
+    /**
+     * 实例描述
+     */
+    private String instanceDesc;
+
 }

@@ -45,6 +45,7 @@ public class PackageConstructor implements IPackageConstructor {
         alarmPackage.setEndpoint(EndpointTypeConstants.SERVER);
         alarmPackage.setInstanceId(InstanceUtils.getInstanceId());
         alarmPackage.setInstanceName(InstanceUtils.getInstanceName());
+        alarmPackage.setInstanceDesc(InstanceUtils.getInstanceDesc());
         alarmPackage.setIp(NetUtils.getLocalIp());
         alarmPackage.setComputerName(SigarUtils.getComputerName());
         // 判断字符集
@@ -85,6 +86,7 @@ public class PackageConstructor implements IPackageConstructor {
         baseResponsePackage.setEndpoint(EndpointTypeConstants.SERVER);
         baseResponsePackage.setInstanceId(InstanceUtils.getInstanceId());
         baseResponsePackage.setInstanceName(InstanceUtils.getInstanceName());
+        baseResponsePackage.setInstanceDesc(InstanceUtils.getInstanceDesc());
         baseResponsePackage.setIp(NetUtils.getLocalIp());
         baseResponsePackage.setComputerName(SigarUtils.getComputerName());
         baseResponsePackage.setId(StrUtils.getUUID());

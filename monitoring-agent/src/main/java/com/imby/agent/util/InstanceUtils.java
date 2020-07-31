@@ -27,6 +27,11 @@ public class InstanceUtils {
     private static String instanceName;
 
     /**
+     * 应用实例描述
+     */
+    private static String instanceDesc;
+
+    /**
      * <p>
      * 获取应用实例ID
      * </p>
@@ -65,6 +70,23 @@ public class InstanceUtils {
         }
         instanceName = ConfigLoader.MONITORING_PROPERTIES.getOwnProperties().getInstanceName();
         return instanceName;
+    }
+
+    /**
+     * <p>
+     * 获取应用实例描述
+     * </p>
+     *
+     * @return 应用实例描述
+     * @author 皮锋
+     * @custom.date 2020/7/31 17:38
+     */
+    public static String getInstanceDesc() {
+        if (StringUtils.isNotEmpty(instanceDesc)) {
+            return instanceDesc;
+        }
+        instanceDesc = ConfigLoader.MONITORING_PROPERTIES.getOwnProperties().getInstanceDesc();
+        return instanceDesc;
     }
 
     /**

@@ -47,6 +47,7 @@ public class PackageConstructor implements IPackageConstructor {
         alarmPackage.setEndpoint(EndpointTypeConstants.AGENT);
         alarmPackage.setInstanceId(InstanceUtils.getInstanceId());
         alarmPackage.setInstanceName(InstanceUtils.getInstanceName());
+        alarmPackage.setInstanceDesc(InstanceUtils.getInstanceDesc());
         alarmPackage.setIp(NetUtils.getLocalIp());
         alarmPackage.setComputerName(SigarUtils.getComputerName());
         // 判断字符集
@@ -77,6 +78,7 @@ public class PackageConstructor implements IPackageConstructor {
         heartbeatPackage.setEndpoint(EndpointTypeConstants.AGENT);
         heartbeatPackage.setInstanceId(InstanceUtils.getInstanceId());
         heartbeatPackage.setInstanceName(InstanceUtils.getInstanceName());
+        heartbeatPackage.setInstanceDesc(InstanceUtils.getInstanceDesc());
         heartbeatPackage.setIp(NetUtils.getLocalIp());
         heartbeatPackage.setComputerName(SigarUtils.getComputerName());
         heartbeatPackage.setDateTime(new Date());
@@ -102,6 +104,7 @@ public class PackageConstructor implements IPackageConstructor {
         serverPackage.setEndpoint(EndpointTypeConstants.AGENT);
         serverPackage.setInstanceId(InstanceUtils.getInstanceId());
         serverPackage.setInstanceName(InstanceUtils.getInstanceName());
+        serverPackage.setInstanceDesc(InstanceUtils.getInstanceDesc());
         serverPackage.setIp(NetUtils.getLocalIp());
         serverPackage.setComputerName(SigarUtils.getComputerName());
         ServerDomain serverDomain = SigarUtils.getServerInfo();
@@ -126,6 +129,7 @@ public class PackageConstructor implements IPackageConstructor {
         baseResponsePackage.setEndpoint(EndpointTypeConstants.AGENT);
         baseResponsePackage.setInstanceId(InstanceUtils.getInstanceId());
         baseResponsePackage.setInstanceName(InstanceUtils.getInstanceName());
+        baseResponsePackage.setInstanceDesc(InstanceUtils.getInstanceDesc());
         baseResponsePackage.setIp(NetUtils.getLocalIp());
         baseResponsePackage.setComputerName(SigarUtils.getComputerName());
         baseResponsePackage.setDateTime(new Date());

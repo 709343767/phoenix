@@ -50,6 +50,12 @@ public class MonitorInstance {
     private String instanceName;
 
     /**
+     * 应用实例描述
+     */
+    @TableField("INSTANCE_DESC")
+    private String instanceDesc;
+
+    /**
      * IP地址
      */
     @TableField("IP")

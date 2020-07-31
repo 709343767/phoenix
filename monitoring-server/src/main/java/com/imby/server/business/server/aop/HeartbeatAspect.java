@@ -73,6 +73,7 @@ public class HeartbeatAspect {
         instance.setInstanceName(heartbeatPackage.getInstanceName());
         instance.setIp(heartbeatPackage.getIp());
         instance.setComputerName(heartbeatPackage.getComputerName());
+        instance.setInstanceDesc(heartbeatPackage.getInstanceDesc());
         // 实例状态信息
         instance.setOnline(true);
         instance.setOnConnect(true);

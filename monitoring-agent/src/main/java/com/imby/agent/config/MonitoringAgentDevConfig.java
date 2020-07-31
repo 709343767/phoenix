@@ -14,6 +14,6 @@ import org.springframework.context.annotation.PropertySource;
  */
 @Configuration
 @Profile("dev")
-@PropertySource("classpath:monitoring-dev.properties")
+@PropertySource(value = "classpath:monitoring-dev.properties", encoding = "utf-8")
 public class MonitoringAgentDevConfig extends AbstractMonitoringAgentConfig {
 }

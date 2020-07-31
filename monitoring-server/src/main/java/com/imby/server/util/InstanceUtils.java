@@ -1,9 +1,8 @@
 package com.imby.server.util;
 
-import org.apache.commons.lang3.StringUtils;
-
 import com.imby.common.util.Md5Utils;
 import com.imby.common.util.NetUtils;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * <p>
@@ -23,7 +22,12 @@ public class InstanceUtils {
     /*
      * 实例名字
      */
-    //private static String instanceName;
+    private static String instanceName;
+
+    /*
+     * 实例描述
+     */
+    private static String instanceDesc;
 
     /**
      * <p>
@@ -54,7 +58,28 @@ public class InstanceUtils {
      * @custom.date 2020年3月8日 下午3:35:21
      */
     public static String getInstanceName() {
-        return "monitoring-server";
+        if (StringUtils.isNotEmpty(instanceName)) {
+            return instanceName;
+        }
+        instanceName = "monitoring-server";
+        return instanceName;
+    }
+
+    /**
+     * <p>
+     * 获取应用实例描述
+     * </p>
+     *
+     * @return 应用实例描述
+     * @author 皮锋
+     * @custom.date 2020/7/31 21:24
+     */
+    public static String getInstanceDesc() {
+        if (StringUtils.isNotEmpty(instanceDesc)) {
+            return instanceDesc;
+        }
+        instanceDesc = "监控服务端程序";
+        return instanceDesc;
     }
 
     public static void main(String[] args) throws InterruptedException {

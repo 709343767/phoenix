@@ -39,6 +39,12 @@ public abstract class AbstractMonitoringAgentConfig {
     private String instanceName;
 
     /**
+     * 当前应用实例描述
+     */
+    @Value("${monitoring.own.instance.desc}")
+    private String instanceDesc;
+
+    /**
      * 与服务端发心跳包的频率（秒）
      */
     @Value("${monitoring.heartbeat.rate}")
@@ -83,6 +89,7 @@ public abstract class AbstractMonitoringAgentConfig {
             throw new NotFoundConfigParamException("监控程序找不到实例名称配置！");
         }
         ownProperties.setInstanceName(this.instanceName);
+        ownProperties.setInstanceDesc(this.instanceDesc);
         MonitoringHeartbeatProperties heartbeatProperties = new MonitoringHeartbeatProperties();
         // 心跳频率
         long heartbeatRate = Long.parseLong(this.heartbeatRate);

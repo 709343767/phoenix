@@ -64,6 +64,7 @@ public class HeartbeatServiceImpl implements IHeartbeatService {
         MonitorInstance entity = new MonitorInstance();
         entity.setInstanceId(instanceId);
         entity.setInstanceName(heartbeatPackage.getInstanceName());
+        entity.setInstanceDesc(heartbeatPackage.getInstanceDesc());
         entity.setEndpoint(heartbeatPackage.getEndpoint());
         entity.setIp(heartbeatPackage.getIp());
         entity.setIsOnLine(ZeroOrOneConstants.ONE);
