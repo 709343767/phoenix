@@ -3,6 +3,7 @@ package com.imby.server.business.web.service;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.imby.server.business.web.entity.MonitorUser;
+import com.imby.server.business.web.vo.LayUiAdminResultVo;
 import com.imby.server.business.web.vo.MonitorUserVo;
 
 /**
@@ -17,27 +18,16 @@ public interface IMonitorUserService extends IService<MonitorUser> {
 
     /**
      * <p>
-     * 校验密码是否正确
-     * </p>
-     *
-     * @param password 密码
-     * @return 密码是否校验成功
-     * @author 皮锋
-     * @custom.date 2020/7/8 16:59
-     */
-    boolean verifyPassword(String password);
-
-    /**
-     * <p>
      * 修改密码
      * </p>
      *
-     * @param password 密码
-     * @return 密码是否修改成功
+     * @param oldPassword 原始密码
+     * @param password    新密码
+     * @return LayUiAdmin响应对象
      * @author 皮锋
      * @custom.date 2020/7/11 15:27
      */
-    boolean updatePassword(String password);
+    LayUiAdminResultVo updatePassword(String oldPassword, String password);
 
     /**
      * <p>

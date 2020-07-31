@@ -59,7 +59,7 @@ public class UserController {
      * @param account  账号
      * @param username 用户名
      * @param email    电子邮箱
-     * @return ayUiAdmin响应对象
+     * @return layUiAdmin响应对象
      * @author 皮锋
      * @custom.date 2020/7/23 16:25
      */

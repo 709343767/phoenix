@@ -5,6 +5,7 @@ import com.imby.server.business.web.entity.MonitorUser;
 import com.imby.server.business.web.realm.MonitorUserRealm;
 import com.imby.server.business.web.service.IMonitorRoleService;
 import com.imby.server.business.web.service.IMonitorUserService;
+import com.imby.server.business.web.vo.LayUiAdminResultVo;
 import com.imby.server.business.web.vo.MonitorRoleVo;
 import com.imby.server.business.web.vo.MonitorUserVo;
 import com.imby.server.util.SpringSecurityUtils;
@@ -93,40 +94,23 @@ public class SetUserController {
 
     /**
      * <p>
-     * 校验密码是否正确
-     * </p>
-     *
-     * @param password 密码
-     * @return 密码是否校验成功
-     * @author 皮锋
-     * @custom.date 2020/7/8 16:52
-     */
-    @ApiOperation(value = "校验密码是否正确")
-    @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "oldPassword", value = "密码", required = true, paramType = "query", dataType = "string")})
-    @PostMapping("/verify-password")
-    @ResponseBody
-    public boolean verifyPassword(@RequestParam(name = "oldPassword") String password) {
-        return this.monitorUserService.verifyPassword(password);
-    }
-
-    /**
-     * <p>
      * 修改密码
      * </p>
      *
      * @param password 密码
-     * @return 密码是否修改成功
+     * @return LayUiAdmin响应对象
      * @author 皮锋
      * @custom.date 2020/7/11 15:22
      */
     @ApiOperation(value = "修改密码")
     @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "newPassword", value = "密码", required = true, paramType = "update", dataType = "string")})
+            @ApiImplicitParam(name = "oldPassword", value = "原始密码", required = true, paramType = "update", dataType = "string"),
+            @ApiImplicitParam(name = "password", value = "新密码", required = true, paramType = "update", dataType = "string")})
     @PostMapping("/update-password")
     @ResponseBody
-    public boolean updatePassword(@RequestParam(name = "newPassword") String password) {
-        return this.monitorUserService.updatePassword(password);
+    public LayUiAdminResultVo updatePassword(@RequestParam(name = "oldPassword") String oldPassword,
+                                             @RequestParam(name = "password") String password) {
+        return this.monitorUserService.updatePassword(oldPassword, password);
     }
 
     /**

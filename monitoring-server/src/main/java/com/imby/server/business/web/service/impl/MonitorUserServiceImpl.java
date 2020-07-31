@@ -12,6 +12,7 @@ import com.imby.server.business.web.entity.MonitorRole;
 import com.imby.server.business.web.entity.MonitorUser;
 import com.imby.server.business.web.realm.MonitorUserRealm;
 import com.imby.server.business.web.service.IMonitorUserService;
+import com.imby.server.business.web.vo.LayUiAdminResultVo;
 import com.imby.server.business.web.vo.MonitorUserVo;
 import com.imby.server.util.SpringSecurityUtils;
 import org.apache.commons.collections.CollectionUtils;
@@ -91,17 +92,18 @@ public class MonitorUserServiceImpl extends ServiceImpl<IMonitorUserDao, Monitor
 
     /**
      * <p>
-     * 校验密码是否正确
+     * 修改密码
      * </p>
      *
-     * @param password 密码
-     * @return 密码是否校验成功
+     * @param oldPassword 原始密码
+     * @param password    新密码
+     * @return LayUiAdmin响应对象
      * @author 皮锋
-     * @custom.date 2020/7/8 16:59
+     * @custom.date 2020/7/11 15:27
      */
     @Override
-    public boolean verifyPassword(String password) {
-        // 获取用户ID
+    public LayUiAdminResultVo updatePassword(String oldPassword, String password) {
+        // 一.校验密码是否正确
         MonitorUserRealm monitorUserRealm = SpringSecurityUtils.getCurrentMonitorUserRealm();
         Long userId = monitorUserRealm.getId();
         // 查询数据库
@@ -109,32 +111,22 @@ public class MonitorUserServiceImpl extends ServiceImpl<IMonitorUserDao, Monitor
         String dbPassword = monitorUser.getPassword();
         // 判断输入的原密码和加密后的密码是否一致
         BCryptPasswordEncoder bc = new BCryptPasswordEncoder();
-        return bc.matches(password, dbPassword);
-    }
-
-    /**
-     * <p>
-     * 修改密码
-     * </p>
-     *
-     * @param password 密码
-     * @return 密码是否修改成功
-     * @author 皮锋
-     * @custom.date 2020/7/11 15:27
-     */
-    @Override
-    public boolean updatePassword(String password) {
+        boolean verify = bc.matches(oldPassword, dbPassword);
+        // 密码不正确
+        if (!verify) {
+            return LayUiAdminResultVo.ok("verifyFail");
+        }
+        // 二.修改密码
         // 加密密码
-        BCryptPasswordEncoder bc = new BCryptPasswordEncoder();
         String enPassword = bc.encode(password);
-        // 获取用户ID
-        MonitorUserRealm monitorUserRealm = SpringSecurityUtils.getCurrentMonitorUserRealm();
-        Long userId = monitorUserRealm.getId();
-        // 修改密码
+        // 更新数据库
         LambdaUpdateWrapper<MonitorUser> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();
         lambdaUpdateWrapper.eq(MonitorUser::getId, userId).set(MonitorUser::getPassword, enPassword);
         int result = this.monitorUserDao.update(null, lambdaUpdateWrapper);
-        return result == 1;
+        if (result == 1) {
+            return LayUiAdminResultVo.ok("success");
+        }
+        return LayUiAdminResultVo.ok("fail");
     }
 
     /**
