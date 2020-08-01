@@ -39,6 +39,9 @@ public class MonitorUserVo implements ISuperBean {
     @ApiModelProperty(value = "用户名")
     private String username;
 
+    @ApiModelProperty(value = "密码")
+    private String password;
+
     @ApiModelProperty(value = "角色ID")
     private Long roleId;
 

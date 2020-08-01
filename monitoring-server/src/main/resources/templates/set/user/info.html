@@ -98,7 +98,7 @@
         form.verify({
             username: function (t) {
                 if (t.length === 0) {
-                    return '用户名不能位空';
+                    return '用户名不能为空';
                 }
                 return new RegExp("^[a-zA-Z0-9_一-龥\\s·]+$").test(t)
                     ? /(^\_)|(\__)|(\_+$)/.test(t)

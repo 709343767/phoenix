@@ -64,8 +64,8 @@
                 toolbar: '#user-list-table-toolbar'
             }]],
         page: !0,
-        limit: 30,
-        height: 'full-220'
+        limit: 15,
+        height: 'full-200'
     });
     e('user/list', {});
 });

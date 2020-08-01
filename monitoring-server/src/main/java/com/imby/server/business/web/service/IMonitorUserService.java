@@ -58,4 +58,17 @@ public interface IMonitorUserService extends IService<MonitorUser> {
      * @custom.date 2020/7/23 16:37
      */
     Page<MonitorUserVo> getMonitorUserList(long current, long size, String account, String username, String email);
+
+    /**
+     * <p>
+     * 添加用户
+     * </p>
+     *
+     * @param monitorUserVo 用户信息
+     * @return layUiAdmin响应对象：如果数据库中已经有此账号，LayUiAdminResultVo.data="exist"；
+     * 如果添加用户成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @author 皮锋
+     * @custom.date 2020/8/1 21:33
+     */
+    LayUiAdminResultVo saveUser(MonitorUserVo monitorUserVo);
 }

@@ -1,8 +1,11 @@
 package com.imby.server.business.web.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.imby.server.business.web.entity.MonitorRole;
+import com.imby.server.business.web.service.IMonitorRoleService;
 import com.imby.server.business.web.service.IMonitorUserService;
 import com.imby.server.business.web.vo.LayUiAdminResultVo;
+import com.imby.server.business.web.vo.MonitorRoleVo;
 import com.imby.server.business.web.vo.MonitorUserVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -11,9 +14,13 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * <p>
@@ -33,6 +40,12 @@ public class UserController {
      */
     @Autowired
     private IMonitorUserService monitorUserService;
+
+    /**
+     * 监控用户角色服务类
+     */
+    @Autowired
+    private IMonitorRoleService monitorRoleService;
 
     /**
      * <p>
@@ -75,6 +88,49 @@ public class UserController {
     public LayUiAdminResultVo getMonitorUserList(long current, long size, String account, String username, String email) {
         Page<MonitorUserVo> page = this.monitorUserService.getMonitorUserList(current, size, account, username, email);
         return LayUiAdminResultVo.ok(page);
+    }
+
+    /**
+     * <p>
+     * 访问用户表单页面
+     * </p>
+     *
+     * @return {@link ModelAndView} 用户表单页面
+     * @author 皮锋
+     * @custom.date 2020/8/1 18:49
+     */
+    @ApiOperation(value = "访问用户表单页面")
+    @GetMapping("/user-form")
+    public ModelAndView userForm() {
+        ModelAndView mv = new ModelAndView("user/user-form");
+        // 查询角色列表
+        List<MonitorRole> monitorRoles = this.monitorRoleService.list();
+        // 转换成监控用户角色表现层对象
+        List<MonitorRoleVo> monitorRoleVos = new LinkedList<>();
+        for (MonitorRole monitorRole : monitorRoles) {
+            MonitorRoleVo monitorRoleVo = MonitorRoleVo.builder().build().convertFor(monitorRole);
+            monitorRoleVos.add(monitorRoleVo);
+        }
+        mv.addObject("roles", monitorRoleVos);
+        return mv;
+    }
+
+    /**
+     * <p>
+     * 添加用户
+     * </p>
+     *
+     * @param monitorUserVo 用户信息
+     * @return layUiAdmin响应对象：如果数据库中已经有此账号，LayUiAdminResultVo.data="exist"；
+     * 如果添加用户成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @author 皮锋
+     * @custom.date 2020/8/1 21:19
+     */
+    @ApiOperation(value = "添加用户")
+    @PostMapping("/save-user")
+    @ResponseBody
+    public LayUiAdminResultVo saveUser(MonitorUserVo monitorUserVo) {
+        return this.monitorUserService.saveUser(monitorUserVo);
     }
 
 }

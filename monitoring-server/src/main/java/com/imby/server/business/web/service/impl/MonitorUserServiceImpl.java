@@ -204,4 +204,39 @@ public class MonitorUserServiceImpl extends ServiceImpl<IMonitorUserDao, Monitor
         monitorUserVoPage.setTotal(monitorUserPage.getTotal());
         return monitorUserVoPage;
     }
+
+    /**
+     * <p>
+     * 添加用户
+     * </p>
+     *
+     * @param monitorUserVo 用户信息
+     * @return layUiAdmin响应对象：如果数据库中已经有此账号，LayUiAdminResultVo.data="exist"；
+     * 如果添加用户成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @author 皮锋
+     * @custom.date 2020/8/1 21:33
+     */
+    @Override
+    public LayUiAdminResultVo saveUser(MonitorUserVo monitorUserVo) {
+        // 判断账号是否已经存在
+        LambdaQueryWrapper<MonitorUser> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(MonitorUser::getAccount, monitorUserVo.getAccount());
+        MonitorUser dbUser = this.monitorUserDao.selectOne(lambdaQueryWrapper);
+        // 数据库中已经有此账号
+        if (dbUser != null) {
+            return LayUiAdminResultVo.ok("exist");
+        }
+        MonitorUser monitorUser = monitorUserVo.convertToMonitorUser();
+        monitorUser.setRegisterTime(new Date());
+        BCryptPasswordEncoder bc = new BCryptPasswordEncoder();
+        // 加密密码
+        String enPassword = bc.encode(monitorUser.getPassword());
+        monitorUser.setPassword(enPassword);
+        int result = this.monitorUserDao.insert(monitorUser);
+        // 成功
+        if (result == 1) {
+            return LayUiAdminResultVo.ok("success");
+        }
+        return LayUiAdminResultVo.ok("fail");
+    }
 }

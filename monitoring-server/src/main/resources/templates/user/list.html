@@ -46,15 +46,15 @@
                         <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
                     </button>
                 </div>
+
+                <div class="layui-inline" style="float: right;">
+                    <button class="layui-btn layuiadmin-btn-useradmin" data-type="batchdel">删除</button>
+                    <button class="layui-btn layuiadmin-btn-useradmin" data-type="add">添加</button>
+                </div>
             </div>
         </div>
 
         <div class="layui-card-body">
-            <div style="padding-bottom: 10px;">
-                <button class="layui-btn layuiadmin-btn-useradmin" data-type="batchdel">删除</button>
-                <button class="layui-btn layuiadmin-btn-useradmin" data-type="add">添加</button>
-            </div>
-
             <table id="user-list-table" lay-filter="user-list-table"></table>
             <script type="text/html" id="imgTpl">
                 <img style="display: inline-block; width: 50%; height: 100%;" src={{ d.avatar }}>
@@ -68,15 +68,14 @@
         </div>
     </div>
 </div>
-
 <script src="./layui/layui.js" th:src="@{/layui/layui.js}"></script>
-<script>
+<script charset="utf-8" th:inline="javascript">
     layui.config({
         base: ctxPath //静态资源所在路径
     }).extend({
         index: 'lib/index' //主入口模块
     }).use(['index', 'user/list', 'table'], function () {
-        var $ = layui.$, form = layui.form, table = layui.table;
+        var $ = layui.$, admin = layui.admin, form = layui.form, table = layui.table;
         //监听搜索
         form.on('submit(user-list-table-search)', function (data) {
             var field = data.field;
@@ -85,6 +84,53 @@
                 where: field
             });
         });
+        //事件
+        var active = {
+            add: function () {
+                layer.open({
+                    type: 2,
+                    title: '添加用户',
+                    content: ctxPath + 'user/user-form',
+                    maxmin: true,
+                    area: ['550px', '500px'],
+                    btn: ['确定', '取消'],
+                    yes: function (index, layero) {
+                        var iframeWindow = window['layui-layer-iframe' + index],
+                            submitID = 'LAY-user-front-submit',
+                            submit = layero.find('iframe').contents().find('#' + submitID);
+                        //监听提交
+                        iframeWindow.layui.form.on('submit(' + submitID + ')', function (data) {
+                            var field = data.field; //获取提交的字段
+                            admin.req({
+                                type: 'post',
+                                url: ctxPath + 'user/save-user',
+                                data: field,
+                                dataType: 'json',
+                                headers: {
+                                    [[${_csrf.headerName}]]: [[${_csrf.token}]]
+                                },
+                                success: function (result) {
+                                    var data = result.data;
+                                    if (data === 'success') {
+                                        table.reload('user-list-table'); //数据刷新
+                                        layer.close(index); //关闭弹层
+                                        layer.msg('添加成功！', {icon: 6});
+                                    } else if (data === 'exist') {
+                                        layer.msg('账户已存在！', {icon: 5, shift: 6});
+                                    } else {
+                                        layer.msg('添加失败！', {icon: 5, shift: 6});
+                                    }
+                                },
+                                error: function () {
+                                    layer.msg('系统错误！', {icon: 5, shift: 6});
+                                }
+                            });
+                        });
+                        submit.trigger('click');
+                    }
+                });
+            }
+        };
 
         $('.layui-btn.layuiadmin-btn-useradmin').on('click', function () {
             var type = $(this).data('type');
