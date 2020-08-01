@@ -23,7 +23,9 @@ public interface IMonitorUserService extends IService<MonitorUser> {
      *
      * @param oldPassword 原始密码
      * @param password    新密码
-     * @return LayUiAdmin响应对象
+     * @return LayUiAdmin响应对象：如果原始密码校验失败，LayUiAdminResultVo.data="verifyFail"；
+     * 如果修改密码成功，LayUiAdminResultVo.data="success"；
+     * 否则LayUiAdminResultVo.data="fail"。
      * @author 皮锋
      * @custom.date 2020/7/11 15:27
      */
@@ -35,11 +37,11 @@ public interface IMonitorUserService extends IService<MonitorUser> {
      * </p>
      *
      * @param monitorUserVo 用户信息
-     * @return 用户信息是否修改成功
+     * @return LayUiAdmin响应对象：如果修改用户信息成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
      * @author 皮锋
      * @custom.date 2020/7/13 18:58
      */
-    boolean updateUser(MonitorUserVo monitorUserVo);
+    LayUiAdminResultVo updateUser(MonitorUserVo monitorUserVo);
 
     /**
      * <p>

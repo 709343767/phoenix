@@ -97,7 +97,9 @@ public class MonitorUserServiceImpl extends ServiceImpl<IMonitorUserDao, Monitor
      *
      * @param oldPassword 原始密码
      * @param password    新密码
-     * @return LayUiAdmin响应对象
+     * @return LayUiAdmin响应对象：如果原始密码校验失败，LayUiAdminResultVo.data="verifyFail"；
+     * 如果修改密码成功，LayUiAdminResultVo.data="success"；
+     * 否则LayUiAdminResultVo.data="fail"。
      * @author 皮锋
      * @custom.date 2020/7/11 15:27
      */
@@ -135,17 +137,20 @@ public class MonitorUserServiceImpl extends ServiceImpl<IMonitorUserDao, Monitor
      * </p>
      *
      * @param monitorUserVo 用户信息
-     * @return 用户信息是否修改成功
+     * @return LayUiAdmin响应对象：如果修改用户信息成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
      * @author 皮锋
      * @custom.date 2020/7/13 18:58
      */
     @Override
-    public boolean updateUser(MonitorUserVo monitorUserVo) {
+    public LayUiAdminResultVo updateUser(MonitorUserVo monitorUserVo) {
         MonitorUser monitorUser = monitorUserVo.convertToMonitorUser();
         // 设置更新时间
         monitorUser.setUpdateTime(new Date());
         int result = this.monitorUserDao.updateById(monitorUser);
-        return result == 1;
+        if (result == 1) {
+            return LayUiAdminResultVo.ok("success");
+        }
+        return LayUiAdminResultVo.ok("fail");
     }
 
     /**

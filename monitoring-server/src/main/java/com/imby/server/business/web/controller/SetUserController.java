@@ -98,7 +98,9 @@ public class SetUserController {
      * </p>
      *
      * @param password 密码
-     * @return LayUiAdmin响应对象
+     * @return LayUiAdmin响应对象：如果原始密码校验失败，LayUiAdminResultVo.data="verifyFail"；
+     * 如果修改密码成功，LayUiAdminResultVo.data="success"；
+     * 否则LayUiAdminResultVo.data="fail"。
      * @author 皮锋
      * @custom.date 2020/7/11 15:22
      */
@@ -119,14 +121,14 @@ public class SetUserController {
      * </p>
      *
      * @param monitorUserVo 用户信息
-     * @return 用户信息是否修改成功
+     * @return LayUiAdmin响应对象：如果修改用户信息成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
      * @author 皮锋
      * @custom.date 2020/7/13 18:55
      */
     @ApiOperation(value = "修改用户信息")
     @PostMapping("/update-user")
     @ResponseBody
-    public boolean updateUser(MonitorUserVo monitorUserVo) {
+    public LayUiAdminResultVo updateUser(MonitorUserVo monitorUserVo) {
         return this.monitorUserService.updateUser(monitorUserVo);
     }
 }

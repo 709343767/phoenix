@@ -84,7 +84,6 @@
         </div>
     </div>
 </div>
-<script src="./js/jquery-1.11.2.min.js" th:src="@{/js/jquery-1.11.2.min.js}"></script>
 <script src="./layui/layui.js" th:src="@{/layui/layui.js}" charset="utf-8"></script>
 <script charset="utf-8" th:inline="javascript">
     layui.config({
@@ -92,6 +91,7 @@
     }).extend({
         index: 'lib/index' //主入口模块
     }).use(['index', 'form', 'element', 'layer'], function () {
+        var admin = layui.admin;
         var form = layui.form;
         form.render();
         //自定义验证规则
@@ -109,7 +109,7 @@
         // 监听信息提交
         form.on('submit(userInfo)', function (data) {
             // 修改用户信息
-            $.ajax({
+            admin.req({
                 type: 'post',
                 url: ctxPath + 'set/user/update-user',
                 data: data.field,
@@ -118,7 +118,8 @@
                     [[${_csrf.headerName}]]: [[${_csrf.token}]]
                 },
                 success: function (result) {
-                    if (result) {
+                    var data = result.data;
+                    if (data === "success") {
                         layer.msg('保存成功！', {icon: 6});
                     } else {
                         layer.msg('保存失败！', {icon: 5, shift: 6});
