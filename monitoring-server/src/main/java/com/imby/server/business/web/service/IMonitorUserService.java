@@ -6,6 +6,8 @@ import com.imby.server.business.web.entity.MonitorUser;
 import com.imby.server.business.web.vo.LayUiAdminResultVo;
 import com.imby.server.business.web.vo.MonitorUserVo;
 
+import java.util.List;
+
 /**
  * <p>
  * 监控用户服务类
@@ -71,4 +73,16 @@ public interface IMonitorUserService extends IService<MonitorUser> {
      * @custom.date 2020/8/1 21:33
      */
     LayUiAdminResultVo saveUser(MonitorUserVo monitorUserVo);
+
+    /**
+     * <p>
+     * 删除用户
+     * </p>
+     *
+     * @param monitorUserVos 用户信息
+     * @return layUiAdmin响应对象：如果删除用户成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @author 皮锋
+     * @custom.date 2020/8/2 17:35
+     */
+    LayUiAdminResultVo deleteUser(List<MonitorUserVo> monitorUserVos);
 }

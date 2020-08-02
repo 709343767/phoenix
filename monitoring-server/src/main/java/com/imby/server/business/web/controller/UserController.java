@@ -13,10 +13,7 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.LinkedList;
@@ -131,6 +128,23 @@ public class UserController {
     @ResponseBody
     public LayUiAdminResultVo saveUser(MonitorUserVo monitorUserVo) {
         return this.monitorUserService.saveUser(monitorUserVo);
+    }
+
+    /**
+     * <p>
+     * 删除用户
+     * </p>
+     *
+     * @param monitorUserVos 用户信息
+     * @return layUiAdmin响应对象：如果删除用户成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @author 皮锋
+     * @custom.date 2020/8/2 16:43
+     */
+    @ApiOperation(value = "删除用户")
+    @PostMapping("/delete-user")
+    @ResponseBody
+    public LayUiAdminResultVo deleteUser(@RequestBody List<MonitorUserVo> monitorUserVos) {
+        return this.monitorUserService.deleteUser(monitorUserVos);
     }
 
 }

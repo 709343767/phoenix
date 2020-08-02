@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.google.common.collect.Lists;
 import com.imby.server.business.web.dao.IMonitorRoleDao;
 import com.imby.server.business.web.dao.IMonitorUserDao;
 import com.imby.server.business.web.entity.MonitorRole;
@@ -240,4 +241,30 @@ public class MonitorUserServiceImpl extends ServiceImpl<IMonitorUserDao, Monitor
         }
         return LayUiAdminResultVo.ok(WebResponseConstants.FAIL);
     }
+
+    /**
+     * <p>
+     * 删除用户
+     * </p>
+     *
+     * @param monitorUserVos 用户信息
+     * @return layUiAdmin响应对象：如果删除用户成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @author 皮锋
+     * @custom.date 2020/8/2 17:35
+     */
+    @Override
+    public LayUiAdminResultVo deleteUser(List<MonitorUserVo> monitorUserVos) {
+        int size = monitorUserVos.size();
+        List<Long> ids = Lists.newArrayList();
+        for (MonitorUserVo monitorUserVo : monitorUserVos) {
+            Long id = monitorUserVo.getId();
+            ids.add(id);
+        }
+        int result = this.monitorUserDao.deleteBatchIds(ids);
+        if (size == result) {
+            return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);
+        }
+        return LayUiAdminResultVo.ok(WebResponseConstants.FAIL);
+    }
+
 }

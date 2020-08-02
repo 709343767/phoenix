@@ -87,6 +87,36 @@
         });
         //事件
         var active = {
+            batchdel: function () {
+                var checkStatus = table.checkStatus('user-list-table'), checkData = checkStatus.data; //得到选中的数据
+                if (checkData.length === 0) {
+                    return layer.msg('请选择数据');
+                }
+                layer.confirm('确定删除吗？', function (index) {
+                    admin.req({
+                        type: 'post',
+                        url: ctxPath + 'user/delete-user',
+                        data: JSON.stringify(checkStatus.data),
+                        dataType: 'json',
+                        contentType: 'application/json;charset=utf-8',
+                        headers: {
+                            [[${_csrf.headerName}]]: [[${_csrf.token}]]
+                        },
+                        success: function (result) {
+                            var data = result.data;
+                            if (data === webConst.SUCCESS) {
+                                table.reload('user-list-table'); //数据刷新
+                                layer.msg('删除成功！', {icon: 6});
+                            } else {
+                                layer.msg('删除失败！', {icon: 5, shift: 6});
+                            }
+                        },
+                        error: function () {
+                            layer.msg('系统错误！', {icon: 5, shift: 6});
+                        }
+                    });
+                });
+            },
             add: function () {
                 layer.open({
                     type: 2,
