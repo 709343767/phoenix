@@ -2,6 +2,7 @@ package com.imby.server.business.web.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.imby.server.business.web.entity.MonitorRole;
+import com.imby.server.business.web.entity.MonitorUser;
 import com.imby.server.business.web.service.IMonitorRoleService;
 import com.imby.server.business.web.service.IMonitorUserService;
 import com.imby.server.business.web.vo.LayUiAdminResultVo;
@@ -89,17 +90,49 @@ public class UserController {
 
     /**
      * <p>
-     * 访问用户表单页面
+     * 访问新增用户表单页面
      * </p>
      *
-     * @return {@link ModelAndView} 用户表单页面
+     * @return {@link ModelAndView} 新增用户表单页面
      * @author 皮锋
      * @custom.date 2020/8/1 18:49
      */
-    @ApiOperation(value = "访问用户表单页面")
-    @GetMapping("/user-form")
-    public ModelAndView userForm() {
-        ModelAndView mv = new ModelAndView("user/user-form");
+    @ApiOperation(value = "访问新增用户表单页面")
+    @GetMapping("/add-user-form")
+    public ModelAndView addUserForm() {
+        ModelAndView mv = new ModelAndView("user/add-user");
+        // 查询角色列表
+        List<MonitorRole> monitorRoles = this.monitorRoleService.list();
+        // 转换成监控用户角色表现层对象
+        List<MonitorRoleVo> monitorRoleVos = new LinkedList<>();
+        for (MonitorRole monitorRole : monitorRoles) {
+            MonitorRoleVo monitorRoleVo = MonitorRoleVo.builder().build().convertFor(monitorRole);
+            monitorRoleVos.add(monitorRoleVo);
+        }
+        mv.addObject("roles", monitorRoleVos);
+        return mv;
+    }
+
+    /**
+     * <p>
+     * 访问编辑用户表单页面
+     * </p>
+     *
+     * @return {@link ModelAndView} 编辑用户表单页面
+     * @author 皮锋
+     * @custom.date 2020/8/2 20:20
+     */
+    @ApiOperation(value = "访问编辑用户表单页面")
+    @ApiImplicitParams(value = {
+            @ApiImplicitParam(name = "userId", value = "用户ID", required = true, paramType = "query", dataType = "long")})
+    @GetMapping("/edit-user-form")
+    public ModelAndView editUserForm(@RequestParam(name = "userId") Long userId) {
+        ModelAndView mv = new ModelAndView("user/edit-user");
+        // 查询当前用户
+        MonitorUser monitorUser = this.monitorUserService.getById(userId);
+        // 转换成监控用户表现层对象
+        MonitorUserVo monitorUserVo = MonitorUserVo.builder().build().convertFor(monitorUser);
+        mv.addObject("user", monitorUserVo);
         // 查询角色列表
         List<MonitorRole> monitorRoles = this.monitorRoleService.list();
         // 转换成监控用户角色表现层对象
@@ -128,6 +161,23 @@ public class UserController {
     @ResponseBody
     public LayUiAdminResultVo saveUser(MonitorUserVo monitorUserVo) {
         return this.monitorUserService.saveUser(monitorUserVo);
+    }
+
+    /**
+     * <p>
+     * 编辑用户
+     * </p>
+     *
+     * @param monitorUserVo 用户信息
+     * @return layUiAdmin响应对象：如果编辑用户成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @author 皮锋
+     * @custom.date 2020/8/2 20:43
+     */
+    @ApiOperation(value = "编辑用户")
+    @PostMapping("/edit-user")
+    @ResponseBody
+    public LayUiAdminResultVo editUser(MonitorUserVo monitorUserVo) {
+        return this.monitorUserService.editUser(monitorUserVo);
     }
 
     /**

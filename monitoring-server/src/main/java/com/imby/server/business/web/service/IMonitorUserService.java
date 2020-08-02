@@ -76,6 +76,18 @@ public interface IMonitorUserService extends IService<MonitorUser> {
 
     /**
      * <p>
+     * 编辑用户
+     * </p>
+     *
+     * @param monitorUserVo 用户信息
+     * @return layUiAdmin响应对象：如果编辑用户成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @author 皮锋
+     * @custom.date 2020/8/2 20:44
+     */
+    LayUiAdminResultVo editUser(MonitorUserVo monitorUserVo);
+
+    /**
+     * <p>
      * 删除用户
      * </p>
      *

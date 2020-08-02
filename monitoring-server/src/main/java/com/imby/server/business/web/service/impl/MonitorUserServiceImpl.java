@@ -177,10 +177,10 @@ public class MonitorUserServiceImpl extends ServiceImpl<IMonitorUserDao, Monitor
         if (StringUtils.isNotBlank(account)) {
             lambdaQueryWrapper.eq(MonitorUser::getAccount, account);
         }
-        if (StringUtils.isNotBlank(account)) {
+        if (StringUtils.isNotBlank(username)) {
             lambdaQueryWrapper.like(MonitorUser::getUsername, username);
         }
-        if (StringUtils.isNotBlank(account)) {
+        if (StringUtils.isNotBlank(email)) {
             lambdaQueryWrapper.like(MonitorUser::getEmail, email);
         }
         IPage<MonitorUser> monitorUserPage = this.monitorUserDao.selectPage(ipage, lambdaQueryWrapper);
@@ -236,6 +236,27 @@ public class MonitorUserServiceImpl extends ServiceImpl<IMonitorUserDao, Monitor
         monitorUser.setPassword(enPassword);
         int result = this.monitorUserDao.insert(monitorUser);
         // 成功
+        if (result == 1) {
+            return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);
+        }
+        return LayUiAdminResultVo.ok(WebResponseConstants.FAIL);
+    }
+
+    /**
+     * <p>
+     * 编辑用户
+     * </p>
+     *
+     * @param monitorUserVo 用户信息
+     * @return layUiAdmin响应对象：如果编辑用户成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @author 皮锋
+     * @custom.date 2020/8/2 20:44
+     */
+    @Override
+    public LayUiAdminResultVo editUser(MonitorUserVo monitorUserVo) {
+        MonitorUser monitorUser = monitorUserVo.convertToMonitorUser();
+        monitorUser.setUpdateTime(new Date());
+        int result = this.monitorUserDao.updateById(monitorUser);
         if (result == 1) {
             return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);
         }
