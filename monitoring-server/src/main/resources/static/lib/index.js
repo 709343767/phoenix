@@ -17,5 +17,5 @@
     n.screen() < 2 && n.sideFlexible(), layui.config({base: e.base + "modules/"}), layui.each(e.extend, function (a, i) {
         var n = {};
         n[i] = "{/}" + e.base + "lib/extend/" + i, layui.extend(n)
-    }), d().autoRender(), layui.use("common"), a("index", {openTabsPage: l})
+    }), d().autoRender(), a("index", {openTabsPage: l})
 });

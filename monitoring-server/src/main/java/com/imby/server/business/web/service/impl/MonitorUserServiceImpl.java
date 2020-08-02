@@ -14,6 +14,7 @@ import com.imby.server.business.web.realm.MonitorUserRealm;
 import com.imby.server.business.web.service.IMonitorUserService;
 import com.imby.server.business.web.vo.LayUiAdminResultVo;
 import com.imby.server.business.web.vo.MonitorUserVo;
+import com.imby.server.constant.WebResponseConstants;
 import com.imby.server.util.SpringSecurityUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -116,7 +117,7 @@ public class MonitorUserServiceImpl extends ServiceImpl<IMonitorUserDao, Monitor
         boolean verify = bc.matches(oldPassword, dbPassword);
         // 密码不正确
         if (!verify) {
-            return LayUiAdminResultVo.ok("verifyFail");
+            return LayUiAdminResultVo.ok(WebResponseConstants.VERIFY_FAIL);
         }
         // 二.修改密码
         // 加密密码
@@ -126,9 +127,9 @@ public class MonitorUserServiceImpl extends ServiceImpl<IMonitorUserDao, Monitor
         lambdaUpdateWrapper.eq(MonitorUser::getId, userId).set(MonitorUser::getPassword, enPassword);
         int result = this.monitorUserDao.update(null, lambdaUpdateWrapper);
         if (result == 1) {
-            return LayUiAdminResultVo.ok("success");
+            return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);
         }
-        return LayUiAdminResultVo.ok("fail");
+        return LayUiAdminResultVo.ok(WebResponseConstants.FAIL);
     }
 
     /**
@@ -148,9 +149,9 @@ public class MonitorUserServiceImpl extends ServiceImpl<IMonitorUserDao, Monitor
         monitorUser.setUpdateTime(new Date());
         int result = this.monitorUserDao.updateById(monitorUser);
         if (result == 1) {
-            return LayUiAdminResultVo.ok("success");
+            return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);
         }
-        return LayUiAdminResultVo.ok("fail");
+        return LayUiAdminResultVo.ok(WebResponseConstants.FAIL);
     }
 
     /**
@@ -224,7 +225,7 @@ public class MonitorUserServiceImpl extends ServiceImpl<IMonitorUserDao, Monitor
         MonitorUser dbUser = this.monitorUserDao.selectOne(lambdaQueryWrapper);
         // 数据库中已经有此账号
         if (dbUser != null) {
-            return LayUiAdminResultVo.ok("exist");
+            return LayUiAdminResultVo.ok(WebResponseConstants.EXIST);
         }
         MonitorUser monitorUser = monitorUserVo.convertToMonitorUser();
         monitorUser.setRegisterTime(new Date());
@@ -235,8 +236,8 @@ public class MonitorUserServiceImpl extends ServiceImpl<IMonitorUserDao, Monitor
         int result = this.monitorUserDao.insert(monitorUser);
         // 成功
         if (result == 1) {
-            return LayUiAdminResultVo.ok("success");
+            return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);
         }
-        return LayUiAdminResultVo.ok("fail");
+        return LayUiAdminResultVo.ok(WebResponseConstants.FAIL);
     }
 }

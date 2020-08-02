@@ -68,6 +68,7 @@
         </div>
     </div>
 </div>
+<script src="./js/common.js" th:src="@{/js/common.js}" charset="utf-8"></script>
 <script src="./layui/layui.js" th:src="@{/layui/layui.js}"></script>
 <script charset="utf-8" th:inline="javascript">
     layui.config({
@@ -111,11 +112,11 @@
                                 },
                                 success: function (result) {
                                     var data = result.data;
-                                    if (data === 'success') {
+                                    if (data === webConst.SUCCESS) {
                                         table.reload('user-list-table'); //数据刷新
                                         layer.close(index); //关闭弹层
                                         layer.msg('添加成功！', {icon: 6});
-                                    } else if (data === 'exist') {
+                                    } else if (data === webConst.EXIST) {
                                         layer.msg('账户已存在！', {icon: 5, shift: 6});
                                     } else {
                                         layer.msg('添加失败！', {icon: 5, shift: 6});

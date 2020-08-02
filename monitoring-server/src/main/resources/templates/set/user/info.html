@@ -84,6 +84,7 @@
         </div>
     </div>
 </div>
+<script src="./js/common.js" th:src="@{/js/common.js}" charset="utf-8"></script>
 <script src="./layui/layui.js" th:src="@{/layui/layui.js}" charset="utf-8"></script>
 <script charset="utf-8" th:inline="javascript">
     layui.config({
@@ -119,7 +120,7 @@
                 },
                 success: function (result) {
                     var data = result.data;
-                    if (data === "success") {
+                    if (data === webConst.SUCCESS) {
                         layer.msg('保存成功！', {icon: 6});
                     } else {
                         layer.msg('保存失败！', {icon: 5, shift: 6});
