@@ -97,7 +97,8 @@ public class SetUserController {
      * 修改密码
      * </p>
      *
-     * @param password 密码
+     * @param oldPassword 原始密码
+     * @param password    密码
      * @return LayUiAdmin响应对象：如果原始密码校验失败，LayUiAdminResultVo.data="verifyFail"；
      * 如果修改密码成功，LayUiAdminResultVo.data="success"；
      * 否则LayUiAdminResultVo.data="fail"。
