@@ -57,7 +57,7 @@ public class UserController {
     @ApiOperation(value = "访问用户列表页面")
     @GetMapping("/list")
     public ModelAndView list() {
-        return new ModelAndView("user/list");
+        return new ModelAndView("user/user");
     }
 
     /**
@@ -83,7 +83,7 @@ public class UserController {
             @ApiImplicitParam(name = "email", value = "电子邮箱", paramType = "query", dataType = "string")})
     @GetMapping("/get-monitor-user-list")
     @ResponseBody
-    public LayUiAdminResultVo getMonitorUserList(long current, long size, String account, String username, String email) {
+    public LayUiAdminResultVo getMonitorUserList(Long current, Long size, String account, String username, String email) {
         Page<MonitorUserVo> page = this.monitorUserService.getMonitorUserList(current, size, account, username, email);
         return LayUiAdminResultVo.ok(page);
     }

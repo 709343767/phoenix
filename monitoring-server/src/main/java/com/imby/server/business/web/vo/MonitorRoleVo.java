@@ -1,5 +1,6 @@
 package com.imby.server.business.web.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.imby.common.inf.ISuperBean;
 import com.imby.server.business.web.entity.MonitorRole;
 import io.swagger.annotations.ApiModel;
@@ -7,6 +8,8 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 import lombok.experimental.Accessors;
 import org.springframework.beans.BeanUtils;
+
+import java.util.Date;
 
 /**
  * <p>
@@ -32,6 +35,14 @@ public class MonitorRoleVo implements ISuperBean {
 
     @ApiModelProperty(value = "角色名称")
     private String roleName;
+
+    @ApiModelProperty(value = "创建时间")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    private Date createTime;
+
+    @ApiModelProperty(value = "更新时间")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    private Date updateTime;
 
     /**
      * <p>

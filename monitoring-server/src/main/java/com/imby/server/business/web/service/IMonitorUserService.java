@@ -59,7 +59,7 @@ public interface IMonitorUserService extends IService<MonitorUser> {
      * @author 皮锋
      * @custom.date 2020/7/23 16:37
      */
-    Page<MonitorUserVo> getMonitorUserList(long current, long size, String account, String username, String email);
+    Page<MonitorUserVo> getMonitorUserList(Long current, Long size, String account, String username, String email);
 
     /**
      * <p>

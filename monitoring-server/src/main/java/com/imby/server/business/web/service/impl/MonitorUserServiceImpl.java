@@ -170,7 +170,7 @@ public class MonitorUserServiceImpl extends ServiceImpl<IMonitorUserDao, Monitor
      * @custom.date 2020/7/23 16:37
      */
     @Override
-    public Page<MonitorUserVo> getMonitorUserList(long current, long size, String account, String username, String email) {
+    public Page<MonitorUserVo> getMonitorUserList(Long current, Long size, String account, String username, String email) {
         // 查询数据库
         IPage<MonitorUser> ipage = new Page<>(current, size);
         LambdaQueryWrapper<MonitorUser> lambdaQueryWrapper = new LambdaQueryWrapper<>();
