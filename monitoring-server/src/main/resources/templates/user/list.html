@@ -46,11 +46,6 @@
                         <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
                     </button>
                 </div>
-
-                <div class="layui-inline" style="float: right;">
-                    <button class="layui-btn layuiadmin-btn-useradmin" data-type="batchdel">删除</button>
-                    <button class="layui-btn layuiadmin-btn-useradmin" data-type="add">添加</button>
-                </div>
             </div>
         </div>
 
@@ -58,6 +53,12 @@
             <table id="user-list-table" lay-filter="user-list-table"></table>
             <script type="text/html" id="imgTpl">
                 <img style="display: inline-block; width: 50%; height: 100%;" src={{ d.avatar }}>
+            </script>
+            <script type="text/html" id="list-table-toolbar">
+                <div class="layui-btn-container">
+                    <button class="layui-btn layuiadmin-btn-useradmin" lay-event="batchdel">删除</button>
+                    <button class="layui-btn layuiadmin-btn-useradmin" lay-event="add">添加</button>
+                </div>
             </script>
             <script type="text/html" id="user-list-table-toolbar">
                 <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i
@@ -80,6 +81,7 @@
         table.render({
             elem: '#user-list-table',
             url: layui.setter.base + 'user/get-monitor-user-list',
+            toolbar: '#list-table-toolbar',
             request: {
                 pageName: 'current',//页码的参数名称，默认：page
                 limitName: 'size' //每页数据量的参数名，默认：limit
@@ -150,6 +152,85 @@
             table.reload('user-list-table', {
                 where: field
             });
+        });
+        //头工具栏事件
+        table.on('toolbar(user-list-table)', function (obj) {
+            switch (obj.event) {
+                case 'batchdel':
+                    var checkStatus = table.checkStatus('user-list-table'), checkData = checkStatus.data; //得到选中的数据
+                    if (checkData.length === 0) {
+                        return layer.msg('请选择数据');
+                    }
+                    layer.confirm('确定删除吗？', function (index) {
+                        admin.req({
+                            type: 'post',
+                            url: ctxPath + 'user/delete-user',
+                            data: JSON.stringify(checkStatus.data),
+                            dataType: 'json',
+                            contentType: 'application/json;charset=utf-8',
+                            headers: {
+                                [[${_csrf.headerName}]]: [[${_csrf.token}]]
+                            },
+                            success: function (result) {
+                                var data = result.data;
+                                if (data === webConst.SUCCESS) {
+                                    table.reload('user-list-table'); //数据刷新
+                                    layer.msg('删除成功！', {icon: 6});
+                                } else {
+                                    layer.msg('删除失败！', {icon: 5, shift: 6});
+                                }
+                            },
+                            error: function () {
+                                layer.msg('系统错误！', {icon: 5, shift: 6});
+                            }
+                        });
+                    });
+                    break;
+                case 'add':
+                    layer.open({
+                        type: 2,
+                        title: '添加用户',
+                        content: ctxPath + 'user/add-user-form',
+                        maxmin: true,
+                        area: ['550px', '500px'],
+                        btn: ['确定', '取消'],
+                        yes: function (index, layero) {
+                            var iframeWindow = window['layui-layer-iframe' + index],
+                                submitID = 'LAY-user-front-submit',
+                                submit = layero.find('iframe').contents().find('#' + submitID);
+                            //监听提交
+                            iframeWindow.layui.form.on('submit(' + submitID + ')', function (data) {
+                                var field = data.field; //获取提交的字段
+                                admin.req({
+                                    type: 'post',
+                                    url: ctxPath + 'user/save-user',
+                                    data: field,
+                                    dataType: 'json',
+                                    headers: {
+                                        [[${_csrf.headerName}]]: [[${_csrf.token}]]
+                                    },
+                                    success: function (result) {
+                                        var data = result.data;
+                                        if (data === webConst.SUCCESS) {
+                                            table.reload('user-list-table'); //数据刷新
+                                            layer.close(index); //关闭弹层
+                                            layer.msg('添加成功！', {icon: 6});
+                                        } else if (data === webConst.EXIST) {
+                                            layer.msg('账户已存在！', {icon: 5, shift: 6});
+                                        } else {
+                                            layer.msg('添加失败！', {icon: 5, shift: 6});
+                                        }
+                                    },
+                                    error: function () {
+                                        layer.msg('系统错误！', {icon: 5, shift: 6});
+                                    }
+                                });
+                            });
+                            submit.trigger('click');
+                        }
+                    });
+                    break;
+            }
         });
         //监听工具条
         table.on('tool(user-list-table)', function (obj) {
@@ -222,88 +303,6 @@
                     }
                 });
             }
-        });
-        //事件
-        var active = {
-            batchdel: function () {
-                var checkStatus = table.checkStatus('user-list-table'), checkData = checkStatus.data; //得到选中的数据
-                if (checkData.length === 0) {
-                    return layer.msg('请选择数据');
-                }
-                layer.confirm('确定删除吗？', function (index) {
-                    admin.req({
-                        type: 'post',
-                        url: ctxPath + 'user/delete-user',
-                        data: JSON.stringify(checkStatus.data),
-                        dataType: 'json',
-                        contentType: 'application/json;charset=utf-8',
-                        headers: {
-                            [[${_csrf.headerName}]]: [[${_csrf.token}]]
-                        },
-                        success: function (result) {
-                            var data = result.data;
-                            if (data === webConst.SUCCESS) {
-                                table.reload('user-list-table'); //数据刷新
-                                layer.msg('删除成功！', {icon: 6});
-                            } else {
-                                layer.msg('删除失败！', {icon: 5, shift: 6});
-                            }
-                        },
-                        error: function () {
-                            layer.msg('系统错误！', {icon: 5, shift: 6});
-                        }
-                    });
-                });
-            },
-            add: function () {
-                layer.open({
-                    type: 2,
-                    title: '添加用户',
-                    content: ctxPath + 'user/add-user-form',
-                    maxmin: true,
-                    area: ['550px', '500px'],
-                    btn: ['确定', '取消'],
-                    yes: function (index, layero) {
-                        var iframeWindow = window['layui-layer-iframe' + index],
-                            submitID = 'LAY-user-front-submit',
-                            submit = layero.find('iframe').contents().find('#' + submitID);
-                        //监听提交
-                        iframeWindow.layui.form.on('submit(' + submitID + ')', function (data) {
-                            var field = data.field; //获取提交的字段
-                            admin.req({
-                                type: 'post',
-                                url: ctxPath + 'user/save-user',
-                                data: field,
-                                dataType: 'json',
-                                headers: {
-                                    [[${_csrf.headerName}]]: [[${_csrf.token}]]
-                                },
-                                success: function (result) {
-                                    var data = result.data;
-                                    if (data === webConst.SUCCESS) {
-                                        table.reload('user-list-table'); //数据刷新
-                                        layer.close(index); //关闭弹层
-                                        layer.msg('添加成功！', {icon: 6});
-                                    } else if (data === webConst.EXIST) {
-                                        layer.msg('账户已存在！', {icon: 5, shift: 6});
-                                    } else {
-                                        layer.msg('添加失败！', {icon: 5, shift: 6});
-                                    }
-                                },
-                                error: function () {
-                                    layer.msg('系统错误！', {icon: 5, shift: 6});
-                                }
-                            });
-                        });
-                        submit.trigger('click');
-                    }
-                });
-            }
-        };
-
-        $('.layui-btn.layuiadmin-btn-useradmin').on('click', function () {
-            var type = $(this).data('type');
-            active[type] ? active[type].call(this) : '';
         });
     });
 </script>
