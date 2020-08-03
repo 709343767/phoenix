@@ -90,21 +90,11 @@
                 <ul class="layui-nav layui-nav-tree" lay-shrink="all" id="LAY-system-side-menu"
                     lay-filter="layadmin-system-side-menu">
                     <li data-name="home" class="layui-nav-item layui-nav-itemed">
-                        <a href="javascript:;" lay-tips="主页" lay-direction="2">
+                        <a href="javascript:;" lay-tips="主页" lay-direction="2"
+                           th:attr="lay-href=@{/home}">
                             <i class="layui-icon layui-icon-home"></i>
                             <cite>主页</cite>
                         </a>
-                        <dl class="layui-nav-child">
-                            <dd data-name="console" class="layui-this">
-                                <a lay-href="home/console.html">控制台</a>
-                            </dd>
-                            <dd data-name="console">
-                                <a lay-href="home/homepage1.html">主页一</a>
-                            </dd>
-                            <dd data-name="console">
-                                <a lay-href="home/homepage2.html">主页二</a>
-                            </dd>
-                        </dl>
                     </li>
                     <li data-name="user" class="layui-nav-item">
                         <a href="javascript:;" lay-tips="用户" lay-direction="2">
@@ -164,7 +154,7 @@
             </div>
             <div class="layui-tab" lay-unauto lay-allowClose="true" lay-filter="layadmin-layout-tabs">
                 <ul class="layui-tab-title" id="LAY_app_tabsheader">
-                    <li lay-id="home/console.html" lay-attr="home/console.html" class="layui-this"><i
+                    <li th:attr="lay-id=@{/home},lay-attr=@{/home}" class="layui-this"><i
                             class="layui-icon layui-icon-home"></i></li>
                 </ul>
             </div>
@@ -173,7 +163,7 @@
         <!-- 主体内容 -->
         <div class="layui-body" id="LAY_app_body">
             <div class="layadmin-tabsbody-item layui-show">
-                <iframe src="home/console.html" frameborder="0" class="layadmin-iframe"></iframe>
+                <iframe th:src="@{/home}" frameborder="0" class="layadmin-iframe"></iframe>
             </div>
         </div>
 
