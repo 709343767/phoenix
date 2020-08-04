@@ -27,4 +27,10 @@ public class HomeServerOsVo implements ISuperBean {
 
     @ApiModelProperty(value = "服务器数量")
     private Integer serverSum;
+
+    @ApiModelProperty(value = "linux服务器数量")
+    private Integer linuxSum;
+
+    @ApiModelProperty(value = "windows服务器数量")
+    private Integer windowsSum;
 }

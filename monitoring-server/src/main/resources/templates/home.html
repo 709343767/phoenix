@@ -27,7 +27,7 @@
             <div class="layui-card">
                 <div class="layui-card-header">
                     应用数量
-                    <span class="layui-badge layui-bg-blue layuiadmin-badge">总</span>
+                    <span class="layui-badge layui-bg-blue layuiadmin-badge">个</span>
                 </div>
                 <div class="layui-card-body layuiadmin-card-list">
                     <p class="layuiadmin-big-font" th:text="${homeInstanceVo.instanceSum}"></p>
@@ -48,19 +48,19 @@
             <div class="layui-card">
                 <div class="layui-card-header">
                     服务器数量
-                    <span class="layui-badge layui-bg-cyan layuiadmin-badge">总</span>
+                    <span class="layui-badge layui-bg-cyan layuiadmin-badge">台</span>
                 </div>
                 <div class="layui-card-body layuiadmin-card-list">
                     <p class="layuiadmin-big-font" th:text="${homeServerOsVo.serverSum}"></p>
                     <p>
-                        正常
-                        <span class="layuiadmin-span-color">10% <i
-                                class="layui-inline layui-icon layui-icon-face-smile"></i></span>
+                        Windows
+                        <span class="layuiadmin-span-color">[[${homeServerOsVo.windowsSum}]]<i
+                                class="layui-inline layui-icon layui-icon-windows"></i></span>
                     </p>
                     <p>
-                        异常
-                        <span class="layuiadmin-span-color">10% <i
-                                class="layui-inline layui-icon layui-icon-face-cry"></i></span>
+                        Linux
+                        <span class="layuiadmin-span-color">[[${homeServerOsVo.linuxSum}]]<i
+                                class="layui-inline layui-icon layui-icon-component"></i></span>
                     </p>
                 </div>
             </div>
@@ -69,7 +69,7 @@
             <div class="layui-card">
                 <div class="layui-card-header">
                     数据库数量
-                    <span class="layui-badge layui-bg-green layuiadmin-badge">年</span>
+                    <span class="layui-badge layui-bg-green layuiadmin-badge">个</span>
                 </div>
                 <div class="layui-card-body layuiadmin-card-list">
 
@@ -91,7 +91,7 @@
             <div class="layui-card">
                 <div class="layui-card-header">
                     告警次数
-                    <span class="layui-badge layui-bg-orange layuiadmin-badge">月</span>
+                    <span class="layui-badge layui-bg-orange layuiadmin-badge">次</span>
                 </div>
                 <div class="layui-card-body layuiadmin-card-list">
 

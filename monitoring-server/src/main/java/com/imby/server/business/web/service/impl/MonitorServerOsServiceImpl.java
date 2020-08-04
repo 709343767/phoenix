@@ -2,10 +2,12 @@ package com.imby.server.business.web.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.imby.common.constant.OsTypeConstants;
 import com.imby.server.business.web.dao.IMonitorServerOsDao;
 import com.imby.server.business.web.entity.MonitorServerOs;
 import com.imby.server.business.web.service.IMonitorServerOsService;
 import com.imby.server.business.web.vo.HomeServerOsVo;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -43,6 +45,8 @@ public class MonitorServerOsServiceImpl extends ServiceImpl<IMonitorServerOsDao,
         // home页的服务器表现层对象
         HomeServerOsVo homeServerOsVo = new HomeServerOsVo();
         homeServerOsVo.setServerSum(monitorServerOss.size());
+        homeServerOsVo.setLinuxSum((int) monitorServerOss.stream().filter(e -> StringUtils.containsIgnoreCase(e.getOsName(), OsTypeConstants.LINUX)).count());
+        homeServerOsVo.setWindowsSum((int) monitorServerOss.stream().filter(e -> StringUtils.containsIgnoreCase(e.getOsName(), OsTypeConstants.WINDOWS)).count());
         return homeServerOsVo;
     }
 }
