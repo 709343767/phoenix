@@ -81,8 +81,6 @@ mybatis-plus:
   #扫描mapper文件的位置
   mapper-locations:
     - classpath:com/imby/server/business/**/mapper/*Mapper.xml
-  #扫描实体，多个package用逗号或者分号分隔
-  type-aliases-package: com.imby.server.business.**.entity
   configuration:
     #是否开启缓存
     cache-enabled: false
