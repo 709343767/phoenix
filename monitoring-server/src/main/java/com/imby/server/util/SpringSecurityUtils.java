@@ -54,13 +54,11 @@ public class SpringSecurityUtils {
      * @custom.date 2020/8/4 9:58
      */
     public static void updateCurrentMonitorUserRealm(MonitorUserRealm monitorUserRealm) {
-        // 用户
-        Object principal = monitorUserRealm;
         // 证书
         Object credentials = monitorUserRealm.getPassword();
         // 权限
         Collection<GrantedAuthority> authorities = monitorUserRealm.getAuthorities();
-        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(principal, credentials, authorities);
+        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(monitorUserRealm, credentials, authorities);
         SecurityContextHolder.getContext().setAuthentication(token);
     }
 }
