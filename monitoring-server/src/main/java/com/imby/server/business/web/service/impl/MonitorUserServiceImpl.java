@@ -128,6 +128,9 @@ public class MonitorUserServiceImpl extends ServiceImpl<IMonitorUserDao, Monitor
         lambdaUpdateWrapper.eq(MonitorUser::getId, userId).set(MonitorUser::getPassword, enPassword);
         int result = this.monitorUserDao.update(null, lambdaUpdateWrapper);
         if (result == 1) {
+            // 更新springsecurity中当前用户
+            MonitorUserRealm realm = (MonitorUserRealm) this.loadUserByUsername(monitorUser.getAccount());
+            SpringSecurityUtils.updateCurrentMonitorUserRealm(realm);
             return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);
         }
         return LayUiAdminResultVo.ok(WebResponseConstants.FAIL);
@@ -150,6 +153,9 @@ public class MonitorUserServiceImpl extends ServiceImpl<IMonitorUserDao, Monitor
         monitorUser.setUpdateTime(new Date());
         int result = this.monitorUserDao.updateById(monitorUser);
         if (result == 1) {
+            // 更新springsecurity中当前用户
+            MonitorUserRealm realm = (MonitorUserRealm) this.loadUserByUsername(monitorUser.getAccount());
+            SpringSecurityUtils.updateCurrentMonitorUserRealm(realm);
             return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);
         }
         return LayUiAdminResultVo.ok(WebResponseConstants.FAIL);
