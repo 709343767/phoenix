@@ -157,49 +157,14 @@
         </div>
         <div class="layui-col-sm4">
             <div class="layui-card">
-                <div class="layui-card-header">用户留言</div>
+                <div class="layui-card-header">最新告警</div>
                 <div class="layui-card-body">
                     <ul class="layuiadmin-card-status layuiadmin-home2-usernote">
-                        <li>
-                            <h3>贤心</h3>
-                            <p>作为 layui 官方推出的后台模板，从初版的饱受争议，到后续的埋头丰富，逐步占据了国内后台系统应用的主要市场。</p>
-                            <span>5月30日 00:00</span>
+                        <li th:each="monitorAlarmRecordVo,monitorAlarmRecordVoStat:${monitorAlarmRecordVos}">
+                            <h3 th:utext="${monitorAlarmRecordVo.title}"></h3>
+                            <p th:utext="${monitorAlarmRecordVo.content}"></p>
+                            <span th:text="${#dates.format(monitorAlarmRecordVo.insertTime, 'yyyy-MM-dd HH:mm:ss')}"></span>
                             <a href="javascript:;" layadmin-event="replyNote" data-id="7"
-                               class="layui-btn layui-btn-xs layuiadmin-reply">回复</a>
-                        </li>
-                        <li>
-                            <h3>诸葛亮</h3>
-                            <p>皓首匹夫！苍髯老贼！你枉活九十有六，一生未立寸功，只会摇唇鼓舌！助曹为虐！一条断脊之犬，还敢在我军阵前狺狺狂吠，我从未见过有如此厚颜无耻之人！</p>
-                            <span>5月02日 00:00</span>
-                            <a href="javascript:;" layadmin-event="replyNote" data-id="5"
-                               class="layui-btn layui-btn-xs layuiadmin-reply">回复</a>
-                        </li>
-                        <li>
-                            <h3>胡歌</h3>
-                            <p>你以为只要长得漂亮就有男生喜欢？你以为只要有了钱漂亮妹子就自己贴上来了？你以为学霸就能找到好工作？我告诉你吧，这些都是真的！</p>
-                            <span>5月11日 00:00</span>
-                            <a href="javascript:;" layadmin-event="replyNote" data-id="6"
-                               class="layui-btn layui-btn-xs layuiadmin-reply">回复</a>
-                        </li>
-                        <li>
-                            <h3>杜甫</h3>
-                            <p>人才虽高，不务学问，不能致圣。刘向十日画一水，五日画一石。</p>
-                            <span>4月11日 00:00</span>
-                            <a href="javascript:;" layadmin-event="replyNote" data-id="2"
-                               class="layui-btn layui-btn-xs layuiadmin-reply">回复</a>
-                        </li>
-                        <li>
-                            <h3>鲁迅</h3>
-                            <p>路本是无所谓有和无的，走的人多了，就没路了。。</p>
-                            <span>4月28日 00:00</span>
-                            <a href="javascript:;" layadmin-event="replyNote" data-id="4"
-                               class="layui-btn layui-btn-xs layuiadmin-reply">回复</a>
-                        </li>
-                        <li>
-                            <h3>张爱玲</h3>
-                            <p>于千万人之中遇到你所要遇到的人，于千万年之中，时间的无涯的荒野中，没有早一步，也没有晚一步，刚巧赶上了，那也没有别的话好说，唯有轻轻的问一声：“噢，原来你也在这里？”</p>
-                            <span>4月11日 00:00</span>
-                            <a href="javascript:;" layadmin-event="replyNote" data-id="1"
                                class="layui-btn layui-btn-xs layuiadmin-reply">回复</a>
                         </li>
                     </ul>

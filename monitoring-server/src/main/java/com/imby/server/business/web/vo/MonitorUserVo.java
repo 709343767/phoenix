@@ -71,7 +71,7 @@ public class MonitorUserVo implements ISuperBean {
      * @author 皮锋
      * @custom.date 2020/7/8 9:20
      */
-    public MonitorUser convertToMonitorUser() {
+    public MonitorUser convertTo() {
         MonitorUser monitorUser = MonitorUser.builder().build();
         BeanUtils.copyProperties(this, monitorUser);
         return monitorUser;

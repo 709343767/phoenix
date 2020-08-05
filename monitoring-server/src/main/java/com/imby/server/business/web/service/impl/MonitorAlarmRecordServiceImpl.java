@@ -1,12 +1,16 @@
 package com.imby.server.business.web.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.google.common.collect.Lists;
 import com.imby.common.constant.ZeroOrOneConstants;
 import com.imby.server.business.web.dao.IMonitorAlarmRecordDao;
 import com.imby.server.business.web.entity.MonitorAlarmRecord;
 import com.imby.server.business.web.service.IMonitorAlarmRecordService;
 import com.imby.server.business.web.vo.HomeAlarmRecordVo;
+import com.imby.server.business.web.vo.MonitorAlarmRecordVo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -63,5 +67,38 @@ public class MonitorAlarmRecordServiceImpl extends ServiceImpl<IMonitorAlarmReco
                         StringUtils.equals(e.getMailStatus(), ZeroOrOneConstants.ZERO)))
                 .count());
         return homeAlarmRecordVo;
+    }
+
+    /**
+     * <p>
+     * 获取监控告警列表
+     * </p>
+     *
+     * @param current 当前页
+     * @param size    每页显示条数
+     * @return 分页Page对象
+     * @author 皮锋
+     * @custom.date 2020/8/3 11:07
+     */
+    @Override
+    public Page<MonitorAlarmRecordVo> getMonitorAlarmRecordList(Long current, Long size) {
+        // 查询数据库
+        IPage<MonitorAlarmRecord> ipage = new Page<>(current, size);
+        LambdaQueryWrapper<MonitorAlarmRecord> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        // 倒叙查询
+        lambdaQueryWrapper.orderByDesc(MonitorAlarmRecord::getInsertTime);
+        IPage<MonitorAlarmRecord> monitorAlarmRecordPage = this.monitorAlarmRecordDao.selectPage(ipage, lambdaQueryWrapper);
+        List<MonitorAlarmRecord> monitorAlarmRecords = monitorAlarmRecordPage.getRecords();
+        // 转换成监控告警表现层对象
+        List<MonitorAlarmRecordVo> monitorAlarmRecordVos = Lists.newLinkedList();
+        for (MonitorAlarmRecord monitorAlarmRecord : monitorAlarmRecords) {
+            MonitorAlarmRecordVo monitorAlarmRecordVo = MonitorAlarmRecordVo.builder().build().convertFor(monitorAlarmRecord);
+            monitorAlarmRecordVos.add(monitorAlarmRecordVo);
+        }
+        // 设置返回对象
+        Page<MonitorAlarmRecordVo> monitorAlarmRecordVoPage = new Page<>();
+        monitorAlarmRecordVoPage.setRecords(monitorAlarmRecordVos);
+        monitorAlarmRecordVoPage.setTotal(monitorAlarmRecordPage.getTotal());
+        return monitorAlarmRecordVoPage;
     }
 }

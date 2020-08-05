@@ -1,11 +1,13 @@
 package com.imby.server.business.web.controller;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.imby.server.business.web.service.IMonitorAlarmRecordService;
 import com.imby.server.business.web.service.IMonitorInstanceService;
 import com.imby.server.business.web.service.IMonitorServerOsService;
 import com.imby.server.business.web.vo.HomeAlarmRecordVo;
 import com.imby.server.business.web.vo.HomeInstanceVo;
 import com.imby.server.business.web.vo.HomeServerOsVo;
+import com.imby.server.business.web.vo.MonitorAlarmRecordVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,6 +64,8 @@ public class HomeController {
         mv.addObject("homeServerOsVo", homeServerOsVo);
         HomeAlarmRecordVo homeAlarmRecordVo = this.monitorAlarmRecordService.getHomeAlarmRecordInfo();
         mv.addObject("homeAlarmRecordVo", homeAlarmRecordVo);
+        Page<MonitorAlarmRecordVo> monitorAlarmRecordVoPage = this.monitorAlarmRecordService.getMonitorAlarmRecordList(1L, 5L);
+        mv.addObject("monitorAlarmRecordVos", monitorAlarmRecordVoPage.getRecords());
         return mv;
     }
 }

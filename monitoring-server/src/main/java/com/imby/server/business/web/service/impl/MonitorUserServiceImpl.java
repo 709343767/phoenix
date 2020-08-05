@@ -148,7 +148,7 @@ public class MonitorUserServiceImpl extends ServiceImpl<IMonitorUserDao, Monitor
      */
     @Override
     public LayUiAdminResultVo updateUser(MonitorUserVo monitorUserVo) {
-        MonitorUser monitorUser = monitorUserVo.convertToMonitorUser();
+        MonitorUser monitorUser = monitorUserVo.convertTo();
         // 设置更新时间
         monitorUser.setUpdateTime(new Date());
         int result = this.monitorUserDao.updateById(monitorUser);
@@ -234,7 +234,7 @@ public class MonitorUserServiceImpl extends ServiceImpl<IMonitorUserDao, Monitor
         if (dbUser != null) {
             return LayUiAdminResultVo.ok(WebResponseConstants.EXIST);
         }
-        MonitorUser monitorUser = monitorUserVo.convertToMonitorUser();
+        MonitorUser monitorUser = monitorUserVo.convertTo();
         monitorUser.setRegisterTime(new Date());
         BCryptPasswordEncoder bc = new BCryptPasswordEncoder();
         // 加密密码
@@ -260,7 +260,7 @@ public class MonitorUserServiceImpl extends ServiceImpl<IMonitorUserDao, Monitor
      */
     @Override
     public LayUiAdminResultVo editUser(MonitorUserVo monitorUserVo) {
-        MonitorUser monitorUser = monitorUserVo.convertToMonitorUser();
+        MonitorUser monitorUser = monitorUserVo.convertTo();
         monitorUser.setUpdateTime(new Date());
         int result = this.monitorUserDao.updateById(monitorUser);
         if (result == 1) {

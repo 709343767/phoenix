@@ -53,7 +53,7 @@ public class MonitorRoleVo implements ISuperBean {
      * @author 皮锋
      * @custom.date 2020/7/14 10:31
      */
-    public MonitorRole convertToMonitorRole() {
+    public MonitorRole convertTo() {
         MonitorRole monitorRole = MonitorRole.builder().build();
         BeanUtils.copyProperties(this, monitorRole);
         return monitorRole;
