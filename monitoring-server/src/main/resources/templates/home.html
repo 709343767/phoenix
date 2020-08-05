@@ -26,7 +26,7 @@
         <div class="layui-col-sm6 layui-col-md3">
             <div class="layui-card">
                 <div class="layui-card-header">
-                    应用数量
+                    应用
                     <span class="layui-badge layui-bg-blue layuiadmin-badge">个</span>
                 </div>
                 <div class="layui-card-body layuiadmin-card-list">
@@ -34,12 +34,12 @@
                     <p>
                         在线
                         <span class="layuiadmin-span-color">[[${homeInstanceVo.instanceOnLineSum}]]<i
-                                class="layui-inline layui-icon layui-icon-face-smile"></i></span>
+                                class="layui-inline layui-icon"><img th:src="@{/images/on-line-16.png}"></i></span>
                     </p>
                     <p>
                         离线
                         <span class="layuiadmin-span-color">[[${homeInstanceVo.instanceOffLineSum}]]<i
-                                class="layui-inline layui-icon layui-icon-face-cry"></i></span>
+                                class="layui-inline layui-icon"><img th:src="@{/images/off-line-16.png}"></i></span>
                     </p>
                 </div>
             </div>
@@ -47,7 +47,7 @@
         <div class="layui-col-sm6 layui-col-md3">
             <div class="layui-card">
                 <div class="layui-card-header">
-                    服务器数量
+                    服务器
                     <span class="layui-badge layui-bg-cyan layuiadmin-badge">台</span>
                 </div>
                 <div class="layui-card-body layuiadmin-card-list">
@@ -55,12 +55,12 @@
                     <p>
                         Windows
                         <span class="layuiadmin-span-color">[[${homeServerOsVo.windowsSum}]]<i
-                                class="layui-inline layui-icon layui-icon-windows"></i></span>
+                                class="layui-inline layui-icon"><img th:src="@{/images/windows-16.png}"></i></span>
                     </p>
                     <p>
                         Linux
                         <span class="layuiadmin-span-color">[[${homeServerOsVo.linuxSum}]]<i
-                                class="layui-inline layui-icon layui-icon-component"></i></span>
+                                class="layui-inline layui-icon"><img th:src="@{/images/linux-16.png}"></i></span>
                     </p>
                 </div>
             </div>
@@ -68,7 +68,7 @@
         <div class="layui-col-sm6 layui-col-md3">
             <div class="layui-card">
                 <div class="layui-card-header">
-                    数据库数量
+                    数据库
                     <span class="layui-badge layui-bg-green layuiadmin-badge">个</span>
                 </div>
                 <div class="layui-card-body layuiadmin-card-list">
@@ -77,12 +77,12 @@
                     <p>
                         正常
                         <span class="layuiadmin-span-color">*** <i
-                                class="layui-inline layui-icon layui-icon-face-smile"></i></span>
+                                class="layui-inline layui-icon"><img th:src="@{/images/normal-16.png}"></i></span>
                     </p>
                     <p>
                         异常
                         <span class="layuiadmin-span-color">*** <i
-                                class="layui-inline layui-icon layui-icon-face-cry"></i></span>
+                                class="layui-inline layui-icon"><img th:src="@{/images/exception-16.png}"></i></span>
                     </p>
                 </div>
             </div>
@@ -90,7 +90,7 @@
         <div class="layui-col-sm6 layui-col-md3">
             <div class="layui-card">
                 <div class="layui-card-header">
-                    告警次数
+                    告警
                     <span class="layui-badge layui-bg-orange layuiadmin-badge">次</span>
                 </div>
                 <div class="layui-card-body layuiadmin-card-list">
@@ -99,12 +99,12 @@
                     <p>
                         成功
                         <span class="layuiadmin-span-color">[[${homeAlarmRecordVo.alarmRecordSuccessSum}]]<i
-                                class="layui-inline layui-icon layui-icon-face-smile"></i></span>
+                                class="layui-inline layui-icon"><img th:src="@{/images/success-16.png}"></i></span>
                     </p>
                     <p>
                         失败
                         <span class="layuiadmin-span-color">[[${homeAlarmRecordVo.alarmRecordFailSum}]]<i
-                                class="layui-inline layui-icon layui-icon-face-cry"></i></span>
+                                class="layui-inline layui-icon"><img th:src="@{/images/fail-16.png}"></i></span>
                     </p>
                 </div>
             </div>
