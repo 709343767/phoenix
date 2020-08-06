@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>告警定义</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="./layui/css/layui.css" th:href="@{/layui/css/layui.css}" media="all">
+    <link rel="stylesheet" href="./style/admin.css" th:href="@{/style/admin.css}" media="all">
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+    <script src="./js/html5.min.js" th:src="@{/js/html5.min.js}"></script>
+    <script src="./js/respond.min.js" th:src="@{/js/respond.min.js}"></script>
+    <![endif]-->
+    <script type="text/javascript" charset="utf-8" th:inline="javascript">
+        var ctxPath = /*[[@{/}]]*/'';
+    </script>
+</head>
+<body>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">告警类型</label>
+                    <div class="layui-input-block">
+                        <select name="type">
+                            <option value="">所有</option>
+                            <option value="SERVER">服务器</option>
+                            <option value="NET">网络</option>
+                            <option value="INSTANCE">应用</option>
+                            <option value="CUSTOM">自定义</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">告警级别</label>
+                    <div class="layui-input-block">
+                        <select name="grade">
+                            <option value="">所有</option>
+                            <option value="INFO">消息</option>
+                            <option value="WARN">警告</option>
+                            <option value="ERROR">错误</option>
+                            <option value="FATAL">致命</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">告警标题</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="title" placeholder="请输入" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">告警内容</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="content" placeholder="请输入" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <button class="layui-btn layuiadmin-btn-useradmin" lay-submit
+                            lay-filter="alarm-definition-list-table-search">
+                        <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-card-body">
+            <table id="alarm-definition-list-table" lay-filter="alarm-definition-list-table"></table>
+            <script type="text/html" id="imgTpl">
+                <img style="display: inline-block; width: 50%; height: 100%;" src={{ d.avatar }}>
+            </script>
+            <script type="text/html" id="list-table-toolbar">
+                <div class="layui-btn-container">
+                    <button class="layui-btn layuiadmin-btn-useradmin" lay-event="batchdel">删除</button>
+                    <button class="layui-btn layuiadmin-btn-useradmin" lay-event="add">添加</button>
+                </div>
+            </script>
+            <script type="text/html" id="alarm-definition-list-table-toolbar">
+                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i
+                        class="layui-icon layui-icon-edit"></i>编辑</a>
+                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i
+                        class="layui-icon layui-icon-delete"></i>删除</a>
+            </script>
+        </div>
+    </div>
+</div>
+<script src="./js/common.js" th:src="@{/js/common.js}" charset="utf-8"></script>
+<script src="./layui/layui.js" th:src="@{/layui/layui.js}"></script>
+<script charset="utf-8" th:inline="javascript">
+    layui.config({
+        base: ctxPath //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'table'], function () {
+        var $ = layui.$, admin = layui.admin, form = layui.form, table = layui.table;
+        table.render({
+            elem: '#alarm-definition-list-table',
+            url: layui.setter.base + 'monitor-alarm-definition/get-monitor-alarm-definition-list',
+            toolbar: '#list-table-toolbar',
+            request: {
+                pageName: 'current',//页码的参数名称，默认：page
+                limitName: 'size' //每页数据量的参数名，默认：limit
+            },
+            response: {
+                statusName: 'code', //规定数据状态的字段名称，默认：code
+                statusCode: 200,//规定成功的状态码，默认：0
+                msgName: 'msg',//规定状态信息的字段名称，默认：msg
+                countName: 'count', //规定数据总数的字段名称，默认：count
+                dataName: 'data' //规定数据列表的字段名称，默认：data
+            },
+            parseData: function (res) { //res 即为原始返回的数据
+                return {
+                    'code': res.code, //解析接口状态
+                    'msg': res.msg, //解析提示文本
+                    'count': res.data.total, //解析数据长度
+                    'data': res.data.records //解析数据列表
+                };
+            },
+            done: function () {
+                $("[data-field='type']").children().each(function () {
+                    if ($(this).text() == 'SERVER') {
+                        $(this).text("服务器");
+                    }
+                    if ($(this).text() == 'NET') {
+                        $(this).text("网络");
+                    }
+                    if ($(this).text() == 'INSTANCE') {
+                        $(this).text("应用");
+                    }
+                    if ($(this).text() == 'CUSTOM') {
+                        $(this).text("自定义");
+                    }
+                });
+                $("[data-field='grade']").children().each(function () {
+                    if ($(this).text() == 'INFO') {
+                        $(this).text("消息");
+                    }
+                    if ($(this).text() == 'WARN') {
+                        $(this).text("警告");
+                    }
+                    if ($(this).text() == 'ERROR') {
+                        $(this).text("错误");
+                    }
+                    if ($(this).text() == 'FATAL') {
+                        $(this).text("致命");
+                    }
+                });
+            },
+            cols: [
+                [{
+                    type: 'checkbox',
+                    fixed: 'left'
+                }, {
+                    field: 'id',
+                    title: 'ID',
+                    sort: !0
+                }, {
+                    field: 'type',
+                    title: '告警类型',
+                }, {
+                    field: 'firstClass',
+                    title: '一级分类',
+                }, {
+                    field: 'secondClass',
+                    title: '二级分类',
+                }, {
+                    field: 'thirdClass',
+                    title: '三级分类'
+                }, {
+                    field: 'grade',
+                    title: '告警级别',
+                }, {
+                    field: 'code',
+                    minWidth: 80,
+                    title: '告警编码',
+                }, {
+                    field: 'title',
+                    title: '告警标题',
+                }, {
+                    field: 'content',
+                    minWidth: 400,
+                    title: '告警内容',
+                }/*, {
+                    field: 'insertTime',
+                    minWidth: 180,
+                    title: '插入时间',
+                }, {
+                    field: 'updateTime',
+                    minWidth: 180,
+                    title: '更新时间',
+                }*/, {
+                    title: '操作',
+                    width: 150,
+                    align: 'center',
+                    fixed: 'right',
+                    toolbar: '#alarm-definition-list-table-toolbar'
+                }]
+            ],
+            page: !0,
+            limit: 15,
+            height: 'full-200'
+        });
+        //监听搜索
+        form.on('submit(alarm-definition-list-table-search)', function (data) {
+            var field = data.field;
+            //执行重载
+            table.reload('alarm-definition-list-table', {
+                where: field
+            });
+        });
+        //头工具栏事件
+        table.on('toolbar(alarm-definition-list-table)', function (obj) {
+            switch (obj.event) {
+                case 'batchdel':
+                    var checkStatus = table.checkStatus('alarm-definition-list-table'), checkData = checkStatus.data; //得到选中的数据
+                    if (checkData.length === 0) {
+                        return layer.msg('请选择数据');
+                    }
+                    layer.confirm('确定删除吗？', function (index) {
+                        admin.req({
+                            type: 'post',
+                            url: ctxPath + 'user/delete-user',
+                            data: JSON.stringify(checkStatus.data),
+                            dataType: 'json',
+                            contentType: 'application/json;charset=utf-8',
+                            headers: {
+                                [[${_csrf.headerName}]]: [[${_csrf.token}]]
+                            },
+                            success: function (result) {
+                                var data = result.data;
+                                if (data === webConst.SUCCESS) {
+                                    table.reload('alarm-definition-list-table'); //数据刷新
+                                    layer.msg('删除成功！', {icon: 6});
+                                } else {
+                                    layer.msg('删除失败！', {icon: 5, shift: 6});
+                                }
+                            },
+                            error: function () {
+                                layer.msg('系统错误！', {icon: 5, shift: 6});
+                            }
+                        });
+                    });
+                    break;
+                case 'add':
+                    layer.open({
+                        type: 2,
+                        title: '添加用户',
+                        content: ctxPath + 'user/add-user-form',
+                        maxmin: true,
+                        area: ['550px', '500px'],
+                        btn: ['确定', '取消'],
+                        yes: function (index, layero) {
+                            var iframeWindow = window['layui-layer-iframe' + index],
+                                submitID = 'LAY-user-front-submit',
+                                submit = layero.find('iframe').contents().find('#' + submitID);
+                            //监听提交
+                            iframeWindow.layui.form.on('submit(' + submitID + ')', function (data) {
+                                var field = data.field; //获取提交的字段
+                                admin.req({
+                                    type: 'post',
+                                    url: ctxPath + 'user/save-user',
+                                    data: field,
+                                    dataType: 'json',
+                                    headers: {
+                                        [[${_csrf.headerName}]]: [[${_csrf.token}]]
+                                    },
+                                    success: function (result) {
+                                        var data = result.data;
+                                        if (data === webConst.SUCCESS) {
+                                            table.reload('alarm-definition-list-table'); //数据刷新
+                                            layer.close(index); //关闭弹层
+                                            layer.msg('添加成功！', {icon: 6});
+                                        } else if (data === webConst.EXIST) {
+                                            layer.msg('账户已存在！', {icon: 5, shift: 6});
+                                        } else {
+                                            layer.msg('添加失败！', {icon: 5, shift: 6});
+                                        }
+                                    },
+                                    error: function () {
+                                        layer.msg('系统错误！', {icon: 5, shift: 6});
+                                    }
+                                });
+                            });
+                            submit.trigger('click');
+                        }
+                    });
+                    break;
+            }
+        });
+        //监听工具条
+        table.on('tool(alarm-definition-list-table)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'del') {
+                layer.confirm('确定删除吗？', function (index) {
+                    admin.req({
+                        type: 'post',
+                        url: ctxPath + 'user/delete-user',
+                        data: JSON.stringify([data]),
+                        dataType: 'json',
+                        contentType: 'application/json;charset=utf-8',
+                        headers: {
+                            [[${_csrf.headerName}]]: [[${_csrf.token}]]
+                        },
+                        success: function (result) {
+                            var data = result.data;
+                            if (data === webConst.SUCCESS) {
+                                obj.del();
+                                table.reload('alarm-definition-list-table'); //数据刷新
+                                layer.msg('删除成功！', {icon: 6});
+                            } else {
+                                layer.msg('删除失败！', {icon: 5, shift: 6});
+                            }
+                        },
+                        error: function () {
+                            layer.msg('系统错误！', {icon: 5, shift: 6});
+                        }
+                    });
+                });
+            } else if (obj.event === 'edit') {
+                layer.open({
+                    type: 2,
+                    title: '编辑用户',
+                    content: ctxPath + 'user/edit-user-form?userId=' + data.id,
+                    maxmin: true,
+                    area: ['550px', '500px'],
+                    btn: ['确定', '取消'],
+                    yes: function (index, layero) {
+                        var iframeWindow = window['layui-layer-iframe' + index],
+                            submitID = 'LAY-user-front-submit',
+                            submit = layero.find('iframe').contents().find('#' + submitID);
+                        //监听提交
+                        iframeWindow.layui.form.on('submit(' + submitID + ')', function (data) {
+                            var field = data.field; //获取提交的字段
+                            admin.req({
+                                type: 'post',
+                                url: ctxPath + 'user/edit-user',
+                                data: field,
+                                dataType: 'json',
+                                headers: {
+                                    [[${_csrf.headerName}]]: [[${_csrf.token}]]
+                                },
+                                success: function (result) {
+                                    var data = result.data;
+                                    if (data === webConst.SUCCESS) {
+                                        table.reload('alarm-definition-list-table'); //数据刷新
+                                        layer.close(index); //关闭弹层
+                                        layer.msg('编辑成功！', {icon: 6});
+                                    } else {
+                                        layer.msg('编辑失败！', {icon: 5, shift: 6});
+                                    }
+                                },
+                                error: function () {
+                                    layer.msg('系统错误！', {icon: 5, shift: 6});
+                                }
+                            });
+                        });
+                        submit.trigger('click');
+                    }
+                });
+            }
+        });
+    });
+</script>
+</body>
+</html>

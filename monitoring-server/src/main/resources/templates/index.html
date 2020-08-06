@@ -96,6 +96,20 @@
                             <cite>主页</cite>
                         </a>
                     </li>
+                    <li data-name="alarm" class="layui-nav-item">
+                        <a href="javascript:;" lay-tips="告警" lay-direction="2">
+                            <i class="layui-icon layui-icon-notice"></i>
+                            <cite>告警</cite>
+                        </a>
+                        <dl class="layui-nav-child">
+                            <dd>
+                                <a th:attr="lay-href=@{/monitor-alarm-definition/list}">告警定义</a>
+                            </dd>
+                            <dd>
+                                <a th:attr="lay-href=@{/role/list}">告警记录</a>
+                            </dd>
+                        </dl>
+                    </li>
                     <li data-name="user" class="layui-nav-item">
                         <a href="javascript:;" lay-tips="用户" lay-direction="2">
                             <i class="layui-icon layui-icon-user"></i>
