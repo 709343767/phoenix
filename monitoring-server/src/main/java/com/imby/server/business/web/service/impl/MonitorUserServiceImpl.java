@@ -1,7 +1,6 @@
 package com.imby.server.business.web.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -190,7 +189,7 @@ public class MonitorUserServiceImpl extends ServiceImpl<IMonitorUserDao, Monitor
             lambdaQueryWrapper.like(MonitorUser::getEmail, email);
         }
         IPage<MonitorUser> monitorUserPage = this.monitorUserDao.selectPage(ipage, lambdaQueryWrapper);
-        List<MonitorRole> monitorRoles = this.monitorRoleDao.selectList(new QueryWrapper<>());
+        List<MonitorRole> monitorRoles = this.monitorRoleDao.selectList(new LambdaQueryWrapper<>());
         List<MonitorUser> monitorUsers = monitorUserPage.getRecords();
         // 转换成监控用户表现层对象
         List<MonitorUserVo> monitorUserVos = new LinkedList<>();
