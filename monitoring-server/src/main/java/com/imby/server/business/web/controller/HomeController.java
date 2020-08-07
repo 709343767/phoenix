@@ -64,7 +64,7 @@ public class HomeController {
         mv.addObject("homeServerOsVo", homeServerOsVo);
         HomeAlarmRecordVo homeAlarmRecordVo = this.monitorAlarmRecordService.getHomeAlarmRecordInfo();
         mv.addObject("homeAlarmRecordVo", homeAlarmRecordVo);
-        Page<MonitorAlarmRecordVo> monitorAlarmRecordVoPage = this.monitorAlarmRecordService.getMonitorAlarmRecordList(1L, 5L);
+        Page<MonitorAlarmRecordVo> monitorAlarmRecordVoPage = this.monitorAlarmRecordService.getMonitorAlarmRecordList(1L, 5L, null, null, null, null);
         mv.addObject("monitorAlarmRecordVos", monitorAlarmRecordVoPage.getRecords());
         return mv;
     }

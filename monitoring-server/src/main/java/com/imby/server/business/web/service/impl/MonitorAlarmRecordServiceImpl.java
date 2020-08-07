@@ -10,7 +10,9 @@ import com.imby.server.business.web.dao.IMonitorAlarmRecordDao;
 import com.imby.server.business.web.entity.MonitorAlarmRecord;
 import com.imby.server.business.web.service.IMonitorAlarmRecordService;
 import com.imby.server.business.web.vo.HomeAlarmRecordVo;
+import com.imby.server.business.web.vo.LayUiAdminResultVo;
 import com.imby.server.business.web.vo.MonitorAlarmRecordVo;
+import com.imby.server.constant.WebResponseConstants;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -76,17 +78,33 @@ public class MonitorAlarmRecordServiceImpl extends ServiceImpl<IMonitorAlarmReco
      *
      * @param current 当前页
      * @param size    每页显示条数
+     * @param type    告警类型
+     * @param level   告警级别
+     * @param title   告警标题
+     * @param content 告警内容
      * @return 分页Page对象
      * @author 皮锋
      * @custom.date 2020/8/3 11:07
      */
     @Override
-    public Page<MonitorAlarmRecordVo> getMonitorAlarmRecordList(Long current, Long size) {
+    public Page<MonitorAlarmRecordVo> getMonitorAlarmRecordList(Long current, Long size, String type, String level, String title, String content) {
         // 查询数据库
         IPage<MonitorAlarmRecord> ipage = new Page<>(current, size);
         LambdaQueryWrapper<MonitorAlarmRecord> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         // 倒叙查询
         lambdaQueryWrapper.orderByDesc(MonitorAlarmRecord::getInsertTime);
+        if (StringUtils.isNotBlank(type)) {
+            lambdaQueryWrapper.eq(MonitorAlarmRecord::getType, type);
+        }
+        if (StringUtils.isNotBlank(level)) {
+            lambdaQueryWrapper.eq(MonitorAlarmRecord::getLevel, level);
+        }
+        if (StringUtils.isNotBlank(title)) {
+            lambdaQueryWrapper.like(MonitorAlarmRecord::getTitle, title);
+        }
+        if (StringUtils.isNotBlank(content)) {
+            lambdaQueryWrapper.like(MonitorAlarmRecord::getContent, content);
+        }
         IPage<MonitorAlarmRecord> monitorAlarmRecordPage = this.monitorAlarmRecordDao.selectPage(ipage, lambdaQueryWrapper);
         List<MonitorAlarmRecord> monitorAlarmRecords = monitorAlarmRecordPage.getRecords();
         // 转换成监控告警表现层对象
@@ -100,5 +118,29 @@ public class MonitorAlarmRecordServiceImpl extends ServiceImpl<IMonitorAlarmReco
         monitorAlarmRecordVoPage.setRecords(monitorAlarmRecordVos);
         monitorAlarmRecordVoPage.setTotal(monitorAlarmRecordPage.getTotal());
         return monitorAlarmRecordVoPage;
+    }
+
+    /**
+     * <p>
+     * 删除告警记录
+     * </p>
+     *
+     * @param monitorAlarmRecordVos 告警记录
+     * @return layUiAdmin响应对象：如果删除成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @author 皮锋
+     * @custom.date 2020/8/7 17:00
+     */
+    @Override
+    public LayUiAdminResultVo deleteMonitorAlarmRecord(List<MonitorAlarmRecordVo> monitorAlarmRecordVos) {
+        int size = monitorAlarmRecordVos.size();
+        List<Long> ids = Lists.newLinkedList();
+        for (MonitorAlarmRecordVo monitorAlarmRecordVo : monitorAlarmRecordVos) {
+            ids.add(monitorAlarmRecordVo.getId());
+        }
+        int result = this.monitorAlarmRecordDao.deleteBatchIds(ids);
+        if (result == size) {
+            return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);
+        }
+        return LayUiAdminResultVo.ok(WebResponseConstants.FAIL);
     }
 }

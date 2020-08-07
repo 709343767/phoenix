@@ -4,7 +4,10 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.imby.server.business.web.entity.MonitorAlarmRecord;
 import com.imby.server.business.web.vo.HomeAlarmRecordVo;
+import com.imby.server.business.web.vo.LayUiAdminResultVo;
 import com.imby.server.business.web.vo.MonitorAlarmRecordVo;
+
+import java.util.List;
 
 /**
  * <p>
@@ -34,9 +37,25 @@ public interface IMonitorAlarmRecordService extends IService<MonitorAlarmRecord>
      *
      * @param current 当前页
      * @param size    每页显示条数
+     * @param type    告警类型
+     * @param level   告警级别
+     * @param title   告警标题
+     * @param content 告警内容
      * @return 分页Page对象
      * @author 皮锋
      * @custom.date 2020/8/3 11:07
      */
-    Page<MonitorAlarmRecordVo> getMonitorAlarmRecordList(Long current, Long size);
+    Page<MonitorAlarmRecordVo> getMonitorAlarmRecordList(Long current, Long size, String type, String level, String title, String content);
+
+    /**
+     * <p>
+     * 删除告警记录
+     * </p>
+     *
+     * @param monitorAlarmRecordVos 告警记录
+     * @return layUiAdmin响应对象：如果删除成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @author 皮锋
+     * @custom.date 2020/8/7 17:00
+     */
+    LayUiAdminResultVo deleteMonitorAlarmRecord(List<MonitorAlarmRecordVo> monitorAlarmRecordVos);
 }
