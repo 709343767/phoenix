@@ -8,11 +8,14 @@ import com.google.common.collect.Lists;
 import com.imby.server.business.web.dao.IMonitorAlarmDefinitionDao;
 import com.imby.server.business.web.entity.MonitorAlarmDefinition;
 import com.imby.server.business.web.service.IMonitorAlarmDefinitionService;
+import com.imby.server.business.web.vo.LayUiAdminResultVo;
 import com.imby.server.business.web.vo.MonitorAlarmDefinitionVo;
+import com.imby.server.constant.WebResponseConstants;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -77,4 +80,80 @@ public class MonitorAlarmDefinitionServiceImpl extends ServiceImpl<IMonitorAlarm
         monitorAlarmDefinitionVoPage.setTotal(monitorAlarmDefinitionPage.getTotal());
         return monitorAlarmDefinitionVoPage;
     }
+
+    /**
+     * <p>
+     * 添加告警定义
+     * </p>
+     *
+     * @param monitorAlarmDefinitionVo 告警定义
+     * @return layUiAdmin响应对象：如果数据库中已经有此告警定义，LayUiAdminResultVo.data="exist"；
+     * 如果添加成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @author 皮锋
+     * @custom.date 2020/8/7 12:22
+     */
+    @Override
+    public LayUiAdminResultVo saveMonitorAlarmDefinition(MonitorAlarmDefinitionVo monitorAlarmDefinitionVo) {
+        // 根据告警code查询数据库，判断数据库中是否已经有此code的告警定义
+        LambdaQueryWrapper<MonitorAlarmDefinition> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(MonitorAlarmDefinition::getCode, monitorAlarmDefinitionVo.getCode());
+        MonitorAlarmDefinition dbMonitorAlarmDefinition = this.monitorAlarmDefinitionDao.selectOne(lambdaQueryWrapper);
+        if (dbMonitorAlarmDefinition != null) {
+            return LayUiAdminResultVo.ok(WebResponseConstants.EXIST);
+        }
+        // 添加告警定义
+        MonitorAlarmDefinition monitorAlarmDefinition = monitorAlarmDefinitionVo.convertTo();
+        monitorAlarmDefinition.setInsertTime(new Date());
+        int result = this.monitorAlarmDefinitionDao.insert(monitorAlarmDefinition);
+        if (result == 1) {
+            return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);
+        }
+        return LayUiAdminResultVo.ok(WebResponseConstants.FAIL);
+    }
+
+    /**
+     * <p>
+     * 编辑告警定义
+     * </p>
+     *
+     * @param monitorAlarmDefinitionVo 告警定义
+     * @return layUiAdmin响应对象：如果编辑成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @author 皮锋
+     * @custom.date 2020/8/7 15:26
+     */
+    @Override
+    public LayUiAdminResultVo editMonitorAlarmDefinition(MonitorAlarmDefinitionVo monitorAlarmDefinitionVo) {
+        MonitorAlarmDefinition monitorAlarmDefinition = monitorAlarmDefinitionVo.convertTo();
+        monitorAlarmDefinition.setUpdateTime(new Date());
+        int result = this.monitorAlarmDefinitionDao.updateById(monitorAlarmDefinition);
+        if (result == 1) {
+            return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);
+        }
+        return LayUiAdminResultVo.ok(WebResponseConstants.FAIL);
+    }
+
+    /**
+     * <p>
+     * 删除告警定义
+     * </p>
+     *
+     * @param monitorAlarmDefinitionVos 告警定义
+     * @return layUiAdmin响应对象：如果删除成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @author 皮锋
+     * @custom.date 2020/8/7 15:36
+     */
+    @Override
+    public LayUiAdminResultVo deleteMonitorAlarmDefinition(List<MonitorAlarmDefinitionVo> monitorAlarmDefinitionVos) {
+        int size = monitorAlarmDefinitionVos.size();
+        List<Long> ids = Lists.newLinkedList();
+        for (MonitorAlarmDefinitionVo monitorAlarmDefinitionVo : monitorAlarmDefinitionVos) {
+            ids.add(monitorAlarmDefinitionVo.getId());
+        }
+        int result = this.monitorAlarmDefinitionDao.deleteBatchIds(ids);
+        if (result == size) {
+            return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);
+        }
+        return LayUiAdminResultVo.ok(WebResponseConstants.FAIL);
+    }
+
 }

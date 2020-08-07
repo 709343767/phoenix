@@ -3,7 +3,10 @@ package com.imby.server.business.web.service;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.imby.server.business.web.entity.MonitorAlarmDefinition;
+import com.imby.server.business.web.vo.LayUiAdminResultVo;
 import com.imby.server.business.web.vo.MonitorAlarmDefinitionVo;
+
+import java.util.List;
 
 /**
  * <p>
@@ -31,4 +34,41 @@ public interface IMonitorAlarmDefinitionService extends IService<MonitorAlarmDef
      * @custom.date 2020/8/6 20:29
      */
     Page<MonitorAlarmDefinitionVo> getMonitorAlarmDefinitionList(Long current, Long size, String type, String grade, String title, String content);
+
+    /**
+     * <p>
+     * 添加告警定义
+     * </p>
+     *
+     * @param monitorAlarmDefinitionVo 告警定义
+     * @return layUiAdmin响应对象：如果数据库中已经有此告警定义，LayUiAdminResultVo.data="exist"；
+     * 如果添加成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @author 皮锋
+     * @custom.date 2020/8/7 12:22
+     */
+    LayUiAdminResultVo saveMonitorAlarmDefinition(MonitorAlarmDefinitionVo monitorAlarmDefinitionVo);
+
+    /**
+     * <p>
+     * 编辑告警定义
+     * </p>
+     *
+     * @param monitorAlarmDefinitionVo 告警定义
+     * @return layUiAdmin响应对象：如果编辑成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @author 皮锋
+     * @custom.date 2020/8/7 15:26
+     */
+    LayUiAdminResultVo editMonitorAlarmDefinition(MonitorAlarmDefinitionVo monitorAlarmDefinitionVo);
+
+    /**
+     * <p>
+     * 删除告警定义
+     * </p>
+     *
+     * @param monitorAlarmDefinitionVos 告警定义
+     * @return layUiAdmin响应对象：如果删除成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @author 皮锋
+     * @custom.date 2020/8/7 15:36
+     */
+    LayUiAdminResultVo deleteMonitorAlarmDefinition(List<MonitorAlarmDefinitionVo> monitorAlarmDefinitionVos);
 }

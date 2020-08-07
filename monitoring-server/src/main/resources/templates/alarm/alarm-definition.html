@@ -121,31 +121,31 @@
                 };
             },
             done: function () {
-                $("[data-field='type']").children().each(function () {
-                    if ($(this).text() == 'SERVER') {
+                $('[data-field="type"]').children().each(function () {
+                    if ($(this).text() === 'SERVER') {
                         $(this).text("服务器");
                     }
-                    if ($(this).text() == 'NET') {
+                    if ($(this).text() === 'NET') {
                         $(this).text("网络");
                     }
-                    if ($(this).text() == 'INSTANCE') {
+                    if ($(this).text() === 'INSTANCE') {
                         $(this).text("应用");
                     }
-                    if ($(this).text() == 'CUSTOM') {
+                    if ($(this).text() === 'CUSTOM') {
                         $(this).text("自定义");
                     }
                 });
-                $("[data-field='grade']").children().each(function () {
-                    if ($(this).text() == 'INFO') {
+                $('[data-field="grade"]').children().each(function () {
+                    if ($(this).text() === 'INFO') {
                         $(this).text("消息");
                     }
-                    if ($(this).text() == 'WARN') {
+                    if ($(this).text() === 'WARN') {
                         $(this).text("警告");
                     }
-                    if ($(this).text() == 'ERROR') {
+                    if ($(this).text() === 'ERROR') {
                         $(this).text("错误");
                     }
-                    if ($(this).text() == 'FATAL') {
+                    if ($(this).text() === 'FATAL') {
                         $(this).text("致命");
                     }
                 });
@@ -223,7 +223,7 @@
                     layer.confirm('确定删除吗？', function (index) {
                         admin.req({
                             type: 'post',
-                            url: ctxPath + 'user/delete-user',
+                            url: ctxPath + 'monitor-alarm-definition/delete-monitor-alarm-definition',
                             data: JSON.stringify(checkStatus.data),
                             dataType: 'json',
                             contentType: 'application/json;charset=utf-8',
@@ -248,21 +248,21 @@
                 case 'add':
                     layer.open({
                         type: 2,
-                        title: '添加用户',
-                        content: ctxPath + 'user/add-user-form',
+                        title: '添加告警定义',
+                        content: ctxPath + 'monitor-alarm-definition/add-monitor-alarm-definition-form',
                         maxmin: true,
-                        area: ['550px', '500px'],
+                        area: ['700px', '580px'],
                         btn: ['确定', '取消'],
                         yes: function (index, layero) {
                             var iframeWindow = window['layui-layer-iframe' + index],
-                                submitID = 'LAY-user-front-submit',
+                                submitID = 'LAY-alarm-front-submit',
                                 submit = layero.find('iframe').contents().find('#' + submitID);
                             //监听提交
                             iframeWindow.layui.form.on('submit(' + submitID + ')', function (data) {
                                 var field = data.field; //获取提交的字段
                                 admin.req({
                                     type: 'post',
-                                    url: ctxPath + 'user/save-user',
+                                    url: ctxPath + 'monitor-alarm-definition/save-monitor-alarm-definition',
                                     data: field,
                                     dataType: 'json',
                                     headers: {
@@ -275,7 +275,7 @@
                                             layer.close(index); //关闭弹层
                                             layer.msg('添加成功！', {icon: 6});
                                         } else if (data === webConst.EXIST) {
-                                            layer.msg('账户已存在！', {icon: 5, shift: 6});
+                                            layer.msg('告警编码已存在！', {icon: 5, shift: 6});
                                         } else {
                                             layer.msg('添加失败！', {icon: 5, shift: 6});
                                         }
@@ -298,7 +298,7 @@
                 layer.confirm('确定删除吗？', function (index) {
                     admin.req({
                         type: 'post',
-                        url: ctxPath + 'user/delete-user',
+                        url: ctxPath + 'monitor-alarm-definition/delete-monitor-alarm-definition',
                         data: JSON.stringify([data]),
                         dataType: 'json',
                         contentType: 'application/json;charset=utf-8',
@@ -323,21 +323,21 @@
             } else if (obj.event === 'edit') {
                 layer.open({
                     type: 2,
-                    title: '编辑用户',
-                    content: ctxPath + 'user/edit-user-form?userId=' + data.id,
+                    title: '编辑告警定义',
+                    content: ctxPath + 'monitor-alarm-definition/edit-monitor-alarm-definition-form?id=' + data.id,
                     maxmin: true,
-                    area: ['550px', '500px'],
+                    area: ['700px', '580px'],
                     btn: ['确定', '取消'],
                     yes: function (index, layero) {
                         var iframeWindow = window['layui-layer-iframe' + index],
-                            submitID = 'LAY-user-front-submit',
+                            submitID = 'LAY-alarm-front-submit',
                             submit = layero.find('iframe').contents().find('#' + submitID);
                         //监听提交
                         iframeWindow.layui.form.on('submit(' + submitID + ')', function (data) {
                             var field = data.field; //获取提交的字段
                             admin.req({
                                 type: 'post',
-                                url: ctxPath + 'user/edit-user',
+                                url: ctxPath + 'monitor-alarm-definition/edit-monitor-alarm-definition',
                                 data: field,
                                 dataType: 'json',
                                 headers: {

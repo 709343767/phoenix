@@ -2,6 +2,7 @@ package com.imby.server.business.web.controller;
 
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.imby.server.business.web.entity.MonitorAlarmDefinition;
 import com.imby.server.business.web.service.IMonitorAlarmDefinitionService;
 import com.imby.server.business.web.vo.LayUiAdminResultVo;
 import com.imby.server.business.web.vo.MonitorAlarmDefinitionVo;
@@ -11,10 +12,10 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.List;
 
 /**
  * <p>
@@ -79,6 +80,95 @@ public class MonitorAlarmDefinitionController {
     public LayUiAdminResultVo getMonitorAlarmDefinitionList(Long current, Long size, String type, String grade, String title, String content) {
         Page<MonitorAlarmDefinitionVo> page = this.monitorAlarmDefinitionService.getMonitorAlarmDefinitionList(current, size, type, grade, title, content);
         return LayUiAdminResultVo.ok(page);
+    }
+
+
+    /**
+     * <p>
+     * 访问新增告警定义表单页面
+     * </p>
+     *
+     * @return {@link ModelAndView} 新增告警定义表单页面
+     * @author 皮锋
+     * @custom.date 2020/8/7 11:00
+     */
+    @ApiOperation(value = "访问新增告警定义表单页面")
+    @GetMapping("/add-monitor-alarm-definition-form")
+    public ModelAndView addMonitorAlarmDefinitionForm() {
+        return new ModelAndView("alarm/add-alarm-definition");
+    }
+
+    /**
+     * <p>
+     * 访问编辑告警定义表单页面
+     * </p>
+     *
+     * @return {@link ModelAndView} 编辑告警定义表单页面
+     * @author 皮锋
+     * @custom.date 2020/8/7 11:07
+     */
+    @ApiOperation(value = "访问编辑告警定义表单页面")
+    @ApiImplicitParams(value = {
+            @ApiImplicitParam(name = "id", value = "告警ID", required = true, paramType = "query", dataType = "long")})
+    @GetMapping("/edit-monitor-alarm-definition-form")
+    public ModelAndView editMonitorAlarmDefinitionForm(@RequestParam(name = "id") Long id) {
+        MonitorAlarmDefinition monitorAlarmDefinition = this.monitorAlarmDefinitionService.getById(id);
+        MonitorAlarmDefinitionVo monitorAlarmDefinitionVo = MonitorAlarmDefinitionVo.builder().build().convertFor(monitorAlarmDefinition);
+        ModelAndView mv = new ModelAndView("alarm/edit-alarm-definition");
+        mv.addObject("monitorAlarmDefinitionVo", monitorAlarmDefinitionVo);
+        return mv;
+    }
+
+    /**
+     * <p>
+     * 添加告警定义
+     * </p>
+     *
+     * @param monitorAlarmDefinitionVo 告警定义
+     * @return layUiAdmin响应对象：如果数据库中已经有此告警定义，LayUiAdminResultVo.data="exist"；
+     * 如果添加成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @author 皮锋
+     * @custom.date 2020/8/7 12:19
+     */
+    @ApiOperation(value = "添加告警定义")
+    @PostMapping("/save-monitor-alarm-definition")
+    @ResponseBody
+    public LayUiAdminResultVo saveMonitorAlarmDefinition(MonitorAlarmDefinitionVo monitorAlarmDefinitionVo) {
+        return this.monitorAlarmDefinitionService.saveMonitorAlarmDefinition(monitorAlarmDefinitionVo);
+    }
+
+    /**
+     * <p>
+     * 编辑告警定义
+     * </p>
+     *
+     * @param monitorAlarmDefinitionVo 告警定义
+     * @return layUiAdmin响应对象：如果编辑成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @author 皮锋
+     * @custom.date 2020/8/7 15:24
+     */
+    @ApiOperation(value = "编辑告警定义")
+    @PostMapping("/edit-monitor-alarm-definition")
+    @ResponseBody
+    public LayUiAdminResultVo editMonitorAlarmDefinition(MonitorAlarmDefinitionVo monitorAlarmDefinitionVo) {
+        return this.monitorAlarmDefinitionService.editMonitorAlarmDefinition(monitorAlarmDefinitionVo);
+    }
+
+    /**
+     * <p>
+     * 删除告警定义
+     * </p>
+     *
+     * @param monitorAlarmDefinitionVos 告警定义
+     * @return layUiAdmin响应对象：如果删除成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @author 皮锋
+     * @custom.date 2020/8/7 15:34
+     */
+    @ApiOperation(value = "删除告警定义")
+    @PostMapping("/delete-monitor-alarm-definition")
+    @ResponseBody
+    public LayUiAdminResultVo deleteMonitorAlarmDefinition(@RequestBody List<MonitorAlarmDefinitionVo> monitorAlarmDefinitionVos) {
+        return this.monitorAlarmDefinitionService.deleteMonitorAlarmDefinition(monitorAlarmDefinitionVos);
     }
 
 }
