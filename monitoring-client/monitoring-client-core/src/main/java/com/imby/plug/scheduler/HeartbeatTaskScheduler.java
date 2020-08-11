@@ -2,12 +2,11 @@ package com.imby.plug.scheduler;
 
 import com.imby.plug.core.ConfigLoader;
 import com.imby.plug.thread.HeartbeatThread;
+import org.apache.commons.lang3.concurrent.BasicThreadFactory;
 
-import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * <p>
@@ -29,26 +28,16 @@ public class HeartbeatTaskScheduler {
      * @custom.date 2020年3月5日 下午2:56:47
      */
     public static void run() {
-        // 重新开启线程，让他单独去做我们想要做的操作，抛出异常并不会影响到主线程
-        Thread thread = new Thread(() -> {
-            final ScheduledExecutorService seService = Executors.newScheduledThreadPool(5, new ThreadFactory() {
-                final AtomicInteger atomic = new AtomicInteger();
-
-                @Override
-                public Thread newThread(Runnable r) {
-                    return new Thread(r, "monitoring-heartbeat-pool-thread-" + this.atomic.getAndIncrement());
-                }
-            });
-            // 心跳频率
-            long rate = ConfigLoader.monitoringProperties.getHeartbeatProperties().getRate();
-            seService.scheduleAtFixedRate(new HeartbeatThread(), 15, rate, TimeUnit.SECONDS);
-        });
-        // 设置线程名
-        thread.setName("monitoring-heartbeat-thread");
-        // 设置守护线程
-        thread.setDaemon(true);
-        // 开始执行分进程
-        thread.start();
+        final ScheduledExecutorService seService = new ScheduledThreadPoolExecutor(5,
+                new BasicThreadFactory.Builder()
+                        // 设置线程名
+                        .namingPattern("monitoring-heartbeat-pool-thread-%d")
+                        // 设置为守护线程
+                        .daemon(true)
+                        .build());
+        // 心跳频率
+        long rate = ConfigLoader.monitoringProperties.getHeartbeatProperties().getRate();
+        seService.scheduleAtFixedRate(new HeartbeatThread(), 15, rate, TimeUnit.SECONDS);
     }
 
 }

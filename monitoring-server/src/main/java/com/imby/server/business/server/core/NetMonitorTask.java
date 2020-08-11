@@ -11,6 +11,7 @@ import com.imby.server.business.server.domain.Net;
 import com.imby.server.business.server.service.IAlarmService;
 import com.imby.server.property.MonitoringServerWebProperties;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.concurrent.BasicThreadFactory;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,11 +22,9 @@ import org.springframework.stereotype.Component;
 
 import java.util.Date;
 import java.util.Map;
-import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * <p>
@@ -61,14 +60,13 @@ public class NetMonitorTask implements CommandLineRunner, DisposableBean {
     /**
      * 延迟/周期执行线程池
      */
-    private final ScheduledExecutorService seService = Executors.newScheduledThreadPool(5, new ThreadFactory() {
-        final AtomicInteger atomic = new AtomicInteger();
-
-        @Override
-        public Thread newThread(Runnable r) {
-            return new Thread(r, "monitoring-net-pool-thread-" + this.atomic.getAndIncrement());
-        }
-    });
+    private final ScheduledExecutorService seService = new ScheduledThreadPoolExecutor(5,
+            new BasicThreadFactory.Builder()
+                    // 设置线程名
+                    .namingPattern("monitoring-net-pool-thread-%d")
+                    // 设置为守护线程
+                    .daemon(true)
+                    .build());
 
     /**
      * <p>
@@ -82,8 +80,7 @@ public class NetMonitorTask implements CommandLineRunner, DisposableBean {
      */
     @Override
     public void run(String... args) {
-        // 重新开启线程，让他单独去做我们想要做的操作，此时CommandLineRunner执行的操作和主线程是相互独立的，抛出异常并不会影响到主线程
-        Thread thread = new Thread(() -> this.seService.scheduleWithFixedDelay(() -> {
+        this.seService.scheduleWithFixedDelay(() -> {
             try {
                 // 网络监控是否打开
                 boolean monitoringEnable = this.monitoringServerWebProperties.getNetworkProperties().isMonitoringEnable();
@@ -133,11 +130,7 @@ public class NetMonitorTask implements CommandLineRunner, DisposableBean {
             } catch (Exception e) {
                 log.error("定时扫描网络信息池中的所有IP异常！", e);
             }
-        }, 10, 30, TimeUnit.SECONDS));
-        // 设置守护线程
-        thread.setDaemon(true);
-        // 开始执行分进程
-        thread.start();
+        }, 10, 30, TimeUnit.SECONDS);
     }
 
     /**
