@@ -175,7 +175,13 @@
                     }
                 });
                 $('[data-field="way"]').children().each(function () {
-                    $(this).text($(this).text().replace('MAIL', "邮件").replace('SMS', "短信").replace(';', "、"));
+                    $(this).html($(this).text().replace('MAIL', '邮件').replace('SMS', '短信').replace(';', '<br>'));
+                });
+                $('[data-field="phone"]').children().each(function () {
+                    $(this).html($(this).text().replace(';', '<br>'));
+                });
+                $('[data-field="mail"]').children().each(function () {
+                    $(this).html($(this).text().replace(';', '<br>'));
                 });
             },
             cols: [
@@ -188,11 +194,11 @@
                     sort: !0
                 }, {
                     field: 'type',
-                    width: 120,
+                    width: 90,
                     title: '告警类型',
                 }, {
                     field: 'way',
-                    width: 120,
+                    width: 90,
                     title: '告警方式',
                 }, {
                     field: 'level',
@@ -203,7 +209,7 @@
                     title: '告警标题'
                 }, {
                     field: 'content',
-                    minWidth: 400,
+                    minWidth: 380,
                     title: '告警内容',
                 }, {
                     field: 'smsStatus',
@@ -213,15 +219,16 @@
                     field: 'mailStatus',
                     width: 80,
                     title: '邮件',
-                }/*, {
+                }, {
                     field: 'phone',
+                    width: 120,
                     title: '手机号码',
                 }, {
                     field: 'mail',
                     title: '电子邮箱',
-                }*/, {
+                }, {
                     field: 'updateTime',
-                    minWidth: 180,
+                    minWidth: 160,
                     title: '告警时间',
                 }/*, {
                     field: 'updateTime',
@@ -229,7 +236,7 @@
                     title: '更新时间',
                 }*/, {
                     title: '操作',
-                    width: 80,
+                    width: 85,
                     align: 'center',
                     fixed: 'right',
                     toolbar: '#alarm-record-list-table-toolbar'
