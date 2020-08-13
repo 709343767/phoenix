@@ -1,10 +1,10 @@
 package com.imby.common.util;
 
+import org.hyperic.sigar.SigarException;
+
 import com.imby.common.domain.server.JvmDomain;
 import com.imby.common.domain.server.ServerDomain;
 import com.imby.common.init.InitSigar;
-import lombok.extern.slf4j.Slf4j;
-import org.hyperic.sigar.SigarException;
 
 /**
  * <p>
@@ -14,7 +14,6 @@ import org.hyperic.sigar.SigarException;
  * @author 皮锋
  * @custom.date 2020年3月3日 上午11:55:09
  */
-@Slf4j
 public final class ServerUtils extends InitSigar {
 
     /**
