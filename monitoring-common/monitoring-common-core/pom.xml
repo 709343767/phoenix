@@ -72,6 +72,11 @@
             <groupId>org.fusesource</groupId>
             <artifactId>sigar</artifactId>
         </dependency>
+        <!-- Hutool工具包依赖 -->
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+        </dependency>
     </dependencies>
 
     <!-- 构建 -->
