@@ -10,7 +10,7 @@ import com.imby.common.dto.HeartbeatPackage;
 import com.imby.common.dto.ServerPackage;
 import com.imby.common.inf.IPackageConstructor;
 import com.imby.common.util.NetUtils;
-import com.imby.common.util.SigarUtils;
+import com.imby.common.util.OsUtils;
 import com.imby.common.util.StrUtils;
 import com.imby.server.util.InstanceUtils;
 
@@ -47,7 +47,7 @@ public class PackageConstructor implements IPackageConstructor {
         alarmPackage.setInstanceName(InstanceUtils.getInstanceName());
         alarmPackage.setInstanceDesc(InstanceUtils.getInstanceDesc());
         alarmPackage.setIp(NetUtils.getLocalIp());
-        alarmPackage.setComputerName(SigarUtils.getComputerName());
+        alarmPackage.setComputerName(OsUtils.getComputerName());
         // 判断字符集
         Charset charset = alarm.getCharset();
         // 设置了字符集
@@ -88,7 +88,7 @@ public class PackageConstructor implements IPackageConstructor {
         baseResponsePackage.setInstanceName(InstanceUtils.getInstanceName());
         baseResponsePackage.setInstanceDesc(InstanceUtils.getInstanceDesc());
         baseResponsePackage.setIp(NetUtils.getLocalIp());
-        baseResponsePackage.setComputerName(SigarUtils.getComputerName());
+        baseResponsePackage.setComputerName(OsUtils.getComputerName());
         baseResponsePackage.setId(StrUtils.getUUID());
         baseResponsePackage.setDateTime(new Date());
         baseResponsePackage.setResult(result);

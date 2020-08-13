@@ -1,10 +1,8 @@
-package com.imby.plug.server;
-
-import org.hyperic.sigar.SigarException;
-import org.junit.Test;
+package com.imby.common.util;
 
 import com.imby.common.domain.server.*;
-import com.imby.common.util.SigarUtils;
+import org.hyperic.sigar.SigarException;
+import org.junit.Test;
 
 import java.util.List;
 
@@ -16,21 +14,7 @@ import java.util.List;
  * @author 皮锋
  * @custom.date 2020年3月3日 上午11:58:49
  */
-public class ServerTest {
-
-    /*
-     * <p>
-     * 测试获取应用服务器信息
-     * </p>
-     *
-     * @author 皮锋
-     * @custom.date 2020年3月3日 下午2:10:39
-     */
-    // @Test
-    // public void testGetAppServerInfo() {
-    // AppServerDomain appServerVo = SigarUtils.getAppServerInfo();
-    // System.out.println(appServerVo.toString());
-    // }
+public class ServerUtilsTest {
 
     /**
      * <p>
@@ -42,7 +26,7 @@ public class ServerTest {
      */
     @Test
     public void testGetOsInfo() {
-        OsDomain osVo = SigarUtils.getOsInfo();
+        OsDomain osVo = OsUtils.getOsInfo();
         System.out.println(osVo.toString());
     }
 
@@ -56,7 +40,7 @@ public class ServerTest {
      */
     @Test
     public void testGetComputerName() {
-        System.out.println(SigarUtils.getComputerName());
+        System.out.println(OsUtils.getComputerName());
     }
 
     /**
@@ -70,7 +54,7 @@ public class ServerTest {
      */
     @Test
     public void testGetMemoryInfo() throws SigarException {
-        MemoryDomain memoryVo = SigarUtils.getMemoryInfo();
+        MemoryDomain memoryVo = MemoryUtils.getMemoryInfo();
         System.out.println(memoryVo);
     }
 
@@ -85,7 +69,7 @@ public class ServerTest {
      */
     @Test
     public void testGetCpuInfo() throws SigarException {
-        CpuDomain cpuVo = SigarUtils.getCpuInfo();
+        CpuDomain cpuVo = CpuUtils.getCpuInfo();
         int cpuNum = cpuVo.getCpuNum();
         List<CpuDomain.CpuInfoDomain> cpuInfoVos = cpuVo.getCpuList();
         System.out.println("CPU数量：" + cpuNum);
@@ -103,7 +87,7 @@ public class ServerTest {
      */
     @Test
     public void testGetNetInfo() throws SigarException {
-        NetDomain netVo = SigarUtils.getNetInfo();
+        NetDomain netVo = NetUtils.getNetInfo();
         int netNum = netVo.getNetNum();
         List<NetDomain.NetInterfaceConfigDomain> netInterfaceConfigs = netVo.getNetList();
         System.out.println("网卡总数：" + netNum);
@@ -120,7 +104,7 @@ public class ServerTest {
      */
     @Test
     public void testGetJvmInfo() {
-        JvmDomain jvmVo = SigarUtils.getJvmInfo();
+        JvmDomain jvmVo = ServerUtils.getJvmInfo();
         System.out.println(jvmVo.toString());
     }
 
@@ -135,7 +119,7 @@ public class ServerTest {
      */
     @Test
     public void testGetDiskInfo() throws SigarException {
-        DiskDomain diskDomain = SigarUtils.getDiskInfo();
+        DiskDomain diskDomain = DiskUtils.getDiskInfo();
         int diskNum = diskDomain.getDiskNum();
         System.out.println("磁盘总数：" + diskNum);
         List<DiskDomain.DiskInfoDomain> diskInfoDomains = diskDomain.getDiskInfoList();
@@ -154,7 +138,7 @@ public class ServerTest {
     @Test
     public void testGetServerInfo() throws SigarException {
         // while (true) {
-        ServerDomain serverInfoVo = SigarUtils.getServerInfo();
+        ServerDomain serverInfoVo = ServerUtils.getServerInfo();
         System.out.println(serverInfoVo.toJsonString());
         System.out.println();
         // Thread.sleep(10000);

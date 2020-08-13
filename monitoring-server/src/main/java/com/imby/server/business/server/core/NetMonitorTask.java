@@ -6,7 +6,7 @@ import com.imby.common.domain.Alarm;
 import com.imby.common.dto.AlarmPackage;
 import com.imby.common.util.DateTimeUtils;
 import com.imby.common.util.NetUtils;
-import com.imby.common.util.SigarUtils;
+import com.imby.common.util.OsUtils;
 import com.imby.server.business.server.domain.Net;
 import com.imby.server.business.server.service.IAlarmService;
 import com.imby.server.property.MonitoringServerWebProperties;
@@ -195,7 +195,7 @@ public class NetMonitorTask implements CommandLineRunner, DisposableBean {
     public void sendAlarmInfo(String title, AlarmLevelEnums alarmLevelEnums, Net net) {
         String dateTime = DateTimeUtils.dateToString(net.getDateTime());
         String msg = "IP地址：" + NetUtils.getLocalIp() + "到" + net.getIp()
-                + "，<br>服务器：" + SigarUtils.getComputerName() + "到" + net.getComputerName()
+                + "，<br>服务器：" + OsUtils.getComputerName() + "到" + net.getComputerName()
                 + "，<br>时间：" + dateTime;
         Alarm alarm = Alarm.builder()//
                 .title(title)//

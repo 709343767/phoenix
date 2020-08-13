@@ -11,7 +11,8 @@ import com.imby.common.dto.HeartbeatPackage;
 import com.imby.common.dto.ServerPackage;
 import com.imby.common.inf.IPackageConstructor;
 import com.imby.common.util.NetUtils;
-import com.imby.common.util.SigarUtils;
+import com.imby.common.util.OsUtils;
+import com.imby.common.util.ServerUtils;
 import com.imby.common.util.StrUtils;
 import com.imby.plug.util.InstanceUtils;
 import org.hyperic.sigar.SigarException;
@@ -49,7 +50,7 @@ public class PackageConstructor implements IPackageConstructor {
         alarmPackage.setInstanceName(InstanceUtils.getInstanceName());
         alarmPackage.setInstanceDesc(InstanceUtils.getInstanceDesc());
         alarmPackage.setIp(NetUtils.getLocalIp());
-        alarmPackage.setComputerName(SigarUtils.getComputerName());
+        alarmPackage.setComputerName(OsUtils.getComputerName());
         // 判断字符集
         Charset charset = alarm.getCharset();
         // 设置了字符集
@@ -80,7 +81,7 @@ public class PackageConstructor implements IPackageConstructor {
         heartbeatPackage.setInstanceName(InstanceUtils.getInstanceName());
         heartbeatPackage.setInstanceDesc(InstanceUtils.getInstanceDesc());
         heartbeatPackage.setIp(NetUtils.getLocalIp());
-        heartbeatPackage.setComputerName(SigarUtils.getComputerName());
+        heartbeatPackage.setComputerName(OsUtils.getComputerName());
         heartbeatPackage.setDateTime(new Date());
         heartbeatPackage.setRate(ConfigLoader.monitoringProperties.getHeartbeatProperties().getRate());
         return heartbeatPackage;
@@ -106,8 +107,8 @@ public class PackageConstructor implements IPackageConstructor {
         serverPackage.setInstanceName(InstanceUtils.getInstanceName());
         serverPackage.setInstanceDesc(InstanceUtils.getInstanceDesc());
         serverPackage.setIp(NetUtils.getLocalIp());
-        serverPackage.setComputerName(SigarUtils.getComputerName());
-        ServerDomain serverDomain = SigarUtils.getServerInfo();
+        serverPackage.setComputerName(OsUtils.getComputerName());
+        ServerDomain serverDomain = ServerUtils.getServerInfo();
         serverPackage.setServerDomain(serverDomain);
         serverPackage.setRate(ConfigLoader.monitoringProperties.getServerInfoProperties().getRate());
         return serverPackage;

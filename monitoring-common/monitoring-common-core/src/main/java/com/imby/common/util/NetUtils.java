@@ -1,7 +1,13 @@
 package com.imby.common.util;
 
+import com.google.common.collect.Lists;
+import com.imby.common.init.InitSigar;
+import com.imby.common.domain.server.NetDomain;
 import lombok.Cleanup;
 import org.apache.commons.lang3.StringUtils;
+import org.hyperic.sigar.NetFlags;
+import org.hyperic.sigar.NetInterfaceConfig;
+import org.hyperic.sigar.SigarException;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -11,6 +17,7 @@ import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.nio.charset.Charset;
 import java.util.Enumeration;
+import java.util.List;
 
 /**
  * <p>
@@ -20,7 +27,7 @@ import java.util.Enumeration;
  * @author 皮锋
  * @custom.date 2020/3/12 11:20
  */
-public class NetUtils {
+public class NetUtils extends InitSigar {
 
     /**
      * <p>
@@ -178,6 +185,48 @@ public class NetUtils {
             return 1;
         }
         return 0;
+    }
+
+    /**
+     * <p>
+     * 获取网卡信息
+     * </p>
+     *
+     * @return {@link NetDomain}
+     * @throws SigarException Sigar异常
+     * @author 皮锋
+     * @custom.date 2020年3月3日 下午3:33:08
+     */
+    public static NetDomain getNetInfo() throws SigarException {
+        NetDomain netDomain = new NetDomain();
+
+        String[] netInfos = SIGAR.getNetInterfaceList();
+
+        List<NetDomain.NetInterfaceConfigDomain> netInterfaceConfigDomains = Lists.newArrayList();
+        for (String info : netInfos) {
+            NetInterfaceConfig netInfo = SIGAR.getNetInterfaceConfig(info);
+            if (
+                // 127.0.0.1
+                    NetFlags.LOOPBACK_ADDRESS.equals(netInfo.getAddress())
+                            // 标识为0
+                            || netInfo.getFlags() == 0
+                            // MAC地址不存在
+                            || NetFlags.NULL_HWADDR.equals(netInfo.getHwaddr())
+                            // 0.0.0.0
+                            || NetFlags.ANY_ADDR.equals(netInfo.getAddress())
+            ) {
+                continue;
+            }
+            NetDomain.NetInterfaceConfigDomain netInterfaceConfigDomain = new NetDomain.NetInterfaceConfigDomain();
+            netInterfaceConfigDomain.setName(netInfo.getName())
+                    .setType(netInfo.getType())
+                    .setAddress(netInfo.getAddress())
+                    .setMask(netInfo.getNetmask())
+                    .setBroadcast(netInfo.getBroadcast());
+            netInterfaceConfigDomains.add(netInterfaceConfigDomain);
+        }
+        netDomain.setNetNum(netInterfaceConfigDomains.size()).setNetList(netInterfaceConfigDomains);
+        return netDomain;
     }
 
     public static void main(String[] args) {
