@@ -1,14 +1,12 @@
 package com.imby.common.util;
 
-import org.hyperic.sigar.SigarException;
-
-import com.imby.common.domain.server.JvmDomain;
 import com.imby.common.domain.server.ServerDomain;
 import com.imby.common.init.InitSigar;
+import org.hyperic.sigar.SigarException;
 
 /**
  * <p>
- * Sigar工具类，获取服务器信息
+ * 服务器信息工具类
  * </p>
  *
  * @author 皮锋
@@ -28,28 +26,6 @@ public final class ServerUtils extends InitSigar {
 
     /**
      * <p>
-     * 获取java虚拟机信息
-     * </p>
-     *
-     * @return {@link JvmDomain}
-     * @author 皮锋
-     * @custom.date 2020年3月3日 下午4:17:55
-     */
-    public static JvmDomain getJvmInfo() {
-        Runtime runTime = Runtime.getRuntime();
-        return new JvmDomain()
-                .setJavaPath(PROPS.getProperty("java.home"))
-                .setJavaVendor(PROPS.getProperty("java.vendor"))
-                .setJavaVersion(PROPS.getProperty("java.version"))
-                .setJavaName(PROPS.getProperty("java.specification.name"))
-                .setJvmVersion(PROPS.getProperty("java.vm.version"))
-                .setJvmTotalMemory(String.format("%.2f", runTime.totalMemory() / MB) + "M")
-                .setJvmFreeMemory(String.format("%.2f", runTime.freeMemory() / MB) + "M");
-    }
-
-
-    /**
-     * <p>
      * 获取服务器信息
      * </p>
      *
@@ -61,7 +37,6 @@ public final class ServerUtils extends InitSigar {
     public static ServerDomain getServerInfo() throws SigarException {
         return new ServerDomain()
                 .setCpuDomain(CpuUtils.getCpuInfo())
-                .setJvmDomain(getJvmInfo())
                 .setMemoryDomain(MemoryUtils.getMemoryInfo())
                 .setNetDomain(NetUtils.getNetInfo())
                 .setOsDomain(OsUtils.getOsInfo())
