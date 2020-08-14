@@ -4,17 +4,12 @@ import com.google.common.base.Charsets;
 import com.imby.agent.util.InstanceUtils;
 import com.imby.common.constant.EndpointTypeConstants;
 import com.imby.common.domain.Alarm;
+import com.imby.common.domain.Jvm;
 import com.imby.common.domain.Result;
-import com.imby.common.domain.server.ServerDomain;
-import com.imby.common.dto.AlarmPackage;
-import com.imby.common.dto.BaseResponsePackage;
-import com.imby.common.dto.HeartbeatPackage;
-import com.imby.common.dto.ServerPackage;
+import com.imby.common.domain.Server;
+import com.imby.common.dto.*;
 import com.imby.common.inf.IPackageConstructor;
-import com.imby.common.util.NetUtils;
-import com.imby.common.util.OsUtils;
-import com.imby.common.util.ServerUtils;
-import com.imby.common.util.StrUtils;
+import com.imby.common.util.*;
 import org.hyperic.sigar.SigarException;
 
 import java.nio.charset.Charset;
@@ -108,10 +103,36 @@ public class PackageConstructor implements IPackageConstructor {
         serverPackage.setInstanceDesc(InstanceUtils.getInstanceDesc());
         serverPackage.setIp(NetUtils.getLocalIp());
         serverPackage.setComputerName(OsUtils.getComputerName());
-        ServerDomain serverDomain = ServerUtils.getServerInfo();
-        serverPackage.setServerDomain(serverDomain);
+        Server server = ServerUtils.getServerInfo();
+        serverPackage.setServer(server);
         serverPackage.setRate(ConfigLoader.MONITORING_PROPERTIES.getServerInfoProperties().getRate());
         return serverPackage;
+    }
+
+    /**
+     * <p>
+     * 构建Java虚拟机信息包
+     * </p>
+     *
+     * @return {@link JvmPackage}
+     * @author 皮锋
+     * @custom.date 2020/8/14 21:28
+     */
+    @Override
+    public JvmPackage structureJvmPackage() {
+        JvmPackage jvmPackage = new JvmPackage();
+        jvmPackage.setId(StrUtils.getUUID());
+        jvmPackage.setDateTime(new Date());
+        jvmPackage.setEndpoint(EndpointTypeConstants.AGENT);
+        jvmPackage.setInstanceId(InstanceUtils.getInstanceId());
+        jvmPackage.setInstanceName(InstanceUtils.getInstanceName());
+        jvmPackage.setInstanceDesc(InstanceUtils.getInstanceDesc());
+        jvmPackage.setIp(NetUtils.getLocalIp());
+        jvmPackage.setComputerName(OsUtils.getComputerName());
+        Jvm jvm = JvmUtils.getJvmInfo();
+        jvmPackage.setJvm(jvm);
+        jvmPackage.setRate(ConfigLoader.MONITORING_PROPERTIES.getMonitoringJvmInfoProperties().getRate());
+        return jvmPackage;
     }
 
     /**

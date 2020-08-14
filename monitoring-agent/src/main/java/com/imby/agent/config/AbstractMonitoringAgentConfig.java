@@ -63,6 +63,18 @@ public abstract class AbstractMonitoringAgentConfig {
     private String serverInfoRate;
 
     /**
+     * 是否发送Java虚拟机信息
+     */
+    @Value("${monitoring.jvm-info.enable}")
+    private String jvmInfoEnable;
+
+    /**
+     * 与服务端发Java虚拟机信息包的频率（秒）
+     */
+    @Value("${monitoring.jvm-info.rate}")
+    private String jvmInfoRate;
+
+    /**
      * <p>
      * 把配置信息实例化到spring容器
      * </p>
@@ -94,7 +106,7 @@ public abstract class AbstractMonitoringAgentConfig {
         // 心跳频率
         long heartbeatRate = Long.parseLong(this.heartbeatRate);
         // 频率配置不正确
-        if (heartbeatRate < 30) {
+        if (heartbeatRate < 30L) {
             throw new ErrorConfigParamException("心跳频率最小不能小于30秒！");
         }
         heartbeatProperties.setRate(heartbeatRate);
@@ -103,14 +115,24 @@ public abstract class AbstractMonitoringAgentConfig {
         // 发送服务器信息频率
         long serverInfoRate = Long.parseLong(this.serverInfoRate);
         // 频率配置不正确
-        if (serverInfoRate < 30) {
+        if (serverInfoRate < 30L) {
             throw new ErrorConfigParamException("获取服务器信息频率最小不能小于30秒！");
         }
         monitoringServerInfoProperties.setRate(serverInfoRate);
+        MonitoringJvmInfoProperties monitoringJvmInfoProperties = new MonitoringJvmInfoProperties();
+        monitoringJvmInfoProperties.setEnable(Boolean.parseBoolean(this.jvmInfoEnable));
+        // 发送Java虚拟机信息频率
+        long jvmInfoRate = Long.parseLong(this.jvmInfoRate);
+        // 频率配置不正确
+        if (jvmInfoRate < 30L) {
+            throw new ErrorConfigParamException("获取Java虚拟机信息频率最小不能小于30秒！");
+        }
+        monitoringJvmInfoProperties.setRate(jvmInfoRate);
         monitoringProperties.setServerProperties(serverProperties);
         monitoringProperties.setOwnProperties(ownProperties);
         monitoringProperties.setHeartbeatProperties(heartbeatProperties);
         monitoringProperties.setServerInfoProperties(monitoringServerInfoProperties);
+        monitoringProperties.setMonitoringJvmInfoProperties(monitoringJvmInfoProperties);
         log.info("监控配置加载成功！");
         return monitoringProperties;
     }
