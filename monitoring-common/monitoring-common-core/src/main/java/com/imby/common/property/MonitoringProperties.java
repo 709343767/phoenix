@@ -19,24 +19,29 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class MonitoringProperties {
 
-	/**
-	 * 与服务端相关的监控属性
-	 */
-	private MonitoringServerProperties serverProperties;
+    /**
+     * 与服务端相关的监控属性
+     */
+    private MonitoringServerProperties serverProperties;
 
-	/**
-	 * 与自己相关的监控属性
-	 */
-	private MonitoringOwnProperties ownProperties;
+    /**
+     * 与自己相关的监控属性
+     */
+    private MonitoringOwnProperties ownProperties;
 
-	/**
-	 * 心跳属性
-	 */
-	private MonitoringHeartbeatProperties heartbeatProperties;
+    /**
+     * 心跳属性
+     */
+    private MonitoringHeartbeatProperties heartbeatProperties;
 
-	/**
-	 * 服务器信息属性
-	 */
-	private MonitoringServerInfoProperties serverInfoProperties;
+    /**
+     * 服务器信息属性
+     */
+    private MonitoringServerInfoProperties serverInfoProperties;
+
+    /**
+     * Java虚拟机信息属性
+     */
+    private MonitoringJvmInfoProperties monitoringJvmInfoProperties;
 
 }

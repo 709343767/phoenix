@@ -1,6 +1,6 @@
 package com.imby.common.util;
 
-import com.imby.common.domain.server.ServerDomain;
+import com.imby.common.domain.Server;
 import org.hyperic.sigar.SigarException;
 import org.junit.Test;
 
@@ -25,7 +25,7 @@ public class ServerUtilsTest {
      */
     @Test
     public void testGetServerInfo() throws SigarException {
-        ServerDomain serverInfoVo = ServerUtils.getServerInfo();
+        Server serverInfoVo = ServerUtils.getServerInfo();
         System.out.println(serverInfoVo.toJsonString());
     }
 

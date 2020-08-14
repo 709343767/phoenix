@@ -1,6 +1,7 @@
-package com.imby.common.domain.server;
+package com.imby.common.domain;
 
 import com.imby.common.abs.AbstractSuperBean;
+import com.imby.common.domain.server.*;
 import lombok.*;
 import lombok.experimental.Accessors;
 
@@ -13,12 +14,13 @@ import lombok.experimental.Accessors;
  * @custom.date 2020/3/3 11:26
  */
 @Data
+@Builder
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public final class ServerDomain extends AbstractSuperBean {
+public final class Server extends AbstractSuperBean {
 
     /**
      * 操作系统信息
@@ -39,11 +41,6 @@ public final class ServerDomain extends AbstractSuperBean {
      * 网卡信息
      */
     private NetDomain netDomain;
-
-    /**
-     * JVM信息
-     */
-    private JvmDomain jvmDomain;
 
     /**
      * 磁盘信息

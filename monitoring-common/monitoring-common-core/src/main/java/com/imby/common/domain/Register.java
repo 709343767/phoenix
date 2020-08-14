@@ -1,34 +1,32 @@
 package com.imby.common.domain;
 
 import com.imby.common.abs.AbstractSuperBean;
+import com.imby.common.domain.server.OsDomain;
+import com.imby.common.inf.INeed2Register;
 import lombok.*;
 import lombok.experimental.Accessors;
 
 /**
  * <p>
- * 返回结果
+ * 注册信息
  * </p>
  *
  * @author 皮锋
- * @custom.date 2020年4月5日 下午1:27:44
+ * @custom.date 2020/8/14 17:07
  */
 @Data
-@Builder
 @ToString
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public final class Result extends AbstractSuperBean {
+public final class Register extends AbstractSuperBean implements INeed2Register {
 
     /**
-     * 是否成功
+     * 操作系统信息
      */
-    private boolean isSuccess;
+    private OsDomain osDomain;
 
-    /**
-     * 结果信息
-     */
-    private String msg;
 
 }

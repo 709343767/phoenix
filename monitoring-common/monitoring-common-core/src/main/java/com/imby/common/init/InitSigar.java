@@ -35,11 +35,6 @@ public class InitSigar {
     public final static Map<String, String> ENVS = System.getenv();
 
     /**
-     * 存储单位转M
-     */
-    public static final double MB = 1024 * 1024;
-
-    /**
      * 初始化Sigar，并创建Sigar对象
      */
     public final static Sigar SIGAR = initSigar();

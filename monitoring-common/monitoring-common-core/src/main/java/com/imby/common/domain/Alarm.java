@@ -10,20 +10,20 @@ import java.nio.charset.Charset;
 
 /**
  * <p>
- * 告警
+ * 告警信息
  * </p>
  *
  * @author 皮锋
  * @custom.date 2020年3月7日 下午2:35:27
  */
 @Data
-@ToString
 @Builder
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public class Alarm extends AbstractSuperBean {
+public final class Alarm extends AbstractSuperBean {
 
     /**
      * 告警级别，默认为：WARN

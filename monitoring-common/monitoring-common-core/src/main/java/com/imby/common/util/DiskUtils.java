@@ -1,5 +1,6 @@
 package com.imby.common.util;
 
+import cn.hutool.core.io.unit.DataSizeUtil;
 import com.google.common.collect.Lists;
 import com.imby.common.domain.server.DiskDomain;
 import com.imby.common.init.InitSigar;
@@ -33,7 +34,7 @@ public class DiskUtils extends InitSigar {
      */
     public static DiskDomain getDiskInfo() throws SigarException {
         DiskDomain diskDomain = new DiskDomain();
-        List<DiskDomain.DiskInfoDomain> diskInfoDomains = Lists.newArrayList();
+        List<DiskDomain.DiskInfoDomain> diskInfoDomains = Lists.newLinkedList();
 
         FileSystem[] fileSystemArray = SIGAR.getFileSystemList();
         for (FileSystem fileSystem : fileSystemArray) {
@@ -94,11 +95,11 @@ public class DiskUtils extends InitSigar {
             } else {
                 continue;
             }
-            diskInfoDomain.setTotal(String.format("%.2f", fileSystemUsage.getTotal() / MB) + "M");
-            diskInfoDomain.setFree(String.format("%.2f", fileSystemUsage.getFree() / MB) + "M");
-            diskInfoDomain.setUsed(String.format("%.2f", fileSystemUsage.getUsed() / MB) + "M");
-            diskInfoDomain.setAvail(String.format("%.2f", fileSystemUsage.getAvail() / MB) + "M");
-            diskInfoDomain.setUsePercent(String.format("%.2f", fileSystemUsage.getUsePercent() * 100) + "%");
+            diskInfoDomain.setTotal(DataSizeUtil.format(fileSystemUsage.getTotal() * 1024L));
+            diskInfoDomain.setFree(DataSizeUtil.format(fileSystemUsage.getFree() * 1024L));
+            diskInfoDomain.setUsed(DataSizeUtil.format(fileSystemUsage.getUsed() * 1024L));
+            diskInfoDomain.setAvail(DataSizeUtil.format(fileSystemUsage.getAvail() * 1024L));
+            diskInfoDomain.setUsePercent(String.format("%.2f", fileSystemUsage.getUsePercent() * 100D) + "%");
             diskInfoDomains.add(diskInfoDomain);
         }
         diskDomain.setDiskInfoList(diskInfoDomains);

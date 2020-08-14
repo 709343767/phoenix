@@ -2,10 +2,7 @@ package com.imby.common.inf;
 
 import com.imby.common.domain.Alarm;
 import com.imby.common.domain.Result;
-import com.imby.common.dto.AlarmPackage;
-import com.imby.common.dto.BaseResponsePackage;
-import com.imby.common.dto.HeartbeatPackage;
-import com.imby.common.dto.ServerPackage;
+import com.imby.common.dto.*;
 import org.hyperic.sigar.SigarException;
 
 /**
@@ -52,6 +49,17 @@ public interface IPackageConstructor {
      * @custom.date 2020年3月7日 下午4:51:51
      */
     ServerPackage structureServerPackage() throws SigarException;
+
+    /**
+     * <p>
+     * 构建Java虚拟机信息包
+     * </p>
+     *
+     * @return {@link JvmPackage}
+     * @author 皮锋
+     * @custom.date 2020/8/14 21:28
+     */
+    JvmPackage structureJvmPackage();
 
     /**
      * <p>
