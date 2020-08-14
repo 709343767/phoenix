@@ -1,7 +1,7 @@
 package com.imby.common.dto;
 
 import com.imby.common.abs.AbstractInstanceBean;
-import com.imby.common.domain.Server;
+import com.imby.common.domain.Jvm;
 import lombok.*;
 import lombok.experimental.Accessors;
 
@@ -10,11 +10,11 @@ import java.util.Date;
 
 /**
  * <p>
- * 服务器信息包
+ * Java虚拟机信息包
  * </p>
  *
  * @author 皮锋
- * @custom.date 2020年3月6日 上午9:54:41
+ * @custom.date 2020/8/14 20:56
  */
 @Data
 @ToString
@@ -22,12 +22,12 @@ import java.util.Date;
 @AllArgsConstructor
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public class ServerPackage extends AbstractInstanceBean implements Serializable {
+public class JvmPackage extends AbstractInstanceBean implements Serializable {
 
     /**
      * serialVersionUID
      */
-    private static final long serialVersionUID = -6332477014336947229L;
+    private static final long serialVersionUID = -3939905322246540065L;
 
     /**
      * ID
@@ -35,9 +35,9 @@ public class ServerPackage extends AbstractInstanceBean implements Serializable 
     private String id;
 
     /**
-     * 服务器信息
+     * Java虚拟机信息
      */
-    private Server server;
+    private Jvm jvm;
 
     /**
      * 时间

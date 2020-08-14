@@ -9,7 +9,7 @@ import java.util.Date;
 
 /**
  * <p>
- * 心跳包传输层对象
+ * 心跳包
  * </p>
  *
  * @author 皮锋

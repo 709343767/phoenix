@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.imby.common.domain.server.CpuDomain;
 import com.imby.common.domain.server.DiskDomain;
 import com.imby.common.domain.server.MemoryDomain;
-import com.imby.common.domain.server.ServerDomain;
+import com.imby.common.domain.Server;
 import com.imby.common.dto.ServerPackage;
 import com.imby.server.business.server.core.CpuPool;
 import com.imby.server.business.server.core.DiskPool;
@@ -112,13 +112,13 @@ public class ServerAspect {
         // 计算机名
         String computerName = serverPackage.getComputerName();
         // 服务器信息
-        ServerDomain serverDomain = serverPackage.getServerDomain();
+        Server server = serverPackage.getServer();
         // 内存信息
-        MemoryDomain memoryDomain = serverDomain.getMemoryDomain();
+        MemoryDomain memoryDomain = server.getMemoryDomain();
         // Cpu信息
-        CpuDomain cpuDomain = serverDomain.getCpuDomain();
+        CpuDomain cpuDomain = server.getCpuDomain();
         // 磁盘信息
-        DiskDomain diskDomain = serverDomain.getDiskDomain();
+        DiskDomain diskDomain = server.getDiskDomain();
         // 刷新服务器信息
         this.refreshServerInfo(ip, computerName, memoryDomain, cpuDomain, diskDomain);
         // 调用监听器回调接口
