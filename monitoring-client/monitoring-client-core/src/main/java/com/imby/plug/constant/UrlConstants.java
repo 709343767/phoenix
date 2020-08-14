@@ -32,4 +32,9 @@ public final class UrlConstants {
      */
     public static final String SERVER_URL = ROOT_URI + "/server/accept-server-package";
 
+    /**
+     * 发送Java虚拟机信息地址
+     */
+    public static final String JVM_URL = ROOT_URI + "/jvm/accept-jvm-package";
+
 }

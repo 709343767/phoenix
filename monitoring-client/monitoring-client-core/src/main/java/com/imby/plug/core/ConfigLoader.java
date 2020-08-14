@@ -88,6 +88,13 @@ public class ConfigLoader {
         // 缺省[与服务端或者代理端发服务器信息包的频率（秒），默认60秒，最小不能小于30秒]
         String serverInfoRateStr = StringUtils.trimToNull(properties.getProperty("monitoring.server-info.rate"));
         long serverInfoRate = StringUtils.isBlank(serverInfoRateStr) ? 60L : Long.parseLong(serverInfoRateStr);
+        // 缺省[是否采集Java虚拟机信息，默认false]
+        String jvmInfoEnableStr = StringUtils.trimToNull(properties.getProperty("monitoring.jvm-info.enable"));
+        boolean jvmInfoEnable = !StringUtils.isBlank(jvmInfoEnableStr)
+                && Boolean.parseBoolean(jvmInfoEnableStr);
+        // 缺省[与服务端或者代理端发送Java虚拟机信息的频率（秒），默认60秒，最小不能小于30秒]
+        String jvmInfoRateStr = StringUtils.trimToNull(properties.getProperty("monitoring.jvm-info.rate"));
+        long jvmInfoRate = StringUtils.isBlank(serverInfoRateStr) ? 60L : Long.parseLong(jvmInfoRateStr);
         // 没有配置连接
         if (StringUtils.isBlank(serverUrl)) {
             throw new NotFoundConfigParamException("监控程序找不到监控服务端URL配置！");
@@ -103,9 +110,12 @@ public class ConfigLoader {
         if (serverInfoRate < 30) {
             throw new ErrorConfigParamException("获取服务器信息频率最小不能小于30秒！");
         }
+        if (jvmInfoRate < 30) {
+            throw new ErrorConfigParamException("获取Java虚拟机信息频率最小不能小于30秒！");
+        }
         // 封装数据
         wrap(serverUrl, instanceId, instanceName, instanceDesc, heartbeatRate, serverInfoEnable,
-                serverInfoRate);
+                serverInfoRate, jvmInfoEnable, jvmInfoRate);
     }
 
     /**
@@ -120,11 +130,16 @@ public class ConfigLoader {
      * @param heartbeatRate    缺省[与服务端或者代理端发心跳包的频率（秒），默认30秒]
      * @param serverInfoEnable 缺省[是否采集服务器信息，默认false]
      * @param serverInfoRate   缺省[与服务端或者代理端发服务器信息包的频率（秒），默认60秒]
+     * @param jvmInfoEnable    缺省[是否采集Java虚拟机信息，默认false]
+     * @param jvmInfoRate      缺省[与服务端或者代理端发送Java虚拟机信息的频率（秒），默认60秒，最小不能小于30秒]
      * @author 皮锋
      * @custom.date 2020年3月5日 下午4:36:33
      */
-    private static void wrap(String serverUrl, String instanceId,
-                             String instanceName, String instanceDesc, long heartbeatRate, boolean serverInfoEnable, long serverInfoRate) {
+    private static void wrap(String serverUrl,
+                             String instanceId, String instanceName,
+                             String instanceDesc, long heartbeatRate,
+                             boolean serverInfoEnable, long serverInfoRate,
+                             boolean jvmInfoEnable, long jvmInfoRate) {
         MonitoringServerProperties serverProperties = new MonitoringServerProperties();
         serverProperties.setUrl(serverUrl);
         monitoringProperties.setServerProperties(serverProperties);
@@ -140,6 +155,10 @@ public class ConfigLoader {
         monitoringServerInfoProperties.setEnable(serverInfoEnable);
         monitoringServerInfoProperties.setRate(serverInfoRate);
         monitoringProperties.setServerInfoProperties(monitoringServerInfoProperties);
+        MonitoringJvmInfoProperties monitoringJvmInfoProperties = new MonitoringJvmInfoProperties();
+        monitoringJvmInfoProperties.setEnable(jvmInfoEnable);
+        monitoringJvmInfoProperties.setRate(jvmInfoRate);
+        monitoringProperties.setMonitoringJvmInfoProperties(monitoringJvmInfoProperties);
     }
 
 }

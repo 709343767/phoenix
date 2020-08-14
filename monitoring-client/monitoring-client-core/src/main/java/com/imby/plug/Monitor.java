@@ -10,6 +10,7 @@ import com.imby.plug.core.ConfigLoader;
 import com.imby.plug.core.PackageConstructor;
 import com.imby.plug.core.Sender;
 import com.imby.plug.scheduler.HeartbeatTaskScheduler;
+import com.imby.plug.scheduler.JvmTaskScheduler;
 import com.imby.plug.scheduler.ServerTaskScheduler;
 import lombok.extern.slf4j.Slf4j;
 
@@ -75,6 +76,8 @@ public class Monitor {
         HeartbeatTaskScheduler.run();
         // 3.开始定时发送服务器信息包
         ServerTaskScheduler.run();
+        // 4.开始定时发送Java虚拟机信息包
+        JvmTaskScheduler.run();
     }
 
     /**
