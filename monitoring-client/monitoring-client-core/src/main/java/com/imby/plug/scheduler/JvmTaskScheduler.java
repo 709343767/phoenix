@@ -20,7 +20,7 @@ public class JvmTaskScheduler {
 
     /**
      * <p>
-     * 如果监控配置文件中配置了发送Java虚拟机，则延迟45秒启动定时任务，定时发送Java虚拟机包，
+     * 如果监控配置文件中配置了发送Java虚拟机，则延迟15秒启动定时任务，定时发送Java虚拟机包，
      * 定时任务的执行频率一般为监控配置文件中配置的Java虚拟机包发送频率，如果监控配置文件中没有配置Java虚拟机包的发送频率，
      * 则由类{@link ConfigLoader}提供默认的发送Java虚拟机频率。
      * </p>
@@ -41,7 +41,7 @@ public class JvmTaskScheduler {
                             .build());
             // 发送Java虚拟机的频率
             long rate = ConfigLoader.monitoringProperties.getMonitoringJvmInfoProperties().getRate();
-            seService.scheduleAtFixedRate(new JvmThread(), 45, rate, TimeUnit.SECONDS);
+            seService.scheduleAtFixedRate(new JvmThread(), 15, rate, TimeUnit.SECONDS);
         }
     }
 

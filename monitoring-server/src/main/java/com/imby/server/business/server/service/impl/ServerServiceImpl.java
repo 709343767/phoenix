@@ -51,12 +51,6 @@ public class ServerServiceImpl implements IServerService {
     private IMonitorServerNetcardDao monitorServerNetcardDao;
 
     /**
-     * 服务器JVM信息数据访问对象
-     */
-    @Autowired
-    private IMonitorServerJvmDao monitorServerJvmDao;
-
-    /**
      * 服务器磁盘数据访问对象
      */
     @Autowired
@@ -81,8 +75,6 @@ public class ServerServiceImpl implements IServerService {
         this.operateServerCpu(serverPackage);
         // 把服务器网卡信息添加或更新到数据库
         this.operateServerNetcard(serverPackage);
-        // 把服务器jvm信息添加到数据库
-        this.operateServerJvm(serverPackage);
         // 把服务器磁盘信息添加到数据库
         this.operateServerDisk(serverPackage);
         // 把服务器操作系统信息添加或更新到数据库
@@ -104,7 +96,7 @@ public class ServerServiceImpl implements IServerService {
         // IP地址
         String ip = serverPackage.getIp();
         // 磁盘信息
-        DiskDomain diskDomain = serverPackage.getServerDomain().getDiskDomain();
+        DiskDomain diskDomain = serverPackage.getServer().getDiskDomain();
         List<DiskDomain.DiskInfoDomain> diskInfoDomains = diskDomain.getDiskInfoList();
         for (int i = 0; i < diskInfoDomains.size(); i++) {
             DiskDomain.DiskInfoDomain diskInfoDomain = diskInfoDomains.get(i);
@@ -128,34 +120,6 @@ public class ServerServiceImpl implements IServerService {
 
     /**
      * <p>
-     * 把服务器jvm信息添加到数据库
-     * </p>
-     *
-     * @param serverPackage 服务器信息包
-     * @author 皮锋
-     * @custom.date 2020/5/12 10:02
-     */
-    private void operateServerJvm(ServerPackage serverPackage) {
-        // IP地址
-        String ip = serverPackage.getIp();
-        // java虚拟机信息
-        JvmDomain jvmDomain = serverPackage.getServerDomain().getJvmDomain();
-        MonitorServerJvm monitorServerJvm = new MonitorServerJvm();
-        monitorServerJvm.setIp(ip);
-        monitorServerJvm.setJavaName(jvmDomain.getJavaName());
-        monitorServerJvm.setJavaPath(jvmDomain.getJavaPath());
-        monitorServerJvm.setJavaVendor(jvmDomain.getJavaVendor());
-        monitorServerJvm.setJavaVersion(jvmDomain.getJavaVersion());
-        monitorServerJvm.setJvmVersion(jvmDomain.getJvmVersion());
-        monitorServerJvm.setJvmFreeMemory(jvmDomain.getJvmFreeMemory());
-        monitorServerJvm.setJvmTotalMemory(jvmDomain.getJvmTotalMemory());
-        monitorServerJvm.setInsertTime(serverPackage.getDateTime());
-        monitorServerJvm.setUpdateTime(serverPackage.getDateTime());
-        this.monitorServerJvmDao.insert(monitorServerJvm);
-    }
-
-    /**
-     * <p>
      * 把服务器网卡信息添加或更新到数据库
      * </p>
      *
@@ -167,7 +131,7 @@ public class ServerServiceImpl implements IServerService {
         // IP地址
         String ip = serverPackage.getIp();
         // 网卡信息
-        NetDomain netDomain = serverPackage.getServerDomain().getNetDomain();
+        NetDomain netDomain = serverPackage.getServer().getNetDomain();
         // 设置网卡信息
         List<NetDomain.NetInterfaceConfigDomain> netInterfaceConfigDomains = netDomain.getNetList();
         for (int i = 0; i < netInterfaceConfigDomains.size(); i++) {
@@ -214,7 +178,7 @@ public class ServerServiceImpl implements IServerService {
         // IP地址
         String ip = serverPackage.getIp();
         // Cpu信息
-        CpuDomain cpuDomain = serverPackage.getServerDomain().getCpuDomain();
+        CpuDomain cpuDomain = serverPackage.getServer().getCpuDomain();
         List<CpuDomain.CpuInfoDomain> cpuInfoDomains = cpuDomain.getCpuList();
         for (int i = 0; i < cpuInfoDomains.size(); i++) {
             CpuDomain.CpuInfoDomain cpuInfoDomain = cpuInfoDomains.get(i);
@@ -244,7 +208,7 @@ public class ServerServiceImpl implements IServerService {
         // IP地址
         String ip = serverPackage.getIp();
         // 内存信息
-        MemoryDomain memoryDomain = serverPackage.getServerDomain().getMemoryDomain();
+        MemoryDomain memoryDomain = serverPackage.getServer().getMemoryDomain();
         MonitorServerMemory monitorServerMemory = new MonitorServerMemory();
         monitorServerMemory.setIp(ip);
         monitorServerMemory.setMenTotal(memoryDomain.getMemTotal());
@@ -269,7 +233,7 @@ public class ServerServiceImpl implements IServerService {
         // IP地址
         String ip = serverPackage.getIp();
         // 操作系统信息
-        OsDomain osDomain = serverPackage.getServerDomain().getOsDomain();
+        OsDomain osDomain = serverPackage.getServer().getOsDomain();
         LambdaQueryWrapper<MonitorServerOs> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         lambdaQueryWrapper.eq(MonitorServerOs::getIp, ip);
         MonitorServerOs monitorServerDb = this.monitorServerOsDao.selectOne(lambdaQueryWrapper);

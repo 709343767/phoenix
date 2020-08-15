@@ -1,13 +1,8 @@
 package com.imby.common.domain.jvm;
 
 import com.imby.common.abs.AbstractSuperBean;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import lombok.*;
 import lombok.experimental.Accessors;
-
-import java.lang.management.ThreadInfo;
 
 /**
  * <p>
@@ -18,8 +13,10 @@ import java.lang.management.ThreadInfo;
  * @custom.date 2020/8/14 10:24
  */
 @Data
-@ToString
 @Builder
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
 public class ThreadDomain extends AbstractSuperBean {
@@ -47,5 +44,5 @@ public class ThreadDomain extends AbstractSuperBean {
     /**
      * 线程信息
      */
-    private ThreadInfo[] threadInfos;
+    //private ThreadInfo[] threadInfos;
 }

@@ -48,7 +48,7 @@ public class ServerInfoCommandLineRunner implements CommandLineRunner, Disposabl
 
     /**
      * <p>
-     * 如果监控配置文件中配置了向服务端发送服务器信息，则项目启动完成后延迟5秒钟启动定时任务，定时向服务端发送服务器信息包，
+     * 如果监控配置文件中配置了向服务端发送服务器信息，则项目启动完成后延迟10秒钟启动定时任务，定时向服务端发送服务器信息包，
      * 定时任务的执行频率为监控配置文件中配置的服务器信息包发送频率。
      * </p>
      *
@@ -61,7 +61,7 @@ public class ServerInfoCommandLineRunner implements CommandLineRunner, Disposabl
         // 是否发送服务器信息
         boolean serverInfoEnable = this.monitoringProperties.getServerInfoProperties().isEnable();
         if (serverInfoEnable) {
-            this.seService.scheduleAtFixedRate(new ServerInfoScheduledExecutor(), 5,
+            this.seService.scheduleAtFixedRate(new ServerInfoScheduledExecutor(), 10,
                     this.monitoringProperties.getServerInfoProperties().getRate(), TimeUnit.SECONDS);
         }
     }

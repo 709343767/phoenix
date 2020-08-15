@@ -1,10 +1,7 @@
 package com.imby.common.domain.jvm;
 
 import com.imby.common.abs.AbstractSuperBean;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import lombok.*;
 import lombok.experimental.Accessors;
 
 import java.util.Map;
@@ -20,6 +17,8 @@ import java.util.Map;
 @Data
 @Builder
 @ToString
+@NoArgsConstructor
+@AllArgsConstructor
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
 public class MemoryDomain extends AbstractSuperBean {

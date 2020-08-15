@@ -1,10 +1,7 @@
 package com.imby.common.domain.jvm;
 
 import com.imby.common.abs.AbstractSuperBean;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import lombok.*;
 import lombok.experimental.Accessors;
 
 import java.util.List;
@@ -20,6 +17,8 @@ import java.util.List;
 @Data
 @Builder
 @ToString
+@NoArgsConstructor
+@AllArgsConstructor
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
 public class GarbageCollectorDomain extends AbstractSuperBean {
@@ -41,6 +40,8 @@ public class GarbageCollectorDomain extends AbstractSuperBean {
     @Data
     @Builder
     @ToString
+    @NoArgsConstructor
+    @AllArgsConstructor
     @Accessors(chain = true)
     @EqualsAndHashCode(callSuper = true)
     public static class GarbageCollectorInfoDomain extends AbstractSuperBean {

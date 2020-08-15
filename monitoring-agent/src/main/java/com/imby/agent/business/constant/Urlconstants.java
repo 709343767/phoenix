@@ -25,4 +25,10 @@ public final class Urlconstants {
      */
     public static final String SERVER_URL = "/server/accept-server-package";
 
+    /**
+     * 发送Java虚拟机信息包URL地址
+     */
+    public static final String JVM_URL = "/jvm/accept-jvm-package";
+
+
 }

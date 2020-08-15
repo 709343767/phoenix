@@ -1,10 +1,7 @@
 package com.imby.agent.business.core;
 
 import com.imby.common.domain.Result;
-import com.imby.common.dto.AlarmPackage;
-import com.imby.common.dto.BaseResponsePackage;
-import com.imby.common.dto.HeartbeatPackage;
-import com.imby.common.dto.ServerPackage;
+import com.imby.common.dto.*;
 
 /**
  * <p>
@@ -68,6 +65,24 @@ public class MethodExecuteHandler {
                 "sendServerPackage");
         // 执行命令，返回执行结果
         return execute(invoker, serverPackage);
+    }
+
+    /**
+     * <p>
+     * 向服务端发送Java虚拟机信息包
+     * </p>
+     *
+     * @param jvmPackage Java虚拟机信息包
+     * @return {@link BaseResponsePackage}
+     * @author 皮锋
+     * @custom.date 2020/8/15 22:09
+     */
+    public static BaseResponsePackage sendJvmPackage2Server(JvmPackage jvmPackage) {
+        // 通过命令执行器管理器，获取指定的命令执行器
+        Invoker invoker = InvokerHolder.getInvoker(com.imby.agent.business.server.service.IJvmService.class,
+                "sendJvmPackage");
+        // 执行命令，返回执行结果
+        return execute(invoker, jvmPackage);
     }
 
     /**

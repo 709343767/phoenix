@@ -30,7 +30,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private static final String[] URLS = {
             "/alarm/accept-alarm-package",
             "/heartbeat/accept-heartbeat-package",
-            "/server/accept-server-package"
+            "/server/accept-server-package",
+            "/jvm/accept-jvm-package"
     };
 
     /**

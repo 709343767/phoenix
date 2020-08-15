@@ -97,7 +97,7 @@ public class JvmUtils {
                 .peakThreadCount(THREADMX_BEAN.getPeakThreadCount())
                 .daemonThreadCount(THREADMX_BEAN.getDaemonThreadCount())
                 .totalStartedThreadCount(THREADMX_BEAN.getTotalStartedThreadCount())
-                .threadInfos(THREADMX_BEAN.getThreadInfo(THREADMX_BEAN.getAllThreadIds()))
+                //.threadInfos(THREADMX_BEAN.getThreadInfo(THREADMX_BEAN.getAllThreadIds()))
                 .build();
     }
 

@@ -1,10 +1,7 @@
 package com.imby.common.domain.jvm;
 
 import com.imby.common.abs.AbstractSuperBean;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import lombok.*;
 import lombok.experimental.Accessors;
 
 import java.util.Date;
@@ -20,8 +17,10 @@ import java.util.Map;
  * @custom.date 2020/8/14 8:50
  */
 @Data
-@ToString
 @Builder
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
 public class RuntimeDomain extends AbstractSuperBean {

@@ -1,8 +1,6 @@
 package com.imby.common.domain;
 
 import com.imby.common.abs.AbstractSuperBean;
-import com.imby.common.domain.server.OsDomain;
-import com.imby.common.inf.INeed2Register;
 import lombok.*;
 import lombok.experimental.Accessors;
 
@@ -21,12 +19,12 @@ import lombok.experimental.Accessors;
 @AllArgsConstructor
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public final class Register extends AbstractSuperBean implements INeed2Register {
+public final class Register extends AbstractSuperBean {
 
     /**
-     * 操作系统信息
+     * ID
      */
-    private OsDomain osDomain;
+    private String id;
 
 
 }

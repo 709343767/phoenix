@@ -4,15 +4,13 @@ import com.google.common.base.Charsets;
 import com.imby.common.constant.EndpointTypeConstants;
 import com.imby.common.domain.Alarm;
 import com.imby.common.domain.Result;
-import com.imby.common.dto.AlarmPackage;
-import com.imby.common.dto.BaseResponsePackage;
-import com.imby.common.dto.HeartbeatPackage;
-import com.imby.common.dto.ServerPackage;
+import com.imby.common.dto.*;
 import com.imby.common.inf.IPackageConstructor;
 import com.imby.common.util.NetUtils;
 import com.imby.common.util.OsUtils;
 import com.imby.common.util.StrUtils;
 import com.imby.server.util.InstanceUtils;
+import org.hyperic.sigar.SigarException;
 
 import java.nio.charset.Charset;
 import java.util.Date;
@@ -60,13 +58,47 @@ public class PackageConstructor implements IPackageConstructor {
         return alarmPackage;
     }
 
+    /**
+     * <p>
+     * 构建心跳数据包
+     * </p>
+     *
+     * @return {@link HeartbeatPackage}
+     * @author 皮锋
+     * @custom.date 2020年3月7日 下午3:54:30
+     */
     @Override
     public HeartbeatPackage structureHeartbeatPackage() {
         return null;
     }
 
+    /**
+     * <p>
+     * 构建服务器数据包
+     * </p>
+     *
+     * @return {@link ServerPackage}
+     * @throws SigarException Sigar异常
+     * @author 皮锋
+     * @custom.date 2020年3月7日 下午4:51:51
+     */
     @Override
-    public ServerPackage structureServerPackage() {
+    public ServerPackage structureServerPackage() throws SigarException {
+        return null;
+    }
+
+
+    /**
+     * <p>
+     * 构建Java虚拟机信息包
+     * </p>
+     *
+     * @return {@link JvmPackage}
+     * @author 皮锋
+     * @custom.date 2020/8/14 21:28
+     */
+    @Override
+    public JvmPackage structureJvmPackage() {
         return null;
     }
 
