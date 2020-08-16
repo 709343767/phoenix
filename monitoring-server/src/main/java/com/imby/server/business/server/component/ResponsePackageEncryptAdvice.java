@@ -22,7 +22,8 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 @RestControllerAdvice(basePackageClasses = {
         com.imby.server.business.server.controller.AlarmController.class,
         com.imby.server.business.server.controller.HeartbeatController.class,
-        com.imby.server.business.server.controller.ServerController.class})
+        com.imby.server.business.server.controller.ServerController.class,
+        com.imby.server.business.server.controller.JvmController.class})
 public class ResponsePackageEncryptAdvice implements ResponseBodyAdvice<Object> {
 
     @Override

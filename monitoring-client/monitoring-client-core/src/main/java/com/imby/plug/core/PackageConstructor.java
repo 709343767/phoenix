@@ -3,9 +3,7 @@ package com.imby.plug.core;
 import com.google.common.base.Charsets;
 import com.imby.common.constant.EndpointTypeConstants;
 import com.imby.common.domain.Alarm;
-import com.imby.common.domain.Jvm;
 import com.imby.common.domain.Result;
-import com.imby.common.domain.Server;
 import com.imby.common.dto.*;
 import com.imby.common.inf.IPackageConstructor;
 import com.imby.common.util.*;
@@ -103,8 +101,7 @@ public class PackageConstructor implements IPackageConstructor {
         serverPackage.setInstanceDesc(InstanceUtils.getInstanceDesc());
         serverPackage.setIp(NetUtils.getLocalIp());
         serverPackage.setComputerName(OsUtils.getComputerName());
-        Server server = ServerUtils.getServerInfo();
-        serverPackage.setServer(server);
+        serverPackage.setServer(ServerUtils.getServerInfo());
         serverPackage.setRate(ConfigLoader.monitoringProperties.getServerInfoProperties().getRate());
         return serverPackage;
     }
@@ -129,8 +126,7 @@ public class PackageConstructor implements IPackageConstructor {
         jvmPackage.setInstanceDesc(InstanceUtils.getInstanceDesc());
         jvmPackage.setIp(NetUtils.getLocalIp());
         jvmPackage.setComputerName(OsUtils.getComputerName());
-        Jvm jvm = JvmUtils.getJvmInfo();
-        jvmPackage.setJvm(jvm);
+        jvmPackage.setJvm(JvmUtils.getJvmInfo());
         jvmPackage.setRate(ConfigLoader.monitoringProperties.getMonitoringJvmInfoProperties().getRate());
         return jvmPackage;
     }

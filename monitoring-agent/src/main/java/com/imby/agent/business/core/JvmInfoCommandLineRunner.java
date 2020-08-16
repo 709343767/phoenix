@@ -60,7 +60,7 @@ public class JvmInfoCommandLineRunner implements CommandLineRunner, DisposableBe
         // 是否发送Java虚拟机信息
         boolean jvmInfoEnable = this.monitoringProperties.getMonitoringJvmInfoProperties().isEnable();
         if (jvmInfoEnable) {
-            this.seService.scheduleAtFixedRate(new JvmInfoScheduledExecutor(), 10,
+            this.seService.scheduleAtFixedRate(new JvmInfoScheduledExecutor(), 15,
                     this.monitoringProperties.getMonitoringJvmInfoProperties().getRate(), TimeUnit.SECONDS);
         }
     }
