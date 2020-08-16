@@ -1,10 +1,10 @@
 package com.imby.server.business.server.aop;
 
 import com.alibaba.fastjson.JSON;
+import com.imby.common.domain.Server;
 import com.imby.common.domain.server.CpuDomain;
 import com.imby.common.domain.server.DiskDomain;
 import com.imby.common.domain.server.MemoryDomain;
-import com.imby.common.domain.Server;
 import com.imby.common.dto.ServerPackage;
 import com.imby.server.business.server.core.CpuPool;
 import com.imby.server.business.server.core.DiskPool;
@@ -76,7 +76,7 @@ public class ServerAspect {
             new LinkedBlockingQueue<>(1024),
             new BasicThreadFactory.Builder()
                     // 设置线程名
-                    .namingPattern("monitoring-server-listeners-thread-%d")
+                    .namingPattern("monitoring-server-listeners-pool-thread-%d")
                     // 设置为守护线程
                     .daemon(true)
                     .build(),

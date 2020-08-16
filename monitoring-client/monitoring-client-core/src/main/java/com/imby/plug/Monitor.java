@@ -9,6 +9,7 @@ import com.imby.plug.constant.UrlConstants;
 import com.imby.plug.core.ConfigLoader;
 import com.imby.plug.core.PackageConstructor;
 import com.imby.plug.core.Sender;
+import com.imby.plug.scheduler.CheckIOTaskScheduler;
 import com.imby.plug.scheduler.HeartbeatTaskScheduler;
 import com.imby.plug.scheduler.JvmTaskScheduler;
 import com.imby.plug.scheduler.ServerTaskScheduler;
@@ -72,12 +73,16 @@ public class Monitor {
             log.error("监控程序加载配置信息失败！", e);
             return;
         }
-        // 2.开始定时发送心跳包
-        HeartbeatTaskScheduler.run();
-        // 3.开始定时发送服务器信息包
-        ServerTaskScheduler.run();
-        // 4.开始定时发送Java虚拟机信息包
-        JvmTaskScheduler.run();
+        // 2.检测与监控服务端或者监控代理端的IO情况
+        boolean b = CheckIOTaskScheduler.call();
+        if (b) {
+            // 3.开始定时发送心跳包
+            HeartbeatTaskScheduler.run();
+            // 4.开始定时发送服务器信息包
+            ServerTaskScheduler.run();
+            // 5.开始定时发送Java虚拟机信息包
+            JvmTaskScheduler.run();
+        }
     }
 
     /**
