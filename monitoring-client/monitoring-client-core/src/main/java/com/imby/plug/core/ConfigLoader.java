@@ -158,7 +158,7 @@ public class ConfigLoader {
         MonitoringJvmInfoProperties monitoringJvmInfoProperties = new MonitoringJvmInfoProperties();
         monitoringJvmInfoProperties.setEnable(jvmInfoEnable);
         monitoringJvmInfoProperties.setRate(jvmInfoRate);
-        monitoringProperties.setMonitoringJvmInfoProperties(monitoringJvmInfoProperties);
+        monitoringProperties.setJvmInfoProperties(monitoringJvmInfoProperties);
     }
 
 }

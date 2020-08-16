@@ -132,7 +132,7 @@ public abstract class AbstractMonitoringAgentConfig {
         monitoringProperties.setOwnProperties(ownProperties);
         monitoringProperties.setHeartbeatProperties(heartbeatProperties);
         monitoringProperties.setServerInfoProperties(monitoringServerInfoProperties);
-        monitoringProperties.setMonitoringJvmInfoProperties(monitoringJvmInfoProperties);
+        monitoringProperties.setJvmInfoProperties(monitoringJvmInfoProperties);
         log.info("监控配置加载成功！");
         return monitoringProperties;
     }

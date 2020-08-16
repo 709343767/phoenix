@@ -127,7 +127,7 @@ public class PackageConstructor implements IPackageConstructor {
         jvmPackage.setIp(NetUtils.getLocalIp());
         jvmPackage.setComputerName(OsUtils.getComputerName());
         jvmPackage.setJvm(JvmUtils.getJvmInfo());
-        jvmPackage.setRate(ConfigLoader.MONITORING_PROPERTIES.getMonitoringJvmInfoProperties().getRate());
+        jvmPackage.setRate(ConfigLoader.MONITORING_PROPERTIES.getJvmInfoProperties().getRate());
         return jvmPackage;
     }
 

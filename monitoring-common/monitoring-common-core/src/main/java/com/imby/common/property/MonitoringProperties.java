@@ -42,6 +42,6 @@ public class MonitoringProperties {
     /**
      * Java虚拟机信息属性
      */
-    private MonitoringJvmInfoProperties monitoringJvmInfoProperties;
+    private MonitoringJvmInfoProperties jvmInfoProperties;
 
 }

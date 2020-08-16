@@ -30,7 +30,7 @@ public class JvmTaskScheduler {
      */
     public static void run() {
         // 是否发送Java虚拟机
-        boolean jvmInfoEnable = ConfigLoader.monitoringProperties.getMonitoringJvmInfoProperties().isEnable();
+        boolean jvmInfoEnable = ConfigLoader.monitoringProperties.getJvmInfoProperties().isEnable();
         if (jvmInfoEnable) {
             final ScheduledExecutorService seService = new ScheduledThreadPoolExecutor(5,
                     new BasicThreadFactory.Builder()
@@ -40,7 +40,7 @@ public class JvmTaskScheduler {
                             .daemon(true)
                             .build());
             // 发送Java虚拟机的频率
-            long rate = ConfigLoader.monitoringProperties.getMonitoringJvmInfoProperties().getRate();
+            long rate = ConfigLoader.monitoringProperties.getJvmInfoProperties().getRate();
             seService.scheduleAtFixedRate(new JvmThread(), 15, rate, TimeUnit.SECONDS);
         }
     }
