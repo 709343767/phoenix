@@ -19,7 +19,7 @@ public class JvmServiceImpl implements IJvmService {
 
     /**
      * <p>
-     * Java虚拟机信息包
+     * 处理Java虚拟机信息包
      * </p>
      *
      * @param jvmPackage Java虚拟机信息包
