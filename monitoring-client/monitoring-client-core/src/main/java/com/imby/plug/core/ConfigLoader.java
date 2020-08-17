@@ -94,7 +94,7 @@ public class ConfigLoader {
                 && Boolean.parseBoolean(jvmInfoEnableStr);
         // 缺省[与服务端或者代理端发送Java虚拟机信息的频率（秒），默认60秒，最小不能小于30秒]
         String jvmInfoRateStr = StringUtils.trimToNull(properties.getProperty("monitoring.jvm-info.rate"));
-        long jvmInfoRate = StringUtils.isBlank(serverInfoRateStr) ? 60L : Long.parseLong(jvmInfoRateStr);
+        long jvmInfoRate = StringUtils.isBlank(jvmInfoRateStr) ? 60L : Long.parseLong(jvmInfoRateStr);
         // 没有配置连接
         if (StringUtils.isBlank(serverUrl)) {
             throw new NotFoundConfigParamException("监控程序找不到监控服务端URL配置！");
