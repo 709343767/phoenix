@@ -1,6 +1,6 @@
 package com.imby.agent.business.scheduler;
 
-import cn.hutool.core.date.DateUnit;
+import cn.hutool.core.date.BetweenFormater;
 import cn.hutool.core.date.DateUtil;
 import com.imby.agent.business.core.MethodExecuteHandler;
 import com.imby.agent.business.core.PackageConstructor;
@@ -112,8 +112,8 @@ class HeartbeatScheduledExecutor implements Runnable {
         // 结束时间
         Date endDate = new Date();
         // 时间差（毫秒）
-        long betweenDay = DateUtil.between(beginDate, endDate, DateUnit.MS);
+        String betweenDay = DateUtil.formatBetween(beginDate, endDate, BetweenFormater.Level.MILLISECOND);
+        log.debug("发送心跳包耗时：{}", betweenDay);
         log.debug("心跳包响应消息：{}", baseResponsePackage.toJsonString());
-        log.debug("发送心跳包耗时：{} {}", betweenDay, "ms");
     }
 }

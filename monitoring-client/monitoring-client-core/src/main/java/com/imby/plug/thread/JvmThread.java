@@ -1,6 +1,6 @@
 package com.imby.plug.thread;
 
-import cn.hutool.core.date.DateUnit;
+import cn.hutool.core.date.BetweenFormater;
 import cn.hutool.core.date.DateUtil;
 import com.imby.common.dto.JvmPackage;
 import com.imby.plug.constant.UrlConstants;
@@ -42,9 +42,9 @@ public class JvmThread implements Runnable {
             // 结束时间
             Date endDate = new Date();
             // 时间差（毫秒）
-            long betweenDay = DateUtil.between(beginDate, endDate, DateUnit.MS);
+            String betweenDay = DateUtil.formatBetween(beginDate, endDate, BetweenFormater.Level.MILLISECOND);
+            log.debug("发送Java虚拟机信息包耗时：{}", betweenDay);
             log.debug("Java虚拟机信息包响应消息：{}", result);
-            log.debug("发送Java虚拟机信息包耗时：{} {}", betweenDay, "ms");
         } catch (ClientProtocolException e) {
             log.error("客户端协议异常！", e);
         } catch (IOException e) {
