@@ -6,7 +6,6 @@ import lombok.experimental.Accessors;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 /**
  * <p>
@@ -93,16 +92,11 @@ public class RuntimeDomain extends AbstractSuperBean {
     /**
      * Java虚拟机的正常运行时间（毫秒）
      */
-    private long uptime;
+    private String uptime;
 
     /**
      * Java虚拟机的开始时间
      */
     private Date startTime;
-
-    /**
-     * 系统属性
-     */
-    private Map<String, String> systemProperties;
 
 }

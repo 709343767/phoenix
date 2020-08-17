@@ -41,8 +41,4 @@ public class ThreadDomain extends AbstractSuperBean {
      */
     private int daemonThreadCount;
 
-    /**
-     * 线程信息
-     */
-    //private ThreadInfo[] threadInfos;
 }

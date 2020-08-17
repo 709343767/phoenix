@@ -1,5 +1,7 @@
 package com.imby.common.util;
 
+import cn.hutool.core.date.BetweenFormater;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.unit.DataSizeUtil;
 import com.google.common.collect.Lists;
 import com.imby.common.domain.Jvm;
@@ -76,9 +78,8 @@ public class JvmUtils {
                 .isBootClassPathSupported(RUNTIMEMX_BEAN.isBootClassPathSupported())
                 .bootClassPath(RUNTIMEMX_BEAN.isBootClassPathSupported() ? RUNTIMEMX_BEAN.getBootClassPath() : null)
                 .inputArguments(RUNTIMEMX_BEAN.getInputArguments())
-                .uptime(RUNTIMEMX_BEAN.getUptime())
+                .uptime(DateUtil.formatBetween(RUNTIMEMX_BEAN.getUptime(), BetweenFormater.Level.MILLISECOND))
                 .startTime(new Date(RUNTIMEMX_BEAN.getStartTime()))
-                .systemProperties(RUNTIMEMX_BEAN.getSystemProperties())
                 .build();
     }
 
@@ -97,7 +98,6 @@ public class JvmUtils {
                 .peakThreadCount(THREADMX_BEAN.getPeakThreadCount())
                 .daemonThreadCount(THREADMX_BEAN.getDaemonThreadCount())
                 .totalStartedThreadCount(THREADMX_BEAN.getTotalStartedThreadCount())
-                //.threadInfos(THREADMX_BEAN.getThreadInfo(THREADMX_BEAN.getAllThreadIds()))
                 .build();
     }
 
@@ -152,7 +152,7 @@ public class JvmUtils {
             memoryPoolDomain.setUsed(DataSizeUtil.format(memoryUsage.getUsed()));
             memoryPoolDomain.setCommitted(DataSizeUtil.format(memoryUsage.getCommitted()));
             memoryPoolDomain.setMax(memoryUsage.getMax() == -1L ? "未定义" : DataSizeUtil.format(memoryUsage.getMax()));
-            memoryPoolDomainMap.put(pool.getName().replace(" ", "_").toUpperCase(), memoryPoolDomain);
+            memoryPoolDomainMap.put(pool.getName().replace(" ", "_"), memoryPoolDomain);
         });
         // 返回内存信息
         return MemoryDomain.builder()
@@ -177,7 +177,7 @@ public class JvmUtils {
             GarbageCollectorDomain.GarbageCollectorInfoDomain garbageCollectorInfoDomain = GarbageCollectorDomain.GarbageCollectorInfoDomain.builder()
                     .name(collector.getName())
                     .collectionCount(collector.getCollectionCount() == -1L ? "未定义" : String.valueOf(collector.getCollectionCount()))
-                    .collectionTime(collector.getCollectionTime() == -1L ? "未定义" : String.valueOf(collector.getCollectionTime()))
+                    .collectionTime(collector.getCollectionTime() == -1L ? "未定义" : DateUtil.formatBetween(collector.getCollectionTime(), BetweenFormater.Level.MILLISECOND))
                     .build();
             garbageCollectorInfoDomains.add(garbageCollectorInfoDomain);
         });
