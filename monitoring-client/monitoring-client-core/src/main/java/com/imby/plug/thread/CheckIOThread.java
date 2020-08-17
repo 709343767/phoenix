@@ -22,6 +22,7 @@ import java.util.concurrent.Callable;
  * @custom.date 2020/8/16 11:56
  */
 @Slf4j
+@Deprecated
 public class CheckIOThread implements Callable<Result> {
 
     /**
