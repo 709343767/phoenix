@@ -1,7 +1,7 @@
 package com.imby.plug.thread;
 
-import cn.hutool.core.date.BetweenFormater;
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.date.TimeInterval;
 import com.imby.common.dto.ServerPackage;
 import com.imby.plug.constant.UrlConstants;
 import com.imby.plug.core.PackageConstructor;
@@ -11,7 +11,6 @@ import org.apache.http.client.ClientProtocolException;
 import org.hyperic.sigar.SigarException;
 
 import java.io.IOException;
-import java.util.Date;
 
 /**
  * <p>
@@ -37,14 +36,12 @@ public class ServerThread implements Runnable {
         try {
             // 构建服务器数据包
             ServerPackage serverPackage = new PackageConstructor().structureServerPackage();
-            // 开始时间
-            Date beginDate = new Date();
+            // 计时器
+            TimeInterval timer = DateUtil.timer();
             // 发送请求
             String result = Sender.send(UrlConstants.SERVER_URL, serverPackage.toJsonString());
-            // 结束时间
-            Date endDate = new Date();
             // 时间差（毫秒）
-            String betweenDay = DateUtil.formatBetween(beginDate, endDate, BetweenFormater.Level.MILLISECOND);
+            String betweenDay = timer.intervalPretty();
             log.debug("发送服务器信息包耗时：{}", betweenDay);
             log.debug("服务器信息包响应消息：{}", result);
         } catch (ClientProtocolException e) {

@@ -1,7 +1,7 @@
 package com.imby.agent.business.scheduler;
 
-import cn.hutool.core.date.BetweenFormater;
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.date.TimeInterval;
 import com.imby.agent.business.core.MethodExecuteHandler;
 import com.imby.agent.business.core.PackageConstructor;
 import com.imby.common.dto.BaseResponsePackage;
@@ -16,7 +16,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
-import java.util.Date;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -112,14 +111,12 @@ class ServerInfoScheduledExecutor implements Runnable {
     public void run() {
         try {
             ServerPackage serverPackage = new PackageConstructor().structureServerPackage();
-            // 开始时间
-            Date beginDate = new Date();
+            // 计时器
+            TimeInterval timer = DateUtil.timer();
             // 向服务端发送服务器信息包
             BaseResponsePackage baseResponsePackage = MethodExecuteHandler.sendServerPackage2Server(serverPackage);
-            // 结束时间
-            Date endDate = new Date();
             // 时间差（毫秒）
-            String betweenDay = DateUtil.formatBetween(beginDate, endDate, BetweenFormater.Level.MILLISECOND);
+            String betweenDay = timer.intervalPretty();
             log.debug("发送服务器信息包耗时：{}", betweenDay);
             log.debug("服务器信息包响应消息：{}", baseResponsePackage.toJsonString());
         } catch (SigarException e) {

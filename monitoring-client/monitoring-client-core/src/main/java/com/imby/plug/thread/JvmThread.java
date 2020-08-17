@@ -1,7 +1,7 @@
 package com.imby.plug.thread;
 
-import cn.hutool.core.date.BetweenFormater;
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.date.TimeInterval;
 import com.imby.common.dto.JvmPackage;
 import com.imby.plug.constant.UrlConstants;
 import com.imby.plug.core.PackageConstructor;
@@ -10,7 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.http.client.ClientProtocolException;
 
 import java.io.IOException;
-import java.util.Date;
 
 /**
  * <p>
@@ -35,14 +34,12 @@ public class JvmThread implements Runnable {
     public void run() {
         try {
             JvmPackage jvmPackage = new PackageConstructor().structureJvmPackage();
-            // 开始时间
-            Date beginDate = new Date();
+            // 计时器
+            TimeInterval timer = DateUtil.timer();
             // 发送请求
             String result = Sender.send(UrlConstants.JVM_URL, jvmPackage.toJsonString());
-            // 结束时间
-            Date endDate = new Date();
             // 时间差（毫秒）
-            String betweenDay = DateUtil.formatBetween(beginDate, endDate, BetweenFormater.Level.MILLISECOND);
+            String betweenDay = timer.intervalPretty();
             log.debug("发送Java虚拟机信息包耗时：{}", betweenDay);
             log.debug("Java虚拟机信息包响应消息：{}", result);
         } catch (ClientProtocolException e) {
