@@ -1,15 +1,16 @@
 package com.imby.plug.thread;
 
-import java.io.IOException;
-
-import org.apache.http.client.ClientProtocolException;
-
+import cn.hutool.core.date.DateUnit;
+import cn.hutool.core.date.DateUtil;
 import com.imby.common.dto.HeartbeatPackage;
 import com.imby.plug.constant.UrlConstants;
 import com.imby.plug.core.PackageConstructor;
 import com.imby.plug.core.Sender;
-
 import lombok.extern.slf4j.Slf4j;
+import org.apache.http.client.ClientProtocolException;
+
+import java.io.IOException;
+import java.util.Date;
 
 /**
  * <p>
@@ -35,9 +36,16 @@ public class HeartbeatThread implements Runnable {
         try {
             // 构建心跳数据包
             HeartbeatPackage heartbeatPackage = new PackageConstructor().structureHeartbeatPackage();
+            // 开始时间
+            Date beginDate = new Date();
             // 发送请求
             String result = Sender.send(UrlConstants.HEARTBEAT_URL, heartbeatPackage.toJsonString());
+            // 结束时间
+            Date endDate = new Date();
+            // 时间差（毫秒）
+            long betweenDay = DateUtil.between(beginDate, endDate, DateUnit.MS);
             log.debug("心跳包响应消息：{}", result);
+            log.debug("发送心跳包耗时：{} {}", betweenDay, "ms");
         } catch (ClientProtocolException e) {
             log.error("客户端协议异常！", e);
         } catch (IOException e) {

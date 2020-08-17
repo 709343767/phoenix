@@ -80,7 +80,7 @@
     <logger name="com.imby" additivity="true"/>
 
     <!-- 日志输出级别 -->
-    <root level="INFO">
+    <root level="DEBUG">
         <appender-ref ref="STDOUT"/>
         <appender-ref ref="FILE"/>
         <appender-ref ref="FILE_ERROR"/>

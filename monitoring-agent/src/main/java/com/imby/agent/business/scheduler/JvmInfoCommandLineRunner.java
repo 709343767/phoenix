@@ -1,5 +1,7 @@
 package com.imby.agent.business.scheduler;
 
+import cn.hutool.core.date.DateUnit;
+import cn.hutool.core.date.DateUtil;
 import com.imby.agent.business.core.MethodExecuteHandler;
 import com.imby.agent.business.core.PackageConstructor;
 import com.imby.common.dto.BaseResponsePackage;
@@ -13,6 +15,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -108,9 +111,16 @@ class JvmInfoScheduledExecutor implements Runnable {
     @Override
     public void run() {
         JvmPackage jvmPackage = new PackageConstructor().structureJvmPackage();
+        // 开始时间
+        Date beginDate = new Date();
         // 向服务端发送Java虚拟机信息包
         BaseResponsePackage baseResponsePackage = MethodExecuteHandler.sendJvmPackage2Server(jvmPackage);
-        log.info("Java虚拟机包响应消息：{}", baseResponsePackage.toJsonString());
+        // 结束时间
+        Date endDate = new Date();
+        // 时间差（毫秒）
+        long betweenDay = DateUtil.between(beginDate, endDate, DateUnit.MS);
+        log.debug("Java虚拟机信息包响应消息：{}", baseResponsePackage.toJsonString());
+        log.debug("发送Java虚拟机信息包耗时：{} {}", betweenDay, "ms");
     }
 
 }
