@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * <p>
- * 检测IO任务调度器
+ * 检测HTTP连接IO情况的任务调度器
  * </p>
  *
  * @author 皮锋
@@ -24,7 +24,7 @@ public class CheckIOTaskScheduler {
     /**
      * 线程池
      */
-    private static final ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(5,
+    private static final ThreadPoolExecutor THREAD_POOL_EXECUTOR = new ThreadPoolExecutor(5,
             16,
             15L,
             TimeUnit.SECONDS,
@@ -48,7 +48,7 @@ public class CheckIOTaskScheduler {
      */
     @SneakyThrows
     public static boolean call() {
-        Future<Result> scheduledFuture = threadPoolExecutor.submit(new CheckIOThread());
+        Future<Result> scheduledFuture = THREAD_POOL_EXECUTOR.submit(new CheckIOThread());
         Result result = scheduledFuture.get();
         boolean b = result.isSuccess();
         if (!b) {
@@ -58,7 +58,7 @@ public class CheckIOTaskScheduler {
             b = call();
         } else {
             // 关闭线程池
-            threadPoolExecutor.shutdown();
+            THREAD_POOL_EXECUTOR.shutdown();
         }
         return b;
     }

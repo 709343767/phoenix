@@ -15,7 +15,7 @@ import java.util.concurrent.Callable;
 
 /**
  * <p>
- * 检测IO的线程
+ * 检测HTTP连接IO情况的线程
  * </p>
  *
  * @author 皮锋
