@@ -1,13 +1,12 @@
 package com.imby.agent.config;
 
+import com.imby.common.property.MonitoringProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
-
-import com.imby.common.property.MonitoringProperties;
 
 import java.time.Duration;
 
@@ -41,13 +40,13 @@ public class RestTemplateConfig {
     @Bean
     public RestTemplate restTemplate() {
         String rootUri = this.monitoringProperties.getServerProperties().getUrl();
-        RestTemplate restTemplate = new RestTemplateBuilder()//
+        RestTemplate restTemplate = new RestTemplateBuilder()
                 // .basicAuthorization("username", "password")
                 // 15秒
                 .setConnectTimeout(Duration.ofSeconds(15))
                 // 15秒
-                .setReadTimeout(Duration.ofSeconds(15))//
-                .rootUri(rootUri) //
+                .setReadTimeout(Duration.ofSeconds(15))
+                .rootUri(rootUri)
                 .build();
         log.info("RestTemplate配置成功！");
         return restTemplate;
