@@ -1,12 +1,16 @@
 package com.imby.plug.core;
 
+import cn.hutool.core.util.IdUtil;
 import com.google.common.base.Charsets;
 import com.imby.common.constant.EndpointTypeConstants;
 import com.imby.common.domain.Alarm;
 import com.imby.common.domain.Result;
 import com.imby.common.dto.*;
 import com.imby.common.inf.IPackageConstructor;
-import com.imby.common.util.*;
+import com.imby.common.util.JvmUtils;
+import com.imby.common.util.NetUtils;
+import com.imby.common.util.OsUtils;
+import com.imby.common.util.ServerUtils;
 import com.imby.plug.util.InstanceUtils;
 import org.hyperic.sigar.SigarException;
 
@@ -36,7 +40,7 @@ public class PackageConstructor implements IPackageConstructor {
     @Override
     public AlarmPackage structureAlarmPackage(Alarm alarm) {
         AlarmPackage alarmPackage = new AlarmPackage();
-        alarmPackage.setId(StrUtils.getUUID());
+        alarmPackage.setId(IdUtil.randomUUID());
         alarmPackage.setDateTime(new Date());
         alarmPackage.setEndpoint(EndpointTypeConstants.CLIENT);
         alarmPackage.setInstanceId(InstanceUtils.getInstanceId());
@@ -68,7 +72,7 @@ public class PackageConstructor implements IPackageConstructor {
     @Override
     public HeartbeatPackage structureHeartbeatPackage() {
         HeartbeatPackage heartbeatPackage = new HeartbeatPackage();
-        heartbeatPackage.setId(StrUtils.getUUID());
+        heartbeatPackage.setId(IdUtil.randomUUID());
         heartbeatPackage.setEndpoint(EndpointTypeConstants.CLIENT);
         heartbeatPackage.setInstanceId(InstanceUtils.getInstanceId());
         heartbeatPackage.setInstanceName(InstanceUtils.getInstanceName());
@@ -93,7 +97,7 @@ public class PackageConstructor implements IPackageConstructor {
     @Override
     public ServerPackage structureServerPackage() throws SigarException {
         ServerPackage serverPackage = new ServerPackage();
-        serverPackage.setId(StrUtils.getUUID());
+        serverPackage.setId(IdUtil.randomUUID());
         serverPackage.setDateTime(new Date());
         serverPackage.setEndpoint(EndpointTypeConstants.CLIENT);
         serverPackage.setInstanceId(InstanceUtils.getInstanceId());
@@ -118,7 +122,7 @@ public class PackageConstructor implements IPackageConstructor {
     @Override
     public JvmPackage structureJvmPackage() {
         JvmPackage jvmPackage = new JvmPackage();
-        jvmPackage.setId(StrUtils.getUUID());
+        jvmPackage.setId(IdUtil.randomUUID());
         jvmPackage.setDateTime(new Date());
         jvmPackage.setEndpoint(EndpointTypeConstants.CLIENT);
         jvmPackage.setInstanceId(InstanceUtils.getInstanceId());

@@ -1,5 +1,6 @@
 package com.imby.server.business.server.core;
 
+import cn.hutool.core.util.IdUtil;
 import com.google.common.base.Charsets;
 import com.imby.common.constant.EndpointTypeConstants;
 import com.imby.common.domain.Alarm;
@@ -8,9 +9,7 @@ import com.imby.common.dto.*;
 import com.imby.common.inf.IPackageConstructor;
 import com.imby.common.util.NetUtils;
 import com.imby.common.util.OsUtils;
-import com.imby.common.util.StrUtils;
 import com.imby.server.util.InstanceUtils;
-import org.hyperic.sigar.SigarException;
 
 import java.nio.charset.Charset;
 import java.util.Date;
@@ -38,7 +37,7 @@ public class PackageConstructor implements IPackageConstructor {
     @Override
     public AlarmPackage structureAlarmPackage(Alarm alarm) {
         AlarmPackage alarmPackage = new AlarmPackage();
-        alarmPackage.setId(StrUtils.getUUID());
+        alarmPackage.setId(IdUtil.randomUUID());
         alarmPackage.setDateTime(new Date());
         alarmPackage.setEndpoint(EndpointTypeConstants.SERVER);
         alarmPackage.setInstanceId(InstanceUtils.getInstanceId());
@@ -78,12 +77,11 @@ public class PackageConstructor implements IPackageConstructor {
      * </p>
      *
      * @return {@link ServerPackage}
-     * @throws SigarException Sigar异常
      * @author 皮锋
      * @custom.date 2020年3月7日 下午4:51:51
      */
     @Override
-    public ServerPackage structureServerPackage() throws SigarException {
+    public ServerPackage structureServerPackage() {
         return null;
     }
 
@@ -121,7 +119,7 @@ public class PackageConstructor implements IPackageConstructor {
         baseResponsePackage.setInstanceDesc(InstanceUtils.getInstanceDesc());
         baseResponsePackage.setIp(NetUtils.getLocalIp());
         baseResponsePackage.setComputerName(OsUtils.getComputerName());
-        baseResponsePackage.setId(StrUtils.getUUID());
+        baseResponsePackage.setId(IdUtil.randomUUID());
         baseResponsePackage.setDateTime(new Date());
         baseResponsePackage.setResult(result);
         return baseResponsePackage;
