@@ -27,7 +27,7 @@ public class JvmController {
 
     /**
      * <p>
-     * 监控服务端程序接收监控代理程序或者监控客户端程序发的Java虚拟机信息包，并返回结果
+     * 监控服务端程序接收监控代理端程序或者监控客户端程序发的Java虚拟机信息包，并返回结果
      * </p>
      *
      * @param request 请求参数
@@ -35,7 +35,7 @@ public class JvmController {
      * @author 皮锋
      * @custom.date 2020年3月6日 下午3:00:54
      */
-    @ApiOperation(value = "接收和响应监控代理程序或者监控客户端程序发的Java虚拟机信息包", notes = "接收Java虚拟机信息包")
+    @ApiOperation(value = "接收和响应监控代理端程序或者监控客户端程序发的Java虚拟机信息包", notes = "接收Java虚拟机信息包")
     @PostMapping("/accept-jvm-package")
     public BaseResponsePackage acceptServerPackage(@RequestBody String request) {
         JvmPackage jvmPackage = JSON.parseObject(request, JvmPackage.class);
