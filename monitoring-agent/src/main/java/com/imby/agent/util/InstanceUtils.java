@@ -1,6 +1,6 @@
 package com.imby.agent.util;
 
-import com.imby.agent.business.core.ConfigLoader;
+import com.imby.agent.core.ConfigLoader;
 import com.imby.common.util.Md5Utils;
 import com.imby.common.util.NetUtils;
 import lombok.SneakyThrows;

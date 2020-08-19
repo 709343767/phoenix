@@ -1,6 +1,6 @@
 package com.imby.agent.business.server.service.impl;
 
-import com.imby.agent.business.constant.Urlconstants;
+import com.imby.agent.constant.Urlconstants;
 import com.imby.agent.business.server.service.IHttpService;
 import com.imby.agent.business.server.service.IJvmService;
 import com.imby.common.dto.BaseResponsePackage;

@@ -1,7 +1,7 @@
 package com.imby.agent.business.server.service;
 
-import com.imby.agent.business.annotation.TargetInf;
-import com.imby.agent.business.annotation.TargetMethod;
+import com.imby.agent.annotation.TargetInf;
+import com.imby.agent.annotation.TargetMethod;
 import com.imby.common.dto.BaseResponsePackage;
 import com.imby.common.dto.JvmPackage;
 
