@@ -41,3 +41,4 @@
 /monitoring-common/monitoring-common-web/target/*
 /monitoring-client/monitoring-client-spring-boot-starter/target/*
 /monitoring-client/monitoring-client-spring-mvc-integrator/target/*
+/target/
