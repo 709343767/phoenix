@@ -1,14 +1,13 @@
 package com.imby.starter.annotation;
 
-import org.springframework.context.annotation.Import;
-
 import com.imby.starter.selector.EnableMonitoringPlugSelector;
+import org.springframework.context.annotation.Import;
 
 import java.lang.annotation.*;
 
 /**
  * <p>
- * 激活监控功能
+ * 开启监控功能
  * </p>
  *
  * @author 皮锋

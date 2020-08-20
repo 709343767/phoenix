@@ -1,8 +1,8 @@
 package com.imby.agent.config;
 
+import com.imby.starter.annotation.EnableMonitoring;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
-import org.springframework.context.annotation.PropertySource;
 
 /**
  * <p>
@@ -14,6 +14,6 @@ import org.springframework.context.annotation.PropertySource;
  */
 @Configuration
 @Profile("dev")
-@PropertySource(value = "classpath:monitoring-dev.properties", encoding = "utf-8")
-public class MonitoringAgentDevConfig extends AbstractMonitoringAgentConfig {
+@EnableMonitoring(configFileName = "monitoring-dev.properties")
+public class MonitoringAgentDevConfig {
 }

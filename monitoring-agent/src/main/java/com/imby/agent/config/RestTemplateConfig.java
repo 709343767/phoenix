@@ -1,8 +1,7 @@
 package com.imby.agent.config;
 
-import com.imby.common.property.MonitoringProperties;
+import com.imby.plug.core.ConfigLoader;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,12 +22,6 @@ import java.time.Duration;
 public class RestTemplateConfig {
 
     /**
-     * 监控属性
-     */
-    @Autowired
-    private MonitoringProperties monitoringProperties;
-
-    /**
      * <p>
      * 构造RestTemplate实例，把RestTemplate实例作为一个JavaBean交给Spring管理
      * </p>
@@ -39,7 +32,7 @@ public class RestTemplateConfig {
      */
     @Bean
     public RestTemplate restTemplate() {
-        String rootUri = this.monitoringProperties.getServerProperties().getUrl();
+        String rootUri = ConfigLoader.monitoringProperties.getServerProperties().getUrl();
         RestTemplate restTemplate = new RestTemplateBuilder()
                 // .basicAuthorization("username", "password")
                 // 15秒
