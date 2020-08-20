@@ -39,6 +39,8 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <!-- 编译时的编码 -->
         <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
+        <!-- 项目根目录 -->
+        <myproject.root>${basedir}</myproject.root>
         <!-- alibaba的fastjson版本 -->
         <fastjson.version>1.2.62</fastjson.version>
         <!-- guava基本工具版本 -->
@@ -340,6 +342,17 @@
                 </plugin>
                 <!--打包插件 -->
                 <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>3.2.0</version>
+                    <configuration>
+                        <!-- 指定输出路径-->
+                        <outputDirectory>
+                            ${session.executionRootDirectory}/target
+                        </outputDirectory>
+                    </configuration>
+                </plugin>
+                <plugin>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-maven-plugin</artifactId>
                     <version>2.3.1.RELEASE</version>
@@ -348,6 +361,10 @@
                         <fork>true</fork>
                         <!-- 这个配置非常重要，使打包好的jar包具备可执行权限 -->
                         <executable>true</executable>
+                        <!-- 指定输出路径-->
+                        <outputDirectory>
+                            ${session.executionRootDirectory}/target
+                        </outputDirectory>
                     </configuration>
                     <executions>
                         <execution>
