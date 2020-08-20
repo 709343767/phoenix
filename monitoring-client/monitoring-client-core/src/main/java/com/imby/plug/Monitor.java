@@ -70,6 +70,8 @@ public class Monitor {
             log.info("监控程序加载配置信息成功！");
         } catch (Exception e) {
             log.error("监控程序加载配置信息失败！", e);
+            // 直接退出程序
+            System.exit(0);
             return;
         }
         // 2.开始定时发送心跳包
