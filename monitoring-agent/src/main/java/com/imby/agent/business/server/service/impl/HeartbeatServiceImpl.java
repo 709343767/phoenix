@@ -1,6 +1,6 @@
 package com.imby.agent.business.server.service.impl;
 
-import com.imby.agent.constant.Urlconstants;
+import com.imby.agent.constant.UrlConstants;
 import com.imby.agent.business.server.service.IHeartbeatService;
 import com.imby.agent.business.server.service.IHttpService;
 import com.imby.common.dto.BaseResponsePackage;
@@ -38,7 +38,7 @@ public class HeartbeatServiceImpl implements IHeartbeatService {
      */
     @Override
     public BaseResponsePackage sendHeartbeatPackage(HeartbeatPackage heartbeatPackage) throws Exception {
-        return this.httpService.sendHttpPost(heartbeatPackage.toJsonString(), Urlconstants.HEARTBEAT_URL);
+        return this.httpService.sendHttpPost(heartbeatPackage.toJsonString(), UrlConstants.HEARTBEAT_URL);
     }
 
 }

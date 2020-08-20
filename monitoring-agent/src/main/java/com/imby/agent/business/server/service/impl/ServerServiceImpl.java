@@ -1,6 +1,6 @@
 package com.imby.agent.business.server.service.impl;
 
-import com.imby.agent.constant.Urlconstants;
+import com.imby.agent.constant.UrlConstants;
 import com.imby.agent.business.server.service.IHttpService;
 import com.imby.agent.business.server.service.IServerService;
 import com.imby.common.dto.BaseResponsePackage;
@@ -38,7 +38,7 @@ public class ServerServiceImpl implements IServerService {
      */
     @Override
     public BaseResponsePackage sendServerPackage(ServerPackage serverPackage) throws Exception {
-        return this.httpService.sendHttpPost(serverPackage.toJsonString(), Urlconstants.SERVER_URL);
+        return this.httpService.sendHttpPost(serverPackage.toJsonString(), UrlConstants.SERVER_URL);
     }
 
 }

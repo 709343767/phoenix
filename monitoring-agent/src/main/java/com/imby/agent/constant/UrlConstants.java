@@ -8,7 +8,7 @@ package com.imby.agent.constant;
  * @author 皮锋
  * @custom.date 2020年3月6日 下午3:34:20
  */
-public final class Urlconstants {
+public final class UrlConstants {
 
     /**
      * 发送心跳包URL地址

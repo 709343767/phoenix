@@ -1,6 +1,6 @@
 package com.imby.agent.business.server.service.impl;
 
-import com.imby.agent.constant.Urlconstants;
+import com.imby.agent.constant.UrlConstants;
 import com.imby.agent.business.server.service.IAlarmService;
 import com.imby.agent.business.server.service.IHttpService;
 import com.imby.common.dto.AlarmPackage;
@@ -38,7 +38,7 @@ public class AlarmServiceImpl implements IAlarmService {
      */
     @Override
     public BaseResponsePackage sendAlarmPackage(AlarmPackage alarmPackage) throws Exception {
-        return this.httpService.sendHttpPost(alarmPackage.toJsonString(), Urlconstants.ALARM_URL);
+        return this.httpService.sendHttpPost(alarmPackage.toJsonString(), UrlConstants.ALARM_URL);
     }
 
 }

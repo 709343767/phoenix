@@ -1,6 +1,6 @@
 package com.imby.agent.business.server.service.impl;
 
-import com.imby.agent.constant.Urlconstants;
+import com.imby.agent.constant.UrlConstants;
 import com.imby.agent.business.server.service.IHttpService;
 import com.imby.agent.business.server.service.IJvmService;
 import com.imby.common.dto.BaseResponsePackage;
@@ -38,6 +38,6 @@ public class JvmServiceImpl implements IJvmService {
      */
     @Override
     public BaseResponsePackage sendServerPackage(JvmPackage jvmPackage) throws Exception {
-        return this.httpService.sendHttpPost(jvmPackage.toJsonString(), Urlconstants.JVM_URL);
+        return this.httpService.sendHttpPost(jvmPackage.toJsonString(), UrlConstants.JVM_URL);
     }
 }
