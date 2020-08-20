@@ -2,7 +2,6 @@ package com.imby.plug.core;
 
 import cn.hutool.core.util.IdUtil;
 import com.google.common.base.Charsets;
-import com.imby.common.constant.EndpointTypeConstants;
 import com.imby.common.domain.Alarm;
 import com.imby.common.domain.Result;
 import com.imby.common.dto.*;
@@ -42,7 +41,7 @@ public class PackageConstructor implements IPackageConstructor {
         AlarmPackage alarmPackage = new AlarmPackage();
         alarmPackage.setId(IdUtil.randomUUID());
         alarmPackage.setDateTime(new Date());
-        alarmPackage.setEndpoint(EndpointTypeConstants.CLIENT);
+        alarmPackage.setEndpoint(ConfigLoader.monitoringProperties.getOwnProperties().getInstanceEndpoint());
         alarmPackage.setInstanceId(InstanceUtils.getInstanceId());
         alarmPackage.setInstanceName(InstanceUtils.getInstanceName());
         alarmPackage.setInstanceDesc(InstanceUtils.getInstanceDesc());
@@ -73,7 +72,7 @@ public class PackageConstructor implements IPackageConstructor {
     public HeartbeatPackage structureHeartbeatPackage() {
         HeartbeatPackage heartbeatPackage = new HeartbeatPackage();
         heartbeatPackage.setId(IdUtil.randomUUID());
-        heartbeatPackage.setEndpoint(EndpointTypeConstants.CLIENT);
+        heartbeatPackage.setEndpoint(ConfigLoader.monitoringProperties.getOwnProperties().getInstanceEndpoint());
         heartbeatPackage.setInstanceId(InstanceUtils.getInstanceId());
         heartbeatPackage.setInstanceName(InstanceUtils.getInstanceName());
         heartbeatPackage.setInstanceDesc(InstanceUtils.getInstanceDesc());
@@ -99,7 +98,7 @@ public class PackageConstructor implements IPackageConstructor {
         ServerPackage serverPackage = new ServerPackage();
         serverPackage.setId(IdUtil.randomUUID());
         serverPackage.setDateTime(new Date());
-        serverPackage.setEndpoint(EndpointTypeConstants.CLIENT);
+        serverPackage.setEndpoint(ConfigLoader.monitoringProperties.getOwnProperties().getInstanceEndpoint());
         serverPackage.setInstanceId(InstanceUtils.getInstanceId());
         serverPackage.setInstanceName(InstanceUtils.getInstanceName());
         serverPackage.setInstanceDesc(InstanceUtils.getInstanceDesc());
@@ -124,7 +123,7 @@ public class PackageConstructor implements IPackageConstructor {
         JvmPackage jvmPackage = new JvmPackage();
         jvmPackage.setId(IdUtil.randomUUID());
         jvmPackage.setDateTime(new Date());
-        jvmPackage.setEndpoint(EndpointTypeConstants.CLIENT);
+        jvmPackage.setEndpoint(ConfigLoader.monitoringProperties.getOwnProperties().getInstanceEndpoint());
         jvmPackage.setInstanceId(InstanceUtils.getInstanceId());
         jvmPackage.setInstanceName(InstanceUtils.getInstanceName());
         jvmPackage.setInstanceDesc(InstanceUtils.getInstanceDesc());

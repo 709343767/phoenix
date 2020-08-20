@@ -43,15 +43,10 @@ public class InstanceUtils {
         if (StringUtils.isNotEmpty(instanceId)) {
             return instanceId;
         }
-        // 配置文件中的ID
-        String id = ConfigLoader.monitoringProperties.getOwnProperties().getInstanceId();
-        if (StringUtils.isNotBlank(id)) {
-            instanceId = id;
-            return instanceId;
-        }
         String mac = NetUtils.getLocalMac();
         String ip = NetUtils.getLocalIp();
-        instanceId = Md5Utils.encrypt16(mac + ip + getInstanceName());
+        int order = ConfigLoader.monitoringProperties.getOwnProperties().getInstanceOrder();
+        instanceId = Md5Utils.encrypt16(mac + ip + order + getInstanceName());
         return instanceId;
     }
 

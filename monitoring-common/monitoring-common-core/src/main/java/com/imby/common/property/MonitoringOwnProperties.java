@@ -20,9 +20,14 @@ import lombok.experimental.Accessors;
 public class MonitoringOwnProperties {
 
     /**
-     * 实例ID
+     * 实例次序（不能重复）
      */
-    private String instanceId;
+    private int instanceOrder;
+
+    /**
+     * 实例端点类型（服务端、代理端、客户端）
+     */
+    private String instanceEndpoint;
 
     /**
      * 实例名称

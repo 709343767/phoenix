@@ -1,5 +1,6 @@
 package com.imby.plug.core;
 
+import com.imby.common.constant.EndpointTypeConstants;
 import com.imby.common.exception.ErrorConfigParamException;
 import com.imby.common.exception.NotFoundConfigFileException;
 import com.imby.common.exception.NotFoundConfigParamException;
@@ -72,8 +73,19 @@ public class ConfigLoader {
     private static void analysis(Properties properties) throws NotFoundConfigParamException, ErrorConfigParamException {
         // 监控服务端url
         String serverUrl = StringUtils.trimToNull(properties.getProperty("monitoring.server.url"));
-        // 缺省[实例ID，如果配置了实例ID，用配置的ID，如果没配置，系统会自动生成一个ID]
-        String instanceId = StringUtils.trimToNull(properties.getProperty("monitoring.own.instance.id"));
+        // 缺省[实例次序(整数)，默认为1]
+        String instanceOrderStr = StringUtils.trimToNull(properties.getProperty("monitoring.own.instance.order"));
+        int instanceOrder = StringUtils.isBlank(instanceOrderStr) ? 1 : Integer.parseInt(instanceOrderStr);
+        // 缺省[实例端点类型（服务端、代理端、客户端），默认客户端]
+        String instanceEndpoint = StringUtils.trimToNull(properties.getProperty("monitoring.own.instance.endpoint"));
+        if (StringUtils.isBlank(instanceEndpoint)) {
+            instanceEndpoint = EndpointTypeConstants.CLIENT;
+        }
+        if (!(StringUtils.equals(instanceEndpoint, EndpointTypeConstants.CLIENT)
+                || StringUtils.equals(instanceEndpoint, EndpointTypeConstants.AGENT)
+                || StringUtils.equals(instanceEndpoint, EndpointTypeConstants.SERVER))) {
+            throw new ErrorConfigParamException("实例端点类型只能为（server、agent、client）其中之一！");
+        }
         // 必填[实例名称，一般为项目名]
         String instanceName = StringUtils.trimToNull(properties.getProperty("monitoring.own.instance.name"));
         // 缺省[实例描述，默认没有描述信息]
@@ -114,7 +126,7 @@ public class ConfigLoader {
             throw new ErrorConfigParamException("获取Java虚拟机信息频率最小不能小于30秒！");
         }
         // 封装数据
-        wrap(serverUrl, instanceId, instanceName, instanceDesc, heartbeatRate, serverInfoEnable,
+        wrap(serverUrl, instanceOrder, instanceEndpoint, instanceName, instanceDesc, heartbeatRate, serverInfoEnable,
                 serverInfoRate, jvmInfoEnable, jvmInfoRate);
     }
 
@@ -124,7 +136,8 @@ public class ConfigLoader {
      * </p>
      *
      * @param serverUrl        监控服务端url
-     * @param instanceId       实例ID
+     * @param instanceOrder    缺省[实例次序(整数)，默认为1]
+     * @param instanceEndpoint 缺省[实例端点类型（服务端、代理端、客户端），默认客户端]
      * @param instanceName     实例名称
      * @param instanceDesc     实例描述
      * @param heartbeatRate    缺省[与服务端或者代理端发心跳包的频率（秒），默认30秒]
@@ -136,15 +149,16 @@ public class ConfigLoader {
      * @custom.date 2020年3月5日 下午4:36:33
      */
     private static void wrap(String serverUrl,
-                             String instanceId, String instanceName,
-                             String instanceDesc, long heartbeatRate,
+                             int instanceOrder, String instanceEndpoint, String instanceName, String instanceDesc,
+                             long heartbeatRate,
                              boolean serverInfoEnable, long serverInfoRate,
                              boolean jvmInfoEnable, long jvmInfoRate) {
         MonitoringServerProperties serverProperties = new MonitoringServerProperties();
         serverProperties.setUrl(serverUrl);
         monitoringProperties.setServerProperties(serverProperties);
         MonitoringOwnProperties ownProperties = new MonitoringOwnProperties();
-        ownProperties.setInstanceId(instanceId);
+        ownProperties.setInstanceOrder(instanceOrder);
+        ownProperties.setInstanceEndpoint(instanceEndpoint);
         ownProperties.setInstanceName(instanceName);
         ownProperties.setInstanceDesc(instanceDesc);
         monitoringProperties.setOwnProperties(ownProperties);
