@@ -18,21 +18,20 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 
-// HttpClient是Apache Jakarta Common下的子项目，
-// 用来提供高效的、最新的、功能丰富的支持HTTP协议的客户端编程工具包，并且它支持HTTP协议最新的版本和建议。
-// HttpClient已经应用在很多的项目中，比如Apache Jakarta上很著名的另外两个开源项目
-// Cactus和HTMLUnit都使用了HttpClient。
-
 /**
  * <p>
- * Http工具类
+ * 枚举的方式实现Http单例工具类
  * </p>
+ * 推荐使用：<br>
+ * 1.线程安全；<br>
+ * 2.防止反射攻击；<br>
+ * 3.防止反序列化攻击。<br>
  *
  * @author 皮锋
- * @custom.date 2020年3月5日 下午5:29:46
+ * @custom.date 2020/8/22 9:04
+ * @since v0.0.2
  */
-@Deprecated
-public class HttpUtils {
+public class EnumHttpUtils {
 
     /**
      * 功能：获取和配置一些外部的网络环境<br>
@@ -56,11 +55,6 @@ public class HttpUtils {
             .build();
 
     /**
-     * 本地线程
-     */
-    private static final ThreadLocal<HttpUtils> THREAD_LOCAL = new ThreadLocal<>();
-
-    /**
      * 编码方式
      */
     private static final String CHARSET = "UTF-8";
@@ -73,29 +67,49 @@ public class HttpUtils {
     /**
      * 构造方法私有化
      */
-    private HttpUtils() {
-        // 解决阿里巴巴编码规范至少调用一次remove()方法的警告
-        THREAD_LOCAL.remove();
+    private EnumHttpUtils() {
+    }
+
+    /**
+     * 枚举类型是线程安全的，并且只会装载一次
+     */
+    private enum Singleton {
+        /**
+         * 实例
+         */
+        INSTANCE;
+
+        private final EnumHttpUtils instance;
+
+        Singleton() {
+            instance = new EnumHttpUtils();
+        }
+
+        /**
+         * <p>
+         * 创建实例
+         * </p>
+         *
+         * @return {@link EnumHttpUtils}
+         * @author 皮锋
+         * @custom.date 2020/8/22 9:11
+         */
+        private EnumHttpUtils getInstance() {
+            return instance;
+        }
     }
 
     /**
      * <p>
-     * 单例模式创建实例(线程安全的)
+     * 创建实例
      * </p>
      *
-     * @return {@link HttpUtils}
+     * @return {@link EnumHttpUtils}
      * @author 皮锋
-     * @custom.date 2020年3月5日 下午5:33:35
+     * @custom.date 2020/8/22 9:11
      */
-    public static HttpUtils getInstance() {
-        // 获取ThreadLocal中当前线程共享变量的值
-        HttpUtils instance = THREAD_LOCAL.get();
-        if (instance == null) {
-            instance = new HttpUtils();
-            // 设置ThreadLocal中当前线程共享变量的值
-            THREAD_LOCAL.set(instance);
-        }
-        return instance;
+    public static EnumHttpUtils getInstance() {
+        return Singleton.INSTANCE.getInstance();
     }
 
     /**

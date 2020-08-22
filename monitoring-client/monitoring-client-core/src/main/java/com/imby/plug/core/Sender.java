@@ -3,8 +3,7 @@ package com.imby.plug.core;
 import com.alibaba.fastjson.JSONObject;
 import com.imby.common.dto.CiphertextPackage;
 import com.imby.common.util.DesEncryptUtils;
-import com.imby.plug.util.HttpUtils;
-
+import com.imby.plug.util.EnumHttpUtils;
 import org.apache.http.client.ClientProtocolException;
 
 import java.io.IOException;
@@ -37,7 +36,7 @@ public class Sender {
         String encrypt = DesEncryptUtils.encrypt(json);
         CiphertextPackage requestCiphertextPackage = new CiphertextPackage(encrypt);
         // 发送请求
-        HttpUtils httpClient = HttpUtils.getInstance();
+        EnumHttpUtils httpClient = EnumHttpUtils.getInstance();
         String result = httpClient.sendHttpPostByJson(url, requestCiphertextPackage.toJsonString());
         // 响应结果
         CiphertextPackage responseCiphertextPackage = JSONObject.parseObject(result, CiphertextPackage.class);
