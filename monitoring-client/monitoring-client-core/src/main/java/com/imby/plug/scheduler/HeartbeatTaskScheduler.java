@@ -28,7 +28,7 @@ public class HeartbeatTaskScheduler {
      * @custom.date 2020年3月5日 下午2:56:47
      */
     public static void run() {
-        final ScheduledExecutorService seService = new ScheduledThreadPoolExecutor(5,
+        final ScheduledExecutorService seService = new ScheduledThreadPoolExecutor(1,
                 new BasicThreadFactory.Builder()
                         // 设置线程名
                         .namingPattern("monitoring-heartbeat-pool-thread-%d")

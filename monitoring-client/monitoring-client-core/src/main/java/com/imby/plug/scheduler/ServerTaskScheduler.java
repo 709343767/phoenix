@@ -32,7 +32,7 @@ public class ServerTaskScheduler {
         // 是否发送服务器信息
         boolean serverInfoEnable = ConfigLoader.monitoringProperties.getServerInfoProperties().isEnable();
         if (serverInfoEnable) {
-            final ScheduledExecutorService seService = new ScheduledThreadPoolExecutor(5,
+            final ScheduledExecutorService seService = new ScheduledThreadPoolExecutor(1,
                     new BasicThreadFactory.Builder()
                             // 设置线程名
                             .namingPattern("monitoring-server-pool-thread-%d")

@@ -24,11 +24,17 @@ import java.util.concurrent.TimeUnit;
 public class CheckIOTaskScheduler {
 
     /**
-     * 线程池
+     * 线程池。<br>
+     * corePoolSize：核心线程数。核心线程会一直存在，即使没有任务执行；当线程数小于核心线程数的时候，即使有空闲线程，也会一直创建线程直到达到核心线程数；通常设置为1就可以了。<br>
+     * maxPoolSize：最大线程数。是线程池里允许存在的最大线程数量。<br>
+     * keepAliveTime：线程空闲时间。当线程空闲时间达到keepAliveTime时，线程会退出（关闭），直到线程数等于核心线程数。<br>
+     * workQueue：阻塞队列。建议使用有界队列，比如ArrayBlockingQueue。<br>
+     * ThreadFactory：线程创建工厂。一般用来设置线程名称的。<br>
+     * handler：拒绝策略。一般用来做日志记录等。<br>
      */
-    private static final ThreadPoolExecutor THREAD_POOL_EXECUTOR = new ThreadPoolExecutor(5,
+    private static final ThreadPoolExecutor THREAD_POOL_EXECUTOR = new ThreadPoolExecutor(1,
             16,
-            15L,
+            1L,
             TimeUnit.SECONDS,
             new LinkedBlockingQueue<>(1024),
             new BasicThreadFactory.Builder()

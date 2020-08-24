@@ -32,7 +32,7 @@ public class JvmTaskScheduler {
         // 是否发送Java虚拟机
         boolean jvmInfoEnable = ConfigLoader.monitoringProperties.getJvmInfoProperties().isEnable();
         if (jvmInfoEnable) {
-            final ScheduledExecutorService seService = new ScheduledThreadPoolExecutor(5,
+            final ScheduledExecutorService seService = new ScheduledThreadPoolExecutor(1,
                     new BasicThreadFactory.Builder()
                             // 设置线程名
                             .namingPattern("monitoring-jvm-pool-thread-%d")
