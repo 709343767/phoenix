@@ -9,12 +9,15 @@ import com.imby.plug.constant.UrlConstants;
 import com.imby.plug.core.ConfigLoader;
 import com.imby.plug.core.PackageConstructor;
 import com.imby.plug.core.Sender;
+import com.imby.plug.scheduler.BusinessBuryingPointScheduler;
 import com.imby.plug.scheduler.HeartbeatTaskScheduler;
 import com.imby.plug.scheduler.JvmTaskScheduler;
 import com.imby.plug.scheduler.ServerTaskScheduler;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * <p>
@@ -103,6 +106,23 @@ public class Monitor {
             log.error("监控程序发送告警信息异常！", e);
             return Result.builder().isSuccess(false).msg(e.getMessage()).build();
         }
+    }
+
+    /**
+     * <p>
+     * 业务埋点监测：定时监测业务运行情况
+     * </p>
+     *
+     * @param command      要执行的任务
+     * @param initialDelay 初次埋点监测延迟的时间
+     * @param period       两次埋点监测任务之间的时间间隔
+     * @param unit         时间单位
+     * @return {@link ScheduledExecutorService}
+     * @author 皮锋
+     * @custom.date 2020/8/24 20:33
+     */
+    public static ScheduledExecutorService buryingPoint(Runnable command, long initialDelay, long period, TimeUnit unit) {
+        return BusinessBuryingPointScheduler.run(command, initialDelay, period, unit);
     }
 
 }
