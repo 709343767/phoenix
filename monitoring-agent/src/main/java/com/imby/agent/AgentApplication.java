@@ -1,5 +1,6 @@
 package com.imby.agent;
 
+import com.imby.common.web.toolkit.CustomizationBeanHandler;
 import com.imby.common.web.toolkit.UniqueBeanNameGenerator;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -16,7 +17,7 @@ import org.springframework.context.annotation.ComponentScan;
  */
 @SpringBootApplication
 @ComponentScan(nameGenerator = UniqueBeanNameGenerator.class)
-public class AgentApplication {
+public class AgentApplication extends CustomizationBeanHandler {
 
     public static void main(String[] args) {
         SpringApplication.run(AgentApplication.class, args);

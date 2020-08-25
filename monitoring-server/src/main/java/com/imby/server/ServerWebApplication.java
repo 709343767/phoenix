@@ -1,13 +1,13 @@
 package com.imby.server;
 
+import com.imby.common.web.toolkit.CustomizationBeanHandler;
+import com.imby.common.web.toolkit.UniqueBeanNameGenerator;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-
-import com.imby.common.web.toolkit.UniqueBeanNameGenerator;
 
 /**
  * <p>
@@ -25,7 +25,7 @@ import com.imby.common.web.toolkit.UniqueBeanNameGenerator;
 @EnableAsync
 // 启用事务管理
 @EnableTransactionManagement
-public class ServerWebApplication {
+public class ServerWebApplication extends CustomizationBeanHandler {
 
     public static void main(String[] args) {
         SpringApplication.run(ServerWebApplication.class, args);
