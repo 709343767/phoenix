@@ -15,12 +15,12 @@ import java.util.concurrent.LinkedBlockingQueue;
  * @author 皮锋
  * @custom.date 2020/8/24 22:52
  */
-public class MyPoolSizeCalculatorTest extends AbstractPoolSizeCalculator {
+public class AbstractPoolSizeCalculatorTest extends AbstractPoolSizeCalculator {
 
     @Test
     public void test() {
-        MyPoolSizeCalculatorTest calculator = new MyPoolSizeCalculatorTest();
-        calculator.calculateBoundaries(new BigDecimal(1.0), new BigDecimal(100000));
+        AbstractPoolSizeCalculatorTest calculator = new AbstractPoolSizeCalculatorTest();
+        calculator.calculateBoundaries(new BigDecimal("1.0"), new BigDecimal(100000));
     }
 
     @Override
