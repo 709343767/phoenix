@@ -1,6 +1,7 @@
 package com.imby.plug.scheduler;
 
 import com.imby.common.domain.Result;
+import com.imby.common.util.CpuUtils;
 import com.imby.plug.core.ConfigLoader;
 import com.imby.plug.thread.CheckIOThread;
 import lombok.extern.slf4j.Slf4j;
@@ -33,7 +34,8 @@ public class CheckIOTaskScheduler {
      * handler：拒绝策略。一般用来做日志记录等。<br>
      */
     private static final ThreadPoolExecutor THREAD_POOL_EXECUTOR = new ThreadPoolExecutor(1,
-            16,
+            // 线程数 = Ncpu /（1 - 阻塞系数），IO密集型阻塞系数相对较大
+            (int) (CpuUtils.getAvailableProcessors() / (1 - 0.8)),
             1L,
             TimeUnit.SECONDS,
             new LinkedBlockingQueue<>(1024),

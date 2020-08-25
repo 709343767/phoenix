@@ -6,6 +6,7 @@ import com.imby.common.domain.server.CpuDomain;
 import com.imby.common.domain.server.DiskDomain;
 import com.imby.common.domain.server.MemoryDomain;
 import com.imby.common.dto.ServerPackage;
+import com.imby.common.util.CpuUtils;
 import com.imby.server.business.server.core.CpuPool;
 import com.imby.server.business.server.core.DiskPool;
 import com.imby.server.business.server.core.MemoryPool;
@@ -76,7 +77,8 @@ public class ServerAspect {
      * handler：拒绝策略。一般用来做日志记录等。<br>
      */
     private final ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(1,
-            16,
+            // 线程数 = Ncpu /（1 - 阻塞系数），CPU密集型阻塞系数相对较小
+            (int) (CpuUtils.getAvailableProcessors() / (1 - 0.2)),
             1L,
             TimeUnit.SECONDS,
             new LinkedBlockingQueue<>(1024),

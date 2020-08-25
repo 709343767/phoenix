@@ -51,4 +51,17 @@ public class CpuUtils extends InitSigar {
         return cpuDomain;
     }
 
+    /**
+     * <p>
+     * 获取系统可用的处理器核心数
+     * </p>
+     *
+     * @return 系统可用的处理器核心数
+     * @author 皮锋
+     * @custom.date 2020/8/25 9:04
+     */
+    public static int getAvailableProcessors() {
+        return Runtime.getRuntime().availableProcessors();
+    }
+
 }
