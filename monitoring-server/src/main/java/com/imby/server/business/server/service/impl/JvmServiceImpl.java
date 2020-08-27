@@ -80,7 +80,7 @@ public class JvmServiceImpl implements IJvmService {
         monitorJvmRuntime.setLibraryPath(runtimeDomain.getLibraryPath());
         monitorJvmRuntime.setIsBootClassPathSupported(runtimeDomain.isBootClassPathSupported() ? ZeroOrOneConstants.ONE : ZeroOrOneConstants.ZERO);
         monitorJvmRuntime.setBootClassPath(runtimeDomain.getBootClassPath());
-        monitorJvmRuntime.setInputArguments(ArrayUtil.join(runtimeDomain.getInputArguments().toArray(new String[runtimeDomain.getInputArguments().size()]), ";"));
+        monitorJvmRuntime.setInputArguments(ArrayUtil.join(runtimeDomain.getInputArguments().toArray(new String[0]), ";"));
         monitorJvmRuntime.setUptime(runtimeDomain.getUptime());
         monitorJvmRuntime.setStartTime(runtimeDomain.getStartTime());
         // 新增java虚拟机运行时信息
