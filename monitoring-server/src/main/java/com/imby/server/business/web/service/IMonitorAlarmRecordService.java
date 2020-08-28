@@ -15,7 +15,7 @@ import java.util.List;
  * </p>
  *
  * @author 皮锋
- * @since 2020-08-04
+ * @custom.date 2020年3月7日 下午5:03:49
  */
 public interface IMonitorAlarmRecordService extends IService<MonitorAlarmRecord> {
 

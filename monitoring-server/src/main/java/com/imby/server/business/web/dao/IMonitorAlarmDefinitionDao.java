@@ -9,7 +9,7 @@ import com.imby.server.business.web.entity.MonitorAlarmDefinition;
  * </p>
  *
  * @author 皮锋
- * @since 2020-08-06
+ * @custom.date 2020年3月7日 下午5:03:49
  */
 public interface IMonitorAlarmDefinitionDao extends BaseMapper<MonitorAlarmDefinition> {
 
