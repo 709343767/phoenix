@@ -6,9 +6,12 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.imby.common.constant.ResultMsgConstants;
 import com.imby.common.constant.ZeroOrOneConstants;
 import com.imby.common.domain.Result;
+import com.imby.common.domain.jvm.ClassLoadingDomain;
 import com.imby.common.domain.jvm.RuntimeDomain;
 import com.imby.common.dto.JvmPackage;
+import com.imby.server.business.server.dao.IMonitorJvmClassLoadingDao;
 import com.imby.server.business.server.dao.IMonitorJvmRuntimeDao;
+import com.imby.server.business.server.entity.MonitorJvmClassLoading;
 import com.imby.server.business.server.entity.MonitorJvmRuntime;
 import com.imby.server.business.server.service.IJvmService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +35,12 @@ public class JvmServiceImpl implements IJvmService {
     private IMonitorJvmRuntimeDao monitorJvmRuntimeDao;
 
     /**
+     * java虚拟机类加载信息数据访问对象
+     */
+    @Autowired
+    private IMonitorJvmClassLoadingDao monitorJvmClassLoadingDao;
+
+    /**
      * <p>
      * 处理java虚拟机信息包
      * </p>
@@ -45,8 +54,47 @@ public class JvmServiceImpl implements IJvmService {
     public Result dealJvmPackage(JvmPackage jvmPackage) {
         // 把java虚拟机运行时信息添加或更新到数据库
         this.operateMonitorJvmRuntime(jvmPackage);
+        // 把java虚拟机类加载信息添加或更新到数据库
+        this.operateMonitorJvmClassLoading(jvmPackage);
         // 返回结果
         return Result.builder().isSuccess(true).msg(ResultMsgConstants.SUCCESS).build();
+    }
+
+    /**
+     * <p>
+     * 把java虚拟机类加载信息添加或更新到数据库
+     * </p>
+     *
+     * @param jvmPackage java虚拟机信息包
+     * @author 皮锋
+     * @custom.date 2020/8/28 8:54
+     */
+    private void operateMonitorJvmClassLoading(JvmPackage jvmPackage) {
+        // 应用实例ID
+        String instanceId = jvmPackage.getInstanceId();
+        // 类加载信息
+        ClassLoadingDomain classLoadingDomain = jvmPackage.getJvm().getClassLoadingDomain();
+        LambdaQueryWrapper<MonitorJvmClassLoading> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(MonitorJvmClassLoading::getInstanceId, instanceId);
+        MonitorJvmClassLoading monitorJvmClassLoadingDb = this.monitorJvmClassLoadingDao.selectOne(lambdaQueryWrapper);
+        MonitorJvmClassLoading monitorJvmClassLoading = new MonitorJvmClassLoading();
+        monitorJvmClassLoading.setInstanceId(instanceId);
+        monitorJvmClassLoading.setTotalLoadedClassCount(classLoadingDomain.getTotalLoadedClassCount());
+        monitorJvmClassLoading.setLoadedClassCount(classLoadingDomain.getLoadedClassCount());
+        monitorJvmClassLoading.setUnloadedClassCount(classLoadingDomain.getUnloadedClassCount());
+        monitorJvmClassLoading.setIsVerbose(classLoadingDomain.isVerbose() ? ZeroOrOneConstants.ONE : ZeroOrOneConstants.ZERO);
+        // 新增java虚拟机类加载信息
+        if (monitorJvmClassLoadingDb == null) {
+            monitorJvmClassLoading.setInsertTime(jvmPackage.getDateTime());
+            this.monitorJvmClassLoadingDao.insert(monitorJvmClassLoading);
+        }
+        // 更新java虚拟机类加载信息
+        else {
+            monitorJvmClassLoading.setUpdateTime(jvmPackage.getDateTime());
+            LambdaUpdateWrapper<MonitorJvmClassLoading> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+            lambdaUpdateWrapper.eq(MonitorJvmClassLoading::getInstanceId, instanceId);
+            this.monitorJvmClassLoadingDao.update(monitorJvmClassLoading, lambdaUpdateWrapper);
+        }
     }
 
     /**
