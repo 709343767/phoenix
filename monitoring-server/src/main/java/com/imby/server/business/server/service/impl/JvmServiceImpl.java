@@ -11,6 +11,8 @@ import com.imby.common.dto.JvmPackage;
 import com.imby.server.business.server.dao.*;
 import com.imby.server.business.server.entity.*;
 import com.imby.server.business.server.service.IJvmService;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -102,22 +104,46 @@ public class JvmServiceImpl implements IJvmService {
         GarbageCollectorDomain garbageCollectorDomain = jvmPackage.getJvm().getGarbageCollectorDomain();
         // 详细GC信息
         List<GarbageCollectorDomain.GarbageCollectorInfoDomain> garbageCollectorInfoDomains = garbageCollectorDomain.getGarbageCollectorInfoDomains();
-        // 先删除
-        LambdaUpdateWrapper<MonitorJvmGarbageCollector> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();
-        lambdaUpdateWrapper.eq(MonitorJvmGarbageCollector::getInstanceId, instanceId);
-        this.monitorJvmGarbageCollectorDao.delete(lambdaUpdateWrapper);
-        // 再插入
-        for (int i = 0; i < garbageCollectorInfoDomains.size(); i++) {
-            GarbageCollectorDomain.GarbageCollectorInfoDomain garbageCollectorInfoDomain = garbageCollectorInfoDomains.get(i);
-            MonitorJvmGarbageCollector monitorJvmGarbageCollector = new MonitorJvmGarbageCollector();
-            monitorJvmGarbageCollector.setInstanceId(instanceId);
-            monitorJvmGarbageCollector.setGarbageCollectorNo(i);
-            monitorJvmGarbageCollector.setGarbageCollectorName(garbageCollectorInfoDomain.getName());
-            monitorJvmGarbageCollector.setCollectionCount(garbageCollectorInfoDomain.getCollectionCount());
-            monitorJvmGarbageCollector.setCollectionTime(garbageCollectorInfoDomain.getCollectionTime());
-            monitorJvmGarbageCollector.setInsertTime(jvmPackage.getDateTime());
-            monitorJvmGarbageCollector.setUpdateTime(jvmPackage.getDateTime());
-            this.monitorJvmGarbageCollectorDao.insert(monitorJvmGarbageCollector);
+        // 查询数据库，看有没有当前应用的GC信息
+        LambdaQueryWrapper<MonitorJvmGarbageCollector> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(MonitorJvmGarbageCollector::getInstanceId, instanceId);
+        List<MonitorJvmGarbageCollector> monitorJvmGarbageCollectorsDb = this.monitorJvmGarbageCollectorDao.selectList(lambdaQueryWrapper);
+        // 新增java虚拟机GC信息
+        if (CollectionUtils.isEmpty(monitorJvmGarbageCollectorsDb)) {
+            for (int i = 0; i < garbageCollectorInfoDomains.size(); i++) {
+                GarbageCollectorDomain.GarbageCollectorInfoDomain garbageCollectorInfoDomain = garbageCollectorInfoDomains.get(i);
+                MonitorJvmGarbageCollector monitorJvmGarbageCollector = new MonitorJvmGarbageCollector();
+                monitorJvmGarbageCollector.setInstanceId(instanceId);
+                monitorJvmGarbageCollector.setGarbageCollectorNo(i);
+                monitorJvmGarbageCollector.setGarbageCollectorName(garbageCollectorInfoDomain.getName());
+                monitorJvmGarbageCollector.setCollectionCount(garbageCollectorInfoDomain.getCollectionCount());
+                monitorJvmGarbageCollector.setCollectionTime(garbageCollectorInfoDomain.getCollectionTime());
+                monitorJvmGarbageCollector.setInsertTime(jvmPackage.getDateTime());
+                this.monitorJvmGarbageCollectorDao.insert(monitorJvmGarbageCollector);
+            }
+        }
+        // 更新java虚拟机GC信息
+        else {
+            for (MonitorJvmGarbageCollector monitorJvmGarbageCollectorDb : monitorJvmGarbageCollectorsDb) {
+                String garbageCollectorNameDb = monitorJvmGarbageCollectorDb.getGarbageCollectorName();
+                for (int i = 0; i < garbageCollectorInfoDomains.size(); i++) {
+                    GarbageCollectorDomain.GarbageCollectorInfoDomain garbageCollectorInfoDomain = garbageCollectorInfoDomains.get(i);
+                    String name = garbageCollectorInfoDomain.getName();
+                    if (StringUtils.equals(name, garbageCollectorNameDb)) {
+                        MonitorJvmGarbageCollector monitorJvmGarbageCollector = new MonitorJvmGarbageCollector();
+                        monitorJvmGarbageCollector.setInstanceId(instanceId);
+                        monitorJvmGarbageCollector.setGarbageCollectorNo(i);
+                        monitorJvmGarbageCollector.setGarbageCollectorName(garbageCollectorInfoDomain.getName());
+                        monitorJvmGarbageCollector.setCollectionCount(garbageCollectorInfoDomain.getCollectionCount());
+                        monitorJvmGarbageCollector.setCollectionTime(garbageCollectorInfoDomain.getCollectionTime());
+                        monitorJvmGarbageCollector.setUpdateTime(jvmPackage.getDateTime());
+                        LambdaUpdateWrapper<MonitorJvmGarbageCollector> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+                        lambdaUpdateWrapper.eq(MonitorJvmGarbageCollector::getInstanceId, instanceId);
+                        lambdaQueryWrapper.eq(MonitorJvmGarbageCollector::getGarbageCollectorName, name);
+                        this.monitorJvmGarbageCollectorDao.update(monitorJvmGarbageCollector, lambdaUpdateWrapper);
+                    }
+                }
+            }
         }
     }
 
