@@ -7,15 +7,21 @@ import com.imby.common.constant.ResultMsgConstants;
 import com.imby.common.constant.ZeroOrOneConstants;
 import com.imby.common.domain.Result;
 import com.imby.common.domain.jvm.ClassLoadingDomain;
+import com.imby.common.domain.jvm.MemoryDomain;
 import com.imby.common.domain.jvm.RuntimeDomain;
 import com.imby.common.dto.JvmPackage;
 import com.imby.server.business.server.dao.IMonitorJvmClassLoadingDao;
+import com.imby.server.business.server.dao.IMonitorJvmMemoryDao;
 import com.imby.server.business.server.dao.IMonitorJvmRuntimeDao;
 import com.imby.server.business.server.entity.MonitorJvmClassLoading;
+import com.imby.server.business.server.entity.MonitorJvmMemory;
 import com.imby.server.business.server.entity.MonitorJvmRuntime;
 import com.imby.server.business.server.service.IJvmService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Map;
 
 /**
  * <p>
@@ -41,6 +47,12 @@ public class JvmServiceImpl implements IJvmService {
     private IMonitorJvmClassLoadingDao monitorJvmClassLoadingDao;
 
     /**
+     * java虚拟机内存信息数据访问对象
+     */
+    @Autowired
+    private IMonitorJvmMemoryDao monitorJvmMemoryDao;
+
+    /**
      * <p>
      * 处理java虚拟机信息包
      * </p>
@@ -50,14 +62,73 @@ public class JvmServiceImpl implements IJvmService {
      * @author 皮锋
      * @custom.date 2020/8/27 17:45
      */
+    @Transactional
     @Override
     public Result dealJvmPackage(JvmPackage jvmPackage) {
         // 把java虚拟机运行时信息添加或更新到数据库
         this.operateMonitorJvmRuntime(jvmPackage);
         // 把java虚拟机类加载信息添加或更新到数据库
         this.operateMonitorJvmClassLoading(jvmPackage);
+        // 把java虚拟机内存信息添加到数据库
+        this.operateMonitorJvmMemory(jvmPackage);
         // 返回结果
         return Result.builder().isSuccess(true).msg(ResultMsgConstants.SUCCESS).build();
+    }
+
+    /**
+     * <p>
+     * 把java虚拟机内存信息添加到数据库
+     * </p>
+     *
+     * @param jvmPackage java虚拟机信息包
+     * @author 皮锋
+     * @custom.date 2020/8/28 9:28
+     */
+    private void operateMonitorJvmMemory(JvmPackage jvmPackage) {
+        // 应用实例ID
+        String instanceId = jvmPackage.getInstanceId();
+        // 内存信息
+        MemoryDomain memoryDomain = jvmPackage.getJvm().getMemoryDomain();
+        // 堆内存信息
+        MemoryDomain.HeapMemoryUsageDomain heapMemoryUsageDomain = memoryDomain.getHeapMemoryUsageDomain();
+        MonitorJvmMemory monitorJvmHeapMemory = new MonitorJvmMemory();
+        monitorJvmHeapMemory.setInstanceId(instanceId);
+        monitorJvmHeapMemory.setMemoryType("Heap");
+        monitorJvmHeapMemory.setInit(heapMemoryUsageDomain.getInit());
+        monitorJvmHeapMemory.setUsed(heapMemoryUsageDomain.getUsed());
+        monitorJvmHeapMemory.setCommitted(heapMemoryUsageDomain.getCommitted());
+        monitorJvmHeapMemory.setMax(heapMemoryUsageDomain.getMax());
+        monitorJvmHeapMemory.setInsertTime(jvmPackage.getDateTime());
+        monitorJvmHeapMemory.setUpdateTime(jvmPackage.getDateTime());
+        this.monitorJvmMemoryDao.insert(monitorJvmHeapMemory);
+        // 堆外内存信息
+        MemoryDomain.NonHeapMemoryUsageDomain nonHeapMemoryUsageDomain = memoryDomain.getNonHeapMemoryUsageDomain();
+        MonitorJvmMemory monitorJvmNonHeapMemory = new MonitorJvmMemory();
+        monitorJvmNonHeapMemory.setInstanceId(instanceId);
+        monitorJvmNonHeapMemory.setMemoryType("Non_Heap");
+        monitorJvmNonHeapMemory.setInit(nonHeapMemoryUsageDomain.getInit());
+        monitorJvmNonHeapMemory.setUsed(nonHeapMemoryUsageDomain.getUsed());
+        monitorJvmNonHeapMemory.setCommitted(nonHeapMemoryUsageDomain.getCommitted());
+        monitorJvmNonHeapMemory.setMax(nonHeapMemoryUsageDomain.getMax());
+        monitorJvmNonHeapMemory.setInsertTime(jvmPackage.getDateTime());
+        monitorJvmNonHeapMemory.setUpdateTime(jvmPackage.getDateTime());
+        this.monitorJvmMemoryDao.insert(monitorJvmNonHeapMemory);
+        // 内存池信息
+        Map<String, MemoryDomain.MemoryPoolDomain> memoryPoolDomainMap = memoryDomain.getMemoryPoolDomainMap();
+        for (String key : memoryPoolDomainMap.keySet()) {
+            // 内存池信息
+            MemoryDomain.MemoryPoolDomain memoryPoolDomain = memoryPoolDomainMap.get(key);
+            MonitorJvmMemory monitorJvmMemory = new MonitorJvmMemory();
+            monitorJvmMemory.setInstanceId(instanceId);
+            monitorJvmMemory.setMemoryType(key);
+            monitorJvmMemory.setInit(memoryPoolDomain.getInit());
+            monitorJvmMemory.setUsed(memoryPoolDomain.getUsed());
+            monitorJvmMemory.setCommitted(memoryPoolDomain.getCommitted());
+            monitorJvmMemory.setMax(memoryPoolDomain.getMax());
+            monitorJvmMemory.setInsertTime(jvmPackage.getDateTime());
+            monitorJvmMemory.setUpdateTime(jvmPackage.getDateTime());
+            this.monitorJvmMemoryDao.insert(monitorJvmMemory);
+        }
     }
 
     /**
