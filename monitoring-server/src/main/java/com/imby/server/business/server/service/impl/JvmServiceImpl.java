@@ -9,13 +9,16 @@ import com.imby.common.domain.Result;
 import com.imby.common.domain.jvm.ClassLoadingDomain;
 import com.imby.common.domain.jvm.MemoryDomain;
 import com.imby.common.domain.jvm.RuntimeDomain;
+import com.imby.common.domain.jvm.ThreadDomain;
 import com.imby.common.dto.JvmPackage;
 import com.imby.server.business.server.dao.IMonitorJvmClassLoadingDao;
 import com.imby.server.business.server.dao.IMonitorJvmMemoryDao;
 import com.imby.server.business.server.dao.IMonitorJvmRuntimeDao;
+import com.imby.server.business.server.dao.IMonitorJvmThreadDao;
 import com.imby.server.business.server.entity.MonitorJvmClassLoading;
 import com.imby.server.business.server.entity.MonitorJvmMemory;
 import com.imby.server.business.server.entity.MonitorJvmRuntime;
+import com.imby.server.business.server.entity.MonitorJvmThread;
 import com.imby.server.business.server.service.IJvmService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -53,6 +56,12 @@ public class JvmServiceImpl implements IJvmService {
     private IMonitorJvmMemoryDao monitorJvmMemoryDao;
 
     /**
+     * java虚拟机线程信息数据访问对象
+     */
+    @Autowired
+    private IMonitorJvmThreadDao monitorJvmThreadDao;
+
+    /**
      * <p>
      * 处理java虚拟机信息包
      * </p>
@@ -71,8 +80,47 @@ public class JvmServiceImpl implements IJvmService {
         this.operateMonitorJvmClassLoading(jvmPackage);
         // 把java虚拟机内存信息添加到数据库
         this.operateMonitorJvmMemory(jvmPackage);
+        // 把java虚拟机线程信息添加或更新到数据库
+        this.operateMonitorJvmThread(jvmPackage);
         // 返回结果
         return Result.builder().isSuccess(true).msg(ResultMsgConstants.SUCCESS).build();
+    }
+
+    /**
+     * <p>
+     * 把java虚拟机线程信息添加或更新到数据库
+     * </p>
+     *
+     * @param jvmPackage java虚拟机信息包
+     * @author 皮锋
+     * @custom.date 2020/8/28 10:03
+     */
+    private void operateMonitorJvmThread(JvmPackage jvmPackage) {
+        // 应用实例ID
+        String instanceId = jvmPackage.getInstanceId();
+        // 线程信息
+        ThreadDomain threadDomain = jvmPackage.getJvm().getThreadDomain();
+        LambdaQueryWrapper<MonitorJvmThread> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(MonitorJvmThread::getInstanceId, instanceId);
+        MonitorJvmThread monitorJvmThreadDb = this.monitorJvmThreadDao.selectOne(lambdaQueryWrapper);
+        MonitorJvmThread monitorJvmThread = new MonitorJvmThread();
+        monitorJvmThread.setInstanceId(instanceId);
+        monitorJvmThread.setThreadCount(threadDomain.getThreadCount());
+        monitorJvmThread.setPeakThreadCount(threadDomain.getPeakThreadCount());
+        monitorJvmThread.setTotalStartedThreadCount(threadDomain.getTotalStartedThreadCount());
+        monitorJvmThread.setDaemonThreadCount(threadDomain.getDaemonThreadCount());
+        // 新增java虚拟机线程信息
+        if (monitorJvmThreadDb == null) {
+            monitorJvmThread.setInsertTime(jvmPackage.getDateTime());
+            this.monitorJvmThreadDao.insert(monitorJvmThread);
+        }
+        // 更新java虚拟机线程信息
+        else {
+            monitorJvmThread.setUpdateTime(jvmPackage.getDateTime());
+            LambdaUpdateWrapper<MonitorJvmThread> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+            lambdaUpdateWrapper.eq(MonitorJvmThread::getInstanceId, instanceId);
+            this.monitorJvmThreadDao.update(monitorJvmThread, lambdaUpdateWrapper);
+        }
     }
 
     /**
