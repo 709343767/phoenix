@@ -6,24 +6,16 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.imby.common.constant.ResultMsgConstants;
 import com.imby.common.constant.ZeroOrOneConstants;
 import com.imby.common.domain.Result;
-import com.imby.common.domain.jvm.ClassLoadingDomain;
-import com.imby.common.domain.jvm.MemoryDomain;
-import com.imby.common.domain.jvm.RuntimeDomain;
-import com.imby.common.domain.jvm.ThreadDomain;
+import com.imby.common.domain.jvm.*;
 import com.imby.common.dto.JvmPackage;
-import com.imby.server.business.server.dao.IMonitorJvmClassLoadingDao;
-import com.imby.server.business.server.dao.IMonitorJvmMemoryDao;
-import com.imby.server.business.server.dao.IMonitorJvmRuntimeDao;
-import com.imby.server.business.server.dao.IMonitorJvmThreadDao;
-import com.imby.server.business.server.entity.MonitorJvmClassLoading;
-import com.imby.server.business.server.entity.MonitorJvmMemory;
-import com.imby.server.business.server.entity.MonitorJvmRuntime;
-import com.imby.server.business.server.entity.MonitorJvmThread;
+import com.imby.server.business.server.dao.*;
+import com.imby.server.business.server.entity.*;
 import com.imby.server.business.server.service.IJvmService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -62,6 +54,12 @@ public class JvmServiceImpl implements IJvmService {
     private IMonitorJvmThreadDao monitorJvmThreadDao;
 
     /**
+     * java虚拟机GC信息数据访问对象
+     */
+    @Autowired
+    private IMonitorJvmGarbageCollectorDao monitorJvmGarbageCollectorDao;
+
+    /**
      * <p>
      * 处理java虚拟机信息包
      * </p>
@@ -82,8 +80,45 @@ public class JvmServiceImpl implements IJvmService {
         this.operateMonitorJvmMemory(jvmPackage);
         // 把java虚拟机线程信息添加或更新到数据库
         this.operateMonitorJvmThread(jvmPackage);
+        // 把java虚拟机GC信息添加或更新到数据库
+        this.operateMonitorJvmGarbageCollector(jvmPackage);
         // 返回结果
         return Result.builder().isSuccess(true).msg(ResultMsgConstants.SUCCESS).build();
+    }
+
+    /**
+     * <p>
+     * 把java虚拟机GC信息添加或更新到数据库
+     * </p>
+     *
+     * @param jvmPackage java虚拟机信息包
+     * @author 皮锋
+     * @custom.date 2020/8/28 10:38
+     */
+    private void operateMonitorJvmGarbageCollector(JvmPackage jvmPackage) {
+        // 应用实例ID
+        String instanceId = jvmPackage.getInstanceId();
+        // GC信息
+        GarbageCollectorDomain garbageCollectorDomain = jvmPackage.getJvm().getGarbageCollectorDomain();
+        // 详细GC信息
+        List<GarbageCollectorDomain.GarbageCollectorInfoDomain> garbageCollectorInfoDomains = garbageCollectorDomain.getGarbageCollectorInfoDomains();
+        // 先删除
+        LambdaUpdateWrapper<MonitorJvmGarbageCollector> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+        lambdaUpdateWrapper.eq(MonitorJvmGarbageCollector::getInstanceId, instanceId);
+        this.monitorJvmGarbageCollectorDao.delete(lambdaUpdateWrapper);
+        // 再插入
+        for (int i = 0; i < garbageCollectorInfoDomains.size(); i++) {
+            GarbageCollectorDomain.GarbageCollectorInfoDomain garbageCollectorInfoDomain = garbageCollectorInfoDomains.get(i);
+            MonitorJvmGarbageCollector monitorJvmGarbageCollector = new MonitorJvmGarbageCollector();
+            monitorJvmGarbageCollector.setInstanceId(instanceId);
+            monitorJvmGarbageCollector.setGarbageCollectorNo(i);
+            monitorJvmGarbageCollector.setGarbageCollectorName(garbageCollectorInfoDomain.getName());
+            monitorJvmGarbageCollector.setCollectionCount(garbageCollectorInfoDomain.getCollectionCount());
+            monitorJvmGarbageCollector.setCollectionTime(garbageCollectorInfoDomain.getCollectionTime());
+            monitorJvmGarbageCollector.setInsertTime(jvmPackage.getDateTime());
+            monitorJvmGarbageCollector.setUpdateTime(jvmPackage.getDateTime());
+            this.monitorJvmGarbageCollectorDao.insert(monitorJvmGarbageCollector);
+        }
     }
 
     /**
