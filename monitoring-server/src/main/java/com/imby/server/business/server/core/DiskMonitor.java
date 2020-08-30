@@ -5,10 +5,12 @@ import com.imby.common.constant.AlarmTypeEnums;
 import com.imby.common.constant.DateTimeStylesEnums;
 import com.imby.common.domain.Alarm;
 import com.imby.common.dto.AlarmPackage;
+import com.imby.common.exception.NetException;
 import com.imby.server.business.server.domain.Disk;
 import com.imby.server.business.server.service.IAlarmService;
 import com.imby.server.inf.IServerMonitoringListener;
 import lombok.extern.slf4j.Slf4j;
+import org.hyperic.sigar.SigarException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
@@ -47,11 +49,13 @@ public class DiskMonitor implements IServerMonitoringListener {
      * </p>
      *
      * @param obj 回调参数
+     * @throws NetException   获取网络信息异常
+     * @throws SigarException Sigar异常
      * @author 皮锋
      * @custom.date 2020/3/30 15:35
      */
     @Override
-    public void wakeUp(Object... obj) {
+    public void wakeUp(Object... obj) throws NetException, SigarException {
         String key = String.valueOf(obj[0]);
         Disk disk = this.diskPool.get(key);
         Map<String, Disk.Subregion> subregionMap = disk.getSubregionMap();
@@ -76,8 +80,8 @@ public class DiskMonitor implements IServerMonitoringListener {
                 subregion.setOverLoad(false);
             }
         }
-        log.info("磁盘信息池大小：{}，详细信息：{}", //
-                this.diskPool.size(), //
+        log.info("磁盘信息池大小：{}，详细信息：{}",
+                this.diskPool.size(),
                 this.diskPool.toJsonString());
     }
 
@@ -90,22 +94,24 @@ public class DiskMonitor implements IServerMonitoringListener {
      * @param alarmLevelEnums 告警级别
      * @param disk            磁盘
      * @param subregion       磁盘分区
+     * @throws NetException   获取网络信息异常
+     * @throws SigarException Sigar异常
      * @author 皮锋
      * @custom.date 2020/3/25 14:46
      */
     @Async
-    public void sendAlarmInfo(String title, AlarmLevelEnums alarmLevelEnums, Disk disk, Disk.Subregion subregion) {
+    public void sendAlarmInfo(String title, AlarmLevelEnums alarmLevelEnums, Disk disk, Disk.Subregion subregion) throws NetException, SigarException {
         String dateTime = DateTimeFormatter.ofPattern(DateTimeStylesEnums.YYYY_MM_DD_HH_MM_SS.getValue()).format(LocalDateTime.now());
         String msg = "IP地址：" + disk.getIp()
                 + "，<br>服务器：" + disk.getComputerName()
                 + "，<br>磁盘分区：" + subregion.getDevName()
                 + "，<br>磁盘分区使用率：" + subregion.getUsePercent()
                 + "%，<br>时间：" + dateTime;
-        Alarm alarm = Alarm.builder()//
-                .title(title)//
-                .msg(msg)//
-                .alarmLevel(alarmLevelEnums)//
-                .alarmType(AlarmTypeEnums.SERVER)//
+        Alarm alarm = Alarm.builder()
+                .title(title)
+                .msg(msg)
+                .alarmLevel(alarmLevelEnums)
+                .alarmType(AlarmTypeEnums.SERVER)
                 .build();
         AlarmPackage alarmPackage = new PackageConstructor().structureAlarmPackage(alarm);
         this.alarmService.dealAlarmPackage(alarmPackage);

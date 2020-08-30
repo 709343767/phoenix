@@ -6,11 +6,13 @@ import com.alibaba.fastjson.JSON;
 import com.imby.common.domain.Result;
 import com.imby.common.dto.BaseResponsePackage;
 import com.imby.common.dto.HeartbeatPackage;
+import com.imby.common.exception.NetException;
 import com.imby.plug.constant.UrlConstants;
 import com.imby.plug.core.PackageConstructor;
 import com.imby.plug.core.Sender;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.client.ClientProtocolException;
+import org.hyperic.sigar.SigarException;
 
 import java.io.IOException;
 import java.util.concurrent.Callable;
@@ -55,6 +57,10 @@ public class CheckIOThread implements Callable<Result> {
             log.error("客户端协议异常！", e);
         } catch (IOException e) {
             log.error("IO异常！", e);
+        } catch (NetException e) {
+            log.error("获取网络信息异常！", e);
+        } catch (SigarException e) {
+            log.error("Sigar异常！", e);
         }
         return Result.builder().isSuccess(false).build();
     }

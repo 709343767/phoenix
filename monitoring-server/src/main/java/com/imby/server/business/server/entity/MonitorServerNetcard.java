@@ -74,6 +74,18 @@ public class MonitorServerNetcard {
     private String broadcast;
 
     /**
+     * MAC地址
+     */
+    @TableField("HW_ADDR")
+    private String hwAddr;
+
+    /**
+     * 网卡描述信息
+     */
+    @TableField("DESCRIPTION")
+    private String description;
+
+    /**
      * 新增时间
      */
     @TableField("INSERT_TIME")
@@ -84,4 +96,5 @@ public class MonitorServerNetcard {
      */
     @TableField("UPDATE_TIME")
     private Date updateTime;
+
 }

@@ -144,6 +144,8 @@ public class ServerServiceImpl implements IServerService {
             monitorServerNetcard.setMask(netInterfaceConfigDomain.getMask());
             monitorServerNetcard.setName(netInterfaceConfigDomain.getName());
             monitorServerNetcard.setType(netInterfaceConfigDomain.getType());
+            monitorServerNetcard.setHwAddr(netInterfaceConfigDomain.getHwAddr());
+            monitorServerNetcard.setDescription(netInterfaceConfigDomain.getDescription());
             // 查询数据库中是否有当前网卡信息
             LambdaQueryWrapper<MonitorServerNetcard> lambdaQueryWrapper = new LambdaQueryWrapper<>();
             lambdaQueryWrapper.eq(MonitorServerNetcard::getIp, ip);

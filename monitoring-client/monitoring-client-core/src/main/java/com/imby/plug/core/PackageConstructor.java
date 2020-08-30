@@ -2,10 +2,13 @@ package com.imby.plug.core;
 
 import cn.hutool.core.util.IdUtil;
 import com.google.common.base.Charsets;
+import com.imby.common.abs.AbstractPackageConstructor;
 import com.imby.common.domain.Alarm;
-import com.imby.common.domain.Result;
-import com.imby.common.dto.*;
-import com.imby.common.inf.IPackageConstructor;
+import com.imby.common.dto.AlarmPackage;
+import com.imby.common.dto.HeartbeatPackage;
+import com.imby.common.dto.JvmPackage;
+import com.imby.common.dto.ServerPackage;
+import com.imby.common.exception.NetException;
 import com.imby.common.util.JvmUtils;
 import com.imby.common.util.NetUtils;
 import com.imby.common.util.OsUtils;
@@ -24,7 +27,7 @@ import java.util.Date;
  * @author 皮锋
  * @custom.date 2020年3月7日 下午2:52:50
  */
-public class PackageConstructor implements IPackageConstructor {
+public class PackageConstructor extends AbstractPackageConstructor {
 
     /**
      * <p>
@@ -33,11 +36,13 @@ public class PackageConstructor implements IPackageConstructor {
      *
      * @param alarm 告警信息
      * @return {@link AlarmPackage}
+     * @throws NetException   获取网络信息异常
+     * @throws SigarException Sigar异常
      * @author 皮锋
      * @custom.date 2020年3月7日 下午3:02:46
      */
     @Override
-    public AlarmPackage structureAlarmPackage(Alarm alarm) {
+    public AlarmPackage structureAlarmPackage(Alarm alarm) throws NetException, SigarException {
         AlarmPackage alarmPackage = new AlarmPackage();
         alarmPackage.setId(IdUtil.randomUUID());
         alarmPackage.setDateTime(new Date());
@@ -65,11 +70,13 @@ public class PackageConstructor implements IPackageConstructor {
      * </p>
      *
      * @return {@link HeartbeatPackage}
+     * @throws NetException   获取网络信息异常
+     * @throws SigarException Sigar异常
      * @author 皮锋
      * @custom.date 2020年3月7日 下午3:54:30
      */
     @Override
-    public HeartbeatPackage structureHeartbeatPackage() {
+    public HeartbeatPackage structureHeartbeatPackage() throws NetException, SigarException {
         HeartbeatPackage heartbeatPackage = new HeartbeatPackage();
         heartbeatPackage.setId(IdUtil.randomUUID());
         heartbeatPackage.setEndpoint(ConfigLoader.monitoringProperties.getOwnProperties().getInstanceEndpoint());
@@ -90,11 +97,12 @@ public class PackageConstructor implements IPackageConstructor {
      *
      * @return {@link ServerPackage}
      * @throws SigarException Sigar异常
+     * @throws NetException   获取网络信息异常
      * @author 皮锋
      * @custom.date 2020年3月7日 下午4:51:51
      */
     @Override
-    public ServerPackage structureServerPackage() throws SigarException {
+    public ServerPackage structureServerPackage() throws SigarException, NetException {
         ServerPackage serverPackage = new ServerPackage();
         serverPackage.setId(IdUtil.randomUUID());
         serverPackage.setDateTime(new Date());
@@ -115,11 +123,13 @@ public class PackageConstructor implements IPackageConstructor {
      * </p>
      *
      * @return {@link JvmPackage}
+     * @throws NetException   获取网络信息异常
+     * @throws SigarException Sigar异常
      * @author 皮锋
      * @custom.date 2020/8/14 21:28
      */
     @Override
-    public JvmPackage structureJvmPackage() {
+    public JvmPackage structureJvmPackage() throws NetException, SigarException {
         JvmPackage jvmPackage = new JvmPackage();
         jvmPackage.setId(IdUtil.randomUUID());
         jvmPackage.setDateTime(new Date());
@@ -132,11 +142,6 @@ public class PackageConstructor implements IPackageConstructor {
         jvmPackage.setJvm(JvmUtils.getJvmInfo());
         jvmPackage.setRate(ConfigLoader.monitoringProperties.getJvmInfoProperties().getRate());
         return jvmPackage;
-    }
-
-    @Override
-    public BaseResponsePackage structureBaseResponsePackage(Result result) {
-        return null;
     }
 
 }

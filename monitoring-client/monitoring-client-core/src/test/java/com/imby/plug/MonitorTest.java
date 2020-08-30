@@ -7,6 +7,9 @@ import com.imby.common.domain.Alarm;
 import com.imby.common.domain.Result;
 import org.junit.Test;
 
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
 /**
  * <p>
  * 测试监控客户端入口类
@@ -29,16 +32,21 @@ public class MonitorTest {
     public void testSendAlarm() {
         // 开启监控
         Monitor.start();
-        // 封装告警信息
-        Alarm alarm = Alarm.builder().alarmLevel(AlarmLevelEnums.INFO)
-                .alarmType(AlarmTypeEnums.CUSTOM)
-                .title("测试发送告警信息")
-                .msg("测试发送告警信息")
-                .charset(Charsets.UTF_8)
-                .isTest(false)
-                .build();
-        // 发送告警信息
-        Result result = Monitor.sendAlarm(alarm);
-        System.out.println(result.toJsonString());
+        // 业务埋点监测：定时监测业务运行情况
+        ScheduledExecutorService service = Monitor.buryingPoint(() -> {
+            // 封装告警信息
+            Alarm alarm = Alarm.builder().alarmLevel(AlarmLevelEnums.INFO)
+                    .alarmType(AlarmTypeEnums.CUSTOM)
+                    .title("测试发送告警信息")
+                    .msg("测试发送告警信息")
+                    .charset(Charsets.UTF_8)
+                    .isTest(false)
+                    .build();
+            // 发送告警信息
+            Result result = Monitor.sendAlarm(alarm);
+            System.out.println(result.toJsonString());
+        }, false, 5, 60, TimeUnit.SECONDS);
+
+        service.shutdown();
     }
 }

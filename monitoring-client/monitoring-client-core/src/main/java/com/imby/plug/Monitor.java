@@ -5,6 +5,7 @@ import com.imby.common.domain.Alarm;
 import com.imby.common.domain.Result;
 import com.imby.common.dto.AlarmPackage;
 import com.imby.common.dto.BaseResponsePackage;
+import com.imby.common.exception.NetException;
 import com.imby.plug.constant.UrlConstants;
 import com.imby.plug.core.ConfigLoader;
 import com.imby.plug.core.PackageConstructor;
@@ -14,6 +15,7 @@ import com.imby.plug.scheduler.HeartbeatTaskScheduler;
 import com.imby.plug.scheduler.JvmTaskScheduler;
 import com.imby.plug.scheduler.ServerTaskScheduler;
 import lombok.extern.slf4j.Slf4j;
+import org.hyperic.sigar.SigarException;
 
 import java.io.IOException;
 import java.util.concurrent.ScheduledExecutorService;
@@ -102,7 +104,7 @@ public class Monitor {
             String result = Sender.send(UrlConstants.ALARM_URL, alarmPackage.toJsonString());
             BaseResponsePackage baseResponsePackage = JSON.parseObject(result, BaseResponsePackage.class);
             return baseResponsePackage.getResult();
-        } catch (IOException e) {
+        } catch (IOException | NetException | SigarException e) {
             log.error("监控程序发送告警信息异常！", e);
             return Result.builder().isSuccess(false).msg(e.getMessage()).build();
         }
@@ -114,6 +116,7 @@ public class Monitor {
      * </p>
      *
      * @param command      要执行的任务
+     * @param isDaemon     是否设置为守护线程
      * @param initialDelay 初次埋点监测延迟的时间
      * @param period       两次埋点监测任务之间的时间间隔
      * @param unit         时间单位
@@ -121,8 +124,8 @@ public class Monitor {
      * @author 皮锋
      * @custom.date 2020/8/24 20:33
      */
-    public static ScheduledExecutorService buryingPoint(Runnable command, long initialDelay, long period, TimeUnit unit) {
-        return BusinessBuryingPointScheduler.run(command, initialDelay, period, unit);
+    public static ScheduledExecutorService buryingPoint(Runnable command, boolean isDaemon, long initialDelay, long period, TimeUnit unit) {
+        return BusinessBuryingPointScheduler.run(command, isDaemon, initialDelay, period, unit);
     }
 
 }

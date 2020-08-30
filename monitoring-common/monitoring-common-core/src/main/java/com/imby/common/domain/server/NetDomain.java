@@ -57,6 +57,14 @@ public final class NetDomain extends AbstractSuperBean {
          * 广播地址
          */
         String broadcast;
+        /**
+         * MAC地址
+         */
+        String hwAddr;
+        /**
+         * 网卡描述信息
+         */
+        String description;
 
     }
 

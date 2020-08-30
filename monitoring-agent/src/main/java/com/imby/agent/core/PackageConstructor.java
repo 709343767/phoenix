@@ -2,14 +2,18 @@ package com.imby.agent.core;
 
 import cn.hutool.core.util.IdUtil;
 import com.google.common.base.Charsets;
+import com.imby.common.abs.AbstractPackageConstructor;
 import com.imby.common.constant.EndpointTypeConstants;
 import com.imby.common.domain.Alarm;
 import com.imby.common.domain.Result;
-import com.imby.common.dto.*;
-import com.imby.common.inf.IPackageConstructor;
+import com.imby.common.dto.AlarmPackage;
+import com.imby.common.dto.BaseResponsePackage;
+import com.imby.common.exception.NetException;
 import com.imby.common.util.NetUtils;
 import com.imby.common.util.OsUtils;
 import com.imby.plug.util.InstanceUtils;
+import lombok.SneakyThrows;
+import org.hyperic.sigar.SigarException;
 
 import java.nio.charset.Charset;
 import java.util.Date;
@@ -22,7 +26,7 @@ import java.util.Date;
  * @author 皮锋
  * @custom.date 2020年3月8日 下午12:16:59
  */
-public class PackageConstructor implements IPackageConstructor {
+public class PackageConstructor extends AbstractPackageConstructor {
 
     /**
      * <p>
@@ -31,11 +35,13 @@ public class PackageConstructor implements IPackageConstructor {
      *
      * @param alarm 告警信息
      * @return {@link AlarmPackage}
+     * @throws NetException   获取网络信息异常
+     * @throws SigarException Sigar异常
      * @author 皮锋
      * @custom.date 2020年3月7日 下午3:02:46
      */
     @Override
-    public AlarmPackage structureAlarmPackage(Alarm alarm) {
+    public AlarmPackage structureAlarmPackage(Alarm alarm) throws NetException, SigarException {
         AlarmPackage alarmPackage = new AlarmPackage();
         alarmPackage.setId(IdUtil.randomUUID());
         alarmPackage.setDateTime(new Date());
@@ -57,21 +63,6 @@ public class PackageConstructor implements IPackageConstructor {
         return alarmPackage;
     }
 
-    @Override
-    public HeartbeatPackage structureHeartbeatPackage() {
-        return null;
-    }
-
-    @Override
-    public ServerPackage structureServerPackage() {
-        return null;
-    }
-
-    @Override
-    public JvmPackage structureJvmPackage() {
-        return null;
-    }
-
     /**
      * <p>
      * 构建请求失败的基础响应包
@@ -82,6 +73,7 @@ public class PackageConstructor implements IPackageConstructor {
      * @author 皮锋
      * @custom.date 2020年3月11日 上午9:52:48
      */
+    @SneakyThrows
     @Override
     public BaseResponsePackage structureBaseResponsePackage(Result result) {
         BaseResponsePackage baseResponsePackage = new BaseResponsePackage();

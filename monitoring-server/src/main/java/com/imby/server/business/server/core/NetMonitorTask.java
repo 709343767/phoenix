@@ -4,6 +4,7 @@ import com.imby.common.constant.AlarmLevelEnums;
 import com.imby.common.constant.AlarmTypeEnums;
 import com.imby.common.domain.Alarm;
 import com.imby.common.dto.AlarmPackage;
+import com.imby.common.exception.NetException;
 import com.imby.common.util.DateTimeUtils;
 import com.imby.common.util.NetUtils;
 import com.imby.common.util.OsUtils;
@@ -12,6 +13,7 @@ import com.imby.server.business.server.service.IAlarmService;
 import com.imby.server.property.MonitoringServerWebProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.concurrent.BasicThreadFactory;
+import org.hyperic.sigar.SigarException;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -89,34 +91,38 @@ public class NetMonitorTask implements CommandLineRunner, DisposableBean {
                     // 循环所有网络信息
                     for (Map.Entry<String, Net> entry : this.netPool.entrySet()) {
                         this.seService.execute(() -> {
-                            Net net = entry.getValue();
-                            // 允许的误差时间
-                            int thresholdSecond = net.getThresholdSecond();
-                            // 最后一次更新的时间
-                            Date dateTime = net.getDateTime();
-                            // 判决时间
-                            DateTime judgeDateTime = new DateTime(dateTime).plusSeconds(thresholdSecond);
-                            // 注册上来的IP失去响应
-                            if (judgeDateTime.isBeforeNow()) {
-                                // 已经断网，也需要继续判断，防止没有应用向服务端发心跳包，这种情况要主动ping
-                                // if (!net.isOnConnect()) {
-                                // continue;
-                                // }
-                                // 判断网络是不是断了
-                                boolean ping = NetUtils.ping(net.getIp());
-                                // 网络不通
-                                if (!ping) {
-                                    // 断网
-                                    this.disConnect(net);
-                                } else {
-                                    // 网络恢复连接
-                                    this.recoverConnect(net, true);
+                            try {
+                                Net net = entry.getValue();
+                                // 允许的误差时间
+                                int thresholdSecond = net.getThresholdSecond();
+                                // 最后一次更新的时间
+                                Date dateTime = net.getDateTime();
+                                // 判决时间
+                                DateTime judgeDateTime = new DateTime(dateTime).plusSeconds(thresholdSecond);
+                                // 注册上来的IP失去响应
+                                if (judgeDateTime.isBeforeNow()) {
+                                    // 已经断网，也需要继续判断，防止没有应用向服务端发心跳包，这种情况要主动ping
+                                    // if (!net.isOnConnect()) {
+                                    // continue;
+                                    // }
+                                    // 判断网络是不是断了
+                                    boolean ping = NetUtils.ping(net.getIp());
+                                    // 网络不通
+                                    if (!ping) {
+                                        // 断网
+                                        this.disConnect(net);
+                                    } else {
+                                        // 网络恢复连接
+                                        this.recoverConnect(net, true);
+                                    }
                                 }
-                            }
-                            // 注册上来的IP恢复响应
-                            else {
-                                // 网络恢复连接
-                                this.recoverConnect(net, false);
+                                // 注册上来的IP恢复响应
+                                else {
+                                    // 网络恢复连接
+                                    this.recoverConnect(net, false);
+                                }
+                            } catch (Exception e) {
+                                log.error("定时扫描网络信息池中的所有IP异常！", e);
                             }
                         });
                     }
@@ -140,10 +146,12 @@ public class NetMonitorTask implements CommandLineRunner, DisposableBean {
      *
      * @param net               网络信息
      * @param isRefreshDateTime 是否刷新最后一次更新的时间
+     * @throws NetException   获取网络信息异常
+     * @throws SigarException Sigar异常
      * @author 皮锋
      * @custom.date 2020/3/25 14:20
      */
-    private void recoverConnect(Net net, boolean isRefreshDateTime) {
+    private void recoverConnect(Net net, boolean isRefreshDateTime) throws NetException, SigarException {
         net.setOnConnect(true);
         // 是否已经发过断网告警信息
         boolean isConnectAlarm = net.isConnectAlarm();
@@ -164,10 +172,12 @@ public class NetMonitorTask implements CommandLineRunner, DisposableBean {
      * </p>
      *
      * @param net 网络信息
+     * @throws NetException   获取网络信息异常
+     * @throws SigarException Sigar异常
      * @author 皮锋
      * @custom.date 2020/3/25 14:20
      */
-    private void disConnect(Net net) {
+    private void disConnect(Net net) throws NetException, SigarException {
         // 断网
         net.setOnConnect(false);
         // 是否已经发过断网告警信息
@@ -188,20 +198,22 @@ public class NetMonitorTask implements CommandLineRunner, DisposableBean {
      * @param title           告警标题
      * @param alarmLevelEnums 告警级别
      * @param net             网络信息
+     * @throws NetException   获取网络信息异常
+     * @throws SigarException Sigar异常
      * @author 皮锋
      * @custom.date 2020/3/25 14:46
      */
     @Async
-    public void sendAlarmInfo(String title, AlarmLevelEnums alarmLevelEnums, Net net) {
+    public void sendAlarmInfo(String title, AlarmLevelEnums alarmLevelEnums, Net net) throws NetException, SigarException {
         String dateTime = DateTimeUtils.dateToString(net.getDateTime());
         String msg = "IP地址：" + NetUtils.getLocalIp() + "到" + net.getIp()
                 + "，<br>服务器：" + OsUtils.getComputerName() + "到" + net.getComputerName()
                 + "，<br>时间：" + dateTime;
-        Alarm alarm = Alarm.builder()//
-                .title(title)//
-                .msg(msg)//
-                .alarmLevel(alarmLevelEnums)//
-                .alarmType(AlarmTypeEnums.NET)//
+        Alarm alarm = Alarm.builder()
+                .title(title)
+                .msg(msg)
+                .alarmLevel(alarmLevelEnums)
+                .alarmType(AlarmTypeEnums.NET)
                 .build();
         AlarmPackage alarmPackage = new PackageConstructor().structureAlarmPackage(alarm);
         this.alarmService.dealAlarmPackage(alarmPackage);

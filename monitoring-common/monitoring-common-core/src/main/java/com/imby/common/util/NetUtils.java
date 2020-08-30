@@ -1,9 +1,11 @@
 package com.imby.common.util;
 
 import com.google.common.collect.Lists;
-import com.imby.common.init.InitSigar;
 import com.imby.common.domain.server.NetDomain;
+import com.imby.common.exception.NetException;
+import com.imby.common.init.InitSigar;
 import lombok.Cleanup;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.hyperic.sigar.NetFlags;
 import org.hyperic.sigar.NetInterfaceConfig;
@@ -27,25 +29,28 @@ import java.util.List;
  * @author 皮锋
  * @custom.date 2020/3/12 11:20
  */
+@Slf4j
 public class NetUtils extends InitSigar {
 
     /**
      * <p>
-     * 获取本机MAC地址
+     * 获取本机MAC地址：已过时，后续版本中可能会删除此方法。
      * </p>
      *
      * @return MAC地址
+     * @throws NetException 获取网络信息异常：获取本机MAC地址异常！
      * @author 皮锋
      * @custom.date 2020/3/12 11:20
      */
-    public static String getLocalMac() {
+    @Deprecated
+    public static String getOutdatedLocalMac() throws NetException {
         try {
             InetAddress ia = InetAddress.getLocalHost();
             byte[] mac = NetworkInterface.getByInetAddress(ia).getHardwareAddress();
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < mac.length; i++) {
                 if (i != 0) {
-                    sb.append("-");
+                    sb.append(":");
                 }
                 // 字节转换为整数
                 int temp = mac[i] & 0xff;
@@ -56,10 +61,45 @@ public class NetUtils extends InitSigar {
                     sb.append(str);
                 }
             }
-            return sb.toString().toLowerCase();
+            return sb.toString().toUpperCase();
         } catch (Exception e) {
-            return "";
+            String exp = "获取本机MAC地址异常！";
+            log.error(exp, e);
+            throw new NetException(exp);
         }
+    }
+
+    /**
+     * <p>
+     * 获取本机MAC地址
+     * </p>
+     *
+     * @return MAC地址
+     * @throws NetException   获取网络信息异常：获取本机MAC地址异常！
+     * @throws SigarException Sigar异常
+     * @author 皮锋
+     * @custom.date 2020/8/30 16:41
+     * @since v0.0.2
+     */
+    public static String getLocalMac() throws SigarException, NetException {
+        // 获取本机IP地址
+        String ip = getLocalIp();
+        NetDomain netDomain = getNetInfo();
+        List<NetDomain.NetInterfaceConfigDomain> netInterfaceConfigDomains = netDomain.getNetList();
+        for (NetDomain.NetInterfaceConfigDomain netInterfaceConfigDomain : netInterfaceConfigDomains) {
+            // 网卡IP地址
+            String address = netInterfaceConfigDomain.getAddress();
+            // 是当前网卡的IP地址
+            if (StringUtils.equals(ip, address)) {
+                // 返回此网卡的MAC地址
+                return netInterfaceConfigDomain.getHwAddr();
+            }
+        }
+        // 手动抛出异常
+        String exp = "获取本机MAC地址异常！";
+        NetException netException = new NetException(exp);
+        log.error(exp, netException);
+        throw new NetException(exp);
     }
 
     /**
@@ -68,10 +108,11 @@ public class NetUtils extends InitSigar {
      * </p>
      *
      * @return IP地址
+     * @throws NetException 获取网络信息异常：获取本机IP地址异常！
      * @author 皮锋
      * @custom.date 2020/3/15 18:03
      */
-    public static String getLocalIp() {
+    public static String getLocalIp() throws NetException {
         try {
             // Windows操作系统
             if (OsUtils.isWindowsOs()) {
@@ -81,7 +122,9 @@ public class NetUtils extends InitSigar {
                 return getLinuxLocalIp();
             }
         } catch (Exception e) {
-            return "";
+            String exp = "获取本机IP地址异常！";
+            log.error(exp, e);
+            throw new NetException(exp);
         }
     }
 
@@ -222,14 +265,18 @@ public class NetUtils extends InitSigar {
                     .setType(netInfo.getType())
                     .setAddress(netInfo.getAddress())
                     .setMask(netInfo.getNetmask())
-                    .setBroadcast(netInfo.getBroadcast());
+                    .setBroadcast(netInfo.getBroadcast())
+                    .setHwAddr(netInfo.getHwaddr())
+                    .setDescription(netInfo.getDescription());
             netInterfaceConfigDomains.add(netInterfaceConfigDomain);
         }
         netDomain.setNetNum(netInterfaceConfigDomains.size()).setNetList(netInterfaceConfigDomains);
         return netDomain;
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws NetException, SigarException {
+        String oldMac = getOutdatedLocalMac();
+        System.out.println(oldMac);
         String mac = getLocalMac();
         System.out.println(mac);
         String hostAddress = getLocalIp();

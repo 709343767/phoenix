@@ -5,11 +5,13 @@ import com.imby.common.constant.AlarmTypeEnums;
 import com.imby.common.constant.DateTimeStylesEnums;
 import com.imby.common.domain.Alarm;
 import com.imby.common.dto.AlarmPackage;
+import com.imby.common.exception.NetException;
 import com.imby.server.business.server.domain.Cpu;
 import com.imby.server.business.server.service.IAlarmService;
 import com.imby.server.inf.IServerMonitoringListener;
 import com.imby.server.property.MonitoringServerWebProperties;
 import lombok.extern.slf4j.Slf4j;
+import org.hyperic.sigar.SigarException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
@@ -53,11 +55,13 @@ public class CpuMonitor implements IServerMonitoringListener {
      * </p>
      *
      * @param obj 回调参数
+     * @throws NetException   获取网络信息异常
+     * @throws SigarException Sigar异常
      * @author 皮锋
      * @custom.date 2020/3/30 21:56
      */
     @Override
-    public void wakeUp(Object... obj) {
+    public void wakeUp(Object... obj) throws NetException, SigarException {
         String key = String.valueOf(obj[0]);
         Cpu cpu = this.cpuPool.get(key);
         // 最终确认CPU过载的阈值
@@ -97,10 +101,10 @@ public class CpuMonitor implements IServerMonitoringListener {
             // 处理从过载100%恢复CPU正常
             this.dealCpuNotOverLoad100(cpu);
         }
-        log.info("CPU信息池大小：{}，CPU过载90%：{}，CPU过载100%：{}，详细信息：{}", //
-                this.cpuPool.size(), //
-                this.cpuPool.entrySet().stream().filter((e) -> e.getValue().isOverLoad90()).count(), //
-                this.cpuPool.entrySet().stream().filter((e) -> e.getValue().isOverLoad100()).count(), //
+        log.info("CPU信息池大小：{}，CPU过载90%：{}，CPU过载100%：{}，详细信息：{}",
+                this.cpuPool.size(),
+                this.cpuPool.entrySet().stream().filter((e) -> e.getValue().isOverLoad90()).count(),
+                this.cpuPool.entrySet().stream().filter((e) -> e.getValue().isOverLoad100()).count(),
                 this.cpuPool.toJsonString());
     }
 
@@ -140,10 +144,12 @@ public class CpuMonitor implements IServerMonitoringListener {
      * </p>
      *
      * @param cpu 服务器CPU
+     * @throws NetException   获取网络信息异常
+     * @throws SigarException Sigar异常
      * @author 皮锋
      * @custom.date 2020/3/30 10:38
      */
-    private void dealCpuOverLoad100(Cpu cpu) {
+    private void dealCpuOverLoad100(Cpu cpu) throws NetException, SigarException {
         cpu.setOverLoad100(true);
         // 是否已经发送过CPU过载100%告警消息
         boolean isAlarm = cpu.isAlarm100();
@@ -159,10 +165,12 @@ public class CpuMonitor implements IServerMonitoringListener {
      * </p>
      *
      * @param cpu 服务器CPU
+     * @throws NetException   获取网络信息异常
+     * @throws SigarException Sigar异常
      * @author 皮锋
      * @custom.date 2020/3/30 10:38
      */
-    private void dealCpuOverLoad90(Cpu cpu) {
+    private void dealCpuOverLoad90(Cpu cpu) throws NetException, SigarException {
         cpu.setOverLoad90(true);
         // 是否已经发送过CPU过载90%告警消息
         boolean isAlarm = cpu.isAlarm90();
@@ -180,21 +188,23 @@ public class CpuMonitor implements IServerMonitoringListener {
      * @param title           告警标题
      * @param alarmLevelEnums 告警级别
      * @param cpu             CPU信息
+     * @throws NetException   获取网络信息异常
+     * @throws SigarException Sigar异常
      * @author 皮锋
      * @custom.date 2020/3/30 10:40
      */
     @Async
-    public void sendAlarmInfo(String title, AlarmLevelEnums alarmLevelEnums, Cpu cpu) {
+    public void sendAlarmInfo(String title, AlarmLevelEnums alarmLevelEnums, Cpu cpu) throws NetException, SigarException {
         String dateTime = DateTimeFormatter.ofPattern(DateTimeStylesEnums.YYYY_MM_DD_HH_MM_SS.getValue()).format(LocalDateTime.now());
         String msg = "IP地址：" + cpu.getIp()
                 + "，<br>服务器：" + cpu.getComputerName()
                 + "，<br>CPU使用率：" + cpu.getAvgCpuCombined()
                 + "%，<br>时间：" + dateTime;
-        Alarm alarm = Alarm.builder()//
-                .title(title)//
-                .msg(msg)//
-                .alarmLevel(alarmLevelEnums)//
-                .alarmType(AlarmTypeEnums.SERVER)//
+        Alarm alarm = Alarm.builder()
+                .title(title)
+                .msg(msg)
+                .alarmLevel(alarmLevelEnums)
+                .alarmType(AlarmTypeEnums.SERVER)
                 .build();
         AlarmPackage alarmPackage = new PackageConstructor().structureAlarmPackage(alarm);
         this.alarmService.dealAlarmPackage(alarmPackage);

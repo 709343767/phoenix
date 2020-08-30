@@ -6,6 +6,7 @@ import com.imby.common.constant.AlarmTypeEnums;
 import com.imby.common.constant.ZeroOrOneConstants;
 import com.imby.common.domain.Alarm;
 import com.imby.common.dto.AlarmPackage;
+import com.imby.common.exception.NetException;
 import com.imby.common.util.DateTimeUtils;
 import com.imby.common.util.NetUtils;
 import com.imby.server.business.server.domain.Instance;
@@ -15,6 +16,7 @@ import com.imby.server.business.server.service.IInstanceService;
 import com.imby.server.property.MonitoringServerWebProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.concurrent.BasicThreadFactory;
+import org.hyperic.sigar.SigarException;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -157,10 +159,12 @@ public class InstanceMonitorTask implements CommandLineRunner, DisposableBean {
      * </p>
      *
      * @param instance 实例
+     * @throws NetException   获取网络信息异常
+     * @throws SigarException Sigar异常
      * @author 皮锋
      * @custom.date 2020/3/23 11:58
      */
-    private void onLine(Instance instance) {
+    private void onLine(Instance instance) throws NetException, SigarException {
         instance.setOnline(true);
         // 是否已经发过离线告警信息
         boolean isLineAlarm = instance.isLineAlarm();
@@ -197,10 +201,12 @@ public class InstanceMonitorTask implements CommandLineRunner, DisposableBean {
      * </p>
      *
      * @param instance 实例
+     * @throws NetException   获取网络信息异常
+     * @throws SigarException Sigar异常
      * @author 皮锋
      * @custom.date 2020/3/23 11:40
      */
-    private void offLine(Instance instance) {
+    private void offLine(Instance instance) throws NetException, SigarException {
         // 离线
         instance.setOnline(false);
         // 是否已经发过离线告警信息
@@ -247,11 +253,13 @@ public class InstanceMonitorTask implements CommandLineRunner, DisposableBean {
      * @param title           告警标题
      * @param alarmLevelEnums 告警级别
      * @param instance        应用实例详情
+     * @throws NetException   获取网络信息异常
+     * @throws SigarException Sigar异常
      * @author 皮锋
      * @custom.date 2020/3/13 11:20
      */
     @Async
-    public void sendAlarmInfo(String title, AlarmLevelEnums alarmLevelEnums, Instance instance) {
+    public void sendAlarmInfo(String title, AlarmLevelEnums alarmLevelEnums, Instance instance) throws NetException, SigarException {
         String msg = "应用ID：" + instance.getInstanceId()
                 + "，<br>应用名称：" + instance.getInstanceName()
                 + "，<br>应用描述：" + instance.getInstanceDesc()
@@ -259,11 +267,11 @@ public class InstanceMonitorTask implements CommandLineRunner, DisposableBean {
                 + "，<br>IP地址：" + instance.getIp()
                 + "，<br>服务器：" + instance.getComputerName()
                 + "，<br>时间：" + DateTimeUtils.dateToString(instance.getDateTime());
-        Alarm alarm = Alarm.builder()//
-                .title(title)//
-                .msg(msg)//
-                .alarmLevel(alarmLevelEnums)//
-                .alarmType(AlarmTypeEnums.INSTANCE)//
+        Alarm alarm = Alarm.builder()
+                .title(title)
+                .msg(msg)
+                .alarmLevel(alarmLevelEnums)
+                .alarmType(AlarmTypeEnums.INSTANCE)
                 .build();
         AlarmPackage alarmPackage = new PackageConstructor().structureAlarmPackage(alarm);
         this.alarmService.dealAlarmPackage(alarmPackage);

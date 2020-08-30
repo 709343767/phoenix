@@ -1,8 +1,10 @@
 package com.imby.server.util;
 
+import com.imby.common.exception.NetException;
 import com.imby.common.util.Md5Utils;
 import com.imby.common.util.NetUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.hyperic.sigar.SigarException;
 
 /**
  * <p>
@@ -35,10 +37,12 @@ public class InstanceUtils {
      * </p>
      *
      * @return 应用实例ID
+     * @throws NetException   获取网络信息异常
+     * @throws SigarException Sigar异常
      * @author 皮锋
      * @custom.date 2020年3月4日 下午11:12:46
      */
-    public static String getInstanceId() {
+    public static String getInstanceId() throws NetException, SigarException {
         if (StringUtils.isNotEmpty(instanceId)) {
             return instanceId;
         }
@@ -82,7 +86,7 @@ public class InstanceUtils {
         return instanceDesc;
     }
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) throws InterruptedException, NetException, SigarException {
         for (int i = 0; i < 100; i++) {
             String id = getInstanceId();
             System.out.println("当前应用的ID为：" + id);

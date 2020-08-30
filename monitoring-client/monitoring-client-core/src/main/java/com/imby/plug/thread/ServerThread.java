@@ -3,6 +3,7 @@ package com.imby.plug.thread;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.date.TimeInterval;
 import com.imby.common.dto.ServerPackage;
+import com.imby.common.exception.NetException;
 import com.imby.plug.constant.UrlConstants;
 import com.imby.plug.core.PackageConstructor;
 import com.imby.plug.core.Sender;
@@ -50,6 +51,8 @@ public class ServerThread implements Runnable {
             log.error("IO异常！", e);
         } catch (SigarException e) {
             log.error("Sigar异常！", e);
+        } catch (NetException e) {
+            log.error("获取网络信息异常！", e);
         }
     }
 

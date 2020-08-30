@@ -6,6 +6,7 @@ import com.imby.common.domain.server.CpuDomain;
 import com.imby.common.domain.server.DiskDomain;
 import com.imby.common.domain.server.MemoryDomain;
 import com.imby.common.dto.ServerPackage;
+import com.imby.common.exception.NetException;
 import com.imby.common.util.CpuUtils;
 import com.imby.server.business.server.core.CpuPool;
 import com.imby.server.business.server.core.DiskPool;
@@ -14,11 +15,13 @@ import com.imby.server.business.server.domain.Cpu;
 import com.imby.server.business.server.domain.Disk;
 import com.imby.server.business.server.domain.Memory;
 import com.imby.server.inf.IServerMonitoringListener;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.concurrent.BasicThreadFactory;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.hyperic.sigar.SigarException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -39,6 +42,7 @@ import java.util.concurrent.TimeUnit;
  * @author 皮锋
  * @custom.date 2020年4月1日 下午3:21:19
  */
+@Slf4j
 @Aspect
 @Component
 public class ServerAspect {
@@ -132,7 +136,15 @@ public class ServerAspect {
         // 调用监听器回调接口
         // this.cachedThreadPool.execute(() -> this.serverMonitoringListeners.forEach(e -> e.wakeUp(ip)));
         for (IServerMonitoringListener serverMonitoringListener : this.serverMonitoringListeners) {
-            this.threadPoolExecutor.execute(() -> serverMonitoringListener.wakeUp(ip));
+            this.threadPoolExecutor.execute(() -> {
+                try {
+                    serverMonitoringListener.wakeUp(ip);
+                } catch (NetException e) {
+                    log.error("获取网络信息异常！", e);
+                } catch (SigarException e) {
+                    log.error("Sigar异常！", e);
+                }
+            });
         }
     }
 
