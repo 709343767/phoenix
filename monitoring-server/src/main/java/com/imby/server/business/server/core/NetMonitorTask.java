@@ -1,7 +1,9 @@
 package com.imby.server.business.server.core;
 
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.imby.common.constant.AlarmLevelEnums;
 import com.imby.common.constant.AlarmTypeEnums;
+import com.imby.common.constant.ZeroOrOneConstants;
 import com.imby.common.domain.Alarm;
 import com.imby.common.dto.AlarmPackage;
 import com.imby.common.exception.NetException;
@@ -9,7 +11,9 @@ import com.imby.common.util.DateTimeUtils;
 import com.imby.common.util.NetUtils;
 import com.imby.common.util.OsUtils;
 import com.imby.server.business.server.domain.Net;
+import com.imby.server.business.server.entity.MonitorNet;
 import com.imby.server.business.server.service.IAlarmService;
+import com.imby.server.business.server.service.INetService;
 import com.imby.server.property.MonitoringServerWebProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.concurrent.BasicThreadFactory;
@@ -58,6 +62,12 @@ public class NetMonitorTask implements CommandLineRunner, DisposableBean {
      */
     @Autowired
     private MonitoringServerWebProperties monitoringServerWebProperties;
+
+    /**
+     * 网络信息服务接口
+     */
+    @Autowired
+    private INetService netService;
 
     /**
      * 延迟/周期执行线程池
@@ -188,6 +198,8 @@ public class NetMonitorTask implements CommandLineRunner, DisposableBean {
             this.sendAlarmInfo("网络中断", AlarmLevelEnums.FATAL, net);
             net.setConnectAlarm(true);
         }
+        // 更新数据库
+        this.updateDb(net);
     }
 
     /**
@@ -217,6 +229,32 @@ public class NetMonitorTask implements CommandLineRunner, DisposableBean {
                 .build();
         AlarmPackage alarmPackage = new PackageConstructor().structureAlarmPackage(alarm);
         this.alarmService.dealAlarmPackage(alarmPackage);
+    }
+
+    /**
+     * <p>
+     * 更新数据库中的网络信息
+     * </p>
+     *
+     * @param net 网络信息
+     * @throws NetException 网络信息异常
+     * @author 皮锋
+     * @custom.date 2020/8/31 17:23
+     */
+    private void updateDb(Net net) throws NetException {
+        // IP地址（来源）
+        String ipSource = net.getIp();
+        // IP地址（目的地）
+        String ipTarget = NetUtils.getLocalIp();
+        MonitorNet monitorNet = new MonitorNet();
+        monitorNet.setIpSource(ipSource);
+        monitorNet.setIpTarget(ipTarget);
+        monitorNet.setStatus(ZeroOrOneConstants.ZERO);
+        monitorNet.setUpdateTime(new Date());
+        LambdaUpdateWrapper<MonitorNet> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+        lambdaUpdateWrapper.eq(MonitorNet::getIpSource, ipSource);
+        lambdaUpdateWrapper.eq(MonitorNet::getIpTarget, ipTarget);
+        this.netService.updateNet(monitorNet, lambdaUpdateWrapper);
     }
 
     /**

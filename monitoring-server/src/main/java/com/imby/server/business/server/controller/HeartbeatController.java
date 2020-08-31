@@ -4,10 +4,12 @@ import com.alibaba.fastjson.JSON;
 import com.imby.common.domain.Result;
 import com.imby.common.dto.BaseResponsePackage;
 import com.imby.common.dto.HeartbeatPackage;
+import com.imby.common.exception.NetException;
 import com.imby.server.business.server.core.PackageConstructor;
 import com.imby.server.business.server.service.IHeartbeatService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/heartbeat")
 @Api(tags = "心跳")
+@Slf4j
 public class HeartbeatController {
 
     /**
@@ -47,7 +50,14 @@ public class HeartbeatController {
     @PostMapping("/accept-heartbeat-package")
     public BaseResponsePackage acceptHeartbeatPackage(@RequestBody String request) {
         HeartbeatPackage heartbeatPackage = JSON.parseObject(request, HeartbeatPackage.class);
-        Result result = this.heartbeatService.dealHeartbeatPackage(heartbeatPackage);
+        // 返回结果
+        Result result;
+        try {
+            result = this.heartbeatService.dealHeartbeatPackage(heartbeatPackage);
+        } catch (NetException e) {
+            log.error("获取网络信息异常！", e);
+            result = Result.builder().isSuccess(false).msg(e.getMessage()).build();
+        }
         return new PackageConstructor().structureBaseResponsePackage(result);
     }
 

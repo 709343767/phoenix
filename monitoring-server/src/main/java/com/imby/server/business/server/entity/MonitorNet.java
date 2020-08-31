@@ -11,11 +11,11 @@ import java.util.Date;
 
 /**
  * <p>
- * 服务器CPU表
+ * 网络信息表
  * </p>
  *
  * @author 皮锋
- * @custom.date 2020/5/11 16:54
+ * @custom.date 2020/8/31 16:32
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -23,44 +23,32 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@TableName("MONITOR_SERVER_CPU")
-public class MonitorServerCpu {
+@TableName("MONITOR_NET")
+public class MonitorNet {
 
     /**
      * 主键ID
      */
     @TableId(value = "ID", type = IdType.AUTO)
-    private Long id;
+    private Integer id;
 
     /**
-     * IP地址
+     * IP地址（来源）
      */
-    @TableField("IP")
-    private String ip;
+    @TableField("IP_SOURCE")
+    private String ipSource;
 
     /**
-     * CPU序号
+     * IP地址（目的地）
      */
-    @TableField("CPU_NO")
-    private Integer cpuNo;
+    @TableField("IP_TARGET")
+    private String ipTarget;
 
     /**
-     * CPU频率
+     * 状态（0：网络不通，1：网络正常）
      */
-    @TableField("CPU_MHZ")
-    private String cpuMhz;
-
-    /**
-     * CPU使用率
-     */
-    @TableField("CPU_COMBINED")
-    private String cpuCombined;
-
-    /**
-     * CPU剩余率
-     */
-    @TableField("CPU_IDLE")
-    private String cpuIdle;
+    @TableField("STATUS")
+    private String status;
 
     /**
      * 新增时间

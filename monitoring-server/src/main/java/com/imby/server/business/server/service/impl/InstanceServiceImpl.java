@@ -40,4 +40,5 @@ public class InstanceServiceImpl implements IInstanceService {
     public int updateInstance(MonitorInstance monitorInstance, LambdaUpdateWrapper<MonitorInstance> lambdaUpdateWrapper) {
         return this.monitorInstanceDao.update(monitorInstance, lambdaUpdateWrapper);
     }
+    
 }
