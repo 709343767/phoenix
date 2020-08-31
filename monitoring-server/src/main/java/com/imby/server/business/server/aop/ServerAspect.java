@@ -134,7 +134,6 @@ public class ServerAspect {
         // 刷新服务器信息
         this.refreshServerInfo(ip, computerName, memoryDomain, cpuDomain, diskDomain);
         // 调用监听器回调接口
-        // this.cachedThreadPool.execute(() -> this.serverMonitoringListeners.forEach(e -> e.wakeUp(ip)));
         for (IServerMonitoringListener serverMonitoringListener : this.serverMonitoringListeners) {
             this.threadPoolExecutor.execute(() -> {
                 try {
