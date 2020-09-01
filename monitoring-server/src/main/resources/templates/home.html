@@ -31,7 +31,10 @@
                     <span class="layui-badge layui-bg-blue layuiadmin-badge">个</span>
                 </div>
                 <div class="layui-card-body layuiadmin-card-list">
-                    <p class="layuiadmin-big-font" th:text="${homeInstanceVo.instanceSum}"></p>
+                    <p class="layuiadmin-big-font">[[${homeInstanceVo.instanceSum}]]
+                        <i class="home-i">[[${homeInstanceVo.instanceOnLineRate}]]
+                            <img th:src="@{/images/percentage-16.png}"></i>
+                    </p>
                     <p>
                         在线
                         <span class="layuiadmin-span-color">[[${homeInstanceVo.instanceOnLineSum}]]<i
@@ -91,8 +94,33 @@
         <div class="layui-col-sm6 layui-col-md2">
             <div class="layui-card">
                 <div class="layui-card-header">
+                    IP
+                    <span class="layui-badge layui-bg-orange layuiadmin-badge">个</span>
+                </div>
+                <div class="layui-card-body layuiadmin-card-list">
+                    <p class="layuiadmin-big-font">[[${homeNetVo.netSum}]]
+                        <i class="home-i">[[${homeNetVo.netConnectRate}]]
+                            <img th:src="@{/images/percentage-16.png}"></i>
+                    </p>
+                    <p>
+                        正常
+                        <span class="layuiadmin-span-color">[[${homeNetVo.netConnectSum}]]<i
+                                class="layui-inline layui-icon"><img th:src="@{/images/net-connect-16.png}"></i></span>
+                    </p>
+                    <p>
+                        断网
+                        <span class="layuiadmin-span-color">[[${homeNetVo.netDisconnectSum}]]<i
+                                class="layui-inline layui-icon"><img
+                                th:src="@{/images/net-disconnect-16.png}"></i></span>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-sm6 layui-col-md2">
+            <div class="layui-card">
+                <div class="layui-card-header">
                     告警
-                    <span class="layui-badge layui-bg-orange layuiadmin-badge">次</span>
+                    <span class="layui-badge layui-bg-black layuiadmin-badge">次</span>
                 </div>
                 <div class="layui-card-body layuiadmin-card-list">
                     <p class="layuiadmin-big-font">[[${homeAlarmRecordVo.alarmRecordSum}]]
@@ -164,8 +192,11 @@
                 <div class="layui-card-body">
                     <ul class="layuiadmin-card-status layuiadmin-home2-usernote">
                         <li th:each="monitorAlarmRecordVo,monitorAlarmRecordVoStat:${monitorAlarmRecordVos}">
+                            <!--/*@thymesVar id="title" type="java.lang.String"*/-->
                             <h3 th:utext="${monitorAlarmRecordVo.title}"></h3>
+                            <!--/*@thymesVar id="content" type="java.lang.String"*/-->
                             <p th:utext="${monitorAlarmRecordVo.content}"></p>
+                            <!--/*@thymesVar id="insertTime" type="java.util.Date"*/-->
                             <span th:text="${#dates.format(monitorAlarmRecordVo.insertTime, 'yyyy-MM-dd HH:mm:ss')}"></span>
                             <a href="javascript:;" layadmin-event="replyNote" data-id="7"
                                class="layui-btn layui-btn-xs layuiadmin-reply">回复</a>

@@ -34,4 +34,7 @@ public class HomeInstanceVo implements ISuperBean {
     @ApiModelProperty(value = "应用实例离线数量")
     private Integer instanceOffLineSum;
 
+    @ApiModelProperty(value = "应用实例在线率")
+    private String instanceOnLineRate;
+
 }

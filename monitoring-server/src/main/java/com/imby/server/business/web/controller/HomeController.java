@@ -3,11 +3,9 @@ package com.imby.server.business.web.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.imby.server.business.web.service.IMonitorAlarmRecordService;
 import com.imby.server.business.web.service.IMonitorInstanceService;
+import com.imby.server.business.web.service.IMonitorNetService;
 import com.imby.server.business.web.service.IMonitorServerOsService;
-import com.imby.server.business.web.vo.HomeAlarmRecordVo;
-import com.imby.server.business.web.vo.HomeInstanceVo;
-import com.imby.server.business.web.vo.HomeServerOsVo;
-import com.imby.server.business.web.vo.MonitorAlarmRecordVo;
+import com.imby.server.business.web.vo.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +44,12 @@ public class HomeController {
     private IMonitorAlarmRecordService monitorAlarmRecordService;
 
     /**
+     * 网络信息服务类
+     */
+    @Autowired
+    private IMonitorNetService monitorNetService;
+
+    /**
      * <p>
      * 访问home页
      * </p>
@@ -60,6 +64,8 @@ public class HomeController {
         ModelAndView mv = new ModelAndView("home");
         HomeInstanceVo homeInstanceVo = this.monitorInstanceService.getHomeInstanceInfo();
         mv.addObject("homeInstanceVo", homeInstanceVo);
+        HomeNetVo homeNetVo = this.monitorNetService.getHomeNetInfo();
+        mv.addObject("homeNetVo", homeNetVo);
         HomeServerOsVo homeServerOsVo = this.monitorServerOsService.getHomeServerOsInfo();
         mv.addObject("homeServerOsVo", homeServerOsVo);
         HomeAlarmRecordVo homeAlarmRecordVo = this.monitorAlarmRecordService.getHomeAlarmRecordInfo();

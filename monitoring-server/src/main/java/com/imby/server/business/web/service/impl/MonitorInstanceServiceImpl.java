@@ -48,6 +48,8 @@ public class MonitorInstanceServiceImpl extends ServiceImpl<IMonitorInstanceDao,
         homeInstanceVo.setInstanceSum(instances.size());
         homeInstanceVo.setInstanceOnLineSum((int) instances.stream().filter(e -> StringUtils.equals(e.getIsOnline(), ZeroOrOneConstants.ONE)).count());
         homeInstanceVo.setInstanceOffLineSum((int) instances.stream().filter(e -> StringUtils.equals(e.getIsOnline(), ZeroOrOneConstants.ZERO)).count());
+        homeInstanceVo.setInstanceOnLineRate(String.format("%.2f",
+                (double) homeInstanceVo.getInstanceOnLineSum() / (double) homeInstanceVo.getInstanceSum() * 100D));
         return homeInstanceVo;
     }
 }
