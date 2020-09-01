@@ -49,6 +49,7 @@ public class MonitorAlarmRecordServiceImpl extends ServiceImpl<IMonitorAlarmReco
     public HomeAlarmRecordVo getHomeAlarmRecordInfo() {
         List<MonitorAlarmRecord> monitorAlarmRecords = this.monitorAlarmRecordDao.selectList(new LambdaQueryWrapper<>());
         HomeAlarmRecordVo homeAlarmRecordVo = new HomeAlarmRecordVo();
+        // 告警总次数
         homeAlarmRecordVo.setAlarmRecordSum(monitorAlarmRecords.size());
         // 告警成功
         homeAlarmRecordVo.setAlarmRecordSuccessSum((int) monitorAlarmRecords.stream().filter(e -> (
@@ -68,6 +69,9 @@ public class MonitorAlarmRecordServiceImpl extends ServiceImpl<IMonitorAlarmReco
                         // 邮件发送失败
                         StringUtils.equals(e.getMailStatus(), ZeroOrOneConstants.ZERO)))
                 .count());
+        // 告警成功率
+        homeAlarmRecordVo.setAlarmSucRate(String.format("%.2f",
+                (double) homeAlarmRecordVo.getAlarmRecordSuccessSum() / (double) homeAlarmRecordVo.getAlarmRecordSum() * 100D));
         return homeAlarmRecordVo;
     }
 
