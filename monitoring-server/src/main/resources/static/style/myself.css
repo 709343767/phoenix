@@ -4,9 +4,17 @@
 }
 
 .layui-icon-server {
-    background-image: url("../images/server-16.png");
+    background-image: url("../images/icon16/server-16.png");
     background-position: center center;
     background-repeat: no-repeat;
     height: 40px;
-    width: 16px;
+    width: 14px;
+}
+
+.layui-icon-db {
+    background-image: url("../images/icon16/database-16.png");
+    background-position: center center;
+    background-repeat: no-repeat;
+    height: 40px;
+    width: 14px;
 }

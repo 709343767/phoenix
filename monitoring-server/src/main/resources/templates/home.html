@@ -20,7 +20,6 @@
     </script>
 </head>
 <body>
-
 <div class="layui-fluid">
     <div class="layui-row layui-col-space15">
 
@@ -33,17 +32,19 @@
                 <div class="layui-card-body layuiadmin-card-list">
                     <p class="layuiadmin-big-font">[[${homeInstanceVo.instanceSum}]]
                         <i class="home-i">[[${homeInstanceVo.instanceOnLineRate}]]
-                            <img th:src="@{/images/percentage-16.png}"></i>
+                            <img th:src="@{/images/icon16/percentage-16.png}"></i>
                     </p>
                     <p>
                         在线
                         <span class="layuiadmin-span-color">[[${homeInstanceVo.instanceOnLineSum}]]<i
-                                class="layui-inline layui-icon"><img th:src="@{/images/on-line-16.png}"></i></span>
+                                class="layui-inline layui-icon"><img
+                                th:src="@{/images/icon16/on-line-16.png}"></i></span>
                     </p>
                     <p>
                         离线
                         <span class="layuiadmin-span-color">[[${homeInstanceVo.instanceOffLineSum}]]<i
-                                class="layui-inline layui-icon"><img th:src="@{/images/off-line-16.png}"></i></span>
+                                class="layui-inline layui-icon"><img
+                                th:src="@{/images/icon16/off-line-16.png}"></i></span>
                     </p>
                 </div>
             </div>
@@ -59,12 +60,13 @@
                     <p>
                         Windows
                         <span class="layuiadmin-span-color">[[${homeServerOsVo.windowsSum}]]<i
-                                class="layui-inline layui-icon"><img th:src="@{/images/windows-16.png}"></i></span>
+                                class="layui-inline layui-icon"><img
+                                th:src="@{/images/icon16/windows-16.png}"></i></span>
                     </p>
                     <p>
                         Linux
                         <span class="layuiadmin-span-color">[[${homeServerOsVo.linuxSum}]]<i
-                                class="layui-inline layui-icon"><img th:src="@{/images/linux-16.png}"></i></span>
+                                class="layui-inline layui-icon"><img th:src="@{/images/icon16/linux-16.png}"></i></span>
                     </p>
                 </div>
             </div>
@@ -81,12 +83,14 @@
                     <p>
                         正常
                         <span class="layuiadmin-span-color">*** <i
-                                class="layui-inline layui-icon"><img th:src="@{/images/normal-16.png}"></i></span>
+                                class="layui-inline layui-icon"><img
+                                th:src="@{/images/icon16/normal-16.png}"></i></span>
                     </p>
                     <p>
                         异常
                         <span class="layuiadmin-span-color">*** <i
-                                class="layui-inline layui-icon"><img th:src="@{/images/exception-16.png}"></i></span>
+                                class="layui-inline layui-icon"><img
+                                th:src="@{/images/icon16/exception-16.png}"></i></span>
                     </p>
                 </div>
             </div>
@@ -100,18 +104,18 @@
                 <div class="layui-card-body layuiadmin-card-list">
                     <p class="layuiadmin-big-font">[[${homeNetVo.netSum}]]
                         <i class="home-i">[[${homeNetVo.netConnectRate}]]
-                            <img th:src="@{/images/percentage-16.png}"></i>
+                            <img th:src="@{/images/icon16/percentage-16.png}"></i>
                     </p>
                     <p>
                         正常
                         <span class="layuiadmin-span-color">[[${homeNetVo.netConnectSum}]]<i
-                                class="layui-inline layui-icon"><img th:src="@{/images/net-connect-16.png}"></i></span>
+                                class="layui-inline layui-icon"><img th:src="@{/images/icon16/net-connect-16.png}"></i></span>
                     </p>
                     <p>
                         断网
                         <span class="layuiadmin-span-color">[[${homeNetVo.netDisconnectSum}]]<i
                                 class="layui-inline layui-icon"><img
-                                th:src="@{/images/net-disconnect-16.png}"></i></span>
+                                th:src="@{/images/icon16/net-disconnect-16.png}"></i></span>
                     </p>
                 </div>
             </div>
@@ -125,17 +129,18 @@
                 <div class="layui-card-body layuiadmin-card-list">
                     <p class="layuiadmin-big-font">[[${homeAlarmRecordVo.alarmRecordSum}]]
                         <i class="home-i">[[${homeAlarmRecordVo.alarmSucRate}]]
-                            <img th:src="@{/images/percentage-16.png}"></i>
+                            <img th:src="@{/images/icon16/percentage-16.png}"></i>
                     </p>
                     <p>
                         成功
                         <span class="layuiadmin-span-color">[[${homeAlarmRecordVo.alarmRecordSuccessSum}]]<i
-                                class="layui-inline layui-icon"><img th:src="@{/images/success-16.png}"></i></span>
+                                class="layui-inline layui-icon"><img
+                                th:src="@{/images/icon16/success-16.png}"></i></span>
                     </p>
                     <p>
                         失败
                         <span class="layuiadmin-span-color">[[${homeAlarmRecordVo.alarmRecordFailSum}]]<i
-                                class="layui-inline layui-icon"><img th:src="@{/images/fail-16.png}"></i></span>
+                                class="layui-inline layui-icon"><img th:src="@{/images/icon16/fail-16.png}"></i></span>
                     </p>
                 </div>
             </div>
