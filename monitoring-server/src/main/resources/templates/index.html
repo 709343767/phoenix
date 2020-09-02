@@ -13,6 +13,7 @@
     <link rel="bookmark" href="./images/favicon.ico" th:href="@{/images/favicon.ico}" type="image/x-icon">
     <link rel="stylesheet" href="./layui/css/layui.css" th:href="@{/layui/css/layui.css}" media="all">
     <link rel="stylesheet" href="./style/admin.css" th:href="@{/style/admin.css}" media="all">
+    <link rel="stylesheet" href="./style/myself.css" th:href="@{/style/myself.css}" media="all">
     <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
     <!--[if lt IE 9]>
     <script src="./js/html5.min.js" th:src="@{/js/html5.min.js}"></script>
@@ -94,6 +95,27 @@
                            th:attr="lay-href=@{/home}">
                             <i class="layui-icon layui-icon-home"></i>
                             <cite>主页</cite>
+                        </a>
+                    </li>
+                    <li data-name="home" class="layui-nav-item layui-nav-itemed">
+                        <a href="javascript:;" lay-tips="服务器" lay-direction="2"
+                           th:attr="lay-href=@{/home}">
+                            <i class="layui-icon layui-icon-server"></i>
+                            <cite>服务器</cite>
+                        </a>
+                    </li>
+                    <li data-name="home" class="layui-nav-item layui-nav-itemed">
+                        <a href="javascript:;" lay-tips="应用" lay-direction="2"
+                           th:attr="lay-href=@{/home}">
+                            <i class="layui-icon layui-icon-app"></i>
+                            <cite>应用</cite>
+                        </a>
+                    </li>
+                    <li data-name="home" class="layui-nav-item layui-nav-itemed">
+                        <a href="javascript:;" lay-tips="网络" lay-direction="2"
+                           th:attr="lay-href=@{/home}">
+                            <i class="layui-icon layui-icon-website"></i>
+                            <cite>网络</cite>
                         </a>
                     </li>
                     <li data-name="alarm" class="layui-nav-item">

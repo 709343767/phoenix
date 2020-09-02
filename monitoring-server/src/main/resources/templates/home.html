@@ -9,7 +9,7 @@
           content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <link rel="stylesheet" href="./layui/css/layui.css" th:href="@{/layui/css/layui.css}" media="all">
     <link rel="stylesheet" href="./style/admin.css" th:href="@{/style/admin.css}" media="all">
-    <link rel="stylesheet" href="./style/home.css" th:href="@{/style/home.css}" media="all">
+    <link rel="stylesheet" href="./style/myself.css" th:href="@{/style/myself.css}" media="all">
     <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
     <!--[if lt IE 9]>
     <script src="./js/html5.min.js" th:src="@{/js/html5.min.js}"></script>
@@ -120,7 +120,7 @@
             <div class="layui-card">
                 <div class="layui-card-header">
                     告警
-                    <span class="layui-badge layui-bg-black layuiadmin-badge">次</span>
+                    <span class="layui-badge layui-bg-red layuiadmin-badge">次</span>
                 </div>
                 <div class="layui-card-body layuiadmin-card-list">
                     <p class="layuiadmin-big-font">[[${homeAlarmRecordVo.alarmRecordSum}]]

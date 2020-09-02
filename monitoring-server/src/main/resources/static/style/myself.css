@@ -1,0 +1,12 @@
+.home-i {
+    font-size: 15px;
+    float: right;
+}
+
+.layui-icon-server {
+    background-image: url("../images/server-16.png");
+    background-position: center center;
+    background-repeat: no-repeat;
+    height: 40px;
+    width: 16px;
+}
