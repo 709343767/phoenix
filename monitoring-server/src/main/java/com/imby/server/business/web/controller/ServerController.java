@@ -10,10 +10,10 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.List;
 
 /**
  * <p>
@@ -76,12 +76,26 @@ public class ServerController {
             @ApiImplicitParam(name = "userName", value = "用户名称", paramType = "query", dataType = "string")})
     @GetMapping("/get-monitor-server-os-list")
     @ResponseBody
-    public LayUiAdminResultVo getMonitorServerOsList(Long current, Long size,
-                                                     String ip, String serverName,
-                                                     String osName, String osVersion, String userName) {
+    public LayUiAdminResultVo getMonitorServerOsList(Long current, Long size, String ip, String serverName, String osName, String osVersion, String userName) {
         Page<MonitorServerOsVo> page = this.monitorServerOsService.getMonitorServerOsList(current, size, ip, serverName, osName, osVersion, userName);
         return LayUiAdminResultVo.ok(page);
     }
 
+    /**
+     * <p>
+     * 删除服务器
+     * </p>
+     *
+     * @param monitorServerOsVos 服务器信息
+     * @return layUiAdmin响应对象：如果删除用户成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @author 皮锋
+     * @custom.date 2020/9/4 16:10
+     */
+    @ApiOperation(value = "删除服务器")
+    @PostMapping("/delete-monitor-server")
+    @ResponseBody
+    public LayUiAdminResultVo deleteMonitorServer(@RequestBody List<MonitorServerOsVo> monitorServerOsVos) {
+        return this.monitorServerOsService.deleteMonitorServer(monitorServerOsVos);
+    }
 
 }

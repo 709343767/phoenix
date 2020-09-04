@@ -4,7 +4,10 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.imby.server.business.web.entity.MonitorServerOs;
 import com.imby.server.business.web.vo.HomeServerOsVo;
+import com.imby.server.business.web.vo.LayUiAdminResultVo;
 import com.imby.server.business.web.vo.MonitorServerOsVo;
+
+import java.util.List;
 
 /**
  * <p>
@@ -44,4 +47,16 @@ public interface IMonitorServerOsService extends IService<MonitorServerOs> {
      * @custom.date 2020/9/4 12:37
      */
     Page<MonitorServerOsVo> getMonitorServerOsList(Long current, Long size, String ip, String serverName, String osName, String osVersion, String userName);
+
+    /**
+     * <p>
+     * 删除服务器
+     * </p>
+     *
+     * @param monitorServerOsVos 服务器信息
+     * @return layUiAdmin响应对象：如果删除用户成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @author 皮锋
+     * @custom.date 2020/9/4 16:13
+     */
+    LayUiAdminResultVo deleteMonitorServer(List<MonitorServerOsVo> monitorServerOsVos);
 }

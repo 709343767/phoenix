@@ -6,14 +6,17 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.common.collect.Lists;
 import com.imby.common.constant.OsTypeConstants;
-import com.imby.server.business.web.dao.IMonitorServerOsDao;
+import com.imby.server.business.web.dao.*;
 import com.imby.server.business.web.entity.MonitorServerOs;
 import com.imby.server.business.web.service.IMonitorServerOsService;
 import com.imby.server.business.web.vo.HomeServerOsVo;
+import com.imby.server.business.web.vo.LayUiAdminResultVo;
 import com.imby.server.business.web.vo.MonitorServerOsVo;
+import com.imby.server.constant.WebResponseConstants;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -33,6 +36,30 @@ public class MonitorServerOsServiceImpl extends ServiceImpl<IMonitorServerOsDao,
      */
     @Autowired
     private IMonitorServerOsDao monitorServerOsDao;
+
+    /**
+     * 服务器CPU数据访问对象
+     */
+    @Autowired
+    private IMonitorServerCpuDao monitorServerCpuDao;
+
+    /**
+     * 服务器磁盘数据访问对象
+     */
+    @Autowired
+    private IMonitorServerDiskDao monitorServerDiskDao;
+
+    /**
+     * 服务器内存数据访问对象
+     */
+    @Autowired
+    private IMonitorServerMemoryDao monitorServerMemoryDao;
+
+    /**
+     * 服务器网卡数据访问对象
+     */
+    @Autowired
+    private IMonitorServerNetcardDao monitorServerNetcardDao;
 
     /**
      * <p>
@@ -104,4 +131,34 @@ public class MonitorServerOsServiceImpl extends ServiceImpl<IMonitorServerOsDao,
         monitorServerOsVoPage.setTotal(monitorServerOsPage.getTotal());
         return monitorServerOsVoPage;
     }
+
+    /**
+     * <p>
+     * 删除服务器
+     * </p>
+     *
+     * @param monitorServerOsVos 服务器信息
+     * @return layUiAdmin响应对象：如果删除用户成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @author 皮锋
+     * @custom.date 2020/9/4 16:13
+     */
+    @Transactional
+    @Override
+    public LayUiAdminResultVo deleteMonitorServer(List<MonitorServerOsVo> monitorServerOsVos) {
+        int size = monitorServerOsVos.size();
+        List<Long> ids = Lists.newArrayList();
+        for (MonitorServerOsVo monitorServerOsVo : monitorServerOsVos) {
+            ids.add(monitorServerOsVo.getId());
+        }
+        int result1 = this.monitorServerOsDao.deleteBatchIds(ids);
+        int result2 = this.monitorServerCpuDao.deleteBatchIds(ids);
+        int result3 = this.monitorServerDiskDao.deleteBatchIds(ids);
+        int result4 = this.monitorServerMemoryDao.deleteBatchIds(ids);
+        int result5 = this.monitorServerNetcardDao.deleteBatchIds(ids);
+        if (size == result1 && size == result2 && size == result3 && size == result4 && size == result5) {
+            return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);
+        }
+        return LayUiAdminResultVo.ok(WebResponseConstants.FAIL);
+    }
+
 }

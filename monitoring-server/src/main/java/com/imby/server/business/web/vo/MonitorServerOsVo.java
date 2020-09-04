@@ -1,5 +1,6 @@
 package com.imby.server.business.web.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.imby.common.inf.ISuperBean;
 import com.imby.server.business.web.entity.MonitorServerOs;
 import io.swagger.annotations.ApiModel;
@@ -53,9 +54,11 @@ public class MonitorServerOsVo implements ISuperBean {
     @ApiModelProperty(value = "操作系统时区")
     private String osTimeZone;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @ApiModelProperty(value = "新增时间")
     private Date insertTime;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @ApiModelProperty(value = "更新时间")
     private Date updateTime;
 
