@@ -354,11 +354,11 @@ public class AlarmServiceImpl implements IAlarmService {
         String enterprise = this.config.getAlarmProperties().getSmsProperties().getEnterprise();
         // 短信不支持<br>标签换行
         String text = msg.replaceAll("<br>", "");
-        TransfarSms transfarSms = TransfarSms.builder()//
-                .content(StringUtils.isBlank(alarmTitle) ? text : ("[" + alarmTitle + "]" + text))//
-                .type(level)//
-                .phone(TransfarSms.getPhones(phones))//
-                .identity(enterprise)//
+        TransfarSms transfarSms = TransfarSms.builder()
+                .content(StringUtils.isBlank(alarmTitle) ? text : ("[" + alarmTitle + "]" + text))
+                .type(level)
+                .phone(TransfarSms.getPhones(phones))
+                .identity(enterprise)
                 .build();
         // 创发公司短信接口
         boolean b = this.smsService.sendSmsByTransfarApi(transfarSms);
@@ -387,11 +387,11 @@ public class AlarmServiceImpl implements IAlarmService {
      * @custom.date 2020/4/13 13:23
      */
     private void dealMailAlarm(String alarmTitle, String msg, String level, Result result) {
-        Mail mail = Mail.builder()//
-                .email(this.config.getAlarmProperties().getMailProperties().getTo())//
-                .title(alarmTitle)//
-                .content(msg)//
-                .level(level)//
+        Mail mail = Mail.builder()
+                .email(this.config.getAlarmProperties().getMailProperties().getTo())
+                .title(alarmTitle)
+                .content(msg)
+                .level(level)
                 .build();
         boolean b = this.mailService.sendAlarmTemplateMail(mail);
         // 成功

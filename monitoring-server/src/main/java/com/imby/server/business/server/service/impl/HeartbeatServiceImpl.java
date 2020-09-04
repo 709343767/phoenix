@@ -28,7 +28,7 @@ import java.util.Date;
  * @author 皮锋
  * @custom.date 2020/3/12 10:05
  */
-@Transactional
+@Transactional(rollbackFor = Throwable.class)
 @Service
 public class HeartbeatServiceImpl implements IHeartbeatService {
 
@@ -55,7 +55,7 @@ public class HeartbeatServiceImpl implements IHeartbeatService {
      * @author 皮锋
      * @custom.date 2020/3/12 10:18
      */
-    @Transactional
+    @Transactional(rollbackFor = Throwable.class)
     @Override
     public Result dealHeartbeatPackage(HeartbeatPackage heartbeatPackage) throws NetException {
         // 把应用实例添加或者更新到数据库

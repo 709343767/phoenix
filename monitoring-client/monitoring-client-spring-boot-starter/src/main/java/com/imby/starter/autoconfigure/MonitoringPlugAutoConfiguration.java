@@ -73,7 +73,7 @@ public class MonitoringPlugAutoConfiguration implements ImportBeanDefinitionRegi
      */
     private String analysisConfigFilePath(String configFilePath) throws BadAnnotateParamException {
         // 异常信息
-        String expMsg = "@EnableMonitoring注解参数有误，请参考如下信息：\r\n"//
+        String expMsg = "@EnableMonitoring注解参数有误，请参考如下信息：\r\n"
                 + "@EnableMonitoring(configFilePath = \"classpath:conf/\", configFileName = \"monitoring.properties\")\r\n";
         if (!StringUtils.containsIgnoreCase(configFilePath, "classpath:")) {
             throw new BadAnnotateParamException(expMsg);

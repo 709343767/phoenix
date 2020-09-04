@@ -31,12 +31,12 @@ public class RestTemplateConfig {
      */
     @Bean
     public RestTemplate restTemplate() {
-        RestTemplate restTemplate = new RestTemplateBuilder()//
+        RestTemplate restTemplate = new RestTemplateBuilder()
                 // .basicAuthorization("username", "password")
                 // 5秒
                 .setConnectTimeout(Duration.ofSeconds(5))
                 // 5秒
-                .setReadTimeout(Duration.ofSeconds(5))//
+                .setReadTimeout(Duration.ofSeconds(5))
                 .build();
         log.info("RestTemplate配置成功！");
         return restTemplate;

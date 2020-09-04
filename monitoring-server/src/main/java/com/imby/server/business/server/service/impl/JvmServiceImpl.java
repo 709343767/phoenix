@@ -71,7 +71,7 @@ public class JvmServiceImpl implements IJvmService {
      * @author 皮锋
      * @custom.date 2020/8/27 17:45
      */
-    @Transactional
+    @Transactional(rollbackFor = Throwable.class)
     @Override
     public Result dealJvmPackage(JvmPackage jvmPackage) {
         // 把java虚拟机运行时信息添加或更新到数据库

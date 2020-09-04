@@ -66,7 +66,7 @@ public class ServerServiceImpl implements IServerService {
      * @author 皮锋
      * @custom.date 2020/3/23 15:29
      */
-    @Transactional
+    @Transactional(rollbackFor = Throwable.class)
     @Override
     public Result dealServerPackage(ServerPackage serverPackage) {
         // 把服务器内存信息添加到数据库

@@ -45,9 +45,11 @@ public abstract class AbstractPoolSizeCalculator {
         calculateOptimalCapacity(targetQueueSizeBytes);
         Runnable task = creatTask();
         start(task);
-        start(task); // warm up phase
+        // warm up phase
+        start(task);
         long cputime = getCurrentThreadCPUTime();
-        start(task); // test intervall
+        // test intervall
+        start(task);
         cputime = getCurrentThreadCPUTime() - cputime;
         long waittime = (testtime * 1000000) - cputime;
         calculateOptimalThreadCount(cputime, waittime, targetUtilization);
@@ -103,6 +105,7 @@ public abstract class AbstractPoolSizeCalculator {
             start = System.currentTimeMillis();
             Timer timer = new Timer();
             timer.schedule(new TimerTask() {
+                @Override
                 public void run() {
                     expired = true;
                 }

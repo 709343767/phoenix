@@ -21,12 +21,12 @@ public class InstanceUtils {
      */
     private static String instanceId;
 
-    /*
+    /**
      * 实例名字
      */
     private static String instanceName;
 
-    /*
+    /**
      * 实例描述
      */
     private static String instanceDesc;

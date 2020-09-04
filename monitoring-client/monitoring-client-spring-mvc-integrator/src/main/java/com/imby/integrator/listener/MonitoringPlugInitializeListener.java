@@ -60,13 +60,13 @@ public class MonitoringPlugInitializeListener implements ServletContextListener 
      */
     private String[] getConfigPathAndName(String configLocation) throws BadListenerConfigException {
         // 异常信息
-        String expMsg = "监控客户端初始化监听器配置有误，请参考如下配置：\r\n" //
-                + "<context-param>\r\n" //
-                + " <param-name>configLocation</param-name>\r\n"//
-                + " <param-value>classpath:conf/monitoring.properties</param-value>\r\n" //
-                + "</context-param>\r\n" //
-                + "<listener>\r\n" //
-                + " <listener-class>com.imby.integrator.listener.MonitoringPlugInitializeListener</listener-class>\r\n" //
+        String expMsg = "监控客户端初始化监听器配置有误，请参考如下配置：\r\n"
+                + "<context-param>\r\n"
+                + " <param-name>configLocation</param-name>\r\n"
+                + " <param-value>classpath:conf/monitoring.properties</param-value>\r\n"
+                + "</context-param>\r\n"
+                + "<listener>\r\n"
+                + " <listener-class>com.imby.integrator.listener.MonitoringPlugInitializeListener</listener-class>\r\n"
                 + "</listener>\r\n";
         // 返回值
         String[] result = new String[2];

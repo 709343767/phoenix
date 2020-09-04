@@ -1,13 +1,14 @@
 package com.imby.server.business.web.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.common.collect.Lists;
 import com.imby.common.constant.OsTypeConstants;
 import com.imby.server.business.web.dao.*;
-import com.imby.server.business.web.entity.MonitorServerOs;
+import com.imby.server.business.web.entity.*;
 import com.imby.server.business.web.service.IMonitorServerOsService;
 import com.imby.server.business.web.vo.HomeServerOsVo;
 import com.imby.server.business.web.vo.LayUiAdminResultVo;
@@ -142,23 +143,29 @@ public class MonitorServerOsServiceImpl extends ServiceImpl<IMonitorServerOsDao,
      * @author 皮锋
      * @custom.date 2020/9/4 16:13
      */
-    @Transactional
+    @Transactional(rollbackFor = Throwable.class)
     @Override
     public LayUiAdminResultVo deleteMonitorServer(List<MonitorServerOsVo> monitorServerOsVos) {
-        int size = monitorServerOsVos.size();
-        List<Long> ids = Lists.newArrayList();
+        List<String> ips = Lists.newArrayList();
         for (MonitorServerOsVo monitorServerOsVo : monitorServerOsVos) {
-            ids.add(monitorServerOsVo.getId());
+            ips.add(monitorServerOsVo.getIp());
         }
-        int result1 = this.monitorServerOsDao.deleteBatchIds(ids);
-        int result2 = this.monitorServerCpuDao.deleteBatchIds(ids);
-        int result3 = this.monitorServerDiskDao.deleteBatchIds(ids);
-        int result4 = this.monitorServerMemoryDao.deleteBatchIds(ids);
-        int result5 = this.monitorServerNetcardDao.deleteBatchIds(ids);
-        if (size == result1 && size == result2 && size == result3 && size == result4 && size == result5) {
-            return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);
-        }
-        return LayUiAdminResultVo.ok(WebResponseConstants.FAIL);
+        LambdaUpdateWrapper<MonitorServerOs> serverOsLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+        serverOsLambdaUpdateWrapper.in(MonitorServerOs::getIp, ips);
+        this.monitorServerOsDao.delete(serverOsLambdaUpdateWrapper);
+        LambdaUpdateWrapper<MonitorServerCpu> serverCpuLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+        serverCpuLambdaUpdateWrapper.in(MonitorServerCpu::getIp, ips);
+        this.monitorServerCpuDao.delete(serverCpuLambdaUpdateWrapper);
+        LambdaUpdateWrapper<MonitorServerDisk> serverDiskLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+        serverDiskLambdaUpdateWrapper.in(MonitorServerDisk::getIp, ips);
+        this.monitorServerDiskDao.delete(serverDiskLambdaUpdateWrapper);
+        LambdaUpdateWrapper<MonitorServerMemory> serverMemoryLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+        serverMemoryLambdaUpdateWrapper.in(MonitorServerMemory::getIp, ips);
+        this.monitorServerMemoryDao.delete(serverMemoryLambdaUpdateWrapper);
+        LambdaUpdateWrapper<MonitorServerNetcard> serverNetcardLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+        serverNetcardLambdaUpdateWrapper.in(MonitorServerNetcard::getIp, ips);
+        this.monitorServerNetcardDao.delete(serverNetcardLambdaUpdateWrapper);
+        return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);
     }
 
 }
