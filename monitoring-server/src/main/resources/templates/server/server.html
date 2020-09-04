@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>服务器</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="./layui/css/layui.css" th:href="@{/layui/css/layui.css}" media="all">
+    <link rel="stylesheet" href="./style/admin.css" th:href="@{/style/admin.css}" media="all">
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+    <script src="./js/html5.min.js" th:src="@{/js/html5.min.js}"></script>
+    <script src="./js/respond.min.js" th:src="@{/js/respond.min.js}"></script>
+    <![endif]-->
+    <script type="text/javascript" charset="utf-8" th:inline="javascript">
+        var ctxPath = /*[[@{/}]]*/'';
+    </script>
+</head>
+<body>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">IP</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="ip" placeholder="请输入" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">服务器名</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="serverName" placeholder="请输入" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">操作系统</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="osName" placeholder="请输入" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">系统版本</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="osVersion" placeholder="请输入" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">系统用户</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="userName" placeholder="请输入" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="list-table-search">
+                        <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-card-body">
+            <table id="list-table" lay-filter="list-table"></table>
+            <script type="text/html" id="imgTpl">
+                <img style="display: inline-block; width: 50%; height: 100%;" src={{ d.avatar }}>
+            </script>
+            <script type="text/html" id="list-table-toolbar">
+                <div class="layui-btn-container">
+                    <button class="layui-btn layuiadmin-btn-useradmin" lay-event="batchdel">删除</button>
+                </div>
+            </script>
+            <script type="text/html" id="list-table-toolbar-detail">
+                <a class="layui-btn layui-btn-sm layui-btn-xs" lay-event="info"><i
+                        class="layui-icon layui-icon-about"></i>详情</a>
+                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i
+                        class="layui-icon layui-icon-delete"></i>删除</a>
+            </script>
+        </div>
+    </div>
+</div>
+<script src="./js/common.js" th:src="@{/js/common.js}" charset="utf-8"></script>
+<script src="./layui/layui.js" th:src="@{/layui/layui.js}"></script>
+<script charset="utf-8" th:inline="javascript">
+    layui.config({
+        base: ctxPath //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'table'], function () {
+        var $ = layui.$, admin = layui.admin, form = layui.form, table = layui.table;
+        table.render({
+            elem: '#list-table',
+            url: layui.setter.base + 'server/get-monitor-server-os-list',
+            toolbar: '#list-table-toolbar',
+            request: {
+                pageName: 'current',//页码的参数名称，默认：page
+                limitName: 'size' //每页数据量的参数名，默认：limit
+            },
+            response: {
+                statusName: 'code', //规定数据状态的字段名称，默认：code
+                statusCode: 200,//规定成功的状态码，默认：0
+                msgName: 'msg',//规定状态信息的字段名称，默认：msg
+                countName: 'count', //规定数据总数的字段名称，默认：count
+                dataName: 'data' //规定数据列表的字段名称，默认：data
+            },
+            parseData: function (res) { //res 即为原始返回的数据
+                return {
+                    'code': res.code, //解析接口状态
+                    'msg': res.msg, //解析提示文本
+                    'count': res.data.total, //解析数据长度
+                    'data': res.data.records //解析数据列表
+                };
+            },
+            cols: [
+                [{
+                    type: 'checkbox'
+                }, {
+                    field: 'id',
+                    width: 100,
+                    title: 'ID',
+                    sort: !0
+                }, {
+                    field: 'ip',
+                    title: 'IP',
+                    width: 150,
+                    sort: !0
+                }, {
+                    field: 'serverName',
+                    title: '服务器名',
+                    minWidth: 200,
+                    sort: !0
+                }, {
+                    field: 'osName',
+                    title: '操作系统',
+                    sort: !0
+                }, {
+                    field: 'osVersion',
+                    title: '系统版本',
+                    sort: !0
+                }, {
+                    field: 'osTimeZone',
+                    title: '系统时区',
+                    sort: !0
+                }, {
+                    field: 'userName',
+                    title: '系统用户',
+                    sort: !0
+                }, {
+                    field: 'userHome',
+                    title: '用户目录',
+                    sort: !0
+                }, {
+                    title: '操作',
+                    width: 150,
+                    align: 'center',
+                    fixed: 'right',
+                    toolbar: '#list-table-toolbar-detail'
+                }]
+            ],
+            page: !0,
+            limit: 15,
+            height: 'full-150'
+        });
+        //监听搜索
+        form.on('submit(list-table-search)', function (data) {
+            var field = data.field;
+            //执行重载
+            table.reload('list-table', {
+                where: field
+            });
+        });
+        //头工具栏事件
+        table.on('toolbar(list-table)', function (obj) {
+            switch (obj.event) {
+                case 'batchdel':
+                    var checkStatus = table.checkStatus('user-list-table'), checkData = checkStatus.data; //得到选中的数据
+                    if (checkData.length === 0) {
+                        return layer.msg('请选择数据');
+                    }
+                    layer.confirm('确定删除吗？', function (index) {
+                        admin.req({
+                            type: 'post',
+                            url: ctxPath + 'user/delete-user',
+                            data: JSON.stringify(checkStatus.data),
+                            dataType: 'json',
+                            contentType: 'application/json;charset=utf-8',
+                            headers: {
+                                [[${_csrf.headerName}]]: [[${_csrf.token}]]
+                            },
+                            success: function (result) {
+                                var data = result.data;
+                                if (data === webConst.SUCCESS) {
+                                    table.reload('user-list-table'); //数据刷新
+                                    layer.msg('删除成功！', {icon: 6});
+                                } else {
+                                    layer.msg('删除失败！', {icon: 5, shift: 6});
+                                }
+                            },
+                            error: function () {
+                                layer.msg('系统错误！', {icon: 5, shift: 6});
+                            }
+                        });
+                    });
+                    break;
+            }
+        });
+        //监听工具条
+        table.on('tool(list-table)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'del') {
+                layer.confirm('确定删除吗？', function (index) {
+                    admin.req({
+                        type: 'post',
+                        url: ctxPath + 'user/delete-user',
+                        data: JSON.stringify([data]),
+                        dataType: 'json',
+                        contentType: 'application/json;charset=utf-8',
+                        headers: {
+                            [[${_csrf.headerName}]]: [[${_csrf.token}]]
+                        },
+                        success: function (result) {
+                            var data = result.data;
+                            if (data === webConst.SUCCESS) {
+                                obj.del();
+                                table.reload('user-list-table'); //数据刷新
+                                layer.msg('删除成功！', {icon: 6});
+                            } else {
+                                layer.msg('删除失败！', {icon: 5, shift: 6});
+                            }
+                        },
+                        error: function () {
+                            layer.msg('系统错误！', {icon: 5, shift: 6});
+                        }
+                    });
+                });
+            }
+        });
+    });
+</script>
+</body>
+</html>
