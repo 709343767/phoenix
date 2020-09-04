@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * <p>
- * 心跳控制器
+ * 心跳包控制器
  * </p>
  *
  * @author 皮锋
@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/heartbeat")
-@Api(tags = "心跳")
+@Api(tags = "心跳包")
 @Slf4j
 public class HeartbeatController {
 

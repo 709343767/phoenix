@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * <p>
- * 服务器信息控制器
+ * 服务器信息包控制器
  * </p>
  *
  * @author 皮锋
@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/server")
-@Api(tags = "服务器信息")
+@Api(tags = "服务器信息包")
 public class ServerController {
 
     /**

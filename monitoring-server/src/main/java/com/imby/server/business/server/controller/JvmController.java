@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * <p>
- * Java虚拟机信息控制器
+ * Java虚拟机信息包控制器
  * </p>
  *
  * @author 皮锋
@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/jvm")
-@Api(tags = "Java虚拟机信息")
+@Api(tags = "Java虚拟机信息包")
 public class JvmController {
 
     /**

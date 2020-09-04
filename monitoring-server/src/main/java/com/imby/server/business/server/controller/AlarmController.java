@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * <p>
- * 告警控制器
+ * 告警包控制器
  * </p>
  *
  * @author 皮锋
@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/alarm")
-@Api(tags = "告警")
+@Api(tags = "告警包")
 public class AlarmController {
 
     /**
