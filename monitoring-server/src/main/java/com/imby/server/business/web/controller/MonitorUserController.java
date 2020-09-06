@@ -31,7 +31,7 @@ import java.util.List;
 @Controller
 @Api(tags = "用户管理")
 @RequestMapping("/user")
-public class UserController {
+public class MonitorUserController {
 
     /**
      * 监控用户服务类

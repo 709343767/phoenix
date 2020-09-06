@@ -30,7 +30,7 @@ import java.util.List;
 @Api(tags = "角色管理")
 @Controller
 @RequestMapping("/role")
-public class RoleController {
+public class MonitorRoleController {
 
     /**
      * 监控用户角色服务类

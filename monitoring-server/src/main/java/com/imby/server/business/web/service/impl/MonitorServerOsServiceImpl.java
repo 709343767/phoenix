@@ -10,7 +10,7 @@ import com.imby.common.constant.OsTypeConstants;
 import com.imby.server.business.web.dao.*;
 import com.imby.server.business.web.entity.*;
 import com.imby.server.business.web.service.IMonitorServerOsService;
-import com.imby.server.business.web.vo.HomeServerOsVo;
+import com.imby.server.business.web.vo.HomeServerVo;
 import com.imby.server.business.web.vo.LayUiAdminResultVo;
 import com.imby.server.business.web.vo.MonitorServerOsVo;
 import com.imby.server.constant.WebResponseConstants;
@@ -72,13 +72,14 @@ public class MonitorServerOsServiceImpl extends ServiceImpl<IMonitorServerOsDao,
      * @custom.date 2020/8/4 16:40
      */
     @Override
-    public HomeServerOsVo getHomeServerOsInfo() {
+    public HomeServerVo getHomeServerOsInfo() {
         List<MonitorServerOs> monitorServerOss = this.monitorServerOsDao.selectList(new LambdaQueryWrapper<>());
         // home页的服务器表现层对象
-        HomeServerOsVo homeServerOsVo = new HomeServerOsVo();
+        HomeServerVo homeServerOsVo = new HomeServerVo();
         homeServerOsVo.setServerSum(monitorServerOss.size());
         homeServerOsVo.setLinuxSum((int) monitorServerOss.stream().filter(e -> StringUtils.containsIgnoreCase(e.getOsName(), OsTypeConstants.LINUX)).count());
         homeServerOsVo.setWindowsSum((int) monitorServerOss.stream().filter(e -> StringUtils.containsIgnoreCase(e.getOsName(), OsTypeConstants.WINDOWS)).count());
+        homeServerOsVo.setOtherSum(homeServerOsVo.getServerSum() - homeServerOsVo.getLinuxSum() - homeServerOsVo.getWindowsSum());
         return homeServerOsVo;
     }
 

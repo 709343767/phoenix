@@ -18,3 +18,7 @@
     height: 40px;
     width: 14px;
 }
+
+.layuiadmin-big-font-my {
+    line-height: 12px !important;
+}

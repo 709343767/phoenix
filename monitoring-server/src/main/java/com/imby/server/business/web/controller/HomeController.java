@@ -66,8 +66,8 @@ public class HomeController {
         mv.addObject("homeInstanceVo", homeInstanceVo);
         HomeNetVo homeNetVo = this.monitorNetService.getHomeNetInfo();
         mv.addObject("homeNetVo", homeNetVo);
-        HomeServerOsVo homeServerOsVo = this.monitorServerOsService.getHomeServerOsInfo();
-        mv.addObject("homeServerOsVo", homeServerOsVo);
+        HomeServerVo homeServerVo = this.monitorServerOsService.getHomeServerOsInfo();
+        mv.addObject("homeServerVo", homeServerVo);
         HomeAlarmRecordVo homeAlarmRecordVo = this.monitorAlarmRecordService.getHomeAlarmRecordInfo();
         mv.addObject("homeAlarmRecordVo", homeAlarmRecordVo);
         Page<MonitorAlarmRecordVo> monitorAlarmRecordVoPage = this.monitorAlarmRecordService.getMonitorAlarmRecordList(1L, 5L, null, null, null, null);

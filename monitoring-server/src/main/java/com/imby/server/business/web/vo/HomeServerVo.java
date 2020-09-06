@@ -23,7 +23,7 @@ import lombok.experimental.Accessors;
 @AllArgsConstructor
 @NoArgsConstructor
 @ApiModel(value = "home页的服务器表现层对象")
-public class HomeServerOsVo implements ISuperBean {
+public class HomeServerVo implements ISuperBean {
 
     @ApiModelProperty(value = "服务器数量")
     private Integer serverSum;
@@ -33,4 +33,8 @@ public class HomeServerOsVo implements ISuperBean {
 
     @ApiModelProperty(value = "windows服务器数量")
     private Integer windowsSum;
+
+    @ApiModelProperty(value = "其它服务器数量")
+    private Integer otherSum;
+
 }

@@ -26,7 +26,7 @@ import java.util.List;
 @Controller
 @RequestMapping("/server")
 @Api(tags = "服务器")
-public class ServerController {
+public class MonitorServerController {
 
     /**
      * 服务器服务类

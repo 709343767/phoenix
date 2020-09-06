@@ -3,7 +3,7 @@ package com.imby.server.business.web.service;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.imby.server.business.web.entity.MonitorServerOs;
-import com.imby.server.business.web.vo.HomeServerOsVo;
+import com.imby.server.business.web.vo.HomeServerVo;
 import com.imby.server.business.web.vo.LayUiAdminResultVo;
 import com.imby.server.business.web.vo.MonitorServerOsVo;
 
@@ -28,7 +28,7 @@ public interface IMonitorServerOsService extends IService<MonitorServerOs> {
      * @author 皮锋
      * @custom.date 2020/8/4 16:40
      */
-    HomeServerOsVo getHomeServerOsInfo();
+    HomeServerVo getHomeServerOsInfo();
 
     /**
      * <p>

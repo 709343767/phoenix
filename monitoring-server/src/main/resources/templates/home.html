@@ -26,7 +26,7 @@
         <div class="layui-col-sm6 layui-col-md2">
             <div class="layui-card">
                 <div class="layui-card-header">
-                    应用
+                    应用程序
                     <span class="layui-badge layui-bg-blue layuiadmin-badge">个</span>
                 </div>
                 <div class="layui-card-body layuiadmin-card-list">
@@ -53,20 +53,55 @@
             <div class="layui-card">
                 <div class="layui-card-header">
                     服务器
-                    <span class="layui-badge layui-bg-cyan layuiadmin-badge">台</span>
+                    <span class="layui-badge layui-bg-black layuiadmin-badge">台</span>
                 </div>
                 <div class="layui-card-body layuiadmin-card-list">
-                    <p class="layuiadmin-big-font" th:text="${homeServerOsVo.serverSum}"></p>
+                    <p class="layuiadmin-big-font layuiadmin-big-font-my" th:text="${homeServerVo.serverSum}"></p>
                     <p>
                         Windows
-                        <span class="layuiadmin-span-color">[[${homeServerOsVo.windowsSum}]]<i
+                        <span class="layuiadmin-span-color">[[${homeServerVo.windowsSum}]]<i
                                 class="layui-inline layui-icon"><img
                                 th:src="@{/images/icon16/windows-16.png}"></i></span>
                     </p>
                     <p>
                         Linux
-                        <span class="layuiadmin-span-color">[[${homeServerOsVo.linuxSum}]]<i
+                        <span class="layuiadmin-span-color">[[${homeServerVo.linuxSum}]]<i
                                 class="layui-inline layui-icon"><img th:src="@{/images/icon16/linux-16.png}"></i></span>
+                    </p>
+                    <p>
+                        其他
+                        <span class="layuiadmin-span-color">[[${homeServerVo.linuxSum}]]<i
+                                class="layui-inline layui-icon"><img
+                                th:src="@{/images/icon16/other-16.png}"></i></span>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-sm6 layui-col-md2">
+            <div class="layui-card">
+                <div class="layui-card-header">
+                    WEB服务器
+                    <span class="layui-badge layuiadmin-badge layui-bg-blue">个</span>
+                </div>
+                <div class="layui-card-body layuiadmin-card-list">
+                    <p class="layuiadmin-big-font layuiadmin-big-font-my" th:text="${homeServerVo.serverSum}"></p>
+                    <p>
+                        Tomcat
+                        <span class="layuiadmin-span-color">[[${homeServerVo.windowsSum}]]<i
+                                class="layui-inline layui-icon"><img
+                                th:src="@{/images/icon16/tomcat-16.png}"></i></span>
+                    </p>
+                    <p>
+                        Undertow
+                        <span class="layuiadmin-span-color">[[${homeServerVo.linuxSum}]]<i
+                                class="layui-inline layui-icon"><img
+                                th:src="@{/images/icon16/undertow-16.png}"></i></span>
+                    </p>
+                    <p>
+                        其他
+                        <span class="layuiadmin-span-color">[[${homeServerVo.linuxSum}]]<i
+                                class="layui-inline layui-icon"><img
+                                th:src="@{/images/icon16/other-16.png}"></i></span>
                     </p>
                 </div>
             </div>
