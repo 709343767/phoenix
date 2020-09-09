@@ -103,8 +103,8 @@ public class CpuMonitor implements IServerMonitoringListener {
         }
         log.info("CPU信息池大小：{}，CPU过载90%：{}，CPU过载100%：{}，详细信息：{}",
                 this.cpuPool.size(),
-                this.cpuPool.entrySet().stream().filter((e) -> e.getValue().isOverLoad90()).count(),
-                this.cpuPool.entrySet().stream().filter((e) -> e.getValue().isOverLoad100()).count(),
+                this.cpuPool.entrySet().stream().filter(e -> e.getValue().isOverLoad90()).count(),
+                this.cpuPool.entrySet().stream().filter(e -> e.getValue().isOverLoad100()).count(),
                 this.cpuPool.toJsonString());
     }
 

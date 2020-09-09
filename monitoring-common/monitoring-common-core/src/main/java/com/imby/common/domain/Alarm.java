@@ -6,6 +6,7 @@ import com.imby.common.constant.AlarmTypeEnums;
 import lombok.*;
 import lombok.experimental.Accessors;
 
+import java.io.Serializable;
 import java.nio.charset.Charset;
 
 /**
@@ -23,7 +24,12 @@ import java.nio.charset.Charset;
 @AllArgsConstructor
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public final class Alarm extends AbstractSuperBean {
+public final class Alarm extends AbstractSuperBean implements Serializable {
+
+    /**
+     * serialVersionUID
+     */
+    private static final long serialVersionUID = -4825979720632574195L;
 
     /**
      * 告警级别，默认为：WARN

@@ -1,8 +1,7 @@
 package com.imby.server.util;
 
-import org.apache.commons.lang3.StringUtils;
-
 import com.imby.common.constant.AlarmLevelEnums;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * <p>
@@ -13,6 +12,17 @@ import com.imby.common.constant.AlarmLevelEnums;
  * @custom.date 2020/3/24 11:20
  */
 public class AlarmUtils {
+
+    /**
+     * <p>
+     * 私有化构造方法
+     * </p>
+     *
+     * @author 皮锋
+     * @custom.date 2020/9/9 8:43
+     */
+    private AlarmUtils() {
+    }
 
     /**
      * <p>

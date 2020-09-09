@@ -353,7 +353,7 @@ public class AlarmServiceImpl implements IAlarmService {
         String[] phones = this.config.getAlarmProperties().getSmsProperties().getPhoneNumbers();
         String enterprise = this.config.getAlarmProperties().getSmsProperties().getEnterprise();
         // 短信不支持<br>标签换行
-        String text = msg.replaceAll("<br>", "");
+        String text = msg.replace("<br>", "");
         TransfarSms transfarSms = TransfarSms.builder()
                 .content(StringUtils.isBlank(alarmTitle) ? text : ("[" + alarmTitle + "]" + text))
                 .type(level)
