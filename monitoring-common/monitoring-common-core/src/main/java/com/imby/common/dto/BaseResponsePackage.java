@@ -5,7 +5,6 @@ import com.imby.common.domain.Result;
 import lombok.*;
 import lombok.experimental.Accessors;
 
-import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -22,12 +21,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public class BaseResponsePackage extends AbstractInstanceBean implements Serializable {
-
-    /**
-     * serialVersionUID
-     */
-    private static final long serialVersionUID = -8909786365854143972L;
+public class BaseResponsePackage extends AbstractInstanceBean {
 
     /**
      * ID

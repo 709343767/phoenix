@@ -4,8 +4,6 @@ import com.imby.common.abs.AbstractSuperBean;
 import lombok.*;
 import lombok.experimental.Accessors;
 
-import java.io.Serializable;
-
 /**
  * <p>
  * 密文数据包
@@ -20,12 +18,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public class CiphertextPackage extends AbstractSuperBean implements Serializable {
-
-    /**
-     * serialVersionUID
-     */
-    private static final long serialVersionUID = 4928013929736210856L;
+public class CiphertextPackage extends AbstractSuperBean {
 
     /**
      * 加密后的数据

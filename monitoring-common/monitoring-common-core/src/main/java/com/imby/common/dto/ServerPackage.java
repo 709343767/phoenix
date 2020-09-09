@@ -5,7 +5,6 @@ import com.imby.common.domain.Server;
 import lombok.*;
 import lombok.experimental.Accessors;
 
-import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -22,12 +21,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public class ServerPackage extends AbstractInstanceBean implements Serializable {
-
-    /**
-     * serialVersionUID
-     */
-    private static final long serialVersionUID = -6332477014336947229L;
+public class ServerPackage extends AbstractInstanceBean {
 
     /**
      * ID

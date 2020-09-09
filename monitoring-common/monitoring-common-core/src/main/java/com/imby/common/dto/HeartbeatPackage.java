@@ -4,7 +4,6 @@ import com.imby.common.abs.AbstractInstanceBean;
 import lombok.*;
 import lombok.experimental.Accessors;
 
-import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -21,12 +20,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public class HeartbeatPackage extends AbstractInstanceBean implements Serializable {
-
-    /**
-     * serialVersionUID
-     */
-    private static final long serialVersionUID = -1227833279912325068L;
+public class HeartbeatPackage extends AbstractInstanceBean {
 
     /**
      * ID

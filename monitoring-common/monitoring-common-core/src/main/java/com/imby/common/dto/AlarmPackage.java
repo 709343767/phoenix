@@ -5,7 +5,6 @@ import com.imby.common.domain.Alarm;
 import lombok.*;
 import lombok.experimental.Accessors;
 
-import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -23,12 +22,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public class AlarmPackage extends AbstractInstanceBean implements Serializable {
-
-    /**
-     * serialVersionUID
-     */
-    private static final long serialVersionUID = -8198453286095801334L;
+public class AlarmPackage extends AbstractInstanceBean {
 
     /**
      * ID
