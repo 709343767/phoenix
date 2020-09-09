@@ -2,10 +2,8 @@ package com.imby.server.business.server.core;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
-import com.google.common.base.Charsets;
 import com.imby.server.business.server.domain.*;
 import com.imby.server.constant.FileNameConstants;
-
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -17,6 +15,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.Map;
 
@@ -126,35 +125,35 @@ public class PersistPoolLifecycle implements InitializingBean, DisposableBean {
     private void storePools() {
         try {
             FileUtils.writeStringToFile(new File(FileNameConstants.INSTANCE_POOL), this.instancePool.toJsonString(),
-                    Charsets.UTF_8, false);
+                    StandardCharsets.UTF_8, false);
             log.info("把Spring容器中的应用实例池内容存入文件系统成功！");
         } catch (Exception e) {
             log.error("把Spring容器中的应用实例池内容存入文件系统异常！");
         }
         try {
             FileUtils.writeStringToFile(new File(FileNameConstants.NET_POOL), this.netPool.toJsonString(),
-                    Charsets.UTF_8, false);
+                    StandardCharsets.UTF_8, false);
             log.info("把Spring容器中的网络信息池内容存入文件系统成功！");
         } catch (Exception e) {
             log.error("把Spring容器中的网络信息池内容存入文件系统异常！");
         }
         try {
             FileUtils.writeStringToFile(new File(FileNameConstants.MEMORY_POOL), this.memoryPool.toJsonString(),
-                    Charsets.UTF_8, false);
+                    StandardCharsets.UTF_8, false);
             log.info("把Spring容器中的服务器内存信息池内容存入文件系统成功！");
         } catch (Exception e) {
             log.error("把Spring容器中的服务器内存信息池内容存入文件系统异常！");
         }
         try {
             FileUtils.writeStringToFile(new File(FileNameConstants.CPU_POOL), this.cpuPool.toJsonString(),
-                    Charsets.UTF_8, false);
+                    StandardCharsets.UTF_8, false);
             log.info("把Spring容器中的服务器CPU信息池内容存入文件系统成功！");
         } catch (Exception e) {
             log.error("把Spring容器中的服务器CPU信息池内容存入文件系统异常！");
         }
         try {
             FileUtils.writeStringToFile(new File(FileNameConstants.DISK_POOL), this.diskPool.toJsonString(),
-                    Charsets.UTF_8, false);
+                    StandardCharsets.UTF_8, false);
             log.info("把Spring容器中的服务器磁盘信息池内容存入文件系统成功！");
         } catch (Exception e) {
             log.error("把Spring容器中的服务器磁盘信息池内容存入文件系统异常！");
@@ -171,7 +170,7 @@ public class PersistPoolLifecycle implements InitializingBean, DisposableBean {
      */
     private void loadPools() {
         try {
-            String instancePoolStr = FileUtils.readFileToString(new File(FileNameConstants.INSTANCE_POOL), Charsets.UTF_8);
+            String instancePoolStr = FileUtils.readFileToString(new File(FileNameConstants.INSTANCE_POOL), StandardCharsets.UTF_8);
             if (StringUtils.isNotBlank(instancePoolStr)) {
                 Map<String, Instance> map = JSON.parseObject(instancePoolStr, new TypeReference<Map<String, Instance>>() {
                 });
@@ -191,7 +190,7 @@ public class PersistPoolLifecycle implements InitializingBean, DisposableBean {
             log.info("把文件系统中的应用实例池内容加载到Spring容器异常！");
         }
         try {
-            String netPoolStr = FileUtils.readFileToString(new File(FileNameConstants.NET_POOL), Charsets.UTF_8);
+            String netPoolStr = FileUtils.readFileToString(new File(FileNameConstants.NET_POOL), StandardCharsets.UTF_8);
             if (StringUtils.isNotBlank(netPoolStr)) {
                 Map<String, Net> map = JSON.parseObject(netPoolStr, new TypeReference<Map<String, Net>>() {
                 });
@@ -210,7 +209,7 @@ public class PersistPoolLifecycle implements InitializingBean, DisposableBean {
             log.info("把文件系统中的网络信息池内容加载到Spring容器异常！");
         }
         try {
-            String memoryPoolStr = FileUtils.readFileToString(new File(FileNameConstants.MEMORY_POOL), Charsets.UTF_8);
+            String memoryPoolStr = FileUtils.readFileToString(new File(FileNameConstants.MEMORY_POOL), StandardCharsets.UTF_8);
             if (StringUtils.isNotBlank(memoryPoolStr)) {
                 Map<String, Memory> map = JSON.parseObject(memoryPoolStr, new TypeReference<Map<String, Memory>>() {
                 });
@@ -221,7 +220,7 @@ public class PersistPoolLifecycle implements InitializingBean, DisposableBean {
             log.info("把文件系统中的服务器内存信息池内容加载到Spring容器异常！");
         }
         try {
-            String cpuPoolStr = FileUtils.readFileToString(new File(FileNameConstants.CPU_POOL), Charsets.UTF_8);
+            String cpuPoolStr = FileUtils.readFileToString(new File(FileNameConstants.CPU_POOL), StandardCharsets.UTF_8);
             if (StringUtils.isNotBlank(cpuPoolStr)) {
                 Map<String, Cpu> map = JSON.parseObject(cpuPoolStr, new TypeReference<Map<String, Cpu>>() {
                 });
@@ -232,7 +231,7 @@ public class PersistPoolLifecycle implements InitializingBean, DisposableBean {
             log.info("把文件系统中的服务器CPU信息池内容加载到Spring容器异常！");
         }
         try {
-            String diskPoolStr = FileUtils.readFileToString(new File(FileNameConstants.DISK_POOL), Charsets.UTF_8);
+            String diskPoolStr = FileUtils.readFileToString(new File(FileNameConstants.DISK_POOL), StandardCharsets.UTF_8);
             if (StringUtils.isNotBlank(diskPoolStr)) {
                 Map<String, Disk> map = JSON.parseObject(diskPoolStr, new TypeReference<Map<String, Disk>>() {
                 });

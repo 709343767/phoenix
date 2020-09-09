@@ -1,9 +1,7 @@
 package com.imby.plug.util;
 
-import com.google.common.base.Charsets;
 import lombok.Cleanup;
 import org.apache.http.HttpStatus;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.config.AuthSchemes;
 import org.apache.http.client.config.CookieSpecs;
 import org.apache.http.client.config.RequestConfig;
@@ -15,6 +13,7 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Collections;
 
@@ -106,17 +105,16 @@ public class HttpUtils {
      * @param url  请求URL
      * @param json JSON字符串格式的数据
      * @return 返回数据
-     * @throws IOException             IO异常
-     * @throws ClientProtocolException 客户端协议异常
+     * @throws IOException IO异常
      * @author 皮锋
      * @custom.date 2020年3月5日 下午5:33:56
      */
-    public String sendHttpPostByJson(String url, String json) throws ClientProtocolException, IOException {
+    public String sendHttpPostByJson(String url, String json) throws IOException {
         HttpPost httpPost = new HttpPost(url);
         httpPost.setConfig(requestConfig);
         if (null != json) {
             // 解决中文乱码问题
-            StringEntity entity = new StringEntity(json, Charsets.UTF_8);
+            StringEntity entity = new StringEntity(json, StandardCharsets.UTF_8);
             entity.setContentEncoding(CHARSET);
             entity.setContentType(CONTENT_TYPE);
             httpPost.setEntity(entity);

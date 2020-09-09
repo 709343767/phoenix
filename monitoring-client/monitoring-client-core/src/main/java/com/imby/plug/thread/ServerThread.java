@@ -8,7 +8,6 @@ import com.imby.plug.constant.UrlConstants;
 import com.imby.plug.core.PackageConstructor;
 import com.imby.plug.core.Sender;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.http.client.ClientProtocolException;
 import org.hyperic.sigar.SigarException;
 
 import java.io.IOException;
@@ -45,8 +44,6 @@ public class ServerThread implements Runnable {
             String betweenDay = timer.intervalPretty();
             log.debug("发送服务器信息包耗时：{}", betweenDay);
             log.debug("服务器信息包响应消息：{}", result);
-        } catch (ClientProtocolException e) {
-            log.error("客户端协议异常！", e);
         } catch (IOException e) {
             log.error("IO异常！", e);
         } catch (SigarException e) {

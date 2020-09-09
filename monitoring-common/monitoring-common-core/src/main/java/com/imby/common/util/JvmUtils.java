@@ -145,7 +145,7 @@ public class JvmUtils {
         nonHeapMemoryUsageDomain.setMax(nonHeapMemoryUsage.getMax() == -1L ? "未定义" : DataSizeUtil.format(nonHeapMemoryUsage.getMax()));
         // 设置内存池信息
         Map<String, MemoryDomain.MemoryPoolDomain> memoryPoolDomainMap = new HashMap<>(6);
-        MEMORY_POOLMX_BEANS.forEach((pool) -> {
+        MEMORY_POOLMX_BEANS.forEach(pool -> {
             MemoryDomain.MemoryPoolDomain memoryPoolDomain = new MemoryDomain.MemoryPoolDomain();
             MemoryUsage memoryUsage = pool.getUsage();
             memoryPoolDomain.setInit(DataSizeUtil.format(memoryUsage.getInit()));

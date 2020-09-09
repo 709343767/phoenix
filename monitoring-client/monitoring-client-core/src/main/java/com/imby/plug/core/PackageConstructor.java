@@ -1,7 +1,6 @@
 package com.imby.plug.core;
 
 import cn.hutool.core.util.IdUtil;
-import com.google.common.base.Charsets;
 import com.imby.common.abs.AbstractPackageConstructor;
 import com.imby.common.domain.Alarm;
 import com.imby.common.dto.AlarmPackage;
@@ -17,6 +16,7 @@ import com.imby.plug.util.InstanceUtils;
 import org.hyperic.sigar.SigarException;
 
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
 /**
@@ -56,9 +56,9 @@ public class PackageConstructor extends AbstractPackageConstructor {
         Charset charset = alarm.getCharset();
         // 设置了字符集
         if (null != charset) {
-            alarm.setTitle(new String(alarm.getTitle().getBytes(Charsets.UTF_8), Charsets.UTF_8));
-            alarm.setMsg(new String(alarm.getMsg().getBytes(Charsets.UTF_8), Charsets.UTF_8));
-            alarm.setCharset(Charsets.UTF_8);
+            alarm.setTitle(new String(alarm.getTitle().getBytes(StandardCharsets.UTF_8), StandardCharsets.UTF_8));
+            alarm.setMsg(new String(alarm.getMsg().getBytes(StandardCharsets.UTF_8), StandardCharsets.UTF_8));
+            alarm.setCharset(StandardCharsets.UTF_8);
         }
         alarmPackage.setAlarm(alarm);
         return alarmPackage;

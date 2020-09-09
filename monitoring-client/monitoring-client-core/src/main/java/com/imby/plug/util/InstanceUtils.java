@@ -4,6 +4,7 @@ import com.imby.common.exception.NetException;
 import com.imby.common.util.Md5Utils;
 import com.imby.common.util.NetUtils;
 import com.imby.plug.core.ConfigLoader;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.hyperic.sigar.SigarException;
 
@@ -15,6 +16,7 @@ import org.hyperic.sigar.SigarException;
  * @author 皮锋
  * @custom.date 2020年3月4日 下午10:41:27
  */
+@Slf4j
 public class InstanceUtils {
 
     /**
@@ -91,8 +93,8 @@ public class InstanceUtils {
     public static void main(String[] args) throws InterruptedException, NetException, SigarException {
         for (int i = 0; i < 100; i++) {
             String id = getInstanceId();
-            System.out.println("当前应用的ID为：" + id);
-            Thread.sleep(5 * 1000);
+            log.info("当前应用的ID为：" + id);
+            Thread.sleep(5L * 1000L);
         }
     }
 }

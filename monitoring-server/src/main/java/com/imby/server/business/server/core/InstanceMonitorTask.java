@@ -140,12 +140,12 @@ public class InstanceMonitorTask implements CommandLineRunner, DisposableBean {
                     }
                 }
                 // 打印当前应用池中的所有应用情况
-                log.info("当前应用实例池大小：{}，正常：{}，离线：{}，断网：{}，详细信息：{}", //
-                        this.instancePool.size(), //
+                log.info("当前应用实例池大小：{}，正常：{}，离线：{}，断网：{}，详细信息：{}",
+                        this.instancePool.size(),
                         this.instancePool.entrySet().stream()
-                                .filter((e) -> (e.getValue().isOnline() && e.getValue().isOnConnect())).count(), //
-                        this.instancePool.entrySet().stream().filter((e) -> !e.getValue().isOnline()).count(), //
-                        this.instancePool.entrySet().stream().filter((e) -> !e.getValue().isOnConnect()).count(), //
+                                .filter(e -> (e.getValue().isOnline() && e.getValue().isOnConnect())).count(),
+                        this.instancePool.entrySet().stream().filter(e -> !e.getValue().isOnline()).count(),
+                        this.instancePool.entrySet().stream().filter(e -> !e.getValue().isOnConnect()).count(),
                         this.instancePool.toJsonString());
             } catch (Exception e) {
                 log.error("定时扫描应用实例池中的所有应用实例异常！", e);

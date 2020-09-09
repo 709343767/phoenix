@@ -276,14 +276,14 @@ public class NetUtils extends InitSigar {
 
     public static void main(String[] args) throws NetException, SigarException {
         String oldMac = getOutdatedLocalMac();
-        System.out.println(oldMac);
+        log.info(oldMac);
         String mac = getLocalMac();
-        System.out.println(mac);
+        log.info(mac);
         String hostAddress = getLocalIp();
-        System.out.println(hostAddress);
+        log.info(hostAddress);
         boolean ping = ping("127.0.0.1");
-        System.out.println(ping);
+        log.info(String.valueOf(ping));
         String ip = getLinuxLocalIp();
-        System.out.println(ip);
+        log.info(ip);
     }
 }

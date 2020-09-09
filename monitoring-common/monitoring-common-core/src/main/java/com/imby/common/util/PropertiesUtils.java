@@ -51,7 +51,6 @@ public final class PropertiesUtils {
             @Cleanup
             InputStream in = new BufferedInputStream(fileInputStream);
             // 将属性文件流装载到Properties对象中
-            // prop.load(in);
             @Cleanup
             InputStreamReader inputStreamReader = new InputStreamReader(in, StandardCharsets.UTF_8);
             prop.load(inputStreamReader);

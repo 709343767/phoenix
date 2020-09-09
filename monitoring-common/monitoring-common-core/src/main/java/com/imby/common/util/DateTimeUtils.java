@@ -1,6 +1,7 @@
 package com.imby.common.util;
 
 import com.imby.common.constant.DateTimeStylesEnums;
+import lombok.extern.slf4j.Slf4j;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -16,6 +17,7 @@ import java.util.Date;
  * @author 皮锋
  * @custom.date 2020/4/10 16:03
  */
+@Slf4j
 public class DateTimeUtils {
 
     /**
@@ -81,7 +83,7 @@ public class DateTimeUtils {
 
     public static void main(String[] args) {
         String str = DateTimeUtils.dateToString(new Date());
-        System.out.println(str);
+        log.info(str);
     }
 
 }

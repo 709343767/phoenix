@@ -137,10 +137,10 @@ public class NetMonitorTask implements CommandLineRunner, DisposableBean {
                         });
                     }
                     // 打印当前网络信息池中的所有网络信息情况
-                    log.info("当前网络信息池大小：{}，正常：{}，断网：{}，详细信息：{}", //
+                    log.info("当前网络信息池大小：{}，正常：{}，断网：{}，详细信息：{}",
                             this.netPool.size(), //
-                            this.netPool.entrySet().stream().filter((e) -> e.getValue().isOnConnect()).count(), //
-                            this.netPool.entrySet().stream().filter((e) -> !e.getValue().isOnConnect()).count(), //
+                            this.netPool.entrySet().stream().filter(e -> e.getValue().isOnConnect()).count(),
+                            this.netPool.entrySet().stream().filter(e -> !e.getValue().isOnConnect()).count(),
                             this.netPool.toJsonString());
                 }
             } catch (Exception e) {

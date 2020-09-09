@@ -1,5 +1,6 @@
 package com.imby.server.business.server.domain;
 
+import cn.hutool.core.util.NumberUtil;
 import com.imby.common.abs.AbstractSuperBean;
 import com.imby.common.domain.server.CpuDomain;
 import lombok.*;
@@ -7,7 +8,6 @@ import lombok.experimental.Accessors;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.CollectionUtils;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -105,8 +105,7 @@ public class Cpu extends AbstractSuperBean {
         }
         double avg = sum / cpuInfoDomains.size();
         // 四舍五入保留两位小数
-        BigDecimal b = new BigDecimal(avg);
-        return b.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+        return NumberUtil.round(avg, 2).doubleValue();
     }
 
 }

@@ -86,7 +86,7 @@ public class MemoryMonitor implements IServerMonitoringListener {
         }
         log.info("内存信息池大小：{}，内存过载：{}，详细信息：{}",
                 this.memoryPool.size(),
-                this.memoryPool.entrySet().stream().filter((e) -> e.getValue().isOverLoad()).count(),
+                this.memoryPool.entrySet().stream().filter(e -> e.getValue().isOverLoad()).count(),
                 this.memoryPool.toJsonString());
     }
 
