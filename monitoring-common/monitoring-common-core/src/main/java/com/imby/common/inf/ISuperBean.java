@@ -18,12 +18,26 @@ public interface ISuperBean {
      * 对象转Json字符串
      * </p>
      *
+     * @param serializerFeature 序列化特征，具体参考类：{@link SerializerFeature}
      * @return Json字符串
      * @author 皮锋
      * @custom.date 2020年3月4日 上午10:16:43
      */
+    default String toJsonString(SerializerFeature serializerFeature) {
+        return JSON.toJSONString(this, serializerFeature);
+    }
+
+    /**
+     * <p>
+     * 对象转Json字符串
+     * </p>
+     *
+     * @return Json字符串
+     * @author 皮锋
+     * @custom.date 2020/9/10 11:56
+     */
     default String toJsonString() {
-        return JSON.toJSONString(this, SerializerFeature.WriteMapNullValue);
+        return this.toJsonString(SerializerFeature.WriteMapNullValue);
     }
 
 }
