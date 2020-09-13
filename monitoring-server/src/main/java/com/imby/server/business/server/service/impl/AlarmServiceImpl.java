@@ -111,13 +111,13 @@ public class AlarmServiceImpl implements IAlarmService {
         boolean enable = this.config.getAlarmProperties().isEnable();
         if (!enable) {
             String expMsg = "告警开关没有打开，不发送告警消息！";
-            this.dontSendAlarmAndReturn(result, expMsg);
+            this.wrapDontSendAlarm(result, expMsg);
             return;
         }
         // 是测试告警信息，不做处理，直接返回
         if (alarm.isTest()) {
             String expMsg = "当前为测试信息，不发送告警消息！";
-            this.dontSendAlarmAndReturn(result, expMsg);
+            this.wrapDontSendAlarm(result, expMsg);
             return;
         }
         // 告警级别
@@ -153,7 +153,7 @@ public class AlarmServiceImpl implements IAlarmService {
                 }
             } catch (Exception e) {
                 String expMsg = "根据告警代码从数据库中查询告警级别失败！";
-                this.dontSendAlarmAndReturn(result, expMsg);
+                this.wrapDontSendAlarm(result, expMsg);
                 return;
             }
         }
@@ -161,19 +161,19 @@ public class AlarmServiceImpl implements IAlarmService {
         String configAlarmLevel = this.config.getAlarmProperties().getLevel();
         if (!AlarmUtils.isAlarm(configAlarmLevel, level)) {
             String expMsg = "小于配置的告警级别，不发送告警消息！";
-            this.dontSendAlarmAndReturn(result, expMsg);
+            this.wrapDontSendAlarm(result, expMsg);
             return;
         }
         // 没有告警标题，不做处理，直接返回
         if (StringUtils.isBlank(alarmTitle)) {
             String expMsg = "告警标题为空，不发送告警消息！";
-            this.dontSendAlarmAndReturn(result, expMsg);
+            this.wrapDontSendAlarm(result, expMsg);
             return;
         }
         // 没有告警内容，不做处理，直接返回
         if (StringUtils.isBlank(msg)) {
             String expMsg = "告警内容为空，不发送告警消息！";
-            this.dontSendAlarmAndReturn(result, expMsg);
+            this.wrapDontSendAlarm(result, expMsg);
             return;
         }
         // 告警方式
@@ -207,13 +207,13 @@ public class AlarmServiceImpl implements IAlarmService {
             }
         } else {
             String expMsg = "没有配置告警方式，不发送告警消息！";
-            this.dontSendAlarmAndReturn(result, expMsg);
+            this.wrapDontSendAlarm(result, expMsg);
         }
     }
 
     /**
      * <p>
-     * 不发送告警消息，封装返回结果信息。
+     * 封装不发送告警消息时的返回结果。
      * </p>
      *
      * @param result 返回结果
@@ -221,7 +221,7 @@ public class AlarmServiceImpl implements IAlarmService {
      * @author 皮锋
      * @custom.date 2020/9/13 21:35
      */
-    private void dontSendAlarmAndReturn(Result result, String msg) {
+    private void wrapDontSendAlarm(Result result, String msg) {
         log.warn(msg);
         result.setSuccess(false);
         result.setMsg(msg);
