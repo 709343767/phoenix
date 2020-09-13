@@ -46,8 +46,8 @@ public final class Md5Utils {
         MessageDigest md5 = MessageDigest.getInstance(ALGORITHM);
         byte[] md5Bytes = md5.digest(encryptStr.getBytes());
         StringBuilder hexValue = new StringBuilder();
-        for (int i = 0; i < md5Bytes.length; i++) {
-            int val = ((int) md5Bytes[i]) & 0xff;
+        for (byte md5Byte : md5Bytes) {
+            int val = ((int) md5Byte) & 0xff;
             if (val < 16) {
                 hexValue.append("0");
             }
