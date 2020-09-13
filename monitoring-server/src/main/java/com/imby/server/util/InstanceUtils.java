@@ -50,7 +50,7 @@ public class InstanceUtils {
         }
         String mac = NetUtils.getLocalMac();
         String ip = NetUtils.getLocalIp();
-        instanceId = Md5Utils.encrypt16(mac + ip + getInstanceName());
+        instanceId = Md5Utils.encrypt32(mac + ip + getInstanceName());
         return instanceId;
     }
 

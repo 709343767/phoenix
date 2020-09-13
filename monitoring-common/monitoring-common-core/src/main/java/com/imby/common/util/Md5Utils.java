@@ -72,7 +72,7 @@ public final class Md5Utils {
 
     public static void main(String[] args) {
         for (int i = 0; i < 10; i++) {
-            log.info(encrypt16("http://localhost:12000/monitoring-agent"));
+            log.info(encrypt32("http://localhost:12000/monitoring-agent"));
         }
     }
 
