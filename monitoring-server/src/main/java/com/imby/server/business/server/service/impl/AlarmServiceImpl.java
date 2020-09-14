@@ -25,6 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -40,6 +41,7 @@ import java.util.List;
  */
 @Service
 @Slf4j
+@Transactional(rollbackFor = Throwable.class)
 public class AlarmServiceImpl implements IAlarmService {
 
     /**
@@ -86,14 +88,14 @@ public class AlarmServiceImpl implements IAlarmService {
     public Result dealAlarmPackage(AlarmPackage alarmPackage) {
         // 返回结果
         Result result = new Result();
-        // 处理告警消息
+        // 处理告警信息
         this.dealAlarm(alarmPackage, result);
         return result;
     }
 
     /**
      * <p>
-     * 处理告警消息
+     * 处理告警信息
      * </p>
      *
      * @param alarmPackage 告警包
@@ -116,7 +118,7 @@ public class AlarmServiceImpl implements IAlarmService {
         String alarmMsg = alarm.getMsg();
         // 告警方式
         String[] alarmWays = this.config.getAlarmProperties().getWay();
-        // 是否发送告警消息
+        // 是否发送告警信息
         if (!this.isSendAlarm(result, alarm)) {
             return;
         }
@@ -151,7 +153,7 @@ public class AlarmServiceImpl implements IAlarmService {
                 return;
             }
         }
-        // 把告警记录计入数据库
+        // 发送告警以及把告警记录计入数据库
         this.sendAlarmAndOperateDb(result, alarmUuid, alarmType, alarmLevel, alarmTitle, alarmMsg, alarmWays);
     }
 
@@ -159,7 +161,7 @@ public class AlarmServiceImpl implements IAlarmService {
      * <p>
      * 发送告警以及把告警记录计入数据库。
      * </p>
-     * 1.把告警消息存入数据库；<br>
+     * 1.把告警信息存入数据库；<br>
      * 2.发送告警；<br>
      * 3.更新数据库中的告警发送结果。<br>
      *
@@ -204,7 +206,7 @@ public class AlarmServiceImpl implements IAlarmService {
 
     /**
      * <p>
-     * 是否发送告警消息
+     * 是否发送告警信息
      * </p>
      *
      * @param result 返回结果
@@ -218,7 +220,7 @@ public class AlarmServiceImpl implements IAlarmService {
         boolean isEnable = this.config.getAlarmProperties().isEnable();
         // 告警开关没有打开，不做处理，直接返回
         if (!isEnable) {
-            String expMsg = "告警开关没有打开，不发送告警消息！";
+            String expMsg = "告警开关没有打开，不发送告警信息！";
             this.wrapDontSendAlarm(result, expMsg);
             return false;
         }
@@ -226,7 +228,7 @@ public class AlarmServiceImpl implements IAlarmService {
         boolean isTest = alarm.isTest();
         // 是测试告警信息，不做处理，直接返回
         if (isTest) {
-            String expMsg = "当前为测试信息，不发送告警消息！";
+            String expMsg = "当前为测试信息，不发送告警信息！";
             this.wrapDontSendAlarm(result, expMsg);
             return false;
         }
@@ -236,7 +238,7 @@ public class AlarmServiceImpl implements IAlarmService {
         String level = alarm.getAlarmLevel().name();
         // 告警级别小于配置的告警级别，不做处理，直接返回
         if (!AlarmUtils.isAlarm(configAlarmLevel, level)) {
-            String expMsg = "小于配置的告警级别，不发送告警消息！";
+            String expMsg = "小于配置的告警级别，不发送告警信息！";
             this.wrapDontSendAlarm(result, expMsg);
             return false;
         }
@@ -244,7 +246,7 @@ public class AlarmServiceImpl implements IAlarmService {
         String alarmTitle = alarm.getTitle();
         // 没有告警标题，不做处理，直接返回
         if (StringUtils.isBlank(alarmTitle)) {
-            String expMsg = "告警标题为空，不发送告警消息！";
+            String expMsg = "告警标题为空，不发送告警信息！";
             this.wrapDontSendAlarm(result, expMsg);
             return false;
         }
@@ -252,7 +254,7 @@ public class AlarmServiceImpl implements IAlarmService {
         String msg = alarm.getMsg();
         // 没有告警内容，不做处理，直接返回
         if (StringUtils.isBlank(msg)) {
-            String expMsg = "告警内容为空，不发送告警消息！";
+            String expMsg = "告警内容为空，不发送告警信息！";
             this.wrapDontSendAlarm(result, expMsg);
             return false;
         }
@@ -260,7 +262,7 @@ public class AlarmServiceImpl implements IAlarmService {
         String[] alarmWays = this.config.getAlarmProperties().getWay();
         // 没有配置告警方式，不做处理，直接返回
         if (ArrayUtil.isEmpty(alarmWays)) {
-            String expMsg = "没有配置告警方式，不发送告警消息！";
+            String expMsg = "没有配置告警方式，不发送告警信息！";
             this.wrapDontSendAlarm(result, expMsg);
             return false;
         }
@@ -269,7 +271,7 @@ public class AlarmServiceImpl implements IAlarmService {
 
     /**
      * <p>
-     * 封装不发送告警消息时的返回结果。
+     * 封装不发送告警信息时的返回结果。
      * </p>
      *
      * @param result 返回结果
@@ -285,7 +287,7 @@ public class AlarmServiceImpl implements IAlarmService {
 
     /**
      * <p>
-     * 封装发送告警消息时的返回结果。
+     * 封装发送告警信息时的返回结果。
      * </p>
      *
      * @param result 返回结果
@@ -299,7 +301,7 @@ public class AlarmServiceImpl implements IAlarmService {
 
     /**
      * <p>
-     * 更新告警信息发送状态
+     * 更新数据库中告警信息发送状态
      * </p>
      *
      * @param result        返回结果
