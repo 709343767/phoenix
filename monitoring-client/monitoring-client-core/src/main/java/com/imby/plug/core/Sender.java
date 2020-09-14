@@ -1,6 +1,6 @@
 package com.imby.plug.core;
 
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.JSON;
 import com.imby.common.dto.CiphertextPackage;
 import com.imby.common.util.DesEncryptUtils;
 import com.imby.plug.util.EnumHttpUtils;
@@ -37,7 +37,7 @@ public class Sender {
         EnumHttpUtils httpClient = EnumHttpUtils.getInstance();
         String result = httpClient.sendHttpPostByJson(url, requestCiphertextPackage.toJsonString());
         // 响应结果
-        CiphertextPackage responseCiphertextPackage = JSONObject.parseObject(result, CiphertextPackage.class);
+        CiphertextPackage responseCiphertextPackage = JSON.parseObject(result, CiphertextPackage.class);
         // 解密响应数据
         return DesEncryptUtils.decrypt(responseCiphertextPackage.getCiphertext());
     }

@@ -1,6 +1,6 @@
 package com.imby.common.web.toolkit;
 
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.JSON;
 import com.imby.common.dto.CiphertextPackage;
 import com.imby.common.util.DesEncryptUtils;
 import org.apache.commons.io.IOUtils;
@@ -30,7 +30,7 @@ public class MyHttpInputMessage implements HttpInputMessage {
         // 请求体转字符串
         String bodyStr = IOUtils.toString(inputMessage.getBody(), StandardCharsets.UTF_8);
         // 密文请求体（数据包）
-        CiphertextPackage ciphertextPackage = JSONObject.parseObject(bodyStr, CiphertextPackage.class);
+        CiphertextPackage ciphertextPackage = JSON.parseObject(bodyStr, CiphertextPackage.class);
         // 解密
         String decryptStr = DesEncryptUtils.decrypt(ciphertextPackage.getCiphertext());
         // 解密后的请求体

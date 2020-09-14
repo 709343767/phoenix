@@ -1,6 +1,6 @@
 package com.imby.server.business.server.component;
 
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.JSON;
 import com.imby.common.dto.CiphertextPackage;
 import com.imby.common.util.DesEncryptUtils;
 import org.springframework.core.MethodParameter;
@@ -38,7 +38,7 @@ public class ResponsePackageEncryptAdvice implements ResponseBodyAdvice<Object> 
                                   ServerHttpResponse response) {
         if (null != body) {
             // 加密
-            String encrypt = DesEncryptUtils.encrypt(JSONObject.toJSONString(body));
+            String encrypt = DesEncryptUtils.encrypt(JSON.toJSONString(body));
             return new CiphertextPackage(encrypt);
         }
         return null;
