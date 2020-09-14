@@ -1,5 +1,6 @@
 package com.imby.server.business.server.service.impl;
 
+import cn.hutool.core.util.ArrayUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.imby.common.constant.ResultMsgConstants;
@@ -104,28 +105,21 @@ public class AlarmServiceImpl implements IAlarmService {
         // 获取告警信息
         Alarm alarm = alarmPackage.getAlarm();
         // 告警ID
-        String uuid = alarmPackage.getId();
+        String alarmUuid = alarmPackage.getId();
         // 告警类型
         String alarmType = alarm.getAlarmType().name();
-        // 告警开关是否打开
-        boolean enable = this.config.getAlarmProperties().isEnable();
-        if (!enable) {
-            String expMsg = "告警开关没有打开，不发送告警消息！";
-            this.wrapDontSendAlarm(result, expMsg);
-            return;
-        }
-        // 是测试告警信息，不做处理，直接返回
-        if (alarm.isTest()) {
-            String expMsg = "当前为测试信息，不发送告警消息！";
-            this.wrapDontSendAlarm(result, expMsg);
-            return;
-        }
         // 告警级别
-        String level = alarm.getAlarmLevel().name();
+        String alarmLevel = alarm.getAlarmLevel().name();
         // 告警内容标题
         String alarmTitle = alarm.getTitle();
         // 告警内容
-        String msg = alarm.getMsg();
+        String alarmMsg = alarm.getMsg();
+        // 告警方式
+        String[] alarmWays = this.config.getAlarmProperties().getWay();
+        // 是否发送告警消息
+        if (!this.isSendAlarm(result, alarm)) {
+            return;
+        }
         // 告警代码
         String code = alarm.getCode();
         // 如果有告警代码，查询数据库中此告警代码对应的告警级别、告警标题、告警内容，数据库中有就用数据库的
@@ -138,7 +132,7 @@ public class AlarmServiceImpl implements IAlarmService {
                     // 数据库中的告警级别
                     String dbLevel = monitorAlarmDefinition.getGrade();
                     if (StringUtils.isNotBlank(dbLevel)) {
-                        level = dbLevel;
+                        alarmLevel = dbLevel;
                     }
                     // 数据库中的告警标题
                     String dbTitle = monitorAlarmDefinition.getTitle();
@@ -148,67 +142,129 @@ public class AlarmServiceImpl implements IAlarmService {
                     // 数据库中的告警内容
                     String dbContent = monitorAlarmDefinition.getContent();
                     if (StringUtils.isNotBlank(dbContent)) {
-                        msg = dbContent;
+                        alarmMsg = dbContent;
                     }
                 }
             } catch (Exception e) {
-                String expMsg = "根据告警代码从数据库中查询告警级别失败！";
+                String expMsg = "根据告警代码从数据库中查询告警定义失败！";
                 this.wrapDontSendAlarm(result, expMsg);
                 return;
             }
         }
-        // 告警级别小于配置的告警级别，不做处理，直接返回
+        // 把告警记录计入数据库
+        this.sendAlarmAndOperateDb(result, alarmUuid, alarmType, alarmLevel, alarmTitle, alarmMsg, alarmWays);
+    }
+
+    /**
+     * <p>
+     * 发送告警以及把告警记录计入数据库。
+     * </p>
+     * 1.把告警消息存入数据库；<br>
+     * 2.发送告警；<br>
+     * 3.更新数据库中的告警发送结果。<br>
+     *
+     * @param result     返回结果
+     * @param alarmUuid  告警ID
+     * @param alarmType  告警类型
+     * @param alarmLevel 告警级别
+     * @param alarmTitle 告警内容标题
+     * @param alarmMsg   告警内容
+     * @param alarmWays  告警方式
+     * @author 皮锋
+     * @custom.date 2020/9/14 12:56
+     */
+    private void sendAlarmAndOperateDb(Result result, String alarmUuid, String alarmType, String alarmLevel, String alarmTitle, String alarmMsg, String[] alarmWays) {
+        // 发送告警前先把告警记录存入数据库
+        int insertResult = this.insertMonitorAlarmRecordToDb(alarmUuid, alarmType, alarmLevel, alarmTitle, alarmMsg, alarmWays);
+        if (insertResult > 0) {
+            List<String> alarmTypeList = Arrays.asList(alarmWays);
+            // 告警方式为短信告警和邮件告警
+            if (alarmTypeList.contains(AlarmWayEnums.SMS.name()) && alarmTypeList.contains(AlarmWayEnums.MAIL.name())) {
+                // 处理短信告警
+                this.dealSmsAlarm(alarmTitle, alarmMsg, alarmLevel, result);
+                // 告警发送完更新数据库中告警发送结果
+                this.updateMonitorAlarmRecordToDb(result, alarmUuid, AlarmWayEnums.SMS);
+                // 处理邮件告警
+                this.dealMailAlarm(alarmTitle, alarmMsg, alarmLevel, result);
+                // 告警发送完更新数据库中告警发送结果
+                this.updateMonitorAlarmRecordToDb(result, alarmUuid, AlarmWayEnums.MAIL);
+            } else if (alarmTypeList.contains(AlarmWayEnums.SMS.name())) {
+                // 处理短信告警
+                this.dealSmsAlarm(alarmTitle, alarmMsg, alarmLevel, result);
+                // 告警发送完更新数据库中告警发送结果
+                this.updateMonitorAlarmRecordToDb(result, alarmUuid, AlarmWayEnums.SMS);
+            } else if (alarmTypeList.contains(AlarmWayEnums.MAIL.name())) {
+                // 处理邮件告警
+                this.dealMailAlarm(alarmTitle, alarmMsg, alarmLevel, result);
+                // 告警发送完更新数据库中告警发送结果
+                this.updateMonitorAlarmRecordToDb(result, alarmUuid, AlarmWayEnums.MAIL);
+            }
+        }
+    }
+
+    /**
+     * <p>
+     * 是否发送告警消息
+     * </p>
+     *
+     * @param result 返回结果
+     * @param alarm  告警信息
+     * @return 是 或 否
+     * @author 皮锋
+     * @custom.date 2020/9/14 12:37
+     */
+    private boolean isSendAlarm(Result result, Alarm alarm) {
+        // 告警开关是否打开
+        boolean isEnable = this.config.getAlarmProperties().isEnable();
+        // 告警开关没有打开，不做处理，直接返回
+        if (!isEnable) {
+            String expMsg = "告警开关没有打开，不发送告警消息！";
+            this.wrapDontSendAlarm(result, expMsg);
+            return false;
+        }
+        // 是否是测试告警信息
+        boolean isTest = alarm.isTest();
+        // 是测试告警信息，不做处理，直接返回
+        if (isTest) {
+            String expMsg = "当前为测试信息，不发送告警消息！";
+            this.wrapDontSendAlarm(result, expMsg);
+            return false;
+        }
+        // 告警级别
         String configAlarmLevel = this.config.getAlarmProperties().getLevel();
+        // 告警级别
+        String level = alarm.getAlarmLevel().name();
+        // 告警级别小于配置的告警级别，不做处理，直接返回
         if (!AlarmUtils.isAlarm(configAlarmLevel, level)) {
             String expMsg = "小于配置的告警级别，不发送告警消息！";
             this.wrapDontSendAlarm(result, expMsg);
-            return;
+            return false;
         }
+        // 告警内容标题
+        String alarmTitle = alarm.getTitle();
         // 没有告警标题，不做处理，直接返回
         if (StringUtils.isBlank(alarmTitle)) {
             String expMsg = "告警标题为空，不发送告警消息！";
             this.wrapDontSendAlarm(result, expMsg);
-            return;
+            return false;
         }
+        // 告警内容
+        String msg = alarm.getMsg();
         // 没有告警内容，不做处理，直接返回
         if (StringUtils.isBlank(msg)) {
             String expMsg = "告警内容为空，不发送告警消息！";
             this.wrapDontSendAlarm(result, expMsg);
-            return;
+            return false;
         }
         // 告警方式
         String[] alarmWays = this.config.getAlarmProperties().getWay();
-        if (alarmWays != null) {
-            // 发送告警前先把告警记录存入数据库
-            int insertResult = this.insertMonitorAlarmRecordToDb(uuid, alarmType, level, alarmTitle, msg, alarmWays);
-            if (insertResult > 0) {
-                List<String> alarmTypeList = Arrays.asList(alarmWays);
-                // 告警方式为短信告警和邮件告警
-                if (alarmTypeList.contains(AlarmWayEnums.SMS.name()) && alarmTypeList.contains(AlarmWayEnums.MAIL.name())) {
-                    // 处理短信告警
-                    this.dealSmsAlarm(alarmTitle, msg, level, result);
-                    // 告警发送完更新数据库中告警发送结果
-                    this.updateMonitorAlarmRecordToDb(result, uuid, AlarmWayEnums.SMS);
-                    // 处理邮件告警
-                    this.dealMailAlarm(alarmTitle, msg, level, result);
-                    // 告警发送完更新数据库中告警发送结果
-                    this.updateMonitorAlarmRecordToDb(result, uuid, AlarmWayEnums.MAIL);
-                } else if (alarmTypeList.contains(AlarmWayEnums.SMS.name())) {
-                    // 处理短信告警
-                    this.dealSmsAlarm(alarmTitle, msg, level, result);
-                    // 告警发送完更新数据库中告警发送结果
-                    this.updateMonitorAlarmRecordToDb(result, uuid, AlarmWayEnums.SMS);
-                } else if (alarmTypeList.contains(AlarmWayEnums.MAIL.name())) {
-                    // 处理邮件告警
-                    this.dealMailAlarm(alarmTitle, msg, level, result);
-                    // 告警发送完更新数据库中告警发送结果
-                    this.updateMonitorAlarmRecordToDb(result, uuid, AlarmWayEnums.MAIL);
-                }
-            }
-        } else {
+        // 没有配置告警方式，不做处理，直接返回
+        if (ArrayUtil.isEmpty(alarmWays)) {
             String expMsg = "没有配置告警方式，不发送告警消息！";
             this.wrapDontSendAlarm(result, expMsg);
+            return false;
         }
+        return true;
     }
 
     /**
@@ -225,6 +281,20 @@ public class AlarmServiceImpl implements IAlarmService {
         log.warn(msg);
         result.setSuccess(false);
         result.setMsg(msg);
+    }
+
+    /**
+     * <p>
+     * 封装发送告警消息时的返回结果。
+     * </p>
+     *
+     * @param result 返回结果
+     * @author 皮锋
+     * @custom.date 2020/9/13 21:35
+     */
+    private void wrapSendAlarm(Result result) {
+        result.setSuccess(true);
+        result.setMsg(ResultMsgConstants.SUCCESS);
     }
 
     /**
@@ -360,13 +430,12 @@ public class AlarmServiceImpl implements IAlarmService {
         boolean b = this.smsService.sendSmsByTransfarApi(transfarSms);
         // 成功
         if (b) {
-            result.setSuccess(true);
-            result.setMsg(ResultMsgConstants.SUCCESS);
+            this.wrapSendAlarm(result);
         }
         // 失败
         else {
-            result.setSuccess(false);
-            result.setMsg("调用创发公司的短信接口发送短信失败！");
+            String expMsg = "调用创发公司的短信接口发送短信失败！";
+            this.wrapDontSendAlarm(result, expMsg);
         }
     }
 
@@ -392,13 +461,12 @@ public class AlarmServiceImpl implements IAlarmService {
         boolean b = this.mailService.sendAlarmTemplateMail(mail);
         // 成功
         if (b) {
-            result.setSuccess(true);
-            result.setMsg(ResultMsgConstants.SUCCESS);
+            this.wrapSendAlarm(result);
         }
         // 失败
         else {
-            result.setSuccess(false);
-            result.setMsg("发送电子邮件失败！");
+            String expMsg = "发送电子邮件失败！";
+            this.wrapDontSendAlarm(result, expMsg);
         }
     }
 
