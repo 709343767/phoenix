@@ -31,7 +31,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/alarm/accept-alarm-package",
             "/heartbeat/accept-heartbeat-package",
             "/server/accept-server-package",
-            "/jvm/accept-jvm-package"
+            "/jvm/accept-jvm-package",
+            // 关闭端点
+            "/actuator/shutdown"
     };
 
     /**
