@@ -89,7 +89,7 @@ public class AlarmServiceImpl implements IAlarmService {
         // 返回结果
         Result result = new Result();
         // 处理告警信息
-        this.dealAlarm(alarmPackage, result);
+        this.dealAlarm(result, alarmPackage);
         return result;
     }
 
@@ -98,12 +98,12 @@ public class AlarmServiceImpl implements IAlarmService {
      * 处理告警信息
      * </p>
      *
-     * @param alarmPackage 告警包
      * @param result       返回结果
+     * @param alarmPackage 告警包
      * @author 皮锋
      * @custom.date 2020/4/2 11:49
      */
-    private void dealAlarm(AlarmPackage alarmPackage, Result result) {
+    private void dealAlarm(Result result, AlarmPackage alarmPackage) {
         // 获取告警信息
         Alarm alarm = alarmPackage.getAlarm();
         // 告警ID
@@ -175,7 +175,10 @@ public class AlarmServiceImpl implements IAlarmService {
      * @author 皮锋
      * @custom.date 2020/9/14 12:56
      */
-    private void sendAlarmAndOperateDb(Result result, String alarmUuid, String alarmType, String alarmLevel, String alarmTitle, String alarmMsg, String[] alarmWays) {
+    private void sendAlarmAndOperateDb(Result result,
+                                       String alarmUuid, String alarmType,
+                                       String alarmLevel, String alarmTitle,
+                                       String alarmMsg, String[] alarmWays) {
         // 发送告警前先把告警记录存入数据库
         int insertResult = this.insertMonitorAlarmRecordToDb(alarmUuid, alarmType, alarmLevel, alarmTitle, alarmMsg, alarmWays);
         if (insertResult > 0) {
@@ -183,21 +186,21 @@ public class AlarmServiceImpl implements IAlarmService {
             // 告警方式为短信告警和邮件告警
             if (alarmTypeList.contains(AlarmWayEnums.SMS.name()) && alarmTypeList.contains(AlarmWayEnums.MAIL.name())) {
                 // 处理短信告警
-                this.dealSmsAlarm(alarmTitle, alarmMsg, alarmLevel, result);
+                this.dealSmsAlarm(result, alarmTitle, alarmMsg, alarmLevel);
                 // 告警发送完更新数据库中告警发送结果
                 this.updateMonitorAlarmRecordToDb(result, alarmUuid, AlarmWayEnums.SMS);
                 // 处理邮件告警
-                this.dealMailAlarm(alarmTitle, alarmMsg, alarmLevel, result);
+                this.dealMailAlarm(result, alarmTitle, alarmMsg, alarmLevel);
                 // 告警发送完更新数据库中告警发送结果
                 this.updateMonitorAlarmRecordToDb(result, alarmUuid, AlarmWayEnums.MAIL);
             } else if (alarmTypeList.contains(AlarmWayEnums.SMS.name())) {
                 // 处理短信告警
-                this.dealSmsAlarm(alarmTitle, alarmMsg, alarmLevel, result);
+                this.dealSmsAlarm(result, alarmTitle, alarmMsg, alarmLevel);
                 // 告警发送完更新数据库中告警发送结果
                 this.updateMonitorAlarmRecordToDb(result, alarmUuid, AlarmWayEnums.SMS);
             } else if (alarmTypeList.contains(AlarmWayEnums.MAIL.name())) {
                 // 处理邮件告警
-                this.dealMailAlarm(alarmTitle, alarmMsg, alarmLevel, result);
+                this.dealMailAlarm(result, alarmTitle, alarmMsg, alarmLevel);
                 // 告警发送完更新数据库中告警发送结果
                 this.updateMonitorAlarmRecordToDb(result, alarmUuid, AlarmWayEnums.MAIL);
             }
@@ -352,7 +355,8 @@ public class AlarmServiceImpl implements IAlarmService {
      * @author 皮锋
      * @custom.date 2020/5/13 16:21
      */
-    private int insertMonitorAlarmRecordToDb(String uuid, String alarmType, String alarmLevel, String alarmTitle,
+    private int insertMonitorAlarmRecordToDb(String uuid, String alarmType,
+                                             String alarmLevel, String alarmTitle,
                                              String alarmMsg, String[] alarmWays) {
         MonitorAlarmRecord monitorAlarmRecord = new MonitorAlarmRecord();
         monitorAlarmRecord.setCode(uuid);
@@ -388,20 +392,20 @@ public class AlarmServiceImpl implements IAlarmService {
      * 处理短信告警
      * </p>
      *
+     * @param result     返回结果
      * @param alarmTitle 告警信息标题
      * @param msg        告警信息
      * @param level      告警级别
-     * @param result     返回结果
      * @author 皮锋
      * @custom.date 2020年3月10日 下午3:13:35
      */
-    private void dealSmsAlarm(String alarmTitle, String msg, String level, Result result) {
+    private void dealSmsAlarm(Result result, String alarmTitle, String msg, String level) {
         // 短信接口商家
         String enterprise = this.config.getAlarmProperties().getSmsProperties().getEnterprise();
         // 判断短信接口商家，不同的商家调用不同的接口
         if (StringUtils.equalsIgnoreCase(EnterpriseConstants.TRANSFAR, enterprise)) {
             // 调用创发短信接口
-            this.callTransfarSmsApi(alarmTitle, msg, level, result);
+            this.callTransfarSmsApi(result, alarmTitle, msg, level);
         }
     }
 
@@ -410,14 +414,14 @@ public class AlarmServiceImpl implements IAlarmService {
      * 封装数据，调用创发公司的短信接口发送短信
      * </p>
      *
+     * @param result     返回结果
      * @param alarmTitle 告警内容标题
      * @param msg        告警内容
      * @param level      告警级别
-     * @param result     返回结果
      * @author 皮锋
      * @custom.date 2020年3月10日 下午3:19:36
      */
-    private void callTransfarSmsApi(String alarmTitle, String msg, String level, Result result) {
+    private void callTransfarSmsApi(Result result, String alarmTitle, String msg, String level) {
         String[] phones = this.config.getAlarmProperties().getSmsProperties().getPhoneNumbers();
         String enterprise = this.config.getAlarmProperties().getSmsProperties().getEnterprise();
         // 短信不支持<br>标签换行
@@ -446,14 +450,14 @@ public class AlarmServiceImpl implements IAlarmService {
      * 处理邮件告警
      * </p>
      *
+     * @param result     返回结果
      * @param alarmTitle 告警信息标题
      * @param msg        告警信息
      * @param level      告警级别
-     * @param result     返回结果
      * @author 皮锋
      * @custom.date 2020/4/13 13:23
      */
-    private void dealMailAlarm(String alarmTitle, String msg, String level, Result result) {
+    private void dealMailAlarm(Result result, String alarmTitle, String msg, String level) {
         Mail mail = Mail.builder()
                 .email(this.config.getAlarmProperties().getMailProperties().getTo())
                 .title(alarmTitle)
