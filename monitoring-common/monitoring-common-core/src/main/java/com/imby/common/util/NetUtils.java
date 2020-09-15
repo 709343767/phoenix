@@ -14,7 +14,6 @@ import org.hyperic.sigar.SigarException;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.nio.charset.Charset;
@@ -32,9 +31,31 @@ import java.util.List;
 @Slf4j
 public class NetUtils extends InitSigar {
 
+
     /**
      * <p>
-     * 获取本机MAC地址：已过时，后续版本中可能会删除此方法。
+     * 获取本机MAC地址
+     * </p>
+     *
+     * @return MAC地址
+     * @throws NetException   获取网络信息异常：获取本机MAC地址异常！
+     * @throws SigarException Sigar异常
+     * @author 皮锋
+     * @custom.date 2020/9/15 12:35
+     */
+    public static String getLocalMac() throws NetException, SigarException {
+        try {
+            // 通过InetAddress的方式
+            return getLocalMacByInetAddress();
+        } catch (Exception e) {
+            // 通过Sigar的方式
+            return getLocalMacBySigar();
+        }
+    }
+
+    /**
+     * <p>
+     * 获取本机MAC地址：通过InetAddress的方式。
      * </p>
      *
      * @return MAC地址
@@ -42,8 +63,7 @@ public class NetUtils extends InitSigar {
      * @author 皮锋
      * @custom.date 2020/3/12 11:20
      */
-    @Deprecated
-    public static String getOutdatedLocalMac() throws NetException {
+    public static String getLocalMacByInetAddress() throws NetException {
         try {
             InetAddress ia = InetAddress.getLocalHost();
             byte[] mac = NetworkInterface.getByInetAddress(ia).getHardwareAddress();
@@ -71,7 +91,7 @@ public class NetUtils extends InitSigar {
 
     /**
      * <p>
-     * 获取本机MAC地址
+     * 获取本机MAC地址：通过Sigar的方式。
      * </p>
      *
      * @return MAC地址
@@ -81,7 +101,7 @@ public class NetUtils extends InitSigar {
      * @custom.date 2020/8/30 16:41
      * @since v0.0.2
      */
-    public static String getLocalMac() throws SigarException, NetException {
+    public static String getLocalMacBySigar() throws SigarException, NetException {
         // 获取本机IP地址
         String ip = getLocalIp();
         NetDomain netDomain = getNetInfo();
@@ -116,7 +136,7 @@ public class NetUtils extends InitSigar {
         try {
             // Windows操作系统
             if (OsUtils.isWindowsOs()) {
-                InetAddress ip4 = Inet4Address.getLocalHost();
+                InetAddress ip4 = InetAddress.getLocalHost();
                 return ip4.getHostAddress();
             } else {
                 return getLinuxLocalIp();
@@ -274,16 +294,4 @@ public class NetUtils extends InitSigar {
         return netDomain;
     }
 
-    public static void main(String[] args) throws NetException, SigarException {
-        String oldMac = getOutdatedLocalMac();
-        log.info(oldMac);
-        String mac = getLocalMac();
-        log.info(mac);
-        String hostAddress = getLocalIp();
-        log.info(hostAddress);
-        boolean ping = ping("127.0.0.1");
-        log.info(String.valueOf(ping));
-        String ip = getLinuxLocalIp();
-        log.info(ip);
-    }
 }
