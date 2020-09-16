@@ -4,6 +4,7 @@ import cn.hutool.core.io.FileUtil;
 import lombok.Cleanup;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.hyperic.sigar.Sigar;
 import org.hyperic.sigar.SigarException;
 import org.hyperic.sigar.SigarLoader;
@@ -29,17 +30,17 @@ public class InitSigar {
     /**
      * 系统属性
      */
-    public final static Properties PROPS = System.getProperties();
+    public static final Properties PROPS = System.getProperties();
 
     /**
      * 环境属性
      */
-    public final static Map<String, String> ENVS = System.getenv();
+    public static final Map<String, String> ENVS = System.getenv();
 
     /**
      * 初始化Sigar，并创建Sigar对象
      */
-    public final static Sigar SIGAR = initSigar();
+    public static final Sigar SIGAR = initSigar();
 
     /**
      * <p>
@@ -84,8 +85,15 @@ public class InitSigar {
             if (FileUtil.isEmpty(file)) {
                 throw new SigarException("Sigar库文件大小为零！");
             }
-            System.setProperty("org.hyperic.sigar.path", tempDir.getCanonicalPath());
-            log.info("Sigar库文件路径：{}", System.getProperty("org.hyperic.sigar.path"));
+            // 系统属性路径
+            String propertyPath = "org.hyperic.sigar.path";
+            // 系统属性
+            String property = System.getProperty(propertyPath);
+            if (StringUtils.isBlank(property)) {
+                // 设置系统属性
+                System.setProperty(propertyPath, tempDir.getCanonicalPath());
+            }
+            log.info("Sigar库文件路径：{}", System.getProperty(propertyPath));
             // 返回Sigar对象
             return new Sigar();
         } catch (Exception e) {
