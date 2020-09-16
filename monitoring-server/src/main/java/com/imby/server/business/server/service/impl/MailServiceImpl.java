@@ -80,7 +80,7 @@ public class MailServiceImpl implements IMailService {
             this.mailSender.send(mimeMessage);
             return true;
         } catch (Exception e) {
-            log.error("HTML模板邮件发送失败：{}", e.getMessage());
+            log.error("HTML模板邮件发送失败！", e);
             return false;
         }
     }
