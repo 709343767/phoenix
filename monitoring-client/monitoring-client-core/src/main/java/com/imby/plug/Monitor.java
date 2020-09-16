@@ -6,6 +6,7 @@ import com.imby.common.domain.Result;
 import com.imby.common.dto.AlarmPackage;
 import com.imby.common.dto.BaseResponsePackage;
 import com.imby.common.exception.NetException;
+import com.imby.common.init.InitBanner;
 import com.imby.plug.constant.UrlConstants;
 import com.imby.plug.core.ConfigLoader;
 import com.imby.plug.core.PackageConstructor;
@@ -69,7 +70,9 @@ public class Monitor {
      * @custom.date 2020年3月5日 下午4:07:10
      */
     private static void run(final String configPath, final String configName) {
-        // 1.加载配置信息
+        // 1.打印banner信息
+        InitBanner.init();
+        // 2.加载配置信息
         try {
             ConfigLoader.load(configPath, configName);
             log.info("监控程序加载配置信息成功！");
@@ -79,11 +82,11 @@ public class Monitor {
             System.exit(0);
             return;
         }
-        // 2.开始定时发送心跳包
+        // 3.开始定时发送心跳包
         HeartbeatTaskScheduler.run();
-        // 3.开始定时发送服务器信息包
+        // 4.开始定时发送服务器信息包
         ServerTaskScheduler.run();
-        // 4.开始定时发送Java虚拟机信息包
+        // 5.开始定时发送Java虚拟机信息包
         JvmTaskScheduler.run();
     }
 

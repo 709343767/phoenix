@@ -39,6 +39,10 @@
             <groupId>commons-collections</groupId>
             <artifactId>commons-collections</artifactId>
         </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+        </dependency>
         <!--lombok依赖 -->
         <dependency>
             <groupId>org.projectlombok</groupId>

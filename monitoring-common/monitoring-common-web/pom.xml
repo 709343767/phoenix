@@ -78,11 +78,6 @@
             <groupId>org.aspectj</groupId>
             <artifactId>aspectjweaver</artifactId>
         </dependency>
-        <!-- commons工具包依赖 -->
-        <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-        </dependency>
         <!-- joda-time时间日期依赖 -->
         <dependency>
             <groupId>joda-time</groupId>
