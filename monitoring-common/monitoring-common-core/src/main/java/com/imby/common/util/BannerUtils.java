@@ -36,6 +36,7 @@ public class BannerUtils {
      * </p>
      *
      * @return “banner.txt”文件字符串
+     * @throws IOException IO异常
      * @author 皮锋
      * @custom.date 2020/9/16 12:43
      */
