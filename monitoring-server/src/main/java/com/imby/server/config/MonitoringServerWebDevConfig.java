@@ -1,8 +1,10 @@
 package com.imby.server.config;
 
+import com.imby.common.init.InitBanner;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
 
 import com.imby.server.property.MonitoringServerWebProperties;
@@ -20,6 +22,7 @@ import java.io.IOException;
 @Configuration
 @Slf4j
 @Profile("dev")
+@Import(InitBanner.class)
 public class MonitoringServerWebDevConfig {
 
     /**

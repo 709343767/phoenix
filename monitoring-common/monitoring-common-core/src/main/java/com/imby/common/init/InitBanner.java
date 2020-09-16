@@ -12,15 +12,7 @@ import com.imby.common.util.BannerUtils;
  */
 public class InitBanner {
 
-    /**
-     * <p>
-     * 初始化项目banner
-     * </p>
-     *
-     * @author 皮锋
-     * @custom.date 2020/9/16 13:35
-     */
-    public static void init() {
+    static {
         BannerUtils.printBanner();
     }
 

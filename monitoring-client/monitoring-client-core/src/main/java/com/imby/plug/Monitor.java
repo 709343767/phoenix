@@ -35,6 +35,17 @@ public class Monitor {
 
     /**
      * <p>
+     * 私有化构造方法
+     * </p>
+     *
+     * @author 皮锋
+     * @custom.date 2020/9/16 14:17
+     */
+    private Monitor() {
+    }
+
+    /**
+     * <p>
      * 开启监控
      * </p>
      *
@@ -71,7 +82,7 @@ public class Monitor {
      */
     private static void run(final String configPath, final String configName) {
         // 1.打印banner信息
-        InitBanner.init();
+        new InitBanner();
         // 2.加载配置信息
         try {
             ConfigLoader.load(configPath, configName);
