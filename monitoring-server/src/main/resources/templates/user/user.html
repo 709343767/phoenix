@@ -80,7 +80,7 @@
         var $ = layui.$, admin = layui.admin, form = layui.form, table = layui.table;
         table.render({
             elem: '#user-list-table',
-            url: layui.setter.base + 'user/get-monitor-user-list',
+            url: ctxPath + 'user/get-monitor-user-list',
             toolbar: '#list-table-toolbar',
             request: {
                 pageName: 'current',//页码的参数名称，默认：page

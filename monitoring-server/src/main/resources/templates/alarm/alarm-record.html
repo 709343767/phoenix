@@ -102,7 +102,7 @@
         var $ = layui.$, admin = layui.admin, form = layui.form, table = layui.table;
         table.render({
             elem: '#alarm-record-list-table',
-            url: layui.setter.base + 'monitor-alarm-record/get-monitor-alarm-record-list',
+            url: ctxPath + 'monitor-alarm-record/get-monitor-alarm-record-list',
             toolbar: '#list-table-toolbar',
             request: {
                 pageName: 'current',//页码的参数名称，默认：page

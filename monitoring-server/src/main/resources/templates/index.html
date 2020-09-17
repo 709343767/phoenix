@@ -66,7 +66,7 @@
                         <dd><a th:attr="lay-href=@{/set/user/info}">基本资料</a></dd>
                         <dd><a th:attr="lay-href=@{/set/user/password}">修改密码</a></dd>
                         <hr>
-                        <dd style="text-align: center;"><a href="javascript:;" onclick="logout();">退出</a></dd>
+                        <dd style="text-align: center;"><a href="javascript:;" id="logout">退出</a></dd>
                         <!-- 一个隐藏的表单，用来提交退出登录请求 -->
                         <form th:action="@{/logout}" method="post" style="display: none;">
                             <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
@@ -214,28 +214,25 @@
         <div class="layadmin-body-shade" layadmin-event="shade"></div>
     </div>
 </div>
-<script src="./js/jquery-1.11.2.min.js" th:src="@{/js/jquery-1.11.2.min.js}"></script>
 <script src="./layui/layui.js" th:src="@{/layui/layui.js}" charset="utf-8"></script>
 <script>
     layui.config({
         base: ctxPath //静态资源所在路径
     }).extend({
         index: 'lib/index' //主入口模块
-    }).use(['index', 'layer']);
-
-    /**
-     * 退出登录
-     */
-    function logout() {
-        layer.confirm('确定要退出登录吗？', {
-            btn: ['确定', '取消']
-        }, function () {
-            // 触发表单提交
-            $('#logout-submit').click();
-        }, function (index) {
-            layer.close(index);
+    }).use(['jquery', 'index', 'layer'], function () {
+        var $ = layui.$, layer = layui.layer;
+        $('#logout').click(function () {
+            layer.confirm('确定要退出登录吗？', {
+                btn: ['确定', '取消']
+            }, function () {
+                // 触发表单提交
+                $('#logout-submit').click();
+            }, function (index) {
+                layer.close(index);
+            });
         });
-    }
+    });
 </script>
 </body>
 </html>
