@@ -2,4 +2,36 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.imby.server.business.web.dao.IMonitorAlarmRecordDao">
 
+    <!-- 获取最近7天的告警统计信息 -->
+    <select id="getLast7DaysAlarmRecordStatistics" databaseId="mysql"
+            resultType="com.imby.server.business.web.vo.LastFewDaysAlarmRecordStatisticsVo">
+        SELECT B.DATE,
+               B.TOTAL,
+               B.SUCCESS,
+               B.TOTAL - B.SUCCESS AS FAIL
+        FROM (
+                 SELECT D.DATE,
+                        COUNT(A.SMS_STATUS) + COUNT(A.MAIL_STATUS)        AS TOTAL,
+                        IFNULL(SUM(A.SMS_STATUS) + SUM(A.MAIL_STATUS), 0) AS SUCCESS
+                 FROM (
+                          SELECT DATE_SUB(CURDATE(), INTERVAL 0 DAY) DATE
+                          UNION
+                          SELECT DATE_SUB(CURDATE(), INTERVAL 1 DAY) DATE
+                          UNION
+                          SELECT DATE_SUB(CURDATE(), INTERVAL 2 DAY) DATE
+                          UNION
+                          SELECT DATE_SUB(CURDATE(), INTERVAL 3 DAY) DATE
+                          UNION
+                          SELECT DATE_SUB(CURDATE(), INTERVAL 4 DAY) DATE
+                          UNION
+                          SELECT DATE_SUB(CURDATE(), INTERVAL 5 DAY) DATE
+                          UNION
+                          SELECT DATE_SUB(CURDATE(), INTERVAL 6 DAY) DATE
+                      ) D
+                          LEFT JOIN MONITOR_ALARM_RECORD A ON (
+                         DATE_FORMAT(D.DATE, '%Y-%m-%d') = DATE_FORMAT(A.UPDATE_TIME, '%Y-%m-%d'))
+                 GROUP BY D.DATE
+             ) B
+    </select>
+
 </mapper>

@@ -90,6 +90,8 @@ mybatis-plus:
     map-underscore-to-camel-case: true
     #打印sql
     #log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    #数据库厂商标识
+    database-id: mysql
   #如果插件版本是3.0-gamma这个选项必须配置,否则会nullPoint
   global-config:
     db-config:

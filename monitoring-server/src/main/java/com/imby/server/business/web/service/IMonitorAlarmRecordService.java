@@ -58,4 +58,16 @@ public interface IMonitorAlarmRecordService extends IService<MonitorAlarmRecord>
      * @custom.date 2020/8/7 17:00
      */
     LayUiAdminResultVo deleteMonitorAlarmRecord(List<MonitorAlarmRecordVo> monitorAlarmRecordVos);
+
+    /**
+     * <p>
+     * 获取最近7天的告警统计信息
+     * </p>
+     *
+     * @return layUiAdmin响应对象
+     * @author 皮锋
+     * @custom.date 2020/9/18 10:25
+     */
+    LayUiAdminResultVo getLast7DaysAlarmRecordStatistics();
+
 }

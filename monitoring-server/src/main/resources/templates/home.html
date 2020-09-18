@@ -17,6 +17,7 @@
     <![endif]-->
     <script type="text/javascript" charset="utf-8" th:inline="javascript">
         var ctxPath = /*[[@{/}]]*/'';
+        var tokenValue = /*[[${_csrf.token}]]*/'';
     </script>
 </head>
 <body>
@@ -191,7 +192,8 @@
                             <div class="layui-carousel layadmin-carousel layadmin-dataview" data-anim="fade"
                                  lay-filter="LAY-index-pagetwo">
                                 <div carousel-item id="LAY-index-pagetwo">
-                                    <div><i class="layui-icon layui-icon-loading1 layadmin-loading"></i></div>
+                                    <div id="myChart"><i class="layui-icon layui-icon-loading1 layadmin-loading"></i>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -226,6 +228,7 @@
 </div>
 </div>
 <script src="./js/echarts.min.js" th:src="@{/js/echarts.min.js}"></script>
+<script src="./js/echarts.theme.infographic.js" th:src="@{/js/echarts.theme.infographic.js}"></script>
 <script src="./layui/layui.js" th:src="@{/layui/layui.js}"></script>
 <script>
     layui.config({
