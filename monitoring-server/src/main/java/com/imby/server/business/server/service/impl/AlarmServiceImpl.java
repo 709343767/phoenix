@@ -149,7 +149,7 @@ public class AlarmServiceImpl implements IAlarmService {
                 }
             } catch (Exception e) {
                 String expMsg = "根据告警代码从数据库中查询告警定义失败！";
-                this.wrapDontSendAlarm(result, expMsg);
+                this.wrapFailResult(result, expMsg);
                 return;
             }
         }
@@ -224,7 +224,7 @@ public class AlarmServiceImpl implements IAlarmService {
         // 告警开关没有打开，不做处理，直接返回
         if (!isEnable) {
             String expMsg = "告警开关没有打开，不发送告警信息！";
-            this.wrapDontSendAlarm(result, expMsg);
+            this.wrapFailResult(result, expMsg);
             return false;
         }
         // 是否是测试告警信息
@@ -232,7 +232,7 @@ public class AlarmServiceImpl implements IAlarmService {
         // 是测试告警信息，不做处理，直接返回
         if (isTest) {
             String expMsg = "当前为测试信息，不发送告警信息！";
-            this.wrapDontSendAlarm(result, expMsg);
+            this.wrapFailResult(result, expMsg);
             return false;
         }
         // 告警级别
@@ -242,7 +242,7 @@ public class AlarmServiceImpl implements IAlarmService {
         // 告警级别小于配置的告警级别，不做处理，直接返回
         if (!AlarmUtils.isAlarm(configAlarmLevel, level)) {
             String expMsg = "小于配置的告警级别，不发送告警信息！";
-            this.wrapDontSendAlarm(result, expMsg);
+            this.wrapFailResult(result, expMsg);
             return false;
         }
         // 告警内容标题
@@ -250,7 +250,7 @@ public class AlarmServiceImpl implements IAlarmService {
         // 没有告警标题，不做处理，直接返回
         if (StringUtils.isBlank(alarmTitle)) {
             String expMsg = "告警标题为空，不发送告警信息！";
-            this.wrapDontSendAlarm(result, expMsg);
+            this.wrapFailResult(result, expMsg);
             return false;
         }
         // 告警内容
@@ -258,7 +258,7 @@ public class AlarmServiceImpl implements IAlarmService {
         // 没有告警内容，不做处理，直接返回
         if (StringUtils.isBlank(msg)) {
             String expMsg = "告警内容为空，不发送告警信息！";
-            this.wrapDontSendAlarm(result, expMsg);
+            this.wrapFailResult(result, expMsg);
             return false;
         }
         // 告警方式
@@ -266,7 +266,7 @@ public class AlarmServiceImpl implements IAlarmService {
         // 没有配置告警方式，不做处理，直接返回
         if (ArrayUtil.isEmpty(alarmWays)) {
             String expMsg = "没有配置告警方式，不发送告警信息！";
-            this.wrapDontSendAlarm(result, expMsg);
+            this.wrapFailResult(result, expMsg);
             return false;
         }
         return true;
@@ -274,7 +274,7 @@ public class AlarmServiceImpl implements IAlarmService {
 
     /**
      * <p>
-     * 封装不发送告警信息时的返回结果。
+     * 封装失败时的返回结果。
      * </p>
      *
      * @param result 返回结果
@@ -282,7 +282,7 @@ public class AlarmServiceImpl implements IAlarmService {
      * @author 皮锋
      * @custom.date 2020/9/13 21:35
      */
-    private void wrapDontSendAlarm(Result result, String msg) {
+    private void wrapFailResult(Result result, String msg) {
         log.warn(msg);
         result.setSuccess(false);
         result.setMsg(msg);
@@ -290,14 +290,14 @@ public class AlarmServiceImpl implements IAlarmService {
 
     /**
      * <p>
-     * 封装发送告警信息时的返回结果。
+     * 封装成功时的返回结果。
      * </p>
      *
      * @param result 返回结果
      * @author 皮锋
      * @custom.date 2020/9/13 21:35
      */
-    private void wrapSendAlarm(Result result) {
+    private void wrapSuccessResult(Result result) {
         result.setSuccess(true);
         result.setMsg(ResultMsgConstants.SUCCESS);
     }
@@ -436,12 +436,12 @@ public class AlarmServiceImpl implements IAlarmService {
         boolean b = this.smsService.sendSmsByTransfarApi(transfarSms);
         // 成功
         if (b) {
-            this.wrapSendAlarm(result);
+            this.wrapSuccessResult(result);
         }
         // 失败
         else {
             String expMsg = "调用创发公司的短信接口发送短信失败！";
-            this.wrapDontSendAlarm(result, expMsg);
+            this.wrapFailResult(result, expMsg);
         }
     }
 
@@ -467,12 +467,12 @@ public class AlarmServiceImpl implements IAlarmService {
         boolean b = this.mailService.sendAlarmTemplateMail(mail);
         // 成功
         if (b) {
-            this.wrapSendAlarm(result);
+            this.wrapSuccessResult(result);
         }
         // 失败
         else {
             String expMsg = "发送电子邮件失败！";
-            this.wrapDontSendAlarm(result, expMsg);
+            this.wrapFailResult(result, expMsg);
         }
     }
 

@@ -11,7 +11,6 @@ import com.imby.common.dto.JvmPackage;
 import com.imby.server.business.server.dao.*;
 import com.imby.server.business.server.entity.*;
 import com.imby.server.business.server.service.IJvmService;
-import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -111,7 +110,7 @@ public class JvmServiceImpl implements IJvmService {
             LambdaQueryWrapper<MonitorJvmGarbageCollector> lambdaQueryWrapper = new LambdaQueryWrapper<>();
             lambdaQueryWrapper.eq(MonitorJvmGarbageCollector::getInstanceId, instanceId);
             lambdaQueryWrapper.eq(MonitorJvmGarbageCollector::getGarbageCollectorName, garbageCollectorInfoDomain.getName());
-            List<MonitorJvmGarbageCollector> monitorJvmGarbageCollectorsDb = this.monitorJvmGarbageCollectorDao.selectList(lambdaQueryWrapper);
+            MonitorJvmGarbageCollector monitorJvmGarbageCollectorDb = this.monitorJvmGarbageCollectorDao.selectOne(lambdaQueryWrapper);
             // 新增或更新
             MonitorJvmGarbageCollector monitorJvmGarbageCollector = new MonitorJvmGarbageCollector();
             monitorJvmGarbageCollector.setInstanceId(instanceId);
@@ -120,7 +119,7 @@ public class JvmServiceImpl implements IJvmService {
             monitorJvmGarbageCollector.setCollectionCount(garbageCollectorInfoDomain.getCollectionCount());
             monitorJvmGarbageCollector.setCollectionTime(garbageCollectorInfoDomain.getCollectionTime());
             // 新增java虚拟机GC信息
-            if (CollectionUtils.isEmpty(monitorJvmGarbageCollectorsDb)) {
+            if (monitorJvmGarbageCollectorDb == null) {
                 monitorJvmGarbageCollector.setInsertTime(jvmPackage.getDateTime());
                 this.monitorJvmGarbageCollectorDao.insert(monitorJvmGarbageCollector);
             }
@@ -149,15 +148,17 @@ public class JvmServiceImpl implements IJvmService {
         String instanceId = jvmPackage.getInstanceId();
         // 线程信息
         ThreadDomain threadDomain = jvmPackage.getJvm().getThreadDomain();
-        LambdaQueryWrapper<MonitorJvmThread> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-        lambdaQueryWrapper.eq(MonitorJvmThread::getInstanceId, instanceId);
-        MonitorJvmThread monitorJvmThreadDb = this.monitorJvmThreadDao.selectOne(lambdaQueryWrapper);
+        // 封装信息
         MonitorJvmThread monitorJvmThread = new MonitorJvmThread();
         monitorJvmThread.setInstanceId(instanceId);
         monitorJvmThread.setThreadCount(threadDomain.getThreadCount());
         monitorJvmThread.setPeakThreadCount(threadDomain.getPeakThreadCount());
         monitorJvmThread.setTotalStartedThreadCount(threadDomain.getTotalStartedThreadCount());
         monitorJvmThread.setDaemonThreadCount(threadDomain.getDaemonThreadCount());
+        // 查询数据库中有没有当前java虚拟机线程信息
+        LambdaQueryWrapper<MonitorJvmThread> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(MonitorJvmThread::getInstanceId, instanceId);
+        MonitorJvmThread monitorJvmThreadDb = this.monitorJvmThreadDao.selectOne(lambdaQueryWrapper);
         // 新增java虚拟机线程信息
         if (monitorJvmThreadDb == null) {
             monitorJvmThread.setInsertTime(jvmPackage.getDateTime());
