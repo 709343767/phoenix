@@ -4,33 +4,33 @@
 
     <!-- 获取最近7天的告警统计信息 -->
     <select id="getLast7DaysAlarmRecordStatistics" resultType="java.util.Map" databaseId="mysql">
-        SELECT B.DATE              as date,
-               B.TOTAL             as total,
-               B.SUCCESS           as success,
-               B.TOTAL - B.SUCCESS AS fail
+        SELECT b.date              as date,
+               b.total             as total,
+               b.success           as success,
+               b.total - b.success as fail
         FROM (
-                 SELECT D.DATE,
-                        COUNT(A.SMS_STATUS) + COUNT(A.MAIL_STATUS)        AS TOTAL,
-                        IFNULL(SUM(A.SMS_STATUS) + SUM(A.MAIL_STATUS), 0) AS SUCCESS
+                 SELECT d.date,
+                        COUNT(a.SMS_STATUS) + COUNT(a.MAIL_STATUS)        as total,
+                        IFNULL(SUM(a.SMS_STATUS) + SUM(a.MAIL_STATUS), 0) as success
                  FROM (
-                          SELECT DATE_SUB(CURDATE(), INTERVAL 0 DAY) DATE
+                          SELECT DATE_SUB(CURDATE(), INTERVAL 0 DAY) date
                           UNION
-                          SELECT DATE_SUB(CURDATE(), INTERVAL 1 DAY) DATE
+                          SELECT DATE_SUB(CURDATE(), INTERVAL 1 DAY) date
                           UNION
-                          SELECT DATE_SUB(CURDATE(), INTERVAL 2 DAY) DATE
+                          SELECT DATE_SUB(CURDATE(), INTERVAL 2 DAY) date
                           UNION
-                          SELECT DATE_SUB(CURDATE(), INTERVAL 3 DAY) DATE
+                          SELECT DATE_SUB(CURDATE(), INTERVAL 3 DAY) date
                           UNION
-                          SELECT DATE_SUB(CURDATE(), INTERVAL 4 DAY) DATE
+                          SELECT DATE_SUB(CURDATE(), INTERVAL 4 DAY) date
                           UNION
-                          SELECT DATE_SUB(CURDATE(), INTERVAL 5 DAY) DATE
+                          SELECT DATE_SUB(CURDATE(), INTERVAL 5 DAY) date
                           UNION
-                          SELECT DATE_SUB(CURDATE(), INTERVAL 6 DAY) DATE
-                      ) D
-                          LEFT JOIN MONITOR_ALARM_RECORD A ON (
-                         DATE_FORMAT(D.DATE, '%Y-%m-%d') = DATE_FORMAT(A.UPDATE_TIME, '%Y-%m-%d'))
+                          SELECT DATE_SUB(CURDATE(), INTERVAL 6 DAY) date
+                      ) d
+                          LEFT JOIN MONITOR_ALARM_RECORD a ON (
+                         DATE_FORMAT(d.DATE, '%Y-%m-%d') = DATE_FORMAT(a.UPDATE_TIME, '%Y-%m-%d'))
                  GROUP BY D.DATE
-             ) B
+             ) b
     </select>
 
     <!-- 告警成功率统计 -->
