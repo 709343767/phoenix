@@ -3,6 +3,7 @@ package com.imby.server.business.web.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -24,6 +25,7 @@ import java.util.Date;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
+@TableName("MONITOR_JVM_RUNTIME")
 @ApiModel(value = "MonitorJvmRuntime对象", description = "java虚拟机运行时信息表")
 public class MonitorJvmRuntime implements Serializable {
 

@@ -3,6 +3,7 @@ package com.imby.server.business.web.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
@@ -25,6 +26,7 @@ import java.util.Date;
 @Builder
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
+@TableName("MONITOR_SERVER_OS")
 @ApiModel(value = "MonitorServerOs对象", description = "服务器表")
 public class MonitorServerOs implements Serializable {
 

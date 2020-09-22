@@ -11,6 +11,7 @@
         from (
                  select count(1)                  as netSum,
                         ifnull(sum(mn.STATUS), 0) as netConnectSum
-                 from monitor_net mn) tmp
+                 from MONITOR_NET mn) tmp
     </select>
+
 </mapper>

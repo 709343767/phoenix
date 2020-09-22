@@ -3,6 +3,7 @@ package com.imby.server.business.web.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -23,6 +24,7 @@ import java.util.Date;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
+@TableName("MONITOR_SERVER_NETCARD")
 @ApiModel(value = "MonitorServerNetcard对象", description = "服务器网卡表")
 public class MonitorServerNetcard implements Serializable {
 

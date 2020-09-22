@@ -10,7 +10,6 @@ import com.imby.server.business.web.dao.IMonitorAlarmRecordDao;
 import com.imby.server.business.web.entity.MonitorAlarmRecord;
 import com.imby.server.business.web.service.IMonitorAlarmRecordService;
 import com.imby.server.business.web.vo.HomeAlarmRecordVo;
-import com.imby.server.business.web.vo.LastFewDaysAlarmRecordStatisticsVo;
 import com.imby.server.business.web.vo.LayUiAdminResultVo;
 import com.imby.server.business.web.vo.MonitorAlarmRecordVo;
 import com.imby.server.constant.WebResponseConstants;
@@ -142,8 +141,8 @@ public class MonitorAlarmRecordServiceImpl extends ServiceImpl<IMonitorAlarmReco
      */
     @Override
     public LayUiAdminResultVo getLast7DaysAlarmRecordStatistics() {
-        List<LastFewDaysAlarmRecordStatisticsVo> lastFewDaysAlarmRecordStatisticsVos = this.monitorAlarmRecordDao.getLast7DaysAlarmRecordStatistics();
-        return LayUiAdminResultVo.ok(lastFewDaysAlarmRecordStatisticsVos);
+        List<Map<String, Object>> maps = this.monitorAlarmRecordDao.getLast7DaysAlarmRecordStatistics();
+        return LayUiAdminResultVo.ok(maps);
     }
 
 }

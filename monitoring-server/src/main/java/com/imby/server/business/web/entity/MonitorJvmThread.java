@@ -3,6 +3,7 @@ package com.imby.server.business.web.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -23,6 +24,7 @@ import java.util.Date;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
+@TableName("MONITOR_JVM_THREAD")
 @ApiModel(value = "MonitorJvmThread对象", description = "java虚拟机线程信息表")
 public class MonitorJvmThread implements Serializable {
 

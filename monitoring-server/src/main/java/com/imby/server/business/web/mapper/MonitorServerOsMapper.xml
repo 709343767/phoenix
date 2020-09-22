@@ -14,7 +14,7 @@
                                0) as windowsSum,
                         ifnull(sum(if(locate('Linux', mso.OS_NAME) or locate('linux', mso.OS_NAME), 1, 0)),
                                0) as linuxSum
-                 from monitor_server_os mso) tmp
+                 from MONITOR_SERVER_OS mso) tmp
     </select>
 
 </mapper>

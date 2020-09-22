@@ -3,6 +3,7 @@ package com.imby.server.business.web.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -23,6 +24,7 @@ import java.util.Date;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
+@TableName("MONITOR_SERVER_DISK")
 @ApiModel(value = "MonitorServerDisk对象", description = "服务器磁盘表")
 public class MonitorServerDisk implements Serializable {
 

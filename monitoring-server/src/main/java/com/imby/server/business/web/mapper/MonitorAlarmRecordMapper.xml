@@ -3,12 +3,11 @@
 <mapper namespace="com.imby.server.business.web.dao.IMonitorAlarmRecordDao">
 
     <!-- 获取最近7天的告警统计信息 -->
-    <select id="getLast7DaysAlarmRecordStatistics" databaseId="mysql"
-            resultType="com.imby.server.business.web.vo.LastFewDaysAlarmRecordStatisticsVo">
-        SELECT B.DATE,
-               B.TOTAL,
-               B.SUCCESS,
-               B.TOTAL - B.SUCCESS AS FAIL
+    <select id="getLast7DaysAlarmRecordStatistics" resultType="java.util.Map" databaseId="mysql">
+        SELECT B.DATE              as date,
+               B.TOTAL             as total,
+               B.SUCCESS           as success,
+               B.TOTAL - B.SUCCESS AS fail
         FROM (
                  SELECT D.DATE,
                         COUNT(A.SMS_STATUS) + COUNT(A.MAIL_STATUS)        AS TOTAL,
@@ -43,7 +42,7 @@
         from (
                  select count(mar.SMS_STATUS) + count(mar.MAIL_STATUS)        as alarmRecordSum,
                         ifnull(sum(mar.SMS_STATUS) + sum(mar.MAIL_STATUS), 0) as alarmRecordSuccessSum
-                 from monitor_alarm_record mar) tmp
+                 from MONITOR_ALARM_RECORD mar) tmp
     </select>
 
 </mapper>

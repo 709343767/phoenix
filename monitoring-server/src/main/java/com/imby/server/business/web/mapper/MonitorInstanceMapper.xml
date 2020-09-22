@@ -11,6 +11,7 @@
         from (
                  select count(1)                     as instanceSum,
                         ifnull(sum(mi.IS_ONLINE), 0) as instanceOnLineSum
-                 from monitor_instance mi) tmp
+                 from MONITOR_INSTANCE mi) tmp
     </select>
+
 </mapper>
