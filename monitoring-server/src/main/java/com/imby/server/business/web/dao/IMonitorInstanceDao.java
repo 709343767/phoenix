@@ -3,6 +3,8 @@ package com.imby.server.business.web.dao;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.imby.server.business.web.entity.MonitorInstance;
 
+import java.util.Map;
+
 /**
  * <p>
  * 应用实例数据访问对象
@@ -13,4 +15,14 @@ import com.imby.server.business.web.entity.MonitorInstance;
  */
 public interface IMonitorInstanceDao extends BaseMapper<MonitorInstance> {
 
+    /**
+     * <p>
+     * 应用实例在线率统计
+     * </p>
+     *
+     * @return 应用实例线率统计信息
+     * @author 皮锋
+     * @custom.date 2020/9/22 12:31
+     */
+    Map<String, Object> getInstanceOnlineRateStatistics();
 }

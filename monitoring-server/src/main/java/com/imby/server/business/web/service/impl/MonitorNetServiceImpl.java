@@ -1,17 +1,15 @@
 package com.imby.server.business.web.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import cn.hutool.core.util.NumberUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.imby.common.constant.ZeroOrOneConstants;
 import com.imby.server.business.web.dao.IMonitorNetDao;
 import com.imby.server.business.web.entity.MonitorNet;
 import com.imby.server.business.web.service.IMonitorNetService;
 import com.imby.server.business.web.vo.HomeNetVo;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -41,15 +39,14 @@ public class MonitorNetServiceImpl extends ServiceImpl<IMonitorNetDao, MonitorNe
      */
     @Override
     public HomeNetVo getHomeNetInfo() {
-        List<MonitorNet> monitorNets = this.monitorNetDao.selectList(new QueryWrapper<>());
-        // home页的网络信息表现层对象
-        HomeNetVo homeNetVo = new HomeNetVo();
-        homeNetVo.setNetSum(monitorNets.size());
-        homeNetVo.setNetConnectSum((int) monitorNets.stream().filter(e -> StringUtils.equals(e.getStatus(), ZeroOrOneConstants.ONE)).count());
-        homeNetVo.setNetDisconnectSum((int) monitorNets.stream().filter(e -> StringUtils.equals(e.getStatus(), ZeroOrOneConstants.ZERO)).count());
-        homeNetVo.setNetConnectRate(String.format("%.2f",
-                (double) homeNetVo.getNetConnectSum() / (double) homeNetVo.getNetSum() * 100D));
-        return homeNetVo;
+        // 网络正常率统计
+        Map<String, Object> map = this.monitorNetDao.getNetNormalRateStatistics();
+        return HomeNetVo.builder()
+                .netSum(NumberUtil.parseInt(map.get("netSum").toString()))
+                .netConnectSum(NumberUtil.parseInt(map.get("netConnectSum").toString()))
+                .netDisconnectSum(NumberUtil.parseInt(map.get("netDisconnectSum").toString()))
+                .netConnectRate(map.get("netConnectRate").toString())
+                .build();
     }
 
 }

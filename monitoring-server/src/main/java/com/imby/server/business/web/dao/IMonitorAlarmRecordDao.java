@@ -5,6 +5,7 @@ import com.imby.server.business.web.entity.MonitorAlarmRecord;
 import com.imby.server.business.web.vo.LastFewDaysAlarmRecordStatisticsVo;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -27,4 +28,14 @@ public interface IMonitorAlarmRecordDao extends BaseMapper<MonitorAlarmRecord> {
      */
     List<LastFewDaysAlarmRecordStatisticsVo> getLast7DaysAlarmRecordStatistics();
 
+    /**
+     * <p>
+     * 告警成功率统计
+     * </p>
+     *
+     * @return 告警成功率统计信息
+     * @author 皮锋
+     * @custom.date 2020/9/22 17:08
+     */
+    Map<String, Object> getAlarmRecordSuccessRateStatistics();
 }

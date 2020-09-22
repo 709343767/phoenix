@@ -34,4 +34,16 @@
              ) B
     </select>
 
+    <!-- 告警成功率统计 -->
+    <select id="getAlarmRecordSuccessRateStatistics" resultType="java.util.Map" databaseId="mysql">
+        select tmp.alarmRecordSum                                                            as alarmRecordSum,
+               tmp.alarmRecordSuccessSum                                                     as alarmRecordSuccessSum,
+               tmp.alarmRecordSum - tmp.alarmRecordSuccessSum                                as alarmRecordFailSum,
+               ifnull(round(tmp.alarmRecordSuccessSum / tmp.alarmRecordSum, 2) * 100, '100') as alarmSucRate
+        from (
+                 select count(mar.SMS_STATUS) + count(mar.MAIL_STATUS)        as alarmRecordSum,
+                        ifnull(sum(mar.SMS_STATUS) + sum(mar.MAIL_STATUS), 0) as alarmRecordSuccessSum
+                 from monitor_alarm_record mar) tmp
+    </select>
+
 </mapper>

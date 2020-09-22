@@ -1,11 +1,11 @@
 package com.imby.server.business.web.service.impl;
 
+import cn.hutool.core.util.NumberUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.common.collect.Lists;
-import com.imby.common.constant.ZeroOrOneConstants;
 import com.imby.server.business.web.dao.IMonitorAlarmRecordDao;
 import com.imby.server.business.web.entity.MonitorAlarmRecord;
 import com.imby.server.business.web.service.IMonitorAlarmRecordService;
@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -48,32 +49,13 @@ public class MonitorAlarmRecordServiceImpl extends ServiceImpl<IMonitorAlarmReco
      */
     @Override
     public HomeAlarmRecordVo getHomeAlarmRecordInfo() {
-        List<MonitorAlarmRecord> monitorAlarmRecords = this.monitorAlarmRecordDao.selectList(new LambdaQueryWrapper<>());
-        HomeAlarmRecordVo homeAlarmRecordVo = new HomeAlarmRecordVo();
-        // 告警总次数
-        homeAlarmRecordVo.setAlarmRecordSum(monitorAlarmRecords.size());
-        // 告警成功
-        homeAlarmRecordVo.setAlarmRecordSuccessSum((int) monitorAlarmRecords.stream().filter(e -> (
-                // 没发短信 && 没发邮件
-                (StringUtils.isBlank(e.getSmsStatus()) && StringUtils.isBlank(e.getMailStatus())) ||
-                        // 没发邮件 && 短信发送成功
-                        (StringUtils.isBlank(e.getMailStatus()) && StringUtils.equals(e.getSmsStatus(), ZeroOrOneConstants.ONE)) ||
-                        // 没发短信 && 邮件发送成功
-                        (StringUtils.isBlank(e.getSmsStatus()) && StringUtils.equals(e.getMailStatus(), ZeroOrOneConstants.ONE)) ||
-                        // 短信和邮件都发送成功
-                        (StringUtils.equals(e.getSmsStatus(), ZeroOrOneConstants.ONE) && StringUtils.equals(e.getMailStatus(), ZeroOrOneConstants.ONE))))
-                .count());
-        // 告警失败
-        homeAlarmRecordVo.setAlarmRecordFailSum((int) monitorAlarmRecords.stream().filter(e -> (
-                // 短信发送失败
-                StringUtils.equals(e.getSmsStatus(), ZeroOrOneConstants.ZERO) ||
-                        // 邮件发送失败
-                        StringUtils.equals(e.getMailStatus(), ZeroOrOneConstants.ZERO)))
-                .count());
-        // 告警成功率
-        homeAlarmRecordVo.setAlarmSucRate(String.format("%.2f",
-                (double) homeAlarmRecordVo.getAlarmRecordSuccessSum() / (double) homeAlarmRecordVo.getAlarmRecordSum() * 100D));
-        return homeAlarmRecordVo;
+        Map<String, Object> map = this.monitorAlarmRecordDao.getAlarmRecordSuccessRateStatistics();
+        return HomeAlarmRecordVo.builder()
+                .alarmRecordSum(NumberUtil.parseInt(map.get("alarmRecordSum").toString()))
+                .alarmRecordSuccessSum(NumberUtil.parseInt(map.get("alarmRecordSuccessSum").toString()))
+                .alarmRecordFailSum(NumberUtil.parseInt(map.get("alarmRecordFailSum").toString()))
+                .alarmSucRate(map.get("alarmSucRate").toString())
+                .build();
     }
 
     /**

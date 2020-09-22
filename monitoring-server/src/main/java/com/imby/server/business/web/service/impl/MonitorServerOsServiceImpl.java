@@ -1,12 +1,12 @@
 package com.imby.server.business.web.service.impl;
 
+import cn.hutool.core.util.NumberUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.common.collect.Lists;
-import com.imby.common.constant.OsTypeConstants;
 import com.imby.server.business.web.dao.*;
 import com.imby.server.business.web.entity.*;
 import com.imby.server.business.web.service.IMonitorServerOsService;
@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -73,14 +74,14 @@ public class MonitorServerOsServiceImpl extends ServiceImpl<IMonitorServerOsDao,
      */
     @Override
     public HomeServerVo getHomeServerOsInfo() {
-        List<MonitorServerOs> monitorServerOss = this.monitorServerOsDao.selectList(new LambdaQueryWrapper<>());
-        // home页的服务器表现层对象
-        HomeServerVo homeServerOsVo = new HomeServerVo();
-        homeServerOsVo.setServerSum(monitorServerOss.size());
-        homeServerOsVo.setLinuxSum((int) monitorServerOss.stream().filter(e -> StringUtils.containsIgnoreCase(e.getOsName(), OsTypeConstants.LINUX)).count());
-        homeServerOsVo.setWindowsSum((int) monitorServerOss.stream().filter(e -> StringUtils.containsIgnoreCase(e.getOsName(), OsTypeConstants.WINDOWS)).count());
-        homeServerOsVo.setOtherSum(homeServerOsVo.getServerSum() - homeServerOsVo.getLinuxSum() - homeServerOsVo.getWindowsSum());
-        return homeServerOsVo;
+        // 服务器类型统计
+        Map<String, Object> map = this.monitorServerOsDao.getServerOsTypeStatistics();
+        return HomeServerVo.builder()
+                .serverSum(NumberUtil.parseInt(map.get("serverSum").toString()))
+                .windowsSum(NumberUtil.parseInt(map.get("windowsSum").toString()))
+                .linuxSum(NumberUtil.parseInt(map.get("linuxSum").toString()))
+                .otherSum(NumberUtil.parseInt(map.get("otherSum").toString()))
+                .build();
     }
 
     /**
@@ -151,18 +152,23 @@ public class MonitorServerOsServiceImpl extends ServiceImpl<IMonitorServerOsDao,
         for (MonitorServerOsVo monitorServerOsVo : monitorServerOsVos) {
             ips.add(monitorServerOsVo.getIp());
         }
+        // 服务器表
         LambdaUpdateWrapper<MonitorServerOs> serverOsLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
         serverOsLambdaUpdateWrapper.in(MonitorServerOs::getIp, ips);
         this.monitorServerOsDao.delete(serverOsLambdaUpdateWrapper);
+        // 服务器CPU表
         LambdaUpdateWrapper<MonitorServerCpu> serverCpuLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
         serverCpuLambdaUpdateWrapper.in(MonitorServerCpu::getIp, ips);
         this.monitorServerCpuDao.delete(serverCpuLambdaUpdateWrapper);
+        // 服务器磁盘表
         LambdaUpdateWrapper<MonitorServerDisk> serverDiskLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
         serverDiskLambdaUpdateWrapper.in(MonitorServerDisk::getIp, ips);
         this.monitorServerDiskDao.delete(serverDiskLambdaUpdateWrapper);
+        // 服务器内存表
         LambdaUpdateWrapper<MonitorServerMemory> serverMemoryLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
         serverMemoryLambdaUpdateWrapper.in(MonitorServerMemory::getIp, ips);
         this.monitorServerMemoryDao.delete(serverMemoryLambdaUpdateWrapper);
+        // 服务器网卡表
         LambdaUpdateWrapper<MonitorServerNetcard> serverNetcardLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
         serverNetcardLambdaUpdateWrapper.in(MonitorServerNetcard::getIp, ips);
         this.monitorServerNetcardDao.delete(serverNetcardLambdaUpdateWrapper);

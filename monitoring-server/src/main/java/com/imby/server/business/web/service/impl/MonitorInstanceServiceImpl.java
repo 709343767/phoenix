@@ -1,17 +1,15 @@
 package com.imby.server.business.web.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import cn.hutool.core.util.NumberUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.imby.common.constant.ZeroOrOneConstants;
 import com.imby.server.business.web.dao.IMonitorInstanceDao;
 import com.imby.server.business.web.entity.MonitorInstance;
 import com.imby.server.business.web.service.IMonitorInstanceService;
 import com.imby.server.business.web.vo.HomeInstanceVo;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -41,15 +39,14 @@ public class MonitorInstanceServiceImpl extends ServiceImpl<IMonitorInstanceDao,
      */
     @Override
     public HomeInstanceVo getHomeInstanceInfo() {
-        // 应用实例列表
-        List<MonitorInstance> instances = this.monitorInstanceDao.selectList(new LambdaQueryWrapper<>());
-        // home页的应用实例表现层对象
-        HomeInstanceVo homeInstanceVo = new HomeInstanceVo();
-        homeInstanceVo.setInstanceSum(instances.size());
-        homeInstanceVo.setInstanceOnLineSum((int) instances.stream().filter(e -> StringUtils.equals(e.getIsOnline(), ZeroOrOneConstants.ONE)).count());
-        homeInstanceVo.setInstanceOffLineSum((int) instances.stream().filter(e -> StringUtils.equals(e.getIsOnline(), ZeroOrOneConstants.ZERO)).count());
-        homeInstanceVo.setInstanceOnLineRate(String.format("%.2f",
-                (double) homeInstanceVo.getInstanceOnLineSum() / (double) homeInstanceVo.getInstanceSum() * 100D));
-        return homeInstanceVo;
+        // 应用实例在线率统计
+        Map<String, Object> map = this.monitorInstanceDao.getInstanceOnlineRateStatistics();
+        return HomeInstanceVo.builder()
+                .instanceSum(NumberUtil.parseInt(map.get("instanceSum").toString()))
+                .instanceOnLineSum(NumberUtil.parseInt(map.get("instanceOnLineSum").toString()))
+                .instanceOffLineSum(NumberUtil.parseInt(map.get("instanceOffLineSum").toString()))
+                .instanceOnLineRate(map.get("instanceOnLineRate").toString())
+                .build();
     }
+
 }
