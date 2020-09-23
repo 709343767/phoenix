@@ -65,7 +65,8 @@
                             name: '告警数',
                             axisLabel: {
                                 formatter: '{value} 次'
-                            }
+                            },
+                            minInterval: 1
                         },
                         // 数据
                         series: [{
