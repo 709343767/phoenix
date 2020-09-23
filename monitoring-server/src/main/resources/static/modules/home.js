@@ -3,26 +3,30 @@
     var a = layui.admin;
     layui.use(['admin', 'carousel'], function () {
         var e = layui.$, a = (layui.admin, layui.carousel), l = layui.element, t = layui.device();
+        //轮播切换
         e('.layadmin-carousel').each(function () {
             var l = e(this);
-            a.render({
+            var option = {
                 elem: this,
                 width: '100%',
-                arrow: 'none',
-                interval: l.data('interval'),
-                autoplay: l.data('autoplay') === !0,
+                arrow: 'hover',
+                interval: 3000,
+                autoplay: true,
                 trigger: t.ios || t.android ? 'click' : 'hover',
                 anim: l.data('anim')
-            });
+            };
+            a.render(option);
         });
-        // 重新渲染进度条
+        // 渲染进度条
         l.render('progress');
-    }), layui.use(['admin', 'carousel'], function () {
-        var admin = layui.admin;
+    }), layui.use(['admin', 'carousel', 'jquery', 'element'], function () {
+        var admin = layui.admin, $ = layui.$, element = layui.element;
         // 基于准备好的dom，初始化echarts实例
-        var myChart = (layui.carousel, echarts.init(document.getElementById('myChart'), 'infographic'));
+        var myChart = (layui.carousel, echarts.init(document.getElementById('last-7-days-alarm-record-statistics'), 'infographic'));
+        // 浏览器窗口大小发生改变时
+        window.onresize = myChart.resize;
 
-        // 发送ajax请求，获取echarts数据
+        // 发送ajax请求，获取最近7天告警统计数据
         function getLast7DaysAlarmRecordStatistics() {
             admin.req({
                 type: 'post',
@@ -135,16 +139,6 @@
             });
         }
 
-        // 发送ajax请求，获取echarts数据
-        getLast7DaysAlarmRecordStatistics();
-        // 每五分钟刷新一次
-        window.setInterval(function () {
-            getLast7DaysAlarmRecordStatistics();
-        }, 1000 * 60 * 5);
-        window.onresize = myChart.resize;
-    }), layui.use(['admin', 'jquery', 'element'], function () {
-        var admin = layui.admin, $ = layui.$, element = layui.element;
-
         // 发送ajax请求，获取告警类型统计信息
         function getAlarmRecordTypeStatistics() {
             admin.req({
@@ -181,10 +175,15 @@
             });
         }
 
+        // 发送ajax请求，获取最近7天告警统计数据
+        getLast7DaysAlarmRecordStatistics();
         // 发送ajax请求，获取告警类型统计信息
         getAlarmRecordTypeStatistics();
         // 每五分钟刷新一次
         window.setInterval(function () {
+            // 发送ajax请求，获取最近7天告警统计数据
+            getLast7DaysAlarmRecordStatistics();
+            // 发送ajax请求，获取告警类型统计信息
             getAlarmRecordTypeStatistics();
         }, 1000 * 60 * 5);
     });

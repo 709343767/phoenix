@@ -23,7 +23,6 @@
 <body>
 <div class="layui-fluid">
     <div class="layui-row layui-col-space15">
-
         <div class="layui-col-sm6 layui-col-md2">
             <div class="layui-card">
                 <div class="layui-card-header">
@@ -181,37 +180,41 @@
                 </div>
             </div>
         </div>
-        <div class="layui-col-sm12">
+        <div class="layui-col-sm8">
             <div class="layui-card">
                 <div class="layui-card-header">
-                    告警量
+                    告警
                 </div>
                 <div class="layui-card-body">
-                    <div class="layui-row">
-                        <div class="layui-col-sm8">
-                            <div class="layui-carousel layadmin-carousel layadmin-dataview" data-anim="fade"
-                                 lay-filter="LAY-index-pagetwo">
-                                <div carousel-item id="LAY-index-pagetwo">
-                                    <div id="myChart"><i class="layui-icon layui-icon-loading1 layadmin-loading"></i>
-                                    </div>
-                                </div>
-                            </div>
+                    <div class="layui-carousel layadmin-carousel layadmin-dataview" data-anim="fade"
+                         lay-filter="LAY-index-dataview">
+                        <div carousel-item>
+                            <div class="layui-row" id="last-7-days-alarm-record-statistics"></div>
+                            <div class="layui-row" id="alarm-record-type-statistics"></div>
+                            <div class="layui-row"></div>
                         </div>
-                        <div class="layui-col-sm4" id="alarm-record-type-statistics">
-                            <!--<div class="layuiadmin-card-list">
-                                <p class="layuiadmin-normal-font">月访问数</p>
-                                <span>同上期增长</span>
-                                <div class="layui-progress layui-progress-big" lay-showPercent="yes">
-                                    <div class="layui-progress-bar layui-bg-orange" lay-percent="30%"></div>
-                                </div>
-                            </div>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-sm4">
+            <div class="layui-card">
+                <div class="layui-card-header">
+                    服务器
+                </div>
+                <div class="layui-card-body">
+                    <div class="layui-carousel layadmin-carousel layadmin-dataview" data-anim="fade"
+                         lay-filter="LAY-index-dataview">
+                        <div carousel-item>
+                            <div class="layui-row"></div>
+                            <div class="layui-row"></div>
+                            <div class="layui-row"></div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 </div>
 <script src="./js/echarts.min.js" th:src="@{/js/echarts.min.js}"></script>
 <script src="./js/echarts.theme.infographic.js" th:src="@{/js/echarts.theme.infographic.js}"></script>
