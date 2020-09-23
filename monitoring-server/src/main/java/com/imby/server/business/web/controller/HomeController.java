@@ -90,4 +90,20 @@ public class HomeController {
         return this.monitorAlarmRecordService.getLast7DaysAlarmRecordStatistics();
     }
 
+    /**
+     * <p>
+     * 获取告警类型统计信息
+     * </p>
+     *
+     * @return layUiAdmin响应对象
+     * @author 皮锋
+     * @custom.date 2020/9/23 9:51
+     */
+    @ApiOperation(value = "获取告警类型统计信息")
+    @ResponseBody
+    @PostMapping("/home/get-alarm-record-type-statistics")
+    public LayUiAdminResultVo getAlarmRecordTypeStatistics() {
+        return this.monitorAlarmRecordService.getAlarmRecordTypeStatistics();
+    }
+
 }

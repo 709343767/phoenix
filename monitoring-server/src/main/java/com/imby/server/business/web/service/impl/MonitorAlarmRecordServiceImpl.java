@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -142,6 +143,29 @@ public class MonitorAlarmRecordServiceImpl extends ServiceImpl<IMonitorAlarmReco
     @Override
     public LayUiAdminResultVo getLast7DaysAlarmRecordStatistics() {
         List<Map<String, Object>> maps = this.monitorAlarmRecordDao.getLast7DaysAlarmRecordStatistics();
+        return LayUiAdminResultVo.ok(maps);
+    }
+
+    /**
+     * <p>
+     * 获取告警类型统计信息
+     * </p>
+     *
+     * @return layUiAdmin响应对象
+     * @author 皮锋
+     * @custom.date 2020/9/23 9:52
+     */
+    @Override
+    public LayUiAdminResultVo getAlarmRecordTypeStatistics() {
+        List<Map<String, Object>> maps = this.monitorAlarmRecordDao.getAlarmRecordTypeStatistics();
+        // 总数
+        int total = (int) maps.stream().collect(Collectors.summarizingInt(e -> NumberUtil.parseInt(e.get("totals").toString()))).getSum();
+        for (Map<String, Object> map : maps) {
+            int totals = NumberUtil.parseInt(map.get("totals").toString());
+            // 占比，四舍五入保留两位小数
+            String rate = NumberUtil.formatPercent((double) totals / (double) total, 2);
+            map.put("rate", rate);
+        }
         return LayUiAdminResultVo.ok(maps);
     }
 

@@ -70,4 +70,14 @@ public interface IMonitorAlarmRecordService extends IService<MonitorAlarmRecord>
      */
     LayUiAdminResultVo getLast7DaysAlarmRecordStatistics();
 
+    /**
+     * <p>
+     * 获取告警类型统计信息
+     * </p>
+     *
+     * @return layUiAdmin响应对象
+     * @author 皮锋
+     * @custom.date 2020/9/23 9:52
+     */
+    LayUiAdminResultVo getAlarmRecordTypeStatistics();
 }

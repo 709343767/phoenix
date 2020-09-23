@@ -17,7 +17,7 @@
         });
         // 重新渲染进度条
         l.render('progress');
-    }), layui.use('carousel', function () {
+    }), layui.use(['admin', 'carousel'], function () {
         var admin = layui.admin;
         // 基于准备好的dom，初始化echarts实例
         var myChart = (layui.carousel, echarts.init(document.getElementById('myChart'), 'infographic'));
@@ -141,6 +141,51 @@
             getLast7DaysAlarmRecordStatistics();
         }, 1000 * 60 * 5);
         window.onresize = myChart.resize;
+    }), layui.use(['admin', 'jquery', 'element'], function () {
+        var admin = layui.admin, $ = layui.$, element = layui.element;
+
+        // 发送ajax请求，获取告警类型统计信息
+        function getAlarmRecordTypeStatistics() {
+            admin.req({
+                type: 'post',
+                url: layui.setter.base + 'home/get-alarm-record-type-statistics',
+                dataType: 'json',
+                contentType: 'application/json;charset=utf-8',
+                headers: {
+                    "X-CSRF-TOKEN": tokenValue
+                },
+                success: function (result) {
+                    var data = result.data;
+                    var html = ``;
+                    for (var i = 0; i < data.length; i++) {
+                        var obj = data[i];
+                        // 占比
+                        var rate = obj.rate;
+                        // 类型
+                        var types = obj.types;
+                        html += `<div class="layuiadmin-card-list">
+                                <span>${types}</span>
+                                <div class="layui-progress layui-progress-big" lay-showPercent="yes">
+                                    <div class="layui-progress-bar layui-bg-orange" lay-percent="${rate}"></div>
+                                </div>
+                            </div>`;
+                    }
+                    $('#alarm-record-type-statistics').empty().append(html);
+                    // 重新渲染进度条
+                    element.render('progress');
+                },
+                error: function () {
+                    layer.msg('系统错误！', {icon: 5, shift: 6});
+                }
+            });
+        }
+
+        // 发送ajax请求，获取告警类型统计信息
+        getAlarmRecordTypeStatistics();
+        // 每五分钟刷新一次
+        window.setInterval(function () {
+            getAlarmRecordTypeStatistics();
+        }, 1000 * 60 * 5);
     });
     e('home', {});
 });

@@ -29,7 +29,7 @@
                       ) d
                           LEFT JOIN MONITOR_ALARM_RECORD a ON (
                          DATE_FORMAT(d.DATE, '%Y-%m-%d') = DATE_FORMAT(a.UPDATE_TIME, '%Y-%m-%d'))
-                 GROUP BY D.DATE
+                 GROUP BY d.DATE
              ) b
     </select>
 
@@ -43,6 +43,21 @@
                  select count(mar.SMS_STATUS) + count(mar.MAIL_STATUS)        as alarmRecordSum,
                         ifnull(sum(mar.SMS_STATUS) + sum(mar.MAIL_STATUS), 0) as alarmRecordSuccessSum
                  from MONITOR_ALARM_RECORD mar) tmp
+    </select>
+
+    <!-- 获取告警类型统计信息 -->
+    <select id="getAlarmRecordTypeStatistics" resultType="java.util.Map" databaseId="mysql">
+        select count(mar.SMS_STATUS) + count(mar.MAIL_STATUS) as totals,
+               case
+                   mar.`TYPE`
+                   when 'INSTANCE' then '应用'
+                   when 'SERVER' then '服务器'
+                   when 'NET' then '网络'
+                   when 'DATABASE' then '数据库'
+                   when 'CUSTOM' then '自定义'
+                   end                                        as types
+        from MONITOR_ALARM_RECORD mar
+        group by mar.`TYPE`
     </select>
 
 </mapper>

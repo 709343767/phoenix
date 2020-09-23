@@ -11,6 +11,11 @@ package com.imby.common.constant;
 public enum AlarmTypeEnums {
 
     /**
+     * 数据库
+     */
+    DATABASE,
+
+    /**
      * 服务器
      */
     SERVER,
@@ -29,4 +34,5 @@ public enum AlarmTypeEnums {
      * 自定义，如果是自己的业务告警，设置此类型
      */
     CUSTOM
+
 }
