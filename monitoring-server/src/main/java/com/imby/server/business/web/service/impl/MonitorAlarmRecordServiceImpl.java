@@ -162,9 +162,13 @@ public class MonitorAlarmRecordServiceImpl extends ServiceImpl<IMonitorAlarmReco
         int total = (int) maps.stream().collect(Collectors.summarizingInt(e -> NumberUtil.parseInt(e.get("totals").toString()))).getSum();
         for (Map<String, Object> map : maps) {
             int totals = NumberUtil.parseInt(map.get("totals").toString());
-            // 占比，四舍五入保留两位小数
-            String rate = NumberUtil.formatPercent((double) totals / (double) total, 2);
-            map.put("rate", rate);
+            if (total != 0) {
+                // 占比，四舍五入保留两位小数
+                String rate = NumberUtil.formatPercent((double) totals / (double) total, 2);
+                map.put("rate", rate);
+            } else {
+                map.put("rate", "100%");
+            }
         }
         return LayUiAdminResultVo.ok(maps);
     }
