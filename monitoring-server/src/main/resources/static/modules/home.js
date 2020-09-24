@@ -158,12 +158,12 @@
                         var rate = obj.rate;
                         // 类型
                         var types = obj.types;
-                        html += `<div class="layuiadmin-card-list">
-                                <span>${types}</span>
-                                <div class="layui-progress layui-progress-big" lay-showPercent="yes">
-                                    <div class="layui-progress-bar layui-bg-orange" lay-percent="${rate}"></div>
-                                </div>
-                            </div>`;
+                        html += `<div class="layuiadmin-card-list-my">
+                                    <span>${types}</span>
+                                    <div class="layui-progress layui-progress-big" lay-showPercent="yes">
+                                        <div class="layui-progress-bar layui-bg-orange" lay-percent="${rate}"></div>
+                                    </div>
+                                 </div>`;
                     }
                     $('#alarm-record-type-statistics').empty().append(html);
                     // 重新渲染进度条
