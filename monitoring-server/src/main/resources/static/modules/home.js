@@ -175,17 +175,53 @@
             });
         }
 
+        // 发送ajax请求，获取最新的5条告警记录
+        function getLast5AlarmRecord() {
+            admin.req({
+                type: 'post',
+                url: layui.setter.base + 'home/get-last-5-alarm-record',
+                dataType: 'json',
+                contentType: 'application/json;charset=utf-8',
+                headers: {
+                    "X-CSRF-TOKEN": tokenValue
+                },
+                success: function (result) {
+                    var data = result.data;
+                    var html = ``;
+                    for (var i = 0; i < data.length; i++) {
+                        var obj = data[i];
+                        var title = obj.title;
+                        var content = obj.content;
+                        var updateTime = obj.updateTime;
+                        html += `<li>
+                                    <h3>${title}</h3>
+                                    <p>${content}</p>
+                                    <span>${updateTime}</span>
+                                 </li>`;
+                    }
+                    $('#get-last-5-alarm-record').empty().append(html);
+                },
+                error: function () {
+                    layer.msg('系统错误！', {icon: 5, shift: 6});
+                }
+            });
+        }
+
         // 发送ajax请求，获取最近7天告警统计数据
         getLast7DaysAlarmRecordStatistics();
         // 发送ajax请求，获取告警类型统计信息
         getAlarmRecordTypeStatistics();
-        // 每五分钟刷新一次
+        // 发送ajax请求，获取最新的5条告警记录
+        getLast5AlarmRecord();
+        // 每30秒刷新一次
         window.setInterval(function () {
             // 发送ajax请求，获取最近7天告警统计数据
             getLast7DaysAlarmRecordStatistics();
             // 发送ajax请求，获取告警类型统计信息
             getAlarmRecordTypeStatistics();
-        }, 1000 * 60 * 5);
+            // 发送ajax请求，获取最新的5条告警记录
+            getLast5AlarmRecord();
+        }, 1000 * 30);
     });
     e('home', {});
 });

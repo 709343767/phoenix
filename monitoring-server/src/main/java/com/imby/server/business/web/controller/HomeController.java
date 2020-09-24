@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.List;
+
 /**
  * <p>
  * home页
@@ -104,6 +106,23 @@ public class HomeController {
     @PostMapping("/home/get-alarm-record-type-statistics")
     public LayUiAdminResultVo getAlarmRecordTypeStatistics() {
         return this.monitorAlarmRecordService.getAlarmRecordTypeStatistics();
+    }
+
+    /**
+     * <p>
+     * 获取最新的5条告警记录
+     * </p>
+     *
+     * @return 最新的5条告警记录
+     * @author 皮锋
+     * @custom.date 2020/9/24 16:35
+     */
+    @ApiOperation(value = "获取最新的5条告警记录")
+    @ResponseBody
+    @PostMapping("/home/get-last-5-alarm-record")
+    public LayUiAdminResultVo getLast5AlarmRecord() {
+        List<MonitorAlarmRecordVo> monitorAlarmRecordVos = this.monitorAlarmRecordService.getMonitorAlarmRecordList(1L, 5L, null, null, null, null).getRecords();
+        return LayUiAdminResultVo.ok(monitorAlarmRecordVos);
     }
 
 }
