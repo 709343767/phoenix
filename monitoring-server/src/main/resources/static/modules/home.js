@@ -10,7 +10,7 @@
                 elem: this,
                 width: '100%',
                 arrow: 'hover',
-                interval: 3000,
+                interval: 5000,
                 autoplay: true,
                 trigger: t.ios || t.android ? 'click' : 'hover',
                 anim: l.data('anim')
