@@ -151,19 +151,19 @@
                 },
                 success: function (result) {
                     var data = result.data;
-                    var html = ``;
+                    var html = '';
                     for (var i = 0; i < data.length; i++) {
                         var obj = data[i];
                         // 占比
                         var rate = obj.rate;
                         // 类型
                         var types = obj.types;
-                        html += `<div class="layuiadmin-card-list-my">
-                                    <span>${types}</span>
-                                    <div class="layui-progress layui-progress-big" lay-showPercent="yes">
-                                        <div class="layui-progress-bar layui-bg-orange" lay-percent="${rate}"></div>
-                                    </div>
-                                 </div>`;
+                        html += '<div class="layuiadmin-card-list-my">'
+                            + '<span>' + types + '</span>'
+                            + '<div class="layui-progress layui-progress-big" lay-showPercent="yes">'
+                            + '<div class="layui-progress-bar layui-bg-orange" lay-percent="' + rate + '"></div>'
+                            + '</div>'
+                            + '</div>';
                     }
                     $('#alarm-record-type-statistics').empty().append(html);
                     // 重新渲染进度条
@@ -187,17 +187,17 @@
                 },
                 success: function (result) {
                     var data = result.data;
-                    var html = ``;
+                    var html = '';
                     for (var i = 0; i < data.length; i++) {
                         var obj = data[i];
                         var title = obj.title;
                         var content = obj.content;
                         var updateTime = obj.updateTime;
-                        html += `<li>
-                                    <h3>${title}</h3>
-                                    <p>${content}</p>
-                                    <span>${updateTime}</span>
-                                 </li>`;
+                        html += '<li>'
+                            + '<h3>' + title + '</h3>'
+                            + '<p>' + content + '</p>'
+                            + '<span>' + updateTime + '</span>'
+                            + '</li>';
                     }
                     $('#get-last-5-alarm-record').empty().append(html);
                 },

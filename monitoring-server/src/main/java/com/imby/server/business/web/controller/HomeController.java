@@ -113,7 +113,7 @@ public class HomeController {
      * 获取最新的5条告警记录
      * </p>
      *
-     * @return 最新的5条告警记录
+     * @return layUiAdmin响应对象
      * @author 皮锋
      * @custom.date 2020/9/24 16:35
      */
