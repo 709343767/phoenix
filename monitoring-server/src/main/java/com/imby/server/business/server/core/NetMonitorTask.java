@@ -116,7 +116,7 @@ public class NetMonitorTask implements CommandLineRunner, DisposableBean {
                                     // continue;
                                     // }
                                     // 判断网络是不是断了
-                                    boolean ping = NetUtils.ping(net.getIp());
+                                    boolean ping = NetUtils.ping(net.getIpSource());
                                     // 网络不通
                                     if (!ping) {
                                         // 断网
@@ -218,7 +218,7 @@ public class NetMonitorTask implements CommandLineRunner, DisposableBean {
     @Async
     public void sendAlarmInfo(String title, AlarmLevelEnums alarmLevelEnums, Net net) throws NetException, SigarException {
         String dateTime = DateTimeUtils.dateToString(net.getDateTime());
-        String msg = "IP地址：" + NetUtils.getLocalIp() + "到" + net.getIp()
+        String msg = "IP地址：" + net.getIpSource() + "到" + net.getIpTarget()
                 + "，<br>服务器：" + OsUtils.getComputerName() + "到" + net.getComputerName()
                 + "，<br>时间：" + dateTime;
         Alarm alarm = Alarm.builder()
@@ -237,15 +237,14 @@ public class NetMonitorTask implements CommandLineRunner, DisposableBean {
      * </p>
      *
      * @param net 网络信息
-     * @throws NetException 网络信息异常
      * @author 皮锋
      * @custom.date 2020/8/31 17:23
      */
-    private void updateDb(Net net) throws NetException {
+    private void updateDb(Net net) {
         // IP地址（来源）
-        String ipSource = net.getIp();
+        String ipSource = net.getIpSource();
         // IP地址（目的地）
-        String ipTarget = NetUtils.getLocalIp();
+        String ipTarget = net.getIpTarget();
         MonitorNet monitorNet = new MonitorNet();
         monitorNet.setIpSource(ipSource);
         monitorNet.setIpTarget(ipTarget);

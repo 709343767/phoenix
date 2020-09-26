@@ -2,6 +2,8 @@ package com.imby.server.business.server.aop;
 
 import com.alibaba.fastjson.JSON;
 import com.imby.common.dto.HeartbeatPackage;
+import com.imby.common.exception.NetException;
+import com.imby.common.util.NetUtils;
 import com.imby.server.business.server.core.NetPool;
 import com.imby.server.business.server.domain.Net;
 import com.imby.server.property.MonitoringServerWebProperties;
@@ -57,11 +59,12 @@ public class NetAspect {
      * </p>
      *
      * @param joinPoint 提供对连接点上可用状态和有关状态的静态信息的反射访问。
+     * @throws NetException 获取网络信息异常
      * @author 皮锋
      * @custom.date 2020/3/25 10:18
      */
     @Before("tangentPoint()")
-    public void addIp2NetPool(JoinPoint joinPoint) {
+    public void addIp2NetPool(JoinPoint joinPoint) throws NetException {
         String args = String.valueOf(joinPoint.getArgs()[0]);
         HeartbeatPackage heartbeatPackage = JSON.parseObject(args, HeartbeatPackage.class);
         // 请求包中的IP
@@ -72,7 +75,8 @@ public class NetAspect {
         net.setOnConnect(true);
         net.setConnectAlarm(this.netPool.get(packageIp) != null && this.netPool.get(packageIp).isConnectAlarm());
         net.setThresholdSecond((int) (heartbeatPackage.getRate() * config.getThreshold()));
-        net.setIp(packageIp);
+        net.setIpSource(packageIp);
+        net.setIpTarget(NetUtils.getLocalIp());
         net.setComputerName(heartbeatPackage.getComputerName());
         // 更新网络信息池
         this.netPool.updateNetPool(packageIp, net);

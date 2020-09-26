@@ -44,9 +44,14 @@ public class Net extends AbstractSuperBean {
     private boolean isConnectAlarm;
 
     /**
-     * IP地址
+     * IP地址（来源）
      */
-    private String ip;
+    private String ipSource;
+
+    /**
+     * IP地址（目的地）
+     */
+    private String ipTarget;
 
     /**
      * 计算机名
