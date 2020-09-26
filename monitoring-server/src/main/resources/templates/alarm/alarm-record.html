@@ -266,6 +266,12 @@
                 where: field
             });
         });
+        // 点击表头排序
+        table.on('sort(alarm-record-list-table)', function (obj) {
+            table.reload('alarm-record-list-table', {
+                initSort: obj
+            });
+        });
         //头工具栏事件
         table.on('toolbar(alarm-record-list-table)', function (obj) {
             switch (obj.event) {

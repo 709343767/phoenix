@@ -108,6 +108,12 @@
                 }
             });
         });
+        // 点击表头排序
+        table.on('sort(LAY-user-role)', function (obj) {
+            table.reload('LAY-user-role', {
+                initSort: obj
+            });
+        });
     });
 </script>
 </body>

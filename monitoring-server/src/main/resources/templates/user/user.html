@@ -160,6 +160,12 @@
                 where: field
             });
         });
+        // 点击表头排序
+        table.on('sort(user-list-table)', function (obj) {
+            table.reload('user-list-table', {
+                initSort: obj
+            });
+        });
         //头工具栏事件
         table.on('toolbar(user-list-table)', function (obj) {
             switch (obj.event) {
