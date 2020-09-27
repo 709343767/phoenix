@@ -96,4 +96,25 @@ public class MonitorInstanceController {
         return this.monitorInstanceService.deleteMonitorInstance(monitorInstanceVos);
     }
 
+
+    /**
+     * <p>
+     * 访问应用程序详情页面
+     * </p>
+     *
+     * @param id         应用实例表的主键ID
+     * @param instanceId 应用实例ID
+     * @return {@link ModelAndView} 应用程序详情页面
+     * @author 皮锋
+     * @custom.date 2020/9/26 10:53
+     */
+    @ApiOperation(value = "访问应用程序详情页面")
+    @GetMapping("/instance-detail")
+    public ModelAndView instanceDetail(String id, String instanceId) {
+        ModelAndView mv = new ModelAndView("instance/instance-detail");
+        mv.addObject("id", id);
+        mv.addObject("instanceId", instanceId);
+        return mv;
+    }
+
 }

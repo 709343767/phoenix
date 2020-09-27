@@ -285,6 +285,15 @@
                     });
                 });
             }
+            if (obj.event === 'info') {
+                layer.open({
+                    type: 2,
+                    title: '应用详情',
+                    content: ctxPath + 'instance/instance-detail?id=' + data.id + '&instanceId=' + data.instanceId,
+                    maxmin: true,
+                    area: ['1360px', '768px'],
+                });
+            }
         });
     });
 </script>
