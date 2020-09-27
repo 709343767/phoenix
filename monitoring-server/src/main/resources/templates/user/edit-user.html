@@ -40,6 +40,13 @@
                    class="layui-input" lay-verType="tips" th:value="${user.username}">
         </div>
     </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">密码</label>
+        <div class="layui-input-inline">
+            <input type="password" name="password" lay-verify="password" placeholder="密码不填则不修改" autocomplete="off"
+                   class="layui-input" lay-verType="tips">
+        </div>
+    </div>
     <div class="layui-form-item" lay-filter="sex">
         <label class="layui-form-label">选择角色</label>
         <div class="layui-input-block">

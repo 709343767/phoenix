@@ -260,6 +260,15 @@ public class MonitorUserServiceImpl extends ServiceImpl<IMonitorUserDao, Monitor
     @Override
     public LayUiAdminResultVo editUser(MonitorUserVo monitorUserVo) {
         MonitorUser monitorUser = monitorUserVo.convertTo();
+        // 密码
+        String password = monitorUser.getPassword();
+        if (StringUtils.isBlank(password)) {
+            // mybatis-plus不会更新值为null字段
+            monitorUser.setPassword(null);
+        } else {
+            BCryptPasswordEncoder bc = new BCryptPasswordEncoder();
+            monitorUser.setPassword(bc.encode(password));
+        }
         monitorUser.setUpdateTime(new Date());
         int result = this.monitorUserDao.updateById(monitorUser);
         if (result == 1) {
