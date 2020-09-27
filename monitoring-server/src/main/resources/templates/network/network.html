@@ -107,10 +107,10 @@
             done: function () {
                 $('[data-field="status"]').children().each(function () {
                     if ($(this).text() === '0') {
-                        $(this).text("网络不通");
+                        $(this).html('<span style="color: #FF4500;">网络不通</span>');
                     }
                     if ($(this).text() === '1') {
-                        $(this).text("网络正常");
+                        $(this).text('网络正常');
                     }
                 });
             },

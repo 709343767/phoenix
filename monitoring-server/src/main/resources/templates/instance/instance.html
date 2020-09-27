@@ -122,29 +122,29 @@
             done: function () {
                 $('[data-field="isOnline"]').children().each(function () {
                     if ($(this).text() === '0') {
-                        $(this).text("离线");
+                        $(this).html('<span style="color: #FF4500;">离线</span>');
                     }
                     if ($(this).text() === '1') {
-                        $(this).text("在线");
+                        $(this).text('在线');
                     }
                 });
                 $('[data-field="isOnconnect"]').children().each(function () {
                     if ($(this).text() === '0') {
-                        $(this).text("断网");
+                        $(this).html('<span style="color: #FF4500;">断网</span>');
                     }
                     if ($(this).text() === '1') {
-                        $(this).text("正常");
+                        $(this).text('正常');
                     }
                 });
                 $('[data-field="endpoint"]').children().each(function () {
                     if ($(this).text() === 'client') {
-                        $(this).text("客户端");
+                        $(this).text('客户端');
                     }
                     if ($(this).text() === 'agent') {
-                        $(this).text("代理端");
+                        $(this).text('代理端');
                     }
                     if ($(this).text() === 'server') {
-                        $(this).text("服务端");
+                        $(this).text('服务端');
                     }
                 });
             },

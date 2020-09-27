@@ -126,52 +126,52 @@
             done: function () {
                 $('[data-field="type"]').children().each(function () {
                     if ($(this).text() === 'SERVER') {
-                        $(this).text("服务器");
+                        $(this).text('服务器');
                     }
                     if ($(this).text() === 'NET') {
-                        $(this).text("网络");
+                        $(this).text('网络');
                     }
                     if ($(this).text() === 'INSTANCE') {
-                        $(this).text("应用");
+                        $(this).text('应用');
                     }
                     if ($(this).text() === 'CUSTOM') {
-                        $(this).text("自定义");
+                        $(this).text('自定义');
                     }
                 });
                 $('[data-field="level"]').children().each(function () {
                     if ($(this).text() === 'INFO') {
-                        $(this).text("消息");
+                        $(this).text('消息');
                     }
                     if ($(this).text() === 'WARN') {
-                        $(this).text("警告");
+                        $(this).text('警告');
                     }
                     if ($(this).text() === 'ERROR') {
-                        $(this).text("错误");
+                        $(this).text('错误');
                     }
                     if ($(this).text() === 'FATAL') {
-                        $(this).text("致命");
+                        $(this).text('致命');
                     }
                 });
                 $('[data-field="smsStatus"]').children().each(function () {
                     if ($(this).text() === '0') {
-                        $(this).text("失败");
+                        $(this).html('<span style="color: #FF4500;">失败</span>');
                     }
                     if ($(this).text() === '1') {
-                        $(this).text("成功");
+                        $(this).text('成功');
                     }
                     if ($(this).text() === '' || $(this).text() === null) {
-                        $(this).text("未发送");
+                        $(this).text('未发送');
                     }
                 });
                 $('[data-field="mailStatus"]').children().each(function () {
                     if ($(this).text() === '0') {
-                        $(this).text("失败");
+                        $(this).html('<span style="color: #FF4500;">失败</span>');
                     }
                     if ($(this).text() === '1') {
-                        $(this).text("成功");
+                        $(this).text('成功');
                     }
                     if ($(this).text() === '' || $(this).text() === null) {
-                        $(this).text("未发送");
+                        $(this).text('未发送');
                     }
                 });
                 $('[data-field="way"]').children().each(function () {
