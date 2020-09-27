@@ -7,6 +7,7 @@ import com.imby.common.domain.server.DiskDomain;
 import com.imby.common.domain.server.MemoryDomain;
 import com.imby.common.dto.ServerPackage;
 import com.imby.common.exception.NetException;
+import com.imby.server.business.server.controller.ServerController;
 import com.imby.server.business.server.core.CpuPool;
 import com.imby.server.business.server.core.DiskPool;
 import com.imby.server.business.server.core.MemoryPool;
@@ -17,8 +18,8 @@ import com.imby.server.core.ThreadPool;
 import com.imby.server.inf.IServerMonitoringListener;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.hyperic.sigar.SigarException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +31,7 @@ import java.util.Map;
 
 /**
  * <p>
- * 处理服务器信息切面。
+ * 处理服务器信息的切面。
  * </p>
  * 1.把所有服务器信息添加或更新到Spring容器中的服务器信息池；<br>
  * 2.在所有服务器信息添加或更新到Spring容器中的服务器信息池之后，调用服务器信息监听器回调接口。<br>
@@ -69,7 +70,7 @@ public class ServerAspect {
 
     /**
      * <p>
-     * 定义切入点，切入点为com.imby.server.business.server.controller.ServerController.acceptServerPackage这一个方法
+     * 定义切入点，切入点为{@link ServerController#acceptServerPackage(String)}这一个方法
      * </p>
      *
      * @author 皮锋
@@ -81,14 +82,14 @@ public class ServerAspect {
 
     /**
      * <p>
-     * 通过后置通知，在服务器信息包处理完成之后通过切面，刷新Spring容器中的服务器信息池，调用服务器信息监听器回调接口
+     * 通过前置通知，刷新Spring容器中的服务器信息池，并调用服务器信息监听器回调接口。
      * </p>
      *
-     * @param joinPoint 提供对连接点上可用状态和有关状态的静态信息的反射访问
+     * @param joinPoint 提供对连接点上可用状态和有关状态的静态信息的反射访问。
      * @author 皮锋
      * @custom.date 2020年4月1日 下午3:34:06
      */
-    @AfterReturning("tangentPoint()")
+    @Before("tangentPoint()")
     public void refreshAndWakeUp(JoinPoint joinPoint) {
         String args = String.valueOf(joinPoint.getArgs()[0]);
         ServerPackage serverPackage = JSON.parseObject(args, ServerPackage.class);
