@@ -1,13 +1,19 @@
 package com.imby.server.inf;
 
+import com.imby.common.constant.AlarmTypeEnums;
 import com.imby.common.exception.NetException;
+import com.imby.server.business.server.aop.ServerAspect;
+import com.imby.server.business.web.service.impl.MonitorServerOsServiceImpl;
+import org.aspectj.lang.JoinPoint;
 import org.hyperic.sigar.SigarException;
+
+import java.util.List;
 
 /**
  * <p>
- * 服务器信息监听器
+ * 服务器信息监听器。
  * </p>
- * 实现监听器接口，当服务器信息发生改变时，自动调用监听器中的方法
+ * 一个被spring容器管理的类只要实现此监听器接口，当服务器信息发生改变时，就会自动调用监听器中相应的方法。
  *
  * @author 皮锋
  * @custom.date 2020/3/30 20:17
@@ -16,8 +22,9 @@ public interface IServerMonitoringListener {
 
     /**
      * <p>
-     * 唤醒执行回调方法
+     * 收到服务器信息包时，唤醒执行监控回调方法。
      * </p>
+     * 此方法在{@link ServerAspect#refreshAndWakeUp(JoinPoint)}中被调用。
      *
      * @param param 回调参数
      * @throws NetException   获取网络信息异常
@@ -25,6 +32,21 @@ public interface IServerMonitoringListener {
      * @author 皮锋
      * @custom.date 2020/3/30 20:18
      */
-    void wakeUp(Object... param) throws NetException, SigarException;
+    default void wakeUpMonitor(Object... param) throws NetException, SigarException {
+    }
+
+    /**
+     * <p>
+     * 删除数据库中的服务器信息时，唤醒执行监控信息池回调方法。
+     * </p>
+     * 此方法在{@link MonitorServerOsServiceImpl#deleteMonitorServer(List)}中被调用。
+     *
+     * @param alarmTypeEnums 告警类型
+     * @param params         回调参数
+     * @author 皮锋
+     * @custom.date 2020/3/30 20:18
+     */
+    default void wakeUpMonitorPool(AlarmTypeEnums alarmTypeEnums, List<String> params) {
+    }
 
 }

@@ -61,7 +61,7 @@ public class CpuMonitor implements IServerMonitoringListener {
      * @custom.date 2020/3/30 21:56
      */
     @Override
-    public void wakeUp(Object... obj) throws NetException, SigarException {
+    public void wakeUpMonitor(Object... obj) throws NetException, SigarException {
         String key = String.valueOf(obj[0]);
         Cpu cpu = this.cpuPool.get(key);
         // 最终确认CPU过载的阈值

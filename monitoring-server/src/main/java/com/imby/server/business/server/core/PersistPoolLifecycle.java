@@ -2,39 +2,43 @@ package com.imby.server.business.server.core;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
+import com.imby.common.constant.AlarmTypeEnums;
 import com.imby.server.business.server.domain.*;
 import com.imby.server.constant.FileNameConstants;
+import com.imby.server.inf.IInstanceMonitoringListener;
+import com.imby.server.inf.INetMonitoringListener;
+import com.imby.server.inf.IServerMonitoringListener;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 /**
  * <p>
- * 持久化所有信息池
+ * 持久化所有信息池。
  * </p>
- * 如果是生产环境：<br>
  * 1.在Spring容器初始化时从文件系统中加载所有信息池内容到Spring容器；<br>
- * 2.定时每十分钟把所有Spring容器中的信息池内容持久化到文件系统;<br>
- * 3.在Spring容器销毁时持久化所有Spring容器中的信息池内容到文件系统。<br>
+ * 2.定时每十分钟把Spring容器中的所有信息池内容持久化到文件系统；<br>
+ * 3.在Spring容器销毁时持久化Spring容器中的所有信息池内容到文件系统；<br>
+ * 4.数据库中删除了“应用实例”、“网络”、“服务器”数据时，唤醒执行监控信息池回调方法。<br>
  *
  * @author 皮锋
  * @custom.date 2020/3/25 16:38
  */
 @Component
 @Slf4j
-@Profile("prod")
-public class PersistPoolLifecycle implements InitializingBean, DisposableBean {
+public class PersistPoolLifecycle implements InitializingBean, DisposableBean, IInstanceMonitoringListener
+        , INetMonitoringListener, IServerMonitoringListener {
 
     /**
      * 应用实例池
@@ -68,7 +72,7 @@ public class PersistPoolLifecycle implements InitializingBean, DisposableBean {
 
     /**
      * <p>
-     * 定时每十分钟把所有Spring容器中的信息池内容持久化到文件系统，<br>
+     * 定时每十分钟把Spring容器中的所有信息池内容持久化到文件系统，<br>
      * {@code @Scheduled(cron = "0 0/10 * * * ?")}
      * </p>
      *
@@ -83,9 +87,9 @@ public class PersistPoolLifecycle implements InitializingBean, DisposableBean {
 
     /**
      * <p>
-     * 在Spring容器初始化时加载资源
+     * 在Spring容器初始化时加载资源。
      * </p>
-     * 把持久化到文件系统的信息池内容加载到Spring容器
+     * 把持久化到文件系统的信息池内容加载到Spring容器。
      *
      * @author 皮锋
      * @custom.date 2020/3/31 16:17
@@ -260,4 +264,41 @@ public class PersistPoolLifecycle implements InitializingBean, DisposableBean {
         log.info("Spring容器中的信息池已经清空！");
     }
 
+    /**
+     * <p>
+     * 数据库中删除了“应用实例”、“网络”、“服务器”数据时，唤醒执行监控信息池回调方法。
+     * </p>
+     *
+     * @param alarmType 告警类型
+     * @param params    回调参数
+     * @author 皮锋
+     * @custom.date 2020/3/30 20:18
+     */
+    @Override
+    public void wakeUpMonitorPool(AlarmTypeEnums alarmType, List<String> params) {
+        if (alarmType == AlarmTypeEnums.INSTANCE) {
+            params.forEach(e ->
+                    // 移除当前应用实例
+                    this.instancePool.remove(e)
+            );
+        }
+        if (alarmType == AlarmTypeEnums.SERVER) {
+            params.forEach(e -> {
+                //移除当前内存信息
+                this.memoryPool.remove(e);
+                // 移除当前CPU信息
+                this.cpuPool.remove(e);
+                // 移除当前磁盘信息
+                this.diskPool.remove(e);
+            });
+        }
+        if (alarmType == AlarmTypeEnums.NET) {
+            params.forEach(e ->
+                    //移除当前网络
+                    this.netPool.remove(e)
+            );
+        }
+        // 把Spring容器中的信息池内容存入文件系统
+        this.storePools();
+    }
 }

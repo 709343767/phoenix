@@ -61,7 +61,7 @@ public class MemoryMonitor implements IServerMonitoringListener {
      * @custom.date 2020/3/30 22:01
      */
     @Override
-    public void wakeUp(Object... obj) throws NetException, SigarException {
+    public void wakeUpMonitor(Object... obj) throws NetException, SigarException {
         String key = String.valueOf(obj[0]);
         Memory memory = this.memoryPool.get(key);
         // 物理内存使用率

@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.common.collect.Lists;
+import com.imby.common.constant.AlarmTypeEnums;
 import com.imby.server.business.web.dao.*;
 import com.imby.server.business.web.entity.*;
 import com.imby.server.business.web.service.IMonitorInstanceService;
@@ -14,9 +15,12 @@ import com.imby.server.business.web.vo.HomeInstanceVo;
 import com.imby.server.business.web.vo.LayUiAdminResultVo;
 import com.imby.server.business.web.vo.MonitorInstanceVo;
 import com.imby.server.constant.WebResponseConstants;
+import com.imby.server.core.ThreadPool;
+import com.imby.server.inf.IInstanceMonitoringListener;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -31,6 +35,12 @@ import java.util.Map;
  */
 @Service
 public class MonitorInstanceServiceImpl extends ServiceImpl<IMonitorInstanceDao, MonitorInstance> implements IMonitorInstanceService {
+
+    /**
+     * 应用实例监听器
+     */
+    @Autowired
+    private List<IInstanceMonitoringListener> instanceMonitoringListenerList;
 
     /**
      * 应用实例数据访问对象
@@ -146,36 +156,42 @@ public class MonitorInstanceServiceImpl extends ServiceImpl<IMonitorInstanceDao,
      * @author 皮锋
      * @custom.date 2020/9/26 12:25
      */
+    @Transactional(rollbackFor = Throwable.class)
     @Override
     public LayUiAdminResultVo deleteMonitorInstance(List<MonitorInstanceVo> monitorInstanceVos) {
-        List<String> ids = Lists.newArrayList();
+        List<String> instances = Lists.newArrayList();
         for (MonitorInstanceVo monitorInstanceVo : monitorInstanceVos) {
-            ids.add(monitorInstanceVo.getInstanceId());
+            instances.add(monitorInstanceVo.getInstanceId());
         }
         // 应用程序
         LambdaUpdateWrapper<MonitorInstance> monitorInstanceLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
-        monitorInstanceLambdaUpdateWrapper.in(MonitorInstance::getInstanceId, ids);
+        monitorInstanceLambdaUpdateWrapper.in(MonitorInstance::getInstanceId, instances);
         this.monitorInstanceDao.delete(monitorInstanceLambdaUpdateWrapper);
         // java虚拟机类加载信息表
         LambdaUpdateWrapper<MonitorJvmClassLoading> monitorJvmClassLoadingLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
-        monitorJvmClassLoadingLambdaUpdateWrapper.in(MonitorJvmClassLoading::getInstanceId, ids);
+        monitorJvmClassLoadingLambdaUpdateWrapper.in(MonitorJvmClassLoading::getInstanceId, instances);
         this.monitorJvmClassLoadingDao.delete(monitorJvmClassLoadingLambdaUpdateWrapper);
         // java虚拟机GC信息表
         LambdaUpdateWrapper<MonitorJvmGarbageCollector> monitorJvmGarbageCollectorLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
-        monitorJvmGarbageCollectorLambdaUpdateWrapper.in(MonitorJvmGarbageCollector::getInstanceId, ids);
+        monitorJvmGarbageCollectorLambdaUpdateWrapper.in(MonitorJvmGarbageCollector::getInstanceId, instances);
         this.monitorJvmGarbageCollectorDao.delete(monitorJvmGarbageCollectorLambdaUpdateWrapper);
         // java虚拟机内存信息表
         LambdaUpdateWrapper<MonitorJvmMemory> monitorJvmMemoryLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
-        monitorJvmMemoryLambdaUpdateWrapper.in(MonitorJvmMemory::getInstanceId, ids);
+        monitorJvmMemoryLambdaUpdateWrapper.in(MonitorJvmMemory::getInstanceId, instances);
         this.monitorJvmMemoryDao.delete(monitorJvmMemoryLambdaUpdateWrapper);
         // java虚拟机运行时信息表
         LambdaUpdateWrapper<MonitorJvmRuntime> monitorJvmRuntimeLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
-        monitorJvmRuntimeLambdaUpdateWrapper.in(MonitorJvmRuntime::getInstanceId, ids);
+        monitorJvmRuntimeLambdaUpdateWrapper.in(MonitorJvmRuntime::getInstanceId, instances);
         this.monitorJvmRuntimeDao.delete(monitorJvmRuntimeLambdaUpdateWrapper);
         // java虚拟机线程信息表
         LambdaUpdateWrapper<MonitorJvmThread> monitorJvmThreadLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
-        monitorJvmThreadLambdaUpdateWrapper.in(MonitorJvmThread::getInstanceId, ids);
+        monitorJvmThreadLambdaUpdateWrapper.in(MonitorJvmThread::getInstanceId, instances);
         this.monitorJvmThreadDao.delete(monitorJvmThreadLambdaUpdateWrapper);
+
+        // 调用监听器回调接口
+        this.instanceMonitoringListenerList.forEach(e ->
+                ThreadPool.CPU_INTENSIVE_THREAD_POOL_EXECUTOR.execute(() ->
+                        e.wakeUpMonitorPool(AlarmTypeEnums.INSTANCE, instances)));
         return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);
     }
 

@@ -55,7 +55,7 @@ public class DiskMonitor implements IServerMonitoringListener {
      * @custom.date 2020/3/30 15:35
      */
     @Override
-    public void wakeUp(Object... obj) throws NetException, SigarException {
+    public void wakeUpMonitor(Object... obj) throws NetException, SigarException {
         String key = String.valueOf(obj[0]);
         Disk disk = this.diskPool.get(key);
         Map<String, Disk.Subregion> subregionMap = disk.getSubregionMap();

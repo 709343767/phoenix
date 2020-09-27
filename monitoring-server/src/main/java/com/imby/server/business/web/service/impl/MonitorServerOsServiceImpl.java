@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.common.collect.Lists;
+import com.imby.common.constant.AlarmTypeEnums;
 import com.imby.server.business.web.dao.*;
 import com.imby.server.business.web.entity.*;
 import com.imby.server.business.web.service.IMonitorServerOsService;
@@ -14,6 +15,8 @@ import com.imby.server.business.web.vo.HomeServerVo;
 import com.imby.server.business.web.vo.LayUiAdminResultVo;
 import com.imby.server.business.web.vo.MonitorServerOsVo;
 import com.imby.server.constant.WebResponseConstants;
+import com.imby.server.core.ThreadPool;
+import com.imby.server.inf.IServerMonitoringListener;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,6 +35,12 @@ import java.util.Map;
  */
 @Service
 public class MonitorServerOsServiceImpl extends ServiceImpl<IMonitorServerOsDao, MonitorServerOs> implements IMonitorServerOsService {
+
+    /**
+     * 服务器信息监听器
+     */
+    @Autowired
+    private List<IServerMonitoringListener> serverMonitoringListeners;
 
     /**
      * 服务器数据访问对象
@@ -172,6 +181,11 @@ public class MonitorServerOsServiceImpl extends ServiceImpl<IMonitorServerOsDao,
         LambdaUpdateWrapper<MonitorServerNetcard> serverNetcardLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
         serverNetcardLambdaUpdateWrapper.in(MonitorServerNetcard::getIp, ips);
         this.monitorServerNetcardDao.delete(serverNetcardLambdaUpdateWrapper);
+
+        // 调用监听器回调接口
+        this.serverMonitoringListeners.forEach(e ->
+                ThreadPool.CPU_INTENSIVE_THREAD_POOL_EXECUTOR.execute(() ->
+                        e.wakeUpMonitorPool(AlarmTypeEnums.SERVER, ips)));
         return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);
     }
 

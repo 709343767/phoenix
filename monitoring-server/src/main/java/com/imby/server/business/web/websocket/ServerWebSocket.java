@@ -109,7 +109,8 @@ public class ServerWebSocket implements IServerMonitoringListener {
      * @custom.date 2020/3/30 20:18
      */
     @Override
-    public void wakeUp(Object... param) {
+    public void wakeUpMonitor(Object... param) {
         this.sendMessage("");
     }
+
 }
