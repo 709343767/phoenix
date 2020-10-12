@@ -1,29 +1,29 @@
-delete from monitor_instance;
-delete from monitor_net;
+DELETE FROM MONITOR_INSTANCE;
+DELETE FROM MONITOR_NET;
 
-delete from monitor_server_cpu;
-delete from monitor_server_disk;
-delete from monitor_server_memory;
-delete from monitor_server_netcard;
-delete from monitor_server_os;
+DELETE FROM MONITOR_SERVER_CPU;
+DELETE FROM MONITOR_SERVER_DISK;
+DELETE FROM MONITOR_SERVER_MEMORY;
+DELETE FROM MONITOR_SERVER_NETCARD;
+DELETE FROM MONITOR_SERVER_OS;
 
-delete from monitor_jvm_class_loading;
-delete from monitor_jvm_garbage_collector;
-delete from monitor_jvm_memory;
-delete from monitor_jvm_runtime;
-delete from monitor_jvm_thread;
+DELETE FROM MONITOR_JVM_CLASS_LOADING;
+DELETE FROM MONITOR_JVM_GARBAGE_COLLECTOR;
+DELETE FROM MONITOR_JVM_MEMORY;
+DELETE FROM MONITOR_JVM_RUNTIME;
+DELETE FROM MONITOR_JVM_THREAD;
 
-alter table monitor_instance auto_increment = 1;
-alter table monitor_net auto_increment = 1;
+ALTER TABLE MONITOR_INSTANCE AUTO_INCREMENT = 1;
+ALTER TABLE MONITOR_NET AUTO_INCREMENT = 1;
 
-alter table monitor_server_cpu auto_increment = 1;
-alter table monitor_server_disk auto_increment = 1;
-alter table monitor_server_memory auto_increment = 1;
-alter table monitor_server_netcard auto_increment = 1;
-alter table monitor_server_os auto_increment = 1;
+ALTER TABLE MONITOR_SERVER_CPU AUTO_INCREMENT = 1;
+ALTER TABLE MONITOR_SERVER_DISK AUTO_INCREMENT = 1;
+ALTER TABLE MONITOR_SERVER_MEMORY AUTO_INCREMENT = 1;
+ALTER TABLE MONITOR_SERVER_NETCARD AUTO_INCREMENT = 1;
+ALTER TABLE MONITOR_SERVER_OS AUTO_INCREMENT = 1;
 
-alter table monitor_jvm_class_loading auto_increment = 1;
-alter table monitor_jvm_garbage_collector auto_increment = 1;
-alter table monitor_jvm_memory auto_increment = 1;
-alter table monitor_jvm_runtime auto_increment = 1;
-alter table monitor_jvm_thread auto_increment = 1;
+ALTER TABLE MONITOR_JVM_CLASS_LOADING AUTO_INCREMENT = 1;
+ALTER TABLE MONITOR_JVM_GARBAGE_COLLECTOR AUTO_INCREMENT = 1;
+ALTER TABLE MONITOR_JVM_MEMORY AUTO_INCREMENT = 1;
+ALTER TABLE MONITOR_JVM_RUNTIME AUTO_INCREMENT = 1;
+ALTER TABLE MONITOR_JVM_THREAD AUTO_INCREMENT = 1;

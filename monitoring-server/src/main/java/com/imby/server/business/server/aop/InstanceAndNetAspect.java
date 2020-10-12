@@ -69,6 +69,7 @@ public class InstanceAndNetAspect {
      * </p>
      *
      * @param joinPoint 提供对连接点上可用状态和有关状态的静态信息的反射访问。
+     * @throws NetException 自定义获取网络信息异常
      * @author 皮锋
      * @custom.date 2020/9/27 12:45
      */

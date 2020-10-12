@@ -14,10 +14,10 @@ spring:
     type: com.alibaba.druid.pool.DruidDataSource
     druid:
       #数据源配置
-      driver-class-name: oracle.jdbc.OracleDriver
-      url: jdbc:oracle:thin:@(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=192.168.12.12)(PORT=1521))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=hngsdb)))
-      username: oms
-      password: hngs$2020
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://119.45.120.24:3306/monitoring?useSSL=false&serverTimezone=GMT%2b8&useUnicode=true&characterEncoding=utf-8
+      username: root
+      password: pzgl@1234
       #初始化来连接大小
       initial-size: 5
       #连接池中最小的空闲连接数
