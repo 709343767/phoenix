@@ -25,7 +25,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -41,7 +40,6 @@ import java.util.List;
  */
 @Service
 @Slf4j
-@Transactional(rollbackFor = Throwable.class)
 public class AlarmServiceImpl implements IAlarmService {
 
     /**
@@ -142,9 +140,9 @@ public class AlarmServiceImpl implements IAlarmService {
                         alarmTitle = dbTitle;
                     }
                     // 数据库中的告警内容
-                    String dbContent = monitorAlarmDefinition.getContent();
-                    if (StringUtils.isNotBlank(dbContent)) {
-                        alarmMsg = dbContent;
+                    String dbMsg = monitorAlarmDefinition.getContent();
+                    if (StringUtils.isNotBlank(dbMsg)) {
+                        alarmMsg = dbMsg;
                     }
                 }
             } catch (Exception e) {
