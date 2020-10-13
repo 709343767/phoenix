@@ -50,6 +50,8 @@ public class HeartbeatThread implements Runnable {
             log.error("获取网络信息异常！", e);
         } catch (SigarException e) {
             log.error("Sigar异常！", e);
+        } catch (Exception e) {
+            log.error("其它异常！", e);
         }
     }
 

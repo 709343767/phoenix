@@ -50,6 +50,8 @@ public class ServerThread implements Runnable {
             log.error("Sigar异常！", e);
         } catch (NetException e) {
             log.error("获取网络信息异常！", e);
+        } catch (Exception e) {
+            log.error("其它异常！", e);
         }
     }
 
