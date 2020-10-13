@@ -1,4 +1,4 @@
-/** layuiAdmin.std-v2020.4.1 LPPL License By https://www.layui.com/admin/ */
+/** layuiAdmin.std-v2020.4.1 LPPL License By 皮锋 */
 ;layui.define(function (e) {
     var a = layui.admin;
     layui.use(['admin', 'carousel'], function () {
