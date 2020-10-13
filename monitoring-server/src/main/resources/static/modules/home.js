@@ -207,6 +207,92 @@
             });
         }
 
+        // 发送ajax请求，获取home页的摘要信息
+        function getSummaryInfo() {
+            admin.req({
+                type: 'post',
+                url: layui.setter.base + 'home/get-summary-info',
+                dataType: 'json',
+                contentType: 'application/json;charset=utf-8',
+                headers: {
+                    "X-CSRF-TOKEN": tokenValue
+                },
+                success: function (result) {
+                    var data = result.data;
+                    var homeInstanceVo = data.homeInstanceVo;
+                    var homeServerVo = data.homeServerVo;
+                    var homeNetVo = data.homeNetVo;
+                    var homeAlarmRecordVo = data.homeAlarmRecordVo;
+                    // 应用程序
+                    var htmlInstance = '<p class="layuiadmin-big-font">' + homeInstanceVo.instanceSum +
+                        '                   <i class="home-i">' + homeInstanceVo.instanceOnLineRate + '<img src="' + ctxPath + 'images/icon16/percentage-16.png"></i>' +
+                        '               </p>' +
+                        '               <p>在线' +
+                        '                   <span class="layuiadmin-span-color">' + homeInstanceVo.instanceOnLineSum +
+                        '                       <i class="layui-inline layui-icon"><img src="' + ctxPath + 'images/icon16/on-line-16.png"></i>' +
+                        '                   </span>' +
+                        '               </p>' +
+                        '               <p>离线' +
+                        '                   <span class="layuiadmin-span-color">' + homeInstanceVo.instanceOffLineSum +
+                        '                       <i class="layui-inline layui-icon"><img src="' + ctxPath + 'images/icon16/off-line-16.png"></i>' +
+                        '                   </span>' +
+                        '               </p>';
+                    $('#instance-card-list').empty().append(htmlInstance);
+                    // 服务器
+                    var htmlServer = '<p class="layuiadmin-big-font layuiadmin-big-font-my">' + homeServerVo.serverSum + '</p>' +
+                        '             <p>Windows' +
+                        '                   <span class="layuiadmin-span-color">' + homeServerVo.windowsSum +
+                        '                       <i class="layui-inline layui-icon"><img src="' + ctxPath + 'images/icon16/windows-16.png"></i>' +
+                        '                   </span>' +
+                        '             </p>' +
+                        '             <p>Linux' +
+                        '                   <span class="layuiadmin-span-color">' + homeServerVo.linuxSum +
+                        '                       <i class="layui-inline layui-icon"><img src="' + ctxPath + 'images/icon16/linux-16.png"></i>' +
+                        '                   </span>' +
+                        '             </p>' +
+                        '             <p>其他' +
+                        '                   <span class="layuiadmin-span-color">' + homeServerVo.otherSum +
+                        '                       <i class="layui-inline layui-icon"><img src="' + ctxPath + 'images/icon16/other-16.png"></i>' +
+                        '                   </span>' +
+                        '             </p>';
+                    $('#server-card-list').empty().append(htmlServer);
+                    // IP
+                    var htmlIp = '<p class="layuiadmin-big-font">' + homeNetVo.netSum +
+                        '               <i class="home-i">' + homeNetVo.netConnectRate + '<img src="' + ctxPath + 'images/icon16/percentage-16.png"></i>' +
+                        '                    </p>' +
+                        '                    <p>正常' +
+                        '                        <span class="layuiadmin-span-color">' + homeNetVo.netConnectSum +
+                        '                               <i class="layui-inline layui-icon"><img src="' + ctxPath + 'images/icon16/net-connect-16.png"></i>' +
+                        '                        </span>' +
+                        '                    </p>' +
+                        '                    <p>断网' +
+                        '                        <span class="layuiadmin-span-color">' + homeNetVo.netDisconnectSum + '' +
+                        '                               <i class="layui-inline layui-icon"><img src="' + ctxPath + 'images/icon16/net-disconnect-16.png"></i>' +
+                        '                        </span>' +
+                        '                    </p>';
+                    $('#ip-card-list').empty().append(htmlIp);
+                    // 告警
+                    var htmlAlarm = '<p class="layuiadmin-big-font">' + homeAlarmRecordVo.alarmRecordSum +
+                        '                   <i class="home-i">' + homeAlarmRecordVo.alarmSucRate + '<img src="' + ctxPath + 'images/icon16/percentage-16.png"></i>' +
+                        '            </p>' +
+                        '            <p>成功' +
+                        '                   <span class="layuiadmin-span-color">' + homeAlarmRecordVo.alarmRecordSuccessSum +
+                        '                           <i class="layui-inline layui-icon"><img src="' + ctxPath + 'images/icon16/success-16.png"></i>' +
+                        '                   </span>' +
+                        '            </p>' +
+                        '            <p>失败' +
+                        '                   <span class="layuiadmin-span-color">' + homeAlarmRecordVo.alarmRecordFailSum +
+                        '                           <i class="layui-inline layui-icon"><img src="' + ctxPath + 'images/icon16/fail-16.png"></i>' +
+                        '                   </span>' +
+                        '            </p>';
+                    $('#alarm-card-list').empty().append(htmlAlarm);
+                },
+                error: function () {
+                    layer.msg('系统错误！', {icon: 5, shift: 6});
+                }
+            });
+        }
+
         // 发送ajax请求，获取最近7天告警统计数据
         getLast7DaysAlarmRecordStatistics();
         // 发送ajax请求，获取告警类型统计信息
@@ -221,6 +307,8 @@
             getAlarmRecordTypeStatistics();
             // 发送ajax请求，获取最新的5条告警记录
             getLast5AlarmRecord();
+            // 发送ajax请求，获取home页的摘要信息（不需要页面加载时发送ajax）
+            getSummaryInfo();
         }, 1000 * 30);
     });
     e('home', {});

@@ -29,7 +29,7 @@
                     应用程序
                     <span class="layui-badge layui-bg-blue layuiadmin-badge">个</span>
                 </div>
-                <div class="layui-card-body layuiadmin-card-list">
+                <div class="layui-card-body layuiadmin-card-list" id="instance-card-list">
                     <p class="layuiadmin-big-font">[[${homeInstanceVo.instanceSum}]]
                         <i class="home-i">[[${homeInstanceVo.instanceOnLineRate}]]
                             <img th:src="@{/images/icon16/percentage-16.png}"></i>
@@ -55,7 +55,7 @@
                     服务器
                     <span class="layui-badge layui-bg-black layuiadmin-badge">台</span>
                 </div>
-                <div class="layui-card-body layuiadmin-card-list">
+                <div class="layui-card-body layuiadmin-card-list" id="server-card-list">
                     <p class="layuiadmin-big-font layuiadmin-big-font-my" th:text="${homeServerVo.serverSum}"></p>
                     <p>
                         Windows
@@ -136,7 +136,7 @@
                     IP
                     <span class="layui-badge layui-bg-orange layuiadmin-badge">个</span>
                 </div>
-                <div class="layui-card-body layuiadmin-card-list">
+                <div class="layui-card-body layuiadmin-card-list" id="ip-card-list">
                     <p class="layuiadmin-big-font">[[${homeNetVo.netSum}]]
                         <i class="home-i">[[${homeNetVo.netConnectRate}]]
                             <img th:src="@{/images/icon16/percentage-16.png}"></i>
@@ -161,7 +161,7 @@
                     告警
                     <span class="layui-badge layui-bg-red layuiadmin-badge">次</span>
                 </div>
-                <div class="layui-card-body layuiadmin-card-list">
+                <div class="layui-card-body layuiadmin-card-list" id="alarm-card-list">
                     <p class="layuiadmin-big-font">[[${homeAlarmRecordVo.alarmRecordSum}]]
                         <i class="home-i">[[${homeAlarmRecordVo.alarmSucRate}]]
                             <img th:src="@{/images/icon16/percentage-16.png}"></i>

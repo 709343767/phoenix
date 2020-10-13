@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -74,6 +76,31 @@ public class HomeController {
         HomeAlarmRecordVo homeAlarmRecordVo = this.monitorAlarmRecordService.getHomeAlarmRecordInfo();
         mv.addObject("homeAlarmRecordVo", homeAlarmRecordVo);
         return mv;
+    }
+
+    /**
+     * <p>
+     * 获取home页的摘要信息
+     * </p>
+     *
+     * @return layUiAdmin响应对象
+     * @author 皮锋
+     * @custom.date 2020/10/13 14:31
+     */
+    @ApiOperation(value = "获取home页的摘要信息")
+    @ResponseBody
+    @PostMapping("/home/get-summary-info")
+    public LayUiAdminResultVo getSummaryInfo() {
+        HomeInstanceVo homeInstanceVo = this.monitorInstanceService.getHomeInstanceInfo();
+        HomeNetVo homeNetVo = this.monitorNetService.getHomeNetInfo();
+        HomeServerVo homeServerVo = this.monitorServerOsService.getHomeServerOsInfo();
+        HomeAlarmRecordVo homeAlarmRecordVo = this.monitorAlarmRecordService.getHomeAlarmRecordInfo();
+        Map<String, Object> map = new HashMap<>(4);
+        map.put("homeInstanceVo", homeInstanceVo);
+        map.put("homeNetVo", homeNetVo);
+        map.put("homeServerVo", homeServerVo);
+        map.put("homeAlarmRecordVo", homeAlarmRecordVo);
+        return LayUiAdminResultVo.ok(map);
     }
 
     /**
