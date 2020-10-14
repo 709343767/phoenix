@@ -27,3 +27,7 @@
 .layuiadmin-card-list-my {
     padding: 10px;
 }
+
+.layadmin-dataview-my {
+    height: 305px !important;
+}

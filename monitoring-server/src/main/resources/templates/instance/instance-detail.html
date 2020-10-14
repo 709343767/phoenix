@@ -26,8 +26,67 @@
 </head>
 <body>
 <div class="layui-fluid">
-    <div class="layui-row layui-col-space15">
+    <div class="layui-card">
+        <div class="layui-tab layui-tab-brief">
+            <ul class="layui-tab-title">
+                <li class="layui-this">概览</li>
+                <li>内存</li>
+                <li>线程</li>
+                <li>类</li>
+                <li>VM概要</li>
+            </ul>
+            <div class="layui-tab-content">
+                <div class="layui-tab-item layui-show">
+                    <div class="layui-card">
+                        <form class="layui-form layui-card-header layuiadmin-card-header-auto">
+                            <div class="layui-form-item">
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">时间范围(T)</label>
+                                    <div class="layui-input-block">
+                                        <select name="time" lay-filter="time">
+                                            <option value="all">全部</option>
+                                            <option value="hour">1小时</option>
+                                            <option value="week">1周</option>
+                                            <option value="month">1月</option>
+                                            <option value="halfYear">6月</option>
+                                            <option value="year">1年</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        <div class="layui-card-body">
+                            <div class="layui-row layui-col-space20">
+                                <div class="layui-col-md6">
+                                    <div class="layadmin-dataview-my" id="get-jvm-memory-heap-info"></div>
+                                </div>
+                                <div class="layui-col-md6">
+                                    <div class="layadmin-dataview-my" id="get-jvm-memory-non-heap-info"></div>
+                                </div>
+                                <div class="layui-col-md6">
+                                    <div class="layadmin-dataview-my">aaa</div>
+                                </div>
+                                <div class="layui-col-md6">
+                                    <div class="layadmin-dataview-my">aaa</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-tab-item">
 
+                </div>
+                <div class="layui-tab-item">
+
+                </div>
+                <div class="layui-tab-item">
+
+                </div>
+                <div class="layui-tab-item">
+
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 <script src="./js/echarts.min.js" th:src="@{/js/echarts.min.js}"></script>
@@ -37,8 +96,9 @@
     layui.config({
         base: ctxPath //静态资源所在路径
     }).extend({
-        index: 'lib/index' //主入口模块
-    }).use(['index']);
+        index: 'lib/index', //主入口模块
+        instanceDetail: 'instance/instanceDetail' // 应用实例详情模块
+    }).use(['index', 'element', 'form', 'instanceDetail']);
 </script>
 </body>
 </html>
