@@ -1,7 +1,8 @@
 package com.imby.server.business.web.service;
 
-import com.imby.server.business.web.entity.MonitorJvmRuntime;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.imby.server.business.web.entity.MonitorJvmRuntime;
+import com.imby.server.business.web.vo.MonitorJvmRuntimeVo;
 
 /**
  * <p>
@@ -13,4 +14,15 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IMonitorJvmRuntimeService extends IService<MonitorJvmRuntime> {
 
+    /**
+     * <p>
+     * 获取java虚拟机运行时信息
+     * </p>
+     *
+     * @param instanceId 应用实例ID
+     * @return java虚拟机运行时信息表现层对象
+     * @author 皮锋
+     * @custom.date 2020/10/15 19:53
+     */
+    MonitorJvmRuntimeVo getJvmRuntimeInfo(String instanceId);
 }

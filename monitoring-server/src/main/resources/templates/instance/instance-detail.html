@@ -40,13 +40,13 @@
                                 <div class="layui-inline">
                                     <label class="layui-form-label">时间范围(T)</label>
                                     <div class="layui-input-block">
-                                        <select name="time" lay-filter="time1">
-                                            <option value="all">全部</option>
+                                        <select name="time1" id="time1" lay-filter="time1">
                                             <option value="hour">1小时</option>
                                             <option value="week">1周</option>
                                             <option value="month">1月</option>
                                             <option value="halfYear">6月</option>
                                             <option value="year">1年</option>
+                                            <option value="all">全部</option>
                                         </select>
                                     </div>
                                 </div>
@@ -78,13 +78,13 @@
                                 <div class="layui-inline">
                                     <label class="layui-form-label">时间范围(T)</label>
                                     <div class="layui-input-block">
-                                        <select name="time" lay-filter="time2">
-                                            <option value="all">全部</option>
+                                        <select name="time2" id="time2" lay-filter="time2">
                                             <option value="hour">1小时</option>
                                             <option value="week">1周</option>
                                             <option value="month">1月</option>
                                             <option value="halfYear">6月</option>
                                             <option value="year">1年</option>
+                                            <option value="all">全部</option>
                                         </select>
                                     </div>
                                 </div>
@@ -105,18 +105,6 @@
                             <h2 class="layui-colla-title">线程</h2>
                             <div class="layui-colla-content layui-show">
                                 <div class="layui-row layui-col-space10" id="thread">
-                                    <div class="layui-col-md3">
-                                        活动线程数：
-                                    </div>
-                                    <div class="layui-col-md3">
-                                        线程峰值：
-                                    </div>
-                                    <div class="layui-col-md3">
-                                        守护程序线程数：
-                                    </div>
-                                    <div class="layui-col-md3">
-                                        启动的线程总数：
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -124,15 +112,6 @@
                             <h2 class="layui-colla-title">GC</h2>
                             <div class="layui-colla-content layui-show">
                                 <div class="layui-row layui-col-space10" id="gc">
-                                    <div class="layui-col-md4">
-                                        名称：
-                                    </div>
-                                    <div class="layui-col-md4">
-                                        GC总次数：
-                                    </div>
-                                    <div class="layui-col-md4">
-                                        GC总时间（毫秒）：
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -140,24 +119,15 @@
                             <h2 class="layui-colla-title">类</h2>
                             <div class="layui-colla-content layui-show">
                                 <div class="layui-row layui-col-space10" id="class-loading">
-                                    <div class="layui-col-md3">
-                                        已加载当前类：
-                                    </div>
-                                    <div class="layui-col-md3">
-                                        已加载类总数：
-                                    </div>
-                                    <div class="layui-col-md3">
-                                        以卸载类总数：
-                                    </div>
-                                    <div class="layui-col-md3">
-                                        是否启用了类加载系统的详细输出：
-                                    </div>
                                 </div>
                             </div>
                         </div>
                         <div class="layui-colla-item">
                             <h2 class="layui-colla-title">VM</h2>
-                            <div class="layui-colla-content layui-show"></div>
+                            <div class="layui-colla-content layui-show">
+                                <div class="layui-row layui-col-space10" id="runtime">
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
