@@ -37,6 +37,125 @@
             getJvmMemoryInfo(chartTime, chartPool, chartPool + '内存使用量');
         });
 
+        // 发送ajax请求，获取线程信息
+        function getJvmThreadInfo() {
+            admin.req({
+                type: 'get',
+                url: layui.setter.base + 'monitor-jvm-thread/get-jvm-thread-info',
+                dataType: 'json',
+                contentType: 'application/json;charset=utf-8',
+                headers: {
+                    "X-CSRF-TOKEN": tokenValue
+                },
+                data: {
+                    instanceId: instanceId, // 应用实例ID
+                },
+                success: function (result) {
+                    var data = result.data;
+                    // 当前活动线程数
+                    var threadCount = data.threadCount;
+                    // 线程峰值
+                    var peakThreadCount = data.peakThreadCount;
+                    // 已创建并已启动的线程总数
+                    var totalStartedThreadCount = data.totalStartedThreadCount;
+                    // 当前活动守护线程数
+                    var daemonThreadCount = data.daemonThreadCount;
+                    var html = '<div class="layui-col-md3">' +
+                        '           活动线程数：' + threadCount +
+                        '       </div>' +
+                        '       <div class="layui-col-md3">' +
+                        '           线程峰值：' + peakThreadCount +
+                        '       </div>' +
+                        '       <div class="layui-col-md3">' +
+                        '           守护程序线程数：' + daemonThreadCount +
+                        '       </div>' +
+                        '       <div class="layui-col-md3">' +
+                        '           启动的线程总数：' + totalStartedThreadCount +
+                        '       </div>';
+                    $('#thread').empty().append(html);
+                }
+            });
+        }
+
+        // 发送ajax请求，获取GC信息
+        function getJvmGcInfo() {
+            admin.req({
+                type: 'get',
+                url: layui.setter.base + 'monitor-jvm-garbage-collector/get-jvm-gc-info',
+                dataType: 'json',
+                contentType: 'application/json;charset=utf-8',
+                headers: {
+                    "X-CSRF-TOKEN": tokenValue
+                },
+                data: {
+                    instanceId: instanceId, // 应用实例ID
+                },
+                success: function (result) {
+                    var data = result.data;
+                    var html = '';
+                    for (var i = 0; i < data.length; i++) {
+                        var obj = data[i];
+                        // 内存管理器名称
+                        var garbageCollectorName = obj.garbageCollectorName;
+                        // GC总次数
+                        var collectionCount = obj.collectionCount;
+                        // GC总时间（毫秒）
+                        var collectionTime = obj.collectionTime;
+                        html += '<div class="layui-col-md4">' +
+                            '        名称：' + garbageCollectorName +
+                            '    </div>' +
+                            '    <div class="layui-col-md4">' +
+                            '        GC总次数：' + collectionCount +
+                            '    </div>' +
+                            '    <div class="layui-col-md4">' +
+                            '        GC总时间（毫秒）：' + collectionTime +
+                            '    </div>';
+                    }
+                    $('#gc').empty().append(html);
+                }
+            });
+        }
+
+        // 发送ajax请求，获取类加载数据
+        function getJvmClassLoadingInfo() {
+            admin.req({
+                type: 'get',
+                url: layui.setter.base + 'monitor-jvm-class-loading/get-jvm-class-loading-info',
+                dataType: 'json',
+                contentType: 'application/json;charset=utf-8',
+                headers: {
+                    "X-CSRF-TOKEN": tokenValue
+                },
+                data: {
+                    instanceId: instanceId, // 应用实例ID
+                },
+                success: function (result) {
+                    var data = result.data;
+                    // 加载的类的总数
+                    var totalLoadedClassCount = data.totalLoadedClassCount;
+                    // 当前加载的类的总数
+                    var loadedClassCount = data.loadedClassCount;
+                    // 卸载的类总数
+                    var unloadedClassCount = data.unloadedClassCount;
+                    // 是否启用了类加载系统的详细输出
+                    var isVerbose = data.isVerbose === '0' ? '否' : '是';
+                    var html = '<div class="layui-col-md3">' +
+                        '           已加载当前类：' + loadedClassCount +
+                        '       </div>' +
+                        '       <div class="layui-col-md3">' +
+                        '          已加载类总数：' + totalLoadedClassCount +
+                        '       </div>' +
+                        '       <div class="layui-col-md3">' +
+                        '           以卸载类总数：' + unloadedClassCount +
+                        '       </div>' +
+                        '       <div class="layui-col-md3">' +
+                        '           是否启用了类加载系统的详细输出：' + isVerbose +
+                        '       </div>';
+                    $('#class-loading').empty().append(html);
+                }
+            });
+        }
+
         // 发送ajax请求，获取内存使用量数据
         function getJvmMemoryInfo(time, memoryType, title) {
             admin.req({
@@ -183,12 +302,24 @@
         getJvmMemoryInfo('all', 'Heap', 'Heap内存使用量');
         getJvmMemoryInfo('all', 'Non_Heap', 'Non_Heap内存使用量');
         getJvmMemoryInfo('all', chartPool, chartPool + '内存使用量');
+        // 发送ajax请求，获取线程信息
+        getJvmThreadInfo();
+        // 发送ajax请求，获取GC信息
+        getJvmGcInfo();
+        // 发送ajax请求，获取类加载数据
+        getJvmClassLoadingInfo();
         // 每30秒刷新一次
         window.setInterval(function () {
             // 发送ajax请求，获取内存使用量数据
             getJvmMemoryInfo('all', 'Heap', 'Heap内存使用量');
             getJvmMemoryInfo('all', 'Non_Heap', 'Non_Heap内存使用量');
             getJvmMemoryInfo('all', chartPool, chartPool + '内存使用量');
+            // 发送ajax请求，获取线程信息
+            getJvmThreadInfo();
+            // 发送ajax请求，获取GC信息
+            getJvmGcInfo();
+            // 发送ajax请求，获取类加载数据
+            getJvmClassLoadingInfo();
         }, 1000 * 30);
     });
     e('instanceDetail', {});

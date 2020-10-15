@@ -1,7 +1,10 @@
 package com.imby.server.business.web.service;
 
-import com.imby.server.business.web.entity.MonitorJvmGarbageCollector;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.imby.server.business.web.entity.MonitorJvmGarbageCollector;
+import com.imby.server.business.web.vo.MonitorJvmGarbageCollectorVo;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +16,15 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IMonitorJvmGarbageCollectorService extends IService<MonitorJvmGarbageCollector> {
 
+    /**
+     * <p>
+     * 获取java虚拟机GC信息
+     * </p>
+     *
+     * @param instanceId 应用实例ID
+     * @return java虚拟机GC信息表现层对象
+     * @author 皮锋
+     * @custom.date 2020/10/15 13:16
+     */
+    List<MonitorJvmGarbageCollectorVo> getJvmGcInfo(String instanceId);
 }

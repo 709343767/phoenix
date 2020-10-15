@@ -30,8 +30,6 @@
         <div class="layui-tab layui-tab-brief">
             <ul class="layui-tab-title">
                 <li class="layui-this">内存</li>
-                <li>线程</li>
-                <li>类</li>
                 <li>VM概要</li>
             </ul>
             <div class="layui-tab-content">
@@ -102,13 +100,66 @@
                     </div>
                 </div>
                 <div class="layui-tab-item">
-
-                </div>
-                <div class="layui-tab-item">
-
-                </div>
-                <div class="layui-tab-item">
-
+                    <div class="layui-collapse">
+                        <div class="layui-colla-item">
+                            <h2 class="layui-colla-title">线程</h2>
+                            <div class="layui-colla-content layui-show">
+                                <div class="layui-row layui-col-space10" id="thread">
+                                    <div class="layui-col-md3">
+                                        活动线程数：
+                                    </div>
+                                    <div class="layui-col-md3">
+                                        线程峰值：
+                                    </div>
+                                    <div class="layui-col-md3">
+                                        守护程序线程数：
+                                    </div>
+                                    <div class="layui-col-md3">
+                                        启动的线程总数：
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-colla-item">
+                            <h2 class="layui-colla-title">GC</h2>
+                            <div class="layui-colla-content layui-show">
+                                <div class="layui-row layui-col-space10" id="gc">
+                                    <div class="layui-col-md4">
+                                        名称：
+                                    </div>
+                                    <div class="layui-col-md4">
+                                        GC总次数：
+                                    </div>
+                                    <div class="layui-col-md4">
+                                        GC总时间（毫秒）：
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-colla-item">
+                            <h2 class="layui-colla-title">类</h2>
+                            <div class="layui-colla-content layui-show">
+                                <div class="layui-row layui-col-space10" id="class-loading">
+                                    <div class="layui-col-md3">
+                                        已加载当前类：
+                                    </div>
+                                    <div class="layui-col-md3">
+                                        已加载类总数：
+                                    </div>
+                                    <div class="layui-col-md3">
+                                        以卸载类总数：
+                                    </div>
+                                    <div class="layui-col-md3">
+                                        是否启用了类加载系统的详细输出：
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-colla-item">
+                            <h2 class="layui-colla-title">VM</h2>
+                            <div class="layui-colla-content layui-show"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
