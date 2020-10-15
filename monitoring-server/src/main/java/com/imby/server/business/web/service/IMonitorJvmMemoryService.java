@@ -29,4 +29,16 @@ public interface IMonitorJvmMemoryService extends IService<MonitorJvmMemory> {
      * @custom.date 2020/10/14 12:02
      */
     List<MonitorJvmMemoryVo> getJvmMemoryInfo(String instanceId, String memoryType, String time);
+
+    /**
+     * <p>
+     * 获取jvm内存类型
+     * </p>
+     *
+     * @param instanceId 应用实例ID
+     * @return jvm内存类型
+     * @author 皮锋
+     * @custom.date 2020/10/15 10:00
+     */
+    List<String> getJvmMemoryTypes(String instanceId);
 }

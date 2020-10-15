@@ -2,6 +2,7 @@ package com.imby.server.business.web.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.imby.server.business.web.service.IMonitorInstanceService;
+import com.imby.server.business.web.service.IMonitorJvmMemoryService;
 import com.imby.server.business.web.vo.LayUiAdminResultVo;
 import com.imby.server.business.web.vo.MonitorInstanceVo;
 import io.swagger.annotations.Api;
@@ -33,6 +34,12 @@ public class MonitorInstanceController {
      */
     @Autowired
     private IMonitorInstanceService monitorInstanceService;
+
+    /**
+     * java虚拟机内存信息服务类
+     */
+    @Autowired
+    private IMonitorJvmMemoryService monitorJvmMemoryService;
 
     /**
      * <p>
@@ -114,6 +121,11 @@ public class MonitorInstanceController {
         ModelAndView mv = new ModelAndView("instance/instance-detail");
         mv.addObject("id", id);
         mv.addObject("instanceId", instanceId);
+        // 获取jvm内存类型
+        List<String> jvmMemoryTypes = this.monitorJvmMemoryService.getJvmMemoryTypes(instanceId);
+        jvmMemoryTypes.remove("Heap");
+        jvmMemoryTypes.remove("Non_Heap");
+        mv.addObject("jvmMemoryTypes", jvmMemoryTypes);
         return mv;
     }
 

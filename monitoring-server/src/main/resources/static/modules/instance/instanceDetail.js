@@ -1,27 +1,44 @@
 /** layuiAdmin.std-v2020.4.1 LPPL License By 皮锋 */
 ;layui.define(function (e) {
     layui.use(['admin', 'element', 'form'], function () {
-        var admin = layui.admin, $ = layui.$, element = layui.element, form = layui.form;
+        var admin = layui.admin, $ = layui.$, form = layui.form;
         // 基于准备好的dom，初始化echarts实例
         var getJvmMemoryHeapInfoChart = echarts.init(document.getElementById('get-jvm-memory-heap-info'), 'infographic');
         var getJvmMemoryNonHeapInfoChart = echarts.init(document.getElementById('get-jvm-memory-non-heap-info'), 'infographic');
+        var getJvmMemoryPoolInfo = echarts.init(document.getElementById('get-jvm-memory-pool-info'), 'infographic');
         // 浏览器窗口大小发生改变时
         window.addEventListener("resize", function () {
             getJvmMemoryHeapInfoChart.resize();
             getJvmMemoryNonHeapInfoChart.resize();
+            getJvmMemoryPoolInfo.resize();
         });
-        // 时间条件
-        var time = 'all';
         // 时间条件发生改变
-        form.on('select(time)', function (data) {
-            time = data.value;
+        form.on('select(time1)', function (data) {
+            var time = data.value;
             // 发送ajax请求，获取内存使用量数据
-            getJvmMemoryInfo('Heap', '堆内存使用量');
-            getJvmMemoryInfo('Non_Heap', '非堆内存使用量');
+            getJvmMemoryInfo(time, 'Heap', '堆内存使用量');
+            getJvmMemoryInfo(time, 'Non_Heap', '非堆内存使用量');
+        });
+        // 内存池图表时间
+        var chartTime = 'all';
+        // 内存池图表内存类型
+        var chartPool = $('#chart option:selected').val();
+        // 图表条件发生改变
+        form.on('select(chart)', function (data) {
+            // 内存池类型
+            chartPool = data.value;
+            // 发送ajax请求，获取内存使用量数据
+            getJvmMemoryInfo(chartTime, chartPool, chartPool + '内存使用量');
+        });
+        form.on('select(time2)', function (data) {
+            // 时间
+            chartTime = data.value;
+            // 发送ajax请求，获取内存使用量数据
+            getJvmMemoryInfo(chartTime, chartPool, chartPool + '内存使用量');
         });
 
         // 发送ajax请求，获取内存使用量数据
-        function getJvmMemoryInfo(memoryType, title) {
+        function getJvmMemoryInfo(time, memoryType, title) {
             admin.req({
                 type: 'get',
                 url: layui.setter.base + 'monitor-jvm-memory/get-jvm-memory-info',
@@ -50,9 +67,9 @@
                         return item.committed;
                     });
                     // 初始内存值
-                    var init = data[0].init;
+                    var init = data[0] != undefined ? data[0].init : '无数据';
                     // 最大内存量
-                    var max = data[0].max;
+                    var max = data[0] != undefined ? data[0].max : '无数据';
                     var option = {
                         title: {
                             text: title,
@@ -147,23 +164,27 @@
                     if (memoryType === 'Heap') {
                         getJvmMemoryHeapInfoChart.setOption(option);
                         window.onresize = getJvmMemoryHeapInfoChart.resize;
-                    }
-                    if (memoryType === 'Non_Heap') {
+                    } else if (memoryType === 'Non_Heap') {
                         getJvmMemoryNonHeapInfoChart.setOption(option);
                         window.onresize = getJvmMemoryNonHeapInfoChart.resize;
+                    } else {
+                        getJvmMemoryPoolInfo.setOption(option);
+                        window.onresize = getJvmMemoryPoolInfo.resize;
                     }
                 }
             });
         }
 
         // 发送ajax请求，获取内存使用量数据
-        getJvmMemoryInfo('Heap', '堆内存使用量');
-        getJvmMemoryInfo('Non_Heap', '非堆内存使用量');
+        getJvmMemoryInfo('all', 'Heap', '堆内存使用量');
+        getJvmMemoryInfo('all', 'Non_Heap', '非堆内存使用量');
+        getJvmMemoryInfo('all', chartPool, chartPool + '内存使用量');
         // 每30秒刷新一次
         window.setInterval(function () {
             // 发送ajax请求，获取内存使用量数据
-            getJvmMemoryInfo('Heap', '堆内存使用量');
-            getJvmMemoryInfo('Non_Heap', '非堆内存使用量');
+            getJvmMemoryInfo('all', 'Heap', '堆内存使用量');
+            getJvmMemoryInfo('all', 'Non_Heap', '非堆内存使用量');
+            getJvmMemoryInfo('all', chartPool, chartPool + '内存使用量');
         }, 1000 * 30);
     });
     e('instanceDetail', {});

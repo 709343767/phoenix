@@ -3,16 +3,13 @@ package com.imby.server.business.web.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.common.collect.Lists;
-import com.imby.common.constant.DateTimeStylesEnums;
 import com.imby.common.util.DataSizeUtils;
-import com.imby.common.util.DateTimeUtils;
 import com.imby.server.business.web.dao.IMonitorJvmMemoryDao;
 import com.imby.server.business.web.entity.MonitorJvmMemory;
 import com.imby.server.business.web.service.IMonitorJvmMemoryService;
 import com.imby.server.business.web.vo.MonitorJvmMemoryVo;
-import com.imby.server.constant.TimeSelectConstants;
+import com.imby.server.core.CalculateDateTime;
 import org.apache.commons.lang3.StringUtils;
-import org.joda.time.format.DateTimeFormat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -56,61 +53,19 @@ public class MonitorJvmMemoryServiceImpl extends ServiceImpl<IMonitorJvmMemoryDa
             lambdaQueryWrapper.eq(MonitorJvmMemory::getMemoryType, memoryType);
         }
         if (StringUtils.isNotBlank(time)) {
+            // 计算时间
+            CalculateDateTime calculateDateTime = new CalculateDateTime(time).invoke();
             // 开始时间
-            Date startTime;
+            Date startTime = calculateDateTime.getStartTime();
             // 结束时间
-            Date endTime;
-            switch (time) {
-                case TimeSelectConstants.HOUR:
-                    startTime = DateTimeFormat.forPattern(DateTimeStylesEnums.YYYY_MM_DD_HH_MM_SS.getValue())
-                            .parseDateTime(DateTimeUtils.dateToString(new Date(), "yyyy-MM-dd HH:00:00"))
-                            .toDate();
-                    endTime = DateTimeFormat.forPattern(DateTimeStylesEnums.YYYY_MM_DD_HH_MM_SS.getValue())
-                            .parseDateTime(DateTimeUtils.dateToString(new Date(), "yyyy-MM-dd HH:59:59"))
-                            .toDate();
-                    lambdaQueryWrapper.between(MonitorJvmMemory::getInsertTime, startTime, endTime);
-                    break;
-                case TimeSelectConstants.WEEK:
-                    startTime = DateTimeFormat.forPattern(DateTimeStylesEnums.YYYY_MM_DD_HH_MM_SS.getValue())
-                            .parseDateTime(DateTimeUtils.dateToString(new Date(), "yyyy-MM-dd 00:00:00"))
-                            .plusDays(-6).toDate();
-                    endTime = DateTimeFormat.forPattern(DateTimeStylesEnums.YYYY_MM_DD_HH_MM_SS.getValue())
-                            .parseDateTime(DateTimeUtils.dateToString(new Date(), "yyyy-MM-dd 23:59:59"))
-                            .toDate();
-                    lambdaQueryWrapper.between(MonitorJvmMemory::getInsertTime, startTime, endTime);
-                    break;
-                case TimeSelectConstants.MONTH:
-                    startTime = DateTimeFormat.forPattern(DateTimeStylesEnums.YYYY_MM_DD_HH_MM_SS.getValue())
-                            .parseDateTime(DateTimeUtils.dateToString(new Date(), "yyyy-MM-dd 00:00:00"))
-                            .plusMonths(-1).plusDays(1).toDate();
-                    endTime = DateTimeFormat.forPattern(DateTimeStylesEnums.YYYY_MM_DD_HH_MM_SS.getValue())
-                            .parseDateTime(DateTimeUtils.dateToString(new Date(), "yyyy-MM-dd 23:59:59"))
-                            .toDate();
-                    lambdaQueryWrapper.between(MonitorJvmMemory::getInsertTime, startTime, endTime);
-                    break;
-                case TimeSelectConstants.HALF_YEAR:
-                    startTime = DateTimeFormat.forPattern(DateTimeStylesEnums.YYYY_MM_DD_HH_MM_SS.getValue())
-                            .parseDateTime(DateTimeUtils.dateToString(new Date(), "yyyy-MM-dd 00:00:00"))
-                            .plusMonths(-6).plusDays(1).toDate();
-                    endTime = DateTimeFormat.forPattern(DateTimeStylesEnums.YYYY_MM_DD_HH_MM_SS.getValue())
-                            .parseDateTime(DateTimeUtils.dateToString(new Date(), "yyyy-MM-dd 23:59:59"))
-                            .toDate();
-                    lambdaQueryWrapper.between(MonitorJvmMemory::getInsertTime, startTime, endTime);
-                    break;
-                case TimeSelectConstants.YEAR:
-                    startTime = DateTimeFormat.forPattern(DateTimeStylesEnums.YYYY_MM_DD_HH_MM_SS.getValue())
-                            .parseDateTime(DateTimeUtils.dateToString(new Date(), "yyyy-MM-dd 00:00:00"))
-                            .plusMonths(-12).plusDays(1).toDate();
-                    endTime = DateTimeFormat.forPattern(DateTimeStylesEnums.YYYY_MM_DD_HH_MM_SS.getValue())
-                            .parseDateTime(DateTimeUtils.dateToString(new Date(), "yyyy-MM-dd 23:59:59"))
-                            .toDate();
-                    lambdaQueryWrapper.between(MonitorJvmMemory::getInsertTime, startTime, endTime);
-                    break;
-                default:
-                    break;
+            Date endTime = calculateDateTime.getEndTime();
+            // 时间不为空
+            if (startTime != null && endTime != null) {
+                lambdaQueryWrapper.between(MonitorJvmMemory::getInsertTime, startTime, endTime);
             }
         }
         List<MonitorJvmMemory> monitorJvmMemories = this.monitorJvmMemoryDao.selectList(lambdaQueryWrapper);
+        // 返回值
         List<MonitorJvmMemoryVo> monitorJvmMemoryVos = Lists.newLinkedList();
         for (MonitorJvmMemory monitorJvmMemory : monitorJvmMemories) {
             // 转MB
@@ -121,6 +76,21 @@ public class MonitorJvmMemoryServiceImpl extends ServiceImpl<IMonitorJvmMemoryDa
             monitorJvmMemoryVos.add(monitorJvmMemoryVo);
         }
         return monitorJvmMemoryVos;
+    }
+
+    /**
+     * <p>
+     * 获取jvm内存类型
+     * </p>
+     *
+     * @param instanceId 应用实例ID
+     * @return jvm内存类型
+     * @author 皮锋
+     * @custom.date 2020/10/15 10:00
+     */
+    @Override
+    public List<String> getJvmMemoryTypes(String instanceId) {
+        return this.monitorJvmMemoryDao.getJvmMemoryTypes(instanceId);
     }
 
 }

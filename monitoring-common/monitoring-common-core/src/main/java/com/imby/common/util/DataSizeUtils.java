@@ -30,17 +30,17 @@ public class DataSizeUtils {
      */
     public static double parse(String text) {
         if (StringUtils.isBlank(text)) {
-            return 0L;
+            return 0D;
         }
         // 去除单位和空格
         String tmp = StringUtils.trimToEmpty(text.substring(0, text.length() - 2));
-        if (StringUtils.containsIgnoreCase(text, DataUnit.KB.name())) {
-            return Double.parseDouble(tmp) * 1024;
+        if (StringUtils.containsIgnoreCase(text, DataUnitEnums.KB.name())) {
+            return Double.parseDouble(tmp) * 1024D;
         }
-        if (StringUtils.containsIgnoreCase(text, DataUnit.MB.name())) {
-            return Double.parseDouble(tmp) * 1024 * 1024;
+        if (StringUtils.containsIgnoreCase(text, DataUnitEnums.MB.name())) {
+            return Double.parseDouble(tmp) * 1024D * 1024D;
         }
-        return 0L;
+        return 0D;
     }
 }
 
@@ -52,7 +52,7 @@ public class DataSizeUtils {
  * @author 皮锋
  * @custom.date 2020/10/14 18:17
  */
-enum DataUnit {
+enum DataUnitEnums {
 
     /**
      * KB
