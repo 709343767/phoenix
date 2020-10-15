@@ -93,7 +93,7 @@
                         },
                         grid: {
                             left: '150px',
-                            right: '10px'
+                            right: '150px'
                         },
                         xAxis: [{
                             type: 'category',
