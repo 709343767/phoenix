@@ -32,6 +32,9 @@ public class DataSizeUtils {
         if (StringUtils.isBlank(text)) {
             return 0D;
         }
+        if (StringUtils.equals("0", text)) {
+            return 0D;
+        }
         // 去除单位和空格
         String tmp = StringUtils.trimToEmpty(text.substring(0, text.length() - 2));
         if (StringUtils.containsIgnoreCase(text, DataUnitEnums.KB.name())) {
