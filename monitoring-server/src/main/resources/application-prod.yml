@@ -9,13 +9,13 @@ logging:
 
 
 ###############################################数据源配置##################################################
-spring:  
+spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     druid:
       #数据源配置
       driver-class-name: com.mysql.cj.jdbc.Driver
-      url: jdbc:mysql://119.45.120.24:3306/monitoring?useSSL=false&serverTimezone=GMT%2b8&useUnicode=true&characterEncoding=utf-8
+      url: jdbc:mysql://localhost:3306/monitoring?useSSL=false&serverTimezone=GMT%2b8&useUnicode=true&characterEncoding=utf-8
       username: root
       password: pzgl@1234
       #初始化来连接大小
