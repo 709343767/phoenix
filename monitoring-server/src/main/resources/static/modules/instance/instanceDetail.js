@@ -16,8 +16,8 @@
         form.on('select(time1)', function (data) {
             var time = data.value;
             // 发送ajax请求，获取内存使用量数据
-            getJvmMemoryInfo(time, 'Heap', '堆内存使用量');
-            getJvmMemoryInfo(time, 'Non_Heap', '非堆内存使用量');
+            getJvmMemoryInfo(time, 'Heap', 'Heap内存使用量');
+            getJvmMemoryInfo(time, 'Non_Heap', 'Non_Heap内存使用量');
         });
         // 内存池图表时间
         var chartTime = 'all';
@@ -90,6 +90,10 @@
                         legend: {
                             data: ['使用量', '提交量'],
                             left: 'right',
+                        },
+                        grid: {
+                            left: '150px',
+                            right: '10px'
                         },
                         xAxis: [{
                             type: 'category',
@@ -176,14 +180,14 @@
         }
 
         // 发送ajax请求，获取内存使用量数据
-        getJvmMemoryInfo('all', 'Heap', '堆内存使用量');
-        getJvmMemoryInfo('all', 'Non_Heap', '非堆内存使用量');
+        getJvmMemoryInfo('all', 'Heap', 'Heap内存使用量');
+        getJvmMemoryInfo('all', 'Non_Heap', 'Non_Heap内存使用量');
         getJvmMemoryInfo('all', chartPool, chartPool + '内存使用量');
         // 每30秒刷新一次
         window.setInterval(function () {
             // 发送ajax请求，获取内存使用量数据
-            getJvmMemoryInfo('all', 'Heap', '堆内存使用量');
-            getJvmMemoryInfo('all', 'Non_Heap', '非堆内存使用量');
+            getJvmMemoryInfo('all', 'Heap', 'Heap内存使用量');
+            getJvmMemoryInfo('all', 'Non_Heap', 'Non_Heap内存使用量');
             getJvmMemoryInfo('all', chartPool, chartPool + '内存使用量');
         }, 1000 * 30);
     });

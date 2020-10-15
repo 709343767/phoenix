@@ -123,8 +123,8 @@ public class MonitorInstanceController {
         mv.addObject("instanceId", instanceId);
         // 获取jvm内存类型
         List<String> jvmMemoryTypes = this.monitorJvmMemoryService.getJvmMemoryTypes(instanceId);
-        jvmMemoryTypes.remove("Heap");
-        jvmMemoryTypes.remove("Non_Heap");
+        // jvmMemoryTypes.remove("Heap");
+        // jvmMemoryTypes.remove("Non_Heap");
         mv.addObject("jvmMemoryTypes", jvmMemoryTypes);
         return mv;
     }
