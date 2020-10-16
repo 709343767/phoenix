@@ -13,11 +13,11 @@
     <!-- 获取应用实例详情页面java虚拟机内存信息 -->
     <select id="getInstanceDetailPageJvmMemory" parameterType="java.util.HashMap"
             resultType="com.imby.server.business.web.vo.InstanceDetailPageJvmMemoryVo">
-        SELECT INIT as init,
-        USED as used,
-        COMMITTED as committed,
-        MAX as max,
-        INSERT_TIME as insertTime
+        SELECT INIT AS init,
+        USED AS used,
+        COMMITTED AS committed,
+        MAX AS max,
+        INSERT_TIME AS insertTime
         FROM MONITOR_JVM_MEMORY
         WHERE INSTANCE_ID = #{params.instanceId}
         <if test="params.memoryType!=null and params.memoryType!=''">
