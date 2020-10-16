@@ -36,7 +36,7 @@ public class DataSizeUtils {
             return 0D;
         }
         // 去除单位和空格
-        String tmp = StringUtils.trimToEmpty(text.substring(0, text.length() - 2));
+        String tmp = StringUtils.trimToEmpty(text.substring(0, text.length() - 2).replace(",", ""));
         if (StringUtils.containsIgnoreCase(text, DataUnitEnums.KB.name())) {
             return Double.parseDouble(tmp) * 1024D;
         }

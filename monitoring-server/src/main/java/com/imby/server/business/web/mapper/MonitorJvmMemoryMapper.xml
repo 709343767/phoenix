@@ -10,4 +10,21 @@
         GROUP BY MEMORY_TYPE
     </select>
 
+    <!-- 获取应用实例详情页面java虚拟机内存信息 -->
+    <select id="getInstanceDetailPageJvmMemory" parameterType="java.util.HashMap"
+            resultType="com.imby.server.business.web.vo.InstanceDetailPageJvmMemoryVo">
+        SELECT INIT as init,
+        USED as used,
+        COMMITTED as committed,
+        MAX as max
+        FROM MONITOR_JVM_MEMORY
+        WHERE INSTANCE_ID = #{params.instanceId}
+        <if test="params.memoryType!=null and params.memoryType!=''">
+            AND MEMORY_TYPE = #{params.memoryType}
+        </if>
+        <if test="params.startTime!=null and params.endTime!=null">
+            AND INSERT_TIME BETWEEN #{params.startTime} AND #{params.endTime}
+        </if>
+    </select>
+
 </mapper>
