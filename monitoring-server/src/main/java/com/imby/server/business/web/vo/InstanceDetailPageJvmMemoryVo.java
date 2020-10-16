@@ -1,10 +1,13 @@
 package com.imby.server.business.web.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.imby.common.inf.ISuperBean;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 import lombok.experimental.Accessors;
+
+import java.util.Date;
 
 /**
  * <p>
@@ -36,5 +39,9 @@ public class InstanceDetailPageJvmMemoryVo implements ISuperBean {
 
     @ApiModelProperty(value = "最大内存量")
     private String max;
+
+    @ApiModelProperty(value = "新增时间")
+    @JsonFormat(pattern = "yyyy/MM/dd HH:mm:ss", timezone = "GMT+8")
+    private Date insertTime;
 
 }

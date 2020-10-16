@@ -16,7 +16,8 @@
         SELECT INIT as init,
         USED as used,
         COMMITTED as committed,
-        MAX as max
+        MAX as max,
+        INSERT_TIME as insertTime
         FROM MONITOR_JVM_MEMORY
         WHERE INSTANCE_ID = #{params.instanceId}
         <if test="params.memoryType!=null and params.memoryType!=''">
