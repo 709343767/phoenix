@@ -2,7 +2,7 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
-    <title>应用详情</title>
+    <title>服务器详情</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport"
@@ -20,8 +20,8 @@
         var tokenValue = /*[[${_csrf.token}]]*/'';
         // 应用实例表的主键ID
         var id = [[${id}]];
-        // 应用实例ID
-        var instanceId = [[${instanceId}]];
+        // IP地址
+        var ip = [[${ip}]];
     </script>
 </head>
 <body>
@@ -30,7 +30,7 @@
         <div class="layui-tab layui-tab-brief">
             <ul class="layui-tab-title">
                 <li class="layui-this">内存</li>
-                <li>概要</li>
+                <li>VM概要</li>
             </ul>
             <div class="layui-tab-content">
                 <div class="layui-tab-item layui-show">

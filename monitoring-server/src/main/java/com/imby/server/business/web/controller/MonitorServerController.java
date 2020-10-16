@@ -98,4 +98,24 @@ public class MonitorServerController {
         return this.monitorServerOsService.deleteMonitorServer(monitorServerOsVos);
     }
 
+    /**
+     * <p>
+     * 访问服务器详情页面
+     * </p>
+     *
+     * @param id 服务器表的主键
+     * @param ip 服务器IP
+     * @return {@link ModelAndView} 服务器详情页面
+     * @author 皮锋
+     * @custom.date 2020/10/16 15:59
+     */
+    @ApiOperation(value = "访问服务器详情页面")
+    @GetMapping("/server-detail")
+    public ModelAndView serverDetail(String id, String ip) {
+        ModelAndView mv = new ModelAndView("server/server-detail");
+        mv.addObject("id", id);
+        mv.addObject("ip", ip);
+        return mv;
+    }
+
 }
