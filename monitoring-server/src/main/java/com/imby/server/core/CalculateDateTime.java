@@ -66,7 +66,7 @@ public class CalculateDateTime {
             case TimeSelectConstants.HOUR:
                 startTime = DateTimeFormat.forPattern(DateTimeStylesEnums.YYYY_MM_DD_HH_MM_SS.getValue())
                         .parseDateTime(DateTimeUtils.dateToString(new Date(), YYYY_MM_DD_HH_00_00))
-                        .toDate();
+                        .plusMinutes(-59).toDate();
                 endTime = DateTimeFormat.forPattern(DateTimeStylesEnums.YYYY_MM_DD_HH_MM_SS.getValue())
                         .parseDateTime(DateTimeUtils.dateToString(new Date(), YYYY_MM_DD_HH_59_59))
                         .toDate();
