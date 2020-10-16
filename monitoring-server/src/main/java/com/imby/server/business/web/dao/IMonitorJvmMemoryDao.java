@@ -35,7 +35,7 @@ public interface IMonitorJvmMemoryDao extends BaseMapper<MonitorJvmMemory> {
      * 获取应用实例详情页面java虚拟机内存信息
      * </p>
      *
-     * @param
+     * @param params 请求参数
      * @return 应用实例详情页面java虚拟机内存信息表现层对象
      * @author 皮锋
      * @custom.date 2020/10/16 13:48
