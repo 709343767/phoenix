@@ -95,7 +95,7 @@
     }).extend({
         index: 'lib/index' //主入口模块
     }).use(['index', 'table'], function () {
-        var $ = layui.$, admin = layui.admin, form = layui.form, table = layui.table;
+        var $ = layui.$, admin = layui.admin, form = layui.form, table = layui.table, device = layui.device();
         table.render({
             elem: '#list-table',
             url: ctxPath + 'instance/get-monitor-instance-list',
@@ -286,6 +286,22 @@
                 });
             }
             if (obj.event === 'info') {
+                // 宽度
+                var width;
+                // 高度
+                var height
+                // 移动端
+                if (device.ios || device.android) {
+                    // 宽度
+                    width = document.body.clientWidth * 0.8 + 'px';
+                    // 高度
+                    height = document.body.clientHeight * 0.55 + 'px';
+                } else {
+                    // 宽度
+                    width = document.body.clientWidth * 0.8 + 'px';
+                    // 高度
+                    height = document.body.clientHeight * 0.8 + 'px';
+                }
                 layer.open({
                     type: 2,
                     title: '应用详情（ID：' + data.instanceId + '）',
@@ -293,7 +309,7 @@
                     maxmin: true,
                     shade: 0,
                     moveOut: true,
-                    area: ['1360px', '768px'],
+                    area: [width, height],
                 });
             }
         });

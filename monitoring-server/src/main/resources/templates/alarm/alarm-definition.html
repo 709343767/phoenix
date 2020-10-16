@@ -96,7 +96,7 @@
     }).extend({
         index: 'lib/index' //主入口模块
     }).use(['index', 'table'], function () {
-        var $ = layui.$, admin = layui.admin, form = layui.form, table = layui.table;
+        var $ = layui.$, admin = layui.admin, form = layui.form, table = layui.table, device = layui.device();
         table.render({
             elem: '#alarm-definition-list-table',
             url: ctxPath + 'monitor-alarm-definition/get-monitor-alarm-definition-list',
@@ -261,12 +261,28 @@
                     });
                     break;
                 case 'add':
+                    // 宽度
+                    var width;
+                    // 高度
+                    var height
+                    // 移动端
+                    if (device.ios || device.android) {
+                        // 宽度
+                        width = document.body.clientWidth * 0.8 + 'px';
+                        // 高度
+                        height = document.body.clientHeight * 0.55 + 'px';
+                    } else {
+                        // 宽度
+                        width = document.body.clientWidth * 0.4 + 'px';
+                        // 高度
+                        height = document.body.clientHeight * 0.65 + 'px';
+                    }
                     layer.open({
                         type: 2,
                         title: '添加告警定义',
                         content: ctxPath + 'monitor-alarm-definition/add-monitor-alarm-definition-form',
                         maxmin: true,
-                        area: ['700px', '580px'],
+                        area: [width, height],
                         btn: ['确定', '取消'],
                         yes: function (index, layero) {
                             var iframeWindow = window['layui-layer-iframe' + index],
@@ -336,12 +352,28 @@
                     });
                 });
             } else if (obj.event === 'edit') {
+                // 宽度
+                var width;
+                // 高度
+                var height
+                // 移动端
+                if (device.ios || device.android) {
+                    // 宽度
+                    width = document.body.clientWidth * 0.8 + 'px';
+                    // 高度
+                    height = document.body.clientHeight * 0.55 + 'px';
+                } else {
+                    // 宽度
+                    width = document.body.clientWidth * 0.4 + 'px';
+                    // 高度
+                    height = document.body.clientHeight * 0.65 + 'px';
+                }
                 layer.open({
                     type: 2,
                     title: '编辑告警定义',
                     content: ctxPath + 'monitor-alarm-definition/edit-monitor-alarm-definition-form?id=' + data.id,
                     maxmin: true,
-                    area: ['700px', '580px'],
+                    area: [width, height],
                     btn: ['确定', '取消'],
                     yes: function (index, layero) {
                         var iframeWindow = window['layui-layer-iframe' + index],
