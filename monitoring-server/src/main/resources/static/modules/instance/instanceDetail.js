@@ -5,12 +5,12 @@
         // 基于准备好的dom，初始化echarts实例
         var getJvmMemoryHeapInfoChart = echarts.init(document.getElementById('get-jvm-memory-heap-info'), 'infographic');
         var getJvmMemoryNonHeapInfoChart = echarts.init(document.getElementById('get-jvm-memory-non-heap-info'), 'infographic');
-        var getJvmMemoryPoolInfo = echarts.init(document.getElementById('get-jvm-memory-pool-info'), 'infographic');
+        var getJvmMemoryPoolInfoChart = echarts.init(document.getElementById('get-jvm-memory-pool-info'), 'infographic');
         // 浏览器窗口大小发生改变时
         window.addEventListener("resize", function () {
             getJvmMemoryHeapInfoChart.resize();
             getJvmMemoryNonHeapInfoChart.resize();
-            getJvmMemoryPoolInfo.resize();
+            getJvmMemoryPoolInfoChart.resize();
         });
         // 堆内存图表和非堆内存图表时间
         var heapAndNonHeapTime = 'hour';
@@ -387,13 +387,10 @@
                     };
                     if (memoryType === 'Heap') {
                         getJvmMemoryHeapInfoChart.setOption(option);
-                        window.onresize = getJvmMemoryHeapInfoChart.resize;
                     } else if (memoryType === 'Non_Heap') {
                         getJvmMemoryNonHeapInfoChart.setOption(option);
-                        window.onresize = getJvmMemoryNonHeapInfoChart.resize;
                     } else {
-                        getJvmMemoryPoolInfo.setOption(option);
-                        window.onresize = getJvmMemoryPoolInfo.resize;
+                        getJvmMemoryPoolInfoChart.setOption(option);
                     }
                     // 关闭loading框
                     layer.close(loadingIndex);
