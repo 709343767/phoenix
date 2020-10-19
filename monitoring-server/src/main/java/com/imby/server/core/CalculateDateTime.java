@@ -1,10 +1,8 @@
 package com.imby.server.core;
 
-import com.imby.common.constant.DateTimeStylesEnums;
-import com.imby.common.util.DateTimeUtils;
 import com.imby.server.constant.TimeSelectConstants;
 import lombok.Data;
-import org.joda.time.format.DateTimeFormat;
+import org.joda.time.DateTime;
 
 import java.util.Date;
 
@@ -18,11 +16,6 @@ import java.util.Date;
  */
 @Data
 public class CalculateDateTime {
-
-    public static final String YYYY_MM_DD_HH_00_00 = "yyyy-MM-dd HH:00:00";
-    public static final String YYYY_MM_DD_HH_59_59 = "yyyy-MM-dd HH:59:59";
-    public static final String YYYY_MM_DD_00_00_00 = "yyyy-MM-dd 00:00:00";
-    public static final String YYYY_MM_DD_23_59_59 = "yyyy-MM-dd 23:59:59";
 
     /**
      * 时间类型
@@ -64,44 +57,28 @@ public class CalculateDateTime {
     public CalculateDateTime invoke() {
         switch (timeType) {
             case TimeSelectConstants.HOUR:
-                startTime = DateTimeFormat.forPattern(DateTimeStylesEnums.YYYY_MM_DD_HH_MM_SS.getValue())
-                        .parseDateTime(DateTimeUtils.dateToString(new Date(), YYYY_MM_DD_HH_00_00))
-                        .plusMinutes(-59).toDate();
-                endTime = DateTimeFormat.forPattern(DateTimeStylesEnums.YYYY_MM_DD_HH_MM_SS.getValue())
-                        .parseDateTime(DateTimeUtils.dateToString(new Date(), YYYY_MM_DD_HH_59_59))
-                        .toDate();
+                startTime = new DateTime().plusHours(-1).toDate();
+                endTime = new Date();
+                break;
+            case TimeSelectConstants.DAY:
+                startTime = new DateTime().plusDays(-1).toDate();
+                endTime = new Date();
                 break;
             case TimeSelectConstants.WEEK:
-                startTime = DateTimeFormat.forPattern(DateTimeStylesEnums.YYYY_MM_DD_HH_MM_SS.getValue())
-                        .parseDateTime(DateTimeUtils.dateToString(new Date(), YYYY_MM_DD_00_00_00))
-                        .plusDays(-6).toDate();
-                endTime = DateTimeFormat.forPattern(DateTimeStylesEnums.YYYY_MM_DD_HH_MM_SS.getValue())
-                        .parseDateTime(DateTimeUtils.dateToString(new Date(), YYYY_MM_DD_23_59_59))
-                        .toDate();
+                startTime = new DateTime().plusWeeks(-1).toDate();
+                endTime = new Date();
                 break;
             case TimeSelectConstants.MONTH:
-                startTime = DateTimeFormat.forPattern(DateTimeStylesEnums.YYYY_MM_DD_HH_MM_SS.getValue())
-                        .parseDateTime(DateTimeUtils.dateToString(new Date(), YYYY_MM_DD_00_00_00))
-                        .plusMonths(-1).plusDays(1).toDate();
-                endTime = DateTimeFormat.forPattern(DateTimeStylesEnums.YYYY_MM_DD_HH_MM_SS.getValue())
-                        .parseDateTime(DateTimeUtils.dateToString(new Date(), YYYY_MM_DD_23_59_59))
-                        .toDate();
+                startTime = new DateTime().plusMonths(-1).toDate();
+                endTime = new Date();
                 break;
             case TimeSelectConstants.HALF_YEAR:
-                startTime = DateTimeFormat.forPattern(DateTimeStylesEnums.YYYY_MM_DD_HH_MM_SS.getValue())
-                        .parseDateTime(DateTimeUtils.dateToString(new Date(), YYYY_MM_DD_00_00_00))
-                        .plusMonths(-6).plusDays(1).toDate();
-                endTime = DateTimeFormat.forPattern(DateTimeStylesEnums.YYYY_MM_DD_HH_MM_SS.getValue())
-                        .parseDateTime(DateTimeUtils.dateToString(new Date(), YYYY_MM_DD_23_59_59))
-                        .toDate();
+                startTime = new DateTime().plusMonths(-6).toDate();
+                endTime = new Date();
                 break;
             case TimeSelectConstants.YEAR:
-                startTime = DateTimeFormat.forPattern(DateTimeStylesEnums.YYYY_MM_DD_HH_MM_SS.getValue())
-                        .parseDateTime(DateTimeUtils.dateToString(new Date(), YYYY_MM_DD_00_00_00))
-                        .plusMonths(-12).plusDays(1).toDate();
-                endTime = DateTimeFormat.forPattern(DateTimeStylesEnums.YYYY_MM_DD_HH_MM_SS.getValue())
-                        .parseDateTime(DateTimeUtils.dateToString(new Date(), YYYY_MM_DD_23_59_59))
-                        .toDate();
+                startTime = new DateTime().plusYears(-1).toDate();
+                endTime = new Date();
                 break;
             default:
                 break;

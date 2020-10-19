@@ -21,6 +21,11 @@ public final class TimeSelectConstants {
     public static final String HOUR = "hour";
 
     /**
+     * 1天
+     */
+    public static final String DAY = "day";
+
+    /**
      * 1星期
      */
     public static final String WEEK = "week";
