@@ -1,6 +1,5 @@
 package com.imby.common.util;
 
-import cn.hutool.core.io.unit.DataSizeUtil;
 import com.imby.common.domain.server.MemoryDomain;
 import com.imby.common.init.InitSigar;
 import org.hyperic.sigar.Mem;
@@ -29,9 +28,9 @@ public class MemoryUtils extends InitSigar {
     public static MemoryDomain getMemoryInfo() throws SigarException {
         Mem mem = SIGAR.getMem();
         return new MemoryDomain()
-                .setMemTotal(DataSizeUtil.format(mem.getTotal()))
-                .setMemUsed(DataSizeUtil.format(mem.getUsed()))
-                .setMemFree(DataSizeUtil.format(mem.getFree()))
-                .setMenUsedPercent(String.format("%.2f", mem.getUsedPercent()) + "%");
+                .setMemTotal(mem.getTotal())
+                .setMemUsed(mem.getUsed())
+                .setMemFree(mem.getFree())
+                .setMenUsedPercent(mem.getUsedPercent() / 100D);
     }
 }

@@ -160,7 +160,7 @@ public class ServerAspect {
             // 盘符名字
             String devName = diskInfoDomain.getDevName();
             // 盘符使用率
-            double usePercent = diskInfoDomain.getUsePercent();
+            double usePercent = diskInfoDomain.getUsePercent() * 100D;
             subregion.setUsePercent(usePercent);
             subregion.setDevName(devName);
             Disk.Subregion poolDiskSubregion = this.diskPool.get(ip) != null ? this.diskPool.get(ip).getSubregionMap().get(devName) : null;
@@ -218,7 +218,7 @@ public class ServerAspect {
         memory.setIp(ip);
         memory.setComputerName(computerName);
         memory.setMemoryDomain(memoryDomain);
-        memory.setUsedPercent(Memory.calculateUsePercent(memoryDomain.getMenUsedPercent()));
+        memory.setUsedPercent(memoryDomain.getMenUsedPercent() * 100D);
         Memory poolMemory = this.memoryPool.get(ip);
         memory.setNum(poolMemory != null ? poolMemory.getNum() : 0);
         memory.setAlarm(poolMemory != null && poolMemory.isAlarm());

@@ -38,21 +38,21 @@ public class MonitorServerMemory implements Serializable {
     @TableField("IP")
     private String ip;
 
-    @ApiModelProperty(value = "物理内存总量")
+    @ApiModelProperty(value = "物理内存总量（单位：byte）")
     @TableField("MEM_TOTAL")
-    private String memTotal;
+    private Long memTotal;
 
-    @ApiModelProperty(value = "物理内存使用量")
+    @ApiModelProperty(value = "物理内存使用量（单位：byte）")
     @TableField("MEM_USED")
-    private String memUsed;
+    private Long memUsed;
 
-    @ApiModelProperty(value = "物理内存剩余量")
+    @ApiModelProperty(value = "物理内存剩余量（单位：byte）")
     @TableField("MEM_FREE")
-    private String memFree;
+    private Long memFree;
 
     @ApiModelProperty(value = "物理内存使用率")
     @TableField("MEN_USED_PERCENT")
-    private String menUsedPercent;
+    private Double menUsedPercent;
 
     @ApiModelProperty(value = "新增时间")
     @TableField("INSERT_TIME")

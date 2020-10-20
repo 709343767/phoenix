@@ -21,21 +21,24 @@ import lombok.experimental.Accessors;
 public class MemoryDomain extends AbstractSuperBean {
 
     /**
-     * 物理内存总量
+     * 物理内存总量（单位：byte）
      */
-    private String memTotal;
+
+    private long memTotal;
+
     /**
-     * 物理内存使用量
+     * 物理内存使用量（单位：byte）
      */
-    private String memUsed;
+    private long memUsed;
+
     /**
-     * 物理内存剩余量
+     * 物理内存剩余量（单位：byte）
      */
-    private String memFree;
+    private long memFree;
 
     /**
      * 物理内存使用率
      */
-    private String menUsedPercent;
+    private double menUsedPercent;
 
 }

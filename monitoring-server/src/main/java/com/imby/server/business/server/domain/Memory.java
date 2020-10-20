@@ -4,7 +4,6 @@ import com.imby.common.abs.AbstractSuperBean;
 import com.imby.common.domain.server.MemoryDomain;
 import lombok.*;
 import lombok.experimental.Accessors;
-import org.apache.commons.lang3.StringUtils;
 
 /**
  * <p>
@@ -57,22 +56,5 @@ public class Memory extends AbstractSuperBean {
      * 内存使用率
      */
     private double usedPercent;
-
-    /**
-     * <p>
-     * 计算内存使用率
-     * </p>
-     *
-     * @param menUsedPercent 内存使用率字符串
-     * @return 内存使用率
-     * @author 皮锋
-     * @custom.date 2020/3/31 12:49
-     */
-    public static double calculateUsePercent(String menUsedPercent) {
-        if (StringUtils.isBlank(menUsedPercent)) {
-            return 0;
-        }
-        return Double.parseDouble(menUsedPercent.substring(0, menUsedPercent.length() - 1));
-    }
 
 }

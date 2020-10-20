@@ -39,28 +39,28 @@ public class MonitorServerMemory {
     private String ip;
 
     /**
-     * 物理内存总量
+     * 物理内存总量（单位：byte）
      */
     @TableField("MEM_TOTAL")
-    private String menTotal;
+    private Long menTotal;
 
     /**
-     * 物理内存使用量
+     * 物理内存使用量（单位：byte）
      */
     @TableField("MEM_USED")
-    private String menUsed;
+    private Long menUsed;
 
     /**
-     * 物理内存剩余量
+     * 物理内存剩余量（单位：byte）
      */
     @TableField("MEM_FREE")
-    private String menFree;
+    private Long menFree;
 
     /**
      * 物理内存使用率
      */
     @TableField("MEN_USED_PERCENT")
-    private String menUsedPercent;
+    private Double menUsedPercent;
 
     /**
      * 新增时间
