@@ -3,7 +3,6 @@ package com.imby.server.business.server.domain;
 import com.imby.common.abs.AbstractSuperBean;
 import lombok.*;
 import lombok.experimental.Accessors;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.Map;
 
@@ -77,23 +76,6 @@ public class Disk extends AbstractSuperBean {
          * 分区的盘符名称
          */
         private String devName;
-    }
-
-    /**
-     * <p>
-     * 计算分区的盘符资源利用率
-     * </p>
-     *
-     * @param usePercentStr 分区的盘符资源利用率字符串
-     * @return 分区的盘符资源利用率
-     * @author 皮锋
-     * @custom.date 2020/3/30 12:21
-     */
-    public static double calculateUsePercent(String usePercentStr) {
-        if (StringUtils.isBlank(usePercentStr)) {
-            return 0;
-        }
-        return Double.parseDouble(usePercentStr.substring(0, usePercentStr.length() - 1));
     }
 
 }

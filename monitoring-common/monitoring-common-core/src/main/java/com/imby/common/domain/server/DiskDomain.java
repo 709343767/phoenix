@@ -60,29 +60,29 @@ public class DiskDomain extends AbstractSuperBean {
         String sysTypeName;
 
         /**
-         * 文件系统总大小
+         * 文件系统总大小（单位：byte）
          */
-        String total;
+        long total;
 
         /**
-         * 文件系统剩余大小
+         * 文件系统剩余大小（单位：byte）
          */
-        String free;
+        long free;
 
         /**
-         * 文件系统已使用大小
+         * 文件系统已使用大小（单位：byte）
          */
-        String used;
+        long used;
 
         /**
-         * 文件系统可用大小
+         * 文件系统可用大小（单位：byte）
          */
-        String avail;
+        long avail;
 
         /**
          * 文件系统资源的利用率
          */
-        String usePercent;
+        double usePercent;
 
     }
 

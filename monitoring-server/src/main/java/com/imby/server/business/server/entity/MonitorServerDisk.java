@@ -69,34 +69,34 @@ public class MonitorServerDisk {
     private String sysTypeName;
 
     /**
-     * 磁盘总大小
+     * 磁盘总大小（单位：byte）
      */
     @TableField("TOTAL")
-    private String total;
+    private Long total;
 
     /**
-     * 磁盘剩余大小
+     * 磁盘剩余大小（单位：byte）
      */
     @TableField("FREE")
-    private String free;
+    private Long free;
 
     /**
-     * 磁盘已用大小
+     * 磁盘已用大小（单位：byte）
      */
     @TableField("USED")
-    private String used;
+    private Long used;
 
     /**
-     * 磁盘可用大小
+     * 磁盘可用大小（单位：byte）
      */
     @TableField("AVAIL")
-    private String avail;
+    private Long avail;
 
     /**
      * 磁盘资源的利用率
      */
     @TableField("USE_PERCENT")
-    private String usePercent;
+    private Double usePercent;
 
     /**
      * 新增时间

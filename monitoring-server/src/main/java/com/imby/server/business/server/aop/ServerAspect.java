@@ -160,7 +160,7 @@ public class ServerAspect {
             // 盘符名字
             String devName = diskInfoDomain.getDevName();
             // 盘符使用率
-            double usePercent = Disk.calculateUsePercent(diskInfoDomain.getUsePercent());
+            double usePercent = diskInfoDomain.getUsePercent();
             subregion.setUsePercent(usePercent);
             subregion.setDevName(devName);
             Disk.Subregion poolDiskSubregion = this.diskPool.get(ip) != null ? this.diskPool.get(ip).getSubregionMap().get(devName) : null;

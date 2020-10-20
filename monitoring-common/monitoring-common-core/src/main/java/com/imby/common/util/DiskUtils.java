@@ -1,7 +1,5 @@
 package com.imby.common.util;
 
-import cn.hutool.core.io.unit.DataSizeUtil;
-import cn.hutool.core.util.NumberUtil;
 import com.google.common.collect.Lists;
 import com.imby.common.domain.server.DiskDomain;
 import com.imby.common.init.InitSigar;
@@ -91,11 +89,11 @@ public class DiskUtils extends InitSigar {
             } else {
                 continue;
             }
-            diskInfoDomain.setTotal(DataSizeUtil.format(fileSystemUsage.getTotal() * 1024L));
-            diskInfoDomain.setFree(DataSizeUtil.format(fileSystemUsage.getFree() * 1024L));
-            diskInfoDomain.setUsed(DataSizeUtil.format(fileSystemUsage.getUsed() * 1024L));
-            diskInfoDomain.setAvail(DataSizeUtil.format(fileSystemUsage.getAvail() * 1024L));
-            diskInfoDomain.setUsePercent(NumberUtil.formatPercent(fileSystemUsage.getUsePercent(), 2));
+            diskInfoDomain.setTotal(fileSystemUsage.getTotal() * 1024L);
+            diskInfoDomain.setFree(fileSystemUsage.getFree() * 1024L);
+            diskInfoDomain.setUsed(fileSystemUsage.getUsed() * 1024L);
+            diskInfoDomain.setAvail(fileSystemUsage.getAvail() * 1024L);
+            diskInfoDomain.setUsePercent(fileSystemUsage.getUsePercent() * 100D);
             diskInfoDomains.add(diskInfoDomain);
         }
         diskDomain.setDiskInfoList(diskInfoDomains);
