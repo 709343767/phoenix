@@ -93,7 +93,7 @@ public class DiskUtils extends InitSigar {
             diskInfoDomain.setFree(fileSystemUsage.getFree() * 1024L);
             diskInfoDomain.setUsed(fileSystemUsage.getUsed() * 1024L);
             diskInfoDomain.setAvail(fileSystemUsage.getAvail() * 1024L);
-            diskInfoDomain.setUsePercent(fileSystemUsage.getUsePercent() * 100D);
+            diskInfoDomain.setUsePercent(fileSystemUsage.getUsePercent());
             diskInfoDomains.add(diskInfoDomain);
         }
         diskDomain.setDiskInfoList(diskInfoDomains);
