@@ -1,5 +1,6 @@
 package com.imby.server.business.server.aop;
 
+import cn.hutool.core.util.NumberUtil;
 import com.alibaba.fastjson.JSON;
 import com.imby.common.domain.Server;
 import com.imby.common.domain.server.CpuDomain;
@@ -160,7 +161,7 @@ public class ServerAspect {
             // 盘符名字
             String devName = diskInfoDomain.getDevName();
             // 盘符使用率
-            double usePercent = diskInfoDomain.getUsePercent() * 100D;
+            double usePercent = NumberUtil.round(diskInfoDomain.getUsePercent() * 100D, 2).doubleValue();
             subregion.setUsePercent(usePercent);
             subregion.setDevName(devName);
             Disk.Subregion poolDiskSubregion = this.diskPool.get(ip) != null ? this.diskPool.get(ip).getSubregionMap().get(devName) : null;
@@ -218,7 +219,7 @@ public class ServerAspect {
         memory.setIp(ip);
         memory.setComputerName(computerName);
         memory.setMemoryDomain(memoryDomain);
-        memory.setUsedPercent(memoryDomain.getMenUsedPercent() * 100D);
+        memory.setUsedPercent(NumberUtil.round(memoryDomain.getMenUsedPercent() * 100D, 2).doubleValue());
         Memory poolMemory = this.memoryPool.get(ip);
         memory.setNum(poolMemory != null ? poolMemory.getNum() : 0);
         memory.setAlarm(poolMemory != null && poolMemory.isAlarm());

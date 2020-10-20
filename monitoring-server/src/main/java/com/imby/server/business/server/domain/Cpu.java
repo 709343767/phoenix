@@ -95,7 +95,7 @@ public class Cpu extends AbstractSuperBean {
         // 和
         double sum = 0;
         for (CpuDomain.CpuInfoDomain cpuInfoDomain : cpuInfoDomains) {
-            double num = cpuInfoDomain.getCpuCombined();
+            double num = NumberUtil.round(cpuInfoDomain.getCpuCombined() * 100D, 2).doubleValue();
             sum += num;
         }
         double avg = sum / cpuInfoDomains.size();
