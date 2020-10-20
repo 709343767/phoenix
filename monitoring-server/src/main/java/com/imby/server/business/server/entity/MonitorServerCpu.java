@@ -45,22 +45,22 @@ public class MonitorServerCpu {
     private Integer cpuNo;
 
     /**
-     * CPU频率
+     * CPU频率（MHz）
      */
     @TableField("CPU_MHZ")
-    private String cpuMhz;
+    private Integer cpuMhz;
 
     /**
      * CPU使用率
      */
     @TableField("CPU_COMBINED")
-    private String cpuCombined;
+    private Double cpuCombined;
 
     /**
      * CPU剩余率
      */
     @TableField("CPU_IDLE")
-    private String cpuIdle;
+    private Double cpuIdle;
 
     /**
      * 新增时间

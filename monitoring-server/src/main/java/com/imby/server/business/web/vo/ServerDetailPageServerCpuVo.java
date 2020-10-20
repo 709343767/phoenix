@@ -30,14 +30,14 @@ public class ServerDetailPageServerCpuVo implements ISuperBean {
     @ApiModelProperty(value = "CPU序号")
     private Integer cpuNo;
 
-    @ApiModelProperty(value = "CPU频率")
-    private String cpuMhz;
+    @ApiModelProperty(value = "CPU频率（MHz）")
+    private Integer cpuMhz;
 
     @ApiModelProperty(value = "CPU使用率")
-    private String cpuCombined;
+    private Double cpuCombined;
 
     @ApiModelProperty(value = "CPU剩余率")
-    private String cpuIdle;
+    private Double cpuIdle;
 
     @ApiModelProperty(value = "新增时间")
     private Date insertTime;

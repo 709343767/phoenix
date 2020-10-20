@@ -1,6 +1,5 @@
 package com.imby.common.util;
 
-import cn.hutool.core.util.NumberUtil;
 import com.google.common.collect.Lists;
 import com.imby.common.domain.server.CpuDomain;
 import com.imby.common.init.InitSigar;
@@ -40,9 +39,9 @@ public class CpuUtils extends InitSigar {
         for (int m = 0; m < cpuList.length; m++) {
             // 设置每一个cpu的信息
             CpuDomain.CpuInfoDomain cpuInfoDomain = new CpuDomain.CpuInfoDomain();
-            cpuInfoDomain.setCpuMhz(cpuInfos[m].getMhz() + "MHz");
-            cpuInfoDomain.setCpuIdle(NumberUtil.formatPercent(cpuList[m].getIdle(), 2));
-            cpuInfoDomain.setCpuCombined(NumberUtil.formatPercent(cpuList[m].getCombined(), 2));
+            cpuInfoDomain.setCpuMhz(cpuInfos[m].getMhz());
+            cpuInfoDomain.setCpuIdle(cpuList[m].getIdle());
+            cpuInfoDomain.setCpuCombined(cpuList[m].getCombined());
             cpuInfoDomains.add(cpuInfoDomain);
         }
         cpuDomain.setCpuNum(cpuInfoDomains.size()).setCpuList(cpuInfoDomains);

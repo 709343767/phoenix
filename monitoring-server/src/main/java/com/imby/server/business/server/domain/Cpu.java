@@ -5,7 +5,6 @@ import com.imby.common.abs.AbstractSuperBean;
 import com.imby.common.domain.server.CpuDomain;
 import lombok.*;
 import lombok.experimental.Accessors;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
@@ -96,11 +95,7 @@ public class Cpu extends AbstractSuperBean {
         // 和
         double sum = 0;
         for (CpuDomain.CpuInfoDomain cpuInfoDomain : cpuInfoDomains) {
-            double num = 0;
-            String cpuCombined = cpuInfoDomain.getCpuCombined();
-            if (StringUtils.isNotBlank(cpuCombined)) {
-                num = Double.parseDouble(cpuCombined.substring(0, cpuCombined.length() - 1));
-            }
+            double num = cpuInfoDomain.getCpuCombined();
             sum += num;
         }
         double avg = sum / cpuInfoDomains.size();

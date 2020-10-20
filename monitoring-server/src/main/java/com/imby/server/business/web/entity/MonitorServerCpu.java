@@ -42,17 +42,17 @@ public class MonitorServerCpu implements Serializable {
     @TableField("CPU_NO")
     private Integer cpuNo;
 
-    @ApiModelProperty(value = "CPU频率")
+    @ApiModelProperty(value = "CPU频率（MHz）")
     @TableField("CPU_MHZ")
-    private String cpuMhz;
+    private Integer cpuMhz;
 
     @ApiModelProperty(value = "CPU使用率")
     @TableField("CPU_COMBINED")
-    private String cpuCombined;
+    private Double cpuCombined;
 
     @ApiModelProperty(value = "CPU剩余率")
     @TableField("CPU_IDLE")
-    private String cpuIdle;
+    private Double cpuIdle;
 
     @ApiModelProperty(value = "新增时间")
     @TableField("INSERT_TIME")

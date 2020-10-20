@@ -41,15 +41,17 @@ public class CpuDomain extends AbstractSuperBean {
         /**
          * CPU频率（MHz）
          */
-        String cpuMhz;
+        int cpuMhz;
+
         /**
          * CPU剩余率
          */
-        String cpuIdle;
+        double cpuIdle;
+
         /**
          * CPU使用率
          */
-        String cpuCombined;
+        double cpuCombined;
 
     }
 
