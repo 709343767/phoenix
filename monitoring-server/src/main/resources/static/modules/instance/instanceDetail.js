@@ -24,7 +24,7 @@
         // 内存池图表时间
         var chartTime = 'hour';
         // 内存池图表内存类型
-        var chartPool = $('#chart option:selected').val();
+        var chartPool = $('#chart option:selected').val() === undefined ? '' : $('#chart option:selected').val();
         // 图表条件发生改变
         form.on('select(chart)', function (data) {
             // 内存池类型
@@ -287,9 +287,21 @@
                         return item.committed;
                     });
                     // 初始内存值
-                    var init = data[0] != undefined ? data[0].init : '无数据';
+                    var init = '无数据';
                     // 最大内存量
-                    var max = data[0] != undefined ? data[0].max : '无数据';
+                    var max = '无数据'
+                    if (data[0] != undefined) {
+                        if (data[0].init != '未定义') {
+                            init = data[0].init + 'Mb';
+                        } else {
+                            init = data[0].init;
+                        }
+                        if (data[0].max != '未定义') {
+                            max = data[0].max + 'Mb';
+                        } else {
+                            max = data[0].max;
+                        }
+                    }
                     var option = {
                         title: {
                             text: title,

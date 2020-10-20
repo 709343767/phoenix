@@ -2,7 +2,6 @@ package com.imby.common.util;
 
 import cn.hutool.core.date.BetweenFormater;
 import cn.hutool.core.date.DateUtil;
-import cn.hutool.core.io.unit.DataSizeUtil;
 import com.google.common.collect.Lists;
 import com.imby.common.domain.Jvm;
 import com.imby.common.domain.jvm.*;
@@ -25,34 +24,45 @@ import java.util.Map;
 public class JvmUtils {
 
     /**
+     * <p>
+     * 私有化构造方法
+     * </p>
+     *
+     * @author 皮锋
+     * @custom.date 2020/10/20 16:19
+     */
+    private JvmUtils() {
+    }
+
+    /**
      * Java虚拟机运行时系统的管理接口
      */
-    private final static RuntimeMXBean RUNTIMEMX_BEAN = ManagementFactory.getRuntimeMXBean();
+    private static final RuntimeMXBean RUNTIMEMX_BEAN = ManagementFactory.getRuntimeMXBean();
 
     /**
      * Java虚拟机线程系统的管理接口
      */
-    private final static ThreadMXBean THREADMX_BEAN = ManagementFactory.getThreadMXBean();
+    private static final ThreadMXBean THREADMX_BEAN = ManagementFactory.getThreadMXBean();
 
     /**
      * Java虚拟机类的加载管理接口
      */
-    private final static ClassLoadingMXBean CLASS_LOADINGMX_BEAN = ManagementFactory.getClassLoadingMXBean();
+    private static final ClassLoadingMXBean CLASS_LOADINGMX_BEAN = ManagementFactory.getClassLoadingMXBean();
 
     /**
      * Java虚拟机内存系统的管理接口
      */
-    private final static MemoryMXBean MEMORYMX_BEAN = ManagementFactory.getMemoryMXBean();
+    private static final MemoryMXBean MEMORYMX_BEAN = ManagementFactory.getMemoryMXBean();
 
     /**
      * 内存池的管理接口
      */
-    private final static List<MemoryPoolMXBean> MEMORY_POOLMX_BEANS = ManagementFactory.getMemoryPoolMXBeans();
+    private static final List<MemoryPoolMXBean> MEMORY_POOLMX_BEANS = ManagementFactory.getMemoryPoolMXBeans();
 
     /**
      * Java虚拟机垃圾回收的管理接口
      */
-    private final static List<GarbageCollectorMXBean> GARBAGE_COLLECTORMX_BEANS = ManagementFactory.getGarbageCollectorMXBeans();
+    private static final List<GarbageCollectorMXBean> GARBAGE_COLLECTORMX_BEANS = ManagementFactory.getGarbageCollectorMXBeans();
 
     /**
      * <p>
@@ -133,25 +143,25 @@ public class JvmUtils {
         MemoryUsage nonHeapMemoryUsage = MEMORYMX_BEAN.getNonHeapMemoryUsage();
         // 设置堆内存
         MemoryDomain.HeapMemoryUsageDomain heapMemoryUsageDomain = new MemoryDomain.HeapMemoryUsageDomain();
-        heapMemoryUsageDomain.setInit(DataSizeUtil.format(heapMemoryUsage.getInit()));
-        heapMemoryUsageDomain.setUsed(DataSizeUtil.format(heapMemoryUsage.getUsed()));
-        heapMemoryUsageDomain.setCommitted(DataSizeUtil.format(heapMemoryUsage.getCommitted()));
-        heapMemoryUsageDomain.setMax(heapMemoryUsage.getMax() == -1L ? "未定义" : DataSizeUtil.format(heapMemoryUsage.getMax()));
+        heapMemoryUsageDomain.setInit(heapMemoryUsage.getInit());
+        heapMemoryUsageDomain.setUsed(heapMemoryUsage.getUsed());
+        heapMemoryUsageDomain.setCommitted(heapMemoryUsage.getCommitted());
+        heapMemoryUsageDomain.setMax(heapMemoryUsage.getMax() == -1L ? "未定义" : String.valueOf(heapMemoryUsage.getMax()));
         // 设置非堆内存
         MemoryDomain.NonHeapMemoryUsageDomain nonHeapMemoryUsageDomain = new MemoryDomain.NonHeapMemoryUsageDomain();
-        nonHeapMemoryUsageDomain.setInit(DataSizeUtil.format(nonHeapMemoryUsage.getInit()));
-        nonHeapMemoryUsageDomain.setUsed(DataSizeUtil.format(nonHeapMemoryUsage.getUsed()));
-        nonHeapMemoryUsageDomain.setCommitted(DataSizeUtil.format(nonHeapMemoryUsage.getCommitted()));
-        nonHeapMemoryUsageDomain.setMax(nonHeapMemoryUsage.getMax() == -1L ? "未定义" : DataSizeUtil.format(nonHeapMemoryUsage.getMax()));
+        nonHeapMemoryUsageDomain.setInit(nonHeapMemoryUsage.getInit());
+        nonHeapMemoryUsageDomain.setUsed(nonHeapMemoryUsage.getUsed());
+        nonHeapMemoryUsageDomain.setCommitted(nonHeapMemoryUsage.getCommitted());
+        nonHeapMemoryUsageDomain.setMax(nonHeapMemoryUsage.getMax() == -1L ? "未定义" : String.valueOf(nonHeapMemoryUsage.getMax()));
         // 设置内存池信息
         Map<String, MemoryDomain.MemoryPoolDomain> memoryPoolDomainMap = new HashMap<>(6);
         MEMORY_POOLMX_BEANS.forEach(pool -> {
             MemoryDomain.MemoryPoolDomain memoryPoolDomain = new MemoryDomain.MemoryPoolDomain();
             MemoryUsage memoryUsage = pool.getUsage();
-            memoryPoolDomain.setInit(DataSizeUtil.format(memoryUsage.getInit()));
-            memoryPoolDomain.setUsed(DataSizeUtil.format(memoryUsage.getUsed()));
-            memoryPoolDomain.setCommitted(DataSizeUtil.format(memoryUsage.getCommitted()));
-            memoryPoolDomain.setMax(memoryUsage.getMax() == -1L ? "未定义" : DataSizeUtil.format(memoryUsage.getMax()));
+            memoryPoolDomain.setInit(memoryUsage.getInit());
+            memoryPoolDomain.setUsed(memoryUsage.getUsed());
+            memoryPoolDomain.setCommitted(memoryUsage.getCommitted());
+            memoryPoolDomain.setMax(memoryUsage.getMax() == -1L ? "未定义" : String.valueOf(memoryUsage.getMax()));
             memoryPoolDomainMap.put(pool.getName().replace(" ", "_"), memoryPoolDomain);
         });
         // 返回内存信息

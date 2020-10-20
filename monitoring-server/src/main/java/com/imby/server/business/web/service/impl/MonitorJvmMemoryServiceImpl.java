@@ -1,12 +1,13 @@
 package com.imby.server.business.web.service.impl;
 
+import cn.hutool.core.util.NumberUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.imby.common.util.DataSizeUtils;
 import com.imby.server.business.web.dao.IMonitorJvmMemoryDao;
 import com.imby.server.business.web.entity.MonitorJvmMemory;
 import com.imby.server.business.web.service.IMonitorJvmMemoryService;
 import com.imby.server.business.web.vo.InstanceDetailPageJvmMemoryVo;
 import com.imby.server.core.CalculateDateTime;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -59,10 +60,18 @@ public class MonitorJvmMemoryServiceImpl extends ServiceImpl<IMonitorJvmMemoryDa
         params.put("endTime", endTime);
         List<InstanceDetailPageJvmMemoryVo> instanceDetailPageJvmMemoryVos = this.monitorJvmMemoryDao.getInstanceDetailPageJvmMemory(params);
         for (InstanceDetailPageJvmMemoryVo instanceDetailPageJvmMemoryVo : instanceDetailPageJvmMemoryVos) {
+            // 除数（1024 * 1024 = 1048576）
+            String v2 = "1048576";
             // 转MB
-            instanceDetailPageJvmMemoryVo.setUsed(String.valueOf(DataSizeUtils.parse(instanceDetailPageJvmMemoryVo.getUsed()) / 1024 / 1024));
+            instanceDetailPageJvmMemoryVo.setUsed(NumberUtil.div(instanceDetailPageJvmMemoryVo.getUsed(), v2, 2).toString());
             // 转MB
-            instanceDetailPageJvmMemoryVo.setCommitted(String.valueOf(DataSizeUtils.parse(instanceDetailPageJvmMemoryVo.getCommitted()) / 1024 / 1024));
+            instanceDetailPageJvmMemoryVo.setCommitted(NumberUtil.div(instanceDetailPageJvmMemoryVo.getCommitted(), v2, 2).toString());
+            // 转MB
+            instanceDetailPageJvmMemoryVo.setInit(NumberUtil.div(instanceDetailPageJvmMemoryVo.getInit(), v2, 2).toString());
+            // 转MB
+            if (!StringUtils.equals(instanceDetailPageJvmMemoryVo.getMax(), "未定义")) {
+                instanceDetailPageJvmMemoryVo.setMax(NumberUtil.div(instanceDetailPageJvmMemoryVo.getMax(), v2, 2).toString());
+            }
         }
         return instanceDetailPageJvmMemoryVos;
     }

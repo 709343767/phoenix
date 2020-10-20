@@ -93,22 +93,22 @@ public class MemoryDomain extends AbstractSuperBean {
 class MemoryUsage extends AbstractSuperBean {
 
     /**
-     * 初始内存量
+     * 初始内存量（单位：byte）
      */
-    private String init;
+    private long init;
 
     /**
-     * 已用内存量
+     * 已用内存量（单位：byte）
      */
-    private String used;
+    private long used;
 
     /**
-     * 提交内存量
+     * 提交内存量（单位：byte）
      */
-    private String committed;
+    private long committed;
 
     /**
-     * 最大内存量
+     * 最大内存量（单位：byte，可能存在未定义）
      */
     private String max;
 

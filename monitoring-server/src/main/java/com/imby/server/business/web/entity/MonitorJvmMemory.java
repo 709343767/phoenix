@@ -44,19 +44,19 @@ public class MonitorJvmMemory implements Serializable {
     @TableField("MEMORY_TYPE")
     private String memoryType;
 
-    @ApiModelProperty(value = "初始内存量")
+    @ApiModelProperty(value = "初始内存量（单位：byte）")
     @TableField("INIT")
-    private String init;
+    private Long init;
 
-    @ApiModelProperty(value = "已用内存量")
+    @ApiModelProperty(value = "已用内存量（单位：byte）")
     @TableField("USED")
-    private String used;
+    private Long used;
 
-    @ApiModelProperty(value = "提交内存量")
+    @ApiModelProperty(value = "提交内存量（单位：byte）")
     @TableField("COMMITTED")
-    private String committed;
+    private Long committed;
 
-    @ApiModelProperty(value = "最大内存量")
+    @ApiModelProperty(value = "最大内存量（单位：byte，可能存在未定义）")
     @TableField("MAX")
     private String max;
 

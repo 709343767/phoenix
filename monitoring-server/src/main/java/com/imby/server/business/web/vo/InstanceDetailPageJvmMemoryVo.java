@@ -28,16 +28,16 @@ import java.util.Date;
 @ApiModel(value = "应用实例详情页面java虚拟机内存信息表现层对象")
 public class InstanceDetailPageJvmMemoryVo implements ISuperBean {
 
-    @ApiModelProperty(value = "初始内存量")
+    @ApiModelProperty(value = "初始内存量（单位：Mb）")
     private String init;
 
-    @ApiModelProperty(value = "已用内存量")
+    @ApiModelProperty(value = "已用内存量（单位：Mb）")
     private String used;
 
-    @ApiModelProperty(value = "提交内存量")
+    @ApiModelProperty(value = "提交内存量（单位：Mb）")
     private String committed;
 
-    @ApiModelProperty(value = "最大内存量")
+    @ApiModelProperty(value = "最大内存量（单位：Mb，可能存在未定义）")
     private String max;
 
     @ApiModelProperty(value = "新增时间")

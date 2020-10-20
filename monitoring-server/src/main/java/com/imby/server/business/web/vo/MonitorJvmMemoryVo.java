@@ -39,16 +39,16 @@ public class MonitorJvmMemoryVo implements ISuperBean {
     @ApiModelProperty(value = "内存类型")
     private String memoryType;
 
-    @ApiModelProperty(value = "初始内存量")
-    private String init;
+    @ApiModelProperty(value = "初始内存量（单位：byte）")
+    private Long init;
 
-    @ApiModelProperty(value = "已用内存量")
-    private String used;
+    @ApiModelProperty(value = "已用内存量（单位：byte）")
+    private Long used;
 
-    @ApiModelProperty(value = "提交内存量")
-    private String committed;
+    @ApiModelProperty(value = "提交内存量（单位：byte）")
+    private Long committed;
 
-    @ApiModelProperty(value = "最大内存量")
+    @ApiModelProperty(value = "最大内存量（单位：byte，可能存在未定义）")
     private String max;
 
     @ApiModelProperty(value = "新增时间")
