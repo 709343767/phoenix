@@ -2,4 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.imby.server.business.web.dao.IMonitorServerCpuDao">
 
+    <select id="getServerDetailPageServerCpu" parameterType="java.util.HashMap"
+            resultType="com.imby.server.business.web.vo.ServerDetailPageServerCpuVo">
+
+    </select>
 </mapper>

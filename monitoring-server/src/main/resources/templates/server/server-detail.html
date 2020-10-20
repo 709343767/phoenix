@@ -29,8 +29,8 @@
     <div class="layui-card">
         <div class="layui-tab layui-tab-brief">
             <ul class="layui-tab-title">
-                <li class="layui-this">内存</li>
-                <li>VM概要</li>
+                <li class="layui-this">图表</li>
+                <li>概要</li>
             </ul>
             <div class="layui-tab-content">
                 <div class="layui-tab-item layui-show">
@@ -40,8 +40,9 @@
                                 <div class="layui-inline">
                                     <label class="layui-form-label">时间范围(T)</label>
                                     <div class="layui-input-block">
-                                        <select name="time1" id="time1" lay-filter="time1">
+                                        <select name="time" id="time" lay-filter="time">
                                             <option value="hour">1小时</option>
+                                            <option value="day">1天</option>
                                             <option value="week">1周</option>
                                             <option value="month">1月</option>
                                             <option value="halfYear">6月</option>
@@ -54,46 +55,18 @@
                         </form>
                         <div class="layui-card-body">
                             <div class="layui-row layui-col-space20">
-                                <div class="layui-col-md6">
-                                    <div class="layadmin-dataview-my" id="get-jvm-memory-heap-info"></div>
-                                </div>
-                                <div class="layui-col-md6">
-                                    <div class="layadmin-dataview-my" id="get-jvm-memory-non-heap-info"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="layui-card">
-                        <form class="layui-form layui-card-header layuiadmin-card-header-auto layui-card-header-my">
-                            <div class="layui-form-item">
-                                <div class="layui-inline">
-                                    <label class="layui-form-label">图表(C)</label>
-                                    <div class="layui-input-block">
-                                        <select name="chart" id="chart" lay-filter="chart">
-                                            <option th:each="types:${jvmMemoryTypes}" th:value="${types}"
-                                                    th:text="${types}"></option>
-                                        </select>
+                                <div class="layui-col-md8">
+                                    <div class="layadmin-dataview-my-330px" style="border:solid 1px #000;"
+                                         id="get-server-cpu-info">aaa
+                                    </div>
+                                    <div class="layadmin-dataview-my-330px" style="border:solid 1px #000;"
+                                         id="get-server-memory-info">aaa
                                     </div>
                                 </div>
-                                <div class="layui-inline">
-                                    <label class="layui-form-label">时间范围(T)</label>
-                                    <div class="layui-input-block">
-                                        <select name="time2" id="time2" lay-filter="time2">
-                                            <option value="hour">1小时</option>
-                                            <option value="week">1周</option>
-                                            <option value="month">1月</option>
-                                            <option value="halfYear">6月</option>
-                                            <option value="year">1年</option>
-                                            <option value="all">全部</option>
-                                        </select>
+                                <div class="layui-col-md4">
+                                    <div class="layadmin-dataview-my-660px" style="border:solid 1px #000;"
+                                         id="get-server-disk-info">aaa
                                     </div>
-                                </div>
-                            </div>
-                        </form>
-                        <div class="layui-card-body">
-                            <div class="layui-row layui-col-space10">
-                                <div class="layui-col-md12">
-                                    <div class="layadmin-dataview-my" id="get-jvm-memory-pool-info"></div>
                                 </div>
                             </div>
                         </div>
@@ -143,8 +116,8 @@
         base: ctxPath //静态资源所在路径
     }).extend({
         index: 'lib/index', //主入口模块
-        instanceDetail: 'instance/instanceDetail' // 应用实例详情模块
-    }).use(['index', 'element', 'form', 'instanceDetail']);
+        serverDetail: 'server/serverDetail' // 服务器详情模块
+    }).use(['index', 'element', 'form', 'serverDetail']);
 </script>
 </body>
 </html>

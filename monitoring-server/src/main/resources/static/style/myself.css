@@ -28,7 +28,15 @@
     padding: 10px;
 }
 
-.layadmin-dataview-my {
+.layadmin-dataview-my-330px {
+    height: 330px !important;
+}
+
+.layadmin-dataview-my-660px {
+    height: 660px !important;
+}
+
+.layadmin-dataview-my-292px {
     height: 292px !important;
 }
 
