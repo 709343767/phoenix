@@ -52,7 +52,7 @@ public class InstanceUtils {
         String mac = NetUtils.getLocalMac();
         String ip = NetUtils.getLocalIp();
         int order = ConfigLoader.monitoringProperties.getOwnProperties().getInstanceOrder();
-        instanceId = Md5Utils.encrypt32(mac + ip + order + getInstanceName());
+        instanceId = Md5Utils.encrypt(mac + ip + order + getInstanceName());
         return instanceId;
     }
 

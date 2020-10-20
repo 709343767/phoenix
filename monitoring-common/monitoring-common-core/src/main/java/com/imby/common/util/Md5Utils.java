@@ -71,6 +71,21 @@ public final class Md5Utils {
         return encrypt32(encryptStr).substring(8, 24);
     }
 
+    /**
+     * <p>
+     * 获取md5校验码
+     * </p>
+     *
+     * @param encryptStr 字符串
+     * @return md5校验码
+     * @author 皮锋
+     * @custom.date 2020/10/20 16:56
+     */
+    public static String encrypt(String encryptStr) {
+        // 默认使用16位md5校验码
+        return encrypt16(encryptStr);
+    }
+
     public static void main(String[] args) {
         for (int i = 0; i < 10; i++) {
             log.info(encrypt32("http://localhost:12000/monitoring-agent"));
