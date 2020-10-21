@@ -30,7 +30,7 @@ public class MonitorJvmThread {
      * 主键ID
      */
     @TableId(value = "ID", type = IdType.AUTO)
-    private Integer id;
+    private Long id;
 
     /**
      * 应用实例ID

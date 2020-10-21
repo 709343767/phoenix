@@ -31,7 +31,7 @@ import java.util.Date;
 public class MonitorJvmThreadVo implements ISuperBean {
 
     @ApiModelProperty(value = "主键IO")
-    private Integer id;
+    private Long id;
 
     @ApiModelProperty(value = "应用实例ID")
     private String instanceId;

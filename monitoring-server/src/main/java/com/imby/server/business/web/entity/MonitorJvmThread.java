@@ -34,7 +34,7 @@ public class MonitorJvmThread implements Serializable {
 
     @ApiModelProperty(value = "主键IO")
     @TableId(value = "ID", type = IdType.AUTO)
-    private Integer id;
+    private Long id;
 
     @ApiModelProperty(value = "应用实例ID")
     @TableField("INSTANCE_ID")
