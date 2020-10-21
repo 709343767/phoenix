@@ -276,7 +276,7 @@
                     var data = result.data;
                     // 时间
                     var time = data.map(function (item) {
-                        return item.insertTime.slice(2);
+                        return item.insertTime;
                     });
                     // 使用量
                     var used = data.map(function (item) {
