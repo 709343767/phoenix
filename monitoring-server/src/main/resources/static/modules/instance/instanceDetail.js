@@ -292,12 +292,12 @@
                     var max = '无数据'
                     if (data[0] != undefined) {
                         if (data[0].init != '未定义') {
-                            init = data[0].init + 'Mb';
+                            init = data[0].init + ' Mb';
                         } else {
                             init = data[0].init;
                         }
                         if (data[0].max != '未定义') {
-                            max = data[0].max + 'Mb';
+                            max = data[0].max + ' Mb';
                         } else {
                             max = data[0].max;
                         }
@@ -323,7 +323,7 @@
                                 var axisName = '';
                                 params.forEach(function (item) {
                                     axisName = item.axisValue;
-                                    var itemValue = item.marker + item.seriesName + ': ' + item.data + 'Mb</br>';
+                                    var itemValue = item.marker + item.seriesName + ': ' + item.data + ' Mb</br>';
                                     result += itemValue;
                                 });
                                 var allResult = axisName + '</br>' + result;
