@@ -317,7 +317,18 @@
                         },
                         // 鼠标移到折线上展示数据
                         tooltip: {
-                            trigger: 'axis'
+                            trigger: 'axis',
+                            formatter: function (params) {
+                                var result = '';
+                                var axisName = '';
+                                params.forEach(function (item) {
+                                    axisName = item.axisValue;
+                                    var itemValue = item.marker + item.seriesName + ': ' + item.data + 'Mb</br>';
+                                    result += itemValue;
+                                });
+                                var allResult = axisName + '</br>' + result;
+                                return allResult;
+                            }
                         },
                         legend: {
                             data: ['使用量', '提交量'],
