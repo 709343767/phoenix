@@ -59,11 +59,11 @@ public class MonitorServerMemoryServiceImpl extends ServiceImpl<IMonitorServerMe
         // 除数（1024 * 1024 * 1024 = 1073741824）
         Double v2 = 1073741824D;
         for (ServerDetailPageServerMemoryVo serverDetailPageServerMemoryVo : serverDetailPageServerMemoryVos) {
-            // 转MB
+            // 转GB
             serverDetailPageServerMemoryVo.setMemFree(NumberUtil.div(serverDetailPageServerMemoryVo.getMemFree(), v2, 2));
-            // 转MB
+            // 转GB
             serverDetailPageServerMemoryVo.setMemTotal(NumberUtil.div(serverDetailPageServerMemoryVo.getMemTotal(), v2, 2));
-            // 转MB
+            // 转GB
             serverDetailPageServerMemoryVo.setMemUsed(NumberUtil.div(serverDetailPageServerMemoryVo.getMemUsed(), v2, 2));
             // 乘以100后，保留两位小数
             serverDetailPageServerMemoryVo.setMenUsedPercent(NumberUtil.round(serverDetailPageServerMemoryVo.getMenUsedPercent() * 100D, 2).doubleValue());
