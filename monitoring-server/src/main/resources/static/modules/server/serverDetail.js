@@ -19,7 +19,131 @@
             time = data.value;
             // 发送ajax请求，获取CPU使用量数据
             getServerCpuInfo(time);
+            // 发送ajax请求，获取内存使用量数据
+            getServerMemoryInfo(time);
         });
+
+        // 发送ajax请求，获取内存使用量数据
+        function getServerMemoryInfo(time) {
+            // 弹出loading框
+            var loadingIndex = layer.load(1, {
+                shade: [0.1, '#fff'] //0.1透明度的白色背景
+            });
+            admin.req({
+                type: 'get',
+                url: layui.setter.base + 'monitor-server-memory/get-server-detail-page-server-memory-info',
+                dataType: 'json',
+                contentType: 'application/json;charset=utf-8',
+                headers: {
+                    "X-CSRF-TOKEN": tokenValue
+                },
+                data: {
+                    ip: ip, // 应用实例ID
+                    time: time // 时间
+                },
+                success: function (result) {
+                    debugger;
+                    var data = result.data;
+                    // 物理内存总量（单位：Mb）
+                    var memTotal = data[0] !== undefined ? data[0].memTotal + ' Gb' : '未定义';
+                    // 物理内存剩余量（单位：Mb）
+                    var memFree = data[0] !== undefined ? data[0].memFree + ' Gb' : '未定义';
+                    // 物理内存使用率
+                    var menUsedPercent = data[0] !== undefined ? data[0].menUsedPercent + '%' : '未定义';
+                    // 物理内存使用量（单位：Mb）
+                    var memUsed0 = data[0] !== undefined ? data[0].memUsed + ' Gb' : '未定义';
+                    var memUsed = data.map(function (item) {
+                        return item.memUsed;
+                    });
+                    // 新增时间
+                    var insertTime = data.map(function (item) {
+                        return item.insertTime;
+                    });
+                    var option = {
+                        title: {
+                            text: '内存使用量',
+                            left: 'center',
+                            textStyle: {
+                                color: '#696969',
+                                fontSize: 14
+                            },
+                            subtext: '总量：' + memTotal + '，使用量：' + memUsed0 + '，剩余量：' + memFree + '，使用率：' + menUsedPercent,
+                            subtextStyle: {
+                                color: '#BEBEBE'
+                            }
+                        },
+                        // 鼠标移到折线上展示数据
+                        tooltip: {
+                            trigger: 'axis',
+                            formatter: function (params) {
+                                var result = '';
+                                var axisName = '';
+                                params.forEach(function (item) {
+                                    axisName = item.axisValue;
+                                    var itemValue = item.marker + item.seriesName + ': ' + item.data + ' Gb</br>';
+                                    result += itemValue;
+                                });
+                                var allResult = axisName + '</br>' + result;
+                                return allResult;
+                            }
+                        },
+                        grid: {
+                            left: '150px',
+                            right: '150px'
+                        },
+                        xAxis: [{
+                            type: 'category',
+                            // X轴从零刻度开始
+                            boundaryGap: false,
+                            data: insertTime
+                        }],
+                        yAxis: {
+                            type: 'value',
+                            name: '使用量',
+                            axisLabel: {
+                                formatter: '{value} Gb'
+                            }
+                        },
+                        // 数据
+                        series: [{
+                            name: '使用量',
+                            data: memUsed,
+                            type: 'line',
+                            smooth: true,
+                            areaStyle: {
+                                type: 'default',
+                                // 渐变色实现
+                                color: new echarts.graphic.LinearGradient(0, 0, 0, 1,
+                                    // 三种由深及浅的颜色
+                                    [{
+                                        offset: 0,
+                                        color: '#87CEEB'
+                                    }, {
+                                        offset: 0.5,
+                                        color: '#ADD8E6'
+                                    }, {
+                                        offset: 1,
+                                        color: '#FFFFFF'
+                                    }])
+                            },
+                            itemStyle: {
+                                normal: {
+                                    // 设置颜色
+                                    color: '#5F9EA0'
+                                }
+                            }
+                        }]
+                    };
+                    getServerMemoryInfoChart.setOption(option);
+                    // 关闭loading框
+                    layer.close(loadingIndex);
+                },
+                error: function () {
+                    // 关闭loading框
+                    layer.close(loadingIndex);
+                }
+            });
+        }
 
         // 发送ajax请求，获取CPU使用量数据
         function getServerCpuInfo(time) {
@@ -136,10 +260,14 @@
 
         // 发送ajax请求，获取CPU使用量数据
         getServerCpuInfo(time);
+        // 发送ajax请求，获取内存使用量数据
+        getServerMemoryInfo(time);
         // 每30秒刷新一次
         window.setInterval(function () {
             // 发送ajax请求，获取CPU使用量数据
             getServerCpuInfo(time);
+            // 发送ajax请求，获取内存使用量数据
+            getServerMemoryInfo(time);
         }, 1000 * 30);
     });
     e('serverDetail', {});

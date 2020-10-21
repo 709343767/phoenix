@@ -59,9 +59,9 @@ public class MonitorJvmMemoryServiceImpl extends ServiceImpl<IMonitorJvmMemoryDa
         params.put("startTime", startTime);
         params.put("endTime", endTime);
         List<InstanceDetailPageJvmMemoryVo> instanceDetailPageJvmMemoryVos = this.monitorJvmMemoryDao.getInstanceDetailPageJvmMemory(params);
+        // 除数（1024 * 1024 = 1048576）
+        String v2 = "1048576";
         for (InstanceDetailPageJvmMemoryVo instanceDetailPageJvmMemoryVo : instanceDetailPageJvmMemoryVos) {
-            // 除数（1024 * 1024 = 1048576）
-            String v2 = "1048576";
             // 转MB
             instanceDetailPageJvmMemoryVo.setUsed(NumberUtil.div(instanceDetailPageJvmMemoryVo.getUsed(), v2, 2).toString());
             // 转MB

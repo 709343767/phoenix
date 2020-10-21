@@ -2,4 +2,16 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.imby.server.business.web.dao.IMonitorServerMemoryDao">
 
+    <!-- 获取服务器详情页面服务器内存信息 -->
+    <select id="getServerDetailPageServerMemory" parameterType="java.util.HashMap"
+            resultType="com.imby.server.business.web.vo.ServerDetailPageServerMemoryVo">
+        SELECT MEM_TOTAL        AS memTotal,
+               MEM_USED         AS memUsed,
+               MEM_FREE         AS memFree,
+               MEN_USED_PERCENT AS menUsedPercent,
+               INSERT_TIME      AS insertTime
+        FROM MONITOR_SERVER_MEMORY
+        WHERE IP = #{params.ip}
+          AND INSERT_TIME BETWEEN #{params.startTime} AND #{params.endTime}
+    </select>
 </mapper>
