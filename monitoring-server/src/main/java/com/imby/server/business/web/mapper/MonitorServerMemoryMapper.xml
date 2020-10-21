@@ -5,13 +5,15 @@
     <!-- 获取服务器详情页面服务器内存信息 -->
     <select id="getServerDetailPageServerMemory" parameterType="java.util.HashMap"
             resultType="com.imby.server.business.web.vo.ServerDetailPageServerMemoryVo">
-        SELECT MEM_TOTAL        AS memTotal,
-               MEM_USED         AS memUsed,
-               MEM_FREE         AS memFree,
-               MEN_USED_PERCENT AS menUsedPercent,
-               INSERT_TIME      AS insertTime
+        SELECT MEM_TOTAL AS memTotal,
+        MEM_USED AS memUsed,
+        MEM_FREE AS memFree,
+        MEN_USED_PERCENT AS menUsedPercent,
+        INSERT_TIME AS insertTime
         FROM MONITOR_SERVER_MEMORY
         WHERE IP = #{params.ip}
-          AND INSERT_TIME BETWEEN #{params.startTime} AND #{params.endTime}
+        <if test="params.startTime!=null and params.endTime!=null">
+            AND INSERT_TIME BETWEEN #{params.startTime} AND #{params.endTime}
+        </if>
     </select>
 </mapper>

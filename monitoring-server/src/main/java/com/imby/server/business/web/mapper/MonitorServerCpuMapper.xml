@@ -6,10 +6,12 @@
     <select id="getServerDetailPageServerCpu" parameterType="java.util.HashMap"
             resultType="com.imby.server.business.web.vo.ServerDetailPageServerCpuVo">
         SELECT AVG(CPU_COMBINED) AS cpuCombined,
-               INSERT_TIME       AS insertTime
+        INSERT_TIME AS insertTime
         from MONITOR_SERVER_CPU
         WHERE IP = #{params.ip}
-          AND INSERT_TIME BETWEEN #{params.startTime} AND #{params.endTime}
+        <if test="params.startTime!=null and params.endTime!=null">
+            AND INSERT_TIME BETWEEN #{params.startTime} AND #{params.endTime}
+        </if>
         GROUP BY INSERT_TIME
     </select>
 </mapper>
