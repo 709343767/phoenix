@@ -2,8 +2,14 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.imby.server.business.web.dao.IMonitorServerCpuDao">
 
+    <!-- 获取服务器详情页面服务器CPU信息 -->
     <select id="getServerDetailPageServerCpu" parameterType="java.util.HashMap"
             resultType="com.imby.server.business.web.vo.ServerDetailPageServerCpuVo">
-
+        SELECT AVG(CPU_COMBINED) AS cpuCombined,
+               INSERT_TIME       AS insertTime
+        from MONITOR_SERVER_CPU
+        WHERE IP = #{params.ip}
+          AND INSERT_TIME BETWEEN #{params.startTime} AND #{params.endTime}
+        GROUP BY INSERT_TIME
     </select>
 </mapper>

@@ -23,6 +23,10 @@
 
         // 发送ajax请求，获取CPU使用量数据
         function getServerCpuInfo(time) {
+            // 弹出loading框
+            var loadingIndex = layer.load(1, {
+                shade: [0.1, '#fff'] //0.1透明度的白色背景
+            });
             admin.req({
                 type: 'get',
                 url: layui.setter.base + 'monitor-server-cpu/get-server-detail-page-server-cpu-info',
@@ -37,7 +41,95 @@
                 },
                 success: function (result) {
                     var data = result.data;
-                    debugger;
+                    // CPU利用率
+                    var cpuCombined = data.map(function (item) {
+                        return item.cpuCombined;
+                    });
+                    // 新增时间
+                    var insertTime = data.map(function (item) {
+                        return item.insertTime;
+                    });
+                    var option = {
+                        title: {
+                            text: 'CPU利用率',
+                            left: 'center',
+                            textStyle: {
+                                color: '#696969',
+                                fontSize: 14
+                            }
+                        },
+                        // 鼠标移到折线上展示数据
+                        tooltip: {
+                            trigger: 'axis',
+                            formatter: function (params) {
+                                var result = '';
+                                var axisName = '';
+                                params.forEach(function (item) {
+                                    axisName = item.axisValue;
+                                    var itemValue = item.marker + item.seriesName + ': ' + item.data + '%</br>';
+                                    result += itemValue;
+                                });
+                                var allResult = axisName + '</br>' + result;
+                                return allResult;
+                            }
+                        },
+                        grid: {
+                            left: '150px',
+                            right: '150px'
+                        },
+                        xAxis: [{
+                            type: 'category',
+                            // X轴从零刻度开始
+                            boundaryGap: false,
+                            data: insertTime
+                        }],
+                        yAxis: {
+                            type: 'value',
+                            name: '利用率',
+                            min: 0,  //一定要设置最小刻度
+                            max: 100,  //一定要设置最大刻度
+                            minInterval: 20, //这个可自己设置刻度间隔
+                            axisLabel: {
+                                formatter: '{value}%'
+                            }
+                        },
+                        // 数据
+                        series: [{
+                            name: '利用率',
+                            data: cpuCombined,
+                            type: 'line',
+                            smooth: true,
+                            areaStyle: {
+                                type: 'default',
+                                // 渐变色实现
+                                color: new echarts.graphic.LinearGradient(0, 0, 0, 1,
+                                    // 三种由深及浅的颜色
+                                    [{
+                                        offset: 0,
+                                        color: '#87CEEB'
+                                    }, {
+                                        offset: 0.5,
+                                        color: '#ADD8E6'
+                                    }, {
+                                        offset: 1,
+                                        color: '#FFFFFF'
+                                    }])
+                            },
+                            itemStyle: {
+                                normal: {
+                                    // 设置颜色
+                                    color: '#5F9EA0'
+                                }
+                            }
+                        }]
+                    };
+                    getServerCpuInfoChart.setOption(option);
+                    // 关闭loading框
+                    layer.close(loadingIndex);
+                },
+                error: function () {
+                    // 关闭loading框
+                    layer.close(loadingIndex);
                 }
             });
         }
@@ -48,7 +140,7 @@
         window.setInterval(function () {
             // 发送ajax请求，获取CPU使用量数据
             getServerCpuInfo(time);
-        });
+        }, 1000 * 30);
     });
     e('serverDetail', {});
 });

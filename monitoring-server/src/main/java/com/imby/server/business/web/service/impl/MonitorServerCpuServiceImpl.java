@@ -1,5 +1,6 @@
 package com.imby.server.business.web.service.impl;
 
+import cn.hutool.core.util.NumberUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.imby.server.business.web.dao.IMonitorServerCpuDao;
 import com.imby.server.business.web.entity.MonitorServerCpu;
@@ -54,6 +55,11 @@ public class MonitorServerCpuServiceImpl extends ServiceImpl<IMonitorServerCpuDa
         Date endTime = calculateDateTime.getEndTime();
         params.put("startTime", startTime);
         params.put("endTime", endTime);
-        return this.monitorServerCpuDao.getServerDetailPageServerCpu(params);
+        List<ServerDetailPageServerCpuVo> serverDetailPageServerCpuVos = this.monitorServerCpuDao.getServerDetailPageServerCpu(params);
+        for (ServerDetailPageServerCpuVo serverDetailPageServerCpuVo : serverDetailPageServerCpuVos) {
+            // 乘以100，保留两位小数
+            serverDetailPageServerCpuVo.setCpuCombined(NumberUtil.round(serverDetailPageServerCpuVo.getCpuCombined() * 100D, 2).doubleValue());
+        }
+        return serverDetailPageServerCpuVos;
     }
 }
