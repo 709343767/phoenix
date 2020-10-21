@@ -292,14 +292,14 @@
                     var max = '无数据'
                     if (data[0] != undefined) {
                         if (data[0].init != '未定义') {
-                            init = data[0].init + ' Mb';
+                            init = data[data.length - 1].init + ' Mb';
                         } else {
-                            init = data[0].init;
+                            init = data[data.length - 1].init;
                         }
                         if (data[0].max != '未定义') {
-                            max = data[0].max + ' Mb';
+                            max = data[data.length - 1].max + ' Mb';
                         } else {
-                            max = data[0].max;
+                            max = data[data.length - 1].max;
                         }
                     }
                     var option = {
