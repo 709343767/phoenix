@@ -338,12 +338,15 @@
                             left: '150px',
                             right: '150px'
                         },
-                        xAxis: [{
+                        xAxis: {
                             type: 'category',
                             // X轴从零刻度开始
                             boundaryGap: false,
-                            data: time
-                        }],
+                            data: time,
+                            axisLabel: {
+                                rotate: 15 //调整数值改变倾斜的幅度（范围-90到90）
+                            },
+                        },
                         yAxis: {
                             type: 'value',
                             name: '使用量',
