@@ -42,16 +42,15 @@
                     time: time // 时间
                 },
                 success: function (result) {
-                    debugger;
                     var data = result.data;
-                    // 物理内存总量（单位：Mb）
-                    var memTotal = data[0] !== undefined ? data[data.length - 1].memTotal + ' Gb' : '未定义';
-                    // 物理内存剩余量（单位：Mb）
-                    var memFree = data[0] !== undefined ? data[data.length - 1].memFree + ' Gb' : '未定义';
+                    // 物理内存总量（单位：Gb）
+                    var memTotal = data[0] !== undefined ? data[data.length - 1].memTotal + ' Gb' : '没数据';
+                    // 物理内存剩余量（单位：Gb）
+                    var memFree = data[0] !== undefined ? data[data.length - 1].memFree + ' Gb' : '没数据';
                     // 物理内存使用率
-                    var menUsedPercent = data[0] !== undefined ? data[data.length - 1].menUsedPercent + '%' : '未定义';
-                    // 物理内存使用量（单位：Mb）
-                    var memUsed0 = data[0] !== undefined ? data[data.length - 1].memUsed + ' Gb' : '未定义';
+                    var menUsedPercent = data[0] !== undefined ? data[data.length - 1].menUsedPercent + '%' : '没数据';
+                    // 物理内存使用量（单位：Gb）
+                    var memUsed0 = data[0] !== undefined ? data[data.length - 1].memUsed + ' Gb' : '没数据';
                     var memUsed = data.map(function (item) {
                         return item.memUsed;
                     });
