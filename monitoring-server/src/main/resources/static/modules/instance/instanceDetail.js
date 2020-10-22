@@ -290,13 +290,13 @@
                     var init = '无数据';
                     // 最大内存量
                     var max = '无数据'
-                    if (data[0] != undefined) {
-                        if (data[0].init != '未定义') {
+                    if (data.length !== 0) {
+                        if (data[data.length - 1].init != '未定义') {
                             init = data[data.length - 1].init + ' Mb';
                         } else {
                             init = data[data.length - 1].init;
                         }
-                        if (data[0].max != '未定义') {
+                        if (data[data.length - 1].max != '未定义') {
                             max = data[data.length - 1].max + ' Mb';
                         } else {
                             max = data[data.length - 1].max;
@@ -310,7 +310,7 @@
                                 color: '#696969',
                                 fontSize: 14
                             },
-                            subtext: '初始内存值：' + init + '，最大内存量：' + max,
+                            subtext: '初始内存：' + init + '，最大内存：' + max,
                             subtextStyle: {
                                 color: '#BEBEBE'
                             }
@@ -344,7 +344,7 @@
                             boundaryGap: false,
                             data: time,
                             axisLabel: {
-                                rotate: 15 //调整数值改变倾斜的幅度（范围-90到90）
+                                rotate: 0 //调整数值改变倾斜的幅度（范围-90到90）
                             },
                         },
                         yAxis: {

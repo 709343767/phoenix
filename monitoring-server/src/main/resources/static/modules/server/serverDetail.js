@@ -44,13 +44,13 @@
                 success: function (result) {
                     var data = result.data;
                     // 物理内存总量（单位：Gb）
-                    var memTotal = data[0] !== undefined ? data[data.length - 1].memTotal + ' Gb' : '没数据';
+                    var memTotal = data.length !== 0 ? data[data.length - 1].memTotal + ' Gb' : '没数据';
                     // 物理内存剩余量（单位：Gb）
-                    var memFree = data[0] !== undefined ? data[data.length - 1].memFree + ' Gb' : '没数据';
+                    var memFree = data.length !== 0 ? data[data.length - 1].memFree + ' Gb' : '没数据';
                     // 物理内存使用率
-                    var menUsedPercent = data[0] !== undefined ? data[data.length - 1].menUsedPercent + '%' : '没数据';
+                    var menUsedPercent = data.length !== 0 ? data[data.length - 1].menUsedPercent + '%' : '没数据';
                     // 物理内存使用量（单位：Gb）
-                    var memUsed0 = data[0] !== undefined ? data[data.length - 1].memUsed + ' Gb' : '没数据';
+                    var memUsed0 = data.length !== 0 ? data[data.length - 1].memUsed + ' Gb' : '没数据';
                     var memUsed = data.map(function (item) {
                         return item.memUsed;
                     });
@@ -96,12 +96,14 @@
                             boundaryGap: false,
                             data: insertTime,
                             axisLabel: {
-                                rotate: 15 //调整数值改变倾斜的幅度（范围-90到90）
+                                rotate: 0 //调整数值改变倾斜的幅度（范围-90到90）
                             }
                         },
                         yAxis: {
                             type: 'value',
                             name: '使用量',
+                            min: 0,  //一定要设置最小刻度
+                            max: data.length !== 0 ? Math.ceil(data[data.length - 1].memTotal) : 1,  //一定要设置最大刻度
                             axisLabel: {
                                 formatter: '{value} Gb'
                             }
@@ -209,7 +211,7 @@
                             boundaryGap: false,
                             data: insertTime,
                             axisLabel: {
-                                rotate: 15 //调整数值改变倾斜的幅度（范围-90到90）
+                                rotate: 0 //调整数值改变倾斜的幅度（范围-90到90）
                             }
                         },
                         yAxis: {
