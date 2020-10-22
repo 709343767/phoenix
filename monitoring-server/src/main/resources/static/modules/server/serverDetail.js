@@ -176,7 +176,7 @@
                     // 最新CPU利用率
                     var lastCpuCombined = data.length !== 0 ? data[data.length - 1].cpuCombined + '%' : '没数据';
                     // 最新CPU剩余率
-                    var lastCpuIdle = data.length !== 0 ? (100 - data[data.length - 1].cpuCombined) + '%' : '没数据';
+                    var lastCpuIdle = data.length !== 0 ? (100 - data[data.length - 1].cpuCombined).toFixed(2) + '%' : '没数据';
                     // 新增时间
                     var insertTime = data.map(function (item) {
                         return item.insertTime;
