@@ -61,10 +61,12 @@ public class DiskUtils extends InitSigar {
             // TYPE_UNKNOWN ：未知
             if (type == 0) {
                 log.debug("{}", "TYPE_UNKNOWN！");
+                continue;
             }
             // TYPE_NONE
             else if (type == 1) {
                 log.debug("{}", "TYPE_NONE！");
+                continue;
             }
             // TYPE_LOCAL_DISK : 本地硬盘
             else if (type == 2) {
@@ -73,10 +75,12 @@ public class DiskUtils extends InitSigar {
             // TYPE_NETWORK ：网络
             else if (type == 3) {
                 log.debug("{}", "TYPE_NETWORK！");
+                continue;
             }
             // TYPE_RAM_DISK ：闪存
             else if (type == 4) {
                 log.debug("{}", "TYPE_RAM_DISK！");
+                continue;
             }
             // TYPE_CDROM ：光驱
             else if (type == 5) {
@@ -86,6 +90,7 @@ public class DiskUtils extends InitSigar {
             // TYPE_SWAP ：页面交换
             else if (type == 6) {
                 log.debug("{}", "TYPE_SWAP！");
+                continue;
             } else {
                 continue;
             }
