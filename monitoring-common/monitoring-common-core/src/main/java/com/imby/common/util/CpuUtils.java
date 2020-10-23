@@ -33,15 +33,33 @@ public class CpuUtils extends InitSigar {
         CpuDomain cpuDomain = new CpuDomain();
 
         CpuInfo[] cpuInfos = SIGAR.getCpuInfoList();
-        CpuPerc[] cpuList = SIGAR.getCpuPercList();
+        CpuPerc[] cpuPercs = SIGAR.getCpuPercList();
 
         List<CpuDomain.CpuInfoDomain> cpuInfoDomains = Lists.newArrayList();
-        for (int m = 0; m < cpuList.length; m++) {
+        for (int m = 0; m < cpuPercs.length; m++) {
+            CpuInfo cpuInfo = cpuInfos[m];
+            CpuPerc cpuPerc = cpuPercs[m];
             // 设置每一个cpu的信息
             CpuDomain.CpuInfoDomain cpuInfoDomain = new CpuDomain.CpuInfoDomain();
-            cpuInfoDomain.setCpuMhz(cpuInfos[m].getMhz());
-            cpuInfoDomain.setCpuIdle(cpuList[m].getIdle());
-            cpuInfoDomain.setCpuCombined(cpuList[m].getCombined());
+            // CPU的总量MHz
+            cpuInfoDomain.setCpuMhz(cpuInfo.getMhz());
+            // 获得CPU的类别，如：Celeron
+            cpuInfoDomain.setCpuModel(cpuInfo.getModel());
+            // 获得CPU的卖主，如：Intel
+            cpuInfoDomain.setCpuVendor(cpuInfo.getVendor());
+            // 用户使用率
+            cpuInfoDomain.setCpuUser(cpuPerc.getUser());
+            // 系统使用率
+            cpuInfoDomain.setCpuSys(cpuPerc.getSys());
+            // 当前等待率
+            cpuInfoDomain.setCpuWait(cpuPerc.getWait());
+            // 当前错误率
+            cpuInfoDomain.setCpuNice(cpuPerc.getNice());
+            // 当前空闲率
+            cpuInfoDomain.setCpuIdle(cpuPerc.getIdle());
+            // 总的使用率
+            cpuInfoDomain.setCpuCombined(cpuPerc.getCombined());
+
             cpuInfoDomains.add(cpuInfoDomain);
         }
         cpuDomain.setCpuNum(cpuInfoDomains.size()).setCpuList(cpuInfoDomains);

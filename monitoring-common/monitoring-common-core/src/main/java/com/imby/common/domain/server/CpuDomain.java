@@ -44,6 +44,36 @@ public class CpuDomain extends AbstractSuperBean {
         int cpuMhz;
 
         /**
+         * CPU卖主
+         */
+        String cpuVendor;
+
+        /**
+         * CPU的类别，如：Celeron
+         */
+        String cpuModel;
+
+        /**
+         * CPU用户使用率
+         */
+        double cpuUser;
+
+        /**
+         * CPU系统使用率
+         */
+        double cpuSys;
+
+        /**
+         * CPU等待率
+         */
+        double cpuWait;
+
+        /**
+         * CPU错误率
+         */
+        double cpuNice;
+
+        /**
          * CPU剩余率
          */
         double cpuIdle;

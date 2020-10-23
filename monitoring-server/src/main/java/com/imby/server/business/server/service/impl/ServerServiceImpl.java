@@ -188,6 +188,12 @@ public class ServerServiceImpl implements IServerService {
             monitorServerCpu.setIp(ip);
             monitorServerCpu.setCpuNo(i + 1);
             monitorServerCpu.setCpuMhz(cpuInfoDomain.getCpuMhz());
+            monitorServerCpu.setCpuVendor(cpuInfoDomain.getCpuVendor());
+            monitorServerCpu.setCpuModel(cpuInfoDomain.getCpuModel());
+            monitorServerCpu.setCpuUser(cpuInfoDomain.getCpuUser());
+            monitorServerCpu.setCpuSys(cpuInfoDomain.getCpuSys());
+            monitorServerCpu.setCpuNice(cpuInfoDomain.getCpuNice());
+            monitorServerCpu.setCpuWait(cpuInfoDomain.getCpuWait());
             monitorServerCpu.setCpuCombined(cpuInfoDomain.getCpuCombined());
             monitorServerCpu.setCpuIdle(cpuInfoDomain.getCpuIdle());
             monitorServerCpu.setInsertTime(serverPackage.getDateTime());

@@ -51,6 +51,42 @@ public class MonitorServerCpu {
     private Integer cpuMhz;
 
     /**
+     * CPU卖主
+     */
+    @TableField("CPU_VENDOR")
+    private String cpuVendor;
+
+    /**
+     * CPU的类别，如：Celeron
+     */
+    @TableField("CPU_MODEL")
+    private String cpuModel;
+
+    /**
+     * CPU用户使用率
+     */
+    @TableField("CPU_USER")
+    private Double cpuUser;
+
+    /**
+     * CPU系统使用率
+     */
+    @TableField("CPU_SYS")
+    private Double cpuSys;
+
+    /**
+     * CPU等待率
+     */
+    @TableField("CPU_WAIT")
+    private Double cpuWait;
+
+    /**
+     * CPU错误率
+     */
+    @TableField("CPU_NICE")
+    private Double cpuNice;
+
+    /**
      * CPU使用率
      */
     @TableField("CPU_COMBINED")
