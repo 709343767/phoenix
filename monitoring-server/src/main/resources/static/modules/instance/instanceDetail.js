@@ -334,10 +334,10 @@
                             data: ['使用量', '提交量'],
                             left: 'right',
                         },
-                        grid: {
+                        /*grid: {
                             left: '150px',
                             right: '150px'
-                        },
+                        },*/
                         xAxis: {
                             type: 'category',
                             // X轴从零刻度开始

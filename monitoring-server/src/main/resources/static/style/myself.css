@@ -48,3 +48,19 @@
 .label-font-weight {
     font-weight: 600;
 }
+
+.layadmin-takerates-my {
+    padding-top: 5px;
+}
+
+.layadmin-takerates-my .layui-progress {
+    margin: 50px 0 60px;
+}
+
+.layadmin-takerates-my .layui-progress h3 {
+    position: absolute;
+    left: 0;
+    top: -35px;
+    color: #999;
+    font-size: 14px;
+}

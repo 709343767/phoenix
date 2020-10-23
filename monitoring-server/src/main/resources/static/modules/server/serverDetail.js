@@ -1,16 +1,16 @@
 /** layuiAdmin.std-v2020.4.1 LPPL License By 皮锋 */
 ;layui.define(function (e) {
     layui.use(['admin', 'element', 'form', 'layer'], function () {
-        var admin = layui.admin, $ = layui.$, form = layui.form, layer = layui.layer;
+        var admin = layui.admin, $ = layui.$, form = layui.form, layer = layui.layer, element = layui.element;
+        // 渲染进度条
+        element.render('progress');
         // 基于准备好的dom，初始化echarts实例
         var getServerCpuInfoChart = echarts.init(document.getElementById('get-server-cpu-info'), 'infographic');
         var getServerMemoryInfoChart = echarts.init(document.getElementById('get-server-memory-info'), 'infographic');
-        var getServerDiskInfoChart = echarts.init(document.getElementById('get-server-disk-info'), 'infographic');
         // 浏览器窗口大小发生改变时
         window.addEventListener("resize", function () {
             getServerCpuInfoChart.resize();
             getServerMemoryInfoChart.resize();
-            getServerDiskInfoChart.resize();
         });
         // 堆内存图表和非堆内存图表时间
         var time = 'hour';
@@ -21,7 +21,61 @@
             getServerCpuInfo(time);
             // 发送ajax请求，获取内存使用量数据
             getServerMemoryInfo(time);
+            // 发送ajax请求，获取磁盘使用量数据
+            getServerDiskInfo();
         });
+
+        // 发送ajax请求，获取磁盘使用量数据
+        function getServerDiskInfo() {
+            // 弹出loading框
+            var loadingIndex = layer.load(1, {
+                shade: [0.1, '#fff'] //0.1透明度的白色背景
+            });
+            admin.req({
+                type: 'get',
+                url: layui.setter.base + 'monitor-server-disk/get-server-detail-page-server-disk-info',
+                dataType: 'json',
+                contentType: 'application/json;charset=utf-8',
+                headers: {
+                    "X-CSRF-TOKEN": tokenValue
+                },
+                data: {
+                    ip: ip // 应用实例ID
+                },
+                success: function (result) {
+                    var data = result.data;
+                    var html = '';
+                    for (var i = 0; i < data.length; i++) {
+                        var obj = data[i];
+                        // 分区的盘符名称
+                        var devName = obj.devName;
+                        // 磁盘总大小
+                        var totalStr = obj.totalStr;
+                        // 磁盘可用大小
+                        var availStr = obj.availStr;
+                        // 磁盘资源的利用率
+                        var usePercent = obj.usePercent;
+                        html += '<div class="layui-progress layui-progress-big" lay-showPercent="yes">' +
+                            '        <h3>' + devName + '（可用' + availStr + '/共' + totalStr + '）</h3>';
+                        if (usePercent >= 90) {
+                            html += '<div class="layui-progress-bar layui-bg-red" lay-percent="' + usePercent + '%"></div>';
+                        } else {
+                            html += '<div class="layui-progress-bar" lay-percent="' + usePercent + '%"></div>';
+                        }
+                        html += '</div>';
+                    }
+                    $('#get-server-disk-info').empty().append(html);
+                    // 重新渲染进度条
+                    element.render('progress');
+                    // 关闭loading框
+                    layer.close(loadingIndex);
+                },
+                error: function () {
+                    // 关闭loading框
+                    layer.close(loadingIndex);
+                }
+            });
+        }
 
         // 发送ajax请求，获取内存使用量数据
         function getServerMemoryInfo(time) {
@@ -86,10 +140,10 @@
                                 return allResult;
                             }
                         },
-                        grid: {
+                        /*grid: {
                             left: '150px',
                             right: '150px'
-                        },
+                        },*/
                         xAxis: {
                             type: 'category',
                             // X轴从零刻度开始
@@ -209,10 +263,10 @@
                                 return allResult;
                             }
                         },
-                        grid: {
+                        /*grid: {
                             left: '150px',
                             right: '150px'
-                        },
+                        },*/
                         xAxis: {
                             type: 'category',
                             // X轴从零刻度开始
@@ -277,12 +331,16 @@
         getServerCpuInfo(time);
         // 发送ajax请求，获取内存使用量数据
         getServerMemoryInfo(time);
+        // 发送ajax请求，获取磁盘使用量数据
+        getServerDiskInfo();
         // 每30秒刷新一次
         window.setInterval(function () {
             // 发送ajax请求，获取CPU使用量数据
             getServerCpuInfo(time);
             // 发送ajax请求，获取内存使用量数据
             getServerMemoryInfo(time);
+            // 发送ajax请求，获取磁盘使用量数据
+            getServerDiskInfo();
         }, 1000 * 30);
     });
     e('serverDetail', {});
