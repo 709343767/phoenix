@@ -59,8 +59,10 @@
                             '        <h3>' + devName + '（可用' + availStr + '/共' + totalStr + '）</h3>';
                         if (usePercent >= 90) {
                             html += '<div class="layui-progress-bar layui-bg-red" lay-percent="' + usePercent + '%"></div>';
+                        } else if (usePercent >= 80 && usePercent < 90) {
+                            html += '<div class="layui-progress-bar layui-bg-orange" lay-percent="' + usePercent + '%"></div>';
                         } else {
-                            html += '<div class="layui-progress-bar" lay-percent="' + usePercent + '%"></div>';
+                            html += '<div class="layui-progress-bar layui-bg-skyblue" lay-percent="' + usePercent + '%"></div>';
                         }
                         html += '</div>';
                     }
