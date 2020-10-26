@@ -40,7 +40,6 @@
                 },
                 success: function (result) {
                     var data = result.data;
-                    debugger;
                     var insertTime = data.insertTime;
                     var ip = data.ip;
                     var osName = data.osName;
@@ -256,10 +255,10 @@
                                     // 三种由深及浅的颜色
                                     [{
                                         offset: 0,
-                                        color: '#00BFFF'
+                                        color: '#87CEEB'
                                     }, {
                                         offset: 0.5,
-                                        color: '#87CEEB'
+                                        color: '#ADD8E6'
                                     }, {
                                         offset: 1,
                                         color: '#FFFFFF'
@@ -268,7 +267,7 @@
                             itemStyle: {
                                 normal: {
                                     // 设置颜色
-                                    color: '#1E90FF'
+                                    color: '#5F9EA0'
                                 }
                             }
                         }, {
@@ -284,10 +283,10 @@
                                     // 三种由深及浅的颜色
                                     [{
                                         offset: 0,
-                                        color: '#4EEE94'
+                                        color: '#B4EEB4'
                                     }, {
                                         offset: 0.5,
-                                        color: '#54FF9F'
+                                        color: '#C1FFC1'
                                     }, {
                                         offset: 1,
                                         color: '#FFFFFF'
@@ -296,7 +295,7 @@
                             itemStyle: {
                                 normal: {
                                     // 设置颜色
-                                    color: '#43CD80'
+                                    color: '#9BCD9B'
                                 }
                             }
                         }]
