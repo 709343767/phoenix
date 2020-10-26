@@ -41,7 +41,7 @@ public class InstanceDetailPageJvmMemoryVo implements ISuperBean {
     private String max;
 
     @ApiModelProperty(value = "新增时间")
-    @JsonFormat(pattern = "yy/MM/dd HH:mm:ss", timezone = "GMT+8")
+    @JsonFormat(pattern = "yyyy/MM/dd HH:mm:ss", timezone = "GMT+8")
     private Date insertTime;
 
 }

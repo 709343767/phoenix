@@ -46,7 +46,7 @@ public class ServerDetailPageServerCpuVo implements ISuperBean {
     @ApiModelProperty(value = "CPU剩余率")
     private Double cpuIdle;
 
-    @JsonFormat(pattern = "yy/MM/dd HH:mm:ss", timezone = "GMT+8")
+    @JsonFormat(pattern = "yyyy/MM/dd HH:mm:ss", timezone = "GMT+8")
     @ApiModelProperty(value = "新增时间")
     private Date insertTime;
 

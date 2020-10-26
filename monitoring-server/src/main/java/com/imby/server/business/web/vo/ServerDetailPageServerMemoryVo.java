@@ -52,7 +52,7 @@ public class ServerDetailPageServerMemoryVo implements ISuperBean {
     @ApiModelProperty(value = "交换区使用率")
     private Double swapUsedPercent;
 
-    @JsonFormat(pattern = "yy/MM/dd HH:mm:ss", timezone = "GMT+8")
+    @JsonFormat(pattern = "yyyy/MM/dd HH:mm:ss", timezone = "GMT+8")
     @ApiModelProperty(value = "新增时间")
     private Date insertTime;
 
