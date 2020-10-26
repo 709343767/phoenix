@@ -59,4 +59,16 @@ public class InitBanner {
         }
     }
 
+    /**
+     * <p>
+     * 打印banner成功
+     * </p>
+     *
+     * @author 皮锋
+     * @custom.date 2020/10/26 21:55
+     */
+    public static void declare() {
+        log.trace("打印banner成功！");
+    }
+
 }

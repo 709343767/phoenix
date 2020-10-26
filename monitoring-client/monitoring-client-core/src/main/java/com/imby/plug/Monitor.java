@@ -82,7 +82,7 @@ public class Monitor {
      */
     private static void run(final String configPath, final String configName) {
         // 1.打印banner信息
-        new InitBanner();
+        InitBanner.declare();
         // 2.加载配置信息
         try {
             ConfigLoader.load(configPath, configName);
