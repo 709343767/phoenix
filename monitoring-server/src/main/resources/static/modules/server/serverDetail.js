@@ -62,7 +62,7 @@
                         } else if (usePercent >= 80 && usePercent < 90) {
                             html += '<div class="layui-progress-bar layui-bg-orange" lay-percent="' + usePercent + '%"></div>';
                         } else {
-                            html += '<div class="layui-progress-bar layui-bg-skyblue" lay-percent="' + usePercent + '%"></div>';
+                            html += '<div class="layui-progress-bar layui-bg-green" lay-percent="' + usePercent + '%"></div>';
                         }
                         html += '</div>';
                     }
@@ -99,14 +99,14 @@
                 },
                 success: function (result) {
                     var data = result.data;
-                    // 物理内存总量（单位：Gb）
-                    var memTotal = data.length !== 0 ? data[data.length - 1].memTotal + ' Gb' : '没数据';
-                    // 物理内存剩余量（单位：Gb）
-                    var memFree = data.length !== 0 ? data[data.length - 1].memFree + ' Gb' : '没数据';
+                    // 物理内存总量（单位：GB）
+                    var memTotal = data.length !== 0 ? data[data.length - 1].memTotal + ' GB' : '没数据';
+                    // 物理内存剩余量（单位：GB）
+                    var memFree = data.length !== 0 ? data[data.length - 1].memFree + ' GB' : '没数据';
                     // 物理内存使用率
                     var menUsedPercent = data.length !== 0 ? data[data.length - 1].menUsedPercent + '%' : '没数据';
-                    // 物理内存使用量（单位：Gb）
-                    var memUsed0 = data.length !== 0 ? data[data.length - 1].memUsed + ' Gb' : '没数据';
+                    // 物理内存使用量（单位：GB）
+                    var memUsed0 = data.length !== 0 ? data[data.length - 1].memUsed + ' GB' : '没数据';
                     var memUsed = data.map(function (item) {
                         return item.memUsed;
                     });
@@ -135,11 +135,10 @@
                                 var axisName = '';
                                 params.forEach(function (item) {
                                     axisName = item.axisValue;
-                                    var itemValue = item.marker + item.seriesName + ': ' + item.data + ' Gb</br>';
+                                    var itemValue = item.marker + item.seriesName + ': ' + item.data + ' GB</br>';
                                     result += itemValue;
                                 });
-                                var allResult = axisName + '</br>' + result;
-                                return allResult;
+                                return axisName + '</br>' + result;
                             }
                         },
                         /*grid: {
@@ -161,7 +160,7 @@
                             min: 0,  //一定要设置最小刻度
                             max: data.length !== 0 ? Math.ceil(data[data.length - 1].memTotal) : 1,  //一定要设置最大刻度
                             axisLabel: {
-                                formatter: '{value} Gb'
+                                formatter: '{value} GB'
                             }
                         },
                         // 数据
@@ -225,12 +224,32 @@
                 },
                 success: function (result) {
                     var data = result.data;
-                    // CPU利用率
+                    // CPU用户使用率
+                    var cpuUser = data.map(function (item) {
+                        return item.cpuUser;
+                    });
+                    // CPU系统使用率
+                    var cpuSys = data.map(function (item) {
+                        return item.cpuSys;
+                    });
+                    // CPU等待率
+                    var cpuWait = data.map(function (item) {
+                        return item.cpuWait;
+                    });
+                    // CPU错误率
+                    var cpuNice = data.map(function (item) {
+                        return item.cpuNice;
+                    });
+                    // CPU总利用率
                     var cpuCombined = data.map(function (item) {
                         return item.cpuCombined;
                     });
-                    // 最新CPU利用率
-                    var lastCpuCombined = data.length !== 0 ? data[data.length - 1].cpuCombined + '%' : '没数据';
+                    // CPU剩余率
+                    var cpuIdle = data.map(function (item) {
+                        return item.cpuIdle;
+                    });
+                    // 最新CPU总利用率
+                    var lastCpuCombined = data.length !== 0 ? data[data.length - 1].cpuCombined.toFixed(2) + '%' : '没数据';
                     // 最新CPU剩余率
                     var lastCpuIdle = data.length !== 0 ? (100 - data[data.length - 1].cpuCombined).toFixed(2) + '%' : '没数据';
                     // 新增时间
@@ -245,7 +264,7 @@
                                 color: '#696969',
                                 fontSize: 14
                             },
-                            subtext: '利用率：' + lastCpuCombined + '，剩余率：' + lastCpuIdle,
+                            subtext: '剩余率：' + lastCpuIdle + '，总使用率：' + lastCpuCombined,
                             subtextStyle: {
                                 color: '#BEBEBE'
                             }
@@ -261,9 +280,15 @@
                                     var itemValue = item.marker + item.seriesName + ': ' + item.data + '%</br>';
                                     result += itemValue;
                                 });
-                                var allResult = axisName + '</br>' + result;
-                                return allResult;
+                                return axisName + '</br>' + result;
                             }
+                        },
+                        legend: {
+                            data: ['剩余率', '总使用率', '用户使用率', '系统使用率', '等待率', '错误率'],
+                            selected: {'用户使用率': false, '系统使用率': false, '等待率': false, '错误率': false},
+                            x: 'center',
+                            y: '12%',
+                            orient: 'horizontal'
                         },
                         /*grid: {
                             left: '150px',
@@ -290,7 +315,34 @@
                         },
                         // 数据
                         series: [{
-                            name: '利用率',
+                            name: '剩余率',
+                            data: cpuIdle,
+                            type: 'line',
+                            smooth: true,
+                            areaStyle: {
+                                type: 'default',
+                                // 渐变色实现
+                                color: new echarts.graphic.LinearGradient(0, 0, 0, 1,
+                                    // 三种由深及浅的颜色
+                                    [{
+                                        offset: 0,
+                                        color: '#B4EEB4'
+                                    }, {
+                                        offset: 0.5,
+                                        color: '#C1FFC1'
+                                    }, {
+                                        offset: 1,
+                                        color: '#FFFFFF'
+                                    }])
+                            },
+                            itemStyle: {
+                                normal: {
+                                    // 设置颜色
+                                    color: '#9BCD9B'
+                                }
+                            }
+                        }, {
+                            name: '总使用率',
                             data: cpuCombined,
                             type: 'line',
                             smooth: true,
@@ -301,10 +353,10 @@
                                     // 三种由深及浅的颜色
                                     [{
                                         offset: 0,
-                                        color: '#87CEEB'
+                                        color: '#EE9572'
                                     }, {
                                         offset: 0.5,
-                                        color: '#ADD8E6'
+                                        color: '#FFA07A'
                                     }, {
                                         offset: 1,
                                         color: '#FFFFFF'
@@ -313,7 +365,115 @@
                             itemStyle: {
                                 normal: {
                                     // 设置颜色
-                                    color: '#5F9EA0'
+                                    color: '#CD8162'
+                                }
+                            }
+                        }, {
+                            name: '用户使用率',
+                            data: cpuUser,
+                            type: 'line',
+                            smooth: true,
+                            areaStyle: {
+                                type: 'default',
+                                // 渐变色实现
+                                color: new echarts.graphic.LinearGradient(0, 0, 0, 1,
+                                    // 三种由深及浅的颜色
+                                    [{
+                                        offset: 0,
+                                        color: '#EEEE00'
+                                    }, {
+                                        offset: 0.5,
+                                        color: '#FFFF00'
+                                    }, {
+                                        offset: 1,
+                                        color: '#FFFFFF'
+                                    }])
+                            },
+                            itemStyle: {
+                                normal: {
+                                    // 设置颜色
+                                    color: '#CDCD00'
+                                }
+                            }
+                        }, {
+                            name: '系统使用率',
+                            data: cpuSys,
+                            type: 'line',
+                            smooth: true,
+                            areaStyle: {
+                                type: 'default',
+                                // 渐变色实现
+                                color: new echarts.graphic.LinearGradient(0, 0, 0, 1,
+                                    // 三种由深及浅的颜色
+                                    [{
+                                        offset: 0,
+                                        color: '#D15FEE'
+                                    }, {
+                                        offset: 0.5,
+                                        color: '#E066FF'
+                                    }, {
+                                        offset: 1,
+                                        color: '#FFFFFF'
+                                    }])
+                            },
+                            itemStyle: {
+                                normal: {
+                                    // 设置颜色
+                                    color: '#B452CD'
+                                }
+                            }
+                        }, {
+                            name: '等待率',
+                            data: cpuWait,
+                            type: 'line',
+                            smooth: true,
+                            areaStyle: {
+                                type: 'default',
+                                // 渐变色实现
+                                color: new echarts.graphic.LinearGradient(0, 0, 0, 1,
+                                    // 三种由深及浅的颜色
+                                    [{
+                                        offset: 0,
+                                        color: '#EEE5DE'
+                                    }, {
+                                        offset: 0.5,
+                                        color: '#FFF5EE'
+                                    }, {
+                                        offset: 1,
+                                        color: '#FFFFFF'
+                                    }])
+                            },
+                            itemStyle: {
+                                normal: {
+                                    // 设置颜色
+                                    color: '#CDC5BF'
+                                }
+                            }
+                        }, {
+                            name: '错误率',
+                            data: cpuNice,
+                            type: 'line',
+                            smooth: true,
+                            areaStyle: {
+                                type: 'default',
+                                // 渐变色实现
+                                color: new echarts.graphic.LinearGradient(0, 0, 0, 1,
+                                    // 三种由深及浅的颜色
+                                    [{
+                                        offset: 0,
+                                        color: '#EE4000'
+                                    }, {
+                                        offset: 0.5,
+                                        color: '#FF4500'
+                                    }, {
+                                        offset: 1,
+                                        color: '#FFFFFF'
+                                    }])
+                            },
+                            itemStyle: {
+                                normal: {
+                                    // 设置颜色
+                                    color: '#CD3700'
                                 }
                             }
                         }]

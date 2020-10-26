@@ -59,6 +59,11 @@ public class MonitorServerCpuServiceImpl extends ServiceImpl<IMonitorServerCpuDa
         for (ServerDetailPageServerCpuVo serverDetailPageServerCpuVo : serverDetailPageServerCpuVos) {
             // 乘以100，保留两位小数
             serverDetailPageServerCpuVo.setCpuCombined(NumberUtil.round(serverDetailPageServerCpuVo.getCpuCombined() * 100D, 2).doubleValue());
+            serverDetailPageServerCpuVo.setCpuIdle(NumberUtil.round(serverDetailPageServerCpuVo.getCpuIdle() * 100D, 2).doubleValue());
+            serverDetailPageServerCpuVo.setCpuNice(NumberUtil.round(serverDetailPageServerCpuVo.getCpuNice() * 100D, 2).doubleValue());
+            serverDetailPageServerCpuVo.setCpuSys(NumberUtil.round(serverDetailPageServerCpuVo.getCpuSys() * 100D, 2).doubleValue());
+            serverDetailPageServerCpuVo.setCpuUser(NumberUtil.round(serverDetailPageServerCpuVo.getCpuUser() * 100D, 2).doubleValue());
+            serverDetailPageServerCpuVo.setCpuWait(NumberUtil.round(serverDetailPageServerCpuVo.getCpuWait() * 100D, 2).doubleValue());
         }
         return serverDetailPageServerCpuVos;
     }

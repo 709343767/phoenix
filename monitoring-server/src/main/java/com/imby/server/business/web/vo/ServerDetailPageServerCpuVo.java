@@ -28,8 +28,23 @@ import java.util.Date;
 @ApiModel(value = "服务器详情页面服务器CPU信息表现层对象")
 public class ServerDetailPageServerCpuVo implements ISuperBean {
 
+    @ApiModelProperty(value = "CPU用户使用率")
+    private Double cpuUser;
+
+    @ApiModelProperty(value = "CPU系统使用率")
+    private Double cpuSys;
+
+    @ApiModelProperty(value = "CPU等待率")
+    private Double cpuWait;
+
+    @ApiModelProperty(value = "CPU错误率")
+    private Double cpuNice;
+
     @ApiModelProperty(value = "CPU使用率")
     private Double cpuCombined;
+
+    @ApiModelProperty(value = "CPU剩余率")
+    private Double cpuIdle;
 
     @JsonFormat(pattern = "yy/MM/dd HH:mm:ss", timezone = "GMT+8")
     @ApiModelProperty(value = "新增时间")

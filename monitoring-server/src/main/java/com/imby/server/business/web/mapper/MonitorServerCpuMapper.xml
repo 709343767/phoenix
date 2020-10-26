@@ -5,7 +5,12 @@
     <!-- 获取服务器详情页面服务器CPU信息 -->
     <select id="getServerDetailPageServerCpu" parameterType="java.util.HashMap"
             resultType="com.imby.server.business.web.vo.ServerDetailPageServerCpuVo">
-        SELECT AVG(CPU_COMBINED) AS cpuCombined,
+        SELECT AVG(CPU_USER) AS cpuUser,
+        AVG(CPU_SYS) AS cpuSys,
+        AVG(CPU_WAIT) AS cpuWait,
+        AVG(CPU_NICE) AS cpuNice,
+        AVG(CPU_COMBINED) AS cpuCombined,
+        AVG(CPU_IDLE) AS cpuIdle,
         INSERT_TIME AS insertTime
         from MONITOR_SERVER_CPU
         WHERE IP = #{params.ip}

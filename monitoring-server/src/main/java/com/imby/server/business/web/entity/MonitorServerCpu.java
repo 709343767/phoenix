@@ -46,6 +46,30 @@ public class MonitorServerCpu implements Serializable {
     @TableField("CPU_MHZ")
     private Integer cpuMhz;
 
+    @ApiModelProperty(value = "CPU卖主")
+    @TableField("CPU_VENDOR")
+    private String cpuVendor;
+
+    @ApiModelProperty(value = "CPU的类别，如：Celeron")
+    @TableField("CPU_MODEL")
+    private String cpuModel;
+
+    @ApiModelProperty(value = "CPU用户使用率")
+    @TableField("CPU_USER")
+    private Double cpuUser;
+
+    @ApiModelProperty(value = "CPU系统使用率")
+    @TableField("CPU_SYS")
+    private Double cpuSys;
+
+    @ApiModelProperty(value = "CPU等待率")
+    @TableField("CPU_WAIT")
+    private Double cpuWait;
+
+    @ApiModelProperty(value = "CPU错误率")
+    @TableField("CPU_NICE")
+    private Double cpuNice;
+
     @ApiModelProperty(value = "CPU使用率")
     @TableField("CPU_COMBINED")
     private Double cpuCombined;
