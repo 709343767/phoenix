@@ -40,6 +40,18 @@ public class ServerDetailPageServerMemoryVo implements ISuperBean {
     @ApiModelProperty(value = "物理内存使用率")
     private Double menUsedPercent;
 
+    @ApiModelProperty(value = "交换区总量（单位：Gb）")
+    private Double swapTotal;
+
+    @ApiModelProperty(value = "交换区使用量（单位：Gb）")
+    private Double swapUsed;
+
+    @ApiModelProperty(value = "交换区剩余量（单位：Gb）")
+    private Double swapFree;
+
+    @ApiModelProperty(value = "交换区使用率")
+    private Double swapUsedPercent;
+
     @JsonFormat(pattern = "yy/MM/dd HH:mm:ss", timezone = "GMT+8")
     @ApiModelProperty(value = "新增时间")
     private Date insertTime;

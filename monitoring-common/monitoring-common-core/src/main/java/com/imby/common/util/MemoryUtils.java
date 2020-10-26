@@ -4,6 +4,7 @@ import com.imby.common.domain.server.MemoryDomain;
 import com.imby.common.init.InitSigar;
 import org.hyperic.sigar.Mem;
 import org.hyperic.sigar.SigarException;
+import org.hyperic.sigar.Swap;
 
 /**
  * <p>
@@ -27,10 +28,26 @@ public class MemoryUtils extends InitSigar {
      */
     public static MemoryDomain getMemoryInfo() throws SigarException {
         Mem mem = SIGAR.getMem();
-        return new MemoryDomain()
-                .setMemTotal(mem.getTotal())
-                .setMemUsed(mem.getUsed())
-                .setMemFree(mem.getFree())
-                .setMenUsedPercent(mem.getUsedPercent() / 100D);
+        Swap swap = SIGAR.getSwap();
+        MemoryDomain.MenDomain menDomain = MemoryDomain.MenDomain.builder()
+                .memTotal(mem.getTotal())
+                // 实际内存使用量
+                .memUsed(mem.getActualUsed())
+                // 实际内存剩余量
+                .memFree(mem.getActualFree())
+                // 物理内存使用率
+                .menUsedPercent(mem.getUsedPercent() / 100D)
+                .build();
+        MemoryDomain.SwapDomain swapDomain = MemoryDomain.SwapDomain.builder()
+                // 交换区总量
+                .swapTotal(swap.getTotal())
+                // 交换区使用量
+                .swapUsed(swap.getUsed())
+                // 交换区剩余量
+                .swapFree(swap.getFree())
+                // 交换区使用率
+                .swapUsedPercent((double) swap.getUsed() / (double) swap.getTotal())
+                .build();
+        return MemoryDomain.builder().menDomain(menDomain).swapDomain(swapDomain).build();
     }
 }

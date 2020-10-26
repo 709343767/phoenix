@@ -101,18 +101,23 @@
                     var data = result.data;
                     // 物理内存总量（单位：GB）
                     var memTotal = data.length !== 0 ? data[data.length - 1].memTotal + ' GB' : '没数据';
-                    // 物理内存剩余量（单位：GB）
-                    var memFree = data.length !== 0 ? data[data.length - 1].memFree + ' GB' : '没数据';
                     // 物理内存使用率
                     var menUsedPercent = data.length !== 0 ? data[data.length - 1].menUsedPercent + '%' : '没数据';
-                    // 物理内存使用量（单位：GB）
-                    var memUsed0 = data.length !== 0 ? data[data.length - 1].memUsed + ' GB' : '没数据';
+                    // 交换区总量（单位：GB）
+                    var swapTotal = data.length !== 0 ? data[data.length - 1].swapTotal + ' GB' : '没数据';
+                    // 交换区使用率
+                    var swapUsedPercent = data.length !== 0 ? data[data.length - 1].swapUsedPercent + '%' : '没数据';
                     var memUsed = data.map(function (item) {
                         return item.memUsed;
                     });
+                    // 交换区使用量
+                    var swapUsed = data.map(function (item) {
+                        return item.swapUsed;
+                    });
+                    debugger;
                     // 新增时间
                     var insertTime = data.map(function (item) {
-                        return item.insertTime;
+                        return item.insertTime.replace(' ', '\n');
                     });
                     var option = {
                         title: {
@@ -122,7 +127,7 @@
                                 color: '#696969',
                                 fontSize: 14
                             },
-                            subtext: '总量：' + memTotal + '，使用量：' + memUsed0 + '，剩余量：' + memFree + '，使用率：' + menUsedPercent,
+                            subtext: '物理内存：' + memTotal + '，物理内存使用率：' + menUsedPercent + '，交换区：' + swapTotal + '，交换区使用率：' + swapUsedPercent,
                             subtextStyle: {
                                 color: '#BEBEBE'
                             }
@@ -141,6 +146,12 @@
                                 return axisName + '</br>' + result;
                             }
                         },
+                        legend: {
+                            data: ['内存使用量', '交换区使用量'],
+                            x: 'center',
+                            y: '12%',
+                            orient: 'horizontal'
+                        },
                         /*grid: {
                             left: '150px',
                             right: '150px'
@@ -154,18 +165,31 @@
                                 rotate: 0 //调整数值改变倾斜的幅度（范围-90到90）
                             }
                         },
-                        yAxis: {
+                        yAxis: [{
                             type: 'value',
-                            name: '使用量',
+                            name: '内存使用量',
                             min: 0,  //一定要设置最小刻度
-                            max: data.length !== 0 ? Math.ceil(data[data.length - 1].memTotal) : 1,  //一定要设置最大刻度
+                            max: Math.ceil(Math.max.apply(null, data.map(function (item) {
+                                return item.memTotal;
+                            }))),  //一定要设置最大刻度
                             axisLabel: {
                                 formatter: '{value} GB'
                             }
-                        },
+                        }, {
+                            type: 'value',
+                            name: '交换区使用量',
+                            min: 0,  //一定要设置最小刻度
+                            max: Math.ceil(Math.max.apply(null, data.map(function (item) {
+                                return item.swapTotal;
+                            }))),
+                            axisLabel: {
+                                formatter: '{value} GB'
+                            }
+                        }],
                         // 数据
                         series: [{
-                            name: '使用量',
+                            name: '内存使用量',
+                            yAxisIndex: 0,
                             data: memUsed,
                             type: 'line',
                             smooth: true,
@@ -176,10 +200,10 @@
                                     // 三种由深及浅的颜色
                                     [{
                                         offset: 0,
-                                        color: '#87CEEB'
+                                        color: '#00BFFF'
                                     }, {
                                         offset: 0.5,
-                                        color: '#ADD8E6'
+                                        color: '#87CEEB'
                                     }, {
                                         offset: 1,
                                         color: '#FFFFFF'
@@ -188,7 +212,35 @@
                             itemStyle: {
                                 normal: {
                                     // 设置颜色
-                                    color: '#5F9EA0'
+                                    color: '#1E90FF'
+                                }
+                            }
+                        }, {
+                            name: '交换区使用量',
+                            yAxisIndex: 1,
+                            data: swapUsed,
+                            type: 'line',
+                            smooth: true,
+                            areaStyle: {
+                                type: 'default',
+                                // 渐变色实现
+                                color: new echarts.graphic.LinearGradient(0, 0, 0, 1,
+                                    // 三种由深及浅的颜色
+                                    [{
+                                        offset: 0,
+                                        color: '#4EEE94'
+                                    }, {
+                                        offset: 0.5,
+                                        color: '#54FF9F'
+                                    }, {
+                                        offset: 1,
+                                        color: '#FFFFFF'
+                                    }])
+                            },
+                            itemStyle: {
+                                normal: {
+                                    // 设置颜色
+                                    color: '#43CD80'
                                 }
                             }
                         }]
@@ -254,7 +306,7 @@
                     var lastCpuIdle = data.length !== 0 ? (100 - data[data.length - 1].cpuCombined).toFixed(2) + '%' : '没数据';
                     // 新增时间
                     var insertTime = data.map(function (item) {
-                        return item.insertTime;
+                        return item.insertTime.replace(' ', '\n');
                     });
                     var option = {
                         title: {

@@ -67,6 +67,14 @@ public class MonitorServerMemoryServiceImpl extends ServiceImpl<IMonitorServerMe
             serverDetailPageServerMemoryVo.setMemUsed(NumberUtil.div(serverDetailPageServerMemoryVo.getMemUsed(), v2, 2));
             // 乘以100后，保留两位小数
             serverDetailPageServerMemoryVo.setMenUsedPercent(NumberUtil.round(serverDetailPageServerMemoryVo.getMenUsedPercent() * 100D, 2).doubleValue());
+            // 转GB
+            serverDetailPageServerMemoryVo.setSwapFree(NumberUtil.div(serverDetailPageServerMemoryVo.getSwapFree(), v2, 2));
+            // 转GB
+            serverDetailPageServerMemoryVo.setSwapTotal(NumberUtil.div(serverDetailPageServerMemoryVo.getSwapTotal(), v2, 2));
+            // 转GB
+            serverDetailPageServerMemoryVo.setSwapUsed(NumberUtil.div(serverDetailPageServerMemoryVo.getSwapUsed(), v2, 2));
+            // 乘以100后，保留两位小数
+            serverDetailPageServerMemoryVo.setSwapUsedPercent(NumberUtil.round(serverDetailPageServerMemoryVo.getSwapUsedPercent() * 100D, 2).doubleValue());
         }
         return serverDetailPageServerMemoryVos;
     }

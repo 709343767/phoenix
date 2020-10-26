@@ -9,6 +9,10 @@
         MEM_USED AS memUsed,
         MEM_FREE AS memFree,
         MEN_USED_PERCENT AS menUsedPercent,
+        SWAP_TOTAL AS swapTotal,
+        SWAP_USED AS swapUsed,
+        SWAP_FREE AS swapFree,
+        SWAP_USED_PERCENT AS swapUsedPercent,
         INSERT_TIME AS insertTime
         FROM MONITOR_SERVER_MEMORY
         WHERE IP = #{params.ip}

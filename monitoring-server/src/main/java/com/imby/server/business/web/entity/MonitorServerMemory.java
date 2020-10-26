@@ -54,6 +54,22 @@ public class MonitorServerMemory implements Serializable {
     @TableField("MEN_USED_PERCENT")
     private Double menUsedPercent;
 
+    @ApiModelProperty(value = "交换区总量（单位：byte）")
+    @TableField("SWAP_TOTAL")
+    private Long swapTotal;
+
+    @ApiModelProperty(value = "交换区使用量（单位：byte）")
+    @TableField("SWAP_USED")
+    private Long swapUsed;
+
+    @ApiModelProperty(value = "交换区剩余量（单位：byte）")
+    @TableField("SWAP_FREE")
+    private Long swapFree;
+
+    @ApiModelProperty(value = "交换区使用率")
+    @TableField("SWAP_USED_PERCENT")
+    private Double swapUsedPercent;
+
     @ApiModelProperty(value = "新增时间")
     @TableField("INSERT_TIME")
     private Date insertTime;

@@ -217,12 +217,18 @@ public class ServerServiceImpl implements IServerService {
         String ip = serverPackage.getIp();
         // 内存信息
         MemoryDomain memoryDomain = serverPackage.getServer().getMemoryDomain();
+        MemoryDomain.MenDomain menDomain = memoryDomain.getMenDomain();
+        MemoryDomain.SwapDomain swapDomain = memoryDomain.getSwapDomain();
         MonitorServerMemory monitorServerMemory = new MonitorServerMemory();
         monitorServerMemory.setIp(ip);
-        monitorServerMemory.setMenTotal(memoryDomain.getMemTotal());
-        monitorServerMemory.setMenUsed(memoryDomain.getMemUsed());
-        monitorServerMemory.setMenFree(memoryDomain.getMemFree());
-        monitorServerMemory.setMenUsedPercent(memoryDomain.getMenUsedPercent());
+        monitorServerMemory.setMenTotal(menDomain.getMemTotal());
+        monitorServerMemory.setMenUsed(menDomain.getMemUsed());
+        monitorServerMemory.setMenFree(menDomain.getMemFree());
+        monitorServerMemory.setMenUsedPercent(menDomain.getMenUsedPercent());
+        monitorServerMemory.setSwapTotal(swapDomain.getSwapTotal());
+        monitorServerMemory.setSwapUsed(swapDomain.getSwapUsed());
+        monitorServerMemory.setSwapFree(swapDomain.getSwapFree());
+        monitorServerMemory.setSwapUsedPercent(swapDomain.getSwapUsedPercent());
         monitorServerMemory.setInsertTime(serverPackage.getDateTime());
         monitorServerMemory.setUpdateTime(serverPackage.getDateTime());
         this.monitorServerMemoryDao.insert(monitorServerMemory);

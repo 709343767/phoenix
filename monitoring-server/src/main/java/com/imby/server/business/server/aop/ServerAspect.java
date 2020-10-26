@@ -219,7 +219,7 @@ public class ServerAspect {
         memory.setIp(ip);
         memory.setComputerName(computerName);
         memory.setMemoryDomain(memoryDomain);
-        memory.setUsedPercent(NumberUtil.round(memoryDomain.getMenUsedPercent() * 100D, 2).doubleValue());
+        memory.setUsedPercent(NumberUtil.round(memoryDomain.getMenDomain().getMenUsedPercent() * 100D, 2).doubleValue());
         Memory poolMemory = this.memoryPool.get(ip);
         memory.setNum(poolMemory != null ? poolMemory.getNum() : 0);
         memory.setAlarm(poolMemory != null && poolMemory.isAlarm());

@@ -63,6 +63,30 @@ public class MonitorServerMemory {
     private Double menUsedPercent;
 
     /**
+     * 交换区总量（单位：byte）
+     */
+    @TableField("SWAP_TOTAL")
+    private Long swapTotal;
+
+    /**
+     * 交换区使用量（单位：byte）
+     */
+    @TableField("SWAP_USED")
+    private Long swapUsed;
+
+    /**
+     * 交换区剩余量（单位：byte）
+     */
+    @TableField("SWAP_FREE")
+    private Long swapFree;
+
+    /**
+     * 交换区使用率
+     */
+    @TableField("SWAP_USED_PERCENT")
+    private Double swapUsedPercent;
+
+    /**
      * 新增时间
      */
     @TableField("INSERT_TIME")
