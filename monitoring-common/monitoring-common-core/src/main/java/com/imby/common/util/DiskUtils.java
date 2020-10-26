@@ -80,7 +80,7 @@ public class DiskUtils extends InitSigar {
             // TYPE_RAM_DISK ：闪存
             else if (type == 4) {
                 log.debug("{}", "TYPE_RAM_DISK！");
-                continue;
+                // continue;
             }
             // TYPE_CDROM ：光驱
             else if (type == 5) {
@@ -90,7 +90,7 @@ public class DiskUtils extends InitSigar {
             // TYPE_SWAP ：页面交换
             else if (type == 6) {
                 log.debug("{}", "TYPE_SWAP！");
-                continue;
+                // continue;
             } else {
                 continue;
             }
