@@ -326,13 +326,13 @@
                                     var itemValue = item.marker + item.seriesName + ': ' + item.data + ' Mb</br>';
                                     result += itemValue;
                                 });
-                                var allResult = axisName + '</br>' + result;
-                                return allResult;
+                                return axisName + '</br>' + result;
                             }
                         },
                         legend: {
                             data: ['使用量', '提交量'],
-                            left: 'right',
+                            orient: 'vertical',
+                            x: '80%' //图例位置，设置right发现图例和文字位置反了，设置一个数值就好了
                         },
                         /*grid: {
                             left: '150px',
