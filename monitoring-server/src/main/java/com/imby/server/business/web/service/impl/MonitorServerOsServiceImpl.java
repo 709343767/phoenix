@@ -189,4 +189,22 @@ public class MonitorServerOsServiceImpl extends ServiceImpl<IMonitorServerOsDao,
         return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);
     }
 
+    /**
+     * <p>
+     * 获取服务器操作系统信息
+     * </p>
+     *
+     * @param ip 服务器IP地址
+     * @return 服务器信息表现层对象
+     * @author 皮锋
+     * @custom.date 2020/10/26 20:26
+     */
+    @Override
+    public MonitorServerOsVo getMonitorServerOsInfo(String ip) {
+        LambdaQueryWrapper<MonitorServerOs> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(MonitorServerOs::getIp, ip);
+        MonitorServerOs monitorServerOs = this.monitorServerOsDao.selectOne(lambdaQueryWrapper);
+        return MonitorServerOsVo.builder().build().convertFor(monitorServerOs);
+    }
+
 }

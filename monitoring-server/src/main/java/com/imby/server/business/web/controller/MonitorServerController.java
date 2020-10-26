@@ -118,4 +118,24 @@ public class MonitorServerController {
         return mv;
     }
 
+    /**
+     * <p>
+     * 获取服务器操作系统信息
+     * </p>
+     *
+     * @param ip 服务器IP地址
+     * @return layUiAdmin响应对象
+     * @author 皮锋
+     * @custom.date 2020/10/26 20:24
+     */
+    @ApiOperation(value = "获取服务器操作系统信息")
+    @ResponseBody
+    @GetMapping("/get-server-os-info")
+    @ApiImplicitParams(value = {
+            @ApiImplicitParam(name = "ip", value = "服务器IP地址", required = true, paramType = "query", dataType = "string")})
+    public LayUiAdminResultVo getMonitorServerOsInfo(@RequestParam(name = "ip") String ip) {
+        MonitorServerOsVo monitorServerOsVo = this.monitorServerOsService.getMonitorServerOsInfo(ip);
+        return LayUiAdminResultVo.ok(monitorServerOsVo);
+    }
+
 }

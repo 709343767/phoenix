@@ -59,4 +59,17 @@ public interface IMonitorServerOsService extends IService<MonitorServerOs> {
      * @custom.date 2020/9/4 16:13
      */
     LayUiAdminResultVo deleteMonitorServer(List<MonitorServerOsVo> monitorServerOsVos);
+
+    /**
+     * <p>
+     * 获取服务器操作系统信息
+     * </p>
+     *
+     * @param ip 服务器IP地址
+     * @return 服务器信息表现层对象
+     * @author 皮锋
+     * @custom.date 2020/10/26 20:26
+     */
+    MonitorServerOsVo getMonitorServerOsInfo(String ip);
+
 }

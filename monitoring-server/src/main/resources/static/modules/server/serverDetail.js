@@ -25,6 +25,63 @@
             getServerDiskInfo();
         });
 
+        // 发送ajax请求，获取操作系统数据
+        function getServerOsInfo() {
+            admin.req({
+                type: 'get',
+                url: layui.setter.base + 'server/get-server-os-info',
+                dataType: 'json',
+                contentType: 'application/json;charset=utf-8',
+                headers: {
+                    "X-CSRF-TOKEN": tokenValue
+                },
+                data: {
+                    ip: ip // 应用实例ID
+                },
+                success: function (result) {
+                    var data = result.data;
+                    debugger;
+                    var insertTime = data.insertTime;
+                    var ip = data.ip;
+                    var osName = data.osName;
+                    var osTimeZone = data.osTimeZone;
+                    var osVersion = data.osVersion;
+                    var serverName = data.serverName;
+                    var updateTime = data.updateTime;
+                    var userHome = data.userHome;
+                    var userName = data.userName;
+                    var html = '<div class="layui-col-md4">' +
+                        '           <label class="label-font-weight">IP地址：</label>' + ip +
+                        '       </div>' +
+                        '       <div class="layui-col-md4">' +
+                        '           <label class="label-font-weight">服务器名：</label>' + serverName +
+                        '       </div>' +
+                        '       <div class="layui-col-md4">' +
+                        '           <label class="label-font-weight">操作系统：</label>' + osName +
+                        '       </div>' +
+                        '       <div class="layui-col-md4">' +
+                        '           <label class="label-font-weight">系统版本：</label>' + osVersion +
+                        '       </div>' +
+                        '       <div class="layui-col-md4">' +
+                        '           <label class="label-font-weight">系统时区：</label>' + osTimeZone +
+                        '       </div>' +
+                        '       <div class="layui-col-md4">' +
+                        '           <label class="label-font-weight">系统用户：</label>' + userName +
+                        '       </div>' +
+                        '       <div class="layui-col-md4">' +
+                        '           <label class="label-font-weight">用户目录：</label>' + userHome +
+                        '       </div>' +
+                        '       <div class="layui-col-md4">' +
+                        '           <label class="label-font-weight">新增时间：</label>' + insertTime +
+                        '       </div>' +
+                        '       <div class="layui-col-md4">' +
+                        '           <label class="label-font-weight">更新时间：</label>' + updateTime +
+                        '       </div>';
+                    $('#os').empty().append(html);
+                }
+            });
+        }
+
         // 发送ajax请求，获取磁盘使用量数据
         function getServerDiskInfo() {
             // 弹出loading框
@@ -114,7 +171,6 @@
                     var swapUsed = data.map(function (item) {
                         return item.swapUsed;
                     });
-                    debugger;
                     // 新增时间
                     var insertTime = data.map(function (item) {
                         return item.insertTime.replace(' ', '\n');
@@ -547,6 +603,8 @@
         getServerMemoryInfo(time);
         // 发送ajax请求，获取磁盘使用量数据
         getServerDiskInfo();
+        // 发送ajax请求，获取操作系统数据
+        getServerOsInfo();
         // 每30秒刷新一次
         window.setInterval(function () {
             // 发送ajax请求，获取CPU使用量数据
@@ -555,6 +613,8 @@
             getServerMemoryInfo(time);
             // 发送ajax请求，获取磁盘使用量数据
             getServerDiskInfo();
+            // 发送ajax请求，获取操作系统数据
+            getServerOsInfo();
         }, 1000 * 30);
     });
     e('serverDetail', {});
