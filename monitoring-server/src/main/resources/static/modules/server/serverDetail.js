@@ -176,7 +176,7 @@
                     });
                     var option = {
                         title: {
-                            text: '内存使用量',
+                            text: '内存',
                             left: 'center',
                             textStyle: {
                                 color: '#696969',
@@ -365,7 +365,7 @@
                     });
                     var option = {
                         title: {
-                            text: 'CPU利用率',
+                            text: 'CPU',
                             left: 'center',
                             textStyle: {
                                 color: '#696969',
