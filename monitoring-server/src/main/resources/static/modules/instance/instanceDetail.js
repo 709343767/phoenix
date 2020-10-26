@@ -292,12 +292,12 @@
                     var max = '无数据'
                     if (data.length !== 0) {
                         if (data[data.length - 1].init != '未定义') {
-                            init = data[data.length - 1].init + ' Mb';
+                            init = data[data.length - 1].init + ' MB';
                         } else {
                             init = data[data.length - 1].init;
                         }
                         if (data[data.length - 1].max != '未定义') {
-                            max = data[data.length - 1].max + ' Mb';
+                            max = data[data.length - 1].max + ' MB';
                         } else {
                             max = data[data.length - 1].max;
                         }
@@ -323,7 +323,7 @@
                                 var axisName = '';
                                 params.forEach(function (item) {
                                     axisName = item.axisValue;
-                                    var itemValue = item.marker + item.seriesName + ': ' + item.data + ' Mb</br>';
+                                    var itemValue = item.marker + item.seriesName + ': ' + item.data + ' MB</br>';
                                     result += itemValue;
                                 });
                                 return axisName + '</br>' + result;
@@ -351,7 +351,7 @@
                             type: 'value',
                             name: '使用量',
                             axisLabel: {
-                                formatter: '{value} Mb'
+                                formatter: '{value} MB'
                             }
                         },
                         // 数据
