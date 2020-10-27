@@ -115,7 +115,7 @@ public class PersistPoolLifecycle implements InitializingBean, DisposableBean, I
         // 把Spring容器中的信息池内容存入文件系统
         this.storePools();
         // 把Spring容器中的信息池清空
-        this.clear();
+        this.clearPools();
     }
 
     /**
@@ -255,7 +255,7 @@ public class PersistPoolLifecycle implements InitializingBean, DisposableBean, I
      * @author 皮锋
      * @custom.date 2020年3月31日 下午3:40:22
      */
-    private void clear() {
+    private void clearPools() {
         this.instancePool.clear();
         this.netPool.clear();
         this.memoryPool.clear();
