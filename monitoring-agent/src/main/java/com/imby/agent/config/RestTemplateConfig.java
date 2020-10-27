@@ -32,7 +32,7 @@ public class RestTemplateConfig {
      */
     @Bean
     public RestTemplate restTemplate() {
-        String rootUri = ConfigLoader.monitoringProperties.getServerProperties().getUrl();
+        String rootUri = ConfigLoader.MONITORING_PROPERTIES.getServerProperties().getUrl();
         RestTemplate restTemplate = new RestTemplateBuilder()
                 // .basicAuthorization("username", "password")
                 // 15秒

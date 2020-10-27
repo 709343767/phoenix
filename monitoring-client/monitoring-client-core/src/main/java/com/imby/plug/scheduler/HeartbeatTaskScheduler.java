@@ -47,7 +47,7 @@ public class HeartbeatTaskScheduler {
                         .daemon(true)
                         .build());
         // 心跳频率
-        long rate = ConfigLoader.monitoringProperties.getHeartbeatProperties().getRate();
+        long rate = ConfigLoader.MONITORING_PROPERTIES.getHeartbeatProperties().getRate();
         seService.scheduleAtFixedRate(new HeartbeatThread(), 5, rate, TimeUnit.SECONDS);
     }
 

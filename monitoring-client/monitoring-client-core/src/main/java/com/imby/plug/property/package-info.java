@@ -6,4 +6,4 @@
  * @author 皮锋
  * @custom.date 2020/4/9 11:29
  */
-package com.imby.common.property;
+package com.imby.plug.property;

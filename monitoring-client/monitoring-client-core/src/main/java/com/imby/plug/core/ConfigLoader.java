@@ -4,8 +4,8 @@ import com.imby.common.constant.EndpointTypeConstants;
 import com.imby.common.exception.ErrorConfigParamException;
 import com.imby.common.exception.NotFoundConfigFileException;
 import com.imby.common.exception.NotFoundConfigParamException;
-import com.imby.common.property.*;
 import com.imby.common.util.PropertiesUtils;
+import com.imby.plug.property.*;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
@@ -35,7 +35,7 @@ public class ConfigLoader {
     /**
      * 监控属性
      */
-    public static MonitoringProperties monitoringProperties = new MonitoringProperties();
+    public static final MonitoringProperties MONITORING_PROPERTIES = new MonitoringProperties();
 
     /**
      * <p>
@@ -137,53 +137,96 @@ public class ConfigLoader {
             throw new ErrorConfigParamException("获取Java虚拟机信息频率最小不能小于30秒！");
         }
         // 封装数据
-        wrap(serverUrl, instanceOrder, instanceEndpoint, instanceName, instanceDesc, heartbeatRate, serverInfoEnable,
-                serverInfoRate, jvmInfoEnable, jvmInfoRate);
+        wrapMonitoringServerProperties(serverUrl);
+        wrapMonitoringOwnProperties(instanceOrder, instanceEndpoint, instanceName, instanceDesc);
+        wrapMonitoringHeartbeatProperties(heartbeatRate);
+        wrapMonitoringServerInfoProperties(serverInfoEnable, serverInfoRate);
+        wrapMonitoringJvmInfoProperties(jvmInfoEnable, jvmInfoRate);
     }
 
     /**
      * <p>
-     * 封装配置信息
+     * 封装与服务端相关的监控属性
      * </p>
      *
-     * @param serverUrl        监控服务端url
-     * @param instanceOrder    缺省[实例次序(整数)，默认为1]
-     * @param instanceEndpoint 缺省[实例端点类型（服务端、代理端、客户端），默认客户端]
-     * @param instanceName     实例名称
-     * @param instanceDesc     实例描述
-     * @param heartbeatRate    缺省[与服务端或者代理端发心跳包的频率（秒），默认30秒]
-     * @param serverInfoEnable 缺省[是否采集服务器信息，默认false]
-     * @param serverInfoRate   缺省[与服务端或者代理端发服务器信息包的频率（秒），默认60秒]
-     * @param jvmInfoEnable    缺省[是否采集Java虚拟机信息，默认false]
-     * @param jvmInfoRate      缺省[与服务端或者代理端发送Java虚拟机信息的频率（秒），默认60秒，最小不能小于30秒]
+     * @param serverUrl 监控服务端url
      * @author 皮锋
-     * @custom.date 2020年3月5日 下午4:36:33
+     * @custom.date 2020/10/27 20:29
      */
-    private static void wrap(String serverUrl,
-                             int instanceOrder, String instanceEndpoint, String instanceName, String instanceDesc,
-                             long heartbeatRate,
-                             boolean serverInfoEnable, long serverInfoRate,
-                             boolean jvmInfoEnable, long jvmInfoRate) {
+    private static void wrapMonitoringServerProperties(String serverUrl) {
         MonitoringServerProperties serverProperties = new MonitoringServerProperties();
         serverProperties.setUrl(serverUrl);
-        monitoringProperties.setServerProperties(serverProperties);
+        MONITORING_PROPERTIES.setServerProperties(serverProperties);
+    }
+
+    /**
+     * <p>
+     * 封装与自己相关的监控属性
+     * </p>
+     *
+     * @param instanceOrder    实例次序(整数)
+     * @param instanceEndpoint 实例端点类型（服务端、代理端、客户端）
+     * @param instanceName     实例名称
+     * @param instanceDesc     实例描述
+     * @author 皮锋
+     * @custom.date 2020/10/27 20:29
+     */
+    private static void wrapMonitoringOwnProperties(int instanceOrder, String instanceEndpoint, String instanceName, String instanceDesc) {
         MonitoringOwnProperties ownProperties = new MonitoringOwnProperties();
         ownProperties.setInstanceOrder(instanceOrder);
         ownProperties.setInstanceEndpoint(instanceEndpoint);
         ownProperties.setInstanceName(instanceName);
         ownProperties.setInstanceDesc(instanceDesc);
-        monitoringProperties.setOwnProperties(ownProperties);
-        MonitoringHeartbeatProperties heartbeatProperties = new MonitoringHeartbeatProperties();
-        heartbeatProperties.setRate(heartbeatRate);
-        monitoringProperties.setHeartbeatProperties(heartbeatProperties);
+        MONITORING_PROPERTIES.setOwnProperties(ownProperties);
+    }
+
+    /**
+     * <p>
+     * 封装服务器信息属性
+     * </p>
+     *
+     * @param serverInfoEnable 是否采集服务器信息
+     * @param serverInfoRate   与服务端或者代理端发服务器信息包的频率（秒）
+     * @author 皮锋
+     * @custom.date 2020/10/27 20:30
+     */
+    private static void wrapMonitoringServerInfoProperties(boolean serverInfoEnable, long serverInfoRate) {
         MonitoringServerInfoProperties monitoringServerInfoProperties = new MonitoringServerInfoProperties();
         monitoringServerInfoProperties.setEnable(serverInfoEnable);
         monitoringServerInfoProperties.setRate(serverInfoRate);
-        monitoringProperties.setServerInfoProperties(monitoringServerInfoProperties);
+        MONITORING_PROPERTIES.setServerInfoProperties(monitoringServerInfoProperties);
+    }
+
+    /**
+     * <p>
+     * 封装Java虚拟机信息属性
+     * </p>
+     *
+     * @param jvmInfoEnable 是否采集Java虚拟机信息
+     * @param jvmInfoRate   与服务端或者代理端发送Java虚拟机信息的频率（秒）
+     * @author 皮锋
+     * @custom.date 2020/10/27 20:31
+     */
+    private static void wrapMonitoringJvmInfoProperties(boolean jvmInfoEnable, long jvmInfoRate) {
         MonitoringJvmInfoProperties monitoringJvmInfoProperties = new MonitoringJvmInfoProperties();
         monitoringJvmInfoProperties.setEnable(jvmInfoEnable);
         monitoringJvmInfoProperties.setRate(jvmInfoRate);
-        monitoringProperties.setJvmInfoProperties(monitoringJvmInfoProperties);
+        MONITORING_PROPERTIES.setJvmInfoProperties(monitoringJvmInfoProperties);
+    }
+
+    /**
+     * <p>
+     * 封装心跳属性
+     * </p>
+     *
+     * @param heartbeatRate 与服务端或者代理端发心跳包的频率（秒）
+     * @author 皮锋
+     * @custom.date 2020/10/27 20:32
+     */
+    private static void wrapMonitoringHeartbeatProperties(long heartbeatRate) {
+        MonitoringHeartbeatProperties heartbeatProperties = new MonitoringHeartbeatProperties();
+        heartbeatProperties.setRate(heartbeatRate);
+        MONITORING_PROPERTIES.setHeartbeatProperties(heartbeatProperties);
     }
 
 }

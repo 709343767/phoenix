@@ -1,4 +1,4 @@
-package com.imby.common.property;
+package com.imby.plug.property;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -7,21 +7,21 @@ import lombok.experimental.Accessors;
 
 /**
  * <p>
- * 与服务端相关的监控属性
+ * 心跳属性
  * </p>
  *
  * @author 皮锋
- * @custom.date 2020年3月4日 下午2:45:10
+ * @custom.date 2020年3月5日 下午3:23:02
  */
 @Data
 @ToString
 @NoArgsConstructor
 @Accessors(chain = true)
-public class MonitoringServerProperties {
+public class MonitoringHeartbeatProperties {
 
-    /**
-     * 监控服务端url
-     */
-    private String url;
+	/**
+	 * 心跳频率
+	 */
+	private long rate;
 
 }

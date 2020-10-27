@@ -51,7 +51,7 @@ public class InstanceUtils {
         }
         String mac = NetUtils.getLocalMac();
         String ip = NetUtils.getLocalIp();
-        int order = ConfigLoader.monitoringProperties.getOwnProperties().getInstanceOrder();
+        int order = ConfigLoader.MONITORING_PROPERTIES.getOwnProperties().getInstanceOrder();
         instanceId = Md5Utils.encrypt(mac + ip + order + getInstanceName());
         return instanceId;
     }
@@ -69,7 +69,7 @@ public class InstanceUtils {
         if (StringUtils.isNotEmpty(instanceName)) {
             return instanceName;
         }
-        instanceName = ConfigLoader.monitoringProperties.getOwnProperties().getInstanceName();
+        instanceName = ConfigLoader.MONITORING_PROPERTIES.getOwnProperties().getInstanceName();
         return instanceName;
     }
 
@@ -86,7 +86,7 @@ public class InstanceUtils {
         if (StringUtils.isNotEmpty(instanceDesc)) {
             return instanceDesc;
         }
-        instanceDesc = ConfigLoader.monitoringProperties.getOwnProperties().getInstanceDesc();
+        instanceDesc = ConfigLoader.MONITORING_PROPERTIES.getOwnProperties().getInstanceDesc();
         return instanceDesc;
     }
 

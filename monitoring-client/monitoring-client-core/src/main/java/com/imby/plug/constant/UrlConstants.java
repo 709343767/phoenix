@@ -26,7 +26,7 @@ public final class UrlConstants {
     /**
      * 服务根路径
      */
-    private static final String ROOT_URI = ConfigLoader.monitoringProperties.getServerProperties().getUrl();
+    private static final String ROOT_URI = ConfigLoader.MONITORING_PROPERTIES.getServerProperties().getUrl();
 
     /**
      * 心跳地址

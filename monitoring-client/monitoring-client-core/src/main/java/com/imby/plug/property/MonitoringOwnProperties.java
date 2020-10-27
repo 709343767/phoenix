@@ -1,4 +1,4 @@
-package com.imby.common.property;
+package com.imby.plug.property;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

@@ -41,7 +41,7 @@ public class ServerTaskScheduler {
      */
     public static void run() {
         // 是否发送服务器信息
-        boolean serverInfoEnable = ConfigLoader.monitoringProperties.getServerInfoProperties().isEnable();
+        boolean serverInfoEnable = ConfigLoader.MONITORING_PROPERTIES.getServerInfoProperties().isEnable();
         if (serverInfoEnable) {
             final ScheduledExecutorService seService = new ScheduledThreadPoolExecutor(1,
                     new BasicThreadFactory.Builder()
@@ -51,7 +51,7 @@ public class ServerTaskScheduler {
                             .daemon(true)
                             .build());
             // 发送服务器信息的频率
-            long rate = ConfigLoader.monitoringProperties.getServerInfoProperties().getRate();
+            long rate = ConfigLoader.MONITORING_PROPERTIES.getServerInfoProperties().getRate();
             seService.scheduleAtFixedRate(new ServerThread(), 10, rate, TimeUnit.SECONDS);
         }
     }
