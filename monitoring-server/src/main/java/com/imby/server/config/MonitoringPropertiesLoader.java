@@ -3,7 +3,6 @@ package com.imby.server.config;
 import com.imby.common.constant.AlarmLevelEnums;
 import com.imby.common.util.PropertiesUtils;
 import com.imby.server.property.*;
-
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
@@ -56,57 +55,116 @@ public class MonitoringPropertiesLoader {
         // 缺省[是否监控网络(默认打开)]
         String monitoringEnableStr = StringUtils.trimToNull(properties.getProperty("monitoring.network.enable"));
         boolean monitoringEnable = StringUtils.isBlank(monitoringEnableStr) || Boolean.parseBoolean(monitoringEnableStr);
-        return wrap(threshold, alarmEnable, alarmLevel, alarmWay, alarmSmsPhoneNumbers, alarmSmsAddress, alarmSmsProtocol,
-                alarmSmsEnterprise, mailTo, monitoringEnable);
+        // 封装短信属性
+        MonitoringSmsProperties smsProperties = wrapMonitoringSmsProperties(alarmSmsPhoneNumbers, alarmSmsAddress, alarmSmsProtocol, alarmSmsEnterprise);
+        // 封装邮箱属性
+        MonitoringMailProperties mailProperties = wrapMonitoringMailProperties(mailTo);
+        // 封装告警属性
+        MonitoringAlarmProperties alarmProperties = wrapMonitoringAlarmProperties(alarmEnable, alarmLevel, alarmWay, smsProperties, mailProperties);
+        // 封装网络属性
+        MonitoringNetworkProperties networkProperties = wrapMonitoringNetworkProperties(monitoringEnable);
+        // 封装所有监控属性
+        return wrapMonitoringServerWebProperties(threshold, alarmProperties, networkProperties);
     }
 
     /**
      * <p>
-     * 封装属性对象
+     * 封装短信配置属性
      * </p>
      *
-     * @param threshold            监控阈值
-     * @param alarmEnable          告警是否打开
-     * @param alarmLevel           告警级别
-     * @param alarmWay             告警方式
      * @param alarmSmsPhoneNumbers 告警短信号码
      * @param alarmSmsAddress      告警短信地址
      * @param alarmSmsProtocol     告警短信协议
      * @param alarmSmsEnterprise   告警短信接口商家
-     * @param mailTo               收件人邮箱地址
-     * @param monitoringEnable     网络监控是否打开
-     * @return {@link MonitoringServerWebProperties}
+     * @return {@link MonitoringSmsProperties}
      * @author 皮锋
-     * @custom.date 2020年3月10日 下午2:39:38
+     * @custom.date 2020/10/27 20:01
      */
-    private MonitoringServerWebProperties wrap(int threshold, boolean alarmEnable, String alarmLevel, String alarmWay,
-                                               String alarmSmsPhoneNumbers, String alarmSmsAddress,
-                                               String alarmSmsProtocol, String alarmSmsEnterprise,
-                                               String mailTo, boolean monitoringEnable) {
-        // 告警属性
-        MonitoringAlarmProperties alarmProperties = new MonitoringAlarmProperties();
-        alarmProperties.setEnable(alarmEnable);
-        alarmProperties.setLevel(alarmLevel);
-        alarmProperties.setWay(alarmWay != null ? alarmWay.split(";") : null);
-        // 短信属性
+    private MonitoringSmsProperties wrapMonitoringSmsProperties(String alarmSmsPhoneNumbers, String alarmSmsAddress, String alarmSmsProtocol, String alarmSmsEnterprise) {
         MonitoringSmsProperties smsProperties = new MonitoringSmsProperties();
         smsProperties.setAddress(alarmSmsAddress);
         smsProperties.setEnterprise(alarmSmsEnterprise);
         smsProperties.setPhoneNumbers(alarmSmsPhoneNumbers != null ? alarmSmsPhoneNumbers.split(";") : null);
         smsProperties.setProtocol(alarmSmsProtocol);
-        alarmProperties.setSmsProperties(smsProperties);
-        // 邮箱属性
+        return smsProperties;
+    }
+
+    /**
+     * <p>
+     * 封装邮箱配置属性
+     * </p>
+     *
+     * @param mailTo 收件人邮箱地址
+     * @return {@link MonitoringMailProperties}
+     * @author 皮锋
+     * @custom.date 2020/10/27 19:59
+     */
+    private MonitoringMailProperties wrapMonitoringMailProperties(String mailTo) {
         MonitoringMailProperties mailProperties = new MonitoringMailProperties();
         mailProperties.setTo(mailTo != null ? mailTo.split(";") : null);
+        return mailProperties;
+    }
+
+    /**
+     * <p>
+     * 封装告警配置属性
+     * </p>
+     *
+     * @param alarmEnable    告警是否打开
+     * @param alarmLevel     告警级别
+     * @param alarmWay       告警方式
+     * @param smsProperties  短信配置属性
+     * @param mailProperties 邮箱配置属性
+     * @return {@link MonitoringAlarmProperties}
+     * @author 皮锋
+     * @custom.date 2020/10/27 19:55
+     */
+    private MonitoringAlarmProperties wrapMonitoringAlarmProperties(boolean alarmEnable, String alarmLevel, String alarmWay,
+                                                                    MonitoringSmsProperties smsProperties, MonitoringMailProperties mailProperties) {
+        MonitoringAlarmProperties alarmProperties = new MonitoringAlarmProperties();
+        alarmProperties.setEnable(alarmEnable);
+        alarmProperties.setLevel(alarmLevel);
+        alarmProperties.setWay(alarmWay != null ? alarmWay.split(";") : null);
+        alarmProperties.setSmsProperties(smsProperties);
         alarmProperties.setMailProperties(mailProperties);
-        // 网络属性
+        return alarmProperties;
+    }
+
+    /**
+     * <p>
+     * 封装网络配置属性
+     * </p>
+     *
+     * @param monitoringEnable 网络监控是否打开
+     * @return {@link MonitoringNetworkProperties}
+     * @author 皮锋
+     * @custom.date 2020/10/27 20:00
+     */
+    private MonitoringNetworkProperties wrapMonitoringNetworkProperties(boolean monitoringEnable) {
         MonitoringNetworkProperties networkProperties = new MonitoringNetworkProperties();
         networkProperties.setMonitoringEnable(monitoringEnable);
-        // 所有监控属性
+        return networkProperties;
+    }
+
+    /**
+     * <p>
+     * 封装所有监控配置属性
+     * </p>
+     *
+     * @param threshold         监控阈值
+     * @param alarmProperties   告警配置属性
+     * @param networkProperties 网络配置属性
+     * @return {@link MonitoringServerWebProperties}
+     * @author 皮锋
+     * @custom.date 2020/10/27 19:57
+     */
+    private MonitoringServerWebProperties wrapMonitoringServerWebProperties(int threshold, MonitoringAlarmProperties alarmProperties,
+                                                                            MonitoringNetworkProperties networkProperties) {
         MonitoringServerWebProperties monitoringServerWebProperties = new MonitoringServerWebProperties();
         monitoringServerWebProperties.setAlarmProperties(alarmProperties);
         monitoringServerWebProperties.setThreshold(threshold);
         monitoringServerWebProperties.setNetworkProperties(networkProperties);
         return monitoringServerWebProperties;
     }
+
 }
