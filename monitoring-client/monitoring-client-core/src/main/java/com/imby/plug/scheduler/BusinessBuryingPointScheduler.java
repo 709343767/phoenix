@@ -18,6 +18,17 @@ public class BusinessBuryingPointScheduler {
 
     /**
      * <p>
+     * 私有化构造方法
+     * </p>
+     *
+     * @author 皮锋
+     * @custom.date 2020/10/27 13:26
+     */
+    private BusinessBuryingPointScheduler() {
+    }
+
+    /**
+     * <p>
      * 定时运行业务埋点监测任务
      * </p>
      *

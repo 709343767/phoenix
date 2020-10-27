@@ -11,6 +11,17 @@ package com.imby.server.constant;
 public class WebResponseConstants {
 
     /**
+     * <p>
+     * 私有化构造方法
+     * </p>
+     *
+     * @author 皮锋
+     * @custom.date 2020/10/27 13:26
+     */
+    private WebResponseConstants() {
+    }
+
+    /**
      * 成功
      */
     public static final String SUCCESS = "success";

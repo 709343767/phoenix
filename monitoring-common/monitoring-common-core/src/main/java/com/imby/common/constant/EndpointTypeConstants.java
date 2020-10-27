@@ -11,6 +11,17 @@ package com.imby.common.constant;
 public final class EndpointTypeConstants {
 
     /**
+     * <p>
+     * 私有化构造方法
+     * </p>
+     *
+     * @author 皮锋
+     * @custom.date 2020/10/27 13:26
+     */
+    private EndpointTypeConstants() {
+    }
+
+    /**
      * 服务端
      */
     public static final String SERVER = "server";

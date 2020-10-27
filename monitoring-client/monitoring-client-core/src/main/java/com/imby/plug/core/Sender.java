@@ -16,6 +16,17 @@ import java.io.IOException;
  * @custom.date 2020年3月6日 上午10:20:09
  */
 public class Sender {
+    /**
+     * <p>
+     * 私有化构造方法
+     * </p>
+     *
+     * @author 皮锋
+     * @custom.date 2020/10/27 13:26
+     */
+    private Sender() {
+    }
+
 
     /**
      * <p>

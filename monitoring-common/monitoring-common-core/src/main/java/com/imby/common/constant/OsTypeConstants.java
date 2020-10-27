@@ -11,6 +11,17 @@ package com.imby.common.constant;
 public class OsTypeConstants {
 
     /**
+     * <p>
+     * 私有化构造方法
+     * </p>
+     *
+     * @author 皮锋
+     * @custom.date 2020/10/27 13:26
+     */
+    private OsTypeConstants() {
+    }
+
+    /**
      * windows操作系统
      */
     public static final String WINDOWS = "Windows";

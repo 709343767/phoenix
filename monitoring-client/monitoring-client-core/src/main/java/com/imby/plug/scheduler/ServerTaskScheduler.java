@@ -20,6 +20,17 @@ public class ServerTaskScheduler {
 
     /**
      * <p>
+     * 私有化构造方法
+     * </p>
+     *
+     * @author 皮锋
+     * @custom.date 2020/10/27 13:26
+     */
+    private ServerTaskScheduler() {
+    }
+
+    /**
+     * <p>
      * 如果监控配置文件中配置了发送服务器信息，则延迟10秒启动定时任务，定时发送服务器信息包，
      * 定时任务的执行频率一般为监控配置文件中配置的服务器信息包发送频率，如果监控配置文件中没有配置服务器信息包的发送频率，
      * 则由类{@link ConfigLoader}提供默认的发送服务器信息频率。

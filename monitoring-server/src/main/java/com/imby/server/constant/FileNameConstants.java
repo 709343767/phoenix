@@ -13,6 +13,17 @@ import java.io.File;
 public final class FileNameConstants {
 
     /**
+     * <p>
+     * 私有化构造方法
+     * </p>
+     *
+     * @author 皮锋
+     * @custom.date 2020/10/27 13:26
+     */
+    private FileNameConstants() {
+    }
+
+    /**
      * 文件存储路径
      */
     private final static String PATH = System.getProperty("user.dir")

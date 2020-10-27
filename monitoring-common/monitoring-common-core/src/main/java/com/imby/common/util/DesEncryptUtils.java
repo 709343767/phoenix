@@ -1,15 +1,13 @@
 package com.imby.common.util;
 
-import java.security.MessageDigest;
-import java.util.Base64;
+import com.google.common.base.Charsets;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
-
-import com.google.common.base.Charsets;
-
-import lombok.extern.slf4j.Slf4j;
+import java.security.MessageDigest;
+import java.util.Base64;
 
 /**
  * <p>
@@ -25,7 +23,7 @@ public class DesEncryptUtils {
     /**
      * 密钥是16位长度的byte[]进行Base64转换后得到的字符串
      */
-    public static String key = "cc839cf9feca4ed7oa65064177a0b505";
+    public static final String KEY = "cc839cf9feca4ed7oa65064177a0b505";
 
     /**
      * <p>
@@ -44,16 +42,16 @@ public class DesEncryptUtils {
             // 取需要加密内容的utf-8编码
             byte[] encrypt = str.getBytes(Charsets.UTF_8);
             // 取MD5Hash码，并组合加密数组
-            byte[] md5Hasn = DesEncryptUtils.MD5Hash(encrypt, 0, encrypt.length);
+            byte[] md5Hasn = DesEncryptUtils.md5Hash(encrypt, 0, encrypt.length);
             // 组合消息体
-            byte[] totalByte = DesEncryptUtils.addMD5(md5Hasn, encrypt);
+            byte[] totalByte = DesEncryptUtils.addMd5(md5Hasn, encrypt);
             // 取密钥和偏转向量
             byte[] key = new byte[8];
             byte[] iv = new byte[8];
-            getKeyIV(DesEncryptUtils.key, key, iv);
+            getKeyIV(key, iv);
             SecretKeySpec deskey = new SecretKeySpec(key, "DES");
             IvParameterSpec ivParam = new IvParameterSpec(iv);
-            byte[] temp = DesEncryptUtils.DES_CBC_Encrypt(totalByte, deskey, ivParam);
+            byte[] temp = DesEncryptUtils.desCbcEncrypt(totalByte, deskey, ivParam);
             result = Base64.getEncoder().encodeToString(temp);
         } catch (Exception e) {
             log.error("字符串DES加密失败！", e);
@@ -81,12 +79,12 @@ public class DesEncryptUtils {
             // 取密钥和偏转向量
             byte[] key = new byte[8];
             byte[] iv = new byte[8];
-            getKeyIV(DesEncryptUtils.key, key, iv);
+            getKeyIV(key, iv);
             SecretKeySpec deskey = new SecretKeySpec(key, "DES");
             IvParameterSpec ivParam = new IvParameterSpec(iv);
-            byte[] temp = DesEncryptUtils.DES_CBC_Decrypt(encBuf, deskey, ivParam);
+            byte[] temp = DesEncryptUtils.desCbcDecrypt(encBuf, deskey, ivParam);
             // 进行解密后的md5Hash校验
-            byte[] md5Hash = DesEncryptUtils.MD5Hash(temp, 16, temp.length - 16);
+            byte[] md5Hash = DesEncryptUtils.md5Hash(temp, 16, temp.length - 16);
             // 进行解密校检
             for (int i = 0; i < md5Hash.length; i++) {
                 if (md5Hash[i] != temp[i]) {
@@ -114,7 +112,7 @@ public class DesEncryptUtils {
      * @author 皮锋
      * @custom.date 2020/4/28 16:06
      */
-    private static byte[] DES_CBC_Encrypt(byte[] sourceBuf, SecretKeySpec deskey, IvParameterSpec ivParam)
+    private static byte[] desCbcEncrypt(byte[] sourceBuf, SecretKeySpec deskey, IvParameterSpec ivParam)
             throws Exception {
         byte[] cipherByte;
         // 使用DES对称加密算法的CBC模式加密
@@ -138,7 +136,7 @@ public class DesEncryptUtils {
      * @author 皮锋
      * @custom.date 2020/4/28 16:07
      */
-    private static byte[] DES_CBC_Decrypt(byte[] sourceBuf, SecretKeySpec deskey, IvParameterSpec ivParam)
+    private static byte[] desCbcDecrypt(byte[] sourceBuf, SecretKeySpec deskey, IvParameterSpec ivParam)
             throws Exception {
         byte[] cipherByte;
         // 获得Cipher实例，使用CBC模式
@@ -163,7 +161,7 @@ public class DesEncryptUtils {
      * @author 皮锋
      * @custom.date 2020/4/28 16:08
      */
-    private static byte[] MD5Hash(byte[] buf, int offset, int length) throws Exception {
+    private static byte[] md5Hash(byte[] buf, int offset, int length) throws Exception {
         MessageDigest md = MessageDigest.getInstance("MD5");
         md.update(buf, offset, length);
         return md.digest();
@@ -180,7 +178,7 @@ public class DesEncryptUtils {
      * @author 皮锋
      * @custom.date 2020/4/28 16:11
      */
-    private static byte[] addMD5(byte[] md5Byte, byte[] bodyByte) {
+    private static byte[] addMd5(byte[] md5Byte, byte[] bodyByte) {
         int length = bodyByte.length + md5Byte.length;
         byte[] resultByte = new byte[length];
         // 前16位放MD5Hash码
@@ -199,15 +197,14 @@ public class DesEncryptUtils {
      * 获取key和iv
      * </p>
      *
-     * @param encryptKey 秘钥
-     * @param key        key数组
-     * @param iv         iv向量数组
+     * @param key key数组
+     * @param iv  iv向量数组
      * @author 皮锋
      * @custom.date 2020/4/28 16:13
      */
-    private static void getKeyIV(String encryptKey, byte[] key, byte[] iv) {
+    private static void getKeyIV(byte[] key, byte[] iv) {
         // 密钥Base64解密
-        byte[] buf = Base64.getDecoder().decode(encryptKey);
+        byte[] buf = Base64.getDecoder().decode(DesEncryptUtils.KEY);
         // 前8位为key
         int i;
         for (i = 0; i < key.length; i++) {
@@ -223,8 +220,8 @@ public class DesEncryptUtils {
 
     public static void main(String[] args) {
         String encrypt = DesEncryptUtils.encrypt("测试字符串！");
-        System.out.println(encrypt);
+        log.info(encrypt);
         String decrypt = DesEncryptUtils.decrypt(encrypt);
-        System.out.println(decrypt);
+        log.info(decrypt);
     }
 }

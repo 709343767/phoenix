@@ -22,6 +22,17 @@ import java.util.Properties;
 public class ConfigLoader {
 
     /**
+     * <p>
+     * 私有化构造方法
+     * </p>
+     *
+     * @author 皮锋
+     * @custom.date 2020/10/27 13:26
+     */
+    private ConfigLoader() {
+    }
+
+    /**
      * 监控属性
      */
     public static MonitoringProperties monitoringProperties = new MonitoringProperties();

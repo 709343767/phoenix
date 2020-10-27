@@ -11,6 +11,17 @@ package com.imby.common.constant;
 public final class ZeroOrOneConstants {
 
     /**
+     * <p>
+     * 私有化构造方法
+     * </p>
+     *
+     * @author 皮锋
+     * @custom.date 2020/10/27 13:26
+     */
+    private ZeroOrOneConstants() {
+    }
+
+    /**
      * 0
      */
     public static final String ZERO = "0";

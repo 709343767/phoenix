@@ -25,6 +25,17 @@ public class InitBanner {
 
     /**
      * <p>
+     * 私有化构造方法
+     * </p>
+     *
+     * @author 皮锋
+     * @custom.date 2020/10/27 13:26
+     */
+    private InitBanner() {
+    }
+
+    /**
+     * <p>
      * 加载“banner.txt”文件
      * </p>
      *

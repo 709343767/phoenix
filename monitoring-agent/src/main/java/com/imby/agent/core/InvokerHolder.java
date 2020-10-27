@@ -14,6 +14,17 @@ import java.util.Map;
 public class InvokerHolder {
 
     /**
+     * <p>
+     * 私有化构造方法
+     * </p>
+     *
+     * @author 皮锋
+     * @custom.date 2020/10/27 13:26
+     */
+    private InvokerHolder() {
+    }
+
+    /**
      * 命令执行器
      */
     private static final Map<Class<?>, Map<String, Invoker>> INVOKERS = new HashMap<>();

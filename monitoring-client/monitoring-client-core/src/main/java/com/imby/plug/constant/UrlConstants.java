@@ -13,6 +13,17 @@ import com.imby.plug.core.ConfigLoader;
 public final class UrlConstants {
 
     /**
+     * <p>
+     * 私有化构造方法
+     * </p>
+     *
+     * @author 皮锋
+     * @custom.date 2020/10/27 13:26
+     */
+    private UrlConstants() {
+    }
+
+    /**
      * 服务根路径
      */
     private static final String ROOT_URI = ConfigLoader.monitoringProperties.getServerProperties().getUrl();

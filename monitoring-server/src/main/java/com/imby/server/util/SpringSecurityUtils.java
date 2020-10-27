@@ -20,6 +20,17 @@ public class SpringSecurityUtils {
 
     /**
      * <p>
+     * 私有化构造方法
+     * </p>
+     *
+     * @author 皮锋
+     * @custom.date 2020/10/27 13:26
+     */
+    private SpringSecurityUtils() {
+    }
+
+    /**
+     * <p>
      * 获取当前用户的认证信息
      * </p>
      *

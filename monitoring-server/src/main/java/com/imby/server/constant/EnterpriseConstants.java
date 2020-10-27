@@ -10,8 +10,19 @@ package com.imby.server.constant;
  */
 public final class EnterpriseConstants {
 
-	/**
-	 * 创发
-	 */
-	public static final String TRANSFAR = "TRANSFAR";
+    /**
+     * <p>
+     * 私有化构造方法
+     * </p>
+     *
+     * @author 皮锋
+     * @custom.date 2020/10/27 13:26
+     */
+    private EnterpriseConstants() {
+    }
+
+    /**
+     * 创发
+     */
+    public static final String TRANSFAR = "TRANSFAR";
 }
