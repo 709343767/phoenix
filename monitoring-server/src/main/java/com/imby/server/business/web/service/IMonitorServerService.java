@@ -2,10 +2,10 @@ package com.imby.server.business.web.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.imby.server.business.web.entity.MonitorServerOs;
+import com.imby.server.business.web.entity.MonitorServer;
 import com.imby.server.business.web.vo.HomeServerVo;
 import com.imby.server.business.web.vo.LayUiAdminResultVo;
-import com.imby.server.business.web.vo.MonitorServerOsVo;
+import com.imby.server.business.web.vo.MonitorServerVo;
 
 import java.util.List;
 
@@ -17,7 +17,7 @@ import java.util.List;
  * @author 皮锋
  * @custom.date 2020年3月7日 下午5:03:49
  */
-public interface IMonitorServerOsService extends IService<MonitorServerOs> {
+public interface IMonitorServerService extends IService<MonitorServer> {
 
     /**
      * <p>
@@ -28,7 +28,7 @@ public interface IMonitorServerOsService extends IService<MonitorServerOs> {
      * @author 皮锋
      * @custom.date 2020/8/4 16:40
      */
-    HomeServerVo getHomeServerOsInfo();
+    HomeServerVo getHomeServerInfo();
 
     /**
      * <p>
@@ -46,19 +46,19 @@ public interface IMonitorServerOsService extends IService<MonitorServerOs> {
      * @author 皮锋
      * @custom.date 2020/9/4 12:37
      */
-    Page<MonitorServerOsVo> getMonitorServerOsList(Long current, Long size, String ip, String serverName, String osName, String osVersion, String userName);
+    Page<MonitorServerVo> getMonitorServerList(Long current, Long size, String ip, String serverName, String osName, String osVersion, String userName);
 
     /**
      * <p>
      * 删除服务器
      * </p>
      *
-     * @param monitorServerOsVos 服务器信息
+     * @param monitorServerVos 服务器信息
      * @return layUiAdmin响应对象：如果删除用户成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
      * @author 皮锋
      * @custom.date 2020/9/4 16:13
      */
-    LayUiAdminResultVo deleteMonitorServer(List<MonitorServerOsVo> monitorServerOsVos);
+    LayUiAdminResultVo deleteMonitorServer(List<MonitorServerVo> monitorServerVos);
 
     /**
      * <p>
@@ -70,6 +70,6 @@ public interface IMonitorServerOsService extends IService<MonitorServerOs> {
      * @author 皮锋
      * @custom.date 2020/10/26 20:26
      */
-    MonitorServerOsVo getMonitorServerOsInfo(String ip);
+    MonitorServerVo getMonitorServerInfo(String ip);
 
 }

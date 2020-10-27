@@ -1,17 +1,12 @@
-package com.imby.server.business.web.entity;
+package com.imby.server.business.server.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 import lombok.experimental.Accessors;
 
-import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -20,55 +15,74 @@ import java.util.Date;
  * </p>
  *
  * @author 皮锋
- * @custom.date 2020年3月7日 下午5:03:49
+ * @custom.date 2020/5/11 15:33
  */
 @Data
-@Builder
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("MONITOR_SERVER_OS")
-@ApiModel(value = "MonitorServerOs对象", description = "服务器表")
-public class MonitorServerOs implements Serializable {
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@TableName("MONITOR_SERVER")
+public class MonitorServer {
 
-    private static final long serialVersionUID = 1L;
-
-    @ApiModelProperty(value = "主键ID")
+    /**
+     * 主键ID
+     */
     @TableId(value = "ID", type = IdType.AUTO)
     private Long id;
 
-    @ApiModelProperty(value = "IP地址")
+    /**
+     * IP地址
+     */
     @TableField("IP")
     private String ip;
 
-    @ApiModelProperty(value = "服务器名")
+    /**
+     * 服务器名
+     */
     @TableField("SERVER_NAME")
     private String serverName;
 
-    @ApiModelProperty(value = "操作系统名称")
+    /**
+     * 操作系统名称
+     */
     @TableField("OS_NAME")
     private String osName;
 
-    @ApiModelProperty(value = "操作系统版本")
+    /**
+     * 操作系统版本
+     */
     @TableField("OS_VERSION")
     private String osVersion;
 
-    @ApiModelProperty(value = "用户名称")
+    /**
+     * 用户名称
+     */
     @TableField("USER_NAME")
     private String userName;
 
-    @ApiModelProperty(value = "用户主目录")
+    /**
+     * 用户主目录
+     */
     @TableField("USER_HOME")
     private String userHome;
 
-    @ApiModelProperty(value = "操作系统时区")
+    /**
+     * 操作系统时区
+     */
     @TableField("OS_TIME_ZONE")
     private String osTimeZone;
 
-    @ApiModelProperty(value = "新增时间")
+    /**
+     * 新增时间
+     */
     @TableField("INSERT_TIME")
     private Date insertTime;
 
-    @ApiModelProperty(value = "更新时间")
+    /**
+     * 更新时间
+     */
     @TableField("UPDATE_TIME")
     private Date updateTime;
 

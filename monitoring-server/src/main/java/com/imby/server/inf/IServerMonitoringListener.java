@@ -3,7 +3,7 @@ package com.imby.server.inf;
 import com.imby.common.constant.AlarmTypeEnums;
 import com.imby.common.exception.NetException;
 import com.imby.server.business.server.aop.ServerAspect;
-import com.imby.server.business.web.service.impl.MonitorServerOsServiceImpl;
+import com.imby.server.business.web.service.impl.MonitorServerServiceImpl;
 import org.aspectj.lang.JoinPoint;
 import org.hyperic.sigar.SigarException;
 
@@ -39,7 +39,7 @@ public interface IServerMonitoringListener {
      * <p>
      * 删除数据库中的服务器信息时，唤醒执行监控信息池回调方法。
      * </p>
-     * 此方法在{@link MonitorServerOsServiceImpl#deleteMonitorServer(List)}中被调用。
+     * 此方法在{@link MonitorServerServiceImpl#deleteMonitorServer(List)}中被调用。
      *
      * @param alarmTypeEnums 告警类型
      * @param params         回调参数

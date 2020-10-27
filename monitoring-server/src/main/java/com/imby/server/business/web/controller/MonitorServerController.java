@@ -1,9 +1,9 @@
 package com.imby.server.business.web.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.imby.server.business.web.service.IMonitorServerOsService;
+import com.imby.server.business.web.service.IMonitorServerService;
 import com.imby.server.business.web.vo.LayUiAdminResultVo;
-import com.imby.server.business.web.vo.MonitorServerOsVo;
+import com.imby.server.business.web.vo.MonitorServerVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -32,7 +32,7 @@ public class MonitorServerController {
      * 服务器服务类
      */
     @Autowired
-    private IMonitorServerOsService monitorServerOsService;
+    private IMonitorServerService monitorServerService;
 
     /**
      * <p>
@@ -74,10 +74,10 @@ public class MonitorServerController {
             @ApiImplicitParam(name = "osName", value = "操作系统名称", paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "osVersion", value = "操作系统版本", paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "userName", value = "用户名称", paramType = "query", dataType = "string")})
-    @GetMapping("/get-monitor-server-os-list")
+    @GetMapping("/get-monitor-server-list")
     @ResponseBody
-    public LayUiAdminResultVo getMonitorServerOsList(Long current, Long size, String ip, String serverName, String osName, String osVersion, String userName) {
-        Page<MonitorServerOsVo> page = this.monitorServerOsService.getMonitorServerOsList(current, size, ip, serverName, osName, osVersion, userName);
+    public LayUiAdminResultVo getMonitorServerList(Long current, Long size, String ip, String serverName, String osName, String osVersion, String userName) {
+        Page<MonitorServerVo> page = this.monitorServerService.getMonitorServerList(current, size, ip, serverName, osName, osVersion, userName);
         return LayUiAdminResultVo.ok(page);
     }
 
@@ -86,7 +86,7 @@ public class MonitorServerController {
      * 删除服务器
      * </p>
      *
-     * @param monitorServerOsVos 服务器信息
+     * @param monitorServerVos 服务器信息
      * @return layUiAdmin响应对象：如果删除用户成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
      * @author 皮锋
      * @custom.date 2020/9/4 16:10
@@ -94,8 +94,8 @@ public class MonitorServerController {
     @ApiOperation(value = "删除服务器")
     @PostMapping("/delete-monitor-server")
     @ResponseBody
-    public LayUiAdminResultVo deleteMonitorServer(@RequestBody List<MonitorServerOsVo> monitorServerOsVos) {
-        return this.monitorServerOsService.deleteMonitorServer(monitorServerOsVos);
+    public LayUiAdminResultVo deleteMonitorServer(@RequestBody List<MonitorServerVo> monitorServerVos) {
+        return this.monitorServerService.deleteMonitorServer(monitorServerVos);
     }
 
     /**
@@ -134,8 +134,8 @@ public class MonitorServerController {
     @ApiImplicitParams(value = {
             @ApiImplicitParam(name = "ip", value = "服务器IP地址", required = true, paramType = "query", dataType = "string")})
     public LayUiAdminResultVo getMonitorServerOsInfo(@RequestParam(name = "ip") String ip) {
-        MonitorServerOsVo monitorServerOsVo = this.monitorServerOsService.getMonitorServerOsInfo(ip);
-        return LayUiAdminResultVo.ok(monitorServerOsVo);
+        MonitorServerVo monitorServerVo = this.monitorServerService.getMonitorServerInfo(ip);
+        return LayUiAdminResultVo.ok(monitorServerVo);
     }
 
 }

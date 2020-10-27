@@ -2,7 +2,7 @@ package com.imby.server.business.web.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.imby.common.inf.ISuperBean;
-import com.imby.server.business.web.entity.MonitorServerOs;
+import com.imby.server.business.web.entity.MonitorServer;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
@@ -28,7 +28,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @ApiModel(value = "服务器信息表现层对象")
-public class MonitorServerOsVo implements ISuperBean {
+public class MonitorServerVo implements ISuperBean {
 
     @ApiModelProperty(value = "主键ID")
     private Long id;
@@ -64,31 +64,31 @@ public class MonitorServerOsVo implements ISuperBean {
 
     /**
      * <p>
-     * MonitorServerOsVo转MonitorServerOs
+     * MonitorServerVo转MonitorServer
      * </p>
      *
-     * @return {@link MonitorServerOs}
+     * @return {@link MonitorServer}
      * @author 皮锋
      * @custom.date 2020/9/3 9:20
      */
-    public MonitorServerOs convertTo() {
-        MonitorServerOs monitorServerOs = MonitorServerOs.builder().build();
-        BeanUtils.copyProperties(this, monitorServerOs);
-        return monitorServerOs;
+    public MonitorServer convertTo() {
+        MonitorServer monitorServer = MonitorServer.builder().build();
+        BeanUtils.copyProperties(this, monitorServer);
+        return monitorServer;
     }
 
     /**
      * <p>
-     * MonitorServerOs转MonitorServerOsVo
+     * MonitorServer转MonitorServerVo
      * </p>
      *
-     * @param monitorServerOs {@link MonitorServerOs}
-     * @return {@link MonitorServerOsVo}
+     * @param monitorServer {@link MonitorServer}
+     * @return {@link MonitorServerVo}
      * @author 皮锋
      * @custom.date 2020/9/3 9:22
      */
-    public MonitorServerOsVo convertFor(MonitorServerOs monitorServerOs) {
-        BeanUtils.copyProperties(monitorServerOs, this);
+    public MonitorServerVo convertFor(MonitorServer monitorServer) {
+        BeanUtils.copyProperties(monitorServer, this);
         return this;
     }
 

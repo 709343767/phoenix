@@ -3,7 +3,7 @@ package com.imby.server.business.web.controller;
 import com.imby.server.business.web.service.IMonitorAlarmRecordService;
 import com.imby.server.business.web.service.IMonitorInstanceService;
 import com.imby.server.business.web.service.IMonitorNetService;
-import com.imby.server.business.web.service.IMonitorServerOsService;
+import com.imby.server.business.web.service.IMonitorServerService;
 import com.imby.server.business.web.vo.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -40,7 +40,7 @@ public class HomeController {
      * 服务器服务类
      */
     @Autowired
-    private IMonitorServerOsService monitorServerOsService;
+    private IMonitorServerService monitorServerService;
 
     /**
      * 告警记录服务类
@@ -71,7 +71,7 @@ public class HomeController {
         mv.addObject("homeInstanceVo", homeInstanceVo);
         HomeNetVo homeNetVo = this.monitorNetService.getHomeNetInfo();
         mv.addObject("homeNetVo", homeNetVo);
-        HomeServerVo homeServerVo = this.monitorServerOsService.getHomeServerOsInfo();
+        HomeServerVo homeServerVo = this.monitorServerService.getHomeServerInfo();
         mv.addObject("homeServerVo", homeServerVo);
         HomeAlarmRecordVo homeAlarmRecordVo = this.monitorAlarmRecordService.getHomeAlarmRecordInfo();
         mv.addObject("homeAlarmRecordVo", homeAlarmRecordVo);
@@ -93,7 +93,7 @@ public class HomeController {
     public LayUiAdminResultVo getSummaryInfo() {
         HomeInstanceVo homeInstanceVo = this.monitorInstanceService.getHomeInstanceInfo();
         HomeNetVo homeNetVo = this.monitorNetService.getHomeNetInfo();
-        HomeServerVo homeServerVo = this.monitorServerOsService.getHomeServerOsInfo();
+        HomeServerVo homeServerVo = this.monitorServerService.getHomeServerInfo();
         HomeAlarmRecordVo homeAlarmRecordVo = this.monitorAlarmRecordService.getHomeAlarmRecordInfo();
         Map<String, Object> map = new HashMap<>(4);
         map.put("homeInstanceVo", homeInstanceVo);

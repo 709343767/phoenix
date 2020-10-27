@@ -10,10 +10,10 @@ import com.google.common.collect.Lists;
 import com.imby.common.constant.AlarmTypeEnums;
 import com.imby.server.business.web.dao.*;
 import com.imby.server.business.web.entity.*;
-import com.imby.server.business.web.service.IMonitorServerOsService;
+import com.imby.server.business.web.service.IMonitorServerService;
 import com.imby.server.business.web.vo.HomeServerVo;
 import com.imby.server.business.web.vo.LayUiAdminResultVo;
-import com.imby.server.business.web.vo.MonitorServerOsVo;
+import com.imby.server.business.web.vo.MonitorServerVo;
 import com.imby.server.constant.WebResponseConstants;
 import com.imby.server.core.ThreadPool;
 import com.imby.server.inf.IServerMonitoringListener;
@@ -34,7 +34,7 @@ import java.util.Map;
  * @custom.date 2020年3月7日 下午5:03:49
  */
 @Service
-public class MonitorServerOsServiceImpl extends ServiceImpl<IMonitorServerOsDao, MonitorServerOs> implements IMonitorServerOsService {
+public class MonitorServerServiceImpl extends ServiceImpl<IMonitorServerDao, MonitorServer> implements IMonitorServerService {
 
     /**
      * 服务器信息监听器
@@ -46,7 +46,7 @@ public class MonitorServerOsServiceImpl extends ServiceImpl<IMonitorServerOsDao,
      * 服务器数据访问对象
      */
     @Autowired
-    private IMonitorServerOsDao monitorServerOsDao;
+    private IMonitorServerDao monitorServerDao;
 
     /**
      * 服务器CPU数据访问对象
@@ -82,9 +82,9 @@ public class MonitorServerOsServiceImpl extends ServiceImpl<IMonitorServerOsDao,
      * @custom.date 2020/8/4 16:40
      */
     @Override
-    public HomeServerVo getHomeServerOsInfo() {
+    public HomeServerVo getHomeServerInfo() {
         // 服务器类型统计
-        Map<String, Object> map = this.monitorServerOsDao.getServerOsTypeStatistics();
+        Map<String, Object> map = this.monitorServerDao.getServerOsTypeStatistics();
         return HomeServerVo.builder()
                 .serverSum(NumberUtil.parseInt(map.get("serverSum").toString()))
                 .windowsSum(NumberUtil.parseInt(map.get("windowsSum").toString()))
@@ -110,38 +110,38 @@ public class MonitorServerOsServiceImpl extends ServiceImpl<IMonitorServerOsDao,
      * @custom.date 2020/9/4 12:38
      */
     @Override
-    public Page<MonitorServerOsVo> getMonitorServerOsList(Long current, Long size, String ip, String serverName, String osName, String osVersion, String userName) {
+    public Page<MonitorServerVo> getMonitorServerList(Long current, Long size, String ip, String serverName, String osName, String osVersion, String userName) {
         // 查询数据库
-        IPage<MonitorServerOs> ipage = new Page<>(current, size);
-        LambdaQueryWrapper<MonitorServerOs> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        IPage<MonitorServer> ipage = new Page<>(current, size);
+        LambdaQueryWrapper<MonitorServer> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         if (StringUtils.isNotBlank(ip)) {
-            lambdaQueryWrapper.like(MonitorServerOs::getIp, ip);
+            lambdaQueryWrapper.like(MonitorServer::getIp, ip);
         }
         if (StringUtils.isNotBlank(serverName)) {
-            lambdaQueryWrapper.like(MonitorServerOs::getServerName, serverName);
+            lambdaQueryWrapper.like(MonitorServer::getServerName, serverName);
         }
         if (StringUtils.isNotBlank(osName)) {
-            lambdaQueryWrapper.like(MonitorServerOs::getOsName, osName);
+            lambdaQueryWrapper.like(MonitorServer::getOsName, osName);
         }
         if (StringUtils.isNotBlank(osVersion)) {
-            lambdaQueryWrapper.like(MonitorServerOs::getOsVersion, osVersion);
+            lambdaQueryWrapper.like(MonitorServer::getOsVersion, osVersion);
         }
         if (StringUtils.isNotBlank(userName)) {
-            lambdaQueryWrapper.like(MonitorServerOs::getUserName, userName);
+            lambdaQueryWrapper.like(MonitorServer::getUserName, userName);
         }
-        IPage<MonitorServerOs> monitorServerOsPage = this.monitorServerOsDao.selectPage(ipage, lambdaQueryWrapper);
-        List<MonitorServerOs> monitorServerOss = monitorServerOsPage.getRecords();
+        IPage<MonitorServer> monitorServerPage = this.monitorServerDao.selectPage(ipage, lambdaQueryWrapper);
+        List<MonitorServer> monitorServers = monitorServerPage.getRecords();
         // 转换成服务器信息表现层对象
-        List<MonitorServerOsVo> monitorServerOsVos = Lists.newLinkedList();
-        for (MonitorServerOs monitorServerOs : monitorServerOss) {
-            MonitorServerOsVo monitorServerOsVo = MonitorServerOsVo.builder().build().convertFor(monitorServerOs);
-            monitorServerOsVos.add(monitorServerOsVo);
+        List<MonitorServerVo> monitorServerVos = Lists.newLinkedList();
+        for (MonitorServer monitorServer : monitorServers) {
+            MonitorServerVo monitorServerVo = MonitorServerVo.builder().build().convertFor(monitorServer);
+            monitorServerVos.add(monitorServerVo);
         }
         // 设置返回对象
-        Page<MonitorServerOsVo> monitorServerOsVoPage = new Page<>();
-        monitorServerOsVoPage.setRecords(monitorServerOsVos);
-        monitorServerOsVoPage.setTotal(monitorServerOsPage.getTotal());
-        return monitorServerOsVoPage;
+        Page<MonitorServerVo> monitorServerVoPage = new Page<>();
+        monitorServerVoPage.setRecords(monitorServerVos);
+        monitorServerVoPage.setTotal(monitorServerPage.getTotal());
+        return monitorServerVoPage;
     }
 
     /**
@@ -149,22 +149,22 @@ public class MonitorServerOsServiceImpl extends ServiceImpl<IMonitorServerOsDao,
      * 删除服务器
      * </p>
      *
-     * @param monitorServerOsVos 服务器信息
+     * @param monitorServerVos 服务器信息
      * @return layUiAdmin响应对象：如果删除用户成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
      * @author 皮锋
      * @custom.date 2020/9/4 16:13
      */
     @Transactional(rollbackFor = Throwable.class)
     @Override
-    public LayUiAdminResultVo deleteMonitorServer(List<MonitorServerOsVo> monitorServerOsVos) {
+    public LayUiAdminResultVo deleteMonitorServer(List<MonitorServerVo> monitorServerVos) {
         List<String> ips = Lists.newArrayList();
-        for (MonitorServerOsVo monitorServerOsVo : monitorServerOsVos) {
-            ips.add(monitorServerOsVo.getIp());
+        for (MonitorServerVo monitorServerVo : monitorServerVos) {
+            ips.add(monitorServerVo.getIp());
         }
         // 服务器表
-        LambdaUpdateWrapper<MonitorServerOs> serverOsLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
-        serverOsLambdaUpdateWrapper.in(MonitorServerOs::getIp, ips);
-        this.monitorServerOsDao.delete(serverOsLambdaUpdateWrapper);
+        LambdaUpdateWrapper<MonitorServer> serverLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+        serverLambdaUpdateWrapper.in(MonitorServer::getIp, ips);
+        this.monitorServerDao.delete(serverLambdaUpdateWrapper);
         // 服务器CPU表
         LambdaUpdateWrapper<MonitorServerCpu> serverCpuLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
         serverCpuLambdaUpdateWrapper.in(MonitorServerCpu::getIp, ips);
@@ -200,11 +200,11 @@ public class MonitorServerOsServiceImpl extends ServiceImpl<IMonitorServerOsDao,
      * @custom.date 2020/10/26 20:26
      */
     @Override
-    public MonitorServerOsVo getMonitorServerOsInfo(String ip) {
-        LambdaQueryWrapper<MonitorServerOs> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-        lambdaQueryWrapper.eq(MonitorServerOs::getIp, ip);
-        MonitorServerOs monitorServerOs = this.monitorServerOsDao.selectOne(lambdaQueryWrapper);
-        return MonitorServerOsVo.builder().build().convertFor(monitorServerOs);
+    public MonitorServerVo getMonitorServerInfo(String ip) {
+        LambdaQueryWrapper<MonitorServer> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(MonitorServer::getIp, ip);
+        MonitorServer monitorServer = this.monitorServerDao.selectOne(lambdaQueryWrapper);
+        return MonitorServerVo.builder().build().convertFor(monitorServer);
     }
 
 }

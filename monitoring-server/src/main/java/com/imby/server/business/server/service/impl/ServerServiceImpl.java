@@ -27,10 +27,10 @@ import java.util.List;
 public class ServerServiceImpl implements IServerService {
 
     /**
-     * 服务器操作系统数据访问对象
+     * 服务器数据访问对象
      */
     @Autowired
-    private IMonitorServerOsDao monitorServerOsDao;
+    private IMonitorServerDao monitorServerDao;
 
     /**
      * 服务器内存数据访问对象
@@ -69,6 +69,8 @@ public class ServerServiceImpl implements IServerService {
     @Transactional(rollbackFor = Throwable.class)
     @Override
     public Result dealServerPackage(ServerPackage serverPackage) {
+        // 把服务器信息添加或更新到数据库
+        this.operateServer(serverPackage);
         // 把服务器内存信息添加到数据库
         this.operateServerMemory(serverPackage);
         // 把服务器CPU信息添加到数据库
@@ -77,8 +79,6 @@ public class ServerServiceImpl implements IServerService {
         this.operateServerNetcard(serverPackage);
         // 把服务器磁盘信息添加到数据库
         this.operateServerDisk(serverPackage);
-        // 把服务器操作系统信息添加或更新到数据库
-        this.operateServerOs(serverPackage);
         // 返回结果
         return Result.builder().isSuccess(true).msg(ResultMsgConstants.SUCCESS).build();
     }
@@ -236,40 +236,40 @@ public class ServerServiceImpl implements IServerService {
 
     /**
      * <p>
-     * 把服务器操作系统信息添加或更新到数据库
+     * 把服务器信息添加或更新到数据库
      * </p>
      *
      * @param serverPackage 服务器信息包
      * @author 皮锋
      * @custom.date 2020/5/11 16:01
      */
-    private void operateServerOs(ServerPackage serverPackage) {
+    private void operateServer(ServerPackage serverPackage) {
         // IP地址
         String ip = serverPackage.getIp();
         // 操作系统信息
         OsDomain osDomain = serverPackage.getServer().getOsDomain();
-        LambdaQueryWrapper<MonitorServerOs> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-        lambdaQueryWrapper.eq(MonitorServerOs::getIp, ip);
-        MonitorServerOs monitorServerDb = this.monitorServerOsDao.selectOne(lambdaQueryWrapper);
-        MonitorServerOs monitorServerOs = new MonitorServerOs();
-        monitorServerOs.setIp(ip);
-        monitorServerOs.setServerName(osDomain.getComputerName());
-        monitorServerOs.setOsName(osDomain.getOsName());
-        monitorServerOs.setOsVersion(osDomain.getOsVersion());
-        monitorServerOs.setOsTimeZone(osDomain.getOsTimeZone());
-        monitorServerOs.setUserHome(osDomain.getUserHome());
-        monitorServerOs.setUserName(osDomain.getUserName());
+        LambdaQueryWrapper<MonitorServer> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(MonitorServer::getIp, ip);
+        MonitorServer monitorServerDb = this.monitorServerDao.selectOne(lambdaQueryWrapper);
+        MonitorServer monitorServer = new MonitorServer();
+        monitorServer.setIp(ip);
+        monitorServer.setServerName(osDomain.getComputerName());
+        monitorServer.setOsName(osDomain.getOsName());
+        monitorServer.setOsVersion(osDomain.getOsVersion());
+        monitorServer.setOsTimeZone(osDomain.getOsTimeZone());
+        monitorServer.setUserHome(osDomain.getUserHome());
+        monitorServer.setUserName(osDomain.getUserName());
         // 新增服务器信息
         if (monitorServerDb == null) {
-            monitorServerOs.setInsertTime(serverPackage.getDateTime());
-            this.monitorServerOsDao.insert(monitorServerOs);
+            monitorServer.setInsertTime(serverPackage.getDateTime());
+            this.monitorServerDao.insert(monitorServer);
         }
         // 更新服务器信息
         else {
-            monitorServerOs.setUpdateTime(serverPackage.getDateTime());
-            LambdaUpdateWrapper<MonitorServerOs> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();
-            lambdaUpdateWrapper.eq(MonitorServerOs::getIp, ip);
-            this.monitorServerOsDao.update(monitorServerOs, lambdaUpdateWrapper);
+            monitorServer.setUpdateTime(serverPackage.getDateTime());
+            LambdaUpdateWrapper<MonitorServer> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+            lambdaUpdateWrapper.eq(MonitorServer::getIp, ip);
+            this.monitorServerDao.update(monitorServer, lambdaUpdateWrapper);
         }
     }
 

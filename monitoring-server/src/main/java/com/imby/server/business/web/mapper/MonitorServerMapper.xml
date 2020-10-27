@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.imby.server.business.web.dao.IMonitorServerOsDao">
+<mapper namespace="com.imby.server.business.web.dao.IMonitorServerDao">
 
     <!-- 服务器类型统计 -->
     <select id="getServerOsTypeStatistics" resultType="java.util.Map" databaseId="mysql">
@@ -10,11 +10,11 @@
                tmp.serverSum - tmp.windowsSum - tmp.linuxSum as otherSum
         from (
                  select count(1)  as serverSum,
-                        ifnull(sum(if(locate('Windows', mso.OS_NAME) or locate('windows', mso.OS_NAME), 1, 0)),
+                        ifnull(sum(if(locate('Windows', ms.OS_NAME) or locate('windows', ms.OS_NAME), 1, 0)),
                                0) as windowsSum,
-                        ifnull(sum(if(locate('Linux', mso.OS_NAME) or locate('linux', mso.OS_NAME), 1, 0)),
+                        ifnull(sum(if(locate('Linux', ms.OS_NAME) or locate('linux', ms.OS_NAME), 1, 0)),
                                0) as linuxSum
-                 from MONITOR_SERVER_OS mso) tmp
+                 from MONITOR_SERVER ms) tmp
     </select>
 
 </mapper>
