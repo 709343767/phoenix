@@ -172,7 +172,7 @@ public class InstanceMonitorTask implements CommandLineRunner, DisposableBean {
         boolean isLineAlarm = instance.isLineAlarm();
         if (isLineAlarm) {
             // 发送在线通知信息
-            this.sendAlarmInfo("应用程序上线", AlarmLevelEnums.FATAL, instance);
+            this.sendAlarmInfo("应用程序上线", AlarmLevelEnums.INFO, instance);
             instance.setLineAlarm(false);
         }
     }
@@ -192,7 +192,6 @@ public class InstanceMonitorTask implements CommandLineRunner, DisposableBean {
         boolean isConnectAlarm = instance.isConnectAlarm();
         if (isConnectAlarm) {
             // 发送来网通知信息
-            // this.sendAlarmInfo("网络恢复", AlarmLevelEnums.WARN, instance);
             instance.setConnectAlarm(false);
         }
     }
@@ -240,7 +239,6 @@ public class InstanceMonitorTask implements CommandLineRunner, DisposableBean {
         // 没发送断网告警
         if (!isConnectAlarm) {
             // 发送断网告警信息
-            // this.sendAlarmInfo("网络中断", AlarmLevelEnums.FATAL, instance);
             instance.setConnectAlarm(true);
         }
         // 更新数据库

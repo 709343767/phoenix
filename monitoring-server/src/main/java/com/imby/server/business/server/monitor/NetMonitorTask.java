@@ -169,7 +169,7 @@ public class NetMonitorTask implements CommandLineRunner, DisposableBean {
         boolean isConnectAlarm = net.isConnectAlarm();
         if (isConnectAlarm) {
             // 发送来网通知信息
-            this.sendAlarmInfo("网络恢复", AlarmLevelEnums.FATAL, net);
+            this.sendAlarmInfo("网络恢复", AlarmLevelEnums.INFO, net);
             net.setConnectAlarm(false);
         }
         // 是否刷新最后一次更新的时间
