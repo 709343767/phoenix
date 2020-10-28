@@ -41,6 +41,6 @@ public class JvmPackage extends AbstractInstanceBean {
     /**
      * 传输频率
      */
-    private Long rate;
+    private long rate;
 
 }

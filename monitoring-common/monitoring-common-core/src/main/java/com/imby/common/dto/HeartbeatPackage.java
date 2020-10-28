@@ -35,6 +35,6 @@ public class HeartbeatPackage extends AbstractInstanceBean {
     /**
      * 心跳频率
      */
-    private Long rate;
+    private long rate;
 
 }

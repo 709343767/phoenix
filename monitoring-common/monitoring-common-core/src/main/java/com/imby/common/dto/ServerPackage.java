@@ -41,6 +41,6 @@ public class ServerPackage extends AbstractInstanceBean {
     /**
      * 传输频率
      */
-    private Long rate;
+    private long rate;
 
 }
