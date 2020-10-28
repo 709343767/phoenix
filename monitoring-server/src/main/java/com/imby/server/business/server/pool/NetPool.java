@@ -1,4 +1,4 @@
-package com.imby.server.business.server.core;
+package com.imby.server.business.server.pool;
 
 import com.imby.common.inf.ISuperBean;
 import com.imby.server.business.server.domain.Net;
