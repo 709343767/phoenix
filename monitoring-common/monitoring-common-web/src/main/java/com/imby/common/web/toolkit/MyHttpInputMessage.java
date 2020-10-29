@@ -3,6 +3,7 @@ package com.imby.common.web.toolkit;
 import com.alibaba.fastjson.JSON;
 import com.imby.common.dto.CiphertextPackage;
 import com.imby.common.util.DesEncryptUtils;
+import lombok.SneakyThrows;
 import org.apache.commons.io.IOUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpInputMessage;
@@ -24,7 +25,8 @@ public class MyHttpInputMessage implements HttpInputMessage {
 
     private final InputStream body;
 
-    public MyHttpInputMessage(HttpInputMessage inputMessage) throws Exception {
+    @SneakyThrows
+    public MyHttpInputMessage(HttpInputMessage inputMessage) {
         // 请求头
         this.headers = inputMessage.getHeaders();
         // 请求体转字符串
