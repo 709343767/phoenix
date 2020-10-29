@@ -56,15 +56,15 @@ public class MonitoringPropertiesLoader {
         String monitoringEnableStr = StringUtils.trimToNull(properties.getProperty("monitoring.network.enable"));
         boolean monitoringEnable = StringUtils.isBlank(monitoringEnableStr) || Boolean.parseBoolean(monitoringEnableStr);
         // 封装短信属性
-        MonitoringSmsProperties smsProperties = wrapMonitoringSmsProperties(alarmSmsPhoneNumbers, alarmSmsAddress, alarmSmsProtocol, alarmSmsEnterprise);
+        MonitoringSmsProperties smsProperties = this.wrapMonitoringSmsProperties(alarmSmsPhoneNumbers, alarmSmsAddress, alarmSmsProtocol, alarmSmsEnterprise);
         // 封装邮箱属性
-        MonitoringMailProperties mailProperties = wrapMonitoringMailProperties(mailTo);
+        MonitoringMailProperties mailProperties = this.wrapMonitoringMailProperties(mailTo);
         // 封装告警属性
-        MonitoringAlarmProperties alarmProperties = wrapMonitoringAlarmProperties(alarmEnable, alarmLevel, alarmWay, smsProperties, mailProperties);
+        MonitoringAlarmProperties alarmProperties = this.wrapMonitoringAlarmProperties(alarmEnable, alarmLevel, alarmWay, smsProperties, mailProperties);
         // 封装网络属性
-        MonitoringNetworkProperties networkProperties = wrapMonitoringNetworkProperties(monitoringEnable);
+        MonitoringNetworkProperties networkProperties = this.wrapMonitoringNetworkProperties(monitoringEnable);
         // 封装所有监控属性
-        return wrapMonitoringServerWebProperties(threshold, alarmProperties, networkProperties);
+        return this.wrapMonitoringServerWebProperties(threshold, alarmProperties, networkProperties);
     }
 
     /**

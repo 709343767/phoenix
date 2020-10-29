@@ -14,7 +14,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 /**
  * <p>
- * 配置Swagger，用于生成、描述、调用和可视化restful风格的web服务
+ * 配置Swagger，用于生成、描述、调用和可视化restful风格的web服务。
  * </p>
  *
  * @author 皮锋
@@ -51,11 +51,6 @@ public class SwaggerConfig {
                 .build();
         log.info("Swagger配置成功！");
         return docket;
-        // return new Docket(DocumentationType.SWAGGER_2)//
-        // .apiInfo(apiInfo())//
-        // .select()//
-        // .apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class))//
-        // .build();
     }
 
     /**
