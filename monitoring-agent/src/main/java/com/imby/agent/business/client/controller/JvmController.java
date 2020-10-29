@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/jvm")
-@Api(tags = "Java虚拟机信息")
+@Api(tags = "信息包.Java虚拟机信息包")
 @Slf4j
 public class JvmController {
 

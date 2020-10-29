@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSON;
 import com.imby.agent.business.client.service.IServerService;
 import com.imby.common.dto.BaseResponsePackage;
 import com.imby.common.dto.ServerPackage;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/server")
-@Api(tags = "服务器信息")
+@Api(tags = "信息包.服务器信息包")
 @Slf4j
 public class ServerController {
 

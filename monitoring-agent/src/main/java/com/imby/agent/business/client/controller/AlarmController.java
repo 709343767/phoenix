@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author 皮锋
  * @custom.date 2020年3月6日 下午2:58:09
  */
-@Api(tags = "告警")
+@Api(tags = "信息包.告警包")
 @RestController
 @RequestMapping("/alarm")
 @Slf4j

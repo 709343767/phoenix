@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/heartbeat")
-@Api(tags = "心跳")
+@Api(tags = "信息包.心跳包")
 @Slf4j
 public class HeartbeatController {
 
