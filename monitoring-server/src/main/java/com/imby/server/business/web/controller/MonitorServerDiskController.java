@@ -4,6 +4,7 @@ package com.imby.server.business.web.controller;
 import com.imby.server.business.web.service.IMonitorServerDiskService;
 import com.imby.server.business.web.vo.LayUiAdminResultVo;
 import com.imby.server.business.web.vo.ServerDetailPageServerDiskVo;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -20,6 +21,7 @@ import java.util.List;
  * @author 皮锋
  * @custom.date 2020/9/4 20:50
  */
+@Api(tags = "服务器磁盘")
 @RestController
 @RequestMapping("/monitor-server-disk")
 public class MonitorServerDiskController {

@@ -4,6 +4,7 @@ package com.imby.server.business.web.controller;
 import com.imby.server.business.web.service.IMonitorJvmClassLoadingService;
 import com.imby.server.business.web.vo.LayUiAdminResultVo;
 import com.imby.server.business.web.vo.MonitorJvmClassLoadingVo;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
  * @author 皮锋
  * @custom.date 2020/9/6 19:59
  */
+@Api(tags = "java虚拟机类加载信息")
 @RestController
 @RequestMapping("/monitor-jvm-class-loading")
 public class MonitorJvmClassLoadingController {

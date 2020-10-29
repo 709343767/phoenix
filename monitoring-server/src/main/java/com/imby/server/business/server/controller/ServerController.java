@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/server")
-@Api(tags = "服务器信息包")
+@Api(tags = "信息包.服务器信息包")
 public class ServerController {
 
     /**

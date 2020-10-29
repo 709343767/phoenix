@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/alarm")
-@Api(tags = "告警包")
+@Api(tags = "信息包.告警包")
 public class AlarmController {
 
     /**

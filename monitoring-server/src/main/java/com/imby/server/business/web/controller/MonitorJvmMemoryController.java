@@ -4,6 +4,7 @@ package com.imby.server.business.web.controller;
 import com.imby.server.business.web.service.IMonitorJvmMemoryService;
 import com.imby.server.business.web.vo.InstanceDetailPageJvmMemoryVo;
 import com.imby.server.business.web.vo.LayUiAdminResultVo;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -20,6 +21,7 @@ import java.util.List;
  * @author 皮锋
  * @custom.date 2020/9/6 19:59
  */
+@Api(tags = "java虚拟机内存信息")
 @RestController
 @RequestMapping("/monitor-jvm-memory")
 public class MonitorJvmMemoryController {
