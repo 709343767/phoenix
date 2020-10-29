@@ -25,10 +25,10 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableAsync
 // 启用事务管理
 @EnableTransactionManagement
-public class ServerWebApplication extends CustomizationBeanHandler {
+public class ServerApplication extends CustomizationBeanHandler {
 
     public static void main(String[] args) {
-        SpringApplication.run(ServerWebApplication.class, args);
+        SpringApplication.run(ServerApplication.class, args);
     }
 
 }
