@@ -78,7 +78,7 @@ public class ThreadPool {
     public static final ScheduledExecutorService COMMON_SCHEDULED_THREAD_POOL = new ScheduledThreadPoolExecutor(1,
             new BasicThreadFactory.Builder()
                     // 设置线程名
-                    .namingPattern("monitoring-common-pool-scheduled-%d")
+                    .namingPattern("monitoring-common-scheduled-%d")
                     // 设置为守护线程
                     .daemon(true)
                     .build());
