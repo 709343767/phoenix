@@ -16,12 +16,11 @@ import com.imby.server.business.server.entity.MonitorNet;
 import com.imby.server.business.server.pool.NetPool;
 import com.imby.server.business.server.service.IAlarmService;
 import com.imby.server.business.server.service.INetService;
+import com.imby.server.core.ThreadPool;
 import com.imby.server.property.MonitoringServerWebProperties;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.concurrent.BasicThreadFactory;
 import org.hyperic.sigar.SigarException;
 import org.joda.time.DateTime;
-import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
@@ -30,8 +29,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.Date;
 import java.util.Map;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -45,7 +42,7 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 @Component
 @Order(2)
-public class NetMonitorTask implements CommandLineRunner, DisposableBean {
+public class NetMonitorTask implements CommandLineRunner {
 
     /**
      * 网络信息池
@@ -72,17 +69,6 @@ public class NetMonitorTask implements CommandLineRunner, DisposableBean {
     private INetService netService;
 
     /**
-     * 延迟/周期执行线程池
-     */
-    private final ScheduledExecutorService seService = new ScheduledThreadPoolExecutor(5,
-            new BasicThreadFactory.Builder()
-                    // 设置线程名
-                    .namingPattern("monitoring-net-pool-thread-%d")
-                    // 设置为守护线程
-                    .daemon(true)
-                    .build());
-
-    /**
      * <p>
      * 项目启动完成后延迟10秒钟启动定时任务，扫描网络信息池中的所有IP，实时更新状态，发送告警，
      * 然后在一次执行结束和下一次执行开始之间延迟30秒。
@@ -94,7 +80,7 @@ public class NetMonitorTask implements CommandLineRunner, DisposableBean {
      */
     @Override
     public void run(String... args) {
-        this.seService.scheduleWithFixedDelay(() -> {
+        ThreadPool.COMMON_SCHEDULED_THREAD_POOL.scheduleWithFixedDelay(() -> {
             try {
                 // 网络监控是否打开
                 boolean monitoringEnable = this.monitoringServerWebProperties.getNetworkProperties().isMonitoringEnable();
@@ -102,7 +88,7 @@ public class NetMonitorTask implements CommandLineRunner, DisposableBean {
                 if (monitoringEnable) {
                     // 循环所有网络信息
                     for (Map.Entry<String, Net> entry : this.netPool.entrySet()) {
-                        this.seService.execute(() -> {
+                        ThreadPool.COMMON_IO_INTENSIVE_THREAD_POOL.execute(() -> {
                             try {
                                 Net net = entry.getValue();
                                 // 允许的误差时间
@@ -258,20 +244,4 @@ public class NetMonitorTask implements CommandLineRunner, DisposableBean {
         this.netService.updateNet(monitorNet, lambdaUpdateWrapper);
     }
 
-    /**
-     * <p>
-     * 在spring容器销毁时关闭线程池
-     * </p>
-     * 关闭线程池：monitoring-net-pool-thread
-     *
-     * @author 皮锋
-     * @custom.date 2020/3/26 9:57
-     */
-    @Override
-    public void destroy() {
-        if (!this.seService.isShutdown()) {
-            this.seService.shutdown();
-            log.info("周期执行线程池“monitoring-net-pool-thread”已经关闭！");
-        }
-    }
 }

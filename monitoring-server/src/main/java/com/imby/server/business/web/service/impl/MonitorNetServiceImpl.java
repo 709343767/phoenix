@@ -138,7 +138,7 @@ public class MonitorNetServiceImpl extends ServiceImpl<IMonitorNetDao, MonitorNe
 
         // 调用监听器回调接口
         this.netMonitoringListeners.forEach(e ->
-                ThreadPool.CPU_INTENSIVE_THREAD_POOL_EXECUTOR.execute(() ->
+                ThreadPool.COMMON_CPU_INTENSIVE_THREAD_POOL.execute(() ->
                         e.wakeUpMonitorPool(AlarmTypeEnums.NET, ipSources)));
         return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);
     }

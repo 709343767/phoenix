@@ -184,7 +184,7 @@ public class MonitorServerServiceImpl extends ServiceImpl<IMonitorServerDao, Mon
 
         // 调用监听器回调接口
         this.serverMonitoringListeners.forEach(e ->
-                ThreadPool.CPU_INTENSIVE_THREAD_POOL_EXECUTOR.execute(() ->
+                ThreadPool.COMMON_CPU_INTENSIVE_THREAD_POOL.execute(() ->
                         e.wakeUpMonitorPool(AlarmTypeEnums.SERVER, ips)));
         return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);
     }

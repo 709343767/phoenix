@@ -15,12 +15,11 @@ import com.imby.server.business.server.entity.MonitorInstance;
 import com.imby.server.business.server.pool.InstancePool;
 import com.imby.server.business.server.service.IAlarmService;
 import com.imby.server.business.server.service.IInstanceService;
+import com.imby.server.core.ThreadPool;
 import com.imby.server.property.MonitoringServerWebProperties;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.concurrent.BasicThreadFactory;
 import org.hyperic.sigar.SigarException;
 import org.joda.time.DateTime;
-import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
@@ -29,8 +28,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.Date;
 import java.util.Map;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -44,7 +41,7 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 @Component
 @Order(1)
-public class InstanceMonitorTask implements CommandLineRunner, DisposableBean {
+public class InstanceMonitorTask implements CommandLineRunner {
 
     /**
      * 应用实例池
@@ -71,17 +68,6 @@ public class InstanceMonitorTask implements CommandLineRunner, DisposableBean {
     private IInstanceService instanceService;
 
     /**
-     * 延迟/周期执行线程池
-     */
-    private final ScheduledExecutorService seService = new ScheduledThreadPoolExecutor(5,
-            new BasicThreadFactory.Builder()
-                    // 设置线程名
-                    .namingPattern("monitoring-instance-pool-thread-%d")
-                    // 设置为守护线程
-                    .daemon(true)
-                    .build());
-
-    /**
      * <p>
      * 项目启动完成后延迟5秒钟启动定时任务，扫描应用实例池中的所有应用实例，实时更新应用实例状态，发送告警，
      * 然后在一次执行结束和下一次执行开始之间延迟30秒。
@@ -93,7 +79,7 @@ public class InstanceMonitorTask implements CommandLineRunner, DisposableBean {
      */
     @Override
     public void run(String... args) {
-        this.seService.scheduleWithFixedDelay(() -> {
+        ThreadPool.COMMON_SCHEDULED_THREAD_POOL.scheduleWithFixedDelay(() -> {
             try {
                 // 循环所有应用实例
                 for (Map.Entry<String, Instance> entry : this.instancePool.entrySet()) {
@@ -304,20 +290,4 @@ public class InstanceMonitorTask implements CommandLineRunner, DisposableBean {
         this.instanceService.updateInstance(monitorInstance, lambdaUpdateWrapper);
     }
 
-    /**
-     * <p>
-     * 在spring容器销毁时关闭线程池
-     * </p>
-     * 关闭线程池：monitoring-instance-pool-thread
-     *
-     * @author 皮锋
-     * @custom.date 2020/3/26 9:54
-     */
-    @Override
-    public void destroy() {
-        if (!this.seService.isShutdown()) {
-            this.seService.shutdown();
-            log.info("周期执行线程池“monitoring-instance-pool-thread”已经关闭！");
-        }
-    }
 }

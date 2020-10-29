@@ -9,12 +9,12 @@ import com.imby.common.domain.server.MemoryDomain;
 import com.imby.common.dto.ServerPackage;
 import com.imby.common.exception.NetException;
 import com.imby.server.business.server.controller.ServerController;
-import com.imby.server.business.server.pool.CpuPool;
-import com.imby.server.business.server.pool.DiskPool;
-import com.imby.server.business.server.pool.MemoryPool;
 import com.imby.server.business.server.domain.Cpu;
 import com.imby.server.business.server.domain.Disk;
 import com.imby.server.business.server.domain.Memory;
+import com.imby.server.business.server.pool.CpuPool;
+import com.imby.server.business.server.pool.DiskPool;
+import com.imby.server.business.server.pool.MemoryPool;
 import com.imby.server.core.ThreadPool;
 import com.imby.server.inf.IServerMonitoringListener;
 import lombok.extern.slf4j.Slf4j;
@@ -109,7 +109,7 @@ public class ServerAspect {
         // 刷新服务器信息
         this.refreshServerInfo(ip, computerName, memoryDomain, cpuDomain, diskDomain);
         // 调用监听器回调接口
-        this.serverMonitoringListeners.forEach(o -> ThreadPool.CPU_INTENSIVE_THREAD_POOL_EXECUTOR.execute(() -> {
+        this.serverMonitoringListeners.forEach(o -> ThreadPool.COMMON_CPU_INTENSIVE_THREAD_POOL.execute(() -> {
             try {
                 o.wakeUpMonitor(ip);
             } catch (NetException e) {

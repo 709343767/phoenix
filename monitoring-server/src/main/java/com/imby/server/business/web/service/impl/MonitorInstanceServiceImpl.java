@@ -190,7 +190,7 @@ public class MonitorInstanceServiceImpl extends ServiceImpl<IMonitorInstanceDao,
 
         // 调用监听器回调接口
         this.instanceMonitoringListenerList.forEach(e ->
-                ThreadPool.CPU_INTENSIVE_THREAD_POOL_EXECUTOR.execute(() ->
+                ThreadPool.COMMON_CPU_INTENSIVE_THREAD_POOL.execute(() ->
                         e.wakeUpMonitorPool(AlarmTypeEnums.INSTANCE, instances)));
         return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);
     }
