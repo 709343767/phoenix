@@ -75,7 +75,7 @@ public class ThreadPool {
     /**
      * 延迟/周期执行线程池
      */
-    public static final ScheduledExecutorService COMMON_SCHEDULED_THREAD_POOL = new ScheduledThreadPoolExecutor(5,
+    public static final ScheduledExecutorService COMMON_SCHEDULED_THREAD_POOL = new ScheduledThreadPoolExecutor(1,
             new BasicThreadFactory.Builder()
                     // 设置线程名
                     .namingPattern("monitoring-common-pool-scheduled-%d")
