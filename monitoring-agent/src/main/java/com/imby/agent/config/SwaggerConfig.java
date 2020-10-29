@@ -51,11 +51,6 @@ public class SwaggerConfig {
                 .build();
         log.info("Swagger配置成功！");
         return docket;
-        // return new Docket(DocumentationType.SWAGGER_2)//
-        // .apiInfo(apiInfo())//
-        // .select()//
-        // .apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class))//
-        // .build();
     }
 
     /**
