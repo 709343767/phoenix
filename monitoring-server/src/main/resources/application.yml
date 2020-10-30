@@ -25,7 +25,7 @@ spring:
   mvc:
     async:
       #接口访问超时时间
-      request-timeout: 20000
+      request-timeout: 5000
   jackson:
     #设置时区
     time-zone: GMT+8
