@@ -78,4 +78,36 @@ public class MonitorServerNetcard implements Serializable {
     @TableField("UPDATE_TIME")
     private Date updateTime;
 
+    @ApiModelProperty(value = "接收到的总字节数")
+    @TableField("RX_BYTES")
+    private Long rxBytes;
+
+    @ApiModelProperty(value = "接收的总包数")
+    @TableField("RX_PACKETS")
+    private Long rxPackets;
+
+    @ApiModelProperty(value = "接收到的错误包数")
+    @TableField("RX_ERRORS")
+    private Long rxErrors;
+
+    @ApiModelProperty(value = "接收时丢弃的包数")
+    @TableField("RX_DROPPED")
+    private Long rxDropped;
+
+    @ApiModelProperty(value = "发送的总字节数")
+    @TableField("TX_BYTES")
+    private Long txBytes;
+
+    @ApiModelProperty(value = "发送的总包数")
+    @TableField("TX_PACKETS")
+    private Long txPackets;
+
+    @ApiModelProperty(value = "发送时的错误包数")
+    @TableField("TX_ERRORS")
+    private Long txErrors;
+
+    @ApiModelProperty(value = "发送时丢弃的包数")
+    @TableField("TX_DROPPED")
+    private Long txDropped;
+
 }

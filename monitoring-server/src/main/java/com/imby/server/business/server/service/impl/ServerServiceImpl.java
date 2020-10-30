@@ -133,19 +133,29 @@ public class ServerServiceImpl implements IServerService {
         // 网卡信息
         NetDomain netDomain = serverPackage.getServer().getNetDomain();
         // 设置网卡信息
-        List<NetDomain.NetInterfaceConfigDomain> netInterfaceConfigDomains = netDomain.getNetList();
-        for (int i = 0; i < netInterfaceConfigDomains.size(); i++) {
-            NetDomain.NetInterfaceConfigDomain netInterfaceConfigDomain = netInterfaceConfigDomains.get(i);
+        List<NetDomain.NetInterfaceDomain> netInterfaceDomains = netDomain.getNetList();
+        for (int i = 0; i < netInterfaceDomains.size(); i++) {
+            NetDomain.NetInterfaceDomain netInterfaceDomain = netInterfaceDomains.get(i);
             MonitorServerNetcard monitorServerNetcard = new MonitorServerNetcard();
             monitorServerNetcard.setIp(ip);
             monitorServerNetcard.setNetNo(i + 1);
-            monitorServerNetcard.setAddress(netInterfaceConfigDomain.getAddress());
-            monitorServerNetcard.setBroadcast(netInterfaceConfigDomain.getBroadcast());
-            monitorServerNetcard.setMask(netInterfaceConfigDomain.getMask());
-            monitorServerNetcard.setName(netInterfaceConfigDomain.getName());
-            monitorServerNetcard.setType(netInterfaceConfigDomain.getType());
-            monitorServerNetcard.setHwAddr(netInterfaceConfigDomain.getHwAddr());
-            monitorServerNetcard.setDescription(netInterfaceConfigDomain.getDescription());
+            // 网卡配置信息
+            monitorServerNetcard.setAddress(netInterfaceDomain.getAddress());
+            monitorServerNetcard.setBroadcast(netInterfaceDomain.getBroadcast());
+            monitorServerNetcard.setMask(netInterfaceDomain.getMask());
+            monitorServerNetcard.setName(netInterfaceDomain.getName());
+            monitorServerNetcard.setType(netInterfaceDomain.getType());
+            monitorServerNetcard.setHwAddr(netInterfaceDomain.getHwAddr());
+            monitorServerNetcard.setDescription(netInterfaceDomain.getDescription());
+            // 网卡状态信息
+            monitorServerNetcard.setRxBytes(netInterfaceDomain.getRxBytes());
+            monitorServerNetcard.setRxDropped(netInterfaceDomain.getRxDropped());
+            monitorServerNetcard.setRxErrors(netInterfaceDomain.getRxErrors());
+            monitorServerNetcard.setRxPackets(netInterfaceDomain.getRxPackets());
+            monitorServerNetcard.setTxBytes(netInterfaceDomain.getTxBytes());
+            monitorServerNetcard.setTxDropped(netInterfaceDomain.getTxDropped());
+            monitorServerNetcard.setTxErrors(netInterfaceDomain.getTxErrors());
+            monitorServerNetcard.setTxPackets(netInterfaceDomain.getTxPackets());
             // 查询数据库中是否有当前网卡信息
             LambdaQueryWrapper<MonitorServerNetcard> lambdaQueryWrapper = new LambdaQueryWrapper<>();
             lambdaQueryWrapper.eq(MonitorServerNetcard::getIp, ip);

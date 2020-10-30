@@ -29,14 +29,14 @@ public final class NetDomain extends AbstractSuperBean {
     /**
      * 网卡信息
      */
-    private List<NetInterfaceConfigDomain> netList;
+    private List<NetInterfaceDomain> netList;
 
     @Data
     @ToString
     @NoArgsConstructor
     @Accessors(chain = true)
     @EqualsAndHashCode(callSuper = true)
-    public static class NetInterfaceConfigDomain extends AbstractSuperBean {
+    public static class NetInterfaceDomain extends AbstractSuperBean {
         /**
          * 网卡名字
          */
@@ -65,6 +65,46 @@ public final class NetDomain extends AbstractSuperBean {
          * 网卡描述信息
          */
         String description;
+
+        /**
+         * 接收到的总字节数
+         */
+        long rxBytes;
+
+        /**
+         * 接收的总包数
+         */
+        long rxPackets;
+
+        /**
+         * 接收到的错误包数
+         */
+        long rxErrors;
+
+        /**
+         * 接收时丢弃的包数
+         */
+        long rxDropped;
+
+        /**
+         * 发送的总字节数
+         */
+        long txBytes;
+
+        /**
+         * 发送的总包数
+         */
+        long txPackets;
+
+        /**
+         * 发送时的错误包数
+         */
+        long txErrors;
+
+        /**
+         * 发送时丢弃的包数
+         */
+        long txDropped;
 
     }
 

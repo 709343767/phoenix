@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.hyperic.sigar.NetFlags;
 import org.hyperic.sigar.NetInterfaceConfig;
+import org.hyperic.sigar.NetInterfaceStat;
 import org.hyperic.sigar.SigarException;
 
 import java.io.BufferedReader;
@@ -105,14 +106,14 @@ public class NetUtils extends InitSigar {
         // 获取本机IP地址
         String ip = getLocalIp();
         NetDomain netDomain = getNetInfo();
-        List<NetDomain.NetInterfaceConfigDomain> netInterfaceConfigDomains = netDomain.getNetList();
-        for (NetDomain.NetInterfaceConfigDomain netInterfaceConfigDomain : netInterfaceConfigDomains) {
+        List<NetDomain.NetInterfaceDomain> netInterfaceDomains = netDomain.getNetList();
+        for (NetDomain.NetInterfaceDomain netInterfaceDomain : netInterfaceDomains) {
             // 网卡IP地址
-            String address = netInterfaceConfigDomain.getAddress();
+            String address = netInterfaceDomain.getAddress();
             // 是当前网卡的IP地址
             if (StringUtils.equals(ip, address)) {
                 // 返回此网卡的MAC地址
-                return netInterfaceConfigDomain.getHwAddr();
+                return netInterfaceDomain.getHwAddr();
             }
         }
         // 手动抛出异常
@@ -265,9 +266,12 @@ public class NetUtils extends InitSigar {
 
         String[] netInfos = SIGAR.getNetInterfaceList();
 
-        List<NetDomain.NetInterfaceConfigDomain> netInterfaceConfigDomains = Lists.newArrayList();
+        List<NetDomain.NetInterfaceDomain> netInterfaceConfigDomains = Lists.newArrayList();
         for (String info : netInfos) {
+            // 网卡配置
             NetInterfaceConfig netInfo = SIGAR.getNetInterfaceConfig(info);
+            // 网卡状态
+            NetInterfaceStat netStat = SIGAR.getNetInterfaceStat(info);
             if (
                 // 127.0.0.1
                     NetFlags.LOOPBACK_ADDRESS.equals(netInfo.getAddress())
@@ -280,15 +284,25 @@ public class NetUtils extends InitSigar {
             ) {
                 continue;
             }
-            NetDomain.NetInterfaceConfigDomain netInterfaceConfigDomain = new NetDomain.NetInterfaceConfigDomain();
-            netInterfaceConfigDomain.setName(netInfo.getName())
+            NetDomain.NetInterfaceDomain netInterfaceDomain = new NetDomain.NetInterfaceDomain();
+            // 网卡配置
+            netInterfaceDomain.setName(netInfo.getName())
                     .setType(netInfo.getType())
                     .setAddress(netInfo.getAddress())
                     .setMask(netInfo.getNetmask())
                     .setBroadcast(netInfo.getBroadcast())
                     .setHwAddr(netInfo.getHwaddr())
                     .setDescription(netInfo.getDescription());
-            netInterfaceConfigDomains.add(netInterfaceConfigDomain);
+            // 网卡状态
+            netInterfaceDomain.setRxBytes(netStat.getRxBytes())
+                    .setRxDropped(netStat.getRxDropped())
+                    .setRxErrors(netStat.getRxErrors())
+                    .setRxPackets(netStat.getRxPackets())
+                    .setTxBytes(netStat.getTxBytes())
+                    .setTxDropped(netStat.getTxDropped())
+                    .setTxErrors(netStat.getTxErrors())
+                    .setTxPackets(netStat.getTxPackets());
+            netInterfaceConfigDomains.add(netInterfaceDomain);
         }
         netDomain.setNetNum(netInterfaceConfigDomains.size()).setNetList(netInterfaceConfigDomains);
         return netDomain;

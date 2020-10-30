@@ -29,9 +29,9 @@ public class NetUtilsTest {
     public void testGetNetInfo() throws SigarException {
         NetDomain netVo = NetUtils.getNetInfo();
         int netNum = netVo.getNetNum();
-        List<NetDomain.NetInterfaceConfigDomain> netInterfaceConfigs = netVo.getNetList();
+        List<NetDomain.NetInterfaceDomain> netInterfaces = netVo.getNetList();
         System.out.println("网卡总数：" + netNum);
-        netInterfaceConfigs.forEach(netInterfaceConfig -> System.out.println(netInterfaceConfig.toJsonString()));
+        netInterfaces.forEach(netInterfaceConfig -> System.out.println(netInterfaceConfig.toJsonString()));
     }
 
 }
