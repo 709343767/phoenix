@@ -25,6 +25,93 @@
             getServerDiskInfo();
         });
 
+        // 发送ajax请求，获取网卡数据
+        function getServerNetcardInfo() {
+            admin.req({
+                type: 'get',
+                url: layui.setter.base + 'monitor-server-netcard/get-server-detail-page-server-netcard-info',
+                dataType: 'json',
+                contentType: 'application/json;charset=utf-8',
+                headers: {
+                    "X-CSRF-TOKEN": tokenValue
+                },
+                data: {
+                    ip: ip // 应用实例ID
+                },
+                success: function (result) {
+                    var data = result.data;
+                    var html = '';
+                    for (var i = 0; i < data.length; i++) {
+                        var obj = data[i];
+                        var address = obj.address;
+                        var broadcast = obj.broadcast;
+                        var description = obj.description;
+                        var hwAddr = obj.hwAddr;
+                        var mask = obj.mask;
+                        var name = obj.name;
+                        var rx = obj.rx;
+                        var rxDropped = obj.rxDropped;
+                        var rxErrors = obj.rxErrors;
+                        var rxPackets = obj.rxPackets;
+                        var tx = obj.tx;
+                        var txDropped = obj.txDropped;
+                        var txErrors = obj.txErrors;
+                        var txPackets = obj.txPackets;
+                        var type = obj.type;
+                        html += '<div class="layui-col-md4">' +
+                            '       <label class="label-font-weight">网卡名字：</label>' + name +
+                            '    </div>' +
+                            '    <div class="layui-col-md4">' +
+                            '       <label class="label-font-weight">网卡类型：</label>' + type +
+                            '    </div>' +
+                            '    <div class="layui-col-md4">' +
+                            '       <label class="label-font-weight">网卡地址：</label>' + address +
+                            '    </div>' +
+                            '    <div class="layui-col-md4">' +
+                            '       <label class="label-font-weight">子网掩码：</label>' + mask +
+                            '    </div>' +
+                            '    <div class="layui-col-md4">' +
+                            '       <label class="label-font-weight">广播地址：</label>' + broadcast +
+                            '    </div>' +
+                            '    <div class="layui-col-md4">' +
+                            '       <label class="label-font-weight">MAC地址：</label>' + hwAddr +
+                            '    </div>' +
+                            '    <div class="layui-col-md4">' +
+                            '       <label class="label-font-weight">网卡信息描述：</label>' + description +
+                            '    </div>' +
+                            '    <div class="layui-col-md4">' +
+                            '       <label class="label-font-weight">接收的总数据大小：</label>' + rx +
+                            '    </div>' +
+                            '    <div class="layui-col-md4">' +
+                            '       <label class="label-font-weight">接收的总包数：</label>' + rxPackets + ' 个' +
+                            '    </div>' +
+                            '    <div class="layui-col-md4">' +
+                            '       <label class="label-font-weight">接收到的错误包数：</label>' + rxErrors + ' 个' +
+                            '    </div>' +
+                            '    <div class="layui-col-md4">' +
+                            '       <label class="label-font-weight">接收时丢弃的包数：</label>' + rxDropped + ' 个' +
+                            '    </div>' +
+                            '    <div class="layui-col-md4">' +
+                            '       <label class="label-font-weight">发送的总数据大小：</label>' + tx +
+                            '    </div>' +
+                            '    <div class="layui-col-md4">' +
+                            '       <label class="label-font-weight">发送的总包数：</label>' + txPackets + ' 个' +
+                            '    </div>' +
+                            '    <div class="layui-col-md4">' +
+                            '       <label class="label-font-weight">发送时的错误包数：</label>' + txErrors + ' 个' +
+                            '    </div>' +
+                            '    <div class="layui-col-md4">' +
+                            '       <label class="label-font-weight">发送时丢弃的包数：</label>' + txDropped + ' 个' +
+                            '    </div>';
+                        if (i != data.length - 1) {
+                            html += '<hr class="layui-bg-gray hr-padding">';
+                        }
+                    }
+                    $('#netcard').empty().append(html);
+                }
+            });
+        }
+
         // 发送ajax请求，获取操作系统数据
         function getServerOsInfo() {
             admin.req({
@@ -40,13 +127,11 @@
                 },
                 success: function (result) {
                     var data = result.data;
-                    var insertTime = data.insertTime;
                     var ip = data.ip;
                     var osName = data.osName;
                     var osTimeZone = data.osTimeZone;
                     var osVersion = data.osVersion;
                     var serverName = data.serverName;
-                    var updateTime = data.updateTime;
                     var userHome = data.userHome;
                     var userName = data.userName;
                     var html = '<div class="layui-col-md4">' +
@@ -69,12 +154,6 @@
                         '       </div>' +
                         '       <div class="layui-col-md4">' +
                         '           <label class="label-font-weight">用户目录：</label>' + userHome +
-                        '       </div>' +
-                        '       <div class="layui-col-md4">' +
-                        '           <label class="label-font-weight">新增时间：</label>' + insertTime +
-                        '       </div>' +
-                        '       <div class="layui-col-md4">' +
-                        '           <label class="label-font-weight">更新时间：</label>' + updateTime +
                         '       </div>';
                     $('#os').empty().append(html);
                 }
@@ -176,7 +255,7 @@
                     });
                     var option = {
                         title: {
-                            text: '内存',
+                            text: '内存/交换区',
                             left: 'center',
                             textStyle: {
                                 color: '#696969',
@@ -604,6 +683,8 @@
         getServerDiskInfo();
         // 发送ajax请求，获取操作系统数据
         getServerOsInfo();
+        // 发送ajax请求，获取网卡数据
+        getServerNetcardInfo();
         // 每30秒刷新一次
         window.setInterval(function () {
             // 发送ajax请求，获取CPU使用量数据
@@ -614,6 +695,8 @@
             getServerDiskInfo();
             // 发送ajax请求，获取操作系统数据
             getServerOsInfo();
+            // 发送ajax请求，获取网卡数据
+            getServerNetcardInfo();
         }, 1000 * 30);
     });
     e('serverDetail', {});

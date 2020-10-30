@@ -1,115 +1,125 @@
-package com.imby.server.business.web.entity;
+package com.imby.server.business.web.vo;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.imby.common.inf.ISuperBean;
+import com.imby.server.business.web.entity.MonitorServerNetcard;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 import lombok.experimental.Accessors;
+import org.springframework.beans.BeanUtils;
 
-import java.io.Serializable;
 import java.util.Date;
 
 /**
  * <p>
- * 服务器网卡表
+ * 服务器网卡信息表现层对象
  * </p>
  *
  * @author 皮锋
- * @custom.date 2020/9/4 20:50
+ * @custom.date 2020/10/30 19:25
  */
-@Data
-@Builder
-@EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("MONITOR_SERVER_NETCARD")
-@ApiModel(value = "MonitorServerNetcard对象", description = "服务器网卡表")
-public class MonitorServerNetcard implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+@EqualsAndHashCode(callSuper = false)
+@Builder
+@Getter
+@Setter
+@ToString
+@AllArgsConstructor
+@NoArgsConstructor
+@ApiModel(value = "服务器网卡信息表现层对象")
+public class MonitorServerNetcardVo implements ISuperBean {
 
     @ApiModelProperty(value = "主键ID")
-    @TableId(value = "ID", type = IdType.AUTO)
     private Long id;
 
     @ApiModelProperty(value = "IP地址")
-    @TableField("IP")
     private String ip;
 
     @ApiModelProperty(value = "网卡序号")
-    @TableField("NET_NO")
     private Integer netNo;
 
     @ApiModelProperty(value = "网卡名字")
-    @TableField("NAME")
     private String name;
 
     @ApiModelProperty(value = "网卡类型")
-    @TableField("TYPE")
     private String type;
 
     @ApiModelProperty(value = "网卡地址")
-    @TableField("ADDRESS")
     private String address;
 
     @ApiModelProperty(value = "子网掩码")
-    @TableField("MASK")
     private String mask;
 
     @ApiModelProperty(value = "广播地址")
-    @TableField("BROADCAST")
     private String broadcast;
 
     @ApiModelProperty(value = "MAC地址")
-    @TableField("HW_ADDR")
     private String hwAddr;
 
     @ApiModelProperty(value = "网卡信息描述")
-    @TableField("DESCRIPTION")
     private String description;
 
+    @JsonFormat(pattern = "yyyy/MM/dd HH:mm:ss", timezone = "GMT+8")
     @ApiModelProperty(value = "新增时间")
-    @TableField("INSERT_TIME")
     private Date insertTime;
 
+    @JsonFormat(pattern = "yyyy/MM/dd HH:mm:ss", timezone = "GMT+8")
     @ApiModelProperty(value = "更新时间")
-    @TableField("UPDATE_TIME")
     private Date updateTime;
 
     @ApiModelProperty(value = "接收到的总字节数")
-    @TableField("RX_BYTES")
     private Long rxBytes;
 
     @ApiModelProperty(value = "接收的总包数")
-    @TableField("RX_PACKETS")
     private Long rxPackets;
 
     @ApiModelProperty(value = "接收到的错误包数")
-    @TableField("RX_ERRORS")
     private Long rxErrors;
 
     @ApiModelProperty(value = "接收时丢弃的包数")
-    @TableField("RX_DROPPED")
     private Long rxDropped;
 
     @ApiModelProperty(value = "发送的总字节数")
-    @TableField("TX_BYTES")
     private Long txBytes;
 
     @ApiModelProperty(value = "发送的总包数")
-    @TableField("TX_PACKETS")
     private Long txPackets;
 
     @ApiModelProperty(value = "发送时的错误包数")
-    @TableField("TX_ERRORS")
     private Long txErrors;
 
     @ApiModelProperty(value = "发送时丢弃的包数")
-    @TableField("TX_DROPPED")
     private Long txDropped;
+
+    /**
+     * <p>
+     * MonitorServerNetcardVo转MonitorServerNetcard
+     * </p>
+     *
+     * @return {@link MonitorServerNetcard}
+     * @author 皮锋
+     * @custom.date 2020/9/3 9:20
+     */
+    public MonitorServerNetcard convertTo() {
+        MonitorServerNetcard monitorServerNetcard = MonitorServerNetcard.builder().build();
+        BeanUtils.copyProperties(this, monitorServerNetcard);
+        return monitorServerNetcard;
+    }
+
+    /**
+     * <p>
+     * MonitorServerNetcard转MonitorServerNetcardVo
+     * </p>
+     *
+     * @param monitorServerNetcard {@link MonitorServerNetcard}
+     * @return {@link MonitorServerNetcardVo}
+     * @author 皮锋
+     * @custom.date 2020/9/3 9:22
+     */
+    public MonitorServerNetcardVo convertFor(MonitorServerNetcard monitorServerNetcard) {
+        BeanUtils.copyProperties(monitorServerNetcard, this);
+        return this;
+    }
 
 }
