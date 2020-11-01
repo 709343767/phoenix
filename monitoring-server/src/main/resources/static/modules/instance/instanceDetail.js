@@ -17,9 +17,9 @@
         // 时间条件发生改变
         form.on('select(time1)', function (data) {
             heapAndNonHeapTime = data.value;
-            // 发送ajax请求，获取内存使用量数据
-            getJvmMemoryInfo(heapAndNonHeapTime, 'Heap', 'Heap内存使用量');
-            getJvmMemoryInfo(heapAndNonHeapTime, 'Non_Heap', 'Non_Heap内存使用量');
+            // 发送ajax请求，获取内存图表数据
+            getJvmMemoryChartInfo(heapAndNonHeapTime, 'Heap', 'Heap内存使用量');
+            getJvmMemoryChartInfo(heapAndNonHeapTime, 'Non_Heap', 'Non_Heap内存使用量');
         });
         // 内存池图表时间
         var chartTime = 'hour';
@@ -29,14 +29,14 @@
         form.on('select(chart)', function (data) {
             // 内存池类型
             chartPool = data.value;
-            // 发送ajax请求，获取内存使用量数据
-            getJvmMemoryInfo(chartTime, chartPool, chartPool + '内存使用量');
+            // 发送ajax请求，获取内存图表数据
+            getJvmMemoryChartInfo(chartTime, chartPool, chartPool + '内存使用量');
         });
         form.on('select(time2)', function (data) {
             // 时间
             chartTime = data.value;
-            // 发送ajax请求，获取内存使用量数据
-            getJvmMemoryInfo(chartTime, chartPool, chartPool + '内存使用量');
+            // 发送ajax请求，获取内存图表数据
+            getJvmMemoryChartInfo(chartTime, chartPool, chartPool + '内存使用量');
         });
 
         // 发送ajax请求，获取线程信息
@@ -253,8 +253,8 @@
             });
         }
 
-        // 发送ajax请求，获取内存使用量数据
-        function getJvmMemoryInfo(time, memoryType, title) {
+        // 发送ajax请求，获取内存图表数据
+        function getJvmMemoryChartInfo(time, memoryType, title) {
             // 弹出loading框
             var loadingIndex = layer.load(1, {
                 shade: [0.1, '#fff'] //0.1透明度的白色背景
@@ -428,10 +428,10 @@
             });
         }
 
-        // 发送ajax请求，获取内存使用量数据
-        getJvmMemoryInfo('hour', 'Heap', 'Heap内存使用量');
-        getJvmMemoryInfo('hour', 'Non_Heap', 'Non_Heap内存使用量');
-        getJvmMemoryInfo('hour', chartPool, chartPool + '内存使用量');
+        // 发送ajax请求，获取内存图表数据
+        getJvmMemoryChartInfo('hour', 'Heap', 'Heap内存使用量');
+        getJvmMemoryChartInfo('hour', 'Non_Heap', 'Non_Heap内存使用量');
+        getJvmMemoryChartInfo('hour', chartPool, chartPool + '内存使用量');
         // 发送ajax请求，获取线程信息
         getJvmThreadInfo();
         // 发送ajax请求，获取GC信息
@@ -442,10 +442,10 @@
         getJvmRuntimeInfo();
         // 每30秒刷新一次
         window.setInterval(function () {
-            // 发送ajax请求，获取内存使用量数据
-            getJvmMemoryInfo(heapAndNonHeapTime, 'Heap', 'Heap内存使用量');
-            getJvmMemoryInfo(heapAndNonHeapTime, 'Non_Heap', 'Non_Heap内存使用量');
-            getJvmMemoryInfo(chartTime, chartPool, chartPool + '内存使用量');
+            // 发送ajax请求，获取内存图表数据
+            getJvmMemoryChartInfo(heapAndNonHeapTime, 'Heap', 'Heap内存使用量');
+            getJvmMemoryChartInfo(heapAndNonHeapTime, 'Non_Heap', 'Non_Heap内存使用量');
+            getJvmMemoryChartInfo(chartTime, chartPool, chartPool + '内存使用量');
             // 发送ajax请求，获取线程信息
             getJvmThreadInfo();
             // 发送ajax请求，获取GC信息
