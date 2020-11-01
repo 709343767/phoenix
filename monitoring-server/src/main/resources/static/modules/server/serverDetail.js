@@ -222,7 +222,7 @@
             });
             admin.req({
                 type: 'get',
-                url: layui.setter.base + 'monitor-server-memory/get-server-detail-page-server-memory-info',
+                url: layui.setter.base + 'monitor-server-memory/get-server-detail-page-server-memory-chart-info',
                 dataType: 'json',
                 contentType: 'application/json;charset=utf-8',
                 headers: {

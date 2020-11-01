@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.imby.server.business.web.dao.IMonitorServerMemoryDao;
 import com.imby.server.business.web.entity.MonitorServerMemory;
 import com.imby.server.business.web.service.IMonitorServerMemoryService;
-import com.imby.server.business.web.vo.ServerDetailPageServerMemoryVo;
+import com.imby.server.business.web.vo.ServerDetailPageServerMemoryChartVo;
 import com.imby.server.core.CalculateDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,18 +34,18 @@ public class MonitorServerMemoryServiceImpl extends ServiceImpl<IMonitorServerMe
 
     /**
      * <p>
-     * 获取服务器详情页面服务器内存信息
+     * 获取服务器详情页面服务器内存图表信息
      * </p>
      *
      * @param ip   服务器IP地址
      * @param time 时间
-     * @return 服务器详情页面服务器内存信息表现层对象
+     * @return 服务器详情页面服务器内存图表信息表现层对象
      * @author 皮锋
      * @custom.date 2020/10/21 12:42
      */
     @Override
-    public List<ServerDetailPageServerMemoryVo> getServerDetailPageServerMemory(String ip, String time) {
-        Map<String, Object> params = new HashMap<>(3);
+    public List<ServerDetailPageServerMemoryChartVo> getServerDetailPageServerMemoryChartInfo(String ip, String time) {
+        Map<String, Object> params = new HashMap<>(16);
         params.put("ip", ip);
         // 计算时间
         CalculateDateTime calculateDateTime = new CalculateDateTime(time).invoke();
@@ -55,27 +55,27 @@ public class MonitorServerMemoryServiceImpl extends ServiceImpl<IMonitorServerMe
         Date endTime = calculateDateTime.getEndTime();
         params.put("startTime", startTime);
         params.put("endTime", endTime);
-        List<ServerDetailPageServerMemoryVo> serverDetailPageServerMemoryVos = this.monitorServerMemoryDao.getServerDetailPageServerMemory(params);
+        List<ServerDetailPageServerMemoryChartVo> serverDetailPageServerMemoryChartVos = this.monitorServerMemoryDao.getServerDetailPageServerMemoryChartInfo(params);
         // 除数（1024 * 1024 * 1024 = 1073741824）
         Double v2 = 1073741824D;
-        for (ServerDetailPageServerMemoryVo serverDetailPageServerMemoryVo : serverDetailPageServerMemoryVos) {
+        for (ServerDetailPageServerMemoryChartVo serverDetailPageServerMemoryChartVo : serverDetailPageServerMemoryChartVos) {
             // 转GB
-            serverDetailPageServerMemoryVo.setMemFree(NumberUtil.div(serverDetailPageServerMemoryVo.getMemFree(), v2, 2));
+            serverDetailPageServerMemoryChartVo.setMemFree(NumberUtil.div(serverDetailPageServerMemoryChartVo.getMemFree(), v2, 2));
             // 转GB
-            serverDetailPageServerMemoryVo.setMemTotal(NumberUtil.div(serverDetailPageServerMemoryVo.getMemTotal(), v2, 2));
+            serverDetailPageServerMemoryChartVo.setMemTotal(NumberUtil.div(serverDetailPageServerMemoryChartVo.getMemTotal(), v2, 2));
             // 转GB
-            serverDetailPageServerMemoryVo.setMemUsed(NumberUtil.div(serverDetailPageServerMemoryVo.getMemUsed(), v2, 2));
+            serverDetailPageServerMemoryChartVo.setMemUsed(NumberUtil.div(serverDetailPageServerMemoryChartVo.getMemUsed(), v2, 2));
             // 乘以100后，保留两位小数
-            serverDetailPageServerMemoryVo.setMenUsedPercent(NumberUtil.round(serverDetailPageServerMemoryVo.getMenUsedPercent() * 100D, 2).doubleValue());
+            serverDetailPageServerMemoryChartVo.setMenUsedPercent(NumberUtil.round(serverDetailPageServerMemoryChartVo.getMenUsedPercent() * 100D, 2).doubleValue());
             // 转GB
-            serverDetailPageServerMemoryVo.setSwapFree(NumberUtil.div(serverDetailPageServerMemoryVo.getSwapFree(), v2, 2));
+            serverDetailPageServerMemoryChartVo.setSwapFree(NumberUtil.div(serverDetailPageServerMemoryChartVo.getSwapFree(), v2, 2));
             // 转GB
-            serverDetailPageServerMemoryVo.setSwapTotal(NumberUtil.div(serverDetailPageServerMemoryVo.getSwapTotal(), v2, 2));
+            serverDetailPageServerMemoryChartVo.setSwapTotal(NumberUtil.div(serverDetailPageServerMemoryChartVo.getSwapTotal(), v2, 2));
             // 转GB
-            serverDetailPageServerMemoryVo.setSwapUsed(NumberUtil.div(serverDetailPageServerMemoryVo.getSwapUsed(), v2, 2));
+            serverDetailPageServerMemoryChartVo.setSwapUsed(NumberUtil.div(serverDetailPageServerMemoryChartVo.getSwapUsed(), v2, 2));
             // 乘以100后，保留两位小数
-            serverDetailPageServerMemoryVo.setSwapUsedPercent(NumberUtil.round(serverDetailPageServerMemoryVo.getSwapUsedPercent() * 100D, 2).doubleValue());
+            serverDetailPageServerMemoryChartVo.setSwapUsedPercent(NumberUtil.round(serverDetailPageServerMemoryChartVo.getSwapUsedPercent() * 100D, 2).doubleValue());
         }
-        return serverDetailPageServerMemoryVos;
+        return serverDetailPageServerMemoryChartVos;
     }
 }

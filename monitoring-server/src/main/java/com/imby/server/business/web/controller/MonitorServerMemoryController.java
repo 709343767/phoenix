@@ -3,7 +3,7 @@ package com.imby.server.business.web.controller;
 
 import com.imby.server.business.web.service.IMonitorServerMemoryService;
 import com.imby.server.business.web.vo.LayUiAdminResultVo;
-import com.imby.server.business.web.vo.ServerDetailPageServerMemoryVo;
+import com.imby.server.business.web.vo.ServerDetailPageServerMemoryChartVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -34,7 +34,7 @@ public class MonitorServerMemoryController {
 
     /**
      * <p>
-     * 获取服务器详情页面服务器内存信息
+     * 获取服务器详情页面服务器内存图表信息
      * </p>
      *
      * @param ip   服务器IP地址
@@ -43,16 +43,16 @@ public class MonitorServerMemoryController {
      * @author 皮锋
      * @custom.date 2020/10/21 12:35
      */
-    @ApiOperation(value = "获取服务器详情页面服务器内存信息")
+    @ApiOperation(value = "获取服务器详情页面服务器内存图表信息")
     @ResponseBody
-    @GetMapping("/get-server-detail-page-server-memory-info")
+    @GetMapping("/get-server-detail-page-server-memory-chart-info")
     @ApiImplicitParams(value = {
             @ApiImplicitParam(name = "ip", value = "服务器IP地址", required = true, paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "time", value = "时间", paramType = "query", dataType = "string")})
-    public LayUiAdminResultVo getServerDetailPageServerMemory(@RequestParam(name = "ip") String ip,
-                                                              @RequestParam(name = "time", required = false) String time) {
-        List<ServerDetailPageServerMemoryVo> monitorJvmMemoryVos = this.monitorServerMemoryService.getServerDetailPageServerMemory(ip, time);
-        return LayUiAdminResultVo.ok(monitorJvmMemoryVos);
+    public LayUiAdminResultVo getServerDetailPageServerMemoryChartInfo(@RequestParam(name = "ip") String ip,
+                                                                       @RequestParam(name = "time", required = false) String time) {
+        List<ServerDetailPageServerMemoryChartVo> monitorJvmMemoryChartVos = this.monitorServerMemoryService.getServerDetailPageServerMemoryChartInfo(ip, time);
+        return LayUiAdminResultVo.ok(monitorJvmMemoryChartVos);
     }
 
 }

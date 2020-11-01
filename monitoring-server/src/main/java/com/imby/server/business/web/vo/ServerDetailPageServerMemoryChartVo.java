@@ -11,7 +11,7 @@ import java.util.Date;
 
 /**
  * <p>
- * 服务器详情页面服务器内存信息表现层对象
+ * 服务器详情页面服务器内存图表信息表现层对象
  * </p>
  *
  * @author 皮锋
@@ -25,8 +25,8 @@ import java.util.Date;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel(value = "服务器详情页面服务器内存信息表现层对象")
-public class ServerDetailPageServerMemoryVo implements ISuperBean {
+@ApiModel(value = "服务器详情页面服务器内存图表信息表现层对象")
+public class ServerDetailPageServerMemoryChartVo implements ISuperBean {
 
     @ApiModelProperty(value = "物理内存总量（单位：Gb）")
     private Double memTotal;
