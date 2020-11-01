@@ -34,11 +34,6 @@ public class Instance extends AbstractInstanceBean {
     private boolean isOnline;
 
     /**
-     * 是否网络可连接
-     */
-    private boolean isOnConnect;
-
-    /**
      * 最后一次通过心跳包更新的时间
      */
     private Date dateTime;
@@ -47,10 +42,5 @@ public class Instance extends AbstractInstanceBean {
      * 是否已经发送过离线告警消息
      */
     private boolean isLineAlarm;
-
-    /**
-     * 是否已经发送过断网告警消息
-     */
-    private boolean isConnectAlarm;
 
 }

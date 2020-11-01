@@ -7,7 +7,6 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.common.collect.Lists;
-import com.imby.common.constant.AlarmTypeEnums;
 import com.imby.server.business.web.dao.IMonitorNetDao;
 import com.imby.server.business.web.entity.MonitorNet;
 import com.imby.server.business.web.service.IMonitorNetService;
@@ -15,8 +14,6 @@ import com.imby.server.business.web.vo.HomeNetVo;
 import com.imby.server.business.web.vo.LayUiAdminResultVo;
 import com.imby.server.business.web.vo.MonitorNetVo;
 import com.imby.server.constant.WebResponseConstants;
-import com.imby.server.core.ThreadPool;
-import com.imby.server.inf.INetMonitoringListener;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,12 +32,6 @@ import java.util.Map;
  */
 @Service
 public class MonitorNetServiceImpl extends ServiceImpl<IMonitorNetDao, MonitorNet> implements IMonitorNetService {
-
-    /**
-     * 网络信息监听器
-     */
-    @Autowired
-    private List<INetMonitoringListener> netMonitoringListeners;
 
     /**
      * 网络信息数据访问对象
@@ -135,11 +126,6 @@ public class MonitorNetServiceImpl extends ServiceImpl<IMonitorNetDao, MonitorNe
         monitorNetLambdaUpdateWrapper.in(MonitorNet::getIpSource, ipSources);
         monitorNetLambdaUpdateWrapper.in(MonitorNet::getIpTarget, ipTargets);
         this.monitorNetDao.delete(monitorNetLambdaUpdateWrapper);
-
-        // 调用监听器回调接口
-        this.netMonitoringListeners.forEach(e ->
-                ThreadPool.COMMON_CPU_INTENSIVE_THREAD_POOL.execute(() ->
-                        e.wakeUpMonitorPool(AlarmTypeEnums.NET, ipSources)));
         return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);
     }
 

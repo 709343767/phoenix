@@ -21,4 +21,5 @@ public class MonitoringNetworkProperties {
      * 是否监控网络
      */
     private boolean monitoringEnable;
+
 }

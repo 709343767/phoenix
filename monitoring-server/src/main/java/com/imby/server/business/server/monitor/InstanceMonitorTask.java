@@ -8,7 +8,6 @@ import com.imby.common.domain.Alarm;
 import com.imby.common.dto.AlarmPackage;
 import com.imby.common.exception.NetException;
 import com.imby.common.util.DateTimeUtils;
-import com.imby.common.util.NetUtils;
 import com.imby.server.business.server.core.PackageConstructor;
 import com.imby.server.business.server.domain.Instance;
 import com.imby.server.business.server.entity.MonitorInstance;
@@ -16,7 +15,6 @@ import com.imby.server.business.server.pool.InstancePool;
 import com.imby.server.business.server.service.IAlarmService;
 import com.imby.server.business.server.service.IInstanceService;
 import com.imby.server.core.ThreadPool;
-import com.imby.server.property.MonitoringServerWebProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.hyperic.sigar.SigarException;
 import org.joda.time.DateTime;
@@ -56,12 +54,6 @@ public class InstanceMonitorTask implements CommandLineRunner {
     private IAlarmService alarmService;
 
     /**
-     * 监控配置属性
-     */
-    @Autowired
-    private MonitoringServerWebProperties monitoringServerWebProperties;
-
-    /**
      * 应用实例服务接口
      */
     @Autowired
@@ -88,52 +80,29 @@ public class InstanceMonitorTask implements CommandLineRunner {
                     int thresholdSecond = instance.getThresholdSecond();
                     // 最后一次通过心跳包更新的时间
                     Date dateTime = instance.getDateTime();
-                    // 网络监控是否打开
-                    boolean monitoringEnable = this.monitoringServerWebProperties.getNetworkProperties()
-                            .isMonitoringEnable();
                     // 判决时间
                     DateTime judgeDateTime = new DateTime(dateTime).plusSeconds(thresholdSecond);
                     // 注册上来的服务失去响应
                     if (judgeDateTime.isBeforeNow()) {
-                        // 已经断网 或者 已经离线
-                        if ((!instance.isOnConnect()) || (!instance.isOnline())) {
+                        // 已经离线
+                        if (!instance.isOnline()) {
                             continue;
                         }
-                        // 打开了网络监控
-                        if (monitoringEnable) {
-                            // 判断网络是不是断了
-                            boolean ping = NetUtils.ping(instance.getIp());
-                            // 网络不通
-                            if (!ping) {
-                                // 断网
-                                this.disConnect(instance);
-                            } else {
-                                // 离线
-                                this.offLine(instance);
-                            }
-                        } else {
-                            // 离线
-                            this.offLine(instance);
-                        }
+                        // 离线
+                        this.offLine(instance);
                     }
                     // 注册上来的服务恢复响应
                     else {
-                        // 打开了网络监控
-                        if (monitoringEnable) {
-                            // 网络恢复连接
-                            this.recoverConnect(instance);
-                        }
                         // 恢复在线
                         this.onLine(instance);
                     }
                 }
                 // 打印当前应用池中的所有应用情况
-                log.info("当前应用实例池大小：{}，正常：{}，离线：{}，断网：{}，详细信息：{}",
+                log.info("当前应用实例池大小：{}，正常：{}，离线：{}，详细信息：{}",
                         this.instancePool.size(),
                         this.instancePool.entrySet().stream()
-                                .filter(e -> (e.getValue().isOnline() && e.getValue().isOnConnect())).count(),
+                                .filter(e -> e.getValue().isOnline()).count(),
                         this.instancePool.entrySet().stream().filter(e -> !e.getValue().isOnline()).count(),
-                        this.instancePool.entrySet().stream().filter(e -> !e.getValue().isOnConnect()).count(),
                         this.instancePool.toJsonString());
             } catch (Exception e) {
                 log.error("定时扫描应用实例池中的所有应用实例异常！", e);
@@ -165,25 +134,6 @@ public class InstanceMonitorTask implements CommandLineRunner {
 
     /**
      * <p>
-     * 处理恢复网络
-     * </p>
-     *
-     * @param instance 实例
-     * @author 皮锋
-     * @custom.date 2020/3/23 11:56
-     */
-    private void recoverConnect(Instance instance) {
-        instance.setOnConnect(true);
-        // 是否已经发过断网告警信息
-        boolean isConnectAlarm = instance.isConnectAlarm();
-        if (isConnectAlarm) {
-            // 发送来网通知信息
-            instance.setConnectAlarm(false);
-        }
-    }
-
-    /**
-     * <p>
      * 处理离线
      * </p>
      *
@@ -203,29 +153,6 @@ public class InstanceMonitorTask implements CommandLineRunner {
             // 发送离线告警信息
             this.sendAlarmInfo("应用程序离线", AlarmLevelEnums.FATAL, instance);
             instance.setLineAlarm(true);
-        }
-        // 更新数据库
-        this.updateDb(instance);
-    }
-
-    /**
-     * <p>
-     * 处理断网
-     * </p>
-     *
-     * @param instance 实例
-     * @author 皮锋
-     * @custom.date 2020/3/23 11:41
-     */
-    private void disConnect(Instance instance) {
-        // 断网
-        instance.setOnConnect(false);
-        // 是否已经发过断网告警信息
-        boolean isConnectAlarm = instance.isConnectAlarm();
-        // 没发送断网告警
-        if (!isConnectAlarm) {
-            // 发送断网告警信息
-            instance.setConnectAlarm(true);
         }
         // 更新数据库
         this.updateDb(instance);
@@ -274,16 +201,11 @@ public class InstanceMonitorTask implements CommandLineRunner {
      */
     private void updateDb(Instance instance) {
         boolean isOnline = instance.isOnline();
-        boolean onConnect = instance.isOnConnect();
         MonitorInstance monitorInstance = new MonitorInstance();
         monitorInstance.setUpdateTime(new Date());
         // 离线
         if (!isOnline) {
             monitorInstance.setIsOnLine(ZeroOrOneConstants.ZERO);
-        }
-        // 断网
-        if (!onConnect) {
-            monitorInstance.setIsOnConnect(ZeroOrOneConstants.ZERO);
         }
         LambdaUpdateWrapper<MonitorInstance> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();
         lambdaUpdateWrapper.eq(MonitorInstance::getInstanceId, instance.getInstanceId());

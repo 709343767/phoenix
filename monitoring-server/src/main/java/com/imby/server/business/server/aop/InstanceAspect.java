@@ -2,13 +2,9 @@ package com.imby.server.business.server.aop;
 
 import com.alibaba.fastjson.JSON;
 import com.imby.common.dto.HeartbeatPackage;
-import com.imby.common.exception.NetException;
-import com.imby.common.util.NetUtils;
 import com.imby.server.business.server.controller.HeartbeatController;
-import com.imby.server.business.server.pool.InstancePool;
-import com.imby.server.business.server.pool.NetPool;
 import com.imby.server.business.server.domain.Instance;
-import com.imby.server.business.server.domain.Net;
+import com.imby.server.business.server.pool.InstancePool;
 import com.imby.server.property.MonitoringServerWebProperties;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
@@ -21,29 +17,22 @@ import java.util.Date;
 
 /**
  * <p>
- * 处理应用实例信息和网络信息的切面。
+ * 处理应用实例信息的切面。
  * </p>
- * 1.获取应用实例信息，并把应用实例信息添加或者更新到应用实例池;
- * 2.获取网络信息，并把网络信息添加或者更新到网络信息池。
+ * 获取应用实例信息，并把应用实例信息添加或者更新到应用实例池。
  *
  * @author 皮锋
  * @custom.date 2020/5/12 11:07
  */
 @Aspect
 @Component
-public class InstanceAndNetAspect {
+public class InstanceAspect {
 
     /**
      * 应用实例池
      */
     @Autowired
     private InstancePool instancePool;
-
-    /**
-     * 网络信息池
-     */
-    @Autowired
-    private NetPool netPool;
 
     /**
      * 监控配置属性
@@ -69,16 +58,14 @@ public class InstanceAndNetAspect {
      * </p>
      *
      * @param joinPoint 提供对连接点上可用状态和有关状态的静态信息的反射访问。
-     * @throws NetException 自定义获取网络信息异常
      * @author 皮锋
      * @custom.date 2020/9/27 12:45
      */
     @Before("tangentPoint()")
-    public void deal(JoinPoint joinPoint) throws NetException {
+    public void deal(JoinPoint joinPoint) {
         String args = String.valueOf(joinPoint.getArgs()[0]);
         HeartbeatPackage heartbeatPackage = JSON.parseObject(args, HeartbeatPackage.class);
         this.operateInstancePool(heartbeatPackage);
-        this.operateNetPool(heartbeatPackage);
     }
 
     /**
@@ -103,38 +90,11 @@ public class InstanceAndNetAspect {
         instance.setInstanceDesc(heartbeatPackage.getInstanceDesc());
         // 实例状态信息
         instance.setOnline(true);
-        instance.setOnConnect(true);
         instance.setDateTime(new Date());
         instance.setLineAlarm(this.instancePool.get(key) != null && this.instancePool.get(key).isLineAlarm());
-        instance.setConnectAlarm(this.instancePool.get(key) != null && this.instancePool.get(key).isConnectAlarm());
         instance.setThresholdSecond((int) (heartbeatPackage.getRate() * this.config.getThreshold()));
         // 更新应用实例池
         this.instancePool.updateInstancePool(key, instance);
-    }
-
-    /**
-     * <p>
-     * 获取网络信息，并把网络信息添加或者更新到网络信息池。
-     * </p>
-     *
-     * @param heartbeatPackage 心跳包
-     * @throws NetException 获取网络信息异常
-     * @author 皮锋
-     * @custom.date 2020/3/25 10:18
-     */
-    private void operateNetPool(HeartbeatPackage heartbeatPackage) throws NetException {
-        String key = heartbeatPackage.getIp();
-        // 网络信息
-        Net net = new Net();
-        net.setDateTime(new Date());
-        net.setOnConnect(true);
-        net.setConnectAlarm(this.netPool.get(key) != null && this.netPool.get(key).isConnectAlarm());
-        net.setThresholdSecond((int) (heartbeatPackage.getRate() * this.config.getThreshold()));
-        net.setIpSource(key);
-        net.setIpTarget(NetUtils.getLocalIp());
-        net.setComputerName(heartbeatPackage.getComputerName());
-        // 更新网络信息池
-        this.netPool.updateNetPool(key, net);
     }
 
 }

@@ -3,11 +3,16 @@ package com.imby.server.business.server.core;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 import com.imby.common.constant.AlarmTypeEnums;
-import com.imby.server.business.server.domain.*;
-import com.imby.server.business.server.pool.*;
+import com.imby.server.business.server.domain.Cpu;
+import com.imby.server.business.server.domain.Disk;
+import com.imby.server.business.server.domain.Instance;
+import com.imby.server.business.server.domain.Memory;
+import com.imby.server.business.server.pool.CpuPool;
+import com.imby.server.business.server.pool.DiskPool;
+import com.imby.server.business.server.pool.InstancePool;
+import com.imby.server.business.server.pool.MemoryPool;
 import com.imby.server.constant.FileNameConstants;
 import com.imby.server.inf.IInstanceMonitoringListener;
-import com.imby.server.inf.INetMonitoringListener;
 import com.imby.server.inf.IServerMonitoringListener;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
@@ -31,27 +36,20 @@ import java.util.Map;
  * 1.在Spring容器初始化时从文件系统中加载所有信息池内容到Spring容器；<br>
  * 2.定时每十分钟把Spring容器中的所有信息池内容持久化到文件系统；<br>
  * 3.在Spring容器销毁时持久化Spring容器中的所有信息池内容到文件系统；<br>
- * 4.数据库中删除了“应用实例”、“网络”、“服务器”数据时，唤醒执行监控信息池回调方法。<br>
+ * 4.数据库中删除了“应用实例”、“服务器”数据时，唤醒执行监控信息池回调方法。<br>
  *
  * @author 皮锋
  * @custom.date 2020/3/25 16:38
  */
 @Component
 @Slf4j
-public class PersistPoolLifecycle implements InitializingBean, DisposableBean, IInstanceMonitoringListener
-        , INetMonitoringListener, IServerMonitoringListener {
+public class PersistPoolLifecycle implements InitializingBean, DisposableBean, IInstanceMonitoringListener, IServerMonitoringListener {
 
     /**
      * 应用实例池
      */
     @Autowired
     private InstancePool instancePool;
-
-    /**
-     * 网络信息池
-     */
-    @Autowired
-    private NetPool netPool;
 
     /**
      * 服务器内存信息池
@@ -136,13 +134,6 @@ public class PersistPoolLifecycle implements InitializingBean, DisposableBean, I
             log.error("把Spring容器中的应用实例池内容存入文件系统异常！");
         }
         try {
-            FileUtils.writeStringToFile(new File(FileNameConstants.NET_POOL), this.netPool.toJsonString(),
-                    StandardCharsets.UTF_8, false);
-            log.info("把Spring容器中的网络信息池内容存入文件系统成功！");
-        } catch (Exception e) {
-            log.error("把Spring容器中的网络信息池内容存入文件系统异常！");
-        }
-        try {
             FileUtils.writeStringToFile(new File(FileNameConstants.MEMORY_POOL), this.memoryPool.toJsonString(),
                     StandardCharsets.UTF_8, false);
             log.info("把Spring容器中的服务器内存信息池内容存入文件系统成功！");
@@ -182,9 +173,8 @@ public class PersistPoolLifecycle implements InitializingBean, DisposableBean, I
                 for (Map.Entry<String, Instance> entry : map.entrySet()) {
                     Instance instance = entry.getValue();
                     boolean isOnline = instance.isOnline();
-                    boolean isOnConnect = instance.isOnConnect();
-                    // 如果之前是在线状态且网络正常，把最后一次通过心跳包更新的时间更新到当前时间
-                    if (isOnline && isOnConnect) {
+                    // 如果之前是在线状态，把最后一次通过心跳包更新的时间更新到当前时间
+                    if (isOnline) {
                         instance.setDateTime(new Date());
                     }
                 }
@@ -193,25 +183,6 @@ public class PersistPoolLifecycle implements InitializingBean, DisposableBean, I
             log.info("把文件系统中的应用实例池内容加载到Spring容器成功！");
         } catch (Exception ignored) {
             log.info("把文件系统中的应用实例池内容加载到Spring容器异常！");
-        }
-        try {
-            String netPoolStr = FileUtils.readFileToString(new File(FileNameConstants.NET_POOL), StandardCharsets.UTF_8);
-            if (StringUtils.isNotBlank(netPoolStr)) {
-                Map<String, Net> map = JSON.parseObject(netPoolStr, new TypeReference<Map<String, Net>>() {
-                });
-                for (Map.Entry<String, Net> entry : map.entrySet()) {
-                    Net net = entry.getValue();
-                    boolean isOnConnect = net.isOnConnect();
-                    // 如果之前是网络可连接状态，把最后一次通过心跳包更新的时间更新到当前时间
-                    if (isOnConnect) {
-                        net.setDateTime(new Date());
-                    }
-                }
-                this.netPool.putAll(map);
-            }
-            log.info("把文件系统中的网络信息池内容加载到Spring容器成功！");
-        } catch (Exception ignored) {
-            log.info("把文件系统中的网络信息池内容加载到Spring容器异常！");
         }
         try {
             String memoryPoolStr = FileUtils.readFileToString(new File(FileNameConstants.MEMORY_POOL), StandardCharsets.UTF_8);
@@ -258,7 +229,6 @@ public class PersistPoolLifecycle implements InitializingBean, DisposableBean, I
      */
     private void clearPools() {
         this.instancePool.clear();
-        this.netPool.clear();
         this.memoryPool.clear();
         this.cpuPool.clear();
         this.diskPool.clear();
@@ -292,12 +262,6 @@ public class PersistPoolLifecycle implements InitializingBean, DisposableBean, I
                 // 移除当前磁盘信息
                 this.diskPool.remove(e);
             });
-        }
-        if (alarmType == AlarmTypeEnums.NET) {
-            params.forEach(e ->
-                    //移除当前网络
-                    this.netPool.remove(e)
-            );
         }
         // 把Spring容器中的信息池内容存入文件系统
         this.storePools();
