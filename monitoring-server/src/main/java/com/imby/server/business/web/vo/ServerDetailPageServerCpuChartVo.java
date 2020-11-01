@@ -11,7 +11,7 @@ import java.util.Date;
 
 /**
  * <p>
- * 服务器详情页面服务器CPU信息表现层对象
+ * 服务器详情页面服务器CPU图表信息表现层对象
  * </p>
  *
  * @author 皮锋
@@ -25,8 +25,8 @@ import java.util.Date;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel(value = "服务器详情页面服务器CPU信息表现层对象")
-public class ServerDetailPageServerCpuVo implements ISuperBean {
+@ApiModel(value = "服务器详情页面服务器CPU图表信息表现层对象")
+public class ServerDetailPageServerCpuChartVo implements ISuperBean {
 
     @ApiModelProperty(value = "CPU用户使用率")
     private Double cpuUser;

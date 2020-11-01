@@ -2,9 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.imby.server.business.web.dao.IMonitorServerCpuDao">
 
-    <!-- 获取服务器详情页面服务器CPU信息 -->
-    <select id="getServerDetailPageServerCpu" parameterType="java.util.HashMap"
-            resultType="com.imby.server.business.web.vo.ServerDetailPageServerCpuVo">
+    <!-- 获取服务器详情页面服务器CPU图表信息 -->
+    <select id="getServerDetailPageServerCpuChartInfo" parameterType="java.util.HashMap"
+            resultType="com.imby.server.business.web.vo.ServerDetailPageServerCpuChartVo">
         SELECT AVG(CPU_USER) AS cpuUser,
         AVG(CPU_SYS) AS cpuSys,
         AVG(CPU_WAIT) AS cpuWait,
@@ -19,4 +19,5 @@
         </if>
         GROUP BY INSERT_TIME
     </select>
+
 </mapper>

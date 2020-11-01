@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.imby.server.business.web.dao.IMonitorServerCpuDao;
 import com.imby.server.business.web.entity.MonitorServerCpu;
 import com.imby.server.business.web.service.IMonitorServerCpuService;
-import com.imby.server.business.web.vo.ServerDetailPageServerCpuVo;
+import com.imby.server.business.web.vo.ServerDetailPageServerCpuChartVo;
 import com.imby.server.core.CalculateDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,18 +34,18 @@ public class MonitorServerCpuServiceImpl extends ServiceImpl<IMonitorServerCpuDa
 
     /**
      * <p>
-     * 获取服务器详情页面服务器CPU信息
+     * 获取服务器详情页面服务器CPU图表信息
      * </p>
      *
      * @param ip   服务器IP地址
      * @param time 时间
-     * @return 服务器详情页面服务器CPU信息表现层对象
+     * @return 服务器详情页面服务器CPU图表信息表现层对象
      * @author 皮锋
      * @custom.date 2020/10/19 14:22
      */
     @Override
-    public List<ServerDetailPageServerCpuVo> getServerDetailPageServerCpu(String ip, String time) {
-        Map<String, Object> params = new HashMap<>(3);
+    public List<ServerDetailPageServerCpuChartVo> getServerDetailPageServerCpuChartInfo(String ip, String time) {
+        Map<String, Object> params = new HashMap<>(16);
         params.put("ip", ip);
         // 计算时间
         CalculateDateTime calculateDateTime = new CalculateDateTime(time).invoke();
@@ -55,16 +55,16 @@ public class MonitorServerCpuServiceImpl extends ServiceImpl<IMonitorServerCpuDa
         Date endTime = calculateDateTime.getEndTime();
         params.put("startTime", startTime);
         params.put("endTime", endTime);
-        List<ServerDetailPageServerCpuVo> serverDetailPageServerCpuVos = this.monitorServerCpuDao.getServerDetailPageServerCpu(params);
-        for (ServerDetailPageServerCpuVo serverDetailPageServerCpuVo : serverDetailPageServerCpuVos) {
+        List<ServerDetailPageServerCpuChartVo> serverDetailPageServerCpuChartVos = this.monitorServerCpuDao.getServerDetailPageServerCpuChartInfo(params);
+        for (ServerDetailPageServerCpuChartVo serverDetailPageServerCpuChartVo : serverDetailPageServerCpuChartVos) {
             // 乘以100，保留两位小数
-            serverDetailPageServerCpuVo.setCpuCombined(NumberUtil.round(serverDetailPageServerCpuVo.getCpuCombined() * 100D, 2).doubleValue());
-            serverDetailPageServerCpuVo.setCpuIdle(NumberUtil.round(serverDetailPageServerCpuVo.getCpuIdle() * 100D, 2).doubleValue());
-            serverDetailPageServerCpuVo.setCpuNice(NumberUtil.round(serverDetailPageServerCpuVo.getCpuNice() * 100D, 2).doubleValue());
-            serverDetailPageServerCpuVo.setCpuSys(NumberUtil.round(serverDetailPageServerCpuVo.getCpuSys() * 100D, 2).doubleValue());
-            serverDetailPageServerCpuVo.setCpuUser(NumberUtil.round(serverDetailPageServerCpuVo.getCpuUser() * 100D, 2).doubleValue());
-            serverDetailPageServerCpuVo.setCpuWait(NumberUtil.round(serverDetailPageServerCpuVo.getCpuWait() * 100D, 2).doubleValue());
+            serverDetailPageServerCpuChartVo.setCpuCombined(NumberUtil.round(serverDetailPageServerCpuChartVo.getCpuCombined() * 100D, 2).doubleValue());
+            serverDetailPageServerCpuChartVo.setCpuIdle(NumberUtil.round(serverDetailPageServerCpuChartVo.getCpuIdle() * 100D, 2).doubleValue());
+            serverDetailPageServerCpuChartVo.setCpuNice(NumberUtil.round(serverDetailPageServerCpuChartVo.getCpuNice() * 100D, 2).doubleValue());
+            serverDetailPageServerCpuChartVo.setCpuSys(NumberUtil.round(serverDetailPageServerCpuChartVo.getCpuSys() * 100D, 2).doubleValue());
+            serverDetailPageServerCpuChartVo.setCpuUser(NumberUtil.round(serverDetailPageServerCpuChartVo.getCpuUser() * 100D, 2).doubleValue());
+            serverDetailPageServerCpuChartVo.setCpuWait(NumberUtil.round(serverDetailPageServerCpuChartVo.getCpuWait() * 100D, 2).doubleValue());
         }
-        return serverDetailPageServerCpuVos;
+        return serverDetailPageServerCpuChartVos;
     }
 }

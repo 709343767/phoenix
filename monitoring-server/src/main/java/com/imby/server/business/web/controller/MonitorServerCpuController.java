@@ -3,7 +3,7 @@ package com.imby.server.business.web.controller;
 
 import com.imby.server.business.web.service.IMonitorServerCpuService;
 import com.imby.server.business.web.vo.LayUiAdminResultVo;
-import com.imby.server.business.web.vo.ServerDetailPageServerCpuVo;
+import com.imby.server.business.web.vo.ServerDetailPageServerCpuChartVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -34,7 +34,7 @@ public class MonitorServerCpuController {
 
     /**
      * <p>
-     * 获取服务器详情页面服务器CPU信息
+     * 获取服务器详情页面服务器CPU图表信息
      * </p>
      *
      * @param ip   服务器IP地址
@@ -43,15 +43,15 @@ public class MonitorServerCpuController {
      * @author 皮锋
      * @custom.date 2020/10/19 14:20
      */
-    @ApiOperation(value = "获取服务器详情页面服务器CPU信息")
+    @ApiOperation(value = "获取服务器详情页面服务器CPU图表信息")
     @ResponseBody
-    @GetMapping("/get-server-detail-page-server-cpu-info")
+    @GetMapping("/get-server-detail-page-server-cpu-chart-info")
     @ApiImplicitParams(value = {
             @ApiImplicitParam(name = "ip", value = "服务器IP地址", required = true, paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "time", value = "时间", paramType = "query", dataType = "string")})
-    public LayUiAdminResultVo getServerDetailPageServerCpu(@RequestParam(name = "ip") String ip,
-                                                           @RequestParam(name = "time", required = false) String time) {
-        List<ServerDetailPageServerCpuVo> monitorJvmMemoryVos = this.monitorServerCpuService.getServerDetailPageServerCpu(ip, time);
+    public LayUiAdminResultVo getServerDetailPageServerCpuChartInfo(@RequestParam(name = "ip") String ip,
+                                                                    @RequestParam(name = "time", required = false) String time) {
+        List<ServerDetailPageServerCpuChartVo> monitorJvmMemoryVos = this.monitorServerCpuService.getServerDetailPageServerCpuChartInfo(ip, time);
         return LayUiAdminResultVo.ok(monitorJvmMemoryVos);
     }
 

@@ -398,7 +398,7 @@
             });
             admin.req({
                 type: 'get',
-                url: layui.setter.base + 'monitor-server-cpu/get-server-detail-page-server-cpu-info',
+                url: layui.setter.base + 'monitor-server-cpu/get-server-detail-page-server-cpu-chart-info',
                 dataType: 'json',
                 contentType: 'application/json;charset=utf-8',
                 headers: {
