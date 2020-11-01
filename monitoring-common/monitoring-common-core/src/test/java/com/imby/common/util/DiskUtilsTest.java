@@ -1,10 +1,13 @@
 package com.imby.common.util;
 
 import com.imby.common.domain.server.DiskDomain;
+import lombok.extern.slf4j.Slf4j;
 import org.hyperic.sigar.SigarException;
 import org.junit.Test;
 
 import java.util.List;
+
+import static org.junit.Assert.assertNotNull;
 
 /**
  * <p>
@@ -14,6 +17,7 @@ import java.util.List;
  * @author 皮锋
  * @custom.date 2020/8/13 22:40
  */
+@Slf4j
 public class DiskUtilsTest {
 
     /**
@@ -28,10 +32,11 @@ public class DiskUtilsTest {
     @Test
     public void testGetDiskInfo() throws SigarException {
         DiskDomain diskDomain = DiskUtils.getDiskInfo();
+        assertNotNull(diskDomain);
         int diskNum = diskDomain.getDiskNum();
-        System.out.println("磁盘总数：" + diskNum);
+        log.info("磁盘总数：" + diskNum);
         List<DiskDomain.DiskInfoDomain> diskInfoDomains = diskDomain.getDiskInfoList();
-        diskInfoDomains.forEach(diskInfoDomain -> System.out.println(diskInfoDomain.toJsonString()));
+        diskInfoDomains.forEach(diskInfoDomain -> log.info(diskInfoDomain.toJsonString()));
     }
 
 }

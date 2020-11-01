@@ -1,7 +1,10 @@
 package com.imby.common.util;
 
 import com.imby.common.domain.server.OsDomain;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
+
+import static org.junit.Assert.assertNotNull;
 
 /**
  * <p>
@@ -11,6 +14,7 @@ import org.junit.Test;
  * @author 皮锋
  * @custom.date 2020/8/13 22:35
  */
+@Slf4j
 public class OsUtilsTest {
 
     /**
@@ -24,7 +28,8 @@ public class OsUtilsTest {
     @Test
     public void testGetOsInfo() {
         OsDomain osVo = OsUtils.getOsInfo();
-        System.out.println(osVo.toJsonString());
+        assertNotNull(osVo);
+        log.info(osVo.toJsonString());
     }
 
 }

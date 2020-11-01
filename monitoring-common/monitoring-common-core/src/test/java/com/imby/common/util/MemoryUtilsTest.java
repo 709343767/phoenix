@@ -1,8 +1,11 @@
 package com.imby.common.util;
 
 import com.imby.common.domain.server.MemoryDomain;
+import lombok.extern.slf4j.Slf4j;
 import org.hyperic.sigar.SigarException;
 import org.junit.Test;
+
+import static org.junit.Assert.assertNotNull;
 
 /**
  * <p>
@@ -12,6 +15,7 @@ import org.junit.Test;
  * @author 皮锋
  * @custom.date 2020/8/13 22:37
  */
+@Slf4j
 public class MemoryUtilsTest {
 
     /**
@@ -26,7 +30,8 @@ public class MemoryUtilsTest {
     @Test
     public void testGetMemoryInfo() throws SigarException {
         MemoryDomain memoryVo = MemoryUtils.getMemoryInfo();
-        System.out.println(memoryVo.toJsonString());
+        assertNotNull(memoryVo);
+        log.info(memoryVo.toJsonString());
     }
 
 }

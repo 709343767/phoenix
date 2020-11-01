@@ -1,10 +1,13 @@
 package com.imby.common.util;
 
 import com.imby.common.domain.server.CpuDomain;
+import lombok.extern.slf4j.Slf4j;
 import org.hyperic.sigar.SigarException;
 import org.junit.Test;
 
 import java.util.List;
+
+import static org.junit.Assert.assertNotNull;
 
 /**
  * <p>
@@ -14,6 +17,7 @@ import java.util.List;
  * @author 皮锋
  * @custom.date 2020/8/13 22:38
  */
+@Slf4j
 public class CpuUtilsTest {
 
     /**
@@ -28,10 +32,11 @@ public class CpuUtilsTest {
     @Test
     public void testGetCpuInfo() throws SigarException {
         CpuDomain cpuVo = CpuUtils.getCpuInfo();
+        assertNotNull(cpuVo);
         int cpuNum = cpuVo.getCpuNum();
         List<CpuDomain.CpuInfoDomain> cpuInfoVos = cpuVo.getCpuList();
-        System.out.println("CPU数量：" + cpuNum);
-        cpuInfoVos.forEach(cpuInfoVo -> System.out.println("CPU信息：" + cpuInfoVo.toJsonString()));
+        log.info("CPU数量：" + cpuNum);
+        cpuInfoVos.forEach(cpuInfoVo -> log.info("CPU信息：" + cpuInfoVo.toJsonString()));
     }
 
     /**
@@ -44,9 +49,10 @@ public class CpuUtilsTest {
      */
     @Test
     public void testGetAvailableProcessors() {
-        System.out.println("系统可用的处理器核心数:" + CpuUtils.getAvailableProcessors());
-        System.out.println("IO密集型线程池最佳线程数：" + (int) (CpuUtils.getAvailableProcessors() / (1 - 0.8)));
-        System.out.println("CPU密集型线程池最佳线程数：" + (int) (CpuUtils.getAvailableProcessors() / (1 - 0.2)));
+        int availableProcessors = CpuUtils.getAvailableProcessors();
+        log.info("系统可用的处理器核心数:" + availableProcessors);
+        log.info("IO密集型线程池最佳线程数：" + (int) (availableProcessors / (1 - 0.8)));
+        log.info("CPU密集型线程池最佳线程数：" + (int) (availableProcessors / (1 - 0.2)));
     }
 
 }

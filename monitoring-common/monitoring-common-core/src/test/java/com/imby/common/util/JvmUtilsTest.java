@@ -2,7 +2,10 @@ package com.imby.common.util;
 
 import com.imby.common.domain.Jvm;
 import com.imby.common.domain.jvm.*;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
+
+import static org.junit.Assert.assertNotNull;
 
 /**
  * <p>
@@ -12,6 +15,7 @@ import org.junit.Test;
  * @author 皮锋
  * @custom.date 2020/8/13 22:22
  */
+@Slf4j
 public class JvmUtilsTest {
 
     /**
@@ -25,7 +29,8 @@ public class JvmUtilsTest {
     @Test
     public void testGetRuntimeInfo() {
         RuntimeDomain runtimeDomain = JvmUtils.getRuntimeInfo();
-        System.out.println(runtimeDomain.toJsonString());
+        assertNotNull(runtimeDomain);
+        log.info(runtimeDomain.toJsonString());
     }
 
     /**
@@ -39,7 +44,8 @@ public class JvmUtilsTest {
     @Test
     public void testGetThreadInfo() {
         ThreadDomain threadDomain = JvmUtils.getThreadInfo();
-        System.out.println(threadDomain.toJsonString());
+        assertNotNull(threadDomain);
+        log.info(threadDomain.toJsonString());
     }
 
     /**
@@ -53,7 +59,8 @@ public class JvmUtilsTest {
     @Test
     public void testGetClassLoadingInfo() {
         ClassLoadingDomain classLoadingDomain = JvmUtils.getClassLoadingInfo();
-        System.out.println(classLoadingDomain.toJsonString());
+        assertNotNull(classLoadingDomain);
+        log.info(classLoadingDomain.toJsonString());
     }
 
     /**
@@ -67,7 +74,8 @@ public class JvmUtilsTest {
     @Test
     public void testGetMemoryInfo() {
         MemoryDomain memoryDomain = JvmUtils.getMemoryInfo();
-        System.out.println(memoryDomain.toJsonString());
+        assertNotNull(memoryDomain);
+        log.info(memoryDomain.toJsonString());
     }
 
     /**
@@ -81,7 +89,8 @@ public class JvmUtilsTest {
     @Test
     public void testGetGarbageCollectorInfo() {
         GarbageCollectorDomain garbageCollectorDomain = JvmUtils.getGarbageCollectorInfo();
-        System.out.println(garbageCollectorDomain.toJsonString());
+        assertNotNull(garbageCollectorDomain);
+        log.info(garbageCollectorDomain.toJsonString());
     }
 
     /**
@@ -95,7 +104,8 @@ public class JvmUtilsTest {
     @Test
     public void testGetJvmInfo() {
         Jvm jvm = JvmUtils.getJvmInfo();
-        System.out.println(jvm.toJsonString());
+        assertNotNull(jvm);
+        log.info(jvm.toJsonString());
     }
 
 }

@@ -3,6 +3,7 @@ package com.imby.integrator.listener;
 import com.imby.common.exception.BadListenerConfigException;
 import com.imby.plug.Monitor;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.ServletContextEvent;
@@ -17,6 +18,7 @@ import java.io.File;
  * @author 皮锋
  * @custom.date 2020/3/14 18:31
  */
+@Slf4j
 public class MonitoringPlugInitializeListener implements ServletContextListener {
 
     /**
@@ -44,7 +46,7 @@ public class MonitoringPlugInitializeListener implements ServletContextListener 
 
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
-
+        log.info("Servlet上下文销毁！");
     }
 
     /**

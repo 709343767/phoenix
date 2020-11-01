@@ -1,10 +1,13 @@
 package com.imby.common.util;
 
 import com.imby.common.domain.server.NetDomain;
+import lombok.extern.slf4j.Slf4j;
 import org.hyperic.sigar.SigarException;
 import org.junit.Test;
 
 import java.util.List;
+
+import static org.junit.Assert.assertNotNull;
 
 /**
  * <p>
@@ -14,6 +17,7 @@ import java.util.List;
  * @author 皮锋
  * @custom.date 2020/8/13 22:39
  */
+@Slf4j
 public class NetUtilsTest {
 
     /**
@@ -28,10 +32,11 @@ public class NetUtilsTest {
     @Test
     public void testGetNetInfo() throws SigarException {
         NetDomain netVo = NetUtils.getNetInfo();
+        assertNotNull(netVo);
         int netNum = netVo.getNetNum();
         List<NetDomain.NetInterfaceDomain> netInterfaces = netVo.getNetList();
-        System.out.println("网卡总数：" + netNum);
-        netInterfaces.forEach(netInterfaceConfig -> System.out.println(netInterfaceConfig.toJsonString()));
+        log.info("网卡总数：" + netNum);
+        netInterfaces.forEach(netInterfaceConfig -> log.info(netInterfaceConfig.toJsonString()));
     }
 
 }

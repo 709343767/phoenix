@@ -1,8 +1,11 @@
 package com.imby.common.util;
 
 import com.imby.common.domain.Server;
+import lombok.extern.slf4j.Slf4j;
 import org.hyperic.sigar.SigarException;
 import org.junit.Test;
+
+import static org.junit.Assert.assertNotNull;
 
 /**
  * <p>
@@ -12,6 +15,7 @@ import org.junit.Test;
  * @author 皮锋
  * @custom.date 2020年3月3日 上午11:58:49
  */
+@Slf4j
 public class ServerUtilsTest {
 
     /**
@@ -26,7 +30,8 @@ public class ServerUtilsTest {
     @Test
     public void testGetServerInfo() throws SigarException {
         Server serverInfoVo = ServerUtils.getServerInfo();
-        System.out.println(serverInfoVo.toJsonString());
+        assertNotNull(serverInfoVo);
+        log.info(serverInfoVo.toJsonString());
     }
 
 }
