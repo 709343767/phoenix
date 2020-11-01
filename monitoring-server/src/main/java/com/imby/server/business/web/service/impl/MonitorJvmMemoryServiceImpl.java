@@ -47,7 +47,7 @@ public class MonitorJvmMemoryServiceImpl extends ServiceImpl<IMonitorJvmMemoryDa
      */
     @Override
     public List<InstanceDetailPageJvmMemoryChartVo> getInstanceDetailPageJvmMemoryChartInfo(String instanceId, String memoryType, String time) {
-        Map<String, Object> params = new HashMap<>(4);
+        Map<String, Object> params = new HashMap<>(16);
         params.put("instanceId", instanceId);
         params.put("memoryType", memoryType);
         // 计算时间
