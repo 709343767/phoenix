@@ -2,9 +2,11 @@ package com.imby.server.business.web.service.impl;
 
 import cn.hutool.core.util.NumberUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.google.common.collect.Lists;
 import com.imby.server.business.web.dao.IMonitorServerCpuDao;
 import com.imby.server.business.web.entity.MonitorServerCpu;
 import com.imby.server.business.web.service.IMonitorServerCpuService;
+import com.imby.server.business.web.vo.MonitorServerCpuVo;
 import com.imby.server.business.web.vo.ServerDetailPageServerCpuChartVo;
 import com.imby.server.core.CalculateDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,5 +68,26 @@ public class MonitorServerCpuServiceImpl extends ServiceImpl<IMonitorServerCpuDa
             serverDetailPageServerCpuChartVo.setCpuWait(NumberUtil.round(serverDetailPageServerCpuChartVo.getCpuWait() * 100D, 2).doubleValue());
         }
         return serverDetailPageServerCpuChartVos;
+    }
+
+    /**
+     * <p>
+     * 获取服务器详情页面服务器CPU信息
+     * </p>
+     *
+     * @param ip 服务器IP地址
+     * @return 服务器CPU信息表现层对象
+     * @author 皮锋
+     * @custom.date 2020/11/1 14:35
+     */
+    @Override
+    public List<MonitorServerCpuVo> getServerDetailPageServerCpuInfo(String ip) {
+        List<MonitorServerCpu> monitorServerCpus = this.monitorServerCpuDao.getServerDetailPageServerCpuInfo(ip);
+        List<MonitorServerCpuVo> monitorServerCpuVos = Lists.newLinkedList();
+        for (MonitorServerCpu monitorServerCpu : monitorServerCpus) {
+            MonitorServerCpuVo monitorServerCpuVo = MonitorServerCpuVo.builder().build().convertFor(monitorServerCpu);
+            monitorServerCpuVos.add(monitorServerCpuVo);
+        }
+        return monitorServerCpuVos;
     }
 }

@@ -20,4 +20,14 @@
         GROUP BY INSERT_TIME
     </select>
 
+    <!-- 获取服务器详情页面服务器CPU信息 -->
+    <select id="getServerDetailPageServerCpuInfo" parameterType="java.lang.String"
+            resultType="com.imby.server.business.web.entity.MonitorServerCpu">
+        SELECT *
+        FROM MONITOR_SERVER_CPU msc
+        WHERE IP = #{ip}
+          AND INSERT_TIME =
+              (SELECT INSERT_TIME FROM MONITOR_SERVER_DISK WHERE IP = #{ip} ORDER BY INSERT_TIME DESC LIMIT 1)
+    </select>
+
 </mapper>

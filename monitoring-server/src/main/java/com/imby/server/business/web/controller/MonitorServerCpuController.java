@@ -3,6 +3,7 @@ package com.imby.server.business.web.controller;
 
 import com.imby.server.business.web.service.IMonitorServerCpuService;
 import com.imby.server.business.web.vo.LayUiAdminResultVo;
+import com.imby.server.business.web.vo.MonitorServerCpuVo;
 import com.imby.server.business.web.vo.ServerDetailPageServerCpuChartVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -54,6 +55,27 @@ public class MonitorServerCpuController {
         List<ServerDetailPageServerCpuChartVo> monitorJvmMemoryChartVos = this.monitorServerCpuService.getServerDetailPageServerCpuChartInfo(ip, time);
         return LayUiAdminResultVo.ok(monitorJvmMemoryChartVos);
     }
+
+    /**
+     * <p>
+     * 获取服务器详情页面服务器CPU信息
+     * </p>
+     *
+     * @param ip 服务器IP地址
+     * @return layUiAdmin响应对象
+     * @author 皮锋
+     * @custom.date 2020/11/1 14:34
+     */
+    @ApiOperation(value = "获取服务器详情页面服务器CPU信息")
+    @ResponseBody
+    @GetMapping("/get-server-detail-page-server-cpu-info")
+    @ApiImplicitParams(value = {
+            @ApiImplicitParam(name = "ip", value = "服务器IP地址", required = true, paramType = "query", dataType = "string")})
+    public LayUiAdminResultVo getServerDetailPageServerCpuInfo(@RequestParam(name = "ip") String ip) {
+        List<MonitorServerCpuVo> monitorServerCpuVos = this.monitorServerCpuService.getServerDetailPageServerCpuInfo(ip);
+        return LayUiAdminResultVo.ok(monitorServerCpuVos);
+    }
+
 
 }
 

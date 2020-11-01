@@ -29,4 +29,17 @@ public interface IMonitorServerCpuDao extends BaseMapper<MonitorServerCpu> {
      * @custom.date 2020/10/20 12:42
      */
     List<ServerDetailPageServerCpuChartVo> getServerDetailPageServerCpuChartInfo(@Param("params") Map<String, Object> params);
+
+    /**
+     * <p>
+     * 获取服务器详情页面服务器CPU信息
+     * </p>
+     *
+     * @param ip 服务器IP地址
+     * @return 服务器CPU
+     * @author 皮锋
+     * @custom.date 2020/11/1 14:41
+     */
+    List<MonitorServerCpu> getServerDetailPageServerCpuInfo(@Param("ip") String ip);
+
 }

@@ -17,13 +17,76 @@
         // 时间条件发生改变
         form.on('select(time)', function (data) {
             time = data.value;
-            // 发送ajax请求，获取CPU使用量数据
-            getServerCpuInfo(time);
-            // 发送ajax请求，获取内存使用量数据
-            getServerMemoryInfo(time);
-            // 发送ajax请求，获取磁盘使用量数据
-            getServerDiskInfo();
+            // 发送ajax请求，获取CPU图表数据
+            getServerCpuChartInfo(time);
+            // 发送ajax请求，获取内存图表数据
+            getServerMemoryChartInfo(time);
+            // 发送ajax请求，获取磁盘图表数据
+            getServerDiskChartInfo();
         });
+
+        // 发送ajax请求，获取CPU数据
+        function getServerCpuInfo() {
+            admin.req({
+                type: 'get',
+                url: layui.setter.base + 'monitor-server-cpu/get-server-detail-page-server-cpu-info',
+                dataType: 'json',
+                contentType: 'application/json;charset=utf-8',
+                headers: {
+                    "X-CSRF-TOKEN": tokenValue
+                },
+                data: {
+                    ip: ip // 应用实例ID
+                },
+                success: function (result) {
+                    var data = result.data;
+                    var html = '';
+                    for (var i = 0; i < data.length; i++) {
+                        var obj = data[i];
+                        var cpuVendor = obj.cpuVendor;
+                        var cpuMhz = obj.cpuMhz;
+                        var cpuModel = obj.cpuModel;
+                        var cpuNice = obj.cpuNice;
+                        var cpuCombined = obj.cpuCombined;
+                        var cpuIdle = obj.cpuIdle;
+                        var cpuSys = obj.cpuSys;
+                        var cpuUser = obj.cpuUser;
+                        var cpuWait = obj.cpuWait;
+                        html += '<div class="layui-col-md4">' +
+                            '       <label class="label-font-weight">频率：</label>' + cpuMhz + 'MHz' +
+                            '    </div>' +
+                            '    <div class="layui-col-md4">' +
+                            '       <label class="label-font-weight">制造商：</label>' + cpuVendor +
+                            '    </div>' +
+                            '    <div class="layui-col-md4">' +
+                            '       <label class="label-font-weight">类型：</label>' + cpuModel +
+                            '    </div>' +
+                            '    <div class="layui-col-md4">' +
+                            '       <label class="label-font-weight">总使用率：</label>' + (cpuCombined * 100).toFixed(2) + '%' +
+                            '    </div>' +
+                            '    <div class="layui-col-md4">' +
+                            '       <label class="label-font-weight">剩余率：</label>' + (cpuIdle * 100).toFixed(2) + '%' +
+                            '    </div>' +
+                            '    <div class="layui-col-md4">' +
+                            '       <label class="label-font-weight">用户使用率：</label>' + (cpuUser * 100).toFixed(2) + '%' +
+                            '    </div>' +
+                            '    <div class="layui-col-md4">' +
+                            '       <label class="label-font-weight">系统使用率：</label>' + (cpuSys * 100).toFixed(2) + '%' +
+                            '    </div>' +
+                            '    <div class="layui-col-md4">' +
+                            '       <label class="label-font-weight">等待率：</label>' + (cpuWait * 100).toFixed(2) + '%' +
+                            '    </div>' +
+                            '    <div class="layui-col-md4">' +
+                            '       <label class="label-font-weight">错误率：</label>' + (cpuNice * 100).toFixed(2) + '%' +
+                            '    </div>';
+                        if (i != data.length - 1) {
+                            html += '<hr class="layui-bg-gray hr-padding">';
+                        }
+                    }
+                    $('#cpu').empty().append(html);
+                }
+            });
+        }
 
         // 发送ajax请求，获取网卡数据
         function getServerNetcardInfo() {
@@ -160,8 +223,8 @@
             });
         }
 
-        // 发送ajax请求，获取磁盘使用量数据
-        function getServerDiskInfo() {
+        // 发送ajax请求，获取磁盘图表数据
+        function getServerDiskChartInfo() {
             // 弹出loading框
             var loadingIndex = layer.load(1, {
                 shade: [0.1, '#fff'] //0.1透明度的白色背景
@@ -214,8 +277,8 @@
             });
         }
 
-        // 发送ajax请求，获取内存使用量数据
-        function getServerMemoryInfo(time) {
+        // 发送ajax请求，获取内存图表数据
+        function getServerMemoryChartInfo(time) {
             // 弹出loading框
             var loadingIndex = layer.load(1, {
                 shade: [0.1, '#fff'] //0.1透明度的白色背景
@@ -390,8 +453,8 @@
             });
         }
 
-        // 发送ajax请求，获取CPU使用量数据
-        function getServerCpuInfo(time) {
+        // 发送ajax请求，获取CPU图表数据
+        function getServerCpuChartInfo(time) {
             // 弹出loading框
             var loadingIndex = layer.load(1, {
                 shade: [0.1, '#fff'] //0.1透明度的白色背景
@@ -675,28 +738,32 @@
             });
         }
 
-        // 发送ajax请求，获取CPU使用量数据
-        getServerCpuInfo(time);
-        // 发送ajax请求，获取内存使用量数据
-        getServerMemoryInfo(time);
-        // 发送ajax请求，获取磁盘使用量数据
-        getServerDiskInfo();
+        // 发送ajax请求，获取CPU图表数据
+        getServerCpuChartInfo(time);
+        // 发送ajax请求，获取内存图表数据
+        getServerMemoryChartInfo(time);
+        // 发送ajax请求，获取磁盘图表数据
+        getServerDiskChartInfo();
         // 发送ajax请求，获取操作系统数据
         getServerOsInfo();
         // 发送ajax请求，获取网卡数据
         getServerNetcardInfo();
+        // 发送ajax请求，获取CPU数据
+        getServerCpuInfo();
         // 每30秒刷新一次
         window.setInterval(function () {
-            // 发送ajax请求，获取CPU使用量数据
-            getServerCpuInfo(time);
-            // 发送ajax请求，获取内存使用量数据
-            getServerMemoryInfo(time);
-            // 发送ajax请求，获取磁盘使用量数据
-            getServerDiskInfo();
+            // 发送ajax请求，获取CPU图表数据
+            getServerCpuChartInfo(time);
+            // 发送ajax请求，获取内存图表数据
+            getServerMemoryChartInfo(time);
+            // 发送ajax请求，获取磁盘图表数据
+            getServerDiskChartInfo();
             // 发送ajax请求，获取操作系统数据
             getServerOsInfo();
             // 发送ajax请求，获取网卡数据
             getServerNetcardInfo();
+            // 发送ajax请求，获取CPU数据
+            getServerCpuInfo();
         }, 1000 * 30);
     });
     e('serverDetail', {});
