@@ -168,7 +168,7 @@
             });
             admin.req({
                 type: 'get',
-                url: layui.setter.base + 'monitor-server-disk/get-server-detail-page-server-disk-info',
+                url: layui.setter.base + 'monitor-server-disk/get-server-detail-page-server-disk-chart-info',
                 dataType: 'json',
                 contentType: 'application/json;charset=utf-8',
                 headers: {

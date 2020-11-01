@@ -3,7 +3,7 @@ package com.imby.server.business.web.controller;
 
 import com.imby.server.business.web.service.IMonitorServerDiskService;
 import com.imby.server.business.web.vo.LayUiAdminResultVo;
-import com.imby.server.business.web.vo.ServerDetailPageServerDiskVo;
+import com.imby.server.business.web.vo.ServerDetailPageServerDiskChartVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -34,7 +34,7 @@ public class MonitorServerDiskController {
 
     /**
      * <p>
-     * 获取服务器详情页面服务器磁盘信息
+     * 获取服务器详情页面服务器磁盘图表信息
      * </p>
      *
      * @param ip 服务器IP地址
@@ -42,14 +42,14 @@ public class MonitorServerDiskController {
      * @author 皮锋
      * @custom.date 2020/10/22 17:26
      */
-    @ApiOperation(value = "获取服务器详情页面服务器磁盘信息")
+    @ApiOperation(value = "获取服务器详情页面服务器磁盘图表信息")
     @ResponseBody
-    @GetMapping("/get-server-detail-page-server-disk-info")
+    @GetMapping("/get-server-detail-page-server-disk-chart-info")
     @ApiImplicitParams(value = {
             @ApiImplicitParam(name = "ip", value = "服务器IP地址", required = true, paramType = "query", dataType = "string")})
-    public LayUiAdminResultVo getServerDetailPageServerDisk(@RequestParam(name = "ip") String ip) {
-        List<ServerDetailPageServerDiskVo> serverDetailPageServerDiskVos = this.monitorServerDiskService.getServerDetailPageServerDisk(ip);
-        return LayUiAdminResultVo.ok(serverDetailPageServerDiskVos);
+    public LayUiAdminResultVo getServerDetailPageServerDiskChartInfo(@RequestParam(name = "ip") String ip) {
+        List<ServerDetailPageServerDiskChartVo> serverDetailPageServerDiskChartVos = this.monitorServerDiskService.getServerDetailPageServerDiskChartInfo(ip);
+        return LayUiAdminResultVo.ok(serverDetailPageServerDiskChartVos);
     }
 
 }

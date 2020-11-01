@@ -8,7 +8,7 @@ import lombok.experimental.Accessors;
 
 /**
  * <p>
- * 服务器详情页面服务器磁盘信息表现层对象
+ * 服务器详情页面服务器磁盘图表信息表现层对象
  * </p>
  *
  * @author 皮锋
@@ -22,8 +22,8 @@ import lombok.experimental.Accessors;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel(value = "服务器详情页面服务器磁盘信息表现层对象")
-public class ServerDetailPageServerDiskVo implements ISuperBean {
+@ApiModel(value = "服务器详情页面服务器磁盘图表信息表现层对象")
+public class ServerDetailPageServerDiskChartVo implements ISuperBean {
 
     @ApiModelProperty(value = "分区的盘符名称")
     private String devName;

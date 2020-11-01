@@ -18,7 +18,7 @@ public interface IMonitorServerDiskDao extends BaseMapper<MonitorServerDisk> {
 
     /**
      * <p>
-     * 获取服务器详情页面服务器磁盘信息
+     * 获取服务器详情页面服务器磁盘图表信息
      * </p>
      *
      * @param ip 服务器IP地址
@@ -26,6 +26,6 @@ public interface IMonitorServerDiskDao extends BaseMapper<MonitorServerDisk> {
      * @author 皮锋
      * @custom.date 2020/10/22 18:03
      */
-    List<MonitorServerDisk> getServerDetailPageServerDisk(@Param("ip") String ip);
+    List<MonitorServerDisk> getServerDetailPageServerDiskChartInfo(@Param("ip") String ip);
 
 }
