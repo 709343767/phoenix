@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.imby.server.business.web.dao.IMonitorJvmMemoryDao;
 import com.imby.server.business.web.entity.MonitorJvmMemory;
 import com.imby.server.business.web.service.IMonitorJvmMemoryService;
-import com.imby.server.business.web.vo.InstanceDetailPageJvmMemoryVo;
+import com.imby.server.business.web.vo.InstanceDetailPageJvmMemoryChartVo;
 import com.imby.server.core.CalculateDateTime;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,18 +35,18 @@ public class MonitorJvmMemoryServiceImpl extends ServiceImpl<IMonitorJvmMemoryDa
 
     /**
      * <p>
-     * 获取应用实例详情页面java虚拟机内存信息
+     * 获取应用实例详情页面java虚拟机内存图表信息
      * </p>
      *
      * @param instanceId 应用实例ID
      * @param memoryType 内存类型
      * @param time       时间
-     * @return 应用实例详情页面java虚拟机内存信息表现层对象
+     * @return 应用实例详情页面java虚拟机内存图表信息表现层对象
      * @author 皮锋
      * @custom.date 2020/10/14 12:02
      */
     @Override
-    public List<InstanceDetailPageJvmMemoryVo> getInstanceDetailPageJvmMemory(String instanceId, String memoryType, String time) {
+    public List<InstanceDetailPageJvmMemoryChartVo> getInstanceDetailPageJvmMemoryChartInfo(String instanceId, String memoryType, String time) {
         Map<String, Object> params = new HashMap<>(4);
         params.put("instanceId", instanceId);
         params.put("memoryType", memoryType);
@@ -58,22 +58,22 @@ public class MonitorJvmMemoryServiceImpl extends ServiceImpl<IMonitorJvmMemoryDa
         Date endTime = calculateDateTime.getEndTime();
         params.put("startTime", startTime);
         params.put("endTime", endTime);
-        List<InstanceDetailPageJvmMemoryVo> instanceDetailPageJvmMemoryVos = this.monitorJvmMemoryDao.getInstanceDetailPageJvmMemory(params);
+        List<InstanceDetailPageJvmMemoryChartVo> instanceDetailPageJvmMemoryChartVos = this.monitorJvmMemoryDao.getInstanceDetailPageJvmMemoryChartInfo(params);
         // 除数（1024 * 1024 = 1048576）
         String v2 = "1048576";
-        for (InstanceDetailPageJvmMemoryVo instanceDetailPageJvmMemoryVo : instanceDetailPageJvmMemoryVos) {
+        for (InstanceDetailPageJvmMemoryChartVo instanceDetailPageJvmMemoryChartVo : instanceDetailPageJvmMemoryChartVos) {
             // 转MB
-            instanceDetailPageJvmMemoryVo.setUsed(NumberUtil.div(instanceDetailPageJvmMemoryVo.getUsed(), v2, 2).toString());
+            instanceDetailPageJvmMemoryChartVo.setUsed(NumberUtil.div(instanceDetailPageJvmMemoryChartVo.getUsed(), v2, 2).toString());
             // 转MB
-            instanceDetailPageJvmMemoryVo.setCommitted(NumberUtil.div(instanceDetailPageJvmMemoryVo.getCommitted(), v2, 2).toString());
+            instanceDetailPageJvmMemoryChartVo.setCommitted(NumberUtil.div(instanceDetailPageJvmMemoryChartVo.getCommitted(), v2, 2).toString());
             // 转MB
-            instanceDetailPageJvmMemoryVo.setInit(NumberUtil.div(instanceDetailPageJvmMemoryVo.getInit(), v2, 2).toString());
+            instanceDetailPageJvmMemoryChartVo.setInit(NumberUtil.div(instanceDetailPageJvmMemoryChartVo.getInit(), v2, 2).toString());
             // 转MB
-            if (!StringUtils.equals(instanceDetailPageJvmMemoryVo.getMax(), "未定义")) {
-                instanceDetailPageJvmMemoryVo.setMax(NumberUtil.div(instanceDetailPageJvmMemoryVo.getMax(), v2, 2).toString());
+            if (!StringUtils.equals(instanceDetailPageJvmMemoryChartVo.getMax(), "未定义")) {
+                instanceDetailPageJvmMemoryChartVo.setMax(NumberUtil.div(instanceDetailPageJvmMemoryChartVo.getMax(), v2, 2).toString());
             }
         }
-        return instanceDetailPageJvmMemoryVos;
+        return instanceDetailPageJvmMemoryChartVos;
     }
 
     /**

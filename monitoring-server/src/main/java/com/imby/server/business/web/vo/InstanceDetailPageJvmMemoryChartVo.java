@@ -11,7 +11,7 @@ import java.util.Date;
 
 /**
  * <p>
- * 应用实例详情页面java虚拟机内存信息表现层对象
+ * 应用实例详情页面java虚拟机内存图表信息表现层对象
  * </p>
  *
  * @author 皮锋
@@ -25,8 +25,8 @@ import java.util.Date;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel(value = "应用实例详情页面java虚拟机内存信息表现层对象")
-public class InstanceDetailPageJvmMemoryVo implements ISuperBean {
+@ApiModel(value = "应用实例详情页面java虚拟机内存图表信息表现层对象")
+public class InstanceDetailPageJvmMemoryChartVo implements ISuperBean {
 
     @ApiModelProperty(value = "初始内存量（单位：Mb）")
     private String init;

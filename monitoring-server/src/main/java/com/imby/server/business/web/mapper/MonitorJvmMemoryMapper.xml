@@ -10,9 +10,9 @@
         GROUP BY MEMORY_TYPE
     </select>
 
-    <!-- 获取应用实例详情页面java虚拟机内存信息 -->
-    <select id="getInstanceDetailPageJvmMemory" parameterType="java.util.HashMap"
-            resultType="com.imby.server.business.web.vo.InstanceDetailPageJvmMemoryVo">
+    <!-- 获取应用实例详情页面java虚拟机内存图表信息 -->
+    <select id="getInstanceDetailPageJvmMemoryChartInfo" parameterType="java.util.HashMap"
+            resultType="com.imby.server.business.web.vo.InstanceDetailPageJvmMemoryChartVo">
         SELECT INIT AS init,
         USED AS used,
         COMMITTED AS committed,

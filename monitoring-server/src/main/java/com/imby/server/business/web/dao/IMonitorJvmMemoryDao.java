@@ -2,7 +2,7 @@ package com.imby.server.business.web.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.imby.server.business.web.entity.MonitorJvmMemory;
-import com.imby.server.business.web.vo.InstanceDetailPageJvmMemoryVo;
+import com.imby.server.business.web.vo.InstanceDetailPageJvmMemoryChartVo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -32,13 +32,13 @@ public interface IMonitorJvmMemoryDao extends BaseMapper<MonitorJvmMemory> {
 
     /**
      * <p>
-     * 获取应用实例详情页面java虚拟机内存信息
+     * 获取应用实例详情页面java虚拟机内存图表信息
      * </p>
      *
      * @param params 请求参数
-     * @return 应用实例详情页面java虚拟机内存信息表现层对象
+     * @return 应用实例详情页面java虚拟机内存图表信息表现层对象
      * @author 皮锋
      * @custom.date 2020/10/16 13:48
      */
-    List<InstanceDetailPageJvmMemoryVo> getInstanceDetailPageJvmMemory(@Param("params") Map<String, Object> params);
+    List<InstanceDetailPageJvmMemoryChartVo> getInstanceDetailPageJvmMemoryChartInfo(@Param("params") Map<String, Object> params);
 }

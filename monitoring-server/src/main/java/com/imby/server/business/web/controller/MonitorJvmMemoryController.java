@@ -2,7 +2,7 @@ package com.imby.server.business.web.controller;
 
 
 import com.imby.server.business.web.service.IMonitorJvmMemoryService;
-import com.imby.server.business.web.vo.InstanceDetailPageJvmMemoryVo;
+import com.imby.server.business.web.vo.InstanceDetailPageJvmMemoryChartVo;
 import com.imby.server.business.web.vo.LayUiAdminResultVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -34,7 +34,7 @@ public class MonitorJvmMemoryController {
 
     /**
      * <p>
-     * 获取应用实例详情页面java虚拟机内存信息
+     * 获取应用实例详情页面java虚拟机内存图表信息
      * </p>
      *
      * @param instanceId 应用实例ID
@@ -44,18 +44,18 @@ public class MonitorJvmMemoryController {
      * @author 皮锋
      * @custom.date 2020/10/14 11:52
      */
-    @ApiOperation(value = "获取应用实例详情页面java虚拟机内存信息")
+    @ApiOperation(value = "获取应用实例详情页面java虚拟机内存图表信息")
     @ResponseBody
-    @GetMapping("/get-instance-detail-page-jvm-memory-info")
+    @GetMapping("/get-instance-detail-page-jvm-memory-chart-info")
     @ApiImplicitParams(value = {
             @ApiImplicitParam(name = "instanceId", value = "应用实例ID", required = true, paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "memoryType", value = "内存类型", paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "time", value = "时间", paramType = "query", dataType = "string")})
-    public LayUiAdminResultVo getInstanceDetailPageJvmMemory(@RequestParam(name = "instanceId") String instanceId,
-                                                             @RequestParam(name = "memoryType", required = false) String memoryType,
-                                                             @RequestParam(name = "time", required = false) String time) {
-        List<InstanceDetailPageJvmMemoryVo> monitorJvmMemoryVos = this.monitorJvmMemoryService.getInstanceDetailPageJvmMemory(instanceId, memoryType, time);
-        return LayUiAdminResultVo.ok(monitorJvmMemoryVos);
+    public LayUiAdminResultVo getInstanceDetailPageJvmMemoryChartInfo(@RequestParam(name = "instanceId") String instanceId,
+                                                                      @RequestParam(name = "memoryType", required = false) String memoryType,
+                                                                      @RequestParam(name = "time", required = false) String time) {
+        List<InstanceDetailPageJvmMemoryChartVo> monitorJvmMemoryChartVos = this.monitorJvmMemoryService.getInstanceDetailPageJvmMemoryChartInfo(instanceId, memoryType, time);
+        return LayUiAdminResultVo.ok(monitorJvmMemoryChartVos);
     }
 
 }

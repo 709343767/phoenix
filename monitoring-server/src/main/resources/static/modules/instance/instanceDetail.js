@@ -261,7 +261,7 @@
             });
             admin.req({
                 type: 'get',
-                url: layui.setter.base + 'monitor-jvm-memory/get-instance-detail-page-jvm-memory-info',
+                url: layui.setter.base + 'monitor-jvm-memory/get-instance-detail-page-jvm-memory-chart-info',
                 dataType: 'json',
                 contentType: 'application/json;charset=utf-8',
                 headers: {
