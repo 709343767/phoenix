@@ -1,4 +1,4 @@
-package com.imby.server.core;
+package com.imby.common.threadpool;
 
 import com.imby.common.util.CpuUtils;
 import org.apache.commons.lang3.concurrent.BasicThreadFactory;

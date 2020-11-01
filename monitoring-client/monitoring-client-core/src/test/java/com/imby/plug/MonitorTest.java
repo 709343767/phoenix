@@ -45,7 +45,7 @@ public class MonitorTest {
             // 发送告警信息
             Result result = Monitor.sendAlarm(alarm);
             System.out.println(result.toJsonString());
-        }, false, 5, 60, TimeUnit.SECONDS);
+        }, 5, 60, TimeUnit.SECONDS);
 
         service.shutdown();
     }

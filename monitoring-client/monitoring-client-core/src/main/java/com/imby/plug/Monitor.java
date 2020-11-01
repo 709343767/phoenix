@@ -130,7 +130,6 @@ public class Monitor {
      * </p>
      *
      * @param command      要执行的任务
-     * @param isDaemon     是否设置为守护线程
      * @param initialDelay 初次埋点监测延迟的时间
      * @param period       两次埋点监测任务之间的时间间隔
      * @param unit         时间单位
@@ -138,8 +137,8 @@ public class Monitor {
      * @author 皮锋
      * @custom.date 2020/8/24 20:33
      */
-    public static ScheduledExecutorService buryingPoint(Runnable command, boolean isDaemon, long initialDelay, long period, TimeUnit unit) {
-        return BusinessBuryingPointScheduler.run(command, isDaemon, initialDelay, period, unit);
+    public static ScheduledExecutorService buryingPoint(Runnable command, long initialDelay, long period, TimeUnit unit) {
+        return BusinessBuryingPointScheduler.run(command, initialDelay, period, unit);
     }
 
 }
