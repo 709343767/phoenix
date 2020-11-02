@@ -8,6 +8,7 @@ import com.imby.server.business.server.core.PackageConstructor;
 import com.imby.server.business.server.service.IAlarmService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author 皮锋
  * @custom.date 2020年3月6日 下午3:46:11
  */
+@Slf4j
 @RestController
 @RequestMapping("/alarm")
 @Api(tags = "信息包.告警包")
@@ -46,6 +48,7 @@ public class AlarmController {
     @ApiOperation(value = "接收和响应监控代理端程序或者监控客户端程序发的告警包", notes = "接收告警包")
     @PostMapping("/accept-alarm-package")
     public BaseResponsePackage acceptAlarmPackage(@RequestBody String request) {
+        log.info("收到告警包：{}", request);
         AlarmPackage alarmPackage = JSON.parseObject(request, AlarmPackage.class);
         Result result = this.alarmService.dealAlarmPackage(alarmPackage);
         return new PackageConstructor().structureBaseResponsePackage(result);

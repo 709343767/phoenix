@@ -49,6 +49,7 @@ public class HeartbeatController {
     @ApiOperation(value = "接收和响应监控代理端程序或者监控客户端程序发的心跳包", notes = "接收心跳包")
     @PostMapping("/accept-heartbeat-package")
     public BaseResponsePackage acceptHeartbeatPackage(@RequestBody String request) {
+        log.info("收到心跳包：{}", request);
         HeartbeatPackage heartbeatPackage = JSON.parseObject(request, HeartbeatPackage.class);
         // 返回结果
         Result result;
