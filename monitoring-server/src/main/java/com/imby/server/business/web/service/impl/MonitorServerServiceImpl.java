@@ -161,10 +161,6 @@ public class MonitorServerServiceImpl extends ServiceImpl<IMonitorServerDao, Mon
         for (MonitorServerVo monitorServerVo : monitorServerVos) {
             ips.add(monitorServerVo.getIp());
         }
-        // 服务器表
-        LambdaUpdateWrapper<MonitorServer> serverLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
-        serverLambdaUpdateWrapper.in(MonitorServer::getIp, ips);
-        this.monitorServerDao.delete(serverLambdaUpdateWrapper);
         // 服务器CPU表
         LambdaUpdateWrapper<MonitorServerCpu> serverCpuLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
         serverCpuLambdaUpdateWrapper.in(MonitorServerCpu::getIp, ips);
@@ -181,6 +177,10 @@ public class MonitorServerServiceImpl extends ServiceImpl<IMonitorServerDao, Mon
         LambdaUpdateWrapper<MonitorServerNetcard> serverNetcardLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
         serverNetcardLambdaUpdateWrapper.in(MonitorServerNetcard::getIp, ips);
         this.monitorServerNetcardDao.delete(serverNetcardLambdaUpdateWrapper);
+        // 服务器表
+        LambdaUpdateWrapper<MonitorServer> serverLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+        serverLambdaUpdateWrapper.in(MonitorServer::getIp, ips);
+        this.monitorServerDao.delete(serverLambdaUpdateWrapper);
 
         // 调用监听器回调接口
         this.serverMonitoringListeners.forEach(e ->

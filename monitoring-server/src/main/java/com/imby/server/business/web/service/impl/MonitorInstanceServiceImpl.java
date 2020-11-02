@@ -163,10 +163,6 @@ public class MonitorInstanceServiceImpl extends ServiceImpl<IMonitorInstanceDao,
         for (MonitorInstanceVo monitorInstanceVo : monitorInstanceVos) {
             instances.add(monitorInstanceVo.getInstanceId());
         }
-        // 应用程序
-        LambdaUpdateWrapper<MonitorInstance> monitorInstanceLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
-        monitorInstanceLambdaUpdateWrapper.in(MonitorInstance::getInstanceId, instances);
-        this.monitorInstanceDao.delete(monitorInstanceLambdaUpdateWrapper);
         // java虚拟机类加载信息表
         LambdaUpdateWrapper<MonitorJvmClassLoading> monitorJvmClassLoadingLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
         monitorJvmClassLoadingLambdaUpdateWrapper.in(MonitorJvmClassLoading::getInstanceId, instances);
@@ -187,6 +183,10 @@ public class MonitorInstanceServiceImpl extends ServiceImpl<IMonitorInstanceDao,
         LambdaUpdateWrapper<MonitorJvmThread> monitorJvmThreadLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
         monitorJvmThreadLambdaUpdateWrapper.in(MonitorJvmThread::getInstanceId, instances);
         this.monitorJvmThreadDao.delete(monitorJvmThreadLambdaUpdateWrapper);
+        // 应用程序
+        LambdaUpdateWrapper<MonitorInstance> monitorInstanceLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+        monitorInstanceLambdaUpdateWrapper.in(MonitorInstance::getInstanceId, instances);
+        this.monitorInstanceDao.delete(monitorInstanceLambdaUpdateWrapper);
 
         // 调用监听器回调接口
         this.instanceMonitoringListenerList.forEach(e ->
