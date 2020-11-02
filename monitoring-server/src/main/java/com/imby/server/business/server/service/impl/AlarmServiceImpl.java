@@ -19,7 +19,7 @@ import com.imby.server.business.server.service.IMailService;
 import com.imby.server.business.server.service.ISmsService;
 import com.imby.server.constant.AlarmWayEnums;
 import com.imby.server.constant.EnterpriseConstants;
-import com.imby.server.property.MonitoringServerWebProperties;
+import com.imby.server.business.server.property.MonitoringServerWebProperties;
 import com.imby.server.util.AlarmUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;

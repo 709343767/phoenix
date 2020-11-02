@@ -2,7 +2,7 @@ package com.imby.server.business.server.service.impl;
 
 import com.imby.server.business.server.domain.TransfarSms;
 import com.imby.server.business.server.service.ISmsService;
-import com.imby.server.property.MonitoringServerWebProperties;
+import com.imby.server.business.server.property.MonitoringServerWebProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;

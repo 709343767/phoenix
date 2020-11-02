@@ -11,7 +11,7 @@ import com.imby.server.business.server.domain.Memory;
 import com.imby.server.business.server.pool.MemoryPool;
 import com.imby.server.business.server.service.IAlarmService;
 import com.imby.server.inf.IServerMonitoringListener;
-import com.imby.server.property.MonitoringServerWebProperties;
+import com.imby.server.business.server.property.MonitoringServerWebProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.hyperic.sigar.SigarException;
 import org.springframework.beans.factory.annotation.Autowired;

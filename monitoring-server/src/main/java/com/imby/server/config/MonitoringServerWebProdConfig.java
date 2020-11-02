@@ -1,7 +1,7 @@
 package com.imby.server.config;
 
 import com.imby.common.init.InitBanner;
-import com.imby.server.property.MonitoringServerWebProperties;
+import com.imby.server.business.server.property.MonitoringServerWebProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -5,7 +5,7 @@ import com.imby.common.dto.HeartbeatPackage;
 import com.imby.server.business.server.controller.HeartbeatController;
 import com.imby.server.business.server.domain.Instance;
 import com.imby.server.business.server.pool.InstancePool;
-import com.imby.server.property.MonitoringServerWebProperties;
+import com.imby.server.business.server.property.MonitoringServerWebProperties;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;

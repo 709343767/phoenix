@@ -2,7 +2,7 @@ package com.imby.server.config;
 
 import com.imby.common.constant.AlarmLevelEnums;
 import com.imby.common.util.PropertiesUtils;
-import com.imby.server.property.*;
+import com.imby.server.business.server.property.*;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;

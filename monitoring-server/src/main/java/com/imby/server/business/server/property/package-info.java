@@ -6,4 +6,4 @@
  * @author 皮锋
  * @custom.date 2020/4/9 11:43
  */
-package com.imby.server.property;
+package com.imby.server.business.server.property;

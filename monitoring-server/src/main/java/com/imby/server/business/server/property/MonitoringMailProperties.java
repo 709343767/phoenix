@@ -1,4 +1,4 @@
-package com.imby.server.property;
+package com.imby.server.business.server.property;
 
 import lombok.*;
 
