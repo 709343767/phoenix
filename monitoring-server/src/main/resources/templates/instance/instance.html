@@ -98,7 +98,7 @@
         var $ = layui.$, admin = layui.admin, form = layui.form, table = layui.table, device = layui.device();
         table.render({
             elem: '#list-table',
-            url: ctxPath + 'instance/get-monitor-instance-list',
+            url: ctxPath + 'monitor-instance/get-monitor-instance-list',
             toolbar: '#list-table-toolbar',
             request: {
                 pageName: 'current',//页码的参数名称，默认：page
@@ -231,7 +231,7 @@
                     layer.confirm('确定删除吗？', function (index) {
                         admin.req({
                             type: 'post',
-                            url: ctxPath + 'instance/delete-monitor-instance',
+                            url: ctxPath + 'monitor-instance/delete-monitor-instance',
                             data: JSON.stringify(checkStatus.data),
                             dataType: 'json',
                             contentType: 'application/json;charset=utf-8',
@@ -262,7 +262,7 @@
                 layer.confirm('确定删除吗？', function (index) {
                     admin.req({
                         type: 'post',
-                        url: ctxPath + 'instance/delete-monitor-instance',
+                        url: ctxPath + 'monitor-instance/delete-monitor-instance',
                         data: JSON.stringify([data]),
                         dataType: 'json',
                         contentType: 'application/json;charset=utf-8',
@@ -305,7 +305,7 @@
                 layer.open({
                     type: 2,
                     title: '应用详情（ID：' + data.instanceId + '）',
-                    content: ctxPath + 'instance/instance-detail?id=' + data.id + '&instanceId=' + data.instanceId,
+                    content: ctxPath + 'monitor-instance/instance-detail?id=' + data.id + '&instanceId=' + data.instanceId,
                     maxmin: true,
                     shade: 0,
                     moveOut: true,

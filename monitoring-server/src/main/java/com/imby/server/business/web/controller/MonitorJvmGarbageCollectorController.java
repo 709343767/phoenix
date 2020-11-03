@@ -21,7 +21,7 @@ import java.util.List;
  * @author 皮锋
  * @custom.date 2020/9/6 19:59
  */
-@Api(tags = "java虚拟机GC信息")
+@Api(tags = "应用程序.java虚拟机GC信息")
 @RestController
 @RequestMapping("/monitor-jvm-garbage-collector")
 public class MonitorJvmGarbageCollectorController {

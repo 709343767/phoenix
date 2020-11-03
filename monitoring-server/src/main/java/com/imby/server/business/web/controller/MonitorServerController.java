@@ -24,7 +24,7 @@ import java.util.List;
  * @custom.date 2020/9/2 21:50
  */
 @Controller
-@RequestMapping("/server")
+@RequestMapping("/monitor-server")
 @Api(tags = "服务器")
 public class MonitorServerController {
 

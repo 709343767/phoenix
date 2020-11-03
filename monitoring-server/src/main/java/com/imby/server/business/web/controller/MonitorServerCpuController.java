@@ -22,7 +22,7 @@ import java.util.List;
  * @author 皮锋
  * @custom.date 2020/9/4 20:50
  */
-@Api(tags = "服务器CPU")
+@Api(tags = "服务器.服务器CPU")
 @RestController
 @RequestMapping("/monitor-server-cpu")
 public class MonitorServerCpuController {

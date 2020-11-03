@@ -91,7 +91,7 @@
         var $ = layui.$, admin = layui.admin, form = layui.form, table = layui.table, device = layui.device();
         table.render({
             elem: '#list-table',
-            url: ctxPath + 'server/get-monitor-server-list',
+            url: ctxPath + 'monitor-server/get-monitor-server-list',
             toolbar: '#list-table-toolbar',
             request: {
                 pageName: 'current',//页码的参数名称，默认：page
@@ -197,7 +197,7 @@
                     layer.confirm('确定删除吗？', function (index) {
                         admin.req({
                             type: 'post',
-                            url: ctxPath + 'server/delete-monitor-server',
+                            url: ctxPath + 'monitor-server/delete-monitor-server',
                             data: JSON.stringify(checkStatus.data),
                             dataType: 'json',
                             contentType: 'application/json;charset=utf-8',
@@ -228,7 +228,7 @@
                 layer.confirm('确定删除吗？', function (index) {
                     admin.req({
                         type: 'post',
-                        url: ctxPath + 'server/delete-monitor-server',
+                        url: ctxPath + 'monitor-server/delete-monitor-server',
                         data: JSON.stringify([data]),
                         dataType: 'json',
                         contentType: 'application/json;charset=utf-8',
@@ -271,7 +271,7 @@
                 layer.open({
                     type: 2,
                     title: '服务器详情（IP：' + data.ip + '）',
-                    content: ctxPath + 'server/server-detail?id=' + data.id + '&ip=' + data.ip,
+                    content: ctxPath + 'monitor-server/server-detail?id=' + data.id + '&ip=' + data.ip,
                     maxmin: true,
                     shade: 0,
                     moveOut: true,

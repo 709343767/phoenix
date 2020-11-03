@@ -21,7 +21,7 @@ import java.util.List;
  * @author 皮锋
  * @custom.date 2020/9/4 20:50
  */
-@Api(tags = "服务器内存")
+@Api(tags = "服务器.服务器内存")
 @RestController
 @RequestMapping("/monitor-server-memory")
 public class MonitorServerMemoryController {

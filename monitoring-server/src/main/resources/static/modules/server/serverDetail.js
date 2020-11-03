@@ -179,7 +179,7 @@
         function getServerOsInfo() {
             admin.req({
                 type: 'get',
-                url: layui.setter.base + 'server/get-server-os-info',
+                url: layui.setter.base + 'monitor-server/get-server-os-info',
                 dataType: 'json',
                 contentType: 'application/json;charset=utf-8',
                 headers: {

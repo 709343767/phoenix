@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
  * @author 皮锋
  * @custom.date 2020/9/6 19:59
  */
-@Api(tags = "java虚拟机线程信息")
+@Api(tags = "应用程序.java虚拟机线程信息")
 @RestController
 @RequestMapping("/monitor-jvm-thread")
 public class MonitorJvmThreadController {

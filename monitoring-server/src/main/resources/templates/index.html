@@ -99,14 +99,14 @@
                     </li>
                     <li data-name="home" class="layui-nav-item layui-nav-item">
                         <a href="javascript:;" lay-tips="服务器" lay-direction="2"
-                           th:attr="lay-href=@{/server/list}">
+                           th:attr="lay-href=@{/monitor-server/list}">
                             <i class="layui-icon layui-icon-server"></i>
                             <cite>服务器</cite>
                         </a>
                     </li>
                     <li data-name="home" class="layui-nav-item layui-nav-item">
                         <a href="javascript:;" lay-tips="应用" lay-direction="2"
-                           th:attr="lay-href=@{/instance/list}">
+                           th:attr="lay-href=@{/monitor-instance/list}">
                             <i class="layui-icon layui-icon-app"></i>
                             <cite>应用程序</cite>
                         </a>
@@ -160,11 +160,7 @@
                         </a>
                         <dl class="layui-nav-child">
                             <dd class="layui-nav-itemed">
-                                <a href="javascript:;">系统设置</a>
-                                <dl class="layui-nav-child">
-                                    <dd><a lay-href="set/system/website.html">网站设置</a></dd>
-                                    <dd><a lay-href="set/system/email.html">邮件服务</a></dd>
-                                </dl>
+                                <a th:attr="lay-href=@{/monitor-config/config}">监控设置</a>
                             </dd>
                             <dd class="layui-nav-itemed">
                                 <a href="javascript:;">我的设置</a>
