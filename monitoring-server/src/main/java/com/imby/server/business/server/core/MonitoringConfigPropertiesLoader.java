@@ -34,12 +34,12 @@ public class MonitoringConfigPropertiesLoader {
      * 获取监控配置属性
      * </p>
      *
-     * @return {@link MonitoringServerWebProperties}
+     * @return {@link MonitoringProperties}
      * @author 皮锋
      * @custom.date 2020/11/4 13:01
      */
     @Bean
-    public MonitoringServerWebProperties loadAllMonitorConfig() {
+    public MonitoringProperties loadAllMonitorConfig() {
         Map<String, Object> allMonitorConfig = this.monitorConfigService.loadAllMonitorConfig();
         MonitorConfigAlarmMail monitorConfigAlarmMail = (MonitorConfigAlarmMail) allMonitorConfig.get("monitorConfigAlarmMail");
         MonitorConfigAlarmSms monitorConfigAlarmSms = (MonitorConfigAlarmSms) allMonitorConfig.get("monitorConfigAlarmSms");
@@ -66,12 +66,12 @@ public class MonitoringConfigPropertiesLoader {
         MonitoringNetworkProperties monitoringNetworkProperties = new MonitoringNetworkProperties();
         monitoringNetworkProperties.setMonitoringEnable(monitorConfigNet.getEnable().equals(1));
         // 监控配置属性
-        MonitoringServerWebProperties monitoringServerWebProperties = new MonitoringServerWebProperties();
-        monitoringServerWebProperties.setThreshold(monitorConfig.getThreshold());
-        monitoringServerWebProperties.setAlarmProperties(monitoringAlarmProperties);
-        monitoringServerWebProperties.setNetworkProperties(monitoringNetworkProperties);
+        MonitoringProperties monitoringProperties = new MonitoringProperties();
+        monitoringProperties.setThreshold(monitorConfig.getThreshold());
+        monitoringProperties.setAlarmProperties(monitoringAlarmProperties);
+        monitoringProperties.setNetworkProperties(monitoringNetworkProperties);
         log.info("监控服务端配置加载成功！");
-        return monitoringServerWebProperties;
+        return monitoringProperties;
     }
 
 }

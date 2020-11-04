@@ -5,7 +5,7 @@ import com.imby.common.dto.HeartbeatPackage;
 import com.imby.server.business.server.controller.HeartbeatController;
 import com.imby.server.business.server.domain.Instance;
 import com.imby.server.business.server.pool.InstancePool;
-import com.imby.server.business.server.property.MonitoringServerWebProperties;
+import com.imby.server.business.server.property.MonitoringProperties;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -38,7 +38,7 @@ public class InstanceAspect {
      * 监控配置属性
      */
     @Autowired
-    private MonitoringServerWebProperties config;
+    private MonitoringProperties config;
 
     /**
      * <p>

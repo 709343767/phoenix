@@ -11,7 +11,7 @@ import com.imby.server.business.server.domain.Memory;
 import com.imby.server.business.server.pool.MemoryPool;
 import com.imby.server.business.server.service.IAlarmService;
 import com.imby.server.inf.IServerMonitoringListener;
-import com.imby.server.business.server.property.MonitoringServerWebProperties;
+import com.imby.server.business.server.property.MonitoringProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.hyperic.sigar.SigarException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +49,7 @@ public class MemoryMonitor implements IServerMonitoringListener {
      * 监控配置属性
      */
     @Autowired
-    private MonitoringServerWebProperties monitoringServerWebProperties;
+    private MonitoringProperties monitoringProperties;
 
     /**
      * <p>
@@ -76,7 +76,7 @@ public class MemoryMonitor implements IServerMonitoringListener {
                 int num = memory.getNum();
                 memory.setNum(num + 1);
                 // 最终确认内存过载的阈值
-                int threshold = this.monitoringServerWebProperties.getThreshold();
+                int threshold = this.monitoringProperties.getThreshold();
                 if (num > threshold) {
                     // 处理物理内存过载
                     this.dealMemoryOverLoad(memory);

@@ -15,7 +15,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
-public class MonitoringServerWebProperties {
+public class MonitoringProperties {
 
     /**
      * 监控阈值

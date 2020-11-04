@@ -14,7 +14,7 @@ import com.imby.server.business.server.domain.Mail;
 import com.imby.server.business.server.domain.TransfarSms;
 import com.imby.server.business.server.entity.MonitorAlarmDefinition;
 import com.imby.server.business.server.entity.MonitorAlarmRecord;
-import com.imby.server.business.server.property.MonitoringServerWebProperties;
+import com.imby.server.business.server.property.MonitoringProperties;
 import com.imby.server.business.server.service.IAlarmService;
 import com.imby.server.business.server.service.IMailService;
 import com.imby.server.business.server.service.ISmsService;
@@ -58,7 +58,7 @@ public class AlarmServiceImpl implements IAlarmService {
      * 监控配置属性
      */
     @Autowired
-    private MonitoringServerWebProperties config;
+    private MonitoringProperties config;
 
     /**
      * 监控告警定义数据访问对象

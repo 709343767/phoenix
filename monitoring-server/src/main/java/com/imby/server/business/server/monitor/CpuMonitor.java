@@ -11,7 +11,7 @@ import com.imby.server.business.server.domain.Cpu;
 import com.imby.server.business.server.pool.CpuPool;
 import com.imby.server.business.server.service.IAlarmService;
 import com.imby.server.inf.IServerMonitoringListener;
-import com.imby.server.business.server.property.MonitoringServerWebProperties;
+import com.imby.server.business.server.property.MonitoringProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.hyperic.sigar.SigarException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +49,7 @@ public class CpuMonitor implements IServerMonitoringListener {
      * 监控配置属性
      */
     @Autowired
-    private MonitoringServerWebProperties monitoringServerWebProperties;
+    private MonitoringProperties monitoringProperties;
 
     /**
      * <p>
@@ -67,7 +67,7 @@ public class CpuMonitor implements IServerMonitoringListener {
         String key = String.valueOf(obj[0]);
         Cpu cpu = this.cpuPool.get(key);
         // 最终确认CPU过载的阈值
-        long threshold = this.monitoringServerWebProperties.getThreshold();
+        long threshold = this.monitoringProperties.getThreshold();
         // 平均CPU使用率
         double avgCpuCombined = cpu.getAvgCpuCombined();
         // 平均CPU使用率大于90%
