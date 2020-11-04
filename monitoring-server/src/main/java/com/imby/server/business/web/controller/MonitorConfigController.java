@@ -17,7 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
  */
 @Controller
 @RequestMapping("/monitor-config")
-@Api(tags = "配置.监控")
+@Api(tags = "配置.监控配置")
 public class MonitorConfigController {
 
     /**
