@@ -21,7 +21,6 @@ import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -171,7 +170,6 @@ public class InstanceMonitorTask implements CommandLineRunner {
      * @author 皮锋
      * @custom.date 2020/3/13 11:20
      */
-    @Async
     public void sendAlarmInfo(String title, AlarmLevelEnums alarmLevelEnums, Instance instance) throws NetException, SigarException {
         String msg = "应用ID：" + instance.getInstanceId()
                 + "，<br>应用名称：" + instance.getInstanceName()
