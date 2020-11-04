@@ -35,8 +35,8 @@ public class MonitorConfigAlarmMail {
     /**
      * 收件人邮箱地址，多个地址用英文分号隔开
      */
-    @TableField("EMILL")
-    private String emill;
+    @TableField("EMILLS")
+    private String emills;
 
     /**
      * 新增时间

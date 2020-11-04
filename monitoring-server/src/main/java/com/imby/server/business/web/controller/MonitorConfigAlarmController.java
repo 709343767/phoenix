@@ -2,8 +2,8 @@ package com.imby.server.business.web.controller;
 
 
 import io.swagger.annotations.Api;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 /**
  * <p>
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2020-11-04
  */
 @Api(tags = "配置.监控告警配置")
-@RestController
+@Controller
 @RequestMapping("/monitor-config-alarm")
 public class MonitorConfigAlarmController {
 

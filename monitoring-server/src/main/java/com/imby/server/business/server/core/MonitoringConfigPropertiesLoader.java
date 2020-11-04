@@ -48,7 +48,7 @@ public class MonitoringConfigPropertiesLoader {
         MonitorConfig monitorConfig = (MonitorConfig) allMonitorConfig.get("monitorConfig");
         // 告警邮箱配置属性
         MonitoringAlarmMailProperties monitoringAlarmMailProperties = new MonitoringAlarmMailProperties();
-        monitoringAlarmMailProperties.setEmills(StrUtil.splitToArray(monitorConfigAlarmMail.getEmill(), ';'));
+        monitoringAlarmMailProperties.setEmills(StrUtil.splitToArray(monitorConfigAlarmMail.getEmills(), ';'));
         // 告警短信配置属性
         MonitoringAlarmSmsProperties monitoringAlarmSmsProperties = new MonitoringAlarmSmsProperties();
         monitoringAlarmSmsProperties.setPhoneNumbers(StrUtil.splitToArray(monitorConfigAlarmSms.getPhoneNumbers(), ';'));
