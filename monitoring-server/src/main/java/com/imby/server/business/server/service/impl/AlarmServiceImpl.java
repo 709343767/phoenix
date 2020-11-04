@@ -104,7 +104,7 @@ public class AlarmServiceImpl implements IAlarmService {
     private void dealAlarm(Result result, AlarmPackage alarmPackage) {
         // 获取告警信息
         Alarm alarm = alarmPackage.getAlarm();
-        // 告警ID
+        // 告警代码
         String alarmUuid = alarmPackage.getId();
         // 告警类型
         String alarmType = alarm.getAlarmType().name();
@@ -164,7 +164,7 @@ public class AlarmServiceImpl implements IAlarmService {
      * 3.更新数据库中的告警发送结果。<br>
      *
      * @param result     返回结果
-     * @param alarmUuid  告警ID
+     * @param alarmUuid  告警代码
      * @param alarmType  告警类型
      * @param alarmLevel 告警级别
      * @param alarmTitle 告警内容标题
@@ -180,9 +180,9 @@ public class AlarmServiceImpl implements IAlarmService {
         // 发送告警前先把告警记录存入数据库
         int insertResult = this.insertMonitorAlarmRecordToDb(alarmUuid, alarmType, alarmLevel, alarmTitle, alarmMsg, alarmWays);
         if (insertResult > 0) {
-            List<String> alarmTypeList = Arrays.asList(alarmWays);
+            List<String> alarmWaysList = Arrays.asList(alarmWays);
             // 告警方式为短信告警和邮件告警
-            if (alarmTypeList.contains(AlarmWayEnums.SMS.name()) && alarmTypeList.contains(AlarmWayEnums.MAIL.name())) {
+            if (alarmWaysList.contains(AlarmWayEnums.SMS.name()) && alarmWaysList.contains(AlarmWayEnums.MAIL.name())) {
                 // 处理短信告警
                 this.dealSmsAlarm(result, alarmTitle, alarmMsg, alarmLevel);
                 // 告警发送完更新数据库中告警发送结果
@@ -191,12 +191,12 @@ public class AlarmServiceImpl implements IAlarmService {
                 this.dealMailAlarm(result, alarmTitle, alarmMsg, alarmLevel);
                 // 告警发送完更新数据库中告警发送结果
                 this.updateMonitorAlarmRecordToDb(result, alarmUuid, AlarmWayEnums.MAIL);
-            } else if (alarmTypeList.contains(AlarmWayEnums.SMS.name())) {
+            } else if (alarmWaysList.contains(AlarmWayEnums.SMS.name())) {
                 // 处理短信告警
                 this.dealSmsAlarm(result, alarmTitle, alarmMsg, alarmLevel);
                 // 告警发送完更新数据库中告警发送结果
                 this.updateMonitorAlarmRecordToDb(result, alarmUuid, AlarmWayEnums.SMS);
-            } else if (alarmTypeList.contains(AlarmWayEnums.MAIL.name())) {
+            } else if (alarmWaysList.contains(AlarmWayEnums.MAIL.name())) {
                 // 处理邮件告警
                 this.dealMailAlarm(result, alarmTitle, alarmMsg, alarmLevel);
                 // 告警发送完更新数据库中告警发送结果
@@ -306,35 +306,24 @@ public class AlarmServiceImpl implements IAlarmService {
      * </p>
      *
      * @param result        返回结果
-     * @param uuid          UUID，唯一不重复，可用作主键
+     * @param uuid          告警代码
      * @param alarmWayEnums 告警方式
      * @author 皮锋
      * @custom.date 2020/5/13 17:04
      */
     private void updateMonitorAlarmRecordToDb(Result result, String uuid, AlarmWayEnums alarmWayEnums) {
         MonitorAlarmRecord monitorAlarmRecord = new MonitorAlarmRecord();
-        // 告警方式为短信
-        if (alarmWayEnums == AlarmWayEnums.SMS) {
-            // 更新状态
-            if (result.isSuccess()) {
-                monitorAlarmRecord.setSmsStatus(ZeroOrOneConstants.ONE);
-            } else {
-                monitorAlarmRecord.setSmsStatus(ZeroOrOneConstants.ZERO);
-            }
-        }
-        // 告警方式为邮件
-        if (alarmWayEnums == AlarmWayEnums.MAIL) {
-            // 更新状态
-            if (result.isSuccess()) {
-                monitorAlarmRecord.setMailStatus(ZeroOrOneConstants.ONE);
-            } else {
-                monitorAlarmRecord.setMailStatus(ZeroOrOneConstants.ZERO);
-            }
+        // 更新状态
+        if (result.isSuccess()) {
+            monitorAlarmRecord.setStatus(ZeroOrOneConstants.ONE);
+        } else {
+            monitorAlarmRecord.setStatus(ZeroOrOneConstants.ZERO);
         }
         // 更新时间
         monitorAlarmRecord.setUpdateTime(new Date());
         LambdaUpdateWrapper<MonitorAlarmRecord> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();
         lambdaUpdateWrapper.eq(MonitorAlarmRecord::getCode, uuid);
+        lambdaUpdateWrapper.eq(MonitorAlarmRecord::getWay, alarmWayEnums);
         this.monitorAlarmRecordDao.update(monitorAlarmRecord, lambdaUpdateWrapper);
     }
 
@@ -343,12 +332,12 @@ public class AlarmServiceImpl implements IAlarmService {
      * 把告警信息插入数据库
      * </p>
      *
-     * @param uuid       UUID，唯一不重复，可用作主键
+     * @param uuid       告警代码
      * @param alarmType  告警类型（SERVER、NET、INSTANCE、CUSTOM）
      * @param alarmLevel 告警级别（INFO、WARM、ERROR、FATAL）
      * @param alarmTitle 告警标题
      * @param alarmMsg   告警内容
-     * @param alarmWays  告警方式（SMS、MAIL）
+     * @param alarmWays  告警方式（SMS、MAIL、...）
      * @return 插入记录数
      * @author 皮锋
      * @custom.date 2020/5/13 16:21
@@ -356,33 +345,31 @@ public class AlarmServiceImpl implements IAlarmService {
     private int insertMonitorAlarmRecordToDb(String uuid, String alarmType,
                                              String alarmLevel, String alarmTitle,
                                              String alarmMsg, String[] alarmWays) {
+        // 返回值
+        int result = 0;
         MonitorAlarmRecord monitorAlarmRecord = new MonitorAlarmRecord();
         monitorAlarmRecord.setCode(uuid);
         monitorAlarmRecord.setTitle(alarmTitle);
         monitorAlarmRecord.setContent(alarmMsg);
         monitorAlarmRecord.setLevel(alarmLevel);
         monitorAlarmRecord.setType(alarmType);
-        monitorAlarmRecord.setWay(StringUtils.join(alarmWays, ";"));
-        List<String> alarmTypeList = Arrays.asList(alarmWays);
-        // 告警方式为短信告警和邮件告警
-        if (alarmTypeList.contains(AlarmWayEnums.SMS.name()) && alarmTypeList.contains(AlarmWayEnums.MAIL.name())) {
-            String[] phones = this.config.getAlarmProperties().getSmsProperties().getPhoneNumbers();
-            String[] mails = this.config.getAlarmProperties().getMailProperties().getEmills();
-            monitorAlarmRecord.setPhone(StringUtils.join(phones, ";"));
-            monitorAlarmRecord.setMail(StringUtils.join(mails, ";"));
+        // 告警方式
+        for (String alarmWay : alarmWays) {
+            // 告警方式为短信告警
+            if (StringUtils.equalsIgnoreCase(alarmWay, AlarmWayEnums.SMS.name())) {
+                String[] phones = this.config.getAlarmProperties().getSmsProperties().getPhoneNumbers();
+                monitorAlarmRecord.setNumber(StringUtils.join(phones, ";"));
+            }
+            // 告警方式为邮件告警
+            else if (StringUtils.equalsIgnoreCase(alarmWay, AlarmWayEnums.MAIL.name())) {
+                String[] mails = this.config.getAlarmProperties().getMailProperties().getEmills();
+                monitorAlarmRecord.setNumber(StringUtils.join(mails, ";"));
+            }
+            monitorAlarmRecord.setWay(alarmWay);
+            monitorAlarmRecord.setInsertTime(new Date());
+            result = result + this.monitorAlarmRecordDao.insert(monitorAlarmRecord);
         }
-        // 告警方式为短信告警
-        else if (alarmTypeList.contains(AlarmWayEnums.SMS.name())) {
-            String[] phones = this.config.getAlarmProperties().getSmsProperties().getPhoneNumbers();
-            monitorAlarmRecord.setPhone(StringUtils.join(phones, ";"));
-        }
-        // 告警方式为邮件告警
-        else if (alarmTypeList.contains(AlarmWayEnums.MAIL.name())) {
-            String[] mails = this.config.getAlarmProperties().getMailProperties().getEmills();
-            monitorAlarmRecord.setMail(StringUtils.join(mails, ";"));
-        }
-        monitorAlarmRecord.setInsertTime(new Date());
-        return this.monitorAlarmRecordDao.insert(monitorAlarmRecord);
+        return result;
     }
 
     /**

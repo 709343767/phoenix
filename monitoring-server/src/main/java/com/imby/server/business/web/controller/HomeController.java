@@ -148,7 +148,7 @@ public class HomeController {
     @ResponseBody
     @PostMapping("/home/get-last-5-alarm-record")
     public LayUiAdminResultVo getLast5AlarmRecord() {
-        List<MonitorAlarmRecordVo> monitorAlarmRecordVos = this.monitorAlarmRecordService.getMonitorAlarmRecordList(1L, 5L, null, null, null, null).getRecords();
+        List<MonitorAlarmRecordVo> monitorAlarmRecordVos = this.monitorAlarmRecordService.getMonitorAlarmRecordList(1L, 5L, null, null, null, null, null).getRecords();
         return LayUiAdminResultVo.ok(monitorAlarmRecordVos);
     }
 

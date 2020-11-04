@@ -36,7 +36,7 @@ public class MonitorAlarmRecord implements Serializable {
     @TableId(value = "ID", type = IdType.AUTO)
     private Long id;
 
-    @ApiModelProperty(value = "UUID，唯一不重复，可用作主键")
+    @ApiModelProperty(value = "告警代码，使用UUID")
     @TableField("CODE")
     private String code;
 
@@ -44,7 +44,7 @@ public class MonitorAlarmRecord implements Serializable {
     @TableField("TYPE")
     private String type;
 
-    @ApiModelProperty(value = "告警方式（SMS、MAIL）")
+    @ApiModelProperty(value = "告警方式（SMS、MAIL、...）")
     @TableField("WAY")
     private String way;
 
@@ -68,21 +68,12 @@ public class MonitorAlarmRecord implements Serializable {
     @TableField("CONTENT")
     private String content;
 
-    @ApiModelProperty(value = "短信告警发送状态（0：失败；1：成功）")
-    @TableField("SMS_STATUS")
-    private String smsStatus;
+    @ApiModelProperty(value = "告警发送状态（0：失败；1：成功）")
+    @TableField("STATUS")
+    private String status;
 
-    @ApiModelProperty(value = "邮件告警发送状态（0：失败；1：成功）")
-    @TableField("MAIL_STATUS")
-    private String mailStatus;
-
-    @ApiModelProperty(value = "被告警人手机号码")
-    @TableField("PHONE")
-    private String phone;
-
-    @ApiModelProperty(value = "被告警人电子邮箱")
-    @TableField("MAIL")
-    private String mail;
-
+    @ApiModelProperty(value = "被告警人号码（手机号码、电子邮箱、...）")
+    @TableField("NUMBER")
+    private String number;
 
 }

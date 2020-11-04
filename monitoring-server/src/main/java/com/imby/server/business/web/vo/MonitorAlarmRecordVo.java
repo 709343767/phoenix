@@ -33,13 +33,13 @@ public class MonitorAlarmRecordVo implements ISuperBean {
     @ApiModelProperty(value = "主键ID")
     private Long id;
 
-    @ApiModelProperty(value = "UUID，唯一不重复，可用作主键")
+    @ApiModelProperty(value = "告警代码，使用UUID")
     private String code;
 
     @ApiModelProperty(value = "告警类型（SERVER、NET、INSTANCE、CUSTOM）")
     private String type;
 
-    @ApiModelProperty(value = "告警方式（SMS、MAIL）")
+    @ApiModelProperty(value = "告警方式（SMS、MAIL、...）")
     private String way;
 
     @ApiModelProperty(value = "告警级别（INFO、WARM、ERROR、FATAL）")
@@ -59,17 +59,11 @@ public class MonitorAlarmRecordVo implements ISuperBean {
     @ApiModelProperty(value = "告警内容")
     private String content;
 
-    @ApiModelProperty(value = "短信告警发送状态（0：失败；1：成功）")
-    private String smsStatus;
+    @ApiModelProperty(value = "告警发送状态（0：失败；1：成功）")
+    private String status;
 
-    @ApiModelProperty(value = "邮件告警发送状态（0：失败；1：成功）")
-    private String mailStatus;
-
-    @ApiModelProperty(value = "被告警人手机号码")
-    private String phone;
-
-    @ApiModelProperty(value = "被告警人电子邮箱")
-    private String mail;
+    @ApiModelProperty(value = "被告警人号码（手机号码、电子邮箱、...）")
+    private String number;
 
     /**
      * <p>

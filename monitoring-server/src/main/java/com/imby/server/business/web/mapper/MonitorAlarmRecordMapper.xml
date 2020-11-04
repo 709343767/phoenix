@@ -10,8 +10,8 @@
                b.total - b.success as fail
         FROM (
                  SELECT d.date,
-                        COUNT(a.SMS_STATUS) + COUNT(a.MAIL_STATUS)                   as total,
-                        IFNULL(SUM(a.SMS_STATUS), 0) + IFNULL(SUM(a.MAIL_STATUS), 0) as success
+                        COUNT(ID)                as total,
+                        IFNULL(SUM(a.STATUS), 0) as success
                  FROM (
                           SELECT DATE_SUB(CURDATE(), INTERVAL 0 DAY) date
                           UNION
@@ -40,8 +40,8 @@
                tmp.alarmRecordSum - tmp.alarmRecordSuccessSum                                as alarmRecordFailSum,
                ifnull(round(tmp.alarmRecordSuccessSum / tmp.alarmRecordSum, 2) * 100, '100') as alarmSucRate
         from (
-                 select count(mar.SMS_STATUS) + count(mar.MAIL_STATUS)                   as alarmRecordSum,
-                        ifnull(sum(mar.SMS_STATUS), 0) + ifnull(sum(mar.MAIL_STATUS), 0) as alarmRecordSuccessSum
+                 select count(ID)                  as alarmRecordSum,
+                        ifnull(sum(mar.STATUS), 0) as alarmRecordSuccessSum
                  from MONITOR_ALARM_RECORD mar) tmp
     </select>
 
@@ -57,7 +57,7 @@
                    end  as types
         from (
                  select t.types,
-                        count(mar.SMS_STATUS) + count(mar.MAIL_STATUS) as totals
+                        count(ID) as totals
                  from (
                           select 'INSTANCE' types
                           from DUAL

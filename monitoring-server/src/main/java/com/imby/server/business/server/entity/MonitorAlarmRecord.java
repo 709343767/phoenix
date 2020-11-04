@@ -33,7 +33,7 @@ public class MonitorAlarmRecord {
     private Long id;
 
     /**
-     * UUID，唯一不重复，可用作主键
+     * 告警代码，使用UUID
      */
     @TableField("CODE")
     private String code;
@@ -45,7 +45,7 @@ public class MonitorAlarmRecord {
     private String type;
 
     /**
-     * 告警方式（SMS、MAIL）
+     * 告警方式（SMS、MAIL、...）
      */
     @TableField("WAY")
     private String way;
@@ -81,27 +81,15 @@ public class MonitorAlarmRecord {
     private String content;
 
     /**
-     * 短信告警发送状态（0：失败；1：成功）
+     * 告警发送状态（0：失败；1：成功）
      */
-    @TableField("SMS_STATUS")
-    private String smsStatus;
+    @TableField("STATUS")
+    private String status;
 
     /**
-     * 邮件告警发送状态（0：失败；1：成功）
+     * 被告警人号码（手机号码、电子邮箱、...）
      */
-    @TableField("MAIL_STATUS")
-    private String mailStatus;
-
-    /**
-     * 被告警人手机号码
-     */
-    @TableField("PHONE")
-    private String phone;
-
-    /**
-     * 被告警人电子邮箱
-     */
-    @TableField("MAIL")
-    private String mail;
+    @TableField("NUMBER")
+    private String number;
 
 }

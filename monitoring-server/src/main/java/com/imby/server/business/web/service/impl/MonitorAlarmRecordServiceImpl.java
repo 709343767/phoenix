@@ -67,6 +67,7 @@ public class MonitorAlarmRecordServiceImpl extends ServiceImpl<IMonitorAlarmReco
      * @param size    每页显示条数
      * @param type    告警类型
      * @param level   告警级别
+     * @param status  告警状态
      * @param title   告警标题
      * @param content 告警内容
      * @return 分页Page对象
@@ -74,7 +75,7 @@ public class MonitorAlarmRecordServiceImpl extends ServiceImpl<IMonitorAlarmReco
      * @custom.date 2020/8/3 11:07
      */
     @Override
-    public Page<MonitorAlarmRecordVo> getMonitorAlarmRecordList(Long current, Long size, String type, String level, String title, String content) {
+    public Page<MonitorAlarmRecordVo> getMonitorAlarmRecordList(Long current, Long size, String type, String level, String status, String title, String content) {
         // 查询数据库
         IPage<MonitorAlarmRecord> ipage = new Page<>(current, size);
         LambdaQueryWrapper<MonitorAlarmRecord> lambdaQueryWrapper = new LambdaQueryWrapper<>();
@@ -85,6 +86,9 @@ public class MonitorAlarmRecordServiceImpl extends ServiceImpl<IMonitorAlarmReco
         }
         if (StringUtils.isNotBlank(level)) {
             lambdaQueryWrapper.eq(MonitorAlarmRecord::getLevel, level);
+        }
+        if (StringUtils.isNotBlank(status)) {
+            lambdaQueryWrapper.eq(MonitorAlarmRecord::getStatus, status);
         }
         if (StringUtils.isNotBlank(title)) {
             lambdaQueryWrapper.like(MonitorAlarmRecord::getTitle, title);

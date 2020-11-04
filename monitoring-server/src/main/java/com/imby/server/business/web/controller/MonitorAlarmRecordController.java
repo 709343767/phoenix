@@ -58,6 +58,7 @@ public class MonitorAlarmRecordController {
      * @param size    每页显示条数
      * @param type    告警类型
      * @param level   告警级别
+     * @param status  告警状态
      * @param title   告警标题
      * @param content 告警内容
      * @return layUiAdmin响应对象
@@ -70,12 +71,13 @@ public class MonitorAlarmRecordController {
             @ApiImplicitParam(name = "size", value = "每页显示条数", required = true, paramType = "query", dataType = "long"),
             @ApiImplicitParam(name = "type", value = "告警类型", paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "level", value = "告警级别", paramType = "query", dataType = "string"),
+            @ApiImplicitParam(name = "status", value = "告警状态", paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "title", value = "告警标题", paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "content", value = "告警内容", paramType = "query", dataType = "string")})
     @GetMapping("/get-monitor-alarm-record-list")
     @ResponseBody
-    public LayUiAdminResultVo getMonitorAlarmRecordList(Long current, Long size, String type, String level, String title, String content) {
-        Page<MonitorAlarmRecordVo> page = this.monitorAlarmRecordService.getMonitorAlarmRecordList(current, size, type, level, title, content);
+    public LayUiAdminResultVo getMonitorAlarmRecordList(Long current, Long size, String type, String level, String status, String title, String content) {
+        Page<MonitorAlarmRecordVo> page = this.monitorAlarmRecordService.getMonitorAlarmRecordList(current, size, type, level,status, title, content);
         return LayUiAdminResultVo.ok(page);
     }
 

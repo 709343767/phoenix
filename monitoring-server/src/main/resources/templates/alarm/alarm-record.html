@@ -31,7 +31,7 @@
             <div class="layui-form-item">
                 <div class="layui-inline">
                     <label class="layui-form-label">告警类型</label>
-                    <div class="layui-input-block">
+                    <div class="layui-input-block" style="width: 100px;">
                         <select name="type">
                             <option value="">所有</option>
                             <option value="SERVER">服务器</option>
@@ -43,13 +43,23 @@
                 </div>
                 <div class="layui-inline">
                     <label class="layui-form-label">告警级别</label>
-                    <div class="layui-input-block">
+                    <div class="layui-input-block" style="width: 100px;">
                         <select name="level">
                             <option value="">所有</option>
                             <option value="INFO">消息</option>
                             <option value="WARN">警告</option>
                             <option value="ERROR">错误</option>
                             <option value="FATAL">致命</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">告警状态</label>
+                    <div class="layui-input-block" style="width: 100px;">
+                        <select name="status">
+                            <option value="">所有</option>
+                            <option value="1">成功</option>
+                            <option value="0">失败</option>
                         </select>
                     </div>
                 </div>
@@ -152,18 +162,7 @@
                         $(this).text('致命');
                     }
                 });
-                $('[data-field="smsStatus"]').children().each(function () {
-                    if ($(this).text() === '0') {
-                        $(this).html('<span style="color: #FF4500;">失败</span>');
-                    }
-                    if ($(this).text() === '1') {
-                        $(this).text('成功');
-                    }
-                    if ($(this).text() === '' || $(this).text() === null) {
-                        $(this).text('未发送');
-                    }
-                });
-                $('[data-field="mailStatus"]').children().each(function () {
+                $('[data-field="status"]').children().each(function () {
                     if ($(this).text() === '0') {
                         $(this).html('<span style="color: #FF4500;">失败</span>');
                     }
@@ -177,10 +176,7 @@
                 $('[data-field="way"]').children().each(function () {
                     $(this).html($(this).text().replace('MAIL', '邮件').replace('SMS', '短信').replace(';', '<br>'));
                 });
-                $('[data-field="phone"]').children().each(function () {
-                    $(this).html($(this).text().replace(';', '<br>'));
-                });
-                $('[data-field="mail"]').children().each(function () {
+                $('[data-field="number"]').children().each(function () {
                     $(this).html($(this).text().replace(';', '<br>'));
                 });
             },
@@ -214,39 +210,30 @@
                     sort: !0
                 }, {
                     field: 'content',
-                    minWidth: 350,
+                    minWidth: 400,
                     title: '告警内容',
                     sort: !0
                 }, {
-                    field: 'smsStatus',
+                    field: 'status',
                     width: 80,
-                    title: '短信',
+                    title: '状态',
                     sort: !0
                 }, {
-                    field: 'mailStatus',
-                    width: 80,
-                    title: '邮件',
-                    sort: !0
-                }, {
-                    field: 'phone',
+                    field: 'number',
                     width: 120,
-                    title: '手机号码',
-                    sort: !0
-                }, {
-                    field: 'mail',
-                    title: '电子邮箱',
+                    title: '号码',
                     sort: !0
                 }, {
                     field: 'updateTime',
                     minWidth: 160,
                     title: '告警时间',
                     sort: !0
-                }/*, {
+                }, {
                     field: 'updateTime',
-                    minWidth: 180,
+                    minWidth: 160,
                     title: '更新时间',
                     sort: !0
-                }*/, {
+                }, {
                     title: '操作',
                     width: 85,
                     align: 'center',
