@@ -367,7 +367,7 @@ public class AlarmServiceImpl implements IAlarmService {
         // 告警方式为短信告警和邮件告警
         if (alarmTypeList.contains(AlarmWayEnums.SMS.name()) && alarmTypeList.contains(AlarmWayEnums.MAIL.name())) {
             String[] phones = this.config.getAlarmProperties().getSmsProperties().getPhoneNumbers();
-            String[] mails = this.config.getAlarmProperties().getMailProperties().getEmill();
+            String[] mails = this.config.getAlarmProperties().getMailProperties().getEmills();
             monitorAlarmRecord.setPhone(StringUtils.join(phones, ";"));
             monitorAlarmRecord.setMail(StringUtils.join(mails, ";"));
         }
@@ -378,7 +378,7 @@ public class AlarmServiceImpl implements IAlarmService {
         }
         // 告警方式为邮件告警
         else if (alarmTypeList.contains(AlarmWayEnums.MAIL.name())) {
-            String[] mails = this.config.getAlarmProperties().getMailProperties().getEmill();
+            String[] mails = this.config.getAlarmProperties().getMailProperties().getEmills();
             monitorAlarmRecord.setMail(StringUtils.join(mails, ";"));
         }
         monitorAlarmRecord.setInsertTime(new Date());
@@ -457,7 +457,7 @@ public class AlarmServiceImpl implements IAlarmService {
      */
     private void dealMailAlarm(Result result, String alarmTitle, String msg, String level) {
         Mail mail = Mail.builder()
-                .email(this.config.getAlarmProperties().getMailProperties().getEmill())
+                .email(this.config.getAlarmProperties().getMailProperties().getEmills())
                 .title(alarmTitle)
                 .content(msg)
                 .level(level)

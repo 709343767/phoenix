@@ -20,6 +20,6 @@ public class MonitoringAlarmMailProperties {
     /**
      * 收件人邮箱地址
      */
-    private String[] emill;
+    private String[] emills;
 
 }
