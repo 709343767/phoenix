@@ -7,6 +7,8 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.*;
 import lombok.experimental.Accessors;
 
+import java.util.Date;
+
 /**
  * <p>
  * 监控邮件告警配置表
@@ -33,7 +35,19 @@ public class MonitorConfigAlarmMail {
     /**
      * 收件人邮箱地址，多个地址用英文分号隔开
      */
-    @TableField("TO")
-    private String to;
+    @TableField("EMILL")
+    private String emill;
+
+    /**
+     * 新增时间
+     */
+    @TableField("INSERT_TIME")
+    private Date insertTime;
+
+    /**
+     * 更新时间
+     */
+    @TableField("UPDATE_TIME")
+    private Date updateTime;
 
 }

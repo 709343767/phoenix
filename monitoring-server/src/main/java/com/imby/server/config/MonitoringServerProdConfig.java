@@ -1,0 +1,19 @@
+package com.imby.server.config;
+
+import com.imby.starter.annotation.EnableMonitoring;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
+
+/**
+ * <p>
+ * 生产环境监控配置
+ * </p>
+ *
+ * @author 皮锋
+ * @custom.date 2020/3/18 14:13
+ */
+@Configuration
+@Profile("prod")
+@EnableMonitoring(configFileName = "monitoring-prod.properties")
+public class MonitoringServerProdConfig {
+}

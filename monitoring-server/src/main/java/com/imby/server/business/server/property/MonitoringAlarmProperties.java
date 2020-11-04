@@ -35,11 +35,11 @@ public class MonitoringAlarmProperties {
     /**
      * 短信配置属性
      */
-    private MonitoringSmsProperties smsProperties;
+    private MonitoringAlarmSmsProperties smsProperties;
 
     /**
      * 邮箱配置属性
      */
-    private MonitoringMailProperties mailProperties;
+    private MonitoringAlarmMailProperties mailProperties;
 
 }

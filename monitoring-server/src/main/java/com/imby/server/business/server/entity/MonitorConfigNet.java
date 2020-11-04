@@ -7,6 +7,8 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.*;
 import lombok.experimental.Accessors;
 
+import java.util.Date;
+
 /**
  * <p>
  * 监控网络配置表
@@ -35,5 +37,17 @@ public class MonitorConfigNet {
      */
     @TableField("ENABLE")
     private Integer enable;
+
+    /**
+     * 新增时间
+     */
+    @TableField("INSERT_TIME")
+    private Date insertTime;
+
+    /**
+     * 更新时间
+     */
+    @TableField("UPDATE_TIME")
+    private Date updateTime;
 
 }

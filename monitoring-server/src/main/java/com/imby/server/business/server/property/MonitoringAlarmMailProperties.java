@@ -4,7 +4,7 @@ import lombok.*;
 
 /**
  * <p>
- * 邮箱配置属性
+ * 告警邮箱配置属性
  * </p>
  *
  * @author 皮锋
@@ -15,10 +15,11 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
-public class MonitoringMailProperties {
+public class MonitoringAlarmMailProperties {
 
     /**
      * 收件人邮箱地址
      */
-    private String[] to;
+    private String[] emill;
+
 }

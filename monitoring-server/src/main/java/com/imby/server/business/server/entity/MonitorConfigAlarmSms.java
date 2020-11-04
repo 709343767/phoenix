@@ -7,6 +7,8 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.*;
 import lombok.experimental.Accessors;
 
+import java.util.Date;
+
 /**
  * <p>
  * 监控短信告警配置表
@@ -53,5 +55,17 @@ public class MonitorConfigAlarmSms {
      */
     @TableField("ENTERPRISE")
     private String enterprise;
+
+    /**
+     * 新增时间
+     */
+    @TableField("INSERT_TIME")
+    private Date insertTime;
+
+    /**
+     * 更新时间
+     */
+    @TableField("UPDATE_TIME")
+    private Date updateTime;
 
 }

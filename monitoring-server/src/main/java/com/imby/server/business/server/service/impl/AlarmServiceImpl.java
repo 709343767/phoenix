@@ -14,12 +14,12 @@ import com.imby.server.business.server.domain.Mail;
 import com.imby.server.business.server.domain.TransfarSms;
 import com.imby.server.business.server.entity.MonitorAlarmDefinition;
 import com.imby.server.business.server.entity.MonitorAlarmRecord;
+import com.imby.server.business.server.property.MonitoringServerWebProperties;
 import com.imby.server.business.server.service.IAlarmService;
 import com.imby.server.business.server.service.IMailService;
 import com.imby.server.business.server.service.ISmsService;
 import com.imby.server.constant.AlarmWayEnums;
 import com.imby.server.constant.EnterpriseConstants;
-import com.imby.server.business.server.property.MonitoringServerWebProperties;
 import com.imby.server.util.AlarmUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -367,7 +367,7 @@ public class AlarmServiceImpl implements IAlarmService {
         // 告警方式为短信告警和邮件告警
         if (alarmTypeList.contains(AlarmWayEnums.SMS.name()) && alarmTypeList.contains(AlarmWayEnums.MAIL.name())) {
             String[] phones = this.config.getAlarmProperties().getSmsProperties().getPhoneNumbers();
-            String[] mails = this.config.getAlarmProperties().getMailProperties().getTo();
+            String[] mails = this.config.getAlarmProperties().getMailProperties().getEmill();
             monitorAlarmRecord.setPhone(StringUtils.join(phones, ";"));
             monitorAlarmRecord.setMail(StringUtils.join(mails, ";"));
         }
@@ -378,7 +378,7 @@ public class AlarmServiceImpl implements IAlarmService {
         }
         // 告警方式为邮件告警
         else if (alarmTypeList.contains(AlarmWayEnums.MAIL.name())) {
-            String[] mails = this.config.getAlarmProperties().getMailProperties().getTo();
+            String[] mails = this.config.getAlarmProperties().getMailProperties().getEmill();
             monitorAlarmRecord.setMail(StringUtils.join(mails, ";"));
         }
         monitorAlarmRecord.setInsertTime(new Date());
@@ -457,7 +457,7 @@ public class AlarmServiceImpl implements IAlarmService {
      */
     private void dealMailAlarm(Result result, String alarmTitle, String msg, String level) {
         Mail mail = Mail.builder()
-                .email(this.config.getAlarmProperties().getMailProperties().getTo())
+                .email(this.config.getAlarmProperties().getMailProperties().getEmill())
                 .title(alarmTitle)
                 .content(msg)
                 .level(level)

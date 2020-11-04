@@ -22,12 +22,24 @@
 </head>
 <body>
 <div class="layui-fluid">
-    <div class="layui-row layui-col-space10">
+    <div class="layui-row layui-col-space8">
         <div class="layui-col-md3">
-            你的内容 9/12
+            <div class="layadmin-homepage-content">
+                <div class="layui-card text-center">
+                    <div class="layui-card-body" id="config-tree">
+                        你的内容 9/12
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="layui-col-md9">
-            你的内容 3/12
+            <div class="layadmin-homepage-content">
+                <div class="layui-card text-center">
+                    <div class="layui-card-body">
+                        你的内容 9/12
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -37,7 +49,32 @@
         base: ctxPath //静态资源所在路径
     }).extend({
         index: 'lib/index', //主入口模块
-    }).use(['index', 'element']);
+    }).use(['index', 'element', 'tree'], function () {
+        var tree = layui.tree;
+        //渲染
+        var inst1 = tree.render({
+            elem: '#config-tree',  //绑定元素
+            onlyIconControl: true,
+            data: [{
+                spread: true,
+                title: '监控', //一级菜单
+                children: [{
+                    spread: true,
+                    title: '网络'//二级菜单
+                }, {
+                    spread: true,
+                    title: '告警', //二级菜单
+                    children: [{
+                        spread: true,
+                        title: '短信告警' //三级菜单
+                    }, {
+                        spread: true,
+                        title: '邮件告警' //三级菜单
+                    }]
+                }]
+            }]
+        });
+    });
 </script>
 </body>
 </html>
