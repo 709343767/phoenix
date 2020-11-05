@@ -1,17 +1,18 @@
 package com.imby.server.business.web.entity;
 
-import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import java.time.LocalDateTime;
 import com.baomidou.mybatisplus.annotation.TableField;
-import java.io.Serializable;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+
+import java.io.Serializable;
+import java.util.Date;
 
 /**
  * <p>
@@ -26,10 +27,10 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 @TableName("MONITOR_CONFIG_NET")
-@ApiModel(value="MonitorConfigNet对象", description="监控网络配置表")
+@ApiModel(value = "MonitorConfigNet对象", description = "监控网络配置表")
 public class MonitorConfigNet implements Serializable {
 
-    private static final long serialVersionUID=1L;
+    private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "主键ID")
     @TableId(value = "ID", type = IdType.AUTO)
@@ -41,11 +42,10 @@ public class MonitorConfigNet implements Serializable {
 
     @ApiModelProperty(value = "插入时间")
     @TableField("INSERT_TIME")
-    private LocalDateTime insertTime;
+    private Date insertTime;
 
     @ApiModelProperty(value = "更新时间")
     @TableField("UPDATE_TIME")
-    private LocalDateTime updateTime;
-
+    private Date updateTime;
 
 }

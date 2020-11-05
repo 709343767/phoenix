@@ -1,7 +1,11 @@
 package com.imby.server.business.web.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.imby.server.business.web.entity.*;
+import com.imby.server.business.web.service.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +25,36 @@ import org.springframework.web.servlet.ModelAndView;
 public class MonitorConfigController {
 
     /**
+     * 监控配置服务类
+     */
+    @Autowired
+    private IMonitorConfigService monitorConfigService;
+
+    /**
+     * 监控网络配置服务类
+     */
+    @Autowired
+    private IMonitorConfigNetService monitorConfigNetService;
+
+    /**
+     * 监控告警配置服务类
+     */
+    @Autowired
+    private IMonitorConfigAlarmService monitorConfigAlarmService;
+
+    /**
+     * 监控邮件告警配置服务类
+     */
+    @Autowired
+    private IMonitorConfigAlarmMailService monitorConfigAlarmMailService;
+
+    /**
+     * 监控短信告警配置服务类
+     */
+    @Autowired
+    private IMonitorConfigAlarmSmsService monitorConfigAlarmSmsService;
+
+    /**
      * <p>
      * 访问监控配置页
      * </p>
@@ -32,6 +66,17 @@ public class MonitorConfigController {
     @ApiOperation(value = "访问监控配置页")
     @GetMapping("/config")
     public ModelAndView config() {
-        return new ModelAndView("set/config/config");
+        ModelAndView mv = new ModelAndView("set/config/config");
+        MonitorConfig monitorConfig = this.monitorConfigService.getOne(new LambdaQueryWrapper<>());
+        MonitorConfigNet monitorConfigNet = this.monitorConfigNetService.getOne(new LambdaQueryWrapper<>());
+        MonitorConfigAlarm monitorConfigAlarm = this.monitorConfigAlarmService.getOne(new LambdaQueryWrapper<>());
+        MonitorConfigAlarmMail monitorConfigAlarmMail = this.monitorConfigAlarmMailService.getOne(new LambdaQueryWrapper<>());
+        MonitorConfigAlarmSms monitorConfigAlarmSms = this.monitorConfigAlarmSmsService.getOne(new LambdaQueryWrapper<>());
+        mv.addObject(monitorConfig)
+                .addObject(monitorConfigNet)
+                .addObject(monitorConfigAlarm)
+                .addObject(monitorConfigAlarmMail)
+                .addObject(monitorConfigAlarmSms);
+        return mv;
     }
 }

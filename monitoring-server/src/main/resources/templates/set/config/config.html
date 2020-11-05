@@ -22,24 +22,142 @@
 </head>
 <body>
 <div class="layui-fluid">
-    <div class="layui-row layui-col-space8">
-        <div class="layui-col-md3">
-            <div class="layadmin-homepage-content">
-                <div class="layui-card text-center">
-                    <div class="layui-card-body" id="config-tree">
-                        你的内容 9/12
+    <div class="layui-row">
+        <div class="layadmin-homepage-content">
+            <form class="layui-form" lay-filter="">
+                <div class="layui-card">
+                    <div class="layui-card-header div-font-weight">设置</div>
+                    <div class="layui-card-body" pad20>
+                        <div class="layui-card">
+                            <div class="layui-card-header">监控</div>
+                            <div class="layui-card-body" pad20>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label" style="text-align: left;">阈值</label>
+                                    <div class="layui-input-block">
+                                        <input type="radio" name="threshold" th:value="${num}" th:title="${num}"
+                                               th:each="num, numStat : ${#numbers.sequence(1,10)}"
+                                               th:checked="${monitorConfig.threshold==num}? true : false">
+                                    </div>
+                                    <div class="layui-form-mid layui-word-aux">1到10，共10级，值越小监控越灵敏</div>
+                                </div>
+                                <div class="layui-card">
+                                    <div class="layui-card-header">网络</div>
+                                    <div class="layui-card-body" pad20>
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label" style="text-align: left;">是否监控</label>
+                                            <div class="layui-input-inline">
+                                                <input type="checkbox" name="netEnable" lay-text="是|否"
+                                                       th:value="${monitorConfigNet.enable}" lay-skin="switch"
+                                                       th:checked="${monitorConfigNet.enable==1}? true : false">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-card">
+                                    <div class="layui-card-header">告警</div>
+                                    <div class="layui-card-body" pad20>
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label" style="text-align: left;">是否告警</label>
+                                            <div class="layui-input-inline">
+                                                <input type="checkbox" name="alarmEnable" lay-text="是|否"
+                                                       th:value="${monitorConfigAlarm.enable}" lay-skin="switch"
+                                                       th:checked="${monitorConfigAlarm.enable==1}? true : false">
+                                            </div>
+                                        </div>
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label" style="text-align: left;">级别</label>
+                                            <div class="layui-input-block">
+                                                <input type="radio" name="level" value="INFO" title="INFO"
+                                                       th:checked="${monitorConfigAlarm.level=='INFO'}? true : false">
+                                                <input type="radio" name="level" value="WARN" title="WARN"
+                                                       th:checked="${monitorConfigAlarm.level=='WARN'}? true : false">
+                                                <input type="radio" name="level" value="ERROR" title="ERROR"
+                                                       th:checked="${monitorConfigAlarm.level=='ERROR'}? true : false">
+                                                <input type="radio" name="level" value="FATAL" title="FATAL"
+                                                       th:checked="${monitorConfigAlarm.level=='FATAL'}? true : false">
+                                            </div>
+                                        </div>
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label" style="text-align: left;">方式</label>
+                                            <div class="layui-input-block">
+                                                <input type="radio" name="way" value="MAIL" title="邮件"
+                                                       th:checked="${monitorConfigAlarm.way=='MAIL'}? true : false">
+                                                <input type="radio" name="way" value="SMS" title="短信"
+                                                       th:checked="${monitorConfigAlarm.way=='SMS'}? true : false">
+                                            </div>
+                                        </div>
+                                        <div class="layui-card">
+                                            <div class="layui-card-header">邮件</div>
+                                            <div class="layui-card-body" pad20>
+                                                <div class="layui-form-item layui-form-text">
+                                                    <label class="layui-form-label"
+                                                           style="text-align: left;">收件人邮箱</label>
+                                                    <div class="layui-input-block">
+                                                        <textarea name="emills" class="layui-textarea"
+                                                                  th:text="${monitorConfigAlarmMail.emills}"></textarea>
+                                                        <div class="layui-form-mid layui-word-aux">收件人邮箱地址，多个邮箱地址用英文分号隔开
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="layui-card">
+                                            <div class="layui-card-header">短信</div>
+                                            <div class="layui-card-body" pad20>
+                                                <div class="layui-form-item layui-form-text">
+                                                    <label class="layui-form-label"
+                                                           style="text-align: left;">收信人号码</label>
+                                                    <div class="layui-input-block">
+                                                        <textarea name="phoneNumbers" class="layui-textarea"
+                                                                  th:text="${monitorConfigAlarmSms.phoneNumbers}"></textarea>
+                                                        <div class="layui-form-mid layui-word-aux">收信人手机号码，多个手机号码用英文分号隔开
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="layui-form-item">
+                                                    <label class="layui-form-label"
+                                                           style="text-align: left;">接口地址</label>
+                                                    <div class="layui-input-block">
+                                                        <input type="text" name="address" class="layui-input"
+                                                               th:value="${monitorConfigAlarmSms.address}">
+                                                    </div>
+                                                </div>
+                                                <div class="layui-form-item">
+                                                    <label class="layui-form-label"
+                                                           style="text-align: left;">接口协议</label>
+                                                    <div class="layui-input-block">
+                                                        <input type="radio" name="protocol"
+                                                               th:value="${monitorConfigAlarmSms.protocol}"
+                                                               th:title="${monitorConfigAlarmSms.protocol}"
+                                                               th:checked="${monitorConfigAlarmSms.protocol=='HTTP'}? true : false">
+                                                    </div>
+                                                </div>
+                                                <div class="layui-form-item">
+                                                    <label class="layui-form-label"
+                                                           style="text-align: left;">接口企业</label>
+                                                    <div class="layui-input-block">
+                                                        <input type="radio" name="enterprise"
+                                                               th:value="${monitorConfigAlarmSms.enterprise}"
+                                                               th:title="${monitorConfigAlarmSms.enterprise}"
+                                                               th:checked="${monitorConfigAlarmSms.enterprise=='transfar'}? true : false">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-input-block">
+                                <button type="submit" class="layui-btn" lay-submit="" lay-filter="config-info">立即提交
+                                </button>
+                                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
-        <div class="layui-col-md9">
-            <div class="layadmin-homepage-content">
-                <div class="layui-card text-center">
-                    <div class="layui-card-body">
-                        你的内容 9/12
-                    </div>
-                </div>
-            </div>
+            </form>
         </div>
     </div>
 </div>
@@ -49,30 +167,13 @@
         base: ctxPath //静态资源所在路径
     }).extend({
         index: 'lib/index', //主入口模块
-    }).use(['index', 'element', 'tree'], function () {
-        var tree = layui.tree;
-        //渲染
-        var inst1 = tree.render({
-            elem: '#config-tree',  //绑定元素
-            onlyIconControl: true,
-            data: [{
-                spread: true,
-                title: '监控', //一级菜单
-                children: [{
-                    spread: true,
-                    title: '网络'//二级菜单
-                }, {
-                    spread: true,
-                    title: '告警', //二级菜单
-                    children: [{
-                        spread: true,
-                        title: '短信告警' //三级菜单
-                    }, {
-                        spread: true,
-                        title: '邮件告警' //三级菜单
-                    }]
-                }]
-            }]
+    }).use(['index', 'element', 'form'], function () {
+        var admin = layui.admin;
+        var form = layui.form;
+        form.render();
+        // 监听信息提交
+        form.on('submit(config-info)', function (data) {
+            return false;
         });
     });
 </script>

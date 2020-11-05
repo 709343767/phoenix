@@ -12,7 +12,7 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * <p>
@@ -42,11 +42,10 @@ public class MonitorConfig implements Serializable {
 
     @ApiModelProperty(value = "插入时间")
     @TableField("INSERT_TIME")
-    private LocalDateTime insertTime;
+    private Date insertTime;
 
     @ApiModelProperty(value = "更新时间")
     @TableField("UPDATE_TIME")
-    private LocalDateTime updateTime;
-
+    private Date updateTime;
 
 }
