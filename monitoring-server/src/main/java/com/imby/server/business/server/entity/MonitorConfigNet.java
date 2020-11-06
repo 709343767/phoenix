@@ -33,7 +33,7 @@ public class MonitorConfigNet {
     private Long id;
 
     /**
-     * 网络告警是否打开
+     * 网络监控是否打开
      */
     @TableField("ENABLE")
     private Integer enable;

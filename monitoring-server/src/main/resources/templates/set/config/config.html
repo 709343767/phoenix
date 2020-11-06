@@ -67,22 +67,22 @@
                                         <div class="layui-form-item">
                                             <label class="layui-form-label" style="text-align: left;">级别</label>
                                             <div class="layui-input-block">
-                                                <input type="radio" name="level" value="INFO" title="INFO"
+                                                <input type="radio" name="alarmLevel" value="INFO" title="INFO"
                                                        th:checked="${monitorConfigAlarm.level=='INFO'}? true : false">
-                                                <input type="radio" name="level" value="WARN" title="WARN"
+                                                <input type="radio" name="alarmLevel" value="WARN" title="WARN"
                                                        th:checked="${monitorConfigAlarm.level=='WARN'}? true : false">
-                                                <input type="radio" name="level" value="ERROR" title="ERROR"
+                                                <input type="radio" name="alarmLevel" value="ERROR" title="ERROR"
                                                        th:checked="${monitorConfigAlarm.level=='ERROR'}? true : false">
-                                                <input type="radio" name="level" value="FATAL" title="FATAL"
+                                                <input type="radio" name="alarmLevel" value="FATAL" title="FATAL"
                                                        th:checked="${monitorConfigAlarm.level=='FATAL'}? true : false">
                                             </div>
                                         </div>
                                         <div class="layui-form-item">
                                             <label class="layui-form-label" style="text-align: left;">方式</label>
                                             <div class="layui-input-block">
-                                                <input type="radio" name="way" value="MAIL" title="邮件"
+                                                <input type="radio" name="alarmWay" value="MAIL" title="邮件"
                                                        th:checked="${monitorConfigAlarm.way=='MAIL'}? true : false">
-                                                <input type="radio" name="way" value="SMS" title="短信"
+                                                <input type="radio" name="alarmWay" value="SMS" title="短信"
                                                        th:checked="${monitorConfigAlarm.way=='SMS'}? true : false">
                                             </div>
                                         </div>
@@ -93,7 +93,8 @@
                                                     <label class="layui-form-label"
                                                            style="text-align: left;">收件人邮箱</label>
                                                     <div class="layui-input-block">
-                                                        <textarea name="emills" class="layui-textarea"
+                                                        <textarea name="alarmMailEmills" class="layui-textarea"
+                                                                  lay-verify="required" lay-verType="tips"
                                                                   th:text="${monitorConfigAlarmMail.emills}"></textarea>
                                                         <div class="layui-form-mid layui-word-aux">收件人邮箱地址，多个邮箱地址用英文分号隔开
                                                         </div>
@@ -108,7 +109,8 @@
                                                     <label class="layui-form-label"
                                                            style="text-align: left;">收信人号码</label>
                                                     <div class="layui-input-block">
-                                                        <textarea name="phoneNumbers" class="layui-textarea"
+                                                        <textarea name="alarmSmsPhoneNumbers" class="layui-textarea"
+                                                                  lay-verify="required" lay-verType="tips"
                                                                   th:text="${monitorConfigAlarmSms.phoneNumbers}"></textarea>
                                                         <div class="layui-form-mid layui-word-aux">收信人手机号码，多个手机号码用英文分号隔开
                                                         </div>
@@ -118,7 +120,8 @@
                                                     <label class="layui-form-label"
                                                            style="text-align: left;">接口地址</label>
                                                     <div class="layui-input-block">
-                                                        <input type="text" name="address" class="layui-input"
+                                                        <input type="text" name="alarmSmsAddress" class="layui-input"
+                                                               lay-verify="required" lay-verType="tips"
                                                                th:value="${monitorConfigAlarmSms.address}">
                                                     </div>
                                                 </div>
@@ -126,7 +129,7 @@
                                                     <label class="layui-form-label"
                                                            style="text-align: left;">接口协议</label>
                                                     <div class="layui-input-block">
-                                                        <input type="radio" name="protocol"
+                                                        <input type="radio" name="alarmSmsProtocol"
                                                                th:value="${monitorConfigAlarmSms.protocol}"
                                                                th:title="${monitorConfigAlarmSms.protocol}"
                                                                th:checked="${monitorConfigAlarmSms.protocol=='HTTP'}? true : false">
@@ -136,7 +139,7 @@
                                                     <label class="layui-form-label"
                                                            style="text-align: left;">接口企业</label>
                                                     <div class="layui-input-block">
-                                                        <input type="radio" name="enterprise"
+                                                        <input type="radio" name="alarmSmsEnterprise"
                                                                th:value="${monitorConfigAlarmSms.enterprise}"
                                                                th:title="${monitorConfigAlarmSms.enterprise}"
                                                                th:checked="${monitorConfigAlarmSms.enterprise=='transfar'}? true : false">
@@ -150,7 +153,7 @@
                         </div>
                         <div class="layui-form-item">
                             <div class="layui-input-block">
-                                <button type="submit" class="layui-btn" lay-submit="" lay-filter="config-info">立即提交
+                                <button type="submit" class="layui-btn" lay-submit="" lay-filter="config-info">保存
                                 </button>
                                 <button type="reset" class="layui-btn layui-btn-primary">重置</button>
                             </div>
@@ -162,7 +165,7 @@
     </div>
 </div>
 <script src="./layui/layui.js" th:src="@{/layui/layui.js}"></script>
-<script>
+<script charset="utf-8" th:inline="javascript">
     layui.config({
         base: ctxPath //静态资源所在路径
     }).extend({
@@ -173,6 +176,28 @@
         form.render();
         // 监听信息提交
         form.on('submit(config-info)', function (data) {
+            // 修改用户信息
+            admin.req({
+                type: 'post',
+                url: ctxPath + 'monitor-config/',
+                data: data.field,
+                dataType: 'json',
+                headers: {
+                    [[${_csrf.headerName}]]: [[${_csrf.token}]]
+                },
+                success: function (result) {
+                    var data = result.data;
+                    if (data === webConst.SUCCESS) {
+                        layer.msg('保存成功！', {icon: 6});
+                    } else {
+                        layer.msg('保存失败！', {icon: 5, shift: 6});
+                    }
+                },
+                error: function () {
+                    layer.msg('系统错误！', {icon: 5, shift: 6});
+                }
+            });
+            debugger;
             return false;
         });
     });

@@ -44,7 +44,7 @@ public class MonitorConfigAlarm implements Serializable {
     @TableField("LEVEL")
     private String level;
 
-    @ApiModelProperty(value = "监控告警方式(MAIL、SMS)，多种告警方式用英文分号隔开")
+    @ApiModelProperty(value = "监控告警方式(MAIL、SMS、...)，多种告警方式用英文分号隔开")
     @TableField("WAY")
     private String way;
 

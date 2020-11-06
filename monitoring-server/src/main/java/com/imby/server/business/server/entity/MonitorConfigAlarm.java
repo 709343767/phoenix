@@ -45,7 +45,7 @@ public class MonitorConfigAlarm {
     private String level;
 
     /**
-     * 监控告警方式(MAIL、SMS)，多种告警方式用英文分号隔开
+     * 监控告警方式(MAIL、SMS、...)，多种告警方式用英文分号隔开
      */
     @TableField("WAY")
     private String way;

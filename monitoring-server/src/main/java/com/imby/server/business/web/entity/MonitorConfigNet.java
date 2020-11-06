@@ -36,7 +36,7 @@ public class MonitorConfigNet implements Serializable {
     @TableId(value = "ID", type = IdType.AUTO)
     private Long id;
 
-    @ApiModelProperty(value = "网络告警是否打开")
+    @ApiModelProperty(value = "网络监控是否打开")
     @TableField("ENABLE")
     private Integer enable;
 
