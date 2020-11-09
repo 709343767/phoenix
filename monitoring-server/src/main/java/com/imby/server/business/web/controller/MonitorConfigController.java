@@ -3,12 +3,17 @@ package com.imby.server.business.web.controller;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.imby.server.business.web.entity.*;
 import com.imby.server.business.web.service.*;
+import com.imby.server.business.web.vo.LayUiAdminResultVo;
+import com.imby.server.business.web.vo.MonitorConfigPageFormVo;
+import com.imby.server.constant.WebResponseConstants;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
@@ -78,5 +83,26 @@ public class MonitorConfigController {
                 .addObject(monitorConfigAlarmMail)
                 .addObject(monitorConfigAlarmSms);
         return mv;
+    }
+
+    /**
+     * <p>
+     * 更新监控配置
+     * </p>
+     *
+     * @param monitorConfigPageFormVo 监控配置页面表单对象
+     * @return layUiAdmin响应对象：如果更新监控配置成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @author 皮锋
+     * @custom.date 2020/11/9 19:56
+     */
+    @ApiOperation(value = "更新监控配置")
+    @ResponseBody
+    @PostMapping("/update-monitor-config")
+    public LayUiAdminResultVo updateMonitorConfig(MonitorConfigPageFormVo monitorConfigPageFormVo) {
+        boolean b = this.monitorConfigService.update(monitorConfigPageFormVo);
+        if (b) {
+            return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);
+        }
+        return LayUiAdminResultVo.ok(WebResponseConstants.FAIL);
     }
 }

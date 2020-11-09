@@ -1,8 +1,8 @@
 package com.imby.server.business.server.service.impl;
 
+import com.imby.server.business.server.core.MonitoringConfigPropertiesLoader;
 import com.imby.server.business.server.domain.TransfarSms;
 import com.imby.server.business.server.service.ISmsService;
-import com.imby.server.business.server.property.MonitoringProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,12 +26,6 @@ public class SmsServiceImpl implements ISmsService {
     private RestTemplate restTemplate;
 
     /**
-     * 监控配置属性
-     */
-    @Autowired
-    private MonitoringProperties config;
-
-    /**
      * <p>
      * 调用创发的短信接口发送短信
      * </p>
@@ -43,7 +37,7 @@ public class SmsServiceImpl implements ISmsService {
      */
     @Override
     public boolean sendSmsByTransfarApi(TransfarSms sms) {
-        String alarmSmsAddress = this.config.getAlarmProperties().getSmsProperties().getAddress();
+        String alarmSmsAddress = MonitoringConfigPropertiesLoader.getMonitoringProperties().getAlarmProperties().getSmsProperties().getAddress();
         // URL地址
         String url = alarmSmsAddress + "?phone=" + sms.getPhone() + "&type=" + sms.getType() + "&content="
                 + sms.getContent() + "&identity=" + sms.getIdentity();

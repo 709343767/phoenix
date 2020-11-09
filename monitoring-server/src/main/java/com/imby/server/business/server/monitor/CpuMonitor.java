@@ -6,12 +6,12 @@ import com.imby.common.constant.DateTimeStylesEnums;
 import com.imby.common.domain.Alarm;
 import com.imby.common.dto.AlarmPackage;
 import com.imby.common.exception.NetException;
+import com.imby.server.business.server.core.MonitoringConfigPropertiesLoader;
 import com.imby.server.business.server.core.PackageConstructor;
 import com.imby.server.business.server.domain.Cpu;
 import com.imby.server.business.server.pool.CpuPool;
 import com.imby.server.business.server.service.IAlarmService;
 import com.imby.server.inf.IServerMonitoringListener;
-import com.imby.server.business.server.property.MonitoringProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.hyperic.sigar.SigarException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,12 +46,6 @@ public class CpuMonitor implements IServerMonitoringListener {
     private IAlarmService alarmService;
 
     /**
-     * 监控配置属性
-     */
-    @Autowired
-    private MonitoringProperties monitoringProperties;
-
-    /**
      * <p>
      * 监控CPU使用率，发送CPU过载告警信息
      * </p>
@@ -67,7 +61,7 @@ public class CpuMonitor implements IServerMonitoringListener {
         String key = String.valueOf(obj[0]);
         Cpu cpu = this.cpuPool.get(key);
         // 最终确认CPU过载的阈值
-        long threshold = this.monitoringProperties.getThreshold();
+        long threshold = MonitoringConfigPropertiesLoader.getMonitoringProperties().getThreshold();
         // 平均CPU使用率
         double avgCpuCombined = cpu.getAvgCpuCombined();
         // 平均CPU使用率大于90%

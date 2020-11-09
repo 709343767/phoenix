@@ -8,13 +8,13 @@ import com.imby.common.constant.ZeroOrOneConstants;
 import com.imby.common.domain.Alarm;
 import com.imby.common.domain.Result;
 import com.imby.common.dto.AlarmPackage;
+import com.imby.server.business.server.core.MonitoringConfigPropertiesLoader;
 import com.imby.server.business.server.dao.IMonitorAlarmDefinitionDao;
 import com.imby.server.business.server.dao.IMonitorAlarmRecordDao;
 import com.imby.server.business.server.domain.Mail;
 import com.imby.server.business.server.domain.TransfarSms;
 import com.imby.server.business.server.entity.MonitorAlarmDefinition;
 import com.imby.server.business.server.entity.MonitorAlarmRecord;
-import com.imby.server.business.server.property.MonitoringProperties;
 import com.imby.server.business.server.service.IAlarmService;
 import com.imby.server.business.server.service.IMailService;
 import com.imby.server.business.server.service.ISmsService;
@@ -53,12 +53,6 @@ public class AlarmServiceImpl implements IAlarmService {
      */
     @Autowired
     private IMailService mailService;
-
-    /**
-     * 监控配置属性
-     */
-    @Autowired
-    private MonitoringProperties config;
 
     /**
      * 监控告警定义数据访问对象
@@ -115,7 +109,7 @@ public class AlarmServiceImpl implements IAlarmService {
         // 告警内容
         String alarmMsg = alarm.getMsg();
         // 告警方式
-        String[] alarmWays = this.config.getAlarmProperties().getWay();
+        String[] alarmWays = MonitoringConfigPropertiesLoader.getMonitoringProperties().getAlarmProperties().getWay();
         // 是否发送告警信息
         if (!this.isSendAlarm(result, alarm)) {
             return;
@@ -218,7 +212,7 @@ public class AlarmServiceImpl implements IAlarmService {
      */
     private boolean isSendAlarm(Result result, Alarm alarm) {
         // 告警开关是否打开
-        boolean isEnable = this.config.getAlarmProperties().isEnable();
+        boolean isEnable = MonitoringConfigPropertiesLoader.getMonitoringProperties().getAlarmProperties().isEnable();
         // 告警开关没有打开，不做处理，直接返回
         if (!isEnable) {
             String expMsg = "告警开关没有打开，不发送告警信息！";
@@ -234,7 +228,7 @@ public class AlarmServiceImpl implements IAlarmService {
             return false;
         }
         // 告警级别
-        String configAlarmLevel = this.config.getAlarmProperties().getLevel();
+        String configAlarmLevel = MonitoringConfigPropertiesLoader.getMonitoringProperties().getAlarmProperties().getLevel();
         // 告警级别
         String level = alarm.getAlarmLevel().name();
         // 告警级别小于配置的告警级别，不做处理，直接返回
@@ -260,7 +254,7 @@ public class AlarmServiceImpl implements IAlarmService {
             return false;
         }
         // 告警方式
-        String[] alarmWays = this.config.getAlarmProperties().getWay();
+        String[] alarmWays = MonitoringConfigPropertiesLoader.getMonitoringProperties().getAlarmProperties().getWay();
         // 没有配置告警方式，不做处理，直接返回
         if (ArrayUtil.isEmpty(alarmWays)) {
             String expMsg = "没有配置告警方式，不发送告警信息！";
@@ -357,12 +351,12 @@ public class AlarmServiceImpl implements IAlarmService {
         for (String alarmWay : alarmWays) {
             // 告警方式为短信告警
             if (StringUtils.equalsIgnoreCase(alarmWay, AlarmWayEnums.SMS.name())) {
-                String[] phones = this.config.getAlarmProperties().getSmsProperties().getPhoneNumbers();
+                String[] phones = MonitoringConfigPropertiesLoader.getMonitoringProperties().getAlarmProperties().getSmsProperties().getPhoneNumbers();
                 monitorAlarmRecord.setNumber(StringUtils.join(phones, ";"));
             }
             // 告警方式为邮件告警
             else if (StringUtils.equalsIgnoreCase(alarmWay, AlarmWayEnums.MAIL.name())) {
-                String[] mails = this.config.getAlarmProperties().getMailProperties().getEmills();
+                String[] mails = MonitoringConfigPropertiesLoader.getMonitoringProperties().getAlarmProperties().getMailProperties().getEmills();
                 monitorAlarmRecord.setNumber(StringUtils.join(mails, ";"));
             }
             monitorAlarmRecord.setWay(alarmWay);
@@ -386,7 +380,7 @@ public class AlarmServiceImpl implements IAlarmService {
      */
     private void dealSmsAlarm(Result result, String alarmTitle, String msg, String level) {
         // 短信接口商家
-        String enterprise = this.config.getAlarmProperties().getSmsProperties().getEnterprise();
+        String enterprise = MonitoringConfigPropertiesLoader.getMonitoringProperties().getAlarmProperties().getSmsProperties().getEnterprise();
         // 判断短信接口商家，不同的商家调用不同的接口
         if (StringUtils.equalsIgnoreCase(EnterpriseConstants.TRANSFAR, enterprise)) {
             // 调用创发短信接口
@@ -407,8 +401,8 @@ public class AlarmServiceImpl implements IAlarmService {
      * @custom.date 2020年3月10日 下午3:19:36
      */
     private void callTransfarSmsApi(Result result, String alarmTitle, String msg, String level) {
-        String[] phones = this.config.getAlarmProperties().getSmsProperties().getPhoneNumbers();
-        String enterprise = this.config.getAlarmProperties().getSmsProperties().getEnterprise();
+        String[] phones = MonitoringConfigPropertiesLoader.getMonitoringProperties().getAlarmProperties().getSmsProperties().getPhoneNumbers();
+        String enterprise = MonitoringConfigPropertiesLoader.getMonitoringProperties().getAlarmProperties().getSmsProperties().getEnterprise();
         // 短信不支持<br>标签换行
         String text = msg.replace("<br>", "");
         TransfarSms transfarSms = TransfarSms.builder()
@@ -444,7 +438,7 @@ public class AlarmServiceImpl implements IAlarmService {
      */
     private void dealMailAlarm(Result result, String alarmTitle, String msg, String level) {
         Mail mail = Mail.builder()
-                .email(this.config.getAlarmProperties().getMailProperties().getEmills())
+                .email(MonitoringConfigPropertiesLoader.getMonitoringProperties().getAlarmProperties().getMailProperties().getEmills())
                 .title(alarmTitle)
                 .content(msg)
                 .level(level)

@@ -1,7 +1,8 @@
 package com.imby.server.business.web.service;
 
-import com.imby.server.business.web.entity.MonitorConfig;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.imby.server.business.web.entity.MonitorConfig;
+import com.imby.server.business.web.vo.MonitorConfigPageFormVo;
 
 /**
  * <p>
@@ -12,5 +13,17 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2020-11-04
  */
 public interface IMonitorConfigService extends IService<MonitorConfig> {
+
+    /**
+     * <p>
+     * 更新监控配置
+     * </p>
+     *
+     * @param monitorConfigPageFormVo 监控配置页面表单对象
+     * @return 是否更新成功
+     * @author 皮锋
+     * @custom.date 2020/11/9 20:11
+     */
+    boolean update(MonitorConfigPageFormVo monitorConfigPageFormVo);
 
 }

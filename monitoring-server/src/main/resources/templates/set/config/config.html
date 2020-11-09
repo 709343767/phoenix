@@ -41,26 +41,26 @@
                                     <div class="layui-form-mid layui-word-aux">1到10，共10级，值越小监控越灵敏</div>
                                 </div>
                                 <div class="layui-card">
-                                    <div class="layui-card-header">网络</div>
+                                    <div class="layui-card-header div-font-weight">网络</div>
                                     <div class="layui-card-body" pad20>
                                         <div class="layui-form-item">
                                             <label class="layui-form-label" style="text-align: left;">是否监控</label>
                                             <div class="layui-input-inline">
                                                 <input type="checkbox" name="netEnable" lay-text="是|否"
-                                                       th:value="${monitorConfigNet.enable}" lay-skin="switch"
+                                                       th:value=1 lay-skin="switch"
                                                        th:checked="${monitorConfigNet.enable==1}? true : false">
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="layui-card">
-                                    <div class="layui-card-header">告警</div>
+                                    <div class="layui-card-header div-font-weight">告警</div>
                                     <div class="layui-card-body" pad20>
                                         <div class="layui-form-item">
                                             <label class="layui-form-label" style="text-align: left;">是否告警</label>
                                             <div class="layui-input-inline">
                                                 <input type="checkbox" name="alarmEnable" lay-text="是|否"
-                                                       th:value="${monitorConfigAlarm.enable}" lay-skin="switch"
+                                                       th:value=1 lay-skin="switch"
                                                        th:checked="${monitorConfigAlarm.enable==1}? true : false">
                                             </div>
                                         </div>
@@ -87,7 +87,7 @@
                                             </div>
                                         </div>
                                         <div class="layui-card">
-                                            <div class="layui-card-header">邮件</div>
+                                            <div class="layui-card-header div-font-weight">邮件</div>
                                             <div class="layui-card-body" pad20>
                                                 <div class="layui-form-item layui-form-text">
                                                     <label class="layui-form-label"
@@ -103,7 +103,7 @@
                                             </div>
                                         </div>
                                         <div class="layui-card">
-                                            <div class="layui-card-header">短信</div>
+                                            <div class="layui-card-header div-font-weight">短信</div>
                                             <div class="layui-card-body" pad20>
                                                 <div class="layui-form-item layui-form-text">
                                                     <label class="layui-form-label"
@@ -164,6 +164,7 @@
         </div>
     </div>
 </div>
+<script src="./js/common.js" th:src="@{/js/common.js}" charset="utf-8"></script>
 <script src="./layui/layui.js" th:src="@{/layui/layui.js}"></script>
 <script charset="utf-8" th:inline="javascript">
     layui.config({
@@ -179,7 +180,7 @@
             // 修改用户信息
             admin.req({
                 type: 'post',
-                url: ctxPath + 'monitor-config/',
+                url: ctxPath + 'monitor-config/update-monitor-config',
                 data: data.field,
                 dataType: 'json',
                 headers: {
@@ -197,7 +198,6 @@
                     layer.msg('系统错误！', {icon: 5, shift: 6});
                 }
             });
-            debugger;
             return false;
         });
     });

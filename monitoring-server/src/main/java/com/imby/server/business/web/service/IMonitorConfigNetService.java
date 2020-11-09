@@ -1,7 +1,7 @@
 package com.imby.server.business.web.service;
 
-import com.imby.server.business.web.entity.MonitorConfigNet;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.imby.server.business.web.entity.MonitorConfigNet;
 
 /**
  * <p>
@@ -12,5 +12,4 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2020-11-04
  */
 public interface IMonitorConfigNetService extends IService<MonitorConfigNet> {
-
 }

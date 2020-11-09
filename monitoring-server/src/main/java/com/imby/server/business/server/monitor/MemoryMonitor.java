@@ -6,12 +6,12 @@ import com.imby.common.constant.DateTimeStylesEnums;
 import com.imby.common.domain.Alarm;
 import com.imby.common.dto.AlarmPackage;
 import com.imby.common.exception.NetException;
+import com.imby.server.business.server.core.MonitoringConfigPropertiesLoader;
 import com.imby.server.business.server.core.PackageConstructor;
 import com.imby.server.business.server.domain.Memory;
 import com.imby.server.business.server.pool.MemoryPool;
 import com.imby.server.business.server.service.IAlarmService;
 import com.imby.server.inf.IServerMonitoringListener;
-import com.imby.server.business.server.property.MonitoringProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.hyperic.sigar.SigarException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,12 +46,6 @@ public class MemoryMonitor implements IServerMonitoringListener {
     private IAlarmService alarmService;
 
     /**
-     * 监控配置属性
-     */
-    @Autowired
-    private MonitoringProperties monitoringProperties;
-
-    /**
      * <p>
      * 监控内存使用率，发送内存过载告警信息
      * </p>
@@ -76,7 +70,7 @@ public class MemoryMonitor implements IServerMonitoringListener {
                 int num = memory.getNum();
                 memory.setNum(num + 1);
                 // 最终确认内存过载的阈值
-                int threshold = this.monitoringProperties.getThreshold();
+                int threshold = MonitoringConfigPropertiesLoader.getMonitoringProperties().getThreshold();
                 if (num > threshold) {
                     // 处理物理内存过载
                     this.dealMemoryOverLoad(memory);

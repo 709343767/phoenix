@@ -3,9 +3,9 @@ package com.imby.server.business.server.aop;
 import com.alibaba.fastjson.JSON;
 import com.imby.common.dto.HeartbeatPackage;
 import com.imby.server.business.server.controller.HeartbeatController;
+import com.imby.server.business.server.core.MonitoringConfigPropertiesLoader;
 import com.imby.server.business.server.domain.Instance;
 import com.imby.server.business.server.pool.InstancePool;
-import com.imby.server.business.server.property.MonitoringProperties;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -33,12 +33,6 @@ public class InstanceAspect {
      */
     @Autowired
     private InstancePool instancePool;
-
-    /**
-     * 监控配置属性
-     */
-    @Autowired
-    private MonitoringProperties config;
 
     /**
      * <p>
@@ -92,7 +86,7 @@ public class InstanceAspect {
         instance.setOnline(true);
         instance.setDateTime(new Date());
         instance.setLineAlarm(this.instancePool.get(key) != null && this.instancePool.get(key).isLineAlarm());
-        instance.setThresholdSecond((int) (heartbeatPackage.getRate() * this.config.getThreshold()));
+        instance.setThresholdSecond((int) (heartbeatPackage.getRate() * MonitoringConfigPropertiesLoader.getMonitoringProperties().getThreshold()));
         // 更新应用实例池
         this.instancePool.updateInstancePool(key, instance);
     }

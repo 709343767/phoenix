@@ -1,10 +1,19 @@
 package com.imby.server.business.web.service.impl;
 
-import com.imby.server.business.web.entity.MonitorConfig;
-import com.imby.server.business.web.dao.IMonitorConfigDao;
-import com.imby.server.business.web.service.IMonitorConfigService;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.imby.common.threadpool.ThreadPool;
+import com.imby.server.business.web.dao.*;
+import com.imby.server.business.web.entity.*;
+import com.imby.server.business.web.service.IMonitorConfigService;
+import com.imby.server.business.web.vo.MonitorConfigPageFormVo;
+import com.imby.server.inf.IMonitorConfigListener;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Date;
+import java.util.List;
 
 /**
  * <p>
@@ -16,5 +25,88 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class MonitorConfigServiceImpl extends ServiceImpl<IMonitorConfigDao, MonitorConfig> implements IMonitorConfigService {
+
+    /**
+     * 监控配置数据访问对象
+     */
+    @Autowired
+    private IMonitorConfigDao monitorConfigDao;
+
+    /**
+     * 监控网络配置数据访问对象
+     */
+    @Autowired
+    private IMonitorConfigNetDao monitorConfigNetDao;
+
+    /**
+     * 监控告警配置数据访问对象
+     */
+    @Autowired
+    private IMonitorConfigAlarmDao monitorConfigAlarmDao;
+
+    /**
+     * 监控邮件告警配置数据访问对象
+     */
+    @Autowired
+    private IMonitorConfigAlarmMailDao monitorConfigAlarmMailDao;
+
+    /**
+     * 监控短信告警配置数据访问对象
+     */
+    @Autowired
+    private IMonitorConfigAlarmSmsDao monitorConfigAlarmSmsDao;
+
+    /**
+     * 监控配置监听器
+     */
+    @Autowired
+    private List<IMonitorConfigListener> monitorConfigListeners;
+
+    /**
+     * <p>
+     * 更新监控配置
+     * </p>
+     *
+     * @param monitorConfigPageFormVo 监控配置页面表单对象
+     * @return 是否更新成功
+     * @author 皮锋
+     * @custom.date 2020/11/9 20:11
+     */
+    @Override
+    @Transactional(rollbackFor = Throwable.class)
+    public boolean update(MonitorConfigPageFormVo monitorConfigPageFormVo) {
+        //更新时间
+        Date updateTime = new Date();
+        this.monitorConfigDao.update(MonitorConfig.builder()
+                .threshold(monitorConfigPageFormVo.getThreshold())
+                .updateTime(updateTime)
+                .build(), new UpdateWrapper<>());
+        this.monitorConfigNetDao.update(MonitorConfigNet.builder()
+                .enable(monitorConfigPageFormVo.getNetEnable())
+                .updateTime(updateTime)
+                .build(), new UpdateWrapper<>());
+        this.monitorConfigAlarmDao.update(MonitorConfigAlarm.builder()
+                .enable(monitorConfigPageFormVo.getAlarmEnable())
+                .level(monitorConfigPageFormVo.getAlarmLevel())
+                .way(monitorConfigPageFormVo.getAlarmWay())
+                .updateTime(updateTime)
+                .build(), new UpdateWrapper<>());
+        this.monitorConfigAlarmMailDao.update(MonitorConfigAlarmMail.builder()
+                .emills(monitorConfigPageFormVo.getAlarmMailEmills())
+                .updateTime(updateTime)
+                .build(), new UpdateWrapper<>());
+        this.monitorConfigAlarmSmsDao.update(MonitorConfigAlarmSms.builder()
+                .address(monitorConfigPageFormVo.getAlarmSmsAddress())
+                .enterprise(monitorConfigPageFormVo.getAlarmSmsEnterprise())
+                .phoneNumbers(monitorConfigPageFormVo.getAlarmSmsPhoneNumbers())
+                .protocol(monitorConfigPageFormVo.getAlarmSmsProtocol())
+                .updateTime(updateTime)
+                .build(), new UpdateWrapper<>());
+        // 调用监听器回调接口
+        this.monitorConfigListeners.forEach(e ->
+                ThreadPool.COMMON_CPU_INTENSIVE_THREAD_POOL.execute(() ->
+                        e.wakeUpMonitoringConfigPropertiesLoader()));
+        return true;
+    }
 
 }
