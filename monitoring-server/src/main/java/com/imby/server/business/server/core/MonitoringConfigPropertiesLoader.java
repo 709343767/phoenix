@@ -46,13 +46,26 @@ public class MonitoringConfigPropertiesLoader implements IMonitorConfigListener 
      * @author 皮锋
      * @custom.date 2020/11/9 22:18
      */
-    public static MonitoringProperties getMonitoringProperties() {
+    public static synchronized MonitoringProperties getMonitoringProperties() {
         return monitoringProperties;
     }
 
     /**
      * <p>
-     * TODO
+     * 设置监控配置属性
+     * </p>
+     *
+     * @param properties {@link MonitoringProperties}
+     * @author 皮锋
+     * @custom.date 2020/11/10 8:43
+     */
+    private static synchronized void setMonitoringProperties(MonitoringProperties properties) {
+        monitoringProperties = properties;
+    }
+
+    /**
+     * <p>
+     * 项目启动时从数据库中获取监控服务端配置，并保存到静态变量中。
      * </p>
      *
      * @author 皮锋
@@ -60,7 +73,7 @@ public class MonitoringConfigPropertiesLoader implements IMonitorConfigListener 
      */
     @Bean
     public void init() {
-        monitoringProperties = this.loadAllMonitorConfig();
+        setMonitoringProperties(this.loadAllMonitorConfig());
     }
 
     /**
@@ -68,6 +81,7 @@ public class MonitoringConfigPropertiesLoader implements IMonitorConfigListener 
      * 获取监控配置属性
      * </p>
      *
+     * @return {@link MonitoringProperties}
      * @author 皮锋
      * @custom.date 2020/11/4 13:01
      */
@@ -98,12 +112,12 @@ public class MonitoringConfigPropertiesLoader implements IMonitorConfigListener 
         MonitoringNetworkProperties monitoringNetworkProperties = new MonitoringNetworkProperties();
         monitoringNetworkProperties.setMonitoringEnable(monitorConfigNet.getEnable().equals(1));
         // 监控配置属性
-        MonitoringProperties monitoringProperties = new MonitoringProperties();
-        monitoringProperties.setThreshold(monitorConfig.getThreshold());
-        monitoringProperties.setAlarmProperties(monitoringAlarmProperties);
-        monitoringProperties.setNetworkProperties(monitoringNetworkProperties);
+        MonitoringProperties properties = new MonitoringProperties();
+        properties.setThreshold(monitorConfig.getThreshold());
+        properties.setAlarmProperties(monitoringAlarmProperties);
+        properties.setNetworkProperties(monitoringNetworkProperties);
         log.info("监控服务端配置加载成功！");
-        return monitoringProperties;
+        return properties;
     }
 
     /**
@@ -117,7 +131,7 @@ public class MonitoringConfigPropertiesLoader implements IMonitorConfigListener 
      */
     @Override
     public void wakeUpMonitoringConfigPropertiesLoader() {
-        monitoringProperties = this.loadAllMonitorConfig();
+        setMonitoringProperties(this.loadAllMonitorConfig());
     }
 
 }
