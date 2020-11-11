@@ -86,9 +86,9 @@ public class Monitor {
         // 2.加载配置信息
         try {
             ConfigLoader.load(configPath, configName);
-            log.info("监控程序加载配置信息成功！");
+            log.info("从监控配置文件中加载监控配置成功！");
         } catch (Exception e) {
-            log.error("监控程序加载配置信息失败！", e);
+            log.error("从监控配置文件中加载监控配置失败！", e);
             // 直接退出程序
             System.exit(0);
             return;

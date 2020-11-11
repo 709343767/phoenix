@@ -116,7 +116,7 @@ public class MonitoringConfigPropertiesLoader implements IMonitorConfigListener 
         properties.setThreshold(monitorConfig.getThreshold());
         properties.setAlarmProperties(monitoringAlarmProperties);
         properties.setNetworkProperties(monitoringNetworkProperties);
-        log.info("监控服务端配置加载成功！");
+        log.info("从数据库中加载监控服务端配置成功！");
         return properties;
     }
 
