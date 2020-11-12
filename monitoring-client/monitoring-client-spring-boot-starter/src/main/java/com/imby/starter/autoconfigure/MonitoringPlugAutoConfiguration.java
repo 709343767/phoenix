@@ -78,17 +78,13 @@ public class MonitoringPlugAutoConfiguration implements ImportBeanDefinitionRegi
         if (!StringUtils.containsIgnoreCase(configFilePath, "classpath:")) {
             throw new BadAnnotateParamException(expMsg);
         }
-        // 如果configFilePath="classpath:"
-        if (StringUtils.equals(configFilePath, "classpath:")) {
+        // 如果configFilePath="classpath:" 或者 configFilePath="classpath:/"
+        if (StringUtils.equals(configFilePath, "classpath:") || StringUtils.equals(configFilePath, "classpath:/")) {
             return "";
         }
         String[] temp = configFilePath.split(":");
         if (temp.length != 2) {
             throw new BadAnnotateParamException(expMsg);
-        }
-        // 如果configFilePath="classpath:/"
-        if (StringUtils.equals(temp[1], "/")) {
-            return "";
         }
         return temp[1];
     }

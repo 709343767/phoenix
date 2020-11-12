@@ -14,6 +14,6 @@ import org.springframework.context.annotation.Profile;
  */
 @Configuration
 @Profile("prod")
-@EnableMonitoring(configFileName = "monitoring-prod.properties")
+@EnableMonitoring(configFilePath = "classpath:/", configFileName = "monitoring-prod.properties")
 public class MonitoringAgentProdConfig {
 }
