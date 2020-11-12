@@ -83,6 +83,7 @@ public class PackageConstructor extends AbstractPackageConstructor {
         heartbeatPackage.setInstanceId(InstanceUtils.getInstanceId());
         heartbeatPackage.setInstanceName(InstanceUtils.getInstanceName());
         heartbeatPackage.setInstanceDesc(InstanceUtils.getInstanceDesc());
+        heartbeatPackage.setLanguage(ConfigLoader.MONITORING_PROPERTIES.getOwnProperties().getLanguage());
         heartbeatPackage.setIp(NetUtils.getLocalIp());
         heartbeatPackage.setComputerName(OsUtils.getComputerName());
         heartbeatPackage.setDateTime(new Date());

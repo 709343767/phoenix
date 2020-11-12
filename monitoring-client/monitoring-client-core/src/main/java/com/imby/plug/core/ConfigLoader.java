@@ -1,6 +1,7 @@
 package com.imby.plug.core;
 
 import com.imby.common.constant.EndpointTypeConstants;
+import com.imby.common.constant.LanguageTypeConstants;
 import com.imby.common.exception.ErrorConfigParamException;
 import com.imby.common.exception.NotFoundConfigFileException;
 import com.imby.common.exception.NotFoundConfigParamException;
@@ -101,6 +102,11 @@ public class ConfigLoader {
         String instanceName = StringUtils.trimToNull(properties.getProperty("monitoring.own.instance.name"));
         // 缺省[实例描述，默认没有描述信息]
         String instanceDesc = StringUtils.trimToEmpty(properties.getProperty("monitoring.own.instance.desc"));
+        // 缺省[程序语言，默认：JAVA]
+        String language = StringUtils.trimToEmpty(properties.getProperty("monitoring.own.instance.language"));
+        if (StringUtils.isBlank(language)) {
+            language = LanguageTypeConstants.JAVA;
+        }
         // 缺省[与服务端或者代理端发心跳包的频率（秒），默认30秒，最小不能小于30秒]
         String heartbeatRateStr = StringUtils.trimToNull(properties.getProperty("monitoring.heartbeat.rate"));
         long heartbeatRate = StringUtils.isBlank(heartbeatRateStr) ? 30L : Long.parseLong(heartbeatRateStr);
@@ -138,7 +144,7 @@ public class ConfigLoader {
         }
         // 封装数据
         wrapMonitoringServerProperties(serverUrl);
-        wrapMonitoringOwnProperties(instanceOrder, instanceEndpoint, instanceName, instanceDesc);
+        wrapMonitoringOwnProperties(instanceOrder, instanceEndpoint, instanceName, instanceDesc, language);
         wrapMonitoringHeartbeatProperties(heartbeatRate);
         wrapMonitoringServerInfoProperties(serverInfoEnable, serverInfoRate);
         wrapMonitoringJvmInfoProperties(jvmInfoEnable, jvmInfoRate);
@@ -168,15 +174,17 @@ public class ConfigLoader {
      * @param instanceEndpoint 实例端点类型（服务端、代理端、客户端）
      * @param instanceName     实例名称
      * @param instanceDesc     实例描述
+     * @param language         程序语言
      * @author 皮锋
      * @custom.date 2020/10/27 20:29
      */
-    private static void wrapMonitoringOwnProperties(int instanceOrder, String instanceEndpoint, String instanceName, String instanceDesc) {
+    private static void wrapMonitoringOwnProperties(int instanceOrder, String instanceEndpoint, String instanceName, String instanceDesc, String language) {
         MonitoringOwnProperties ownProperties = new MonitoringOwnProperties();
         ownProperties.setInstanceOrder(instanceOrder);
         ownProperties.setInstanceEndpoint(instanceEndpoint);
         ownProperties.setInstanceName(instanceName);
         ownProperties.setInstanceDesc(instanceDesc);
+        ownProperties.setLanguage(language);
         MONITORING_PROPERTIES.setOwnProperties(ownProperties);
     }
 

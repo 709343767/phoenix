@@ -2,7 +2,6 @@ package com.imby.server.business.server.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
-import com.imby.common.constant.LanguageTypeConstants;
 import com.imby.common.constant.ResultMsgConstants;
 import com.imby.common.constant.ZeroOrOneConstants;
 import com.imby.common.domain.Result;
@@ -70,7 +69,7 @@ public class HeartbeatServiceImpl implements IHeartbeatService {
         entity.setEndpoint(heartbeatPackage.getEndpoint());
         entity.setIp(heartbeatPackage.getIp());
         entity.setIsOnLine(ZeroOrOneConstants.ONE);
-        entity.setLanguage(LanguageTypeConstants.JAVA);
+        entity.setLanguage(heartbeatPackage.getLanguage());
         // 查询数据库中有没有当前应用实例
         LambdaQueryWrapper<MonitorInstance> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         lambdaQueryWrapper.eq(MonitorInstance::getInstanceId, instanceId);

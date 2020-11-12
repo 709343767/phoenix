@@ -39,4 +39,9 @@ public class MonitoringOwnProperties {
      */
     private String instanceDesc;
 
+    /**
+     * 程序语言
+     */
+    private String language;
+
 }

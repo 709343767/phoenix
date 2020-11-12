@@ -42,6 +42,11 @@ public abstract class AbstractInstanceBean extends AbstractSuperBean {
     protected String instanceDesc;
 
     /**
+     * 程序语言
+     */
+    protected String language;
+
+    /**
      * IP地址
      */
     protected String ip;
