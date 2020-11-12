@@ -1,8 +1,8 @@
 package com.imby.starter.autoconfigure;
 
+import com.imby.common.exception.BadAnnotateParamException;
 import com.imby.plug.Monitor;
 import com.imby.starter.annotation.EnableMonitoring;
-import com.imby.common.exception.BadAnnotateParamException;
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
@@ -78,9 +78,17 @@ public class MonitoringPlugAutoConfiguration implements ImportBeanDefinitionRegi
         if (!StringUtils.containsIgnoreCase(configFilePath, "classpath:")) {
             throw new BadAnnotateParamException(expMsg);
         }
+        // 如果configFilePath="classpath:"
+        if (StringUtils.equals(configFilePath, "classpath:")) {
+            return "";
+        }
         String[] temp = configFilePath.split(":");
         if (temp.length != 2) {
             throw new BadAnnotateParamException(expMsg);
+        }
+        // 如果configFilePath="classpath:/"
+        if (StringUtils.equals(temp[1], "/")) {
+            return "";
         }
         return temp[1];
     }
