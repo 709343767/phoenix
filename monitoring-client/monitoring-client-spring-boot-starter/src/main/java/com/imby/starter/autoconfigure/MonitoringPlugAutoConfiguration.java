@@ -6,23 +6,27 @@ import com.imby.starter.annotation.EnableMonitoring;
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
+import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportBeanDefinitionRegistrar;
+import org.springframework.core.Ordered;
 import org.springframework.core.annotation.AnnotationAttributes;
 import org.springframework.core.type.AnnotationMetadata;
 
 /**
  * <p>
- * 监控客户端自动配置类
+ * 监控客户端自动配置类。
  * </p>
+ * 1.最小优先级；<br>
+ * 2.只应用于spring boot项目。<br>
  *
  * @author 皮锋
  * @custom.date 2020/3/13 15:40
  */
 @Configuration
-// 只应用于spring boot项目
+@AutoConfigureOrder(Ordered.LOWEST_PRECEDENCE)
 @ConditionalOnClass({SpringBootApplication.class})
 public class MonitoringPlugAutoConfiguration implements ImportBeanDefinitionRegistrar {
 
