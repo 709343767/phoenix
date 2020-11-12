@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 /**
  * <p>
  * 本SpringApplication类提供了一个方便的方式来引导该从Spring应用程序的main()方法开始。<br>
- * 在许多情况下，您可以委托给静态SpringApplication.run方法
+ * 在许多情况下，您可以委托给静态SpringApplication.run方法。
  * </p>
  *
  * @author 皮锋
@@ -20,10 +20,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  */
 @SpringBootApplication
 @ComponentScan(nameGenerator = UniqueBeanNameGenerator.class)
-// 启用spring的任务调度
 @EnableScheduling
 @EnableAsync
-// 启用事务管理
 @EnableTransactionManagement
 public class ServerApplication extends CustomizationBeanHandler {
 
