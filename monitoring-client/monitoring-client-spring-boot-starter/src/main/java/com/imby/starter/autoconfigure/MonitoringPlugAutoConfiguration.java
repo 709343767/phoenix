@@ -19,7 +19,7 @@ import org.springframework.core.type.AnnotationMetadata;
  * <p>
  * 监控客户端自动配置类。
  * </p>
- * 1.最小优先级；<br>
+ * 1.最低优先级；<br>
  * 2.只应用于spring boot项目。<br>
  *
  * @author 皮锋
