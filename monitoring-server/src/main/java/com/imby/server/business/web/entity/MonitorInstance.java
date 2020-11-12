@@ -68,8 +68,8 @@ public class MonitorInstance implements Serializable {
     @TableField("IS_ONLINE")
     private String isOnline;
 
-    @ApiModelProperty(value = "网络状态（0：断网，1：网络正常）")
-    @TableField("IS_ONCONNECT")
-    private String isOnconnect;
+    @ApiModelProperty(value = "程序语言")
+    @TableField("LANGUAGE")
+    private String language;
 
 }

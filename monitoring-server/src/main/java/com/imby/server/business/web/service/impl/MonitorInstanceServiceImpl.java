@@ -109,13 +109,12 @@ public class MonitorInstanceServiceImpl extends ServiceImpl<IMonitorInstanceDao,
      * @param instanceName 应用实例名
      * @param endpoint     端点
      * @param isOnline     应用状态
-     * @param isOnconnect  网络状态
      * @return layUiAdmin响应对象
      * @author 皮锋
      * @custom.date 2020/9/26 11:02
      */
     @Override
-    public Page<MonitorInstanceVo> getMonitorInstanceList(Long current, Long size, String instanceName, String endpoint, String isOnline, String isOnconnect) {
+    public Page<MonitorInstanceVo> getMonitorInstanceList(Long current, Long size, String instanceName, String endpoint, String isOnline) {
         // 查询数据库
         IPage<MonitorInstance> ipage = new Page<>(current, size);
         LambdaQueryWrapper<MonitorInstance> lambdaQueryWrapper = new LambdaQueryWrapper<>();
@@ -127,9 +126,6 @@ public class MonitorInstanceServiceImpl extends ServiceImpl<IMonitorInstanceDao,
         }
         if (StringUtils.isNotBlank(isOnline)) {
             lambdaQueryWrapper.eq(MonitorInstance::getIsOnline, isOnline);
-        }
-        if (StringUtils.isNotBlank(isOnconnect)) {
-            lambdaQueryWrapper.eq(MonitorInstance::getIsOnconnect, isOnconnect);
         }
         IPage<MonitorInstance> monitorInstancePage = this.monitorInstanceDao.selectPage(ipage, lambdaQueryWrapper);
         List<MonitorInstance> monitorInstances = monitorInstancePage.getRecords();

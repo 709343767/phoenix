@@ -51,16 +51,6 @@
                     </div>
                 </div>
                 <div class="layui-inline">
-                    <label class="layui-form-label">网络状态</label>
-                    <div class="layui-input-block">
-                        <select name="isOnconnect">
-                            <option value="">所有</option>
-                            <option value="0">断网</option>
-                            <option value="1">正常</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="layui-inline">
                     <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="list-table-search">
                         <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
                     </button>
@@ -128,14 +118,6 @@
                         $(this).text('在线');
                     }
                 });
-                $('[data-field="isOnconnect"]').children().each(function () {
-                    if ($(this).text() === '0') {
-                        $(this).html('<span style="color: #FF4500;">断网</span>');
-                    }
-                    if ($(this).text() === '1') {
-                        $(this).text('正常');
-                    }
-                });
                 $('[data-field="endpoint"]').children().each(function () {
                     if ($(this).text() === 'client') {
                         $(this).text('客户端');
@@ -181,8 +163,8 @@
                     title: '应用状态',
                     sort: !0
                 }, {
-                    field: 'isOnconnect',
-                    title: '网络状态',
+                    field: 'language',
+                    title: '程序语言',
                     sort: !0
                 }, {
                     field: 'insertTime',

@@ -81,9 +81,9 @@ public class MonitorInstance {
     private String isOnLine;
 
     /**
-     * 网络状态（0：断网，1：网络正常）
+     * 编程语言
      */
-    @TableField("IS_ONCONNECT")
-    private String isOnConnect;
+    @TableField("LANGUAGE")
+    private String language;
 
 }

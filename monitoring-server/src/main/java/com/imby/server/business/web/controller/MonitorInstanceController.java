@@ -66,7 +66,6 @@ public class MonitorInstanceController {
      * @param instanceName 应用实例名
      * @param endpoint     端点
      * @param isOnline     应用状态
-     * @param isOnconnect  网络状态
      * @return layUiAdmin响应对象
      * @author 皮锋
      * @custom.date 2020/9/26 10:59
@@ -77,12 +76,11 @@ public class MonitorInstanceController {
             @ApiImplicitParam(name = "size", value = "每页显示条数", required = true, paramType = "query", dataType = "long"),
             @ApiImplicitParam(name = "instanceName", value = "应用实例名", paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "endpoint", value = "端点", paramType = "query", dataType = "string"),
-            @ApiImplicitParam(name = "isOnline", value = "应用状态", paramType = "query", dataType = "string"),
-            @ApiImplicitParam(name = "isOnconnect", value = "网络状态", paramType = "query", dataType = "string")})
+            @ApiImplicitParam(name = "isOnline", value = "应用状态", paramType = "query", dataType = "string")})
     @GetMapping("/get-monitor-instance-list")
     @ResponseBody
-    public LayUiAdminResultVo getMonitorInstanceList(Long current, Long size, String instanceName, String endpoint, String isOnline, String isOnconnect) {
-        Page<MonitorInstanceVo> page = this.monitorInstanceService.getMonitorInstanceList(current, size, instanceName, endpoint, isOnline, isOnconnect);
+    public LayUiAdminResultVo getMonitorInstanceList(Long current, Long size, String instanceName, String endpoint, String isOnline) {
+        Page<MonitorInstanceVo> page = this.monitorInstanceService.getMonitorInstanceList(current, size, instanceName, endpoint, isOnline);
         return LayUiAdminResultVo.ok(page);
     }
 

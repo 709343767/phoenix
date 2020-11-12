@@ -59,8 +59,8 @@ public class MonitorInstanceVo implements ISuperBean {
     @ApiModelProperty(value = "应用状态（0：离线，1：在线）")
     private String isOnline;
 
-    @ApiModelProperty(value = "网络状态（0：断网，1：网络正常）")
-    private String isOnconnect;
+    @ApiModelProperty(value = "程序语言")
+    private String language;
 
     /**
      * <p>
