@@ -31,7 +31,7 @@ public class ServerTaskScheduler {
 
     /**
      * <p>
-     * 如果监控配置文件中配置了发送服务器信息，则延迟10秒启动定时任务，定时发送服务器信息包，
+     * 如果监控配置文件中配置了发送服务器信息，则延迟40秒启动定时任务，定时发送服务器信息包，
      * 定时任务的执行频率一般为监控配置文件中配置的服务器信息包发送频率，如果监控配置文件中没有配置服务器信息包的发送频率，
      * 则由类{@link ConfigLoader}提供默认的发送服务器信息频率。
      * </p>
@@ -52,7 +52,7 @@ public class ServerTaskScheduler {
                             .build());
             // 发送服务器信息的频率
             long rate = ConfigLoader.MONITORING_PROPERTIES.getServerInfoProperties().getRate();
-            seService.scheduleAtFixedRate(new ServerThread(), 10, rate, TimeUnit.SECONDS);
+            seService.scheduleAtFixedRate(new ServerThread(), 40, rate, TimeUnit.SECONDS);
         }
     }
 }
