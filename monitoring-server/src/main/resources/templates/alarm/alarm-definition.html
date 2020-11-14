@@ -22,7 +22,7 @@
 <div class="layui-fluid">
     <div class="layui-card">
         <div class="layui-form layui-card-header layuiadmin-card-header-auto">
-            <div class="layui-form-item">
+            <form class="layui-form-item" onsubmit="return false;">
                 <div class="layui-inline">
                     <label class="layui-form-label">告警类型</label>
                     <div class="layui-input-block">
@@ -64,8 +64,9 @@
                             lay-filter="alarm-definition-list-table-search">
                         <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
                     </button>
+                    <button id="reset" type="reset" class="layui-btn">清空</button>
                 </div>
-            </div>
+            </form>
         </div>
 
         <div class="layui-card-body">
