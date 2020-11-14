@@ -3,6 +3,7 @@ package com.imby.agent.core;
 import cn.hutool.core.util.IdUtil;
 import com.imby.common.abs.AbstractPackageConstructor;
 import com.imby.common.constant.EndpointTypeConstants;
+import com.imby.common.constant.LanguageTypeConstants;
 import com.imby.common.domain.Alarm;
 import com.imby.common.domain.Result;
 import com.imby.common.dto.AlarmPackage;
@@ -10,6 +11,7 @@ import com.imby.common.dto.BaseResponsePackage;
 import com.imby.common.exception.NetException;
 import com.imby.common.util.NetUtils;
 import com.imby.common.util.OsUtils;
+import com.imby.plug.core.ConfigLoader;
 import com.imby.plug.util.InstanceUtils;
 import lombok.SneakyThrows;
 import org.hyperic.sigar.SigarException;
@@ -45,10 +47,11 @@ public class PackageConstructor extends AbstractPackageConstructor {
         AlarmPackage alarmPackage = new AlarmPackage();
         alarmPackage.setId(IdUtil.randomUUID());
         alarmPackage.setDateTime(new Date());
-        alarmPackage.setEndpoint(EndpointTypeConstants.AGENT);
+        alarmPackage.setInstanceEndpoint(EndpointTypeConstants.AGENT);
         alarmPackage.setInstanceId(InstanceUtils.getInstanceId());
-        alarmPackage.setInstanceName(InstanceUtils.getInstanceName());
-        alarmPackage.setInstanceDesc(InstanceUtils.getInstanceDesc());
+        alarmPackage.setInstanceName(ConfigLoader.MONITORING_PROPERTIES.getOwnProperties().getInstanceName());
+        alarmPackage.setInstanceDesc(ConfigLoader.MONITORING_PROPERTIES.getOwnProperties().getInstanceDesc());
+        alarmPackage.setInstanceLanguage(LanguageTypeConstants.JAVA);
         alarmPackage.setIp(NetUtils.getLocalIp());
         alarmPackage.setComputerName(OsUtils.getComputerName());
         // 判断字符集
@@ -77,10 +80,11 @@ public class PackageConstructor extends AbstractPackageConstructor {
     @Override
     public BaseResponsePackage structureBaseResponsePackage(Result result) {
         BaseResponsePackage baseResponsePackage = new BaseResponsePackage();
-        baseResponsePackage.setEndpoint(EndpointTypeConstants.AGENT);
+        baseResponsePackage.setInstanceEndpoint(EndpointTypeConstants.AGENT);
         baseResponsePackage.setInstanceId(InstanceUtils.getInstanceId());
-        baseResponsePackage.setInstanceName(InstanceUtils.getInstanceName());
-        baseResponsePackage.setInstanceDesc(InstanceUtils.getInstanceDesc());
+        baseResponsePackage.setInstanceName(ConfigLoader.MONITORING_PROPERTIES.getOwnProperties().getInstanceName());
+        baseResponsePackage.setInstanceDesc(ConfigLoader.MONITORING_PROPERTIES.getOwnProperties().getInstanceDesc());
+        baseResponsePackage.setInstanceLanguage(LanguageTypeConstants.JAVA);
         baseResponsePackage.setIp(NetUtils.getLocalIp());
         baseResponsePackage.setComputerName(OsUtils.getComputerName());
         baseResponsePackage.setDateTime(new Date());

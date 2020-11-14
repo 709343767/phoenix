@@ -22,9 +22,9 @@ import lombok.experimental.Accessors;
 public abstract class AbstractInstanceBean extends AbstractSuperBean {
 
     /**
-     * 端点（服务端、代理端、客户端）
+     * 应用实例端点（服务端、代理端、客户端）
      */
-    protected String endpoint;
+    protected String instanceEndpoint;
 
     /**
      * 应用实例ID
@@ -42,9 +42,9 @@ public abstract class AbstractInstanceBean extends AbstractSuperBean {
     protected String instanceDesc;
 
     /**
-     * 程序语言
+     * 应用实例程序语言
      */
-    protected String language;
+    protected String instanceLanguage;
 
     /**
      * IP地址

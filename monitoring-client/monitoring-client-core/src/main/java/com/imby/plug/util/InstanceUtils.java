@@ -25,16 +25,6 @@ public class InstanceUtils {
     private static String instanceId;
 
     /**
-     * 应用名字
-     */
-    private static String instanceName;
-
-    /**
-     * 应用描述
-     */
-    private static String instanceDesc;
-
-    /**
      * <p>
      * 获取应用实例ID
      * </p>
@@ -51,43 +41,13 @@ public class InstanceUtils {
         }
         String mac = NetUtils.getLocalMac();
         String ip = NetUtils.getLocalIp();
+        // 实例次序（不能重复）
         int order = ConfigLoader.MONITORING_PROPERTIES.getOwnProperties().getInstanceOrder();
-        instanceId = Md5Utils.encrypt(mac + ip + order + getInstanceName());
+        // 实例名称
+        String instanceName = ConfigLoader.MONITORING_PROPERTIES.getOwnProperties().getInstanceName();
+        // 实例ID
+        instanceId = Md5Utils.encrypt(mac + ip + order + instanceName);
         return instanceId;
-    }
-
-    /**
-     * <p>
-     * 获取应用实例名字
-     * </p>
-     *
-     * @return 应用实例名字
-     * @author 皮锋
-     * @custom.date 2020年3月6日 下午9:16:00
-     */
-    public static String getInstanceName() {
-        if (StringUtils.isNotEmpty(instanceName)) {
-            return instanceName;
-        }
-        instanceName = ConfigLoader.MONITORING_PROPERTIES.getOwnProperties().getInstanceName();
-        return instanceName;
-    }
-
-    /**
-     * <p>
-     * 获取应用实例描述
-     * </p>
-     *
-     * @return 应用实例描述
-     * @author 皮锋
-     * @custom.date 2020/7/31 17:44
-     */
-    public static String getInstanceDesc() {
-        if (StringUtils.isNotEmpty(instanceDesc)) {
-            return instanceDesc;
-        }
-        instanceDesc = ConfigLoader.MONITORING_PROPERTIES.getOwnProperties().getInstanceDesc();
-        return instanceDesc;
     }
 
     public static void main(String[] args) throws InterruptedException, NetException, SigarException {

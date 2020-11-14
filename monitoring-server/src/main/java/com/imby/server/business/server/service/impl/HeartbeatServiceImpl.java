@@ -66,10 +66,10 @@ public class HeartbeatServiceImpl implements IHeartbeatService {
         entity.setInstanceId(instanceId);
         entity.setInstanceName(heartbeatPackage.getInstanceName());
         entity.setInstanceDesc(heartbeatPackage.getInstanceDesc());
-        entity.setEndpoint(heartbeatPackage.getEndpoint());
+        entity.setEndpoint(heartbeatPackage.getInstanceEndpoint());
         entity.setIp(heartbeatPackage.getIp());
         entity.setIsOnLine(ZeroOrOneConstants.ONE);
-        entity.setLanguage(heartbeatPackage.getLanguage());
+        entity.setLanguage(heartbeatPackage.getInstanceLanguage());
         // 查询数据库中有没有当前应用实例
         LambdaQueryWrapper<MonitorInstance> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         lambdaQueryWrapper.eq(MonitorInstance::getInstanceId, instanceId);

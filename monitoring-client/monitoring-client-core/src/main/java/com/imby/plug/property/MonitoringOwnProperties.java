@@ -42,6 +42,6 @@ public class MonitoringOwnProperties {
     /**
      * 程序语言
      */
-    private String language;
+    private String instanceLanguage;
 
 }

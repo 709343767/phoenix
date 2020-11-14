@@ -46,10 +46,11 @@ public class PackageConstructor extends AbstractPackageConstructor {
         AlarmPackage alarmPackage = new AlarmPackage();
         alarmPackage.setId(IdUtil.randomUUID());
         alarmPackage.setDateTime(new Date());
-        alarmPackage.setEndpoint(ConfigLoader.MONITORING_PROPERTIES.getOwnProperties().getInstanceEndpoint());
+        alarmPackage.setInstanceEndpoint(ConfigLoader.MONITORING_PROPERTIES.getOwnProperties().getInstanceEndpoint());
         alarmPackage.setInstanceId(InstanceUtils.getInstanceId());
-        alarmPackage.setInstanceName(InstanceUtils.getInstanceName());
-        alarmPackage.setInstanceDesc(InstanceUtils.getInstanceDesc());
+        alarmPackage.setInstanceName(ConfigLoader.MONITORING_PROPERTIES.getOwnProperties().getInstanceName());
+        alarmPackage.setInstanceDesc(ConfigLoader.MONITORING_PROPERTIES.getOwnProperties().getInstanceDesc());
+        alarmPackage.setInstanceLanguage(ConfigLoader.MONITORING_PROPERTIES.getOwnProperties().getInstanceLanguage());
         alarmPackage.setIp(NetUtils.getLocalIp());
         alarmPackage.setComputerName(OsUtils.getComputerName());
         // 判断字符集
@@ -79,11 +80,11 @@ public class PackageConstructor extends AbstractPackageConstructor {
     public HeartbeatPackage structureHeartbeatPackage() throws NetException, SigarException {
         HeartbeatPackage heartbeatPackage = new HeartbeatPackage();
         heartbeatPackage.setId(IdUtil.randomUUID());
-        heartbeatPackage.setEndpoint(ConfigLoader.MONITORING_PROPERTIES.getOwnProperties().getInstanceEndpoint());
+        heartbeatPackage.setInstanceEndpoint(ConfigLoader.MONITORING_PROPERTIES.getOwnProperties().getInstanceEndpoint());
         heartbeatPackage.setInstanceId(InstanceUtils.getInstanceId());
-        heartbeatPackage.setInstanceName(InstanceUtils.getInstanceName());
-        heartbeatPackage.setInstanceDesc(InstanceUtils.getInstanceDesc());
-        heartbeatPackage.setLanguage(ConfigLoader.MONITORING_PROPERTIES.getOwnProperties().getLanguage());
+        heartbeatPackage.setInstanceName(ConfigLoader.MONITORING_PROPERTIES.getOwnProperties().getInstanceName());
+        heartbeatPackage.setInstanceDesc(ConfigLoader.MONITORING_PROPERTIES.getOwnProperties().getInstanceDesc());
+        heartbeatPackage.setInstanceLanguage(ConfigLoader.MONITORING_PROPERTIES.getOwnProperties().getInstanceLanguage());
         heartbeatPackage.setIp(NetUtils.getLocalIp());
         heartbeatPackage.setComputerName(OsUtils.getComputerName());
         heartbeatPackage.setDateTime(new Date());
@@ -107,10 +108,11 @@ public class PackageConstructor extends AbstractPackageConstructor {
         ServerPackage serverPackage = new ServerPackage();
         serverPackage.setId(IdUtil.randomUUID());
         serverPackage.setDateTime(new Date());
-        serverPackage.setEndpoint(ConfigLoader.MONITORING_PROPERTIES.getOwnProperties().getInstanceEndpoint());
+        serverPackage.setInstanceEndpoint(ConfigLoader.MONITORING_PROPERTIES.getOwnProperties().getInstanceEndpoint());
         serverPackage.setInstanceId(InstanceUtils.getInstanceId());
-        serverPackage.setInstanceName(InstanceUtils.getInstanceName());
-        serverPackage.setInstanceDesc(InstanceUtils.getInstanceDesc());
+        serverPackage.setInstanceName(ConfigLoader.MONITORING_PROPERTIES.getOwnProperties().getInstanceName());
+        serverPackage.setInstanceDesc(ConfigLoader.MONITORING_PROPERTIES.getOwnProperties().getInstanceDesc());
+        serverPackage.setInstanceLanguage(ConfigLoader.MONITORING_PROPERTIES.getOwnProperties().getInstanceLanguage());
         serverPackage.setIp(NetUtils.getLocalIp());
         serverPackage.setComputerName(OsUtils.getComputerName());
         serverPackage.setServer(ServerUtils.getServerInfo());
@@ -134,10 +136,11 @@ public class PackageConstructor extends AbstractPackageConstructor {
         JvmPackage jvmPackage = new JvmPackage();
         jvmPackage.setId(IdUtil.randomUUID());
         jvmPackage.setDateTime(new Date());
-        jvmPackage.setEndpoint(ConfigLoader.MONITORING_PROPERTIES.getOwnProperties().getInstanceEndpoint());
+        jvmPackage.setInstanceEndpoint(ConfigLoader.MONITORING_PROPERTIES.getOwnProperties().getInstanceEndpoint());
         jvmPackage.setInstanceId(InstanceUtils.getInstanceId());
-        jvmPackage.setInstanceName(InstanceUtils.getInstanceName());
-        jvmPackage.setInstanceDesc(InstanceUtils.getInstanceDesc());
+        jvmPackage.setInstanceName(ConfigLoader.MONITORING_PROPERTIES.getOwnProperties().getInstanceName());
+        jvmPackage.setInstanceDesc(ConfigLoader.MONITORING_PROPERTIES.getOwnProperties().getInstanceDesc());
+        jvmPackage.setInstanceLanguage(ConfigLoader.MONITORING_PROPERTIES.getOwnProperties().getInstanceLanguage());
         jvmPackage.setIp(NetUtils.getLocalIp());
         jvmPackage.setComputerName(OsUtils.getComputerName());
         jvmPackage.setJvm(JvmUtils.getJvmInfo());

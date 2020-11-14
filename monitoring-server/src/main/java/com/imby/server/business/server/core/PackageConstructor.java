@@ -3,6 +3,7 @@ package com.imby.server.business.server.core;
 import cn.hutool.core.util.IdUtil;
 import com.imby.common.abs.AbstractPackageConstructor;
 import com.imby.common.constant.EndpointTypeConstants;
+import com.imby.common.constant.LanguageTypeConstants;
 import com.imby.common.domain.Alarm;
 import com.imby.common.domain.Result;
 import com.imby.common.dto.AlarmPackage;
@@ -45,10 +46,11 @@ public class PackageConstructor extends AbstractPackageConstructor {
         AlarmPackage alarmPackage = new AlarmPackage();
         alarmPackage.setId(IdUtil.randomUUID());
         alarmPackage.setDateTime(new Date());
-        alarmPackage.setEndpoint(EndpointTypeConstants.SERVER);
+        alarmPackage.setInstanceEndpoint(EndpointTypeConstants.SERVER);
         alarmPackage.setInstanceId(InstanceUtils.getInstanceId());
         alarmPackage.setInstanceName(InstanceUtils.getInstanceName());
         alarmPackage.setInstanceDesc(InstanceUtils.getInstanceDesc());
+        alarmPackage.setInstanceLanguage(LanguageTypeConstants.JAVA);
         alarmPackage.setIp(NetUtils.getLocalIp());
         alarmPackage.setComputerName(OsUtils.getComputerName());
         // 判断字符集
@@ -77,10 +79,11 @@ public class PackageConstructor extends AbstractPackageConstructor {
     @Override
     public BaseResponsePackage structureBaseResponsePackage(Result result) {
         BaseResponsePackage baseResponsePackage = new BaseResponsePackage();
-        baseResponsePackage.setEndpoint(EndpointTypeConstants.SERVER);
+        baseResponsePackage.setInstanceEndpoint(EndpointTypeConstants.SERVER);
         baseResponsePackage.setInstanceId(InstanceUtils.getInstanceId());
         baseResponsePackage.setInstanceName(InstanceUtils.getInstanceName());
         baseResponsePackage.setInstanceDesc(InstanceUtils.getInstanceDesc());
+        baseResponsePackage.setInstanceLanguage(LanguageTypeConstants.JAVA);
         baseResponsePackage.setIp(NetUtils.getLocalIp());
         baseResponsePackage.setComputerName(OsUtils.getComputerName());
         baseResponsePackage.setId(IdUtil.randomUUID());

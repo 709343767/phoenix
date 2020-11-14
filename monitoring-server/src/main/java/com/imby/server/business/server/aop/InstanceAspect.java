@@ -76,7 +76,7 @@ public class InstanceAspect {
         String key = heartbeatPackage.getInstanceId();
         Instance instance = new Instance();
         // 实例本身信息
-        instance.setEndpoint(heartbeatPackage.getEndpoint());
+        instance.setInstanceEndpoint(heartbeatPackage.getInstanceEndpoint());
         instance.setInstanceId(key);
         instance.setInstanceName(heartbeatPackage.getInstanceName());
         instance.setIp(heartbeatPackage.getIp());

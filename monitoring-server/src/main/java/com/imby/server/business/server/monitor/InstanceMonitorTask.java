@@ -174,7 +174,7 @@ public class InstanceMonitorTask implements CommandLineRunner {
         String msg = "应用ID：" + instance.getInstanceId()
                 + "，<br>应用名称：" + instance.getInstanceName()
                 + "，<br>应用描述：" + instance.getInstanceDesc()
-                + "，<br>应用端点：" + instance.getEndpoint()
+                + "，<br>应用端点：" + instance.getInstanceEndpoint()
                 + "，<br>IP地址：" + instance.getIp()
                 + "，<br>服务器：" + instance.getComputerName()
                 + "，<br>时间：" + DateTimeUtils.dateToString(instance.getDateTime());
