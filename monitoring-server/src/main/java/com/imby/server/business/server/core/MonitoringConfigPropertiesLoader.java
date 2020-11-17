@@ -92,6 +92,10 @@ public class MonitoringConfigPropertiesLoader implements IMonitorConfigListener 
         MonitorConfigAlarm monitorConfigAlarm = (MonitorConfigAlarm) allMonitorConfig.get("monitorConfigAlarm");
         MonitorConfigNet monitorConfigNet = (MonitorConfigNet) allMonitorConfig.get("monitorConfigNet");
         MonitorConfig monitorConfig = (MonitorConfig) allMonitorConfig.get("monitorConfig");
+        MonitorConfigServer monitorConfigServer = (MonitorConfigServer) allMonitorConfig.get("monitorConfigServer");
+        MonitorConfigServerCpu monitorConfigServerCpu = (MonitorConfigServerCpu) allMonitorConfig.get("monitorConfigServerCpu");
+        MonitorConfigServerDisk monitorConfigServerDisk = (MonitorConfigServerDisk) allMonitorConfig.get("monitorConfigServerDisk");
+        MonitorConfigServerMemory monitorConfigServerMemory = (MonitorConfigServerMemory) allMonitorConfig.get("monitorConfigServerMemory");
         // 告警邮箱配置属性
         MonitoringAlarmMailProperties monitoringAlarmMailProperties = new MonitoringAlarmMailProperties();
         monitoringAlarmMailProperties.setEmills(StrUtil.splitToArray(monitorConfigAlarmMail.getEmills(), ';'));
@@ -111,11 +115,27 @@ public class MonitoringConfigPropertiesLoader implements IMonitorConfigListener 
         // 网络配置属性
         MonitoringNetworkProperties monitoringNetworkProperties = new MonitoringNetworkProperties();
         monitoringNetworkProperties.setMonitoringEnable(monitorConfigNet.getEnable().equals(1));
+        // 服务器CPU配置属性
+        MonitoringServerCpuProperties monitoringServerCpuProperties = new MonitoringServerCpuProperties();
+        monitoringServerCpuProperties.setOverloadThreshold(monitorConfigServerCpu.getOverloadThreshold());
+        // 服务器磁盘配置属性
+        MonitoringServerDiskProperties monitoringServerDiskProperties = new MonitoringServerDiskProperties();
+        monitoringServerDiskProperties.setOverloadThreshold(monitorConfigServerDisk.getOverloadThreshold());
+        // 服务器内存配置属性
+        MonitoringServerMemoryProperties monitoringServerMemoryProperties = new MonitoringServerMemoryProperties();
+        monitoringServerMemoryProperties.setOverloadThreshold(monitorConfigServerMemory.getOverloadThreshold());
+        // 服务器配置属性
+        MonitoringServerProperties monitoringServerProperties = new MonitoringServerProperties();
+        monitoringServerProperties.setEnable(monitorConfigServer.getEnable().equals(1));
+        monitoringServerProperties.setServerCpuProperties(monitoringServerCpuProperties);
+        monitoringServerProperties.setServerDiskProperties(monitoringServerDiskProperties);
+        monitoringServerProperties.setServerMemoryProperties(monitoringServerMemoryProperties);
         // 监控配置属性
         MonitoringProperties properties = new MonitoringProperties();
         properties.setThreshold(monitorConfig.getThreshold());
         properties.setAlarmProperties(monitoringAlarmProperties);
         properties.setNetworkProperties(monitoringNetworkProperties);
+        properties.setServerProperties(monitoringServerProperties);
         log.info("从数据库中加载监控服务端配置成功！");
         return properties;
     }

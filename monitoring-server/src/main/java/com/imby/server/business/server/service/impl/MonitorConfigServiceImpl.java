@@ -52,6 +52,30 @@ public class MonitorConfigServiceImpl implements IMonitorConfigService {
     private IMonitorConfigNetDao monitorConfigNetDao;
 
     /**
+     * 监控服务器信息配置数据访问对象
+     */
+    @Autowired
+    private IMonitorConfigServerDao monitorConfigServerDao;
+
+    /**
+     * 监控服务器CPU信息配置数据访问对象
+     */
+    @Autowired
+    private IMonitorConfigServerCpuDao monitorConfigServerCpuDao;
+
+    /**
+     * 监控服务器磁盘信息配置数据访问对象
+     */
+    @Autowired
+    private IMonitorConfigServerDiskDao monitorConfigServerDiskDao;
+
+    /**
+     * 监控服务器内存信息配置数据访问对象
+     */
+    @Autowired
+    private IMonitorConfigServerMemoryDao monitorConfigServerMemoryDao;
+
+    /**
      * <p>
      * 加载所有监控配置
      * </p>
@@ -67,12 +91,20 @@ public class MonitorConfigServiceImpl implements IMonitorConfigService {
         MonitorConfigAlarm monitorConfigAlarm = this.monitorConfigAlarmDao.selectOne(new LambdaQueryWrapper<>());
         MonitorConfigAlarmMail monitorConfigAlarmMail = this.monitorConfigAlarmMailDao.selectOne(new LambdaQueryWrapper<>());
         MonitorConfigAlarmSms monitorConfigAlarmSms = this.monitorConfigAlarmSmsDao.selectOne(new LambdaQueryWrapper<>());
+        MonitorConfigServer monitorConfigServer = this.monitorConfigServerDao.selectOne(new LambdaQueryWrapper<>());
+        MonitorConfigServerCpu monitorConfigServerCpu = this.monitorConfigServerCpuDao.selectOne(new LambdaQueryWrapper<>());
+        MonitorConfigServerDisk monitorConfigServerDisk = this.monitorConfigServerDiskDao.selectOne(new LambdaQueryWrapper<>());
+        MonitorConfigServerMemory monitorConfigServerMemory = this.monitorConfigServerMemoryDao.selectOne(new LambdaQueryWrapper<>());
         Map<String, Object> map = new HashMap<>(16);
         map.put("monitorConfig", monitorConfig);
         map.put("monitorConfigNet", monitorConfigNet);
         map.put("monitorConfigAlarm", monitorConfigAlarm);
         map.put("monitorConfigAlarmMail", monitorConfigAlarmMail);
         map.put("monitorConfigAlarmSms", monitorConfigAlarmSms);
+        map.put("monitorConfigServer", monitorConfigServer);
+        map.put("monitorConfigServerCpu", monitorConfigServerCpu);
+        map.put("monitorConfigServerDisk", monitorConfigServerDisk);
+        map.put("monitorConfigServerMemory", monitorConfigServerMemory);
         return map;
     }
 

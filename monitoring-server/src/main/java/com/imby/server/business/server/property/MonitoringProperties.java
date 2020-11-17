@@ -32,4 +32,9 @@ public class MonitoringProperties {
      */
     private MonitoringNetworkProperties networkProperties;
 
+    /**
+     * 服务器属性
+     */
+    private MonitoringServerProperties serverProperties;
+
 }
