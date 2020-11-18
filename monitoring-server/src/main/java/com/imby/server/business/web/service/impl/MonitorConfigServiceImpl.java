@@ -57,6 +57,30 @@ public class MonitorConfigServiceImpl extends ServiceImpl<IMonitorConfigDao, Mon
     private IMonitorConfigAlarmSmsDao monitorConfigAlarmSmsDao;
 
     /**
+     * 监控服务器信息配置数据访问对象
+     */
+    @Autowired
+    private IMonitorConfigServerDao monitorConfigServerDao;
+
+    /**
+     * 监控服务器CPU信息配置数据访问对象
+     */
+    @Autowired
+    private IMonitorConfigServerCpuDao monitorConfigServerCpuDao;
+
+    /**
+     * 监控服务器磁盘信息配置数据访问对象
+     */
+    @Autowired
+    private IMonitorConfigServerDiskDao monitorConfigServerDiskDao;
+
+    /**
+     * 监控服务器内存信息配置数据访问对象
+     */
+    @Autowired
+    private IMonitorConfigServerMemoryDao monitorConfigServerMemoryDao;
+
+    /**
      * 监控配置监听器
      */
     @Autowired
@@ -100,6 +124,22 @@ public class MonitorConfigServiceImpl extends ServiceImpl<IMonitorConfigDao, Mon
                 .enterprise(monitorConfigPageFormVo.getAlarmSmsEnterprise())
                 .phoneNumbers(monitorConfigPageFormVo.getAlarmSmsPhoneNumbers())
                 .protocol(monitorConfigPageFormVo.getAlarmSmsProtocol())
+                .updateTime(updateTime)
+                .build(), new UpdateWrapper<>());
+        this.monitorConfigServerDao.update(MonitorConfigServer.builder()
+                .enable(monitorConfigPageFormVo.getServerEnable())
+                .updateTime(updateTime)
+                .build(), new UpdateWrapper<>());
+        this.monitorConfigServerCpuDao.update(MonitorConfigServerCpu.builder()
+                .overloadThreshold(monitorConfigPageFormVo.getServerCpuOverloadThreshold())
+                .updateTime(updateTime)
+                .build(), new UpdateWrapper<>());
+        this.monitorConfigServerDiskDao.update(MonitorConfigServerDisk.builder()
+                .overloadThreshold(monitorConfigPageFormVo.getServerDiskOverloadThreshold())
+                .updateTime(updateTime)
+                .build(), new UpdateWrapper<>());
+        this.monitorConfigServerMemoryDao.update(MonitorConfigServerMemory.builder()
+                .overloadThreshold(monitorConfigPageFormVo.getServerMemoryOverloadThreshold())
                 .updateTime(updateTime)
                 .build(), new UpdateWrapper<>());
         // 调用监听器回调接口

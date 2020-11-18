@@ -74,4 +74,24 @@ public class MonitorConfigPageFormVo implements ISuperBean {
      */
     private String alarmSmsProtocol;
 
+    /**
+     * 是否监控服务器
+     */
+    private int serverEnable;
+
+    /**
+     * CPU过载阈值
+     */
+    private double serverCpuOverloadThreshold;
+
+    /**
+     * 磁盘过载阈值
+     */
+    private double serverDiskOverloadThreshold;
+
+    /**
+     * 内存过载阈值
+     */
+    private double serverMemoryOverloadThreshold;
+
 }

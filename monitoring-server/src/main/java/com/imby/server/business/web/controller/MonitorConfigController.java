@@ -60,6 +60,30 @@ public class MonitorConfigController {
     private IMonitorConfigAlarmSmsService monitorConfigAlarmSmsService;
 
     /**
+     * 监控服务器信息配置服务类
+     */
+    @Autowired
+    private IMonitorConfigServerService monitorConfigServerService;
+
+    /**
+     * 监控服务器CPU信息配置服务类
+     */
+    @Autowired
+    private IMonitorConfigServerCpuService monitorConfigServerCpuService;
+
+    /**
+     * 监控服务器磁盘信息配置服务类
+     */
+    @Autowired
+    private IMonitorConfigServerDiskService monitorConfigServerDiskService;
+
+    /**
+     * 监控服务器内存信息配置服务类
+     */
+    @Autowired
+    private IMonitorConfigServerMemoryService monitorConfigServerMemoryService;
+
+    /**
      * <p>
      * 访问监控配置页
      * </p>
@@ -77,11 +101,19 @@ public class MonitorConfigController {
         MonitorConfigAlarm monitorConfigAlarm = this.monitorConfigAlarmService.getOne(new LambdaQueryWrapper<>());
         MonitorConfigAlarmMail monitorConfigAlarmMail = this.monitorConfigAlarmMailService.getOne(new LambdaQueryWrapper<>());
         MonitorConfigAlarmSms monitorConfigAlarmSms = this.monitorConfigAlarmSmsService.getOne(new LambdaQueryWrapper<>());
+        MonitorConfigServer monitorConfigServer = this.monitorConfigServerService.getOne(new LambdaQueryWrapper<>());
+        MonitorConfigServerCpu monitorConfigServerCpu = this.monitorConfigServerCpuService.getOne(new LambdaQueryWrapper<>());
+        MonitorConfigServerDisk monitorConfigServerDisk = this.monitorConfigServerDiskService.getOne(new LambdaQueryWrapper<>());
+        MonitorConfigServerMemory monitorConfigServerMemory = this.monitorConfigServerMemoryService.getOne(new LambdaQueryWrapper<>());
         mv.addObject(monitorConfig)
                 .addObject(monitorConfigNet)
                 .addObject(monitorConfigAlarm)
                 .addObject(monitorConfigAlarmMail)
-                .addObject(monitorConfigAlarmSms);
+                .addObject(monitorConfigAlarmSms)
+                .addObject(monitorConfigServer)
+                .addObject(monitorConfigServerCpu)
+                .addObject(monitorConfigServerDisk)
+                .addObject(monitorConfigServerMemory);
         return mv;
     }
 
@@ -105,4 +137,5 @@ public class MonitorConfigController {
         }
         return LayUiAdminResultVo.ok(WebResponseConstants.FAIL);
     }
+
 }

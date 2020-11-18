@@ -121,7 +121,7 @@
                                                            style="text-align: left;">接口地址</label>
                                                     <div class="layui-input-block">
                                                         <input type="text" name="alarmSmsAddress" class="layui-input"
-                                                               lay-verify="required" lay-verType="tips"
+                                                               lay-verify="url" lay-verType="tips"
                                                                th:value="${monitorConfigAlarmSms.address}">
                                                     </div>
                                                 </div>
@@ -143,6 +143,64 @@
                                                                th:value="${monitorConfigAlarmSms.enterprise}"
                                                                th:title="${monitorConfigAlarmSms.enterprise}"
                                                                th:checked="${monitorConfigAlarmSms.enterprise=='transfar'}? true : false">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-card">
+                                    <div class="layui-card-header div-font-weight">服务器</div>
+                                    <div class="layui-card-body" pad20>
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label" style="text-align: left;">是否监控</label>
+                                            <div class="layui-input-inline">
+                                                <input type="checkbox" name="serverEnable" lay-text="是|否"
+                                                       th:value=1 lay-skin="switch"
+                                                       th:checked="${monitorConfigServer.enable==1}? true : false">
+                                            </div>
+                                        </div>
+                                        <div class="layui-card">
+                                            <div class="layui-card-header div-font-weight">CPU</div>
+                                            <div class="layui-card-body" pad20>
+                                                <div class="layui-form-item">
+                                                    <label class="layui-form-label"
+                                                           style="text-align: left;">过载阈值(%)</label>
+                                                    <div class="layui-input-block">
+                                                        <input type="text" name="serverCpuOverloadThreshold"
+                                                               class="layui-input"
+                                                               lay-verify="number" lay-verType="tips"
+                                                               th:value="${monitorConfigServerCpu.overloadThreshold}">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="layui-card">
+                                            <div class="layui-card-header div-font-weight">内存</div>
+                                            <div class="layui-card-body" pad20>
+                                                <div class="layui-form-item">
+                                                    <label class="layui-form-label"
+                                                           style="text-align: left;">过载阈值(%)</label>
+                                                    <div class="layui-input-block">
+                                                        <input type="text" name="serverMemoryOverloadThreshold"
+                                                               class="layui-input"
+                                                               lay-verify="number" lay-verType="tips"
+                                                               th:value="${monitorConfigServerMemory.overloadThreshold}">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="layui-card">
+                                            <div class="layui-card-header div-font-weight">磁盘</div>
+                                            <div class="layui-card-body" pad20>
+                                                <div class="layui-form-item">
+                                                    <label class="layui-form-label"
+                                                           style="text-align: left;">过载阈值(%)</label>
+                                                    <div class="layui-input-block">
+                                                        <input type="text" name="serverDiskOverloadThreshold"
+                                                               class="layui-input"
+                                                               lay-verify="number" lay-verType="tips"
+                                                               th:value="${monitorConfigServerDisk.overloadThreshold}">
                                                     </div>
                                                 </div>
                                             </div>
