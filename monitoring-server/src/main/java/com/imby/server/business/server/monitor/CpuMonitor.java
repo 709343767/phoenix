@@ -72,14 +72,14 @@ public class CpuMonitor implements IServerMonitoringListener {
         double overloadThreshold = MonitoringConfigPropertiesLoader.getMonitoringProperties().getServerProperties().getServerCpuProperties().getOverloadThreshold();
         // 平均CPU使用率
         double avgCpuCombined = cpu.getAvgCpuCombined();
-        // 平均CPU使用率大于配置的过载阈值
+        // 平均CPU使用率大于等于配置的过载阈值
         if (avgCpuCombined >= overloadThreshold) {
             boolean isOverLoad = cpu.isOverLoad();
             // 没有标记平均CPU使用率大于配置的过载阈值
             if (!isOverLoad) {
                 int num = cpu.getNum();
                 cpu.setNum(num + 1);
-                if (num > threshold) {
+                if (num >= threshold) {
                     // 处理CPU过载
                     this.dealCpuOverLoad(cpu);
                 }
