@@ -27,34 +27,19 @@ import java.util.List;
 public class Cpu extends AbstractSuperBean {
 
     /**
-     * CPU过载90%次数
+     * CPU过载次数
      */
-    private int num90;
+    private int num;
 
     /**
-     * 是否已经发送过CPU过载90%告警消息
+     * 是否已经发送过CPU过载告警消息
      */
-    private boolean isAlarm90;
+    private boolean isAlarm;
 
     /**
-     * 是否确认CPU过载90%
+     * 是否确认CPU过载
      */
-    private boolean isOverLoad90;
-
-    /**
-     * CPU过载100%次数
-     */
-    private int num100;
-
-    /**
-     * 是否已经发送过CPU过载100%告警消息
-     */
-    private boolean isAlarm100;
-
-    /**
-     * 是否确认CPU过载100%
-     */
-    private boolean isOverLoad100;
+    private boolean isOverLoad;
 
     /**
      * 平均CPU使用率

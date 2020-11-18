@@ -193,12 +193,9 @@ public class ServerAspect {
         cpu.setCpuDomain(cpuDomain);
         cpu.setAvgCpuCombined(Cpu.calculateAvgCpuCombined(cpuDomain));
         Cpu poolCpu = this.cpuPool.get(ip);
-        cpu.setNum90(poolCpu != null ? poolCpu.getNum90() : 0);
-        cpu.setAlarm90(poolCpu != null && poolCpu.isAlarm90());
-        cpu.setOverLoad90(poolCpu != null && poolCpu.isOverLoad90());
-        cpu.setNum100(poolCpu != null ? poolCpu.getNum100() : 0);
-        cpu.setAlarm100(poolCpu != null && poolCpu.isAlarm100());
-        cpu.setOverLoad100(poolCpu != null && poolCpu.isOverLoad100());
+        cpu.setNum(poolCpu != null ? poolCpu.getNum() : 0);
+        cpu.setAlarm(poolCpu != null && poolCpu.isAlarm());
+        cpu.setOverLoad(poolCpu != null && poolCpu.isOverLoad());
         // 更新服务器CPU信息池
         this.cpuPool.updateCpuPool(ip, cpu);
     }

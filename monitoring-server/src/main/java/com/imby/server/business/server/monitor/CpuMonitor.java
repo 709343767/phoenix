@@ -58,85 +58,60 @@ public class CpuMonitor implements IServerMonitoringListener {
      */
     @Override
     public void wakeUpMonitor(Object... obj) throws NetException, SigarException {
+        // 是否监控服务器
+        boolean isEnable = MonitoringConfigPropertiesLoader.getMonitoringProperties().getServerProperties().isEnable();
+        // 不需要监控服务器
+        if (!isEnable) {
+            return;
+        }
         String key = String.valueOf(obj[0]);
         Cpu cpu = this.cpuPool.get(key);
-        // 最终确认CPU过载的阈值
+        // 最终确认CPU过载的阈值（次数）
         long threshold = MonitoringConfigPropertiesLoader.getMonitoringProperties().getThreshold();
+        // 过载阈值
+        double overloadThreshold = MonitoringConfigPropertiesLoader.getMonitoringProperties().getServerProperties().getServerCpuProperties().getOverloadThreshold();
         // 平均CPU使用率
         double avgCpuCombined = cpu.getAvgCpuCombined();
-        // 平均CPU使用率大于90%
-        if (avgCpuCombined > 90) {
-            boolean isOverLoad90 = cpu.isOverLoad90();
-            // 没有标记平均CPU使用率大于90%
-            if (!isOverLoad90) {
-                int num90 = cpu.getNum90();
-                cpu.setNum90(num90 + 1);
-                // 大于两倍监控阈值才认为过载90%是确认的
-                if (num90 > threshold * 2) {
-                    // 处理CPU过载90%
-                    this.dealCpuOverLoad90(cpu);
+        // 平均CPU使用率大于配置的过载阈值
+        if (avgCpuCombined >= overloadThreshold) {
+            boolean isOverLoad = cpu.isOverLoad();
+            // 没有标记平均CPU使用率大于配置的过载阈值
+            if (!isOverLoad) {
+                int num = cpu.getNum();
+                cpu.setNum(num + 1);
+                if (num > threshold) {
+                    // 处理CPU过载
+                    this.dealCpuOverLoad(cpu);
                 }
             }
         } else {
-            // 处理从过载90%恢复CPU正常
-            this.dealCpuNotOverLoad90(cpu);
+            // 处理从过载恢复CPU正常
+            this.dealCpuNotOverLoad(cpu);
         }
-        // 平均CPU使用率大于100%
-        if (avgCpuCombined > 100) {
-            boolean isOverLoad100 = cpu.isOverLoad100();
-            // 没有标记平均CPU使用率大于90%
-            if (!isOverLoad100) {
-                int num100 = cpu.getNum100();
-                cpu.setNum100(num100 + 1);
-                if (num100 > threshold) {
-                    // 处理CPU过载100%
-                    this.dealCpuOverLoad100(cpu);
-                }
-            }
-        } else {
-            // 处理从过载100%恢复CPU正常
-            this.dealCpuNotOverLoad100(cpu);
-        }
-        log.info("CPU信息池大小：{}，CPU过载90%：{}，CPU过载100%：{}，详细信息：{}",
+        log.info("CPU信息池大小：{}，CPU过载：{}，详细信息：{}",
                 this.cpuPool.size(),
-                this.cpuPool.entrySet().stream().filter(e -> e.getValue().isOverLoad90()).count(),
-                this.cpuPool.entrySet().stream().filter(e -> e.getValue().isOverLoad100()).count(),
+                this.cpuPool.entrySet().stream().filter(e -> e.getValue().isOverLoad()).count(),
                 this.cpuPool.toJsonString());
     }
 
     /**
      * <p>
-     * 处理从过载100%恢复CPU正常
+     * 处理从过载恢复CPU正常
      * </p>
      *
      * @param cpu 服务器CPU
      * @author 皮锋
      * @custom.date 2020/3/30 10:48
      */
-    private void dealCpuNotOverLoad100(Cpu cpu) {
-        cpu.setAlarm100(false);
-        cpu.setOverLoad100(false);
-        cpu.setNum100(0);
+    private void dealCpuNotOverLoad(Cpu cpu) {
+        cpu.setAlarm(false);
+        cpu.setOverLoad(false);
+        cpu.setNum(0);
     }
 
     /**
      * <p>
-     * 处理从过载90%恢复CPU正常
-     * </p>
-     *
-     * @param cpu 服务器CPU
-     * @author 皮锋
-     * @custom.date 2020/3/30 10:48
-     */
-    private void dealCpuNotOverLoad90(Cpu cpu) {
-        cpu.setAlarm90(false);
-        cpu.setOverLoad90(false);
-        cpu.setNum90(0);
-    }
-
-    /**
-     * <p>
-     * 处理CPU过载100%
+     * 处理CPU过载
      * </p>
      *
      * @param cpu 服务器CPU
@@ -145,34 +120,13 @@ public class CpuMonitor implements IServerMonitoringListener {
      * @author 皮锋
      * @custom.date 2020/3/30 10:38
      */
-    private void dealCpuOverLoad100(Cpu cpu) throws NetException, SigarException {
-        cpu.setOverLoad100(true);
-        // 是否已经发送过CPU过载100%告警消息
-        boolean isAlarm = cpu.isAlarm100();
+    private void dealCpuOverLoad(Cpu cpu) throws NetException, SigarException {
+        cpu.setOverLoad(true);
+        // 是否已经发送过CPU过载告警消息
+        boolean isAlarm = cpu.isAlarm();
         if (!isAlarm) {
-            this.sendAlarmInfo("CPU过载100%", AlarmLevelEnums.FATAL, cpu);
-            cpu.setAlarm100(true);
-        }
-    }
-
-    /**
-     * <p>
-     * 处理CPU过载90%
-     * </p>
-     *
-     * @param cpu 服务器CPU
-     * @throws NetException   获取网络信息异常
-     * @throws SigarException Sigar异常
-     * @author 皮锋
-     * @custom.date 2020/3/30 10:38
-     */
-    private void dealCpuOverLoad90(Cpu cpu) throws NetException, SigarException {
-        cpu.setOverLoad90(true);
-        // 是否已经发送过CPU过载90%告警消息
-        boolean isAlarm = cpu.isAlarm90();
-        if (!isAlarm) {
-            this.sendAlarmInfo("CPU过载90%", AlarmLevelEnums.WARN, cpu);
-            cpu.setAlarm90(true);
+            this.sendAlarmInfo("CPU过载", AlarmLevelEnums.WARN, cpu);
+            cpu.setAlarm(true);
         }
     }
 
