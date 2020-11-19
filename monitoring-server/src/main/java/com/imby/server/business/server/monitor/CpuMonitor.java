@@ -77,9 +77,8 @@ public class CpuMonitor implements IServerMonitoringListener {
             boolean isOverLoad = cpu.isOverLoad();
             // 没有标记平均CPU使用率大于配置的过载阈值
             if (!isOverLoad) {
-                int num = cpu.getNum();
-                cpu.setNum(num + 1);
-                if (num >= threshold) {
+                cpu.setNum(cpu.getNum() + 1);
+                if (cpu.getNum() >= threshold) {
                     // 处理CPU过载
                     this.dealCpuOverLoad(cpu);
                 }
