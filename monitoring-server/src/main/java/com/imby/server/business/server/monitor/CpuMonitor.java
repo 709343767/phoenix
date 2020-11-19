@@ -12,6 +12,7 @@ import com.imby.server.business.server.domain.Cpu;
 import com.imby.server.business.server.pool.CpuPool;
 import com.imby.server.business.server.service.IAlarmService;
 import com.imby.server.inf.IServerMonitoringListener;
+import com.imby.server.util.AlarmUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.hyperic.sigar.SigarException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -124,7 +125,11 @@ public class CpuMonitor implements IServerMonitoringListener {
         // 是否已经发送过CPU过载告警消息
         boolean isAlarm = cpu.isAlarm();
         if (!isAlarm) {
-            this.sendAlarmInfo("CPU过载", AlarmLevelEnums.WARN, cpu);
+            // 监控级别
+            String level = MonitoringConfigPropertiesLoader.getMonitoringProperties().getServerProperties().getServerCpuProperties().getLevel();
+            // 告警级别字符串转告警级别枚举
+            AlarmLevelEnums alarmLevel = AlarmUtils.str2Enum(level);
+            this.sendAlarmInfo("CPU过载", alarmLevel, cpu);
             cpu.setAlarm(true);
         }
     }

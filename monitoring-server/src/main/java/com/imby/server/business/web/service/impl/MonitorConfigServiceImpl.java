@@ -132,14 +132,17 @@ public class MonitorConfigServiceImpl extends ServiceImpl<IMonitorConfigDao, Mon
                 .build(), new UpdateWrapper<>());
         this.monitorConfigServerCpuDao.update(MonitorConfigServerCpu.builder()
                 .overloadThreshold(monitorConfigPageFormVo.getServerCpuOverloadThreshold())
+                .level(monitorConfigPageFormVo.getServerCpuLevel())
                 .updateTime(updateTime)
                 .build(), new UpdateWrapper<>());
         this.monitorConfigServerDiskDao.update(MonitorConfigServerDisk.builder()
                 .overloadThreshold(monitorConfigPageFormVo.getServerDiskOverloadThreshold())
+                .level(monitorConfigPageFormVo.getServerDiskLevel())
                 .updateTime(updateTime)
                 .build(), new UpdateWrapper<>());
         this.monitorConfigServerMemoryDao.update(MonitorConfigServerMemory.builder()
                 .overloadThreshold(monitorConfigPageFormVo.getServerMemoryOverloadThreshold())
+                .level(monitorConfigPageFormVo.getServerMemoryLevel())
                 .updateTime(updateTime)
                 .build(), new UpdateWrapper<>());
         // 调用监听器回调接口

@@ -39,6 +39,10 @@ public class MonitorConfigServerCpu implements Serializable {
     @TableField("OVERLOAD_THRESHOLD")
     private Double overloadThreshold;
 
+    @ApiModelProperty(value = "监控级别，四级：INFO < WARN < ERROR < FATAL")
+    @TableField("LEVEL")
+    private String level;
+
     @ApiModelProperty(value = "插入时间")
     @TableField("INSERT_TIME")
     private Date insertTime;

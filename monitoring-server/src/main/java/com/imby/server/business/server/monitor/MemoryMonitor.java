@@ -12,6 +12,7 @@ import com.imby.server.business.server.domain.Memory;
 import com.imby.server.business.server.pool.MemoryPool;
 import com.imby.server.business.server.service.IAlarmService;
 import com.imby.server.inf.IServerMonitoringListener;
+import com.imby.server.util.AlarmUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.hyperic.sigar.SigarException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -125,7 +126,11 @@ public class MemoryMonitor implements IServerMonitoringListener {
         // 是否已经发送过告警消息
         boolean isAlarm = memory.isAlarm();
         if (!isAlarm) {
-            this.sendAlarmInfo("服务器内存过载", AlarmLevelEnums.WARN, memory);
+            // 监控级别
+            String level = MonitoringConfigPropertiesLoader.getMonitoringProperties().getServerProperties().getServerMemoryProperties().getLevel();
+            // 告警级别字符串转告警级别枚举
+            AlarmLevelEnums alarmLevel = AlarmUtils.str2Enum(level);
+            this.sendAlarmInfo("服务器内存过载", alarmLevel, memory);
             memory.setAlarm(true);
         }
     }

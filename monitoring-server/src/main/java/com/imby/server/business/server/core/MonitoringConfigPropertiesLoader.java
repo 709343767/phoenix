@@ -118,12 +118,15 @@ public class MonitoringConfigPropertiesLoader implements IMonitorConfigListener 
         // 服务器CPU配置属性
         MonitoringServerCpuProperties monitoringServerCpuProperties = new MonitoringServerCpuProperties();
         monitoringServerCpuProperties.setOverloadThreshold(monitorConfigServerCpu.getOverloadThreshold());
+        monitoringServerCpuProperties.setLevel(monitorConfigServerCpu.getLevel());
         // 服务器磁盘配置属性
         MonitoringServerDiskProperties monitoringServerDiskProperties = new MonitoringServerDiskProperties();
         monitoringServerDiskProperties.setOverloadThreshold(monitorConfigServerDisk.getOverloadThreshold());
+        monitoringServerDiskProperties.setLevel(monitorConfigServerDisk.getLevel());
         // 服务器内存配置属性
         MonitoringServerMemoryProperties monitoringServerMemoryProperties = new MonitoringServerMemoryProperties();
         monitoringServerMemoryProperties.setOverloadThreshold(monitorConfigServerMemory.getOverloadThreshold());
+        monitoringServerMemoryProperties.setLevel(monitorConfigServerMemory.getLevel());
         // 服务器配置属性
         MonitoringServerProperties monitoringServerProperties = new MonitoringServerProperties();
         monitoringServerProperties.setEnable(monitorConfigServer.getEnable().equals(1));

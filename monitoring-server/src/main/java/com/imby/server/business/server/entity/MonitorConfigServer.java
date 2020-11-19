@@ -28,15 +28,27 @@ public class MonitorConfigServer implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    /**
+     * 主键ID
+     */
     @TableId("ID")
     private Long id;
 
+    /**
+     * 是否监控服务器
+     */
     @TableField("ENABLE")
     private Integer enable;
 
+    /**
+     * 新增时间
+     */
     @TableField("INSERT_TIME")
     private Date insertTime;
 
+    /**
+     * 更新时间
+     */
     @TableField("UPDATE_TIME")
     private Date updateTime;
 

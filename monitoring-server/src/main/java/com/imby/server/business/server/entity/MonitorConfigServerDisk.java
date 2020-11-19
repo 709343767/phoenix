@@ -28,15 +28,33 @@ public class MonitorConfigServerDisk implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    /**
+     * 主键ID
+     */
     @TableId("ID")
     private Long id;
 
+    /**
+     * 过载阈值
+     */
     @TableField("OVERLOAD_THRESHOLD")
     private Double overloadThreshold;
 
+    /**
+     * 监控级别，四级：INFO &#60; WARN &#60; ERROR &#60; FATAL
+     */
+    @TableField("LEVEL")
+    private String level;
+
+    /**
+     * 新增时间
+     */
     @TableField("INSERT_TIME")
     private Date insertTime;
 
+    /**
+     * 更新时间
+     */
     @TableField("UPDATE_TIME")
     private Date updateTime;
 

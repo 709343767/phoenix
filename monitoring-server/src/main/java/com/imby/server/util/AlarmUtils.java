@@ -64,4 +64,35 @@ public class AlarmUtils {
         }
         return false;
     }
+
+    /**
+     * <p>
+     * 告警级别字符串转告警级别枚举
+     * </p>
+     *
+     * @param alarmStr 告警级别字符串
+     * @return 告警级别枚举
+     * @author 皮锋
+     * @custom.date 2020/11/19 15:00
+     */
+    public static AlarmLevelEnums str2Enum(String alarmStr) {
+        // 消息
+        if (StringUtils.equalsIgnoreCase(AlarmLevelEnums.INFO.name(), alarmStr)) {
+            return AlarmLevelEnums.INFO;
+        }
+        // 警告
+        if (StringUtils.equalsIgnoreCase(AlarmLevelEnums.WARN.name(), alarmStr)) {
+            return AlarmLevelEnums.WARN;
+        }
+        // 错误
+        if (StringUtils.equalsIgnoreCase(AlarmLevelEnums.ERROR.name(), alarmStr)) {
+            return AlarmLevelEnums.ERROR;
+        }
+        // 致命
+        if (StringUtils.equalsIgnoreCase(AlarmLevelEnums.FATAL.name(), alarmStr)) {
+            return AlarmLevelEnums.FATAL;
+        }
+        return null;
+    }
+
 }

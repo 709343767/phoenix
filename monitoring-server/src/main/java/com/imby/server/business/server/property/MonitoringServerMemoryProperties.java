@@ -22,4 +22,9 @@ public class MonitoringServerMemoryProperties {
      */
     private double overloadThreshold;
 
+    /**
+     * 监控级别，四级：INFO &#60; WARN &#60; ERROR &#60; FATAL
+     */
+    private String level;
+
 }

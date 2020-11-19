@@ -12,6 +12,7 @@ import com.imby.server.business.server.domain.Disk;
 import com.imby.server.business.server.pool.DiskPool;
 import com.imby.server.business.server.service.IAlarmService;
 import com.imby.server.inf.IServerMonitoringListener;
+import com.imby.server.util.AlarmUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.hyperic.sigar.SigarException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,8 +81,12 @@ public class DiskMonitor implements IServerMonitoringListener {
                 boolean isAlarm = subregion.isAlarm();
                 subregion.setOverLoad(true);
                 if (!isAlarm) {
+                    // 监控级别
+                    String level = MonitoringConfigPropertiesLoader.getMonitoringProperties().getServerProperties().getServerDiskProperties().getLevel();
+                    // 告警级别字符串转告警级别枚举
+                    AlarmLevelEnums alarmLevel = AlarmUtils.str2Enum(level);
                     // 发送告警
-                    this.sendAlarmInfo("磁盘分区过载", AlarmLevelEnums.WARN, disk, subregion);
+                    this.sendAlarmInfo("磁盘分区过载", alarmLevel, disk, subregion);
                     subregion.setAlarm(true);
                 }
             }

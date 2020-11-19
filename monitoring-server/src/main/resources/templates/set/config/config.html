@@ -173,6 +173,23 @@
                                                                th:value="${monitorConfigServerCpu.overloadThreshold}">
                                                     </div>
                                                 </div>
+                                                <div class="layui-form-item">
+                                                    <label class="layui-form-label" style="text-align: left;">级别</label>
+                                                    <div class="layui-input-block">
+                                                        <input type="radio" name="serverCpuLevel" value="INFO"
+                                                               title="INFO"
+                                                               th:checked="${monitorConfigServerCpu.level=='INFO'}? true : false">
+                                                        <input type="radio" name="serverCpuLevel" value="WARN"
+                                                               title="WARN"
+                                                               th:checked="${monitorConfigServerCpu.level=='WARN'}? true : false">
+                                                        <input type="radio" name="serverCpuLevel" value="ERROR"
+                                                               title="ERROR"
+                                                               th:checked="${monitorConfigServerCpu.level=='ERROR'}? true : false">
+                                                        <input type="radio" name="serverCpuLevel" value="FATAL"
+                                                               title="FATAL"
+                                                               th:checked="${monitorConfigServerCpu.level=='FATAL'}? true : false">
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="layui-card">
@@ -188,6 +205,23 @@
                                                                th:value="${monitorConfigServerMemory.overloadThreshold}">
                                                     </div>
                                                 </div>
+                                                <div class="layui-form-item">
+                                                    <label class="layui-form-label" style="text-align: left;">级别</label>
+                                                    <div class="layui-input-block">
+                                                        <input type="radio" name="serverMemoryLevel" value="INFO"
+                                                               title="INFO"
+                                                               th:checked="${monitorConfigServerMemory.level=='INFO'}? true : false">
+                                                        <input type="radio" name="serverMemoryLevel" value="WARN"
+                                                               title="WARN"
+                                                               th:checked="${monitorConfigServerMemory.level=='WARN'}? true : false">
+                                                        <input type="radio" name="serverMemoryLevel" value="ERROR"
+                                                               title="ERROR"
+                                                               th:checked="${monitorConfigServerMemory.level=='ERROR'}? true : false">
+                                                        <input type="radio" name="serverMemoryLevel" value="FATAL"
+                                                               title="FATAL"
+                                                               th:checked="${monitorConfigServerMemory.level=='FATAL'}? true : false">
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="layui-card">
@@ -201,6 +235,23 @@
                                                                class="layui-input"
                                                                lay-verify="number" lay-verType="tips"
                                                                th:value="${monitorConfigServerDisk.overloadThreshold}">
+                                                    </div>
+                                                </div>
+                                                <div class="layui-form-item">
+                                                    <label class="layui-form-label" style="text-align: left;">级别</label>
+                                                    <div class="layui-input-block">
+                                                        <input type="radio" name="serverDiskLevel" value="INFO"
+                                                               title="INFO"
+                                                               th:checked="${monitorConfigServerDisk.level=='INFO'}? true : false">
+                                                        <input type="radio" name="serverDiskLevel" value="WARN"
+                                                               title="WARN"
+                                                               th:checked="${monitorConfigServerDisk.level=='WARN'}? true : false">
+                                                        <input type="radio" name="serverDiskLevel" value="ERROR"
+                                                               title="ERROR"
+                                                               th:checked="${monitorConfigServerDisk.level=='ERROR'}? true : false">
+                                                        <input type="radio" name="serverDiskLevel" value="FATAL"
+                                                               title="FATAL"
+                                                               th:checked="${monitorConfigServerDisk.level=='FATAL'}? true : false">
                                                     </div>
                                                 </div>
                                             </div>
