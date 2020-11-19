@@ -6,6 +6,7 @@ import com.imby.common.constant.DateTimeStylesEnums;
 import com.imby.common.domain.Alarm;
 import com.imby.common.dto.AlarmPackage;
 import com.imby.common.exception.NetException;
+import com.imby.server.business.server.core.MonitoringConfigPropertiesLoader;
 import com.imby.server.business.server.core.PackageConstructor;
 import com.imby.server.business.server.domain.Disk;
 import com.imby.server.business.server.pool.DiskPool;
@@ -58,6 +59,12 @@ public class DiskMonitor implements IServerMonitoringListener {
      */
     @Override
     public void wakeUpMonitor(Object... obj) throws NetException, SigarException {
+        // 是否监控服务器
+        boolean isEnable = MonitoringConfigPropertiesLoader.getMonitoringProperties().getServerProperties().isEnable();
+        // 不需要监控服务器
+        if (!isEnable) {
+            return;
+        }
         String key = String.valueOf(obj[0]);
         Disk disk = this.diskPool.get(key);
         Map<String, Disk.Subregion> subregionMap = disk.getSubregionMap();
@@ -65,8 +72,10 @@ public class DiskMonitor implements IServerMonitoringListener {
             Disk.Subregion subregion = entry.getValue();
             // 分区的盘符资源利用率
             double usePercent = subregion.getUsePercent();
-            // 利用率大于90%
-            if (usePercent > 90) {
+            //  过载阈值
+            double overloadThreshold = MonitoringConfigPropertiesLoader.getMonitoringProperties().getServerProperties().getServerDiskProperties().getOverloadThreshold();
+            // 利用率大于配置的过载阈值
+            if (usePercent >= overloadThreshold) {
                 // 是否已经发送过告警
                 boolean isAlarm = subregion.isAlarm();
                 subregion.setOverLoad(true);
