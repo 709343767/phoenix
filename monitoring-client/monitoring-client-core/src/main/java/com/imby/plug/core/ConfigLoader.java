@@ -7,6 +7,7 @@ import com.imby.common.exception.NotFoundConfigFileException;
 import com.imby.common.exception.NotFoundConfigParamException;
 import com.imby.common.util.PropertiesUtils;
 import com.imby.plug.property.*;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
@@ -20,6 +21,7 @@ import java.util.Properties;
  * @author 皮锋
  * @custom.date 2020年3月5日 下午3:06:21
  */
+@Slf4j
 public class ConfigLoader {
 
     /**
@@ -64,6 +66,7 @@ public class ConfigLoader {
         Properties properties;
         try {
             properties = PropertiesUtils.loadProperties(configPath + configName);
+            log.info("监控配置项：{}", properties.toString());
         } catch (IOException e) {
             throw new NotFoundConfigFileException("监控程序找不到配置文件！");
         }
