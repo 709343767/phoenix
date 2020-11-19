@@ -58,20 +58,27 @@ public class MemoryMonitor implements IServerMonitoringListener {
      */
     @Override
     public void wakeUpMonitor(Object... obj) throws NetException, SigarException {
+        // 是否监控服务器
+        boolean isEnable = MonitoringConfigPropertiesLoader.getMonitoringProperties().getServerProperties().isEnable();
+        // 不需要监控服务器
+        if (!isEnable) {
+            return;
+        }
         String key = String.valueOf(obj[0]);
         Memory memory = this.memoryPool.get(key);
         // 物理内存使用率
         double usedPercent = memory.getUsedPercent();
-        // 物理内存占用率超过90%
-        if (usedPercent > 90) {
+        // 过载阈值
+        double overloadThreshold = MonitoringConfigPropertiesLoader.getMonitoringProperties().getServerProperties().getServerMemoryProperties().getOverloadThreshold();
+        // 物理内存占用率大于等于配置的过载阈值
+        if (usedPercent >= overloadThreshold) {
             // 是否确认内存过载
             boolean isOverLoad = memory.isOverLoad();
             if (!isOverLoad) {
-                int num = memory.getNum();
-                memory.setNum(num + 1);
-                // 最终确认内存过载的阈值
+                memory.setNum(memory.getNum() + 1);
+                // 最终确认内存过载的阈值（次数）
                 int threshold = MonitoringConfigPropertiesLoader.getMonitoringProperties().getThreshold();
-                if (num > threshold) {
+                if (memory.getNum() >= threshold) {
                     // 处理物理内存过载
                     this.dealMemoryOverLoad(memory);
                 }

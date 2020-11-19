@@ -74,7 +74,7 @@ public class DiskMonitor implements IServerMonitoringListener {
             double usePercent = subregion.getUsePercent();
             //  过载阈值
             double overloadThreshold = MonitoringConfigPropertiesLoader.getMonitoringProperties().getServerProperties().getServerDiskProperties().getOverloadThreshold();
-            // 利用率大于配置的过载阈值
+            // 利用率大于等于配置的过载阈值
             if (usePercent >= overloadThreshold) {
                 // 是否已经发送过告警
                 boolean isAlarm = subregion.isAlarm();

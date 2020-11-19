@@ -66,8 +66,6 @@ public class CpuMonitor implements IServerMonitoringListener {
         }
         String key = String.valueOf(obj[0]);
         Cpu cpu = this.cpuPool.get(key);
-        // 最终确认CPU过载的阈值（次数）
-        long threshold = MonitoringConfigPropertiesLoader.getMonitoringProperties().getThreshold();
         // 过载阈值
         double overloadThreshold = MonitoringConfigPropertiesLoader.getMonitoringProperties().getServerProperties().getServerCpuProperties().getOverloadThreshold();
         // 平均CPU使用率
@@ -78,6 +76,8 @@ public class CpuMonitor implements IServerMonitoringListener {
             // 没有标记平均CPU使用率大于配置的过载阈值
             if (!isOverLoad) {
                 cpu.setNum(cpu.getNum() + 1);
+                // 最终确认CPU过载的阈值（次数）
+                int threshold = MonitoringConfigPropertiesLoader.getMonitoringProperties().getThreshold();
                 if (cpu.getNum() >= threshold) {
                     // 处理CPU过载
                     this.dealCpuOverLoad(cpu);
