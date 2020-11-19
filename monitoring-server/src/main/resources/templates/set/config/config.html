@@ -280,9 +280,10 @@
         base: ctxPath //静态资源所在路径
     }).extend({
         index: 'lib/index', //主入口模块
-    }).use(['index', 'element', 'form'], function () {
+    }).use(['index', 'element', 'form', 'util'], function () {
         var admin = layui.admin;
         var form = layui.form;
+        var util = layui.util;
         form.render();
         // 监听信息提交
         form.on('submit(config-info)', function (data) {
@@ -308,6 +309,10 @@
                 }
             });
             return false;
+        });
+        // 右下脚回到顶部小图标
+        util.fixbar({
+            showHeight: 100
         });
     });
 </script>
