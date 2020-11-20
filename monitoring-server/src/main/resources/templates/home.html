@@ -217,7 +217,13 @@
         base: ctxPath //静态资源所在路径
     }).extend({
         index: 'lib/index' //主入口模块
-    }).use(['index', 'home']);
+    }).use(['index', 'home', 'util'], function () {
+        var util = layui.util;
+        // 右下脚回到顶部小图标
+        util.fixbar({
+            showHeight: 100
+        });
+    });
 </script>
 </body>
 </html>
