@@ -1,6 +1,8 @@
 package com.imby.server.business.web.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.imby.common.exception.NetException;
+import com.imby.server.business.web.entity.MonitorNet;
 import com.imby.server.business.web.service.IMonitorNetService;
 import com.imby.server.business.web.vo.LayUiAdminResultVo;
 import com.imby.server.business.web.vo.MonitorNetVo;
@@ -92,6 +94,80 @@ public class MonitorNetworkController {
     @ResponseBody
     public LayUiAdminResultVo deleteMonitorNet(@RequestBody List<MonitorNetVo> monitorNetVos) {
         return this.monitorNetService.deleteMonitorNet(monitorNetVos);
+    }
+
+    /**
+     * <p>
+     * 访问编辑网络信息表单页面
+     * </p>
+     *
+     * @param id 网络ID
+     * @return {@link ModelAndView} 编辑网络信息表单页面
+     * @author 皮锋
+     * @custom.date 2020/11/20 9:17
+     */
+    @ApiOperation(value = "访问编辑网络信息表单页面")
+    @ApiImplicitParams(value = {
+            @ApiImplicitParam(name = "id", value = "网络ID", required = true, paramType = "query", dataType = "long")})
+    @GetMapping("/edit-monitor-network-form")
+    public ModelAndView editMonitorNetworkForm(@RequestParam(name = "id") Long id) {
+        MonitorNet monitorNet = this.monitorNetService.getById(id);
+        MonitorNetVo monitorNetVo = MonitorNetVo.builder().build().convertFor(monitorNet);
+        ModelAndView mv = new ModelAndView("network/edit-network");
+        mv.addObject(monitorNetVo);
+        return mv;
+    }
+
+    /**
+     * <p>
+     * 访问新增网络信息表单页面
+     * </p>
+     *
+     * @return {@link ModelAndView} 新增网络信息表单页面
+     * @author 皮锋
+     * @custom.date 2020/11/20 14:54
+     */
+    @ApiOperation(value = "访问新增网络信息表单页面")
+    @GetMapping("/add-monitor-network-form")
+    public ModelAndView addMonitorNetworkForm() {
+        return new ModelAndView("network/add-network");
+    }
+
+    /**
+     * <p>
+     * 编辑网络信息
+     * </p>
+     *
+     * @param monitorNetVo 网络信息
+     * @return layUiAdmin响应对象：如果数据库中已经存在，LayUiAdminResultVo.data="exist"；
+     * 如果编辑成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @author 皮锋
+     * @custom.date 2020/11/20 13:56
+     */
+    @ApiOperation(value = "编辑网络信息")
+    @PostMapping("/edit-monitor-network")
+    @ResponseBody
+    public LayUiAdminResultVo editMonitorNetwork(MonitorNetVo monitorNetVo) {
+        return this.monitorNetService.editMonitorNetwork(monitorNetVo);
+    }
+
+    /**
+     * <p>
+     * 添加网络信息
+     * </p>
+     *
+     * @param monitorNetVo 网络信息
+     * @return layUiAdmin响应对象：如果数据库中已经存在，LayUiAdminResultVo.data="exist"；
+     * 如果添加成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @throws NetException 自定义获取网络信息异常
+     * @author 皮锋
+     * @custom.date 2020/11/20 15:05
+     */
+    @ApiOperation(value = "添加网络信息")
+    @PostMapping("/add-monitor-network")
+    @ResponseBody
+    public LayUiAdminResultVo addMonitorNetwork(MonitorNetVo monitorNetVo) throws NetException {
+        return this.monitorNetService.addMonitorNetwork(monitorNetVo);
     }
 
 }

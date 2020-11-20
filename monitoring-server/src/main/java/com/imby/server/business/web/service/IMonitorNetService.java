@@ -2,6 +2,7 @@ package com.imby.server.business.web.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.imby.common.exception.NetException;
 import com.imby.server.business.web.entity.MonitorNet;
 import com.imby.server.business.web.vo.HomeNetVo;
 import com.imby.server.business.web.vo.LayUiAdminResultVo;
@@ -57,4 +58,32 @@ public interface IMonitorNetService extends IService<MonitorNet> {
      * @custom.date 2020/9/26 14:02
      */
     LayUiAdminResultVo deleteMonitorNet(List<MonitorNetVo> monitorNetVos);
+
+    /**
+     * <p>
+     * 编辑网络信息
+     * </p>
+     *
+     * @param monitorNetVo 网络信息
+     * @return layUiAdmin响应对象：如果数据库中已经存在，LayUiAdminResultVo.data="exist"；
+     * 如果编辑成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @author 皮锋
+     * @custom.date 2020/11/20 13:58
+     */
+    LayUiAdminResultVo editMonitorNetwork(MonitorNetVo monitorNetVo);
+
+    /**
+     * <p>
+     * 添加网络信息
+     * </p>
+     *
+     * @param monitorNetVo 网络信息
+     * @return layUiAdmin响应对象：如果数据库中已经存在，LayUiAdminResultVo.data="exist"；
+     * 如果添加成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @throws NetException 自定义获取网络信息异常
+     * @author 皮锋
+     * @custom.date 2020/11/20 15:30
+     */
+    LayUiAdminResultVo addMonitorNetwork(MonitorNetVo monitorNetVo) throws NetException;
+
 }

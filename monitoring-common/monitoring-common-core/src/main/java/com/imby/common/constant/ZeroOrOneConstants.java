@@ -2,7 +2,7 @@ package com.imby.common.constant;
 
 /**
  * <p>
- * 0或者1
+ * 0或者1或者-1
  * </p>
  *
  * @author 皮锋
@@ -30,4 +30,9 @@ public final class ZeroOrOneConstants {
      * 1
      */
     public static final String ONE = "1";
+
+    /**
+     * -1
+     */
+    public static final String MINUS_ONE = "-1";
 }

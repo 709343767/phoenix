@@ -39,6 +39,9 @@ public class MonitorNetVo implements ISuperBean {
     @ApiModelProperty(value = "IP地址（目的地）")
     private String ipTarget;
 
+    @ApiModelProperty(value = "IP地址（目的地）描述")
+    private String ipTargetDesc;
+
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @ApiModelProperty(value = "新增时间")
     private Date insertTime;

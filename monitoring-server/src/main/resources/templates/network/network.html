@@ -42,6 +42,7 @@
                             <option value="">所有</option>
                             <option value="0">网络不通</option>
                             <option value="1">网络正常</option>
+                            <option value="-1">未知</option>
                         </select>
                     </div>
                 </div>
@@ -62,11 +63,12 @@
             <script type="text/html" id="list-table-toolbar">
                 <div class="layui-btn-container">
                     <button class="layui-btn layuiadmin-btn-useradmin" lay-event="batchdel">删除</button>
+                    <button class="layui-btn layuiadmin-btn-useradmin" lay-event="add">添加</button>
                 </div>
             </script>
             <script type="text/html" id="list-table-toolbar-detail">
-                <a class="layui-btn layui-btn-sm layui-btn-xs" lay-event="info"><i
-                        class="layui-icon layui-icon-about"></i>详情</a>
+                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i
+                        class="layui-icon layui-icon-edit"></i>编辑</a>
                 <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i
                         class="layui-icon layui-icon-delete"></i>删除</a>
             </script>
@@ -81,7 +83,7 @@
     }).extend({
         index: 'lib/index' //主入口模块
     }).use(['index', 'table'], function () {
-        var $ = layui.$, admin = layui.admin, form = layui.form, table = layui.table;
+        var $ = layui.$, admin = layui.admin, form = layui.form, table = layui.table, device = layui.device();
         table.render({
             elem: '#list-table',
             url: ctxPath + 'network/get-monitor-network-list',
@@ -113,6 +115,9 @@
                     if ($(this).text() === '1') {
                         $(this).text('网络正常');
                     }
+                    if ($(this).text() === null || $(this).text() === '' || $(this).text() === undefined) {
+                        $(this).text('未知');
+                    }
                 });
             },
             cols: [
@@ -125,13 +130,18 @@
                     sort: !0
                 }, {
                     field: 'ipSource',
-                    title: 'IP地址（来源）',
+                    title: '源IP',
                     minWidth: 150,
                     sort: !0
                 }, {
                     field: 'ipTarget',
-                    title: 'IP地址（去往）',
+                    title: '目标IP',
                     minWidth: 150,
+                    sort: !0
+                }, {
+                    field: 'ipTargetDesc',
+                    title: '目标IP描述',
+                    minWidth: 350,
                     sort: !0
                 }, {
                     field: 'status',
@@ -206,6 +216,66 @@
                         });
                     });
                     break;
+                case 'add':
+                    // 宽度
+                    var width;
+                    // 高度
+                    var height
+                    // 移动端
+                    if (device.ios || device.android) {
+                        // 宽度
+                        width = document.body.clientWidth * 0.8 + 'px';
+                        // 高度
+                        height = document.body.clientHeight * 0.5 + 'px';
+                    } else {
+                        // 宽度
+                        width = document.body.clientWidth * 0.3 + 'px';
+                        // 高度
+                        height = document.body.clientHeight * 0.35 + 'px';
+                    }
+                    layer.open({
+                        type: 2,
+                        title: '添加网络信息',
+                        content: ctxPath + 'network/add-monitor-network-form',
+                        maxmin: true,
+                        area: [width, height],
+                        btn: ['确定', '取消'],
+                        yes: function (index, layero) {
+                            var iframeWindow = window['layui-layer-iframe' + index],
+                                submitID = 'LAY-front-submit',
+                                submit = layero.find('iframe').contents().find('#' + submitID);
+                            //监听提交
+                            iframeWindow.layui.form.on('submit(' + submitID + ')', function (data) {
+                                var field = data.field; //获取提交的字段
+                                admin.req({
+                                    type: 'post',
+                                    url: ctxPath + 'network/add-monitor-network',
+                                    data: field,
+                                    dataType: 'json',
+                                    headers: {
+                                        [[${_csrf.headerName}]]: [[${_csrf.token}]]
+                                    },
+                                    success: function (result) {
+                                        var data = result.data;
+                                        if (data === webConst.SUCCESS) {
+                                            table.reload('list-table'); //数据刷新
+                                            layer.close(index); //关闭弹层
+                                            layer.msg('添加成功！', {icon: 6});
+                                        } else if (data === webConst.EXIST) {
+                                            layer.msg('目标IP已经存在！', {icon: 5, shift: 6});
+                                        } else {
+                                            layer.msg('添加失败！', {icon: 5, shift: 6});
+                                        }
+                                    },
+                                    error: function () {
+                                        layer.msg('系统错误！', {icon: 5, shift: 6});
+                                    }
+                                });
+                            });
+                            submit.trigger('click');
+                        }
+                    });
+                    break;
             }
         });
         //监听工具条
@@ -236,6 +306,65 @@
                             layer.msg('系统错误！', {icon: 5, shift: 6});
                         }
                     });
+                });
+            } else if (obj.event === 'edit') {
+                // 宽度
+                var width;
+                // 高度
+                var height
+                // 移动端
+                if (device.ios || device.android) {
+                    // 宽度
+                    width = document.body.clientWidth * 0.8 + 'px';
+                    // 高度
+                    height = document.body.clientHeight * 0.5 + 'px';
+                } else {
+                    // 宽度
+                    width = document.body.clientWidth * 0.3 + 'px';
+                    // 高度
+                    height = document.body.clientHeight * 0.35 + 'px';
+                }
+                layer.open({
+                    type: 2,
+                    title: '编辑网络信息',
+                    content: ctxPath + 'network/edit-monitor-network-form?id=' + data.id,
+                    maxmin: true,
+                    area: [width, height],
+                    btn: ['确定', '取消'],
+                    yes: function (index, layero) {
+                        var iframeWindow = window['layui-layer-iframe' + index],
+                            submitID = 'LAY-front-submit',
+                            submit = layero.find('iframe').contents().find('#' + submitID);
+                        //监听提交
+                        iframeWindow.layui.form.on('submit(' + submitID + ')', function (data) {
+                            var field = data.field; //获取提交的字段
+                            admin.req({
+                                type: 'post',
+                                url: ctxPath + 'network/edit-monitor-network',
+                                data: field,
+                                dataType: 'json',
+                                headers: {
+                                    [[${_csrf.headerName}]]: [[${_csrf.token}]]
+                                },
+                                success: function (result) {
+                                    var data = result.data;
+                                    if (data === webConst.SUCCESS) {
+                                        table.reload('list-table'); //数据刷新
+                                        layer.close(index); //关闭弹层
+                                        layer.msg('编辑成功！', {icon: 6});
+                                    } else if (data === webConst.EXIST) {
+                                        layer.msg('目标IP已经存在！', {icon: 5, shift: 6});
+                                    } else {
+                                        layer.msg('编辑失败！', {icon: 5, shift: 6});
+                                    }
+                                },
+                                error: function () {
+                                    layer.msg('系统错误！', {icon: 5, shift: 6});
+                                }
+                            });
+                        });
+                        submit.trigger('click');
+                    }
                 });
             }
         });

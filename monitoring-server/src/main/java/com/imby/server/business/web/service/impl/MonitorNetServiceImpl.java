@@ -7,6 +7,9 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.common.collect.Lists;
+import com.imby.common.constant.ZeroOrOneConstants;
+import com.imby.common.exception.NetException;
+import com.imby.common.util.NetUtils;
 import com.imby.server.business.web.dao.IMonitorNetDao;
 import com.imby.server.business.web.entity.MonitorNet;
 import com.imby.server.business.web.service.IMonitorNetService;
@@ -19,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -86,7 +90,13 @@ public class MonitorNetServiceImpl extends ServiceImpl<IMonitorNetDao, MonitorNe
             lambdaQueryWrapper.like(MonitorNet::getIpTarget, ipTarget);
         }
         if (StringUtils.isNotBlank(status)) {
-            lambdaQueryWrapper.eq(MonitorNet::getStatus, status);
+            // -1 用来表示状态未知
+            if (StringUtils.equals(status, ZeroOrOneConstants.MINUS_ONE)) {
+                // 状态为 null 或 空字符串
+                lambdaQueryWrapper.and(wrapper -> wrapper.isNull(MonitorNet::getStatus).or().eq(MonitorNet::getStatus, ""));
+            } else {
+                lambdaQueryWrapper.eq(MonitorNet::getStatus, status);
+            }
         }
         IPage<MonitorNet> monitorNetPage = this.monitorNetDao.selectPage(ipage, lambdaQueryWrapper);
         List<MonitorNet> monitorNets = monitorNetPage.getRecords();
@@ -127,6 +137,68 @@ public class MonitorNetServiceImpl extends ServiceImpl<IMonitorNetDao, MonitorNe
         monitorNetLambdaUpdateWrapper.in(MonitorNet::getIpTarget, ipTargets);
         this.monitorNetDao.delete(monitorNetLambdaUpdateWrapper);
         return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);
+    }
+
+    /**
+     * <p>
+     * 编辑网络信息
+     * </p>
+     *
+     * @param monitorNetVo 网络信息
+     * @return layUiAdmin响应对象：如果数据库中已经存在，LayUiAdminResultVo.data="exist"；
+     * 如果编辑成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @author 皮锋
+     * @custom.date 2020/11/20 13:58
+     */
+    @Override
+    public LayUiAdminResultVo editMonitorNetwork(MonitorNetVo monitorNetVo) {
+        // 根据目标IP，查询数据库中是否已经存在此目标IP的记录
+        LambdaQueryWrapper<MonitorNet> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        // 去掉它自己这条记录
+        lambdaQueryWrapper.ne(MonitorNet::getId, monitorNetVo.getId());
+        lambdaQueryWrapper.eq(MonitorNet::getIpTarget, monitorNetVo.getIpTarget());
+        MonitorNet dbMonitorNet = this.monitorNetDao.selectOne(lambdaQueryWrapper);
+        if (dbMonitorNet != null) {
+            return LayUiAdminResultVo.ok(WebResponseConstants.EXIST);
+        }
+        MonitorNet monitorNet = monitorNetVo.convertTo();
+        monitorNet.setUpdateTime(new Date());
+        int result = this.monitorNetDao.updateById(monitorNet);
+        if (result == 1) {
+            return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);
+        }
+        return LayUiAdminResultVo.ok(WebResponseConstants.FAIL);
+    }
+
+    /**
+     * <p>
+     * 添加网络信息
+     * </p>
+     *
+     * @param monitorNetVo 网络信息
+     * @return layUiAdmin响应对象：如果数据库中已经存在，LayUiAdminResultVo.data="exist"；
+     * 如果添加成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @throws NetException 自定义获取网络信息异常
+     * @author 皮锋
+     * @custom.date 2020/11/20 15:30
+     */
+    @Override
+    public LayUiAdminResultVo addMonitorNetwork(MonitorNetVo monitorNetVo) throws NetException {
+        // 根据目标IP，查询数据库中是否已经存在此目标IP的记录
+        LambdaQueryWrapper<MonitorNet> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(MonitorNet::getIpTarget, monitorNetVo.getIpTarget());
+        MonitorNet dbMonitorNet = this.monitorNetDao.selectOne(lambdaQueryWrapper);
+        if (dbMonitorNet != null) {
+            return LayUiAdminResultVo.ok(WebResponseConstants.EXIST);
+        }
+        MonitorNet monitorNet = monitorNetVo.convertTo();
+        monitorNet.setIpSource(NetUtils.getLocalIp());
+        monitorNet.setInsertTime(new Date());
+        int result = this.monitorNetDao.insert(monitorNet);
+        if (result == 1) {
+            return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);
+        }
+        return LayUiAdminResultVo.ok(WebResponseConstants.FAIL);
     }
 
 }
