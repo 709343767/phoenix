@@ -168,7 +168,6 @@ public class NetMonitorTask implements CommandLineRunner {
         String msg = "源IP：" + net.getIpSource()
                 + "，<br>目标IP：" + net.getIpTarget()
                 + "，<br>目标IP描述：" + net.getIpTargetDesc()
-                + "，<br>网络状态：" + (StringUtils.equals(net.getStatus(), ZeroOrOneConstants.ONE) ? "网络正常" : "网络不通")
                 + "，<br>时间：" + DateTimeUtils.dateToString(new Date());
         Alarm alarm = Alarm.builder()
                 .title(title)
