@@ -57,6 +57,12 @@ public class MonitorNet {
     private String status;
 
     /**
+     * 是否已经断网告警（0：否，1：是）
+     */
+    @TableField("IS_ALARM")
+    private String isAlarm;
+
+    /**
      * 新增时间
      */
     @TableField("INSERT_TIME")

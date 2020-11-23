@@ -60,5 +60,8 @@ public class MonitorNet implements Serializable {
     @TableField("STATUS")
     private String status;
 
+    @ApiModelProperty(value = "是否已经断网告警（0：否，1：是）")
+    @TableField("IS_ALARM")
+    private String isAlarm;
 
 }
