@@ -80,10 +80,10 @@
                                         <div class="layui-form-item">
                                             <label class="layui-form-label" style="text-align: left;">方式</label>
                                             <div class="layui-input-block">
-                                                <input type="radio" name="alarmWay" value="MAIL" title="邮件"
-                                                       th:checked="${monitorConfigAlarm.way=='MAIL'}? true : false">
-                                                <input type="radio" name="alarmWay" value="SMS" title="短信"
-                                                       th:checked="${monitorConfigAlarm.way=='SMS'}? true : false">
+                                                <input type="checkbox" name="alarmWay[0]" value="MAIL" title="邮件"
+                                                       th:checked="${#strings.containsIgnoreCase(monitorConfigAlarm.way,'MAIL')}? true : false">
+                                                <input type="checkbox" name="alarmWay[1]" value="SMS" title="短信"
+                                                       th:checked="${#strings.containsIgnoreCase(monitorConfigAlarm.way,'SMS')}? true : false">
                                             </div>
                                         </div>
                                         <div class="layui-card">

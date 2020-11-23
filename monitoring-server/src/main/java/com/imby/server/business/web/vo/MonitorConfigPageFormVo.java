@@ -53,7 +53,7 @@ public class MonitorConfigPageFormVo implements ISuperBean {
      * 监控告警方式
      */
     @ApiModelProperty(value = "监控告警方式")
-    private String alarmWay;
+    private String[] alarmWay;
 
     /**
      * 告警收件人邮箱地址，多个地址用英文分号隔开

@@ -1,5 +1,6 @@
 package com.imby.server.business.web.service.impl;
 
+import cn.hutool.core.util.ArrayUtil;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.imby.common.threadpool.ThreadPool;
@@ -112,7 +113,7 @@ public class MonitorConfigServiceImpl extends ServiceImpl<IMonitorConfigDao, Mon
         this.monitorConfigAlarmDao.update(MonitorConfigAlarm.builder()
                 .enable(monitorConfigPageFormVo.getAlarmEnable())
                 .level(monitorConfigPageFormVo.getAlarmLevel())
-                .way(monitorConfigPageFormVo.getAlarmWay())
+                .way(ArrayUtil.join(ArrayUtil.removeEle(monitorConfigPageFormVo.getAlarmWay(), null), ";"))
                 .updateTime(updateTime)
                 .build(), new UpdateWrapper<>());
         this.monitorConfigAlarmMailDao.update(MonitorConfigAlarmMail.builder()
