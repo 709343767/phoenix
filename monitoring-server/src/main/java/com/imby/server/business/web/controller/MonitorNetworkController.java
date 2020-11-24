@@ -2,6 +2,7 @@ package com.imby.server.business.web.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.imby.common.exception.NetException;
+import com.imby.common.util.NetUtils;
 import com.imby.server.business.web.entity.MonitorNet;
 import com.imby.server.business.web.service.IMonitorNetService;
 import com.imby.server.business.web.vo.LayUiAdminResultVo;
@@ -42,13 +43,17 @@ public class MonitorNetworkController {
      * </p>
      *
      * @return {@link ModelAndView} 网络列表页面
+     * @throws NetException 自定义获取网络信息异常
      * @author 皮锋
      * @custom.date 2020/9/26 10:53
      */
     @ApiOperation(value = "访问网络列表页面")
     @GetMapping("/list")
-    public ModelAndView list() {
-        return new ModelAndView("network/network");
+    public ModelAndView list() throws NetException {
+        ModelAndView mv = new ModelAndView("network/network");
+        // 源IP
+        mv.addObject("ipSource", NetUtils.getLocalIp());
+        return mv;
     }
 
     /**

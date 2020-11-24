@@ -16,6 +16,7 @@
     <![endif]-->
     <script type="text/javascript" charset="utf-8" th:inline="javascript">
         var ctxPath = /*[[@{/}]]*/'';
+        var ipSource = [[${ipSource}]];// 源IP
     </script>
 </head>
 <body>
@@ -107,7 +108,7 @@
                     'data': res.data.records //解析数据列表
                 };
             },
-            done: function () {
+            done: function (res) {
                 $('[data-field="status"]').children().each(function () {
                     if ($(this).text() === '0') {
                         $(this).html('<span style="color: #FF4500;">网络不通</span>');
@@ -119,6 +120,13 @@
                         $(this).text('未知');
                     }
                 });
+                for (var i in res.data) {		//遍历整个表格数据
+                    var item = res.data[i];		//获取当前行数据
+                    // 源IP与当前监控服务端所在的服务器IP不同，把这条记录标红
+                    if (item.ipSource !== ipSource) {
+                        $('tr[data-index=' + i + ']').css('color', '#FF4500');
+                    }
+                }
             },
             cols: [
                 [{
@@ -146,16 +154,17 @@
                 }, {
                     field: 'status',
                     title: '状态',
+                    minWidth: 100,
                     sort: !0
                 }, {
                     field: 'insertTime',
                     title: '新增时间',
-                    minWidth: 160,
+                    minWidth: 170,
                     sort: !0
                 }, {
                     field: 'updateTime',
                     title: '更新时间',
-                    minWidth: 160,
+                    minWidth: 170,
                     sort: !0
                 }, {
                     title: '操作',
