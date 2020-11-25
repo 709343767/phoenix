@@ -82,6 +82,7 @@ public class InstanceAspect {
         instance.setIp(heartbeatPackage.getIp());
         instance.setComputerName(heartbeatPackage.getComputerName());
         instance.setInstanceDesc(heartbeatPackage.getInstanceDesc());
+        instance.setInstanceLanguage(heartbeatPackage.getInstanceLanguage());
         // 实例状态信息
         instance.setOnline(true);
         instance.setDateTime(new Date());
