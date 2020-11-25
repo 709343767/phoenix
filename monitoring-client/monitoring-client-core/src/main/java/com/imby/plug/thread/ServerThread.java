@@ -33,16 +33,13 @@ public class ServerThread implements Runnable {
      */
     @Override
     public void run() {
+        // 计时器
+        TimeInterval timer = DateUtil.timer();
         try {
             // 构建服务器数据包
             ServerPackage serverPackage = new PackageConstructor().structureServerPackage();
-            // 计时器
-            TimeInterval timer = DateUtil.timer();
             // 发送请求
             String result = Sender.send(UrlConstants.SERVER_URL, serverPackage.toJsonString());
-            // 时间差（毫秒）
-            String betweenDay = timer.intervalPretty();
-            log.debug("发送服务器信息包耗时：{}", betweenDay);
             log.debug("服务器信息包响应消息：{}", result);
         } catch (IOException e) {
             log.error("IO异常！", e);
@@ -52,6 +49,10 @@ public class ServerThread implements Runnable {
             log.error("获取网络信息异常！", e);
         } catch (Exception e) {
             log.error("其它异常！", e);
+        } finally {
+            // 时间差（毫秒）
+            String betweenDay = timer.intervalPretty();
+            log.debug("发送服务器信息包耗时：{}", betweenDay);
         }
     }
 

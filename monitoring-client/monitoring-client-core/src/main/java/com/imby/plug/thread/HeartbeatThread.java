@@ -33,16 +33,13 @@ public class HeartbeatThread implements Runnable {
      */
     @Override
     public void run() {
+        // 计时器
+        TimeInterval timer = DateUtil.timer();
         try {
             // 构建心跳数据包
             HeartbeatPackage heartbeatPackage = new PackageConstructor().structureHeartbeatPackage();
-            // 计时器
-            TimeInterval timer = DateUtil.timer();
             // 发送请求
             String result = Sender.send(UrlConstants.HEARTBEAT_URL, heartbeatPackage.toJsonString());
-            // 时间差（毫秒）
-            String betweenDay = timer.intervalPretty();
-            log.debug("发送心跳包耗时：{}", betweenDay);
             log.debug("心跳包响应消息：{}", result);
         } catch (IOException e) {
             log.error("IO异常！", e);
@@ -52,6 +49,10 @@ public class HeartbeatThread implements Runnable {
             log.error("Sigar异常！", e);
         } catch (Exception e) {
             log.error("其它异常！", e);
+        } finally {
+            // 时间差（毫秒）
+            String betweenDay = timer.intervalPretty();
+            log.debug("发送心跳包耗时：{}", betweenDay);
         }
     }
 

@@ -33,15 +33,12 @@ public class JvmThread implements Runnable {
      */
     @Override
     public void run() {
+        // 计时器
+        TimeInterval timer = DateUtil.timer();
         try {
             JvmPackage jvmPackage = new PackageConstructor().structureJvmPackage();
-            // 计时器
-            TimeInterval timer = DateUtil.timer();
             // 发送请求
             String result = Sender.send(UrlConstants.JVM_URL, jvmPackage.toJsonString());
-            // 时间差（毫秒）
-            String betweenDay = timer.intervalPretty();
-            log.debug("发送Java虚拟机信息包耗时：{}", betweenDay);
             log.debug("Java虚拟机信息包响应消息：{}", result);
         } catch (IOException e) {
             log.error("IO异常！", e);
@@ -51,6 +48,10 @@ public class JvmThread implements Runnable {
             log.error("Sigar异常！", e);
         } catch (Exception e) {
             log.error("其它异常！", e);
+        } finally {
+            // 时间差（毫秒）
+            String betweenDay = timer.intervalPretty();
+            log.debug("发送Java虚拟机信息包耗时：{}", betweenDay);
         }
     }
 
