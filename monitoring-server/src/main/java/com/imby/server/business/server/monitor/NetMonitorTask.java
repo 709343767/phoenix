@@ -164,7 +164,7 @@ public class NetMonitorTask implements CommandLineRunner {
      * @author 皮锋
      * @custom.date 2020/3/13 11:20
      */
-    public void sendAlarmInfo(String title, AlarmLevelEnums alarmLevelEnums, MonitorNet net) throws NetException, SigarException {
+    private void sendAlarmInfo(String title, AlarmLevelEnums alarmLevelEnums, MonitorNet net) throws NetException, SigarException {
         String msg = "源IP：" + net.getIpSource()
                 + "，<br>目标IP：" + net.getIpTarget()
                 + "，<br>目标IP描述：" + net.getIpTargetDesc()

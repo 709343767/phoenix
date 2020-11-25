@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.concurrent.Future;
+
 /**
  * <p>
  * 告警包控制器
@@ -48,9 +50,16 @@ public class AlarmController {
     @ApiOperation(value = "接收和响应监控代理端程序或者监控客户端程序发的告警包", notes = "接收告警包")
     @PostMapping("/accept-alarm-package")
     public BaseResponsePackage acceptAlarmPackage(@RequestBody String request) {
-        log.info("收到告警包：{}", request);
-        AlarmPackage alarmPackage = JSON.parseObject(request, AlarmPackage.class);
-        Result result = this.alarmService.dealAlarmPackage(alarmPackage);
-        return new PackageConstructor().structureBaseResponsePackage(result);
+        log.debug("收到告警包：{}", request);
+        try {
+            AlarmPackage alarmPackage = JSON.parseObject(request, AlarmPackage.class);
+            Future<Result> resultFuture = this.alarmService.dealAlarmPackage(alarmPackage);
+            Result result = resultFuture.get();
+            return new PackageConstructor().structureBaseResponsePackage(result);
+        } catch (Exception e) {
+            log.error("处理告警包异常！", e);
+            return new PackageConstructor().structureBaseResponsePackage(Result.builder().isSuccess(false).msg(e.getMessage()).build());
+        }
     }
+
 }

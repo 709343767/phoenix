@@ -169,7 +169,7 @@ public class InstanceMonitorTask implements CommandLineRunner {
      * @author 皮锋
      * @custom.date 2020/3/13 11:20
      */
-    public void sendAlarmInfo(String title, AlarmLevelEnums alarmLevelEnums, Instance instance) throws NetException, SigarException {
+    private void sendAlarmInfo(String title, AlarmLevelEnums alarmLevelEnums, Instance instance) throws NetException, SigarException {
         String msg = "应用ID：" + instance.getInstanceId()
                 + "，<br>应用名称：" + instance.getInstanceName()
                 + "，<br>应用描述：" + instance.getInstanceDesc()

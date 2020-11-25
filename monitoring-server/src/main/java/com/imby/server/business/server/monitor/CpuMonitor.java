@@ -16,7 +16,6 @@ import com.imby.server.util.AlarmUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.hyperic.sigar.SigarException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -147,8 +146,7 @@ public class CpuMonitor implements IServerMonitoringListener {
      * @author 皮锋
      * @custom.date 2020/3/30 10:40
      */
-    @Async
-    public void sendAlarmInfo(String title, AlarmLevelEnums alarmLevelEnums, Cpu cpu) throws NetException, SigarException {
+    private void sendAlarmInfo(String title, AlarmLevelEnums alarmLevelEnums, Cpu cpu) throws NetException, SigarException {
         String dateTime = DateTimeFormatter.ofPattern(DateTimeStylesEnums.YYYY_MM_DD_HH_MM_SS.getValue()).format(LocalDateTime.now());
         String msg = "IP地址：" + cpu.getIp()
                 + "，<br>服务器：" + cpu.getComputerName()

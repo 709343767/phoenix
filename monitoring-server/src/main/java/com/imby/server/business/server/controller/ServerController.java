@@ -48,10 +48,15 @@ public class ServerController {
     @ApiOperation(value = "接收和响应监控代理端程序或者监控客户端程序发的服务器信息包", notes = "接收服务器信息包")
     @PostMapping("/accept-server-package")
     public BaseResponsePackage acceptServerPackage(@RequestBody String request) {
-        log.info("收到服务器信息包：{}", request);
-        ServerPackage serverPackage = JSON.parseObject(request, ServerPackage.class);
-        Result result = this.serverService.dealServerPackage(serverPackage);
-        return new PackageConstructor().structureBaseResponsePackage(result);
+        log.debug("收到服务器信息包：{}", request);
+        try {
+            ServerPackage serverPackage = JSON.parseObject(request, ServerPackage.class);
+            Result result = this.serverService.dealServerPackage(serverPackage);
+            return new PackageConstructor().structureBaseResponsePackage(result);
+        } catch (Exception e) {
+            log.error("处理服务器信息包异常！", e);
+            return new PackageConstructor().structureBaseResponsePackage(Result.builder().isSuccess(false).msg(e.getMessage()).build());
+        }
     }
 
 }

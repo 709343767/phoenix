@@ -48,9 +48,15 @@ public class JvmController {
     @ApiOperation(value = "接收和响应监控代理端程序或者监控客户端程序发的Java虚拟机信息包", notes = "接收Java虚拟机信息包")
     @PostMapping("/accept-jvm-package")
     public BaseResponsePackage acceptJvmPackage(@RequestBody String request) {
-        log.info("收到Java虚拟机信息包：{}", request);
-        JvmPackage jvmPackage = JSON.parseObject(request, JvmPackage.class);
-        Result result = this.jvmService.dealJvmPackage(jvmPackage);
-        return new PackageConstructor().structureBaseResponsePackage(result);
+        log.debug("收到Java虚拟机信息包：{}", request);
+        try {
+            JvmPackage jvmPackage = JSON.parseObject(request, JvmPackage.class);
+            Result result = this.jvmService.dealJvmPackage(jvmPackage);
+            return new PackageConstructor().structureBaseResponsePackage(result);
+        } catch (Exception e) {
+            log.error("处理java虚拟机信息包异常！", e);
+            return new PackageConstructor().structureBaseResponsePackage(Result.builder().isSuccess(false).msg(e.getMessage()).build());
+        }
     }
+
 }

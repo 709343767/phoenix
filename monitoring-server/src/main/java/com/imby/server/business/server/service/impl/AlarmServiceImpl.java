@@ -24,11 +24,14 @@ import com.imby.server.util.AlarmUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.Future;
 
 /**
  * <p>
@@ -68,21 +71,22 @@ public class AlarmServiceImpl implements IAlarmService {
 
     /**
      * <p>
-     * 处理告警包
+     * 异步处理告警包
      * </p>
      *
      * @param alarmPackage 告警包
-     * @return {@link Result}
+     * @return {@link Future}
      * @author 皮锋
      * @custom.date 2020年3月10日 下午1:33:55
      */
+    @Async
     @Override
-    public Result dealAlarmPackage(AlarmPackage alarmPackage) {
+    public Future<Result> dealAlarmPackage(AlarmPackage alarmPackage) {
         // 返回结果
         Result result = new Result();
         // 处理告警信息
         this.dealAlarm(result, alarmPackage);
-        return result;
+        return new AsyncResult<>(result);
     }
 
     /**

@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSON;
 import com.imby.common.domain.Result;
 import com.imby.common.dto.BaseResponsePackage;
 import com.imby.common.dto.HeartbeatPackage;
-import com.imby.common.exception.NetException;
 import com.imby.server.business.server.core.PackageConstructor;
 import com.imby.server.business.server.service.IHeartbeatService;
 import io.swagger.annotations.Api;
@@ -49,17 +48,16 @@ public class HeartbeatController {
     @ApiOperation(value = "接收和响应监控代理端程序或者监控客户端程序发的心跳包", notes = "接收心跳包")
     @PostMapping("/accept-heartbeat-package")
     public BaseResponsePackage acceptHeartbeatPackage(@RequestBody String request) {
-        log.info("收到心跳包：{}", request);
-        HeartbeatPackage heartbeatPackage = JSON.parseObject(request, HeartbeatPackage.class);
-        // 返回结果
-        Result result;
+        log.debug("收到心跳包：{}", request);
         try {
-            result = this.heartbeatService.dealHeartbeatPackage(heartbeatPackage);
-        } catch (NetException e) {
-            log.error("获取网络信息异常！", e);
-            result = Result.builder().isSuccess(false).msg(e.getMessage()).build();
+            HeartbeatPackage heartbeatPackage = JSON.parseObject(request, HeartbeatPackage.class);
+            // 返回结果
+            Result result = this.heartbeatService.dealHeartbeatPackage(heartbeatPackage);
+            return new PackageConstructor().structureBaseResponsePackage(result);
+        } catch (Exception e) {
+            log.error("处理心跳包异常！", e);
+            return new PackageConstructor().structureBaseResponsePackage(Result.builder().isSuccess(false).msg(e.getMessage()).build());
         }
-        return new PackageConstructor().structureBaseResponsePackage(result);
     }
 
 }
