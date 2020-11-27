@@ -70,7 +70,7 @@ public class InstanceMonitorTask implements CommandLineRunner {
      */
     @Override
     public void run(String... args) {
-        ThreadPool.COMMON_SCHEDULED_THREAD_POOL.scheduleWithFixedDelay(() -> {
+        ThreadPool.COMMON_CPU_INTENSIVE_SCHEDULED_THREAD_POOL.scheduleWithFixedDelay(() -> {
             try {
                 // 循环所有应用实例
                 for (Map.Entry<String, Instance> entry : this.instancePool.entrySet()) {

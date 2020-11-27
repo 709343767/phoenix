@@ -3,6 +3,7 @@ package com.imby.plug;
 import com.google.common.base.Charsets;
 import com.imby.common.constant.AlarmLevelEnums;
 import com.imby.common.constant.AlarmTypeEnums;
+import com.imby.common.constant.ThreadTypeEnums;
 import com.imby.common.domain.Alarm;
 import com.imby.common.domain.Result;
 import org.junit.Test;
@@ -45,7 +46,7 @@ public class MonitorTest {
             // 发送告警信息
             Result result = Monitor.sendAlarm(alarm);
             System.out.println(result.toJsonString());
-        }, 5, 60, TimeUnit.SECONDS);
+        }, 5, 60, TimeUnit.SECONDS, ThreadTypeEnums.IO_INTENSIVE_THREAD);
 
         service.shutdown();
     }

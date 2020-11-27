@@ -1,6 +1,7 @@
 package com.imby.plug;
 
 import com.alibaba.fastjson.JSON;
+import com.imby.common.constant.ThreadTypeEnums;
 import com.imby.common.domain.Alarm;
 import com.imby.common.domain.Result;
 import com.imby.common.dto.AlarmPackage;
@@ -129,16 +130,17 @@ public class Monitor {
      * 业务埋点监测：定时监测业务运行情况
      * </p>
      *
-     * @param command      要执行的任务
-     * @param initialDelay 初次埋点监测延迟的时间
-     * @param period       两次埋点监测任务之间的时间间隔
-     * @param unit         时间单位
+     * @param command        要执行的任务
+     * @param initialDelay   初次埋点监测延迟的时间
+     * @param period         两次埋点监测任务之间的时间间隔
+     * @param unit           时间单位
+     * @param threadTypeEnum 线程类型：CPU密集型、IO密集型
      * @return {@link ScheduledExecutorService}
      * @author 皮锋
      * @custom.date 2020/8/24 20:33
      */
-    public static ScheduledExecutorService buryingPoint(Runnable command, long initialDelay, long period, TimeUnit unit) {
-        return BusinessBuryingPointScheduler.run(command, initialDelay, period, unit);
+    public static ScheduledExecutorService buryingPoint(Runnable command, long initialDelay, long period, TimeUnit unit, ThreadTypeEnums threadTypeEnum) {
+        return BusinessBuryingPointScheduler.run(command, initialDelay, period, unit, threadTypeEnum);
     }
 
 }

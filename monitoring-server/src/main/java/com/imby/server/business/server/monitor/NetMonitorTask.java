@@ -62,7 +62,7 @@ public class NetMonitorTask implements CommandLineRunner {
      */
     @Override
     public void run(String... args) {
-        ThreadPool.COMMON_SCHEDULED_THREAD_POOL.scheduleWithFixedDelay(() -> {
+        ThreadPool.COMMON_CPU_INTENSIVE_SCHEDULED_THREAD_POOL.scheduleWithFixedDelay(() -> {
             // 是否监控网络
             boolean isMonitoringEnable = MonitoringConfigPropertiesLoader.getMonitoringProperties().getNetworkProperties().isMonitoringEnable();
             if (isMonitoringEnable) {

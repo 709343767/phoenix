@@ -28,14 +28,16 @@ public class ThreadPool {
 
     /**
      * 创建一个CPU密集型的线程池。
-     * corePoolSize：核心线程数。核心线程会一直存在，即使没有任务执行；当线程数小于核心线程数的时候，即使有空闲线程，也会一直创建线程直到达到核心线程数；通常设置为1就可以了。<br>
-     * maxPoolSize：最大线程数。是线程池里允许存在的最大线程数量。<br>
+     * corePoolSize：指定了线程池中的线程数量，它的数量决定了添加的任务是开辟新的线程去执行，还是放到workQueue任务队列中去。<br>
+     * maxPoolSize：指定了线程池中的最大线程数量，这个参数会根据你使用的workQueue任务队列的类型，决定线程池会开辟的最大线程数量。<br>
      * keepAliveTime：线程空闲时间。当线程空闲时间达到keepAliveTime时，线程会退出（关闭），直到线程数等于核心线程数。<br>
      * workQueue：阻塞队列。建议使用有界队列，比如ArrayBlockingQueue。<br>
      * ThreadFactory：线程创建工厂。一般用来设置线程名称的。<br>
      * handler：拒绝策略。一般用来做日志记录等。<br>
      */
-    public static final ThreadPoolExecutor COMMON_CPU_INTENSIVE_THREAD_POOL = new ThreadPoolExecutor(1,
+    public static final ThreadPoolExecutor COMMON_CPU_INTENSIVE_THREAD_POOL = new ThreadPoolExecutor(
+            // 线程数 = Ncpu /（1 - 阻塞系数），CPU密集型阻塞系数相对较小
+            (int) (CpuUtils.getAvailableProcessors() / (1 - 0.2)),
             // 线程数 = Ncpu /（1 - 阻塞系数），CPU密集型阻塞系数相对较小
             (int) (CpuUtils.getAvailableProcessors() / (1 - 0.2)),
             1L,
@@ -51,14 +53,16 @@ public class ThreadPool {
 
     /**
      * 创建一个IO密集型的线程池。
-     * corePoolSize：核心线程数。核心线程会一直存在，即使没有任务执行；当线程数小于核心线程数的时候，即使有空闲线程，也会一直创建线程直到达到核心线程数；通常设置为1就可以了。<br>
-     * maxPoolSize：最大线程数。是线程池里允许存在的最大线程数量。<br>
+     * corePoolSize：指定了线程池中的线程数量，它的数量决定了添加的任务是开辟新的线程去执行，还是放到workQueue任务队列中去。<br>
+     * maxPoolSize：指定了线程池中的最大线程数量，这个参数会根据你使用的workQueue任务队列的类型，决定线程池会开辟的最大线程数量。<br>
      * keepAliveTime：线程空闲时间。当线程空闲时间达到keepAliveTime时，线程会退出（关闭），直到线程数等于核心线程数。<br>
      * workQueue：阻塞队列。建议使用有界队列，比如ArrayBlockingQueue。<br>
      * ThreadFactory：线程创建工厂。一般用来设置线程名称的。<br>
      * handler：拒绝策略。一般用来做日志记录等。<br>
      */
-    public static final ThreadPoolExecutor COMMON_IO_INTENSIVE_THREAD_POOL = new ThreadPoolExecutor(1,
+    public static final ThreadPoolExecutor COMMON_IO_INTENSIVE_THREAD_POOL = new ThreadPoolExecutor(
+            // 线程数 = Ncpu /（1 - 阻塞系数），IO密集型阻塞系数相对较大
+            (int) (CpuUtils.getAvailableProcessors() / (1 - 0.8)),
             // 线程数 = Ncpu /（1 - 阻塞系数），IO密集型阻塞系数相对较大
             (int) (CpuUtils.getAvailableProcessors() / (1 - 0.8)),
             1L,
@@ -73,12 +77,27 @@ public class ThreadPool {
             new ThreadPoolExecutor.AbortPolicy());
 
     /**
-     * 延迟/周期执行线程池
+     * 延迟/周期执行线程池（CPU密集型）
      */
-    public static final ScheduledExecutorService COMMON_SCHEDULED_THREAD_POOL = new ScheduledThreadPoolExecutor(1,
+    public static final ScheduledExecutorService COMMON_CPU_INTENSIVE_SCHEDULED_THREAD_POOL = new ScheduledThreadPoolExecutor(
+            // 线程数 = Ncpu /（1 - 阻塞系数），CPU密集型阻塞系数相对较小
+            (int) (CpuUtils.getAvailableProcessors() / (1 - 0.2)),
             new BasicThreadFactory.Builder()
                     // 设置线程名
-                    .namingPattern("monitoring-common-scheduled-%d")
+                    .namingPattern("monitoring-common-cpu-intensive-scheduled-%d")
+                    // 设置为守护线程
+                    .daemon(true)
+                    .build());
+
+    /**
+     * 延迟/周期执行线程池（IO密集型）
+     */
+    public static final ScheduledExecutorService COMMON_IO_INTENSIVE_SCHEDULED_THREAD_POOL = new ScheduledThreadPoolExecutor(
+            // 线程数 = Ncpu /（1 - 阻塞系数），IO密集型阻塞系数相对较大
+            (int) (CpuUtils.getAvailableProcessors() / (1 - 0.8)),
+            new BasicThreadFactory.Builder()
+                    // 设置线程名
+                    .namingPattern("monitoring-common-io-intensive-scheduled-%d")
                     // 设置为守护线程
                     .daemon(true)
                     .build());
