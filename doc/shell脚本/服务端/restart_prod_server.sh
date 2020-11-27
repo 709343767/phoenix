@@ -15,7 +15,7 @@ count=$(ps -ef | grep monitoring-server.jar | grep -v "grep" | wc -l)
 echo "监控服务端进程个数：$count"
 
 sec=5
-sum=12
+sum=60
 #开始一个循环
 while (($sum > 0)); do
   if (($count > 0)); then
