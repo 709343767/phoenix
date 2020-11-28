@@ -15,7 +15,7 @@ count=$(ps -ef | grep monitoring-agent.jar | grep -v "grep" | wc -l)
 echo "监控代理端进程个数：$count"
 
 sec=5
-sum=60
+sum=12
 #开始一个循环
 while (($sum > 0)); do
   if (($count > 0)); then
