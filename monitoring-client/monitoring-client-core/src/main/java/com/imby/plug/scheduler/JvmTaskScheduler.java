@@ -1,5 +1,6 @@
 package com.imby.plug.scheduler;
 
+import com.imby.common.util.CpuUtils;
 import com.imby.plug.core.ConfigLoader;
 import com.imby.plug.thread.JvmThread;
 import org.apache.commons.lang3.concurrent.BasicThreadFactory;
@@ -43,9 +44,11 @@ public class JvmTaskScheduler {
         // 是否发送Java虚拟机
         boolean jvmInfoEnable = ConfigLoader.MONITORING_PROPERTIES.getJvmInfoProperties().isEnable();
         if (jvmInfoEnable) {
-            final ScheduledExecutorService seService = new ScheduledThreadPoolExecutor(1,
+            final ScheduledExecutorService seService = new ScheduledThreadPoolExecutor(
+                    // 线程数 = Ncpu /（1 - 阻塞系数），IO密集型阻塞系数相对较大
+                    (int) (CpuUtils.getAvailableProcessors() / (1 - 0.8)),
                     new BasicThreadFactory.Builder()
-                            // 设置线程名
+                            // 设置线程名s
                             .namingPattern("monitoring-jvm-pool-thread-%d")
                             // 设置为守护线程
                             .daemon(true)

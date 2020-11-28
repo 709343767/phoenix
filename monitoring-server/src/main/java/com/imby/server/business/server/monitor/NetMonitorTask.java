@@ -1,7 +1,7 @@
 package com.imby.server.business.server.monitor;
 
 import com.imby.common.constant.AlarmLevelEnums;
-import com.imby.common.constant.AlarmTypeEnums;
+import com.imby.common.constant.MonitorTypeEnums;
 import com.imby.common.constant.ZeroOrOneConstants;
 import com.imby.common.domain.Alarm;
 import com.imby.common.dto.AlarmPackage;
@@ -62,7 +62,7 @@ public class NetMonitorTask implements CommandLineRunner {
      */
     @Override
     public void run(String... args) {
-        ThreadPool.COMMON_CPU_INTENSIVE_SCHEDULED_THREAD_POOL.scheduleWithFixedDelay(() -> {
+        ThreadPool.COMMON_IO_INTENSIVE_SCHEDULED_THREAD_POOL.scheduleWithFixedDelay(() -> {
             // 是否监控网络
             boolean isMonitoringEnable = MonitoringConfigPropertiesLoader.getMonitoringProperties().getNetworkProperties().isMonitoringEnable();
             if (isMonitoringEnable) {
@@ -173,7 +173,7 @@ public class NetMonitorTask implements CommandLineRunner {
                 .title(title)
                 .msg(msg)
                 .alarmLevel(alarmLevelEnums)
-                .alarmType(AlarmTypeEnums.NET)
+                .monitorType(MonitorTypeEnums.NET)
                 .build();
         AlarmPackage alarmPackage = new PackageConstructor().structureAlarmPackage(alarm);
         this.alarmService.dealAlarmPackage(alarmPackage);

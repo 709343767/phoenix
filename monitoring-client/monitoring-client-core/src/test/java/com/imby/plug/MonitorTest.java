@@ -2,7 +2,7 @@ package com.imby.plug;
 
 import com.google.common.base.Charsets;
 import com.imby.common.constant.AlarmLevelEnums;
-import com.imby.common.constant.AlarmTypeEnums;
+import com.imby.common.constant.MonitorTypeEnums;
 import com.imby.common.constant.ThreadTypeEnums;
 import com.imby.common.domain.Alarm;
 import com.imby.common.domain.Result;
@@ -37,7 +37,7 @@ public class MonitorTest {
         ScheduledExecutorService service = Monitor.buryingPoint(() -> {
             // 封装告警信息
             Alarm alarm = Alarm.builder().alarmLevel(AlarmLevelEnums.INFO)
-                    .alarmType(AlarmTypeEnums.CUSTOM)
+                    .monitorType(MonitorTypeEnums.CUSTOM)
                     .title("测试发送告警信息")
                     .msg("测试发送告警信息")
                     .charset(Charsets.UTF_8)

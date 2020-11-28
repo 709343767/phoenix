@@ -2,13 +2,13 @@ package com.imby.common.constant;
 
 /**
  * <p>
- * 告警类型
+ * 监控类型
  * </p>
  *
  * @author 皮锋
  * @custom.date 2020/4/1 20:04
  */
-public enum AlarmTypeEnums {
+public enum MonitorTypeEnums {
 
     /**
      * 数据库
@@ -31,7 +31,7 @@ public enum AlarmTypeEnums {
     INSTANCE,
 
     /**
-     * 自定义，如果是自己的业务告警，设置此类型
+     * 自定义，如果是自己的业务监控，设置此类型
      */
     CUSTOM
 

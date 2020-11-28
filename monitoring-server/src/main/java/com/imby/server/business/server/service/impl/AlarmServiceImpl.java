@@ -104,8 +104,8 @@ public class AlarmServiceImpl implements IAlarmService {
         Alarm alarm = alarmPackage.getAlarm();
         // 告警代码
         String alarmUuid = alarmPackage.getId();
-        // 告警类型
-        String alarmType = alarm.getAlarmType().name();
+        // 监控类型
+        String monitorType = alarm.getMonitorType().name();
         // 告警级别
         String alarmLevel = alarm.getAlarmLevel().name();
         // 告警内容标题
@@ -150,7 +150,7 @@ public class AlarmServiceImpl implements IAlarmService {
             }
         }
         // 发送告警以及把告警记录计入数据库
-        this.sendAlarmAndOperateDb(result, alarmUuid, alarmType, alarmLevel, alarmTitle, alarmMsg, alarmWays);
+        this.sendAlarmAndOperateDb(result, alarmUuid, monitorType, alarmLevel, alarmTitle, alarmMsg, alarmWays);
     }
 
     /**
@@ -161,22 +161,22 @@ public class AlarmServiceImpl implements IAlarmService {
      * 2.发送告警；<br>
      * 3.更新数据库中的告警发送结果。<br>
      *
-     * @param result     返回结果
-     * @param alarmUuid  告警代码
-     * @param alarmType  告警类型
-     * @param alarmLevel 告警级别
-     * @param alarmTitle 告警内容标题
-     * @param alarmMsg   告警内容
-     * @param alarmWays  告警方式
+     * @param result      返回结果
+     * @param alarmUuid   告警代码
+     * @param monitorType 监控类型
+     * @param alarmLevel  告警级别
+     * @param alarmTitle  告警内容标题
+     * @param alarmMsg    告警内容
+     * @param alarmWays   告警方式
      * @author 皮锋
      * @custom.date 2020/9/14 12:56
      */
     private void sendAlarmAndOperateDb(Result result,
-                                       String alarmUuid, String alarmType,
+                                       String alarmUuid, String monitorType,
                                        String alarmLevel, String alarmTitle,
                                        String alarmMsg, String[] alarmWays) {
         // 发送告警前先把告警记录存入数据库
-        int insertResult = this.insertMonitorAlarmRecordToDb(alarmUuid, alarmType, alarmLevel, alarmTitle, alarmMsg, alarmWays);
+        int insertResult = this.insertMonitorAlarmRecordToDb(alarmUuid, monitorType, alarmLevel, alarmTitle, alarmMsg, alarmWays);
         if (insertResult > 0) {
             List<String> alarmWaysList = Arrays.asList(alarmWays);
             // 告警方式为短信告警和邮件告警
@@ -330,17 +330,17 @@ public class AlarmServiceImpl implements IAlarmService {
      * 把告警信息插入数据库
      * </p>
      *
-     * @param uuid       告警代码
-     * @param alarmType  告警类型（SERVER、NET、INSTANCE、CUSTOM）
-     * @param alarmLevel 告警级别（INFO、WARM、ERROR、FATAL）
-     * @param alarmTitle 告警标题
-     * @param alarmMsg   告警内容
-     * @param alarmWays  告警方式（SMS、MAIL、...）
+     * @param uuid        告警代码
+     * @param monitorType 监控类型（SERVER、NET、INSTANCE、CUSTOM）
+     * @param alarmLevel  告警级别（INFO、WARM、ERROR、FATAL）
+     * @param alarmTitle  告警标题
+     * @param alarmMsg    告警内容
+     * @param alarmWays   告警方式（SMS、MAIL、...）
      * @return 插入记录数
      * @author 皮锋
      * @custom.date 2020/5/13 16:21
      */
-    private int insertMonitorAlarmRecordToDb(String uuid, String alarmType,
+    private int insertMonitorAlarmRecordToDb(String uuid, String monitorType,
                                              String alarmLevel, String alarmTitle,
                                              String alarmMsg, String[] alarmWays) {
         // 返回值
@@ -350,7 +350,7 @@ public class AlarmServiceImpl implements IAlarmService {
         monitorAlarmRecord.setTitle(alarmTitle);
         monitorAlarmRecord.setContent(alarmMsg);
         monitorAlarmRecord.setLevel(alarmLevel);
-        monitorAlarmRecord.setType(alarmType);
+        monitorAlarmRecord.setType(monitorType);
         // 告警方式
         for (String alarmWay : alarmWays) {
             // 告警方式为短信告警

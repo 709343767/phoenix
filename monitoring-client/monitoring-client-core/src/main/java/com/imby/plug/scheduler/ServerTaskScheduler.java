@@ -1,5 +1,6 @@
 package com.imby.plug.scheduler;
 
+import com.imby.common.util.CpuUtils;
 import com.imby.plug.core.ConfigLoader;
 import com.imby.plug.thread.ServerThread;
 import org.apache.commons.lang3.concurrent.BasicThreadFactory;
@@ -43,7 +44,9 @@ public class ServerTaskScheduler {
         // 是否发送服务器信息
         boolean serverInfoEnable = ConfigLoader.MONITORING_PROPERTIES.getServerInfoProperties().isEnable();
         if (serverInfoEnable) {
-            final ScheduledExecutorService seService = new ScheduledThreadPoolExecutor(1,
+            final ScheduledExecutorService seService = new ScheduledThreadPoolExecutor(
+                    // 线程数 = Ncpu /（1 - 阻塞系数），IO密集型阻塞系数相对较大
+                    (int) (CpuUtils.getAvailableProcessors() / (1 - 0.8)),
                     new BasicThreadFactory.Builder()
                             // 设置线程名
                             .namingPattern("monitoring-server-pool-thread-%d")
@@ -55,4 +58,5 @@ public class ServerTaskScheduler {
             seService.scheduleAtFixedRate(new ServerThread(), 40, rate, TimeUnit.SECONDS);
         }
     }
+
 }

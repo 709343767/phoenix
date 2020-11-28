@@ -1,8 +1,8 @@
 package com.imby.server.business.server.monitor;
 
 import com.imby.common.constant.AlarmLevelEnums;
-import com.imby.common.constant.AlarmTypeEnums;
 import com.imby.common.constant.DateTimeStylesEnums;
+import com.imby.common.constant.MonitorTypeEnums;
 import com.imby.common.domain.Alarm;
 import com.imby.common.dto.AlarmPackage;
 import com.imby.common.exception.NetException;
@@ -157,7 +157,7 @@ public class MemoryMonitor implements IServerMonitoringListener {
                 .title(title)
                 .msg(msg)
                 .alarmLevel(alarmLevelEnums)
-                .alarmType(AlarmTypeEnums.SERVER)
+                .monitorType(MonitorTypeEnums.SERVER)
                 .build();
         AlarmPackage alarmPackage = new PackageConstructor().structureAlarmPackage(alarm);
         this.alarmService.dealAlarmPackage(alarmPackage);

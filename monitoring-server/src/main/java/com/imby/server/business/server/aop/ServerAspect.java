@@ -109,7 +109,7 @@ public class ServerAspect {
         // 刷新服务器信息
         this.refreshServerInfo(ip, computerName, memoryDomain, cpuDomain, diskDomain);
         // 调用监听器回调接口
-        this.serverMonitoringListeners.forEach(o -> ThreadPool.COMMON_CPU_INTENSIVE_THREAD_POOL.execute(() -> {
+        this.serverMonitoringListeners.forEach(o -> ThreadPool.COMMON_IO_INTENSIVE_THREAD_POOL.execute(() -> {
             try {
                 o.wakeUpMonitor(ip);
             } catch (NetException e) {

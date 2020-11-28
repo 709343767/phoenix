@@ -2,7 +2,7 @@ package com.imby.common.domain;
 
 import com.imby.common.abs.AbstractSuperBean;
 import com.imby.common.constant.AlarmLevelEnums;
-import com.imby.common.constant.AlarmTypeEnums;
+import com.imby.common.constant.MonitorTypeEnums;
 import lombok.*;
 import lombok.experimental.Accessors;
 
@@ -34,11 +34,11 @@ public final class Alarm extends AbstractSuperBean {
     private AlarmLevelEnums alarmLevel = AlarmLevelEnums.WARN;
 
     /**
-     * 告警类型
+     * 监控类型
      *
-     * @see AlarmTypeEnums
+     * @see MonitorTypeEnums
      */
-    private AlarmTypeEnums alarmType;
+    private MonitorTypeEnums monitorType;
 
     /**
      * 字符集，如果当前字符集不是UTF-8，请指明字符集

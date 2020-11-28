@@ -2,7 +2,7 @@ package com.imby.server.business.server.monitor;
 
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.imby.common.constant.AlarmLevelEnums;
-import com.imby.common.constant.AlarmTypeEnums;
+import com.imby.common.constant.MonitorTypeEnums;
 import com.imby.common.constant.ZeroOrOneConstants;
 import com.imby.common.domain.Alarm;
 import com.imby.common.dto.AlarmPackage;
@@ -70,7 +70,7 @@ public class InstanceMonitorTask implements CommandLineRunner {
      */
     @Override
     public void run(String... args) {
-        ThreadPool.COMMON_CPU_INTENSIVE_SCHEDULED_THREAD_POOL.scheduleWithFixedDelay(() -> {
+        ThreadPool.COMMON_IO_INTENSIVE_SCHEDULED_THREAD_POOL.scheduleWithFixedDelay(() -> {
             try {
                 // 循环所有应用实例
                 for (Map.Entry<String, Instance> entry : this.instancePool.entrySet()) {
@@ -181,7 +181,7 @@ public class InstanceMonitorTask implements CommandLineRunner {
                 .title(title)
                 .msg(msg)
                 .alarmLevel(alarmLevelEnums)
-                .alarmType(AlarmTypeEnums.INSTANCE)
+                .monitorType(MonitorTypeEnums.INSTANCE)
                 .build();
         AlarmPackage alarmPackage = new PackageConstructor().structureAlarmPackage(alarm);
         this.alarmService.dealAlarmPackage(alarmPackage);

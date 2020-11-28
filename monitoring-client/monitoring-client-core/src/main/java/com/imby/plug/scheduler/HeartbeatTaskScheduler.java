@@ -1,5 +1,6 @@
 package com.imby.plug.scheduler;
 
+import com.imby.common.util.CpuUtils;
 import com.imby.plug.core.ConfigLoader;
 import com.imby.plug.thread.HeartbeatThread;
 import org.apache.commons.lang3.concurrent.BasicThreadFactory;
@@ -39,7 +40,9 @@ public class HeartbeatTaskScheduler {
      * @custom.date 2020年3月5日 下午2:56:47
      */
     public static void run() {
-        final ScheduledExecutorService seService = new ScheduledThreadPoolExecutor(1,
+        final ScheduledExecutorService seService = new ScheduledThreadPoolExecutor(
+                // 线程数 = Ncpu /（1 - 阻塞系数），IO密集型阻塞系数相对较大
+                (int) (CpuUtils.getAvailableProcessors() / (1 - 0.8)),
                 new BasicThreadFactory.Builder()
                         // 设置线程名
                         .namingPattern("monitoring-heartbeat-pool-thread-%d")

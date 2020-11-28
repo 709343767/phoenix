@@ -2,7 +2,7 @@ package com.imby.server.business.server.core;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
-import com.imby.common.constant.AlarmTypeEnums;
+import com.imby.common.constant.MonitorTypeEnums;
 import com.imby.server.business.server.domain.Cpu;
 import com.imby.server.business.server.domain.Disk;
 import com.imby.server.business.server.domain.Instance;
@@ -237,23 +237,23 @@ public class PersistPoolLifecycle implements InitializingBean, DisposableBean, I
 
     /**
      * <p>
-     * 数据库中删除了“应用实例”、“网络”、“服务器”数据时，唤醒执行监控信息池回调方法。
+     * 数据库中删除了“应用实例”、“服务器”数据时，唤醒执行监控信息池回调方法。
      * </p>
      *
-     * @param alarmType 告警类型
-     * @param params    回调参数
+     * @param monitorType 监控类型
+     * @param params      回调参数
      * @author 皮锋
      * @custom.date 2020/3/30 20:18
      */
     @Override
-    public void wakeUpMonitorPool(AlarmTypeEnums alarmType, List<String> params) {
-        if (alarmType == AlarmTypeEnums.INSTANCE) {
+    public void wakeUpMonitorPool(MonitorTypeEnums monitorType, List<String> params) {
+        if (monitorType == MonitorTypeEnums.INSTANCE) {
             params.forEach(e ->
                     // 移除当前应用实例
                     this.instancePool.remove(e)
             );
         }
-        if (alarmType == AlarmTypeEnums.SERVER) {
+        if (monitorType == MonitorTypeEnums.SERVER) {
             params.forEach(e -> {
                 //移除当前内存信息
                 this.memoryPool.remove(e);

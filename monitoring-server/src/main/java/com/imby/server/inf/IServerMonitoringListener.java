@@ -1,6 +1,6 @@
 package com.imby.server.inf;
 
-import com.imby.common.constant.AlarmTypeEnums;
+import com.imby.common.constant.MonitorTypeEnums;
 import com.imby.common.exception.NetException;
 import com.imby.server.business.server.aop.ServerAspect;
 import com.imby.server.business.web.service.impl.MonitorServerServiceImpl;
@@ -41,12 +41,12 @@ public interface IServerMonitoringListener {
      * </p>
      * 此方法在{@link MonitorServerServiceImpl#deleteMonitorServer(List)}中被调用。
      *
-     * @param alarmTypeEnums 告警类型
-     * @param params         回调参数
+     * @param monitorTypeEnum 监控类型
+     * @param params          回调参数
      * @author 皮锋
      * @custom.date 2020/3/30 20:18
      */
-    default void wakeUpMonitorPool(AlarmTypeEnums alarmTypeEnums, List<String> params) {
+    default void wakeUpMonitorPool(MonitorTypeEnums monitorTypeEnum, List<String> params) {
     }
 
 }

@@ -7,7 +7,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.common.collect.Lists;
-import com.imby.common.constant.AlarmTypeEnums;
+import com.imby.common.constant.MonitorTypeEnums;
 import com.imby.common.threadpool.ThreadPool;
 import com.imby.server.business.web.dao.*;
 import com.imby.server.business.web.entity.*;
@@ -184,8 +184,8 @@ public class MonitorServerServiceImpl extends ServiceImpl<IMonitorServerDao, Mon
 
         // 调用监听器回调接口
         this.serverMonitoringListeners.forEach(e ->
-                ThreadPool.COMMON_CPU_INTENSIVE_THREAD_POOL.execute(() ->
-                        e.wakeUpMonitorPool(AlarmTypeEnums.SERVER, ips)));
+                ThreadPool.COMMON_IO_INTENSIVE_THREAD_POOL.execute(() ->
+                        e.wakeUpMonitorPool(MonitorTypeEnums.SERVER, ips)));
         return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);
     }
 

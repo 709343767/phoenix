@@ -148,7 +148,7 @@ public class MonitorConfigServiceImpl extends ServiceImpl<IMonitorConfigDao, Mon
                 .build(), new UpdateWrapper<>());
         // 调用监听器回调接口
         this.monitorConfigListeners.forEach(e ->
-                ThreadPool.COMMON_CPU_INTENSIVE_THREAD_POOL.execute(e::wakeUpMonitoringConfigPropertiesLoader));
+                ThreadPool.COMMON_IO_INTENSIVE_THREAD_POOL.execute(e::wakeUpMonitoringConfigPropertiesLoader));
         return true;
     }
 
