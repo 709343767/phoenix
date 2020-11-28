@@ -8,6 +8,7 @@ import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.Contact;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
@@ -42,7 +43,11 @@ public class SwaggerConfig {
      */
     @Bean
     public Docket createRestApi() {
-        Docket docket = new Docket(DocumentationType.SWAGGER_2).apiInfo(apiInfo()).select()
+        Docket docket = new Docket(DocumentationType.SWAGGER_2).apiInfo(apiInfo())
+                // 分组名称（swagger-ui-layer不支持分组）
+                // .groupName("1.x")
+                //
+                .select()
                 // 包路径
                 .apis(RequestHandlerSelectors.basePackage(BASE_PACKAGE))
                 //
@@ -66,10 +71,14 @@ public class SwaggerConfig {
         return new ApiInfoBuilder()
                 // 页面标题
                 .title("监控服务端程序")
+                // 作者
+                .contact(new Contact("皮锋", "无", "709343767@qq.com"))
+                // 服务Url
+                .termsOfServiceUrl("无")
                 // 版本号
                 .version("LATEST-SNAPSHOT")
                 // 描述
-                .description("与监控代理程序或监控客户端程序通信，获取监控信息，维护被监控的应用列表，并且展示监控信息，发送告警通知。")
+                .description("“kacper”是一款监控框架，用于监控应用程序、服务器、数据库、网络。持续更新中...")
                 // 构建
                 .build();
     }
