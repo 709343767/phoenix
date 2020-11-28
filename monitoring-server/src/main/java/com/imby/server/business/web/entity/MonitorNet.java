@@ -44,9 +44,9 @@ public class MonitorNet implements Serializable {
     @TableField("IP_TARGET")
     private String ipTarget;
 
-    @ApiModelProperty(value = "IP地址（目的地）描述")
-    @TableField("IP_TARGET_DESC")
-    private String ipTargetDesc;
+    @ApiModelProperty(value = "IP地址描述")
+    @TableField("IP_DESC")
+    private String ipDesc;
 
     @ApiModelProperty(value = "新增时间")
     @TableField("INSERT_TIME")

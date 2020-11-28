@@ -45,10 +45,10 @@ public class MonitorNet {
     private String ipTarget;
 
     /**
-     * IP地址（目的地）描述
+     * IP地址描述
      */
-    @TableField("IP_TARGET_DESC")
-    private String ipTargetDesc;
+    @TableField("IP_DESC")
+    private String ipDesc;
 
     /**
      * 状态（0：网络不通，1：网络正常）
