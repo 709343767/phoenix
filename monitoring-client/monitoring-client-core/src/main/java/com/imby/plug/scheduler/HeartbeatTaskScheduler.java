@@ -3,6 +3,7 @@ package com.imby.plug.scheduler;
 import com.imby.common.util.CpuUtils;
 import com.imby.plug.core.ConfigLoader;
 import com.imby.plug.thread.HeartbeatThread;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.concurrent.BasicThreadFactory;
 
 import java.util.concurrent.ScheduledExecutorService;
@@ -17,6 +18,7 @@ import java.util.concurrent.TimeUnit;
  * @author 皮锋
  * @custom.date 2020年3月5日 下午2:54:21
  */
+@Slf4j
 public class HeartbeatTaskScheduler {
 
     /**
@@ -52,6 +54,13 @@ public class HeartbeatTaskScheduler {
         // 心跳频率
         long rate = ConfigLoader.MONITORING_PROPERTIES.getHeartbeatProperties().getRate();
         seService.scheduleAtFixedRate(new HeartbeatThread(), 35, rate, TimeUnit.SECONDS);
+        // 关闭钩子
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            if (!seService.isShutdown()) {
+                seService.shutdown();
+                log.info("{}", "心跳任务调度器关闭！");
+            }
+        }));
     }
 
 }

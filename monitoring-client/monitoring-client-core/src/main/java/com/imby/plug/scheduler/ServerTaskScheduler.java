@@ -3,6 +3,7 @@ package com.imby.plug.scheduler;
 import com.imby.common.util.CpuUtils;
 import com.imby.plug.core.ConfigLoader;
 import com.imby.plug.thread.ServerThread;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.concurrent.BasicThreadFactory;
 
 import java.util.concurrent.ScheduledExecutorService;
@@ -17,6 +18,7 @@ import java.util.concurrent.TimeUnit;
  * @author 皮锋
  * @custom.date 2020年3月7日 下午4:42:19
  */
+@Slf4j
 public class ServerTaskScheduler {
 
     /**
@@ -56,6 +58,13 @@ public class ServerTaskScheduler {
             // 发送服务器信息的频率
             long rate = ConfigLoader.MONITORING_PROPERTIES.getServerInfoProperties().getRate();
             seService.scheduleAtFixedRate(new ServerThread(), 40, rate, TimeUnit.SECONDS);
+            // 关闭钩子
+            Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+                if (!seService.isShutdown()) {
+                    seService.shutdown();
+                    log.info("{}", "发送服务器信息任务调度器关闭！");
+                }
+            }));
         }
     }
 

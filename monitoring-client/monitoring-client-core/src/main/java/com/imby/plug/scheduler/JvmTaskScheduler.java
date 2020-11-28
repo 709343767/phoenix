@@ -3,6 +3,7 @@ package com.imby.plug.scheduler;
 import com.imby.common.util.CpuUtils;
 import com.imby.plug.core.ConfigLoader;
 import com.imby.plug.thread.JvmThread;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.concurrent.BasicThreadFactory;
 
 import java.util.concurrent.ScheduledExecutorService;
@@ -17,6 +18,7 @@ import java.util.concurrent.TimeUnit;
  * @author 皮锋
  * @custom.date 2020/8/14 21:20
  */
+@Slf4j
 public class JvmTaskScheduler {
 
     /**
@@ -56,6 +58,13 @@ public class JvmTaskScheduler {
             // 发送Java虚拟机的频率
             long rate = ConfigLoader.MONITORING_PROPERTIES.getJvmInfoProperties().getRate();
             seService.scheduleAtFixedRate(new JvmThread(), 45, rate, TimeUnit.SECONDS);
+            // 关闭钩子
+            Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+                if (!seService.isShutdown()) {
+                    seService.shutdown();
+                    log.info("{}", "发送Java虚拟机信息任务调度器关闭！");
+                }
+            }));
         }
     }
 
