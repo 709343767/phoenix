@@ -58,7 +58,9 @@ public class ThreadShutdownHook {
             if (!executorService.isShutdown()) {
                 // 使新任务无法提交
                 executorService.shutdown();
-                if (executorService.awaitTermination(3, TimeUnit.SECONDS)) {
+                // 超时时长
+                long timeout = 3L;
+                if (executorService.awaitTermination(timeout, TimeUnit.SECONDS)) {
                     // 取消当前执行的任务
                     executorService.shutdownNow();
                 }
