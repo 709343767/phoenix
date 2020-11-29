@@ -56,13 +56,20 @@ public class ThreadShutdownHook {
     public void shutdownGracefully(ExecutorService executorService, String alias) {
         try {
             if (!executorService.isShutdown()) {
+                log.info("“{}”线程池开始关闭！", alias);
                 // 使新任务无法提交
                 executorService.shutdown();
                 // 超时时长
-                long timeout = 3L;
-                if (executorService.awaitTermination(timeout, TimeUnit.SECONDS)) {
+                long timeout = 15L;
+                // 等待未完成任务结束
+                if (!executorService.awaitTermination(timeout, TimeUnit.SECONDS)) {
                     // 取消当前执行的任务
                     executorService.shutdownNow();
+                    log.warn("中断工作进程，这可能导致某些任务不一致。请检查业务日志！");
+                }
+                // 等待任务取消的响应
+                if (!executorService.awaitTermination(timeout, TimeUnit.SECONDS)) {
+                    log.error("即使工作线程中断，线程池也无法关闭，这可能会导致某些任务不一致。请检查业务日志！");
                 }
             }
         } catch (InterruptedException e) {
