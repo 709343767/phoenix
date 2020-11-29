@@ -1,5 +1,6 @@
 package com.imby.plug.scheduler;
 
+import com.imby.common.threadpool.ThreadShutdownHook;
 import com.imby.common.util.CpuUtils;
 import com.imby.plug.core.ConfigLoader;
 import com.imby.plug.thread.HeartbeatThread;
@@ -55,12 +56,7 @@ public class HeartbeatTaskScheduler {
         long rate = ConfigLoader.MONITORING_PROPERTIES.getHeartbeatProperties().getRate();
         seService.scheduleAtFixedRate(new HeartbeatThread(), 35, rate, TimeUnit.SECONDS);
         // 关闭钩子
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            if (!seService.isShutdown()) {
-                seService.shutdownNow();
-                log.info("{}", "心跳任务调度器关闭！");
-            }
-        }));
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> new ThreadShutdownHook().shutdownGracefully(seService, "monitoring-heartbeat-pool-thread")));
     }
 
 }

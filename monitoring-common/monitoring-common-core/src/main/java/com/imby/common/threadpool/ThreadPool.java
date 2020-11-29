@@ -39,7 +39,7 @@ import java.util.concurrent.*;
  * @author 皮锋
  * @custom.date 2020/9/27 10:20
  */
-public class ThreadPool extends ThreadShutdownHook {
+public class ThreadPool {
 
     /**
      * <p>
@@ -50,6 +50,11 @@ public class ThreadPool extends ThreadShutdownHook {
      * @custom.date 2020/9/27 10:25
      */
     private ThreadPool() {
+    }
+
+    // 执行关闭钩子，优雅关闭线程池
+    static {
+        new ThreadShutdownHook().executeShutdownHook();
     }
 
     /**

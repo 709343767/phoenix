@@ -1,5 +1,6 @@
 package com.imby.plug.scheduler;
 
+import com.imby.common.threadpool.ThreadShutdownHook;
 import com.imby.common.util.CpuUtils;
 import com.imby.plug.core.ConfigLoader;
 import com.imby.plug.thread.ServerThread;
@@ -59,12 +60,7 @@ public class ServerTaskScheduler {
             long rate = ConfigLoader.MONITORING_PROPERTIES.getServerInfoProperties().getRate();
             seService.scheduleAtFixedRate(new ServerThread(), 40, rate, TimeUnit.SECONDS);
             // 关闭钩子
-            Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-                if (!seService.isShutdown()) {
-                    seService.shutdownNow();
-                    log.info("{}", "发送服务器信息任务调度器关闭！");
-                }
-            }));
+            Runtime.getRuntime().addShutdownHook(new Thread(() -> new ThreadShutdownHook().shutdownGracefully(seService, "monitoring-server-pool-thread")));
         }
     }
 
