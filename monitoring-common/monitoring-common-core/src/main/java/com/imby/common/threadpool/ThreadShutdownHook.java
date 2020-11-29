@@ -28,19 +28,19 @@ public class ThreadShutdownHook {
     private static void executeShutdownHook() {
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             if (!ThreadPool.COMMON_CPU_INTENSIVE_THREAD_POOL.isShutdown()) {
-                ThreadPool.COMMON_CPU_INTENSIVE_THREAD_POOL.shutdown();
+                ThreadPool.COMMON_CPU_INTENSIVE_THREAD_POOL.shutdownNow();
                 log.info("{}", "CPU密集型线程池关闭！");
             }
             if (!ThreadPool.COMMON_IO_INTENSIVE_THREAD_POOL.isShutdown()) {
-                ThreadPool.COMMON_IO_INTENSIVE_THREAD_POOL.shutdown();
+                ThreadPool.COMMON_IO_INTENSIVE_THREAD_POOL.shutdownNow();
                 log.info("{}", "IO密集型线程池关闭！");
             }
             if (!ThreadPool.COMMON_CPU_INTENSIVE_SCHEDULED_THREAD_POOL.isShutdown()) {
-                ThreadPool.COMMON_CPU_INTENSIVE_SCHEDULED_THREAD_POOL.shutdown();
+                ThreadPool.COMMON_CPU_INTENSIVE_SCHEDULED_THREAD_POOL.shutdownNow();
                 log.info("{}", "延迟/周期执行线程池（CPU密集型）关闭！");
             }
             if (!ThreadPool.COMMON_IO_INTENSIVE_SCHEDULED_THREAD_POOL.isShutdown()) {
-                ThreadPool.COMMON_IO_INTENSIVE_SCHEDULED_THREAD_POOL.shutdown();
+                ThreadPool.COMMON_IO_INTENSIVE_SCHEDULED_THREAD_POOL.shutdownNow();
                 log.info("{}", "延迟/周期执行线程池（IO密集型）关闭！");
             }
         }));

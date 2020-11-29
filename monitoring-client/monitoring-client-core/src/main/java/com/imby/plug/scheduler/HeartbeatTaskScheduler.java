@@ -57,7 +57,7 @@ public class HeartbeatTaskScheduler {
         // 关闭钩子
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             if (!seService.isShutdown()) {
-                seService.shutdown();
+                seService.shutdownNow();
                 log.info("{}", "心跳任务调度器关闭！");
             }
         }));

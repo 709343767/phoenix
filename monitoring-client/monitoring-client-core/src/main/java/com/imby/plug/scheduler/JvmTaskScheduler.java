@@ -61,7 +61,7 @@ public class JvmTaskScheduler {
             // 关闭钩子
             Runtime.getRuntime().addShutdownHook(new Thread(() -> {
                 if (!seService.isShutdown()) {
-                    seService.shutdown();
+                    seService.shutdownNow();
                     log.info("{}", "发送Java虚拟机信息任务调度器关闭！");
                 }
             }));
