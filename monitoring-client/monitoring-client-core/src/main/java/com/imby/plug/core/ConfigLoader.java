@@ -136,13 +136,14 @@ public class ConfigLoader {
             throw new NotFoundConfigParamException("监控程序找不到实例名称配置！");
         }
         // 频率配置不正确
-        if (heartbeatRate < 30) {
+        long minimum = 30L;
+        if (heartbeatRate < minimum) {
             throw new ErrorConfigParamException("心跳频率最小不能小于30秒！");
         }
-        if (serverInfoRate < 30) {
+        if (serverInfoRate < minimum) {
             throw new ErrorConfigParamException("获取服务器信息频率最小不能小于30秒！");
         }
-        if (jvmInfoRate < 30) {
+        if (jvmInfoRate < minimum) {
             throw new ErrorConfigParamException("获取Java虚拟机信息频率最小不能小于30秒！");
         }
         // 封装数据
