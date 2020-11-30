@@ -327,6 +327,31 @@
                             orient: 'vertical',
                             x: '80%' //图例位置，设置right发现图例和文字位置反了，设置一个数值就好了
                         },
+                        dataZoom: [{
+                            type: 'inside'
+                        }],
+                        toolbox: {
+                            show: true,
+                            feature: {
+                                dataZoom: {
+                                    yAxisIndex: "none"
+                                },
+                                dataView: {
+                                    readOnly: false
+                                },
+                                magicType: {
+                                    type: ["line", "bar"]
+                                },
+                                restore: {},
+                                saveAsImage: {}
+                            },
+                            iconStyle: {
+                                borderColor: "rgba(105, 98, 98, 1)"
+                            },
+                            right: "2%",
+                            orient: "vertical",
+                            showTitle: false,
+                        },
                         /*grid: {
                             left: '150px',
                             right: '150px'

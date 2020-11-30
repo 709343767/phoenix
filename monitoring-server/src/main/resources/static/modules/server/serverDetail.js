@@ -349,6 +349,31 @@
                             y: '12%',
                             orient: 'horizontal'
                         },
+                        dataZoom: [{
+                            type: 'inside'
+                        }],
+                        toolbox: {
+                            show: true,
+                            feature: {
+                                dataZoom: {
+                                    yAxisIndex: "none"
+                                },
+                                dataView: {
+                                    readOnly: false
+                                },
+                                magicType: {
+                                    type: ["line", "bar"]
+                                },
+                                restore: {},
+                                saveAsImage: {}
+                            },
+                            iconStyle: {
+                                borderColor: "rgba(105, 98, 98, 1)"
+                            },
+                            right: "1%",
+                            orient: "vertical",
+                            showTitle: false,
+                        },
                         /*grid: {
                             left: '150px',
                             right: '150px'
@@ -538,6 +563,31 @@
                             x: 'center',
                             y: '12%',
                             orient: 'horizontal'
+                        },
+                        dataZoom: [{
+                            type: 'inside'
+                        }],
+                        toolbox: {
+                            show: true,
+                            feature: {
+                                dataZoom: {
+                                    yAxisIndex: "none"
+                                },
+                                dataView: {
+                                    readOnly: false
+                                },
+                                magicType: {
+                                    type: ["line", "bar"]
+                                },
+                                restore: {},
+                                saveAsImage: {}
+                            },
+                            iconStyle: {
+                                borderColor: "rgba(105, 98, 98, 1)"
+                            },
+                            right: "5%",
+                            orient: "vertical",
+                            showTitle: false,
                         },
                         /*grid: {
                             left: '150px',
