@@ -12,16 +12,7 @@
             getJvmMemoryNonHeapInfoChart.resize();
             getJvmMemoryPoolInfoChart.resize();
         });
-        // 堆内存图表和非堆内存图表时间
-        var heapAndNonHeapTime = 'hour';
-        // 时间条件发生改变
-        form.on('select(time1)', function (data) {
-            heapAndNonHeapTime = data.value;
-            // 发送ajax请求，获取内存图表数据
-            getJvmMemoryChartInfo(heapAndNonHeapTime, 'Heap', 'Heap内存使用量');
-            getJvmMemoryChartInfo(heapAndNonHeapTime, 'Non_Heap', 'Non_Heap内存使用量');
-        });
-        // 内存池图表时间
+        // 时间
         var chartTime = 'hour';
         // 内存池图表内存类型
         var chartPool = $('#chart option:selected').val() === undefined ? '' : $('#chart option:selected').val();
@@ -32,10 +23,12 @@
             // 发送ajax请求，获取内存图表数据
             getJvmMemoryChartInfo(chartTime, chartPool, chartPool + '内存使用量');
         });
-        form.on('select(time2)', function (data) {
-            // 时间
+        // 时间条件发生改变
+        form.on('select(time1)', function (data) {
             chartTime = data.value;
             // 发送ajax请求，获取内存图表数据
+            getJvmMemoryChartInfo(chartTime, 'Heap', 'Heap内存使用量');
+            getJvmMemoryChartInfo(chartTime, 'Non_Heap', 'Non_Heap内存使用量');
             getJvmMemoryChartInfo(chartTime, chartPool, chartPool + '内存使用量');
         });
 
@@ -443,8 +436,8 @@
         // 每30秒刷新一次
         window.setInterval(function () {
             // 发送ajax请求，获取内存图表数据
-            getJvmMemoryChartInfo(heapAndNonHeapTime, 'Heap', 'Heap内存使用量');
-            getJvmMemoryChartInfo(heapAndNonHeapTime, 'Non_Heap', 'Non_Heap内存使用量');
+            getJvmMemoryChartInfo(chartTime, 'Heap', 'Heap内存使用量');
+            getJvmMemoryChartInfo(chartTime, 'Non_Heap', 'Non_Heap内存使用量');
             getJvmMemoryChartInfo(chartTime, chartPool, chartPool + '内存使用量');
             // 发送ajax请求，获取线程信息
             getJvmThreadInfo();
