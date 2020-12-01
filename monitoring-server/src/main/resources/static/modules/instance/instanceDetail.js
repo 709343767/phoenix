@@ -327,9 +327,9 @@
                             orient: 'vertical',
                             x: '80%' //图例位置，设置right发现图例和文字位置反了，设置一个数值就好了
                         },
-                        dataZoom: [{
+                        /*dataZoom: [{
                             type: 'inside'
-                        }],
+                        }],*/
                         toolbox: {
                             show: true,
                             feature: {

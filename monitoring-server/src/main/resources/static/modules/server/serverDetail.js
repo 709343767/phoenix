@@ -349,9 +349,9 @@
                             y: '12%',
                             orient: 'horizontal'
                         },
-                        dataZoom: [{
+                        /*dataZoom: [{
                             type: 'inside'
-                        }],
+                        }],*/
                         toolbox: {
                             show: true,
                             feature: {
@@ -564,9 +564,9 @@
                             y: '12%',
                             orient: 'horizontal'
                         },
-                        dataZoom: [{
+                        /*dataZoom: [{
                             type: 'inside'
-                        }],
+                        }],*/
                         toolbox: {
                             show: true,
                             feature: {
