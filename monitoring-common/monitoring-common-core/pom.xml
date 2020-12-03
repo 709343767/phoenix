@@ -30,6 +30,11 @@
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
         </dependency>
+        <!-- liferay.portal工具依赖 -->
+        <dependency>
+            <groupId>com.liferay.portal</groupId>
+            <artifactId>com.liferay.portal.kernel</artifactId>
+        </dependency>
         <!-- commons工具包依赖 -->
         <dependency>
             <groupId>org.apache.commons</groupId>

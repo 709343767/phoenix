@@ -45,6 +45,8 @@
         <fastjson.version>1.2.62</fastjson.version>
         <!-- guava基本工具版本 -->
         <guava.version>20.0</guava.version>
+        <!-- liferay.portal工具版本 -->
+        <com.liferay.portal.kernel.version>9.12.2</com.liferay.portal.kernel.version>
         <!-- joda-time时间日期版本 -->
         <joda-time.version>2.10.6</joda-time.version>
         <!-- commons工具包版本 -->
@@ -166,6 +168,12 @@
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
                 <version>${guava.version}</version>
+            </dependency>
+            <!-- liferay.portal工具依赖 -->
+            <dependency>
+                <groupId>com.liferay.portal</groupId>
+                <artifactId>com.liferay.portal.kernel</artifactId>
+                <version>${com.liferay.portal.kernel.version}</version>
             </dependency>
             <!-- commons工具包依赖 -->
             <dependency>
