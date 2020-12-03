@@ -2,7 +2,7 @@ package com.imby.server.business.server.core;
 
 import cn.hutool.core.util.IdUtil;
 import com.imby.common.abs.AbstractPackageConstructor;
-import com.imby.common.constant.EndpointTypeConstants;
+import com.imby.common.constant.EndpointTypeEnums;
 import com.imby.common.constant.LanguageTypeConstants;
 import com.imby.common.domain.Alarm;
 import com.imby.common.domain.Result;
@@ -46,7 +46,7 @@ public class PackageConstructor extends AbstractPackageConstructor {
         AlarmPackage alarmPackage = new AlarmPackage();
         alarmPackage.setId(IdUtil.randomUUID());
         alarmPackage.setDateTime(new Date());
-        alarmPackage.setInstanceEndpoint(EndpointTypeConstants.SERVER);
+        alarmPackage.setInstanceEndpoint(EndpointTypeEnums.SERVER.getCode());
         alarmPackage.setInstanceId(InstanceUtils.getInstanceId());
         alarmPackage.setInstanceName(InstanceUtils.getInstanceName());
         alarmPackage.setInstanceDesc(InstanceUtils.getInstanceDesc());
@@ -79,7 +79,7 @@ public class PackageConstructor extends AbstractPackageConstructor {
     @Override
     public BaseResponsePackage structureBaseResponsePackage(Result result) {
         BaseResponsePackage baseResponsePackage = new BaseResponsePackage();
-        baseResponsePackage.setInstanceEndpoint(EndpointTypeConstants.SERVER);
+        baseResponsePackage.setInstanceEndpoint(EndpointTypeEnums.SERVER.getCode());
         baseResponsePackage.setInstanceId(InstanceUtils.getInstanceId());
         baseResponsePackage.setInstanceName(InstanceUtils.getInstanceName());
         baseResponsePackage.setInstanceDesc(InstanceUtils.getInstanceDesc());
