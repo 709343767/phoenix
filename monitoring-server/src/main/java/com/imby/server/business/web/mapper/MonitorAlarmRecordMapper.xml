@@ -9,9 +9,9 @@
                b.success           as success,
                b.total - b.success as fail
         FROM (
-                 SELECT d.date,
-                        COUNT(ID)                as total,
-                        IFNULL(SUM(a.STATUS), 0) as success
+                 SELECT DATE_FORMAT(d.date, '%Y/%m/%d') as date,
+                        COUNT(ID)                       as total,
+                        IFNULL(SUM(a.STATUS), 0)        as success
                  FROM (
                           SELECT DATE_SUB(CURDATE(), INTERVAL 0 DAY) date
                           UNION
@@ -28,7 +28,7 @@
                           SELECT DATE_SUB(CURDATE(), INTERVAL 6 DAY) date
                       ) d
                           LEFT JOIN MONITOR_ALARM_RECORD a
-                                    ON (DATE_FORMAT(d.date, '%Y-%m-%d') = DATE_FORMAT(a.UPDATE_TIME, '%Y-%m-%d'))
+                                    ON (DATE_FORMAT(d.date, '%Y/%m/%d') = DATE_FORMAT(a.UPDATE_TIME, '%Y/%m/%d'))
                  GROUP BY d.date
              ) b
     </select>
