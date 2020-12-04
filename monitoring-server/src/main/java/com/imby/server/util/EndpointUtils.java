@@ -11,7 +11,7 @@ import org.apache.commons.lang3.StringUtils;
  * @author 皮锋
  * @custom.date 2020/12/4 12:42
  */
-public final class InstanceEndpointUtils {
+public final class EndpointUtils {
 
     /**
      * <p>
@@ -21,7 +21,7 @@ public final class InstanceEndpointUtils {
      * @author 皮锋
      * @custom.date 2020/12/4 12:59
      */
-    private InstanceEndpointUtils() {
+    private EndpointUtils() {
     }
 
     /**
