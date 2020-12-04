@@ -38,7 +38,7 @@ public class PackageConstructor extends AbstractPackageConstructor {
     @Override
     public BaseResponsePackage structureBaseResponsePackage(Result result) {
         BaseResponsePackage baseResponsePackage = new BaseResponsePackage();
-        baseResponsePackage.setInstanceEndpoint(EndpointTypeEnums.AGENT.getCode());
+        baseResponsePackage.setInstanceEndpoint(EndpointTypeEnums.AGENT.getNameEn());
         baseResponsePackage.setInstanceId(InstanceUtils.getInstanceId());
         baseResponsePackage.setInstanceName(ConfigLoader.MONITORING_PROPERTIES.getOwnProperties().getInstanceName());
         baseResponsePackage.setInstanceDesc(ConfigLoader.MONITORING_PROPERTIES.getOwnProperties().getInstanceDesc());

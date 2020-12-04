@@ -46,7 +46,7 @@ public class PackageConstructor extends AbstractPackageConstructor {
         AlarmPackage alarmPackage = new AlarmPackage();
         alarmPackage.setId(IdUtil.randomUUID());
         alarmPackage.setDateTime(new Date());
-        alarmPackage.setInstanceEndpoint(EndpointTypeEnums.SERVER.getCode());
+        alarmPackage.setInstanceEndpoint(EndpointTypeEnums.SERVER.getNameEn());
         alarmPackage.setInstanceId(InstanceUtils.getInstanceId());
         alarmPackage.setInstanceName(InstanceUtils.getInstanceName());
         alarmPackage.setInstanceDesc(InstanceUtils.getInstanceDesc());
@@ -79,7 +79,7 @@ public class PackageConstructor extends AbstractPackageConstructor {
     @Override
     public BaseResponsePackage structureBaseResponsePackage(Result result) {
         BaseResponsePackage baseResponsePackage = new BaseResponsePackage();
-        baseResponsePackage.setInstanceEndpoint(EndpointTypeEnums.SERVER.getCode());
+        baseResponsePackage.setInstanceEndpoint(EndpointTypeEnums.SERVER.getNameEn());
         baseResponsePackage.setInstanceId(InstanceUtils.getInstanceId());
         baseResponsePackage.setInstanceName(InstanceUtils.getInstanceName());
         baseResponsePackage.setInstanceDesc(InstanceUtils.getInstanceDesc());

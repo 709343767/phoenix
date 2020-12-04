@@ -94,11 +94,11 @@ public class ConfigLoader {
         // 缺省[实例端点类型（服务端、代理端、客户端），默认客户端]
         String instanceEndpoint = StringUtils.trimToNull(properties.getProperty("monitoring.own.instance.endpoint"));
         if (StringUtils.isBlank(instanceEndpoint)) {
-            instanceEndpoint = EndpointTypeEnums.CLIENT.getCode();
+            instanceEndpoint = EndpointTypeEnums.CLIENT.getNameEn();
         }
-        if (!(StringUtils.equals(instanceEndpoint, EndpointTypeEnums.CLIENT.getCode())
-                || StringUtils.equals(instanceEndpoint, EndpointTypeEnums.AGENT.getCode())
-                || StringUtils.equals(instanceEndpoint, EndpointTypeEnums.SERVER.getCode()))) {
+        if (!(StringUtils.equals(instanceEndpoint, EndpointTypeEnums.CLIENT.getNameEn())
+                || StringUtils.equals(instanceEndpoint, EndpointTypeEnums.AGENT.getNameEn())
+                || StringUtils.equals(instanceEndpoint, EndpointTypeEnums.SERVER.getNameEn()))) {
             throw new ErrorConfigParamException("实例端点类型只能为（server、agent、client）其中之一！");
         }
         // 必填[实例名称，一般为项目名]

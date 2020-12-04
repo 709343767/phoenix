@@ -1,5 +1,8 @@
 package com.imby.common.constant;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 /**
  * <p>
  * 端点类型（服务端、代理端、客户端）
@@ -8,6 +11,8 @@ package com.imby.common.constant;
  * @author 皮锋
  * @custom.date 2020年3月4日 下午10:30:27
  */
+@Getter
+@AllArgsConstructor
 public enum EndpointTypeEnums {
 
     /**
@@ -25,20 +30,14 @@ public enum EndpointTypeEnums {
      */
     CLIENT("client", "客户端");
 
-    private final String code;
-    private final String name;
+    /**
+     * 英文名字
+     */
+    private final String nameEn;
 
-    EndpointTypeEnums(String code, String name) {
-        this.code = code;
-        this.name = name();
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public String getName() {
-        return name;
-    }
+    /**
+     * 中文名字
+     */
+    private final String nameCn;
 
 }
