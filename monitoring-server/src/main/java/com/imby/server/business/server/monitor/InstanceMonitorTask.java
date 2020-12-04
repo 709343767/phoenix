@@ -15,6 +15,7 @@ import com.imby.server.business.server.entity.MonitorInstance;
 import com.imby.server.business.server.pool.InstancePool;
 import com.imby.server.business.server.service.IAlarmService;
 import com.imby.server.business.server.service.IInstanceService;
+import com.imby.server.util.InstanceEndpointUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.hyperic.sigar.SigarException;
 import org.joda.time.DateTime;
@@ -173,7 +174,7 @@ public class InstanceMonitorTask implements CommandLineRunner {
         String msg = "应用ID：" + instance.getInstanceId()
                 + "，<br>应用名称：" + instance.getInstanceName()
                 + "，<br>应用描述：" + instance.getInstanceDesc()
-                + "，<br>应用端点：" + instance.getInstanceEndpoint()
+                + "，<br>应用端点：" + InstanceEndpointUtils.instanceEndpointNameEn2Cn(instance.getInstanceEndpoint())
                 + "，<br>IP地址：" + instance.getIp()
                 + "，<br>服务器：" + instance.getComputerName()
                 + "，<br>时间：" + DateTimeUtils.dateToString(instance.getDateTime());
