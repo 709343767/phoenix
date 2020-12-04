@@ -1,5 +1,8 @@
 package com.imby.common.constant;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 /**
  * <p>
  * 日期时间样式
@@ -8,6 +11,8 @@ package com.imby.common.constant;
  * @author 皮锋
  * @custom.date 2020/4/10 16:06
  */
+@Getter
+@AllArgsConstructor
 public enum DateTimeStylesEnums {
 
     /**
@@ -134,21 +139,8 @@ public enum DateTimeStylesEnums {
      */
     MM_DD_HH_MM_SS_CN("MM月dd日 HH:mm:ss", true);
 
-    private String value;
+    private final String value;
 
-    private boolean isShowOnly;
-
-    private DateTimeStylesEnums(String value, boolean isShowOnly) {
-        this.value = value;
-        this.isShowOnly = isShowOnly;
-    }
-
-    public String getValue() {
-        return value;
-    }
-
-    public boolean isShowOnly() {
-        return isShowOnly;
-    }
+    private final boolean isShowOnly;
 
 }
