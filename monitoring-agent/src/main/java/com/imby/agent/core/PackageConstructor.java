@@ -6,6 +6,7 @@ import com.imby.common.constant.EndpointTypeEnums;
 import com.imby.common.constant.LanguageTypeConstants;
 import com.imby.common.domain.Result;
 import com.imby.common.dto.BaseResponsePackage;
+import com.imby.common.util.AppServerDetectorUtils;
 import com.imby.common.util.NetUtils;
 import com.imby.common.util.OsUtils;
 import com.imby.plug.core.ConfigLoader;
@@ -43,6 +44,7 @@ public class PackageConstructor extends AbstractPackageConstructor {
         baseResponsePackage.setInstanceName(ConfigLoader.MONITORING_PROPERTIES.getOwnProperties().getInstanceName());
         baseResponsePackage.setInstanceDesc(ConfigLoader.MONITORING_PROPERTIES.getOwnProperties().getInstanceDesc());
         baseResponsePackage.setInstanceLanguage(LanguageTypeConstants.JAVA);
+        baseResponsePackage.setAppServerType(AppServerDetectorUtils.getAppServerTypeEnum());
         baseResponsePackage.setIp(NetUtils.getLocalIp());
         baseResponsePackage.setComputerName(OsUtils.getComputerName());
         baseResponsePackage.setDateTime(new Date());

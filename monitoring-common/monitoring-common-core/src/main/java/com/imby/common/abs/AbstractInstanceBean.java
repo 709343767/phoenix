@@ -1,5 +1,6 @@
 package com.imby.common.abs;
 
+import com.imby.common.constant.AppServerTypeEnums;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -45,6 +46,11 @@ public abstract class AbstractInstanceBean extends AbstractSuperBean {
      * 应用实例程序语言
      */
     protected String instanceLanguage;
+
+    /**
+     * 应用服务器类型
+     */
+    protected AppServerTypeEnums appServerType;
 
     /**
      * IP地址

@@ -8,10 +8,7 @@ import com.imby.common.dto.HeartbeatPackage;
 import com.imby.common.dto.JvmPackage;
 import com.imby.common.dto.ServerPackage;
 import com.imby.common.exception.NetException;
-import com.imby.common.util.JvmUtils;
-import com.imby.common.util.NetUtils;
-import com.imby.common.util.OsUtils;
-import com.imby.common.util.ServerUtils;
+import com.imby.common.util.*;
 import com.imby.plug.util.InstanceUtils;
 import org.hyperic.sigar.SigarException;
 
@@ -51,6 +48,7 @@ public class PackageConstructor extends AbstractPackageConstructor {
         alarmPackage.setInstanceName(ConfigLoader.MONITORING_PROPERTIES.getOwnProperties().getInstanceName());
         alarmPackage.setInstanceDesc(ConfigLoader.MONITORING_PROPERTIES.getOwnProperties().getInstanceDesc());
         alarmPackage.setInstanceLanguage(ConfigLoader.MONITORING_PROPERTIES.getOwnProperties().getInstanceLanguage());
+        alarmPackage.setAppServerType(AppServerDetectorUtils.getAppServerTypeEnum());
         alarmPackage.setIp(NetUtils.getLocalIp());
         alarmPackage.setComputerName(OsUtils.getComputerName());
         // 判断字符集
@@ -85,6 +83,7 @@ public class PackageConstructor extends AbstractPackageConstructor {
         heartbeatPackage.setInstanceName(ConfigLoader.MONITORING_PROPERTIES.getOwnProperties().getInstanceName());
         heartbeatPackage.setInstanceDesc(ConfigLoader.MONITORING_PROPERTIES.getOwnProperties().getInstanceDesc());
         heartbeatPackage.setInstanceLanguage(ConfigLoader.MONITORING_PROPERTIES.getOwnProperties().getInstanceLanguage());
+        heartbeatPackage.setAppServerType(AppServerDetectorUtils.getAppServerTypeEnum());
         heartbeatPackage.setIp(NetUtils.getLocalIp());
         heartbeatPackage.setComputerName(OsUtils.getComputerName());
         heartbeatPackage.setDateTime(new Date());
@@ -113,6 +112,7 @@ public class PackageConstructor extends AbstractPackageConstructor {
         serverPackage.setInstanceName(ConfigLoader.MONITORING_PROPERTIES.getOwnProperties().getInstanceName());
         serverPackage.setInstanceDesc(ConfigLoader.MONITORING_PROPERTIES.getOwnProperties().getInstanceDesc());
         serverPackage.setInstanceLanguage(ConfigLoader.MONITORING_PROPERTIES.getOwnProperties().getInstanceLanguage());
+        serverPackage.setAppServerType(AppServerDetectorUtils.getAppServerTypeEnum());
         serverPackage.setIp(NetUtils.getLocalIp());
         serverPackage.setComputerName(OsUtils.getComputerName());
         serverPackage.setServer(ServerUtils.getServerInfo());
@@ -141,6 +141,7 @@ public class PackageConstructor extends AbstractPackageConstructor {
         jvmPackage.setInstanceName(ConfigLoader.MONITORING_PROPERTIES.getOwnProperties().getInstanceName());
         jvmPackage.setInstanceDesc(ConfigLoader.MONITORING_PROPERTIES.getOwnProperties().getInstanceDesc());
         jvmPackage.setInstanceLanguage(ConfigLoader.MONITORING_PROPERTIES.getOwnProperties().getInstanceLanguage());
+        jvmPackage.setAppServerType(AppServerDetectorUtils.getAppServerTypeEnum());
         jvmPackage.setIp(NetUtils.getLocalIp());
         jvmPackage.setComputerName(OsUtils.getComputerName());
         jvmPackage.setJvm(JvmUtils.getJvmInfo());

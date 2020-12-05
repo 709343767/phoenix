@@ -2,6 +2,7 @@ package com.imby.server.business.server.aop;
 
 import com.alibaba.fastjson.JSON;
 import com.imby.common.dto.HeartbeatPackage;
+import com.imby.common.util.AppServerDetectorUtils;
 import com.imby.server.business.server.controller.HeartbeatController;
 import com.imby.server.business.server.core.MonitoringConfigPropertiesLoader;
 import com.imby.server.business.server.domain.Instance;
@@ -83,6 +84,7 @@ public class InstanceAspect {
         instance.setComputerName(heartbeatPackage.getComputerName());
         instance.setInstanceDesc(heartbeatPackage.getInstanceDesc());
         instance.setInstanceLanguage(heartbeatPackage.getInstanceLanguage());
+        instance.setAppServerType(AppServerDetectorUtils.getAppServerTypeEnum());
         // 实例状态信息
         instance.setOnline(true);
         instance.setDateTime(new Date());

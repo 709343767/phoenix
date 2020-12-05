@@ -9,6 +9,7 @@ import com.imby.common.domain.Result;
 import com.imby.common.dto.AlarmPackage;
 import com.imby.common.dto.BaseResponsePackage;
 import com.imby.common.exception.NetException;
+import com.imby.common.util.AppServerDetectorUtils;
 import com.imby.common.util.NetUtils;
 import com.imby.common.util.OsUtils;
 import com.imby.server.util.InstanceUtils;
@@ -51,6 +52,7 @@ public class PackageConstructor extends AbstractPackageConstructor {
         alarmPackage.setInstanceName(InstanceUtils.getInstanceName());
         alarmPackage.setInstanceDesc(InstanceUtils.getInstanceDesc());
         alarmPackage.setInstanceLanguage(LanguageTypeConstants.JAVA);
+        alarmPackage.setAppServerType(AppServerDetectorUtils.getAppServerTypeEnum());
         alarmPackage.setIp(NetUtils.getLocalIp());
         alarmPackage.setComputerName(OsUtils.getComputerName());
         // 判断字符集
@@ -84,6 +86,7 @@ public class PackageConstructor extends AbstractPackageConstructor {
         baseResponsePackage.setInstanceName(InstanceUtils.getInstanceName());
         baseResponsePackage.setInstanceDesc(InstanceUtils.getInstanceDesc());
         baseResponsePackage.setInstanceLanguage(LanguageTypeConstants.JAVA);
+        baseResponsePackage.setAppServerType(AppServerDetectorUtils.getAppServerTypeEnum());
         baseResponsePackage.setIp(NetUtils.getLocalIp());
         baseResponsePackage.setComputerName(OsUtils.getComputerName());
         baseResponsePackage.setId(IdUtil.randomUUID());

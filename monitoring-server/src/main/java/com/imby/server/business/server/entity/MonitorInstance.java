@@ -86,4 +86,10 @@ public class MonitorInstance {
     @TableField("LANGUAGE")
     private String language;
 
+    /**
+     * 应用服务器类型
+     */
+    @TableField("APP_SERVER_TYPE")
+    private String appServerType;
+
 }
