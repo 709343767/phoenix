@@ -62,6 +62,9 @@ public class MonitorInstanceVo implements ISuperBean {
     @ApiModelProperty(value = "程序语言")
     private String language;
 
+    @ApiModelProperty(value = "应用服务器类型")
+    private String appServerType;
+
     /**
      * <p>
      * MonitorInstanceVo转MonitorInstance

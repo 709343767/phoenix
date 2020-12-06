@@ -2,6 +2,7 @@ package com.imby.common.constant;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.ToString;
 
 /**
  * <p>
@@ -12,6 +13,7 @@ import lombok.Getter;
  * @custom.date 2020年3月4日 下午10:30:27
  */
 @Getter
+@ToString
 @AllArgsConstructor
 public enum EndpointTypeEnums {
 

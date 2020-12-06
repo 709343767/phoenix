@@ -24,6 +24,10 @@ public class AppServerDetectorUtils {
     private AppServerDetectorUtils() {
     }
 
+    public static final String JETTY_CLASS = "/org/mortbay/jetty/Server.class";
+
+    public static final String UNDERTOW_CLASS = "/io/undertow/Undertow.class";
+
     /**
      * <p>
      * 获取应用服务器枚举类型
@@ -40,13 +44,41 @@ public class AppServerDetectorUtils {
         if (ServerDetector.isWebLogic()) {
             return AppServerTypeEnums.WEBLOGIC;
         }
-        if (ServerDetector.isJBoss()) {
-            return AppServerTypeEnums.JBOSS;
+        if (isUndertow()) {
+            return AppServerTypeEnums.UNDERTOW;
         }
-        if (ServerDetector.isWebSphere()) {
-            return AppServerTypeEnums.WEBSPHERE;
+        if (isJetty()) {
+            return AppServerTypeEnums.JETTY;
         }
         return AppServerTypeEnums.UNKNOWN;
+    }
+
+    /**
+     * <p>
+     * 是不是Jetty服务器
+     * </p>
+     *
+     * @return 是 或者 否
+     * @author 皮锋
+     * @custom.date 2020/12/6 11:34
+     */
+    private static boolean isJetty() {
+        Class<?> c = AppServerDetectorUtils.class;
+        return c.getResource(JETTY_CLASS) != null;
+    }
+
+    /**
+     * <p>
+     * 是不是Undertow服务器
+     * </p>
+     *
+     * @return 是 或者 否
+     * @author 皮锋
+     * @custom.date 2020/12/6 11:35
+     */
+    private static boolean isUndertow() {
+        Class<?> c = AppServerDetectorUtils.class;
+        return c.getResource(UNDERTOW_CLASS) != null;
     }
 
 }

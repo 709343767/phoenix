@@ -72,4 +72,8 @@ public class MonitorInstance implements Serializable {
     @TableField("LANGUAGE")
     private String language;
 
+    @ApiModelProperty(value = "应用服务器类型")
+    @TableField("APP_SERVER_TYPE")
+    private String appServerType;
+
 }

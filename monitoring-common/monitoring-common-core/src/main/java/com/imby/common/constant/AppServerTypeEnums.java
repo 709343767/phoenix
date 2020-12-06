@@ -1,5 +1,9 @@
 package com.imby.common.constant;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.ToString;
+
 /**
  * <p>
  * 应用服务器类型
@@ -8,41 +12,39 @@ package com.imby.common.constant;
  * @author 皮锋
  * @custom.date 2020/12/5 21:16
  */
+@Getter
+@ToString
+@AllArgsConstructor
 public enum AppServerTypeEnums {
 
     /**
      * Tomcat
      */
-    TOMCAT,
+    TOMCAT("Tomcat"),
 
     /**
      * Undertow
      */
-    UNDERTOW,
-
-    /**
-     * WebLogic
-     */
-    WEBLOGIC,
-
-    /**
-     * JBoss
-     */
-    JBOSS,
-
-    /**
-     * WebSphere
-     */
-    WEBSPHERE,
+    UNDERTOW("Undertow"),
 
     /**
      * Jetty
      */
-    JETTY,
+    JETTY("Jetty"),
+
+    /**
+     * WebLogic
+     */
+    WEBLOGIC("WebLogic"),
 
     /**
      * 未知
      */
-    UNKNOWN
+    UNKNOWN("未知");
+
+    /**
+     * 应用服务器类型名
+     */
+    private final String name;
 
 }
