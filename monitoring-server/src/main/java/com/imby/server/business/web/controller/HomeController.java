@@ -95,7 +95,7 @@ public class HomeController {
         HomeNetVo homeNetVo = this.monitorNetService.getHomeNetInfo();
         HomeServerVo homeServerVo = this.monitorServerService.getHomeServerInfo();
         HomeAlarmRecordVo homeAlarmRecordVo = this.monitorAlarmRecordService.getHomeAlarmRecordInfo();
-        Map<String, Object> map = new HashMap<>(4);
+        Map<String, Object> map = new HashMap<>(16);
         map.put("homeInstanceVo", homeInstanceVo);
         map.put("homeNetVo", homeNetVo);
         map.put("homeServerVo", homeServerVo);
