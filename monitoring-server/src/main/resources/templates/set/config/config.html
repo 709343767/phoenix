@@ -41,19 +41,6 @@
                                     <div class="layui-form-mid layui-word-aux">1到10，共10级，值越小监控越灵敏</div>
                                 </div>
                                 <div class="layui-card">
-                                    <div class="layui-card-header div-font-weight">网络</div>
-                                    <div class="layui-card-body" pad20>
-                                        <div class="layui-form-item">
-                                            <label class="layui-form-label" style="text-align: left;">是否监控</label>
-                                            <div class="layui-input-inline">
-                                                <input type="checkbox" name="netEnable" lay-text="是|否"
-                                                       th:value=1 lay-skin="switch"
-                                                       th:checked="${monitorConfigNet.enable==1}? true : false">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="layui-card">
                                     <div class="layui-card-header div-font-weight">告警</div>
                                     <div class="layui-card-body" pad20>
                                         <div class="layui-form-item">
@@ -145,6 +132,19 @@
                                                                th:checked="${monitorConfigAlarmSms.enterprise=='transfar'}? true : false">
                                                     </div>
                                                 </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-card">
+                                    <div class="layui-card-header div-font-weight">网络</div>
+                                    <div class="layui-card-body" pad20>
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label" style="text-align: left;">是否监控</label>
+                                            <div class="layui-input-inline">
+                                                <input type="checkbox" name="netEnable" lay-text="是|否"
+                                                       th:value=1 lay-skin="switch"
+                                                       th:checked="${monitorConfigNet.enable==1}? true : false">
                                             </div>
                                         </div>
                                     </div>
