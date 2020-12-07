@@ -24,6 +24,6 @@ public final class LanguageTypeConstants {
     /**
      * JAVA语言
      */
-    public static final String JAVA = "JAVA";
+    public static final String JAVA = "Java";
 
 }
