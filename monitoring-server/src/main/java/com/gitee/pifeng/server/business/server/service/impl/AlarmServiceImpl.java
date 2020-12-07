@@ -114,10 +114,6 @@ public class AlarmServiceImpl implements IAlarmService {
         String alarmMsg = alarm.getMsg();
         // 告警方式
         String[] alarmWays = MonitoringConfigPropertiesLoader.getMonitoringProperties().getAlarmProperties().getWay();
-        // 是否发送告警信息
-        if (!this.isSendAlarm(result, alarm)) {
-            return;
-        }
         // 告警代码
         String code = alarm.getCode();
         // 如果有告警代码，查询数据库中此告警代码对应的告警级别、告警标题、告警内容，数据库中有就用数据库的
@@ -149,8 +145,14 @@ public class AlarmServiceImpl implements IAlarmService {
                 return;
             }
         }
+        // 不管发不发送告警信息，先把告警记录存入数据库
+        this.insertMonitorAlarmRecordToDb(alarmUuid, monitorType, alarmLevel, alarmTitle, alarmMsg, alarmWays);
+        // 是否发送告警信息
+        if (!this.isSendAlarm(result, alarm)) {
+            return;
+        }
         // 发送告警以及把告警记录计入数据库
-        this.sendAlarmAndOperateDb(result, alarmUuid, monitorType, alarmLevel, alarmTitle, alarmMsg, alarmWays);
+        this.sendAlarmAndOperateDb(result, alarmUuid, alarmLevel, alarmTitle, alarmMsg, alarmWays);
     }
 
     /**
@@ -161,45 +163,40 @@ public class AlarmServiceImpl implements IAlarmService {
      * 2.发送告警；<br>
      * 3.更新数据库中的告警发送结果。<br>
      *
-     * @param result      返回结果
-     * @param alarmUuid   告警代码
-     * @param monitorType 监控类型
-     * @param alarmLevel  告警级别
-     * @param alarmTitle  告警内容标题
-     * @param alarmMsg    告警内容
-     * @param alarmWays   告警方式
+     * @param result     返回结果
+     * @param alarmUuid  告警代码
+     * @param alarmLevel 告警级别
+     * @param alarmTitle 告警内容标题
+     * @param alarmMsg   告警内容
+     * @param alarmWays  告警方式
      * @author 皮锋
      * @custom.date 2020/9/14 12:56
      */
     private void sendAlarmAndOperateDb(Result result,
-                                       String alarmUuid, String monitorType,
+                                       String alarmUuid,
                                        String alarmLevel, String alarmTitle,
                                        String alarmMsg, String[] alarmWays) {
-        // 发送告警前先把告警记录存入数据库
-        int insertResult = this.insertMonitorAlarmRecordToDb(alarmUuid, monitorType, alarmLevel, alarmTitle, alarmMsg, alarmWays);
-        if (insertResult > 0) {
-            List<String> alarmWaysList = Arrays.asList(alarmWays);
-            // 告警方式为短信告警和邮件告警
-            if (alarmWaysList.contains(AlarmWayEnums.SMS.name()) && alarmWaysList.contains(AlarmWayEnums.MAIL.name())) {
-                // 处理短信告警
-                this.dealSmsAlarm(result, alarmTitle, alarmMsg, alarmLevel);
-                // 告警发送完更新数据库中告警发送结果
-                this.updateMonitorAlarmRecordToDb(result, alarmUuid, AlarmWayEnums.SMS);
-                // 处理邮件告警
-                this.dealMailAlarm(result, alarmTitle, alarmMsg, alarmLevel);
-                // 告警发送完更新数据库中告警发送结果
-                this.updateMonitorAlarmRecordToDb(result, alarmUuid, AlarmWayEnums.MAIL);
-            } else if (alarmWaysList.contains(AlarmWayEnums.SMS.name())) {
-                // 处理短信告警
-                this.dealSmsAlarm(result, alarmTitle, alarmMsg, alarmLevel);
-                // 告警发送完更新数据库中告警发送结果
-                this.updateMonitorAlarmRecordToDb(result, alarmUuid, AlarmWayEnums.SMS);
-            } else if (alarmWaysList.contains(AlarmWayEnums.MAIL.name())) {
-                // 处理邮件告警
-                this.dealMailAlarm(result, alarmTitle, alarmMsg, alarmLevel);
-                // 告警发送完更新数据库中告警发送结果
-                this.updateMonitorAlarmRecordToDb(result, alarmUuid, AlarmWayEnums.MAIL);
-            }
+        List<String> alarmWaysList = Arrays.asList(alarmWays);
+        // 告警方式为短信告警和邮件告警
+        if (alarmWaysList.contains(AlarmWayEnums.SMS.name()) && alarmWaysList.contains(AlarmWayEnums.MAIL.name())) {
+            // 处理短信告警
+            this.dealSmsAlarm(result, alarmTitle, alarmMsg, alarmLevel);
+            // 告警发送完更新数据库中告警发送结果
+            this.updateMonitorAlarmRecordToDb(result, alarmUuid, AlarmWayEnums.SMS);
+            // 处理邮件告警
+            this.dealMailAlarm(result, alarmTitle, alarmMsg, alarmLevel);
+            // 告警发送完更新数据库中告警发送结果
+            this.updateMonitorAlarmRecordToDb(result, alarmUuid, AlarmWayEnums.MAIL);
+        } else if (alarmWaysList.contains(AlarmWayEnums.SMS.name())) {
+            // 处理短信告警
+            this.dealSmsAlarm(result, alarmTitle, alarmMsg, alarmLevel);
+            // 告警发送完更新数据库中告警发送结果
+            this.updateMonitorAlarmRecordToDb(result, alarmUuid, AlarmWayEnums.SMS);
+        } else if (alarmWaysList.contains(AlarmWayEnums.MAIL.name())) {
+            // 处理邮件告警
+            this.dealMailAlarm(result, alarmTitle, alarmMsg, alarmLevel);
+            // 告警发送完更新数据库中告警发送结果
+            this.updateMonitorAlarmRecordToDb(result, alarmUuid, AlarmWayEnums.MAIL);
         }
     }
 
