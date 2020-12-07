@@ -99,7 +99,7 @@ public class MybaisPlusAutoGenerator {
             @Override
             public String outputFile(TableInfo tableInfo) {
                 // 自定义输入文件名称
-                return projectPath + "/src/main/java/com/imby/server/business/web/mapper/" +
+                return projectPath + "/src/main/java/com/gitee/pifeng/server/business/web/mapper/" +
                         tableInfo.getEntityName() + "Mapper" + StringPool.DOT_XML;
             }
         });

@@ -84,7 +84,7 @@ mybatis-plus:
   check-config-location: false
   #扫描mapper文件的位置
   mapper-locations:
-    - classpath:com/imby/server/business/**/mapper/*Mapper.xml
+    - classpath:com/gitee/pifeng/server/business/**/mapper/*Mapper.xml
   configuration:
     #是否开启缓存
     cache-enabled: false
