@@ -192,11 +192,11 @@
                         var obj = data[i];
                         var title = obj.title;
                         var content = obj.content;
-                        var updateTime = obj.updateTime;
+                        var insertTime = obj.insertTime;
                         html += '<li>'
                             + '<h3>' + title + '</h3>'
                             + '<p>' + content + '</p>'
-                            + '<span>' + updateTime + '</span>'
+                            + '<span>' + insertTime + '</span>'
                             + '</li>';
                     }
                     $('#get-last-5-alarm-record').empty().append(html);
