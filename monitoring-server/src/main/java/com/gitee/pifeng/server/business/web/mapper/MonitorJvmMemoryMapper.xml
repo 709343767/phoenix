@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gitee.pifeng.server.business.web.dao.IMonitorJvmMemoryDao">
+
+    <!-- 获取jvm内存类型 -->
+    <select id="getJvmMemoryTypes" resultType="java.lang.String" parameterType="java.lang.String">
+        SELECT MEMORY_TYPE
+        FROM MONITOR_JVM_MEMORY
+        where INSTANCE_ID = #{instanceId}
+        GROUP BY MEMORY_TYPE
+    </select>
+
+    <!-- 获取应用实例详情页面java虚拟机内存图表信息 -->
+    <select id="getInstanceDetailPageJvmMemoryChartInfo" parameterType="java.util.HashMap"
+            resultType="com.gitee.pifeng.server.business.web.vo.InstanceDetailPageJvmMemoryChartVo">
+        SELECT INIT AS init,
+        USED AS used,
+        COMMITTED AS committed,
+        MAX AS max,
+        INSERT_TIME AS insertTime
+        FROM MONITOR_JVM_MEMORY
+        WHERE INSTANCE_ID = #{params.instanceId}
+        <if test="params.memoryType!=null and params.memoryType!=''">
+            AND MEMORY_TYPE = #{params.memoryType}
+        </if>
+        <if test="params.startTime!=null and params.endTime!=null">
+            AND INSERT_TIME BETWEEN #{params.startTime} AND #{params.endTime}
+        </if>
+    </select>
+
+</mapper>

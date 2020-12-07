@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gitee.pifeng.server.business.web.dao.IMonitorServerDiskDao">
+
+    <!-- 获取服务器详情页面服务器磁盘图表信息 -->
+    <select id="getServerDetailPageServerDiskChartInfo" parameterType="java.lang.String" databaseId="mysql"
+            resultType="com.gitee.pifeng.server.business.web.entity.MonitorServerDisk">
+        SELECT *
+        FROM MONITOR_SERVER_DISK
+        WHERE IP = #{ip}
+          AND INSERT_TIME =
+              (SELECT INSERT_TIME FROM MONITOR_SERVER_DISK WHERE IP = #{ip} ORDER BY INSERT_TIME DESC LIMIT 1)
+    </select>
+
+</mapper>

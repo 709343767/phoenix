@@ -7,7 +7,7 @@
     <!-- 监控父项目 -->
     <parent>
         <artifactId>monitoring</artifactId>
-        <groupId>com.imby</groupId>
+        <groupId>com.gitee.pifeng</groupId>
         <version>${revision}</version>
         <relativePath>..</relativePath>
     </parent>
@@ -31,19 +31,19 @@
         <dependencies>
             <!-- 监控客户端依赖 -->
             <dependency>
-                <groupId>com.imby</groupId>
+                <groupId>com.gitee.pifeng</groupId>
                 <artifactId>monitoring-client-core</artifactId>
                 <version>${revision}</version>
             </dependency>
             <!-- 监控项目客户端与springboot集成的starter -->
             <dependency>
-                <groupId>com.imby</groupId>
+                <groupId>com.gitee.pifeng</groupId>
                 <artifactId>monitoring-client-spring-boot-starter</artifactId>
                 <version>${revision}</version>
             </dependency>
             <!-- 监控项目客户端与springmvc集成的integrator -->
             <dependency>
-                <groupId>com.imby</groupId>
+                <groupId>com.gitee.pifeng</groupId>
                 <artifactId>monitoring-client-spring-mvc-integrator</artifactId>
                 <version>${revision}</version>
             </dependency>

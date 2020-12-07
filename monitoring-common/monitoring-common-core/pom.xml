@@ -7,7 +7,7 @@
     <!-- 监控父项目，为监控公共模父项目 -->
     <parent>
         <artifactId>monitoring-common</artifactId>
-        <groupId>com.imby</groupId>
+        <groupId>com.gitee.pifeng</groupId>
         <version>${revision}</version>
         <relativePath>..</relativePath>
     </parent>

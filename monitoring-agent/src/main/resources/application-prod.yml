@@ -8,4 +8,4 @@ logging:
   config: classpath:log-prod.xml
   #监控相关的日志级别设置成debug
   level:
-    com.imby: debug
+    com.gitee.pifeng: debug

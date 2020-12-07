@@ -7,7 +7,7 @@
     <!-- 监控父项目 -->
     <parent>
         <artifactId>monitoring</artifactId>
-        <groupId>com.imby</groupId>
+        <groupId>com.gitee.pifeng</groupId>
         <version>${revision}</version>
         <relativePath>..</relativePath>
     </parent>
@@ -22,12 +22,12 @@
     <dependencies>
         <!-- 监控WEB公共模块依赖 -->
         <dependency>
-            <groupId>com.imby</groupId>
+            <groupId>com.gitee.pifeng</groupId>
             <artifactId>monitoring-common-web</artifactId>
         </dependency>
         <!-- springboot项目集成监控依赖，使之拥有监控功能 -->
         <dependency>
-            <groupId>com.imby</groupId>
+            <groupId>com.gitee.pifeng</groupId>
             <artifactId>monitoring-client-spring-boot-starter</artifactId>
         </dependency>
 
@@ -130,7 +130,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
                     <!-- 指定该Main Class为全局的唯一入口 -->
-                    <mainClass>com.imby.server.ServerApplication</mainClass>
+                    <mainClass>com.gitee.pifeng.server.ServerApplication</mainClass>
                 </configuration>
             </plugin>
         </plugins>

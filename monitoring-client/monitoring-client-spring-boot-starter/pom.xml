@@ -7,7 +7,7 @@
     <!-- 监控父项目，为监控客户端父项目 -->
     <parent>
         <artifactId>monitoring-client</artifactId>
-        <groupId>com.imby</groupId>
+        <groupId>com.gitee.pifeng</groupId>
         <version>${revision}</version>
         <relativePath>..</relativePath>
     </parent>
@@ -22,7 +22,7 @@
     <dependencies>
         <!-- 监控客户端模块依赖 -->
         <dependency>
-            <groupId>com.imby</groupId>
+            <groupId>com.gitee.pifeng</groupId>
             <artifactId>monitoring-client-core</artifactId>
         </dependency>
 

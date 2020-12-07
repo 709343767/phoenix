@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <!-- 项目基本信息 -->
-    <groupId>com.imby</groupId>
+    <groupId>com.gitee.pifeng</groupId>
     <artifactId>monitoring</artifactId>
     <version>${revision}</version>
     <modules>
@@ -98,55 +98,55 @@
 
             <!-- 监控公共模块父项目 -->
             <dependency>
-                <groupId>com.imby</groupId>
+                <groupId>com.gitee.pifeng</groupId>
                 <artifactId>monitoring-common</artifactId>
                 <version>${revision}</version>
             </dependency>
             <!-- 监控公共模块 -->
             <dependency>
-                <groupId>com.imby</groupId>
+                <groupId>com.gitee.pifeng</groupId>
                 <artifactId>monitoring-common-core</artifactId>
                 <version>${revision}</version>
             </dependency>
             <!-- 监控WEB公共模块 -->
             <dependency>
-                <groupId>com.imby</groupId>
+                <groupId>com.gitee.pifeng</groupId>
                 <artifactId>monitoring-common-web</artifactId>
                 <version>${revision}</version>
             </dependency>
             <!-- 监控客户端父项目 -->
             <dependency>
-                <groupId>com.imby</groupId>
+                <groupId>com.gitee.pifeng</groupId>
                 <artifactId>monitoring-client</artifactId>
                 <version>${revision}</version>
             </dependency>
             <!-- 监控客户端基础模块 -->
             <dependency>
-                <groupId>com.imby</groupId>
+                <groupId>com.gitee.pifeng</groupId>
                 <artifactId>monitoring-client-core</artifactId>
                 <version>${revision}</version>
             </dependency>
             <!-- 监控客户端与springboot集成的starter -->
             <dependency>
-                <groupId>com.imby</groupId>
+                <groupId>com.gitee.pifeng</groupId>
                 <artifactId>monitoring-client-spring-boot-starter</artifactId>
                 <version>${revision}</version>
             </dependency>
             <!-- 监控客户端与springmvc集成的integrator -->
             <dependency>
-                <groupId>com.imby</groupId>
+                <groupId>com.gitee.pifeng</groupId>
                 <artifactId>monitoring-client-spring-mvc-integrator</artifactId>
                 <version>${revision}</version>
             </dependency>
             <!-- 监控代理端 -->
             <dependency>
-                <groupId>com.imby</groupId>
+                <groupId>com.gitee.pifeng</groupId>
                 <artifactId>monitoring-agent</artifactId>
                 <version>${revision}</version>
             </dependency>
             <!-- 监控服务端 -->
             <dependency>
-                <groupId>com.imby</groupId>
+                <groupId>com.gitee.pifeng</groupId>
                 <artifactId>monitoring-server</artifactId>
                 <version>${revision}</version>
             </dependency>

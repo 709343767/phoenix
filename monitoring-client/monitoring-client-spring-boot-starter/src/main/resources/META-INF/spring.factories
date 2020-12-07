@@ -1,1 +1,1 @@
-com.imby.starter.annotation.EnableMonitoring=\com.imby.starter.autoconfigure.MonitoringPlugAutoConfiguration
+com.gitee.pifeng.starter.annotation.EnableMonitoring=\com.gitee.pifeng.starter.autoconfigure.MonitoringPlugAutoConfiguration

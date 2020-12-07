@@ -7,7 +7,7 @@
     <!-- 监控父项目 -->
     <parent>
         <artifactId>monitoring</artifactId>
-        <groupId>com.imby</groupId>
+        <groupId>com.gitee.pifeng</groupId>
         <version>${revision}</version>
         <relativePath>..</relativePath>
     </parent>
@@ -29,13 +29,13 @@
         <dependencies>
             <!-- 监控公共模块 -->
             <dependency>
-                <groupId>com.imby</groupId>
+                <groupId>com.gitee.pifeng</groupId>
                 <artifactId>monitoring-common-core</artifactId>
                 <version>${revision}</version>
             </dependency>
             <!-- 监控WEB公共模块 -->
             <dependency>
-                <groupId>com.imby</groupId>
+                <groupId>com.gitee.pifeng</groupId>
                 <artifactId>monitoring-common-web</artifactId>
                 <version>${revision}</version>
             </dependency>
