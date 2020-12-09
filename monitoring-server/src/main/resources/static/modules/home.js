@@ -50,13 +50,17 @@
                     var fail = data.map(function (item) {
                         return parseInt(item.fail);
                     });
+                    // 未发送
+                    var unsent = data.map(function (item) {
+                        return parseInt(item.unsent);
+                    });
                     var option = {
                         // 鼠标移到折线上展示数据
                         tooltip: {
                             trigger: 'axis'
                         },
                         legend: {
-                            data: ['成功', '失败']
+                            data: ['成功', '失败', '未发送']
                         },
                         xAxis: [{
                             type: 'category',
@@ -66,7 +70,7 @@
                         }],
                         yAxis: {
                             type: 'value',
-                            name: '告警数',
+                            name: '次数',
                             axisLabel: {
                                 formatter: '{value} 次'
                             },
@@ -75,8 +79,8 @@
                         // 数据
                         series: [{
                             stack: '总数',
-                            name: '成功',
-                            data: success,
+                            name: '未发送',
+                            data: unsent,
                             type: 'line',
                             smooth: true,
                             areaStyle: {
@@ -129,6 +133,34 @@
                                     color: '#FF0000'
                                 }
                             }
+                        }, {
+                            stack: '总数',
+                            name: '成功',
+                            data: success,
+                            type: 'line',
+                            smooth: true,
+                            areaStyle: {
+                                type: 'default',
+                                // 渐变色实现
+                                color: new echarts.graphic.LinearGradient(0, 0, 0, 1,
+                                    // 三种由深及浅的颜色
+                                    [{
+                                        offset: 0,
+                                        color: '#A2CD5A'
+                                    }, {
+                                        offset: 0.5,
+                                        color: '#BCEE68'
+                                    }, {
+                                        offset: 1,
+                                        color: '#FFFFFF'
+                                    }])
+                            },
+                            itemStyle: {
+                                normal: {
+                                    // 设置颜色
+                                    color: '#6E8B3D'
+                                }
+                            }
                         }]
                     };
                     myChart.setOption(option);
@@ -151,20 +183,21 @@
                 },
                 success: function (result) {
                     var data = result.data;
-                    var html = '';
+                    var html = '<div class="layui-card-body layadmin-takerates">';
                     for (var i = 0; i < data.length; i++) {
                         var obj = data[i];
                         // 占比
                         var rate = obj.rate;
+                        // 数量
+                        var totals = obj.totals;
                         // 类型
                         var types = obj.types;
-                        html += '<div class="layuiadmin-card-list-my">'
-                            + '<span>' + types + '</span>'
-                            + '<div class="layui-progress layui-progress-big" lay-showPercent="yes">'
-                            + '<div class="layui-progress-bar layui-bg-orange" lay-percent="' + rate + '"></div>'
-                            + '</div>'
-                            + '</div>';
+                        html += '<div class="layui-progress" lay-showPercent="yes">'
+                            + '     <h3>' + types + '（' + totals + '次）</h3>'
+                            + '     <div class="layui-progress-bar layui-bg-orange" lay-percent="' + rate + '"></div>'
+                            + '  </div>';
                     }
+                    html += '</div>';
                     $('#alarm-record-type-statistics').empty().append(html);
                     // 重新渲染进度条
                     element.render('progress');
@@ -272,7 +305,7 @@
                         '                    </p>';
                     $('#ip-card-list').empty().append(htmlIp);
                     // 告警
-                    var htmlAlarm = '<p class="layuiadmin-big-font">' + homeAlarmRecordVo.alarmRecordSum +
+                    var htmlAlarm = '<p class="layuiadmin-big-font layuiadmin-big-font-my">' + homeAlarmRecordVo.alarmRecordSum +
                         '                   <i class="home-i">' + homeAlarmRecordVo.alarmSucRate + '<img src="' + ctxPath + 'images/icon16/percentage-16.png"></i>' +
                         '            </p>' +
                         '            <p>成功' +
@@ -283,6 +316,11 @@
                         '            <p>失败' +
                         '                   <span class="layuiadmin-span-color">' + homeAlarmRecordVo.alarmRecordFailSum +
                         '                           <i class="layui-inline layui-icon"><img src="' + ctxPath + 'images/icon16/fail-16.png"></i>' +
+                        '                   </span>' +
+                        '            </p>' +
+                        '            <p>未发送' +
+                        '                   <span class="layuiadmin-span-color">' + homeAlarmRecordVo.alarmRecordUnsentSum +
+                        '                           <i class="layui-inline layui-icon"><img src="' + ctxPath + 'images/icon16/unsent-16.png"></i>' +
                         '                   </span>' +
                         '            </p>';
                     $('#alarm-card-list').empty().append(htmlAlarm);

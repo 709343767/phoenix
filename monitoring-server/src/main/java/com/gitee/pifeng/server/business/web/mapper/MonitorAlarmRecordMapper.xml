@@ -4,45 +4,56 @@
 
     <!-- 获取最近7天的告警统计信息 -->
     <select id="getLast7DaysAlarmRecordStatistics" resultType="java.util.Map" databaseId="mysql">
-        SELECT b.date              as date,
-               b.total             as total,
-               b.success           as success,
-               b.total - b.success as fail
+        SELECT b.date                       AS date,
+               b.total                      AS total,
+               b.success                    AS success,
+               b.fail                       AS fail,
+               b.total - b.success - b.fail AS unsent
         FROM (
-                 SELECT DATE_FORMAT(d.date, '%Y/%m/%d') as date,
-                        COUNT(ID)                       as total,
-                        IFNULL(SUM(a.STATUS), 0)        as success
+                 SELECT DATE_FORMAT(d.date, '%Y/%m/%d')                 as date,
+                        COUNT(a.ID)                                     AS total,
+                        SUM(CASE WHEN a.STATUS = '1' THEN 1 ELSE 0 END) AS success,
+                        SUM(CASE WHEN a.STATUS = '0' THEN 1 ELSE 0 END) AS fail
                  FROM (
-                          SELECT DATE_SUB(CURDATE(), INTERVAL 0 DAY) date
+                          SELECT DATE_SUB(CURDATE(),
+                                          INTERVAL 0 DAY) date
                           UNION
-                          SELECT DATE_SUB(CURDATE(), INTERVAL 1 DAY) date
+                          SELECT DATE_SUB(CURDATE(),
+                                          INTERVAL 1 DAY) date
                           UNION
-                          SELECT DATE_SUB(CURDATE(), INTERVAL 2 DAY) date
+                          SELECT DATE_SUB(CURDATE(),
+                                          INTERVAL 2 DAY) date
                           UNION
-                          SELECT DATE_SUB(CURDATE(), INTERVAL 3 DAY) date
+                          SELECT DATE_SUB(CURDATE(),
+                                          INTERVAL 3 DAY) date
                           UNION
-                          SELECT DATE_SUB(CURDATE(), INTERVAL 4 DAY) date
+                          SELECT DATE_SUB(CURDATE(),
+                                          INTERVAL 4 DAY) date
                           UNION
-                          SELECT DATE_SUB(CURDATE(), INTERVAL 5 DAY) date
+                          SELECT DATE_SUB(CURDATE(),
+                                          INTERVAL 5 DAY) date
                           UNION
-                          SELECT DATE_SUB(CURDATE(), INTERVAL 6 DAY) date
-                      ) d
-                          LEFT JOIN MONITOR_ALARM_RECORD a
-                                    ON (DATE_FORMAT(d.date, '%Y/%m/%d') = DATE_FORMAT(a.UPDATE_TIME, '%Y/%m/%d'))
-                 GROUP BY d.date
-             ) b
+                          SELECT DATE_SUB(CURDATE(),
+                                          INTERVAL 6 DAY) date) d
+                          LEFT JOIN MONITOR_ALARM_RECORD a ON
+                     (DATE_FORMAT(d.date, '%Y/%m/%d') = DATE_FORMAT(a.INSERT_TIME, '%Y/%m/%d'))
+                 GROUP BY d.date) b
     </select>
 
     <!-- 告警成功率统计 -->
     <select id="getAlarmRecordSuccessRateStatistics" resultType="java.util.Map" databaseId="mysql">
-        select tmp.alarmRecordSum                                                            as alarmRecordSum,
-               tmp.alarmRecordSuccessSum                                                     as alarmRecordSuccessSum,
-               tmp.alarmRecordSum - tmp.alarmRecordSuccessSum                                as alarmRecordFailSum,
-               ifnull(round(tmp.alarmRecordSuccessSum / tmp.alarmRecordSum, 2) * 100, '100') as alarmSucRate
-        from (
-                 select count(ID)                  as alarmRecordSum,
-                        ifnull(sum(mar.STATUS), 0) as alarmRecordSuccessSum
-                 from MONITOR_ALARM_RECORD mar) tmp
+        SELECT tmp.alarmRecordSum        AS alarmRecordSum,
+               tmp.alarmRecordSuccessSum AS alarmRecordSuccessSum,
+               tmp.alarmRecordFailSum    AS alarmRecordFailSum,
+               tmp.alarmRecordUnsentSum  AS alarmRecordUnsentSum,
+               ifnull(round(tmp.alarmRecordSuccessSum * 100 / (tmp.alarmRecordSum - tmp.alarmRecordUnsentSum), 2),
+                      '100')             AS alarmSucRate
+        FROM (
+                 SELECT COUNT(ID)                                           AS alarmRecordSum,
+                        SUM(CASE WHEN mar.STATUS = '1' THEN 1 ELSE 0 END)   AS alarmRecordSuccessSum,
+                        SUM(CASE WHEN mar.STATUS = '0' THEN 1 ELSE 0 END)   AS alarmRecordFailSum,
+                        SUM(CASE WHEN mar.STATUS is null THEN 1 ELSE 0 END) AS alarmRecordUnsentSum
+                 FROM MONITOR_ALARM_RECORD mar) tmp
     </select>
 
     <!-- 获取告警类型统计信息 -->

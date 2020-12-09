@@ -138,7 +138,8 @@
                             <span class="layui-badge layui-bg-red layuiadmin-badge">次</span>
                         </div>
                         <div class="layui-card-body layuiadmin-card-list" id="alarm-card-list">
-                            <p class="layuiadmin-big-font">[[${homeAlarmRecordVo.alarmRecordSum}]]
+                            <p class="layuiadmin-big-font layuiadmin-big-font-my">
+                                [[${homeAlarmRecordVo.alarmRecordSum}]]
                                 <i class="home-i">[[${homeAlarmRecordVo.alarmSucRate}]]
                                     <img th:src="@{/images/icon16/percentage-16.png}"></i>
                             </p>
@@ -153,6 +154,12 @@
                                 <span class="layuiadmin-span-color">[[${homeAlarmRecordVo.alarmRecordFailSum}]]<i
                                         class="layui-inline layui-icon"><img
                                         th:src="@{/images/icon16/fail-16.png}"></i></span>
+                            </p>
+                            <p>
+                                未发送
+                                <span class="layuiadmin-span-color">[[${homeAlarmRecordVo.alarmRecordUnsentSum}]]<i
+                                        class="layui-inline layui-icon"><img
+                                        th:src="@{/images/icon16/unsent-16.png}"></i></span>
                             </p>
                         </div>
                     </div>

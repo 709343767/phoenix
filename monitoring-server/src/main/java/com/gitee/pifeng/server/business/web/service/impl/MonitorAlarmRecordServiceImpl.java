@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.google.common.collect.Lists;
 import com.gitee.pifeng.server.business.web.dao.IMonitorAlarmRecordDao;
 import com.gitee.pifeng.server.business.web.entity.MonitorAlarmRecord;
 import com.gitee.pifeng.server.business.web.service.IMonitorAlarmRecordService;
@@ -13,6 +12,7 @@ import com.gitee.pifeng.server.business.web.vo.HomeAlarmRecordVo;
 import com.gitee.pifeng.server.business.web.vo.LayUiAdminResultVo;
 import com.gitee.pifeng.server.business.web.vo.MonitorAlarmRecordVo;
 import com.gitee.pifeng.server.constant.WebResponseConstants;
+import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -54,6 +54,7 @@ public class MonitorAlarmRecordServiceImpl extends ServiceImpl<IMonitorAlarmReco
                 .alarmRecordSum(NumberUtil.parseInt(map.get("alarmRecordSum").toString()))
                 .alarmRecordSuccessSum(NumberUtil.parseInt(map.get("alarmRecordSuccessSum").toString()))
                 .alarmRecordFailSum(NumberUtil.parseInt(map.get("alarmRecordFailSum").toString()))
+                .alarmRecordUnsentSum(NumberUtil.parseInt(map.get("alarmRecordUnsentSum").toString()))
                 .alarmSucRate(map.get("alarmSucRate").toString())
                 .build();
     }

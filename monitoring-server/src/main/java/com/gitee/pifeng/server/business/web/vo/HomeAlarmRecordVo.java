@@ -34,6 +34,9 @@ public class HomeAlarmRecordVo implements ISuperBean {
     @ApiModelProperty(value = "告警失败次数")
     private Integer alarmRecordFailSum;
 
+    @ApiModelProperty(value = "未发送告警次数")
+    private Integer alarmRecordUnsentSum;
+
     @ApiModelProperty(value = "告警成功率")
     private String alarmSucRate;
 
