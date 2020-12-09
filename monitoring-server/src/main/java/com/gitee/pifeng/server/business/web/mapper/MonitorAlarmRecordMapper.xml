@@ -46,13 +46,13 @@
                tmp.alarmRecordSuccessSum AS alarmRecordSuccessSum,
                tmp.alarmRecordFailSum    AS alarmRecordFailSum,
                tmp.alarmRecordUnsentSum  AS alarmRecordUnsentSum,
-               ifnull(round(tmp.alarmRecordSuccessSum * 100 / (tmp.alarmRecordSum - tmp.alarmRecordUnsentSum), 2),
+               IFNULL(round(tmp.alarmRecordSuccessSum * 100 / (tmp.alarmRecordSum - tmp.alarmRecordUnsentSum), 2),
                       '100')             AS alarmSucRate
         FROM (
-                 SELECT COUNT(ID)                                           AS alarmRecordSum,
-                        SUM(CASE WHEN mar.STATUS = '1' THEN 1 ELSE 0 END)   AS alarmRecordSuccessSum,
-                        SUM(CASE WHEN mar.STATUS = '0' THEN 1 ELSE 0 END)   AS alarmRecordFailSum,
-                        SUM(CASE WHEN mar.STATUS is null THEN 1 ELSE 0 END) AS alarmRecordUnsentSum
+                 SELECT COUNT(ID)                                                      AS alarmRecordSum,
+                        IFNULL(SUM(CASE WHEN mar.STATUS = '1' THEN 1 ELSE 0 END), 0)   AS alarmRecordSuccessSum,
+                        IFNULL(SUM(CASE WHEN mar.STATUS = '0' THEN 1 ELSE 0 END), 0)   AS alarmRecordFailSum,
+                        IFNULL(SUM(CASE WHEN mar.STATUS is null THEN 1 ELSE 0 END), 0) AS alarmRecordUnsentSum
                  FROM MONITOR_ALARM_RECORD mar) tmp
     </select>
 
