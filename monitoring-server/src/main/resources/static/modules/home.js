@@ -60,7 +60,7 @@
                             trigger: 'axis'
                         },
                         legend: {
-                            data: ['成功', '失败', '未发送']
+                            data: ['未发送', '失败', '成功']
                         },
                         xAxis: [{
                             type: 'category',
