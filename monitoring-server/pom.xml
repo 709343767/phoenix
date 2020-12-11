@@ -18,6 +18,11 @@
     <name>monitoring-server</name>
     <description>监控服务端</description>
 
+    <!-- 属性 -->
+    <properties>
+        <maven.deploy.skip>true</maven.deploy.skip>
+    </properties>
+
     <!-- 依赖 -->
     <dependencies>
         <!-- 监控WEB公共模块依赖 -->
@@ -131,6 +136,32 @@
                 <configuration>
                     <!-- 指定该Main Class为全局的唯一入口 -->
                     <mainClass>com.gitee.pifeng.server.ServerApplication</mainClass>
+                </configuration>
+            </plugin>
+            <!-- 部署插件，部署时跳过此模块 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
+            <!-- sonatype的staging插件 -->
+            <plugin>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>nexus-staging-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>default-deploy</id>
+                        <phase>deploy</phase>
+                        <!-- By default, this is the phase deploy goal will bind to -->
+                        <goals>
+                            <goal>deploy</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <skipNexusStagingDeployMojo>true</skipNexusStagingDeployMojo>
                 </configuration>
             </plugin>
         </plugins>

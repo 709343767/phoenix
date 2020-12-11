@@ -20,7 +20,8 @@
     </modules>
     <packaging>pom</packaging>
     <name>monitoring</name>
-    <description>自己写的监控框架，用于监控java应用、服务器、数据库、网络。</description>
+    <description>监控框架，用于监控应用程序、服务器、数据库、网络、...</description>
+    <url>https://gitee.com/pifeng/monitoring</url>
 
     <!-- 属性 -->
     <properties>
@@ -333,6 +334,25 @@
     <!-- 构建 -->
     <build>
         <defaultGoal>package</defaultGoal>
+        <!-- 资源 -->
+        <resources>
+            <resource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <!-- 为了解决mybatis sql 配置文件的编译问题 -->
+                    <include>**/*.xml</include>
+                </includes>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <!-- 如果加了上面的配置，必须加入这个配置，不然resources目录下的东西不会进编译目录 -->
+                    <include>**/*.*</include>
+                </includes>
+            </resource>
+        </resources>
+
+        <!-- 插件管理 -->
         <pluginManagement>
             <plugins>
                 <!--编译插件 -->
@@ -367,6 +387,7 @@
                         </outputDirectory>
                     </configuration>
                 </plugin>
+                <!-- springboot插件 -->
                 <plugin>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-maven-plugin</artifactId>
@@ -391,27 +412,29 @@
                         </execution>
                     </executions>
                 </plugin>
+                <!-- 部署插件 -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-deploy-plugin</artifactId>
+                    <version>2.8.2</version>
+                </plugin>
+                <!-- sonatype的staging插件 -->
+                <plugin>
+                    <groupId>org.sonatype.plugins</groupId>
+                    <artifactId>nexus-staging-maven-plugin</artifactId>
+                    <version>1.6.7</version>
+                    <extensions>true</extensions>
+                    <configuration>
+                        <serverId>ossrh</serverId>
+                        <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                        <autoReleaseAfterClose>false</autoReleaseAfterClose>
+                        <autoDropAfterRelease>false</autoDropAfterRelease>
+                    </configuration>
+                </plugin>
             </plugins>
         </pluginManagement>
 
-        <!-- 资源 -->
-        <resources>
-            <resource>
-                <directory>src/main/java</directory>
-                <includes>
-                    <!-- 为了解决mybatis sql 配置文件的编译问题 -->
-                    <include>**/*.xml</include>
-                </includes>
-            </resource>
-            <resource>
-                <directory>src/main/resources</directory>
-                <includes>
-                    <!-- 如果加了上面的配置，必须加入这个配置，不然resources目录下的东西不会进编译目录 -->
-                    <include>**/*.*</include>
-                </includes>
-            </resource>
-        </resources>
-
+        <!-- 插件 -->
         <plugins>
             <!-- 生成java doc插件 -->
             <!-- http://maven.apache.org/plugins/maven-javadoc-plugin/javadoc-mojo.html -->
@@ -465,6 +488,26 @@
                     </execution>
                 </executions>
             </plugin>
+            <!-- gpg签名插件 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>1.6</version>
+                <executions>
+                    <execution>
+                        <id>release</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- sonatype的staging插件 -->
+            <plugin>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>nexus-staging-maven-plugin</artifactId>
+            </plugin>
         </plugins>
     </build>
 
@@ -472,8 +515,8 @@
     <repositories>
         <!-- 私有仓库 -->
         <repository>
-            <id>maven-hngs-group</id>
-            <url>http://10.43.1.77:8081/repository/maven-hngs-group/</url>
+            <id>aliyun</id>
+            <url>http://maven.aliyun.com/nexus/content/groups/public</url>
             <releases>
                 <!-- 是否激活 -->
                 <enabled>true</enabled>
@@ -494,8 +537,8 @@
     <!-- 仓库插件 -->
     <pluginRepositories>
         <pluginRepository>
-            <id>maven-hngs-releases</id>
-            <url>http://10.43.1.77:8081/repository/maven-hngs-group/</url>
+            <id>aliyun</id>
+            <url>http://maven.aliyun.com/nexus/content/groups/public</url>
             <releases>
                 <enabled>true</enabled>
                 <updatePolicy>always</updatePolicy>
@@ -512,26 +555,43 @@
     <!-- 发布 -->
     <distributionManagement>
         <repository>
-            <id>maven-hngs-releases</id>
-            <name>maven-hngs-releases</name>
-            <url>http://10.43.1.77:8081/repository/maven-hngs-releases/</url>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
         </repository>
         <snapshotRepository>
-            <id>maven-hngs-snapshots</id>
-            <name>maven-hngs-snapshots</name>
-            <url>http://10.43.1.77:8081/repository/maven-hngs-snapshots/</url>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
             <!-- 发布的时候，是否为Snapshot版本分配一个包含时间戳的构建号 -->
-            <uniqueVersion>false</uniqueVersion>
+            <!-- <uniqueVersion>false</uniqueVersion> -->
         </snapshotRepository>
     </distributionManagement>
 
+
+    <!--许可证信息-->
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    <!--托管仓库信息-->
+    <scm>
+        <url>https://gitee.com/pifeng/monitoring</url>
+        <connection>scm:git:https://gitee.com/pifeng/monitoring.git</connection>
+        <developerConnection>scm:git:https://gitee.com/pifeng/monitoring</developerConnection>
+    </scm>
     <!-- 开发者 -->
     <developers>
         <developer>
             <name>皮锋</name>
-            <organization>transfar</organization>
+            <organization>imby</organization>
             <email>709343767@qq.com</email>
             <url>https://blog.csdn.net/Paulangsky</url>
+            <roles>
+                <role>developer</role>
+            </roles>
+            <timezone>+8</timezone>
         </developer>
     </developers>
 
