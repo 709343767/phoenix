@@ -92,11 +92,9 @@
         <maven-jar-plugin.version>3.2.0</maven-jar-plugin.version>
         <!-- springboot插件版本 -->
         <spring-boot-maven-plugin.version>2.3.1.RELEASE</spring-boot-maven-plugin.version>
-        <!-- 部署插件版本 -->
-        <maven-deploy-plugin.version>2.8.2</maven-deploy-plugin.version>
         <!-- sonatype的staging插件版本 -->
         <nexus-staging-maven-plugin.version>1.6.8</nexus-staging-maven-plugin.version>
-        <!-- 生产java doc插件版本 -->
+        <!-- 生成java doc插件版本 -->
         <maven-javadoc-plugin.version>3.2.0</maven-javadoc-plugin.version>
         <!-- 发布源码插件版本 -->
         <maven-source-plugin.version>3.2.1</maven-source-plugin.version>
@@ -431,12 +429,6 @@
                         </execution>
                     </executions>
                 </plugin>
-                <!-- 部署插件 -->
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-deploy-plugin</artifactId>
-                    <version>${maven-deploy-plugin.version}</version>
-                </plugin>
                 <!-- sonatype的staging插件 -->
                 <plugin>
                     <groupId>org.sonatype.plugins</groupId>
@@ -515,11 +507,6 @@
                     </execution>
                 </executions>
             </plugin>
-            <!-- 部署插件 -->
-            <!--<plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-deploy-plugin</artifactId>
-            </plugin>-->
             <!-- sonatype的staging插件 -->
             <plugin>
                 <groupId>org.sonatype.plugins</groupId>
