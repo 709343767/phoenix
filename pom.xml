@@ -500,7 +500,7 @@
                 <executions>
                     <execution>
                         <id>release</id>
-                        <phase>verify</phase>
+                        <phase>deploy</phase>
                         <goals>
                             <goal>sign</goal>
                         </goals>
