@@ -7,7 +7,7 @@
     <!-- 项目基本信息 -->
     <groupId>com.gitee.pifeng</groupId>
     <artifactId>monitoring</artifactId>
-    <version>${revision}</version>
+    <version>0.0.2.RELEASE</version>
     <modules>
         <!-- 监控公共模块父工程 -->
         <module>monitoring-common</module>
@@ -26,7 +26,7 @@
     <!-- 属性 -->
     <properties>
         <!-- 监控框架版本 -->
-        <revision>LATEST-SNAPSHOT</revision>
+        <revision>0.0.2.RELEASE</revision>
         <!-- spring-boot-starter-parent版本 -->
         <spring-boot-starter-parent.version>2.3.0.RELEASE</spring-boot-starter-parent.version>
         <!-- 解决eclipse中maven报错的问题 -->
