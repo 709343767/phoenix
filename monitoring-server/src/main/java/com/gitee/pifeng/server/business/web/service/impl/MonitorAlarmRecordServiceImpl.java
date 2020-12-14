@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.gitee.pifeng.common.constant.ZeroOrOneConstants;
 import com.gitee.pifeng.server.business.web.dao.IMonitorAlarmRecordDao;
 import com.gitee.pifeng.server.business.web.entity.MonitorAlarmRecord;
 import com.gitee.pifeng.server.business.web.service.IMonitorAlarmRecordService;
@@ -88,8 +89,13 @@ public class MonitorAlarmRecordServiceImpl extends ServiceImpl<IMonitorAlarmReco
         if (StringUtils.isNotBlank(level)) {
             lambdaQueryWrapper.eq(MonitorAlarmRecord::getLevel, level);
         }
-        if (StringUtils.isNotBlank(status)) {
-            lambdaQueryWrapper.eq(MonitorAlarmRecord::getStatus, status);
+        if (StringUtils.equals(ZeroOrOneConstants.MINUS_ONE, status)) {
+            // 自己用-1代表未发送
+            lambdaQueryWrapper.isNull(MonitorAlarmRecord::getStatus);
+        } else {
+            if (StringUtils.isNotBlank(status)) {
+                lambdaQueryWrapper.eq(MonitorAlarmRecord::getStatus, status);
+            }
         }
         if (StringUtils.isNotBlank(title)) {
             lambdaQueryWrapper.like(MonitorAlarmRecord::getTitle, title);
