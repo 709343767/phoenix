@@ -77,7 +77,7 @@ public class NetMonitorTask implements CommandLineRunner {
                         ThreadPoolExecutor threadPoolExecutor = ThreadPool.COMMON_IO_INTENSIVE_THREAD_POOL;
                         threadPoolExecutor.execute(() -> {
                             // 测试IP地址能否ping通
-                            boolean isConnected = NetUtils.ping(ipTarget);
+                            boolean isConnected = NetUtils.isConnect(ipTarget);
                             // 网络正常
                             if (isConnected) {
                                 // 处理网络正常

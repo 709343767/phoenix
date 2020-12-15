@@ -1,9 +1,10 @@
 package com.gitee.pifeng.common.util;
 
-import com.google.common.collect.Lists;
+import cn.hutool.core.net.NetUtil;
 import com.gitee.pifeng.common.domain.server.NetDomain;
 import com.gitee.pifeng.common.exception.NetException;
 import com.gitee.pifeng.common.init.InitSigar;
+import com.google.common.collect.Lists;
 import lombok.Cleanup;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -17,6 +18,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.nio.charset.Charset;
 import java.util.Enumeration;
 import java.util.List;
@@ -137,8 +140,7 @@ public class NetUtils extends InitSigar {
         try {
             // Windows操作系统
             if (OsUtils.isWindowsOs()) {
-                InetAddress ip4 = InetAddress.getLocalHost();
-                return ip4.getHostAddress();
+                return getWindowsLocalIp();
             } else {
                 return getLinuxLocalIp();
             }
@@ -151,57 +153,83 @@ public class NetUtils extends InitSigar {
 
     /**
      * <p>
-     * 获取linux系统下的IP地址
+     * 获取Windows系统下的IP地址
      * </p>
      *
      * @return IP地址
+     * @throws UnknownHostException 无法确定主机的IP地址异常
+     * @author 皮锋
+     * @custom.date 2020/12/15 10:44
+     */
+    private static String getWindowsLocalIp() throws UnknownHostException {
+        InetAddress ip4 = InetAddress.getLocalHost();
+        return ip4.getHostAddress();
+    }
+
+    /**
+     * <p>
+     * 获取Linux系统下的IP地址
+     * </p>
+     *
+     * @return IP地址
+     * @throws SocketException 创建或访问套接字时异常
      * @author 皮锋
      * @custom.date 2020年3月20日 上午10:19:10
      */
-    private static String getLinuxLocalIp() {
-        String ip = "";
-        try {
-            for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements(); ) {
-                NetworkInterface intf = en.nextElement();
-                String name = intf.getName();
-                if (!name.contains("docker") && !name.contains("lo")) {
-                    for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements(); ) {
-                        InetAddress inetAddress = enumIpAddr.nextElement();
-                        if (!inetAddress.isLoopbackAddress()) {
-                            String ipaddress = inetAddress.getHostAddress();
-                            if (!ipaddress.contains("::") && !ipaddress.contains("0:0:")
-                                    && !ipaddress.contains("fe80")) {
-                                ip = ipaddress;
-                            }
+    private static String getLinuxLocalIp() throws SocketException {
+        String ip = null;
+        for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements(); ) {
+            NetworkInterface intf = en.nextElement();
+            String name = intf.getName();
+            if (!name.contains("docker") && !name.contains("lo")) {
+                for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements(); ) {
+                    InetAddress inetAddress = enumIpAddr.nextElement();
+                    if (!inetAddress.isLoopbackAddress()) {
+                        String ipaddress = inetAddress.getHostAddress();
+                        if (!ipaddress.contains("::") && !ipaddress.contains("0:0:")
+                                && !ipaddress.contains("fe80")) {
+                            ip = ipaddress;
                         }
                     }
                 }
             }
-        } catch (Exception ex) {
-            ip = "127.0.0.1";
         }
         return ip;
     }
 
     /**
      * <p>
-     * 测试IP地址能否ping通
+     * 检测IP地址是否能ping通
      * </p>
      *
-     * @param address IP地址
-     * @return boolean
+     * @param ip ip地址
+     * @return 返回是否ping通
+     * @author 皮锋
+     * @custom.date 2020/12/15 10:58
+     */
+    public static boolean isConnect(String ip) {
+        return NetUtil.ping(ip) && ping(ip);
+    }
+
+    /**
+     * <p>
+     * 检测IP地址是否能ping通
+     * </p>
+     *
+     * @param ip IP地址
+     * @return 返回是否ping通
      * @author 皮锋
      * @custom.date 2020/3/18 22:22
      */
-    public static boolean ping(String address) {
+    private static boolean ping(String ip) {
         boolean result;
         try {
             Process process;
             // Windows系统
             if (OsUtils.isWindowsOs()) {
-                process = Runtime.getRuntime().exec("ping " + address + " -n 5");
+                process = Runtime.getRuntime().exec("ping " + ip + " -n 5");
             } else {
-                process = Runtime.getRuntime().exec("ping " + address + " -c 5");
+                process = Runtime.getRuntime().exec("ping " + ip + " -c 5");
             }
             if (process == null) {
                 result = false;
