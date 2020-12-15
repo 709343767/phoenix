@@ -82,6 +82,12 @@ public class MonitorConfigServiceImpl extends ServiceImpl<IMonitorConfigDao, Mon
     private IMonitorConfigServerMemoryDao monitorConfigServerMemoryDao;
 
     /**
+     * 监控数据库配置数据访问对象
+     */
+    @Autowired
+    private IMonitorConfigDbDao monitorConfigDbDao;
+
+    /**
      * 监控配置监听器
      */
     @Autowired
@@ -144,6 +150,10 @@ public class MonitorConfigServiceImpl extends ServiceImpl<IMonitorConfigDao, Mon
         this.monitorConfigServerMemoryDao.update(MonitorConfigServerMemory.builder()
                 .overloadThreshold(monitorConfigPageFormVo.getServerMemoryOverloadThreshold())
                 .level(monitorConfigPageFormVo.getServerMemoryLevel())
+                .updateTime(updateTime)
+                .build(), new UpdateWrapper<>());
+        this.monitorConfigDbDao.update(MonitorConfigDb.builder()
+                .enable(monitorConfigPageFormVo.getDbEnable())
                 .updateTime(updateTime)
                 .build(), new UpdateWrapper<>());
         // 调用监听器回调接口

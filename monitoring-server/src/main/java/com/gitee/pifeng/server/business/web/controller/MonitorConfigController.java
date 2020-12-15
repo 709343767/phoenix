@@ -84,6 +84,12 @@ public class MonitorConfigController {
     private IMonitorConfigServerMemoryService monitorConfigServerMemoryService;
 
     /**
+     * 监控数据库配置服务类
+     */
+    @Autowired
+    private IMonitorConfigDbService monitorConfigDbService;
+
+    /**
      * <p>
      * 访问监控配置页
      * </p>
@@ -105,6 +111,7 @@ public class MonitorConfigController {
         MonitorConfigServerCpu monitorConfigServerCpu = this.monitorConfigServerCpuService.getOne(new LambdaQueryWrapper<>());
         MonitorConfigServerDisk monitorConfigServerDisk = this.monitorConfigServerDiskService.getOne(new LambdaQueryWrapper<>());
         MonitorConfigServerMemory monitorConfigServerMemory = this.monitorConfigServerMemoryService.getOne(new LambdaQueryWrapper<>());
+        MonitorConfigDb monitorConfigDb = this.monitorConfigDbService.getOne(new LambdaQueryWrapper<>());
         mv.addObject(monitorConfig)
                 .addObject(monitorConfigNet)
                 .addObject(monitorConfigAlarm)
@@ -113,7 +120,8 @@ public class MonitorConfigController {
                 .addObject(monitorConfigServer)
                 .addObject(monitorConfigServerCpu)
                 .addObject(monitorConfigServerDisk)
-                .addObject(monitorConfigServerMemory);
+                .addObject(monitorConfigServerMemory)
+                .addObject(monitorConfigDb);
         return mv;
     }
 

@@ -37,4 +37,9 @@ public class MonitoringProperties {
      */
     private MonitoringServerProperties serverProperties;
 
+    /**
+     * 数据库配置属性
+     */
+    private MonitoringDbProperties dbProperties;
+
 }

@@ -32,9 +32,9 @@ public class MonitorConfigPageFormVo implements ISuperBean {
     private int threshold;
 
     /**
-     * 网络监控是否打开
+     * 是否监控网络
      */
-    @ApiModelProperty(value = "网络监控是否打开")
+    @ApiModelProperty(value = "是否监控网络")
     private int netEnable;
 
     /**
@@ -126,5 +126,11 @@ public class MonitorConfigPageFormVo implements ISuperBean {
      */
     @ApiModelProperty(value = "内存监控级别")
     private String serverMemoryLevel;
+
+    /**
+     * 是否监控数据库
+     */
+    @ApiModelProperty(value = "是否监控数据库")
+    private int dbEnable;
 
 }

@@ -46,6 +46,12 @@ public class MonitorConfigServiceImpl implements IMonitorConfigService {
     private IMonitorConfigAlarmSmsDao monitorConfigAlarmSmsDao;
 
     /**
+     * 监控数据库配置数据访问对象
+     */
+    @Autowired
+    private IMonitorConfigDbDao monitorConfigDbDao;
+
+    /**
      * 监控网络配置数据访问对象
      */
     @Autowired
@@ -95,6 +101,7 @@ public class MonitorConfigServiceImpl implements IMonitorConfigService {
         MonitorConfigServerCpu monitorConfigServerCpu = this.monitorConfigServerCpuDao.selectOne(new LambdaQueryWrapper<>());
         MonitorConfigServerDisk monitorConfigServerDisk = this.monitorConfigServerDiskDao.selectOne(new LambdaQueryWrapper<>());
         MonitorConfigServerMemory monitorConfigServerMemory = this.monitorConfigServerMemoryDao.selectOne(new LambdaQueryWrapper<>());
+        MonitorConfigDb monitorConfigDb = this.monitorConfigDbDao.selectOne(new LambdaQueryWrapper<>());
         Map<String, Object> map = new HashMap<>(16);
         map.put("monitorConfig", monitorConfig);
         map.put("monitorConfigNet", monitorConfigNet);
@@ -105,6 +112,7 @@ public class MonitorConfigServiceImpl implements IMonitorConfigService {
         map.put("monitorConfigServerCpu", monitorConfigServerCpu);
         map.put("monitorConfigServerDisk", monitorConfigServerDisk);
         map.put("monitorConfigServerMemory", monitorConfigServerMemory);
+        map.put("monitorConfigDb", monitorConfigDb);
         return map;
     }
 

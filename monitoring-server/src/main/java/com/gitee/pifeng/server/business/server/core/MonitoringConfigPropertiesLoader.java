@@ -96,6 +96,7 @@ public class MonitoringConfigPropertiesLoader implements IMonitorConfigListener 
         MonitorConfigServerCpu monitorConfigServerCpu = (MonitorConfigServerCpu) allMonitorConfig.get("monitorConfigServerCpu");
         MonitorConfigServerDisk monitorConfigServerDisk = (MonitorConfigServerDisk) allMonitorConfig.get("monitorConfigServerDisk");
         MonitorConfigServerMemory monitorConfigServerMemory = (MonitorConfigServerMemory) allMonitorConfig.get("monitorConfigServerMemory");
+        MonitorConfigDb monitorConfigDb = (MonitorConfigDb) allMonitorConfig.get("monitorConfigDb");
         // 告警邮箱配置属性
         MonitoringAlarmMailProperties monitoringAlarmMailProperties = new MonitoringAlarmMailProperties();
         monitoringAlarmMailProperties.setEmills(StrUtil.splitToArray(monitorConfigAlarmMail.getEmills(), ';'));
@@ -114,7 +115,7 @@ public class MonitoringConfigPropertiesLoader implements IMonitorConfigListener 
         monitoringAlarmProperties.setMailProperties(monitoringAlarmMailProperties);
         // 网络配置属性
         MonitoringNetworkProperties monitoringNetworkProperties = new MonitoringNetworkProperties();
-        monitoringNetworkProperties.setMonitoringEnable(monitorConfigNet.getEnable().equals(1));
+        monitoringNetworkProperties.setEnable(monitorConfigNet.getEnable().equals(1));
         // 服务器CPU配置属性
         MonitoringServerCpuProperties monitoringServerCpuProperties = new MonitoringServerCpuProperties();
         monitoringServerCpuProperties.setOverloadThreshold(monitorConfigServerCpu.getOverloadThreshold());
@@ -133,12 +134,16 @@ public class MonitoringConfigPropertiesLoader implements IMonitorConfigListener 
         monitoringServerProperties.setServerCpuProperties(monitoringServerCpuProperties);
         monitoringServerProperties.setServerDiskProperties(monitoringServerDiskProperties);
         monitoringServerProperties.setServerMemoryProperties(monitoringServerMemoryProperties);
+        // 数据库配置
+        MonitoringDbProperties monitoringDbProperties = new MonitoringDbProperties();
+        monitoringDbProperties.setEnable(monitorConfigDb.getEnable().equals(1));
         // 监控配置属性
         MonitoringProperties properties = new MonitoringProperties();
         properties.setThreshold(monitorConfig.getThreshold());
         properties.setAlarmProperties(monitoringAlarmProperties);
         properties.setNetworkProperties(monitoringNetworkProperties);
         properties.setServerProperties(monitoringServerProperties);
+        properties.setDbProperties(monitoringDbProperties);
         log.info("从数据库中加载监控服务端配置成功！");
         return properties;
     }

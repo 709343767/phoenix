@@ -4,21 +4,21 @@ import lombok.*;
 
 /**
  * <p>
- * 网络配置属性
+ * 数据库配置属性
  * </p>
  *
  * @author 皮锋
- * @custom.date 2020/3/23 10:46
+ * @custom.date 2020/12/15 12:27
  */
 @Data
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
-public class MonitoringNetworkProperties {
+public class MonitoringDbProperties {
 
     /**
-     * 是否监控网络
+     * 是否监控数据库
      */
     private boolean enable;
 
