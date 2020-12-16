@@ -208,7 +208,7 @@ public class NetUtils extends InitSigar {
      * @custom.date 2020/12/15 10:58
      */
     public static boolean isConnect(String ip) {
-        return NetUtil.ping(ip) && ping(ip);
+        return NetUtil.ping(ip, 3000) && ping(ip);
     }
 
     /**
