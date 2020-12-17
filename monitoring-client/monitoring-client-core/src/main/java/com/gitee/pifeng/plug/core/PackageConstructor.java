@@ -49,7 +49,7 @@ public class PackageConstructor extends AbstractPackageConstructor {
         alarmPackage.setInstanceDesc(ConfigLoader.MONITORING_PROPERTIES.getOwnProperties().getInstanceDesc());
         alarmPackage.setInstanceLanguage(ConfigLoader.MONITORING_PROPERTIES.getOwnProperties().getInstanceLanguage());
         alarmPackage.setAppServerType(AppServerDetectorUtils.getAppServerTypeEnum());
-        alarmPackage.setIp(NetUtils.getLocalIp());
+        alarmPackage.setIp(ConfigLoader.MONITORING_PROPERTIES.getServerInfoProperties().getIp() == null ? NetUtils.getLocalIp() : ConfigLoader.MONITORING_PROPERTIES.getServerInfoProperties().getIp());
         alarmPackage.setComputerName(OsUtils.getComputerName());
         // 判断字符集
         Charset charset = alarm.getCharset();
@@ -84,7 +84,7 @@ public class PackageConstructor extends AbstractPackageConstructor {
         heartbeatPackage.setInstanceDesc(ConfigLoader.MONITORING_PROPERTIES.getOwnProperties().getInstanceDesc());
         heartbeatPackage.setInstanceLanguage(ConfigLoader.MONITORING_PROPERTIES.getOwnProperties().getInstanceLanguage());
         heartbeatPackage.setAppServerType(AppServerDetectorUtils.getAppServerTypeEnum());
-        heartbeatPackage.setIp(NetUtils.getLocalIp());
+        heartbeatPackage.setIp(ConfigLoader.MONITORING_PROPERTIES.getServerInfoProperties().getIp() == null ? NetUtils.getLocalIp() : ConfigLoader.MONITORING_PROPERTIES.getServerInfoProperties().getIp());
         heartbeatPackage.setComputerName(OsUtils.getComputerName());
         heartbeatPackage.setDateTime(new Date());
         heartbeatPackage.setRate(ConfigLoader.MONITORING_PROPERTIES.getHeartbeatProperties().getRate());
@@ -113,7 +113,7 @@ public class PackageConstructor extends AbstractPackageConstructor {
         serverPackage.setInstanceDesc(ConfigLoader.MONITORING_PROPERTIES.getOwnProperties().getInstanceDesc());
         serverPackage.setInstanceLanguage(ConfigLoader.MONITORING_PROPERTIES.getOwnProperties().getInstanceLanguage());
         serverPackage.setAppServerType(AppServerDetectorUtils.getAppServerTypeEnum());
-        serverPackage.setIp(NetUtils.getLocalIp());
+        serverPackage.setIp(ConfigLoader.MONITORING_PROPERTIES.getServerInfoProperties().getIp() == null ? NetUtils.getLocalIp() : ConfigLoader.MONITORING_PROPERTIES.getServerInfoProperties().getIp());
         serverPackage.setComputerName(OsUtils.getComputerName());
         serverPackage.setServer(ServerUtils.getServerInfo());
         serverPackage.setRate(ConfigLoader.MONITORING_PROPERTIES.getServerInfoProperties().getRate());
@@ -142,7 +142,7 @@ public class PackageConstructor extends AbstractPackageConstructor {
         jvmPackage.setInstanceDesc(ConfigLoader.MONITORING_PROPERTIES.getOwnProperties().getInstanceDesc());
         jvmPackage.setInstanceLanguage(ConfigLoader.MONITORING_PROPERTIES.getOwnProperties().getInstanceLanguage());
         jvmPackage.setAppServerType(AppServerDetectorUtils.getAppServerTypeEnum());
-        jvmPackage.setIp(NetUtils.getLocalIp());
+        jvmPackage.setIp(ConfigLoader.MONITORING_PROPERTIES.getServerInfoProperties().getIp() == null ? NetUtils.getLocalIp() : ConfigLoader.MONITORING_PROPERTIES.getServerInfoProperties().getIp());
         jvmPackage.setComputerName(OsUtils.getComputerName());
         jvmPackage.setJvm(JvmUtils.getJvmInfo());
         jvmPackage.setRate(ConfigLoader.MONITORING_PROPERTIES.getJvmInfoProperties().getRate());

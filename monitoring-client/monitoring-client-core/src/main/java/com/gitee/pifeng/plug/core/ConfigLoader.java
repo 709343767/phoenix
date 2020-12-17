@@ -5,6 +5,7 @@ import com.gitee.pifeng.common.constant.LanguageTypeConstants;
 import com.gitee.pifeng.common.exception.ErrorConfigParamException;
 import com.gitee.pifeng.common.exception.NotFoundConfigFileException;
 import com.gitee.pifeng.common.exception.NotFoundConfigParamException;
+import com.gitee.pifeng.common.util.IpAddressUtils;
 import com.gitee.pifeng.common.util.PropertiesUtils;
 import com.gitee.pifeng.plug.property.*;
 import lombok.extern.slf4j.Slf4j;
@@ -120,6 +121,12 @@ public class ConfigLoader {
         // 缺省[与服务端或者代理端发服务器信息包的频率（秒），默认60秒，最小不能小于30秒]
         String serverInfoRateStr = StringUtils.trimToNull(properties.getProperty("monitoring.server-info.rate"));
         long serverInfoRate = StringUtils.isBlank(serverInfoRateStr) ? 60L : Long.parseLong(serverInfoRateStr);
+        // 缺省[服务器本机ip地址，默认：自动获取]
+        String serverInfoIp = StringUtils.trimToNull(properties.getProperty("monitoring.server-info.ip"));
+        // 是否为合法IP地址（为空的情况不考虑）
+        if ((null != serverInfoIp) && (!IpAddressUtils.isIpAddress(serverInfoIp))) {
+            throw new ErrorConfigParamException("服务器本机IP不是合法的IPv4地址！");
+        }
         // 缺省[是否采集Java虚拟机信息，默认false]
         String jvmInfoEnableStr = StringUtils.trimToNull(properties.getProperty("monitoring.jvm-info.enable"));
         boolean jvmInfoEnable = !StringUtils.isBlank(jvmInfoEnableStr)
@@ -150,7 +157,7 @@ public class ConfigLoader {
         wrapMonitoringServerProperties(serverUrl);
         wrapMonitoringOwnProperties(instanceOrder, instanceEndpoint, instanceName, instanceDesc, instanceLanguage);
         wrapMonitoringHeartbeatProperties(heartbeatRate);
-        wrapMonitoringServerInfoProperties(serverInfoEnable, serverInfoRate);
+        wrapMonitoringServerInfoProperties(serverInfoEnable, serverInfoRate, serverInfoIp);
         wrapMonitoringJvmInfoProperties(jvmInfoEnable, jvmInfoRate);
     }
 
@@ -199,13 +206,15 @@ public class ConfigLoader {
      *
      * @param serverInfoEnable 是否采集服务器信息
      * @param serverInfoRate   与服务端或者代理端发服务器信息包的频率（秒）
+     * @param serverInfoIp     服务器的本机ip地址
      * @author 皮锋
      * @custom.date 2020/10/27 20:30
      */
-    private static void wrapMonitoringServerInfoProperties(boolean serverInfoEnable, long serverInfoRate) {
+    private static void wrapMonitoringServerInfoProperties(boolean serverInfoEnable, long serverInfoRate, String serverInfoIp) {
         MonitoringServerInfoProperties monitoringServerInfoProperties = new MonitoringServerInfoProperties();
         monitoringServerInfoProperties.setEnable(serverInfoEnable);
         monitoringServerInfoProperties.setRate(serverInfoRate);
+        monitoringServerInfoProperties.setIp(serverInfoIp);
         MONITORING_PROPERTIES.setServerInfoProperties(monitoringServerInfoProperties);
     }
 

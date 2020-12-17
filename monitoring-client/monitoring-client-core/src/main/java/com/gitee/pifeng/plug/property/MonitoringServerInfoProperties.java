@@ -19,14 +19,19 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class MonitoringServerInfoProperties {
 
-	/**
-	 * 是否采集服务器信息
-	 */
-	private boolean enable;
+    /**
+     * 是否采集服务器信息
+     */
+    private boolean enable;
 
-	/**
-	 * 发送服务器信息的频率
-	 */
-	private long rate;
+    /**
+     * 发送服务器信息的频率
+     */
+    private long rate;
+
+    /**
+     * 服务器本机IP地址
+     */
+    private String ip;
 
 }

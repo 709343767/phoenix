@@ -12,6 +12,7 @@ import com.gitee.pifeng.common.exception.NetException;
 import com.gitee.pifeng.common.util.AppServerDetectorUtils;
 import com.gitee.pifeng.common.util.NetUtils;
 import com.gitee.pifeng.common.util.OsUtils;
+import com.gitee.pifeng.plug.core.ConfigLoader;
 import com.gitee.pifeng.server.util.InstanceUtils;
 import lombok.SneakyThrows;
 import org.hyperic.sigar.SigarException;
@@ -53,7 +54,7 @@ public class PackageConstructor extends AbstractPackageConstructor {
         alarmPackage.setInstanceDesc(InstanceUtils.getInstanceDesc());
         alarmPackage.setInstanceLanguage(LanguageTypeConstants.JAVA);
         alarmPackage.setAppServerType(AppServerDetectorUtils.getAppServerTypeEnum());
-        alarmPackage.setIp(NetUtils.getLocalIp());
+        alarmPackage.setIp(ConfigLoader.MONITORING_PROPERTIES.getServerInfoProperties().getIp() == null ? NetUtils.getLocalIp() : ConfigLoader.MONITORING_PROPERTIES.getServerInfoProperties().getIp());
         alarmPackage.setComputerName(OsUtils.getComputerName());
         // 判断字符集
         Charset charset = alarm.getCharset();
@@ -87,7 +88,7 @@ public class PackageConstructor extends AbstractPackageConstructor {
         baseResponsePackage.setInstanceDesc(InstanceUtils.getInstanceDesc());
         baseResponsePackage.setInstanceLanguage(LanguageTypeConstants.JAVA);
         baseResponsePackage.setAppServerType(AppServerDetectorUtils.getAppServerTypeEnum());
-        baseResponsePackage.setIp(NetUtils.getLocalIp());
+        baseResponsePackage.setIp(ConfigLoader.MONITORING_PROPERTIES.getServerInfoProperties().getIp() == null ? NetUtils.getLocalIp() : ConfigLoader.MONITORING_PROPERTIES.getServerInfoProperties().getIp());
         baseResponsePackage.setComputerName(OsUtils.getComputerName());
         baseResponsePackage.setId(IdUtil.randomUUID());
         baseResponsePackage.setDateTime(new Date());

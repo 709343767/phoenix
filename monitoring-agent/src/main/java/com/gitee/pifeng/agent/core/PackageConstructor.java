@@ -45,7 +45,7 @@ public class PackageConstructor extends AbstractPackageConstructor {
         baseResponsePackage.setInstanceDesc(ConfigLoader.MONITORING_PROPERTIES.getOwnProperties().getInstanceDesc());
         baseResponsePackage.setInstanceLanguage(LanguageTypeConstants.JAVA);
         baseResponsePackage.setAppServerType(AppServerDetectorUtils.getAppServerTypeEnum());
-        baseResponsePackage.setIp(NetUtils.getLocalIp());
+        baseResponsePackage.setIp(ConfigLoader.MONITORING_PROPERTIES.getServerInfoProperties().getIp() == null ? NetUtils.getLocalIp() : ConfigLoader.MONITORING_PROPERTIES.getServerInfoProperties().getIp());
         baseResponsePackage.setComputerName(OsUtils.getComputerName());
         baseResponsePackage.setDateTime(new Date());
         baseResponsePackage.setId(IdUtil.randomUUID());
