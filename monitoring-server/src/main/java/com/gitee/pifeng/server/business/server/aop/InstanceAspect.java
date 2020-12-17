@@ -90,6 +90,7 @@ public class InstanceAspect {
         instance.setDateTime(new Date());
         instance.setLineAlarm(this.instancePool.get(key) != null && this.instancePool.get(key).isLineAlarm());
         instance.setThresholdSecond((int) (heartbeatPackage.getRate() * MonitoringConfigPropertiesLoader.getMonitoringProperties().getThreshold()));
+        instance.setFirstDiscovery(this.instancePool.get(key) == null || this.instancePool.get(key).isFirstDiscovery());
         // 更新应用实例池
         this.instancePool.updateInstancePool(key, instance);
     }

@@ -93,8 +93,13 @@ public class InstanceMonitorTask implements CommandLineRunner {
                     }
                     // 注册上来的服务恢复响应
                     else {
-                        // 恢复在线
-                        this.onLine(instance);
+                        if (instance.isFirstDiscovery()) {
+                            // 首次发现新应用
+                            this.firstDiscovery(instance);
+                        } else {
+                            // 恢复在线
+                            this.onLine(instance);
+                        }
                     }
                 }
                 // 打印当前应用池中的所有应用情况
@@ -107,6 +112,24 @@ public class InstanceMonitorTask implements CommandLineRunner {
                 log.error("定时扫描应用实例池中的所有应用实例异常！", e);
             }
         }, 5, 30, TimeUnit.SECONDS);
+    }
+
+    /**
+     * <p>
+     * 发现新的应用程序
+     * </p>
+     *
+     * @param instance 实例
+     * @throws NetException   获取网络信息异常
+     * @throws SigarException Sigar异常
+     * @author 皮锋
+     * @custom.date 2020/12/17 15:14
+     */
+    private void firstDiscovery(Instance instance) throws NetException, SigarException {
+        // 发送发现新的应用程序通知信息
+        this.sendAlarmInfo("发现应用程序", AlarmLevelEnums.INFO, instance);
+        instance.setFirstDiscovery(false);
+        instance.setLineAlarm(false);
     }
 
     /**

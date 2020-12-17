@@ -43,4 +43,9 @@ public class Instance extends AbstractInstanceBean {
      */
     private boolean isLineAlarm;
 
+    /**
+     * 是否首次发现新应用
+     */
+    private boolean isFirstDiscovery;
+
 }
