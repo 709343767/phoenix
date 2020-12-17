@@ -8,7 +8,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * <p>
- * 应用实例池，维护哪些应用在线，哪些应用离线
+ * 应用实例池
  * </p>
  *
  * @author 皮锋

@@ -35,9 +35,9 @@ public final class FileNameConstants {
     public static final String INSTANCE_POOL = PATH + "instancePool.json";
 
     /**
-     * 网络信息池
+     * 服务器信息池
      */
-    public static final String NET_POOL = PATH + "netPool.json";
+    public static final String SERVER_POOL = PATH + "serverPool.json";
 
     /**
      * 服务器内存池

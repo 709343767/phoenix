@@ -9,7 +9,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * <p>
- * 服务器CPU信息池，维护各个服务器的CPU使用情况，是否已经发送告警消息
+ * 服务器CPU信息池
  * </p>
  *
  * @author 皮锋

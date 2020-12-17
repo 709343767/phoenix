@@ -16,6 +16,7 @@ import com.gitee.pifeng.server.business.server.domain.Memory;
 import com.gitee.pifeng.server.business.server.pool.CpuPool;
 import com.gitee.pifeng.server.business.server.pool.DiskPool;
 import com.gitee.pifeng.server.business.server.pool.MemoryPool;
+import com.gitee.pifeng.server.business.server.pool.ServerPool;
 import com.gitee.pifeng.server.inf.IServerMonitoringListener;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
@@ -44,6 +45,12 @@ import java.util.Map;
 @Aspect
 @Component
 public class ServerAspect {
+
+    /**
+     * 服务器信息池
+     */
+    @Autowired
+    private ServerPool serverPool;
 
     /**
      * 服务器内存信息池
@@ -134,12 +141,35 @@ public class ServerAspect {
      * @custom.date 2020/3/31 13:39
      */
     private void refreshServerInfo(String ip, String computerName, MemoryDomain memoryDomain, CpuDomain cpuDomain, DiskDomain diskDomain) {
+        // 刷新服务器信息
+        this.refreshServer(ip, computerName);
         // 刷新服务器内存信息
         this.refreshMemory(ip, computerName, memoryDomain);
         // 刷新服务器CPU信息
         this.refreshCpu(ip, computerName, cpuDomain);
         // 刷新服务器磁盘信息
         this.refreshDisk(ip, computerName, diskDomain);
+    }
+
+    /**
+     * <p>
+     * 刷新服务器信息
+     * </p>
+     *
+     * @param ip           IP地址
+     * @param computerName 计算机名
+     * @author 皮锋
+     * @custom.date 2020/12/17 20:15
+     */
+    private void refreshServer(String ip, String computerName) {
+        com.gitee.pifeng.server.business.server.domain.Server server = new com.gitee.pifeng.server.business.server.domain.Server();
+        server.setIp(ip);
+        server.setComputerName(computerName);
+        com.gitee.pifeng.server.business.server.domain.Server poolServer = this.serverPool.get(ip);
+        server.setFirstDiscovery(poolServer == null || poolServer.isFirstDiscovery());
+        server.setAlarm(poolServer != null && poolServer.isAlarm());
+        // 更新服务器信息池
+        this.serverPool.updateServerPool(ip, server);
     }
 
     /**

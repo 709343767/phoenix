@@ -3,14 +3,8 @@ package com.gitee.pifeng.server.business.server.core;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 import com.gitee.pifeng.common.constant.MonitorTypeEnums;
-import com.gitee.pifeng.server.business.server.domain.Cpu;
-import com.gitee.pifeng.server.business.server.domain.Disk;
-import com.gitee.pifeng.server.business.server.domain.Instance;
-import com.gitee.pifeng.server.business.server.domain.Memory;
-import com.gitee.pifeng.server.business.server.pool.CpuPool;
-import com.gitee.pifeng.server.business.server.pool.DiskPool;
-import com.gitee.pifeng.server.business.server.pool.InstancePool;
-import com.gitee.pifeng.server.business.server.pool.MemoryPool;
+import com.gitee.pifeng.server.business.server.domain.*;
+import com.gitee.pifeng.server.business.server.pool.*;
 import com.gitee.pifeng.server.constant.FileNameConstants;
 import com.gitee.pifeng.server.inf.IInstanceMonitoringListener;
 import com.gitee.pifeng.server.inf.IServerMonitoringListener;
@@ -50,6 +44,12 @@ public class PersistPoolLifecycle implements InitializingBean, DisposableBean, I
      */
     @Autowired
     private InstancePool instancePool;
+
+    /**
+     * 服务器信息池
+     */
+    @Autowired
+    private ServerPool serverPool;
 
     /**
      * 服务器内存信息池
@@ -134,6 +134,13 @@ public class PersistPoolLifecycle implements InitializingBean, DisposableBean, I
             log.error("把Spring容器中的应用实例池内容存入文件系统异常！");
         }
         try {
+            FileUtils.writeStringToFile(new File(FileNameConstants.SERVER_POOL), this.serverPool.toJsonString(),
+                    StandardCharsets.UTF_8, false);
+            log.info("把Spring容器中的服务器信息池内容存入文件系统成功！");
+        } catch (Exception e) {
+            log.info("把Spring容器中的服务器信息池内容存入文件系统异常！");
+        }
+        try {
             FileUtils.writeStringToFile(new File(FileNameConstants.MEMORY_POOL), this.memoryPool.toJsonString(),
                     StandardCharsets.UTF_8, false);
             log.info("把Spring容器中的服务器内存信息池内容存入文件系统成功！");
@@ -183,6 +190,17 @@ public class PersistPoolLifecycle implements InitializingBean, DisposableBean, I
             log.info("把文件系统中的应用实例池内容加载到Spring容器成功！");
         } catch (Exception ignored) {
             log.info("把文件系统中的应用实例池内容加载到Spring容器异常！");
+        }
+        try {
+            String serverPoolStr = FileUtils.readFileToString(new File(FileNameConstants.SERVER_POOL), StandardCharsets.UTF_8);
+            if (StringUtils.isNotBlank(serverPoolStr)) {
+                Map<String, Server> map = JSON.parseObject(serverPoolStr, new TypeReference<Map<String, Server>>() {
+                });
+                this.serverPool.putAll(map);
+            }
+            log.info("把文件系统中的服务器信息池内容加载到Spring容器成功！");
+        } catch (Exception ignored) {
+            log.info("把文件系统中的服务器信息池内容加载到Spring容器异常！");
         }
         try {
             String memoryPoolStr = FileUtils.readFileToString(new File(FileNameConstants.MEMORY_POOL), StandardCharsets.UTF_8);
@@ -255,6 +273,8 @@ public class PersistPoolLifecycle implements InitializingBean, DisposableBean, I
         }
         if (monitorType == MonitorTypeEnums.SERVER) {
             params.forEach(e -> {
+                //移除服务器信息
+                this.serverPool.remove(e);
                 //移除当前内存信息
                 this.memoryPool.remove(e);
                 // 移除当前CPU信息

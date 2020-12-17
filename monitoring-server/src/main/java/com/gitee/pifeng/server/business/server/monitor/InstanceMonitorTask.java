@@ -127,7 +127,7 @@ public class InstanceMonitorTask implements CommandLineRunner {
      */
     private void firstDiscovery(Instance instance) throws NetException, SigarException {
         // 发送发现新的应用程序通知信息
-        this.sendAlarmInfo("发现应用程序", AlarmLevelEnums.INFO, instance);
+        this.sendAlarmInfo("发现新应用程序", AlarmLevelEnums.INFO, instance);
         instance.setFirstDiscovery(false);
         instance.setLineAlarm(false);
     }
