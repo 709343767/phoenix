@@ -72,7 +72,6 @@ public class ServerMonitor implements IServerMonitoringListener {
         if (isFirstDiscovery) {
             this.sendAlarmInfo("发现新服务器", AlarmLevelEnums.INFO, server);
             server.setFirstDiscovery(false);
-            server.setAlarm(false);
         }
     }
 

@@ -36,9 +36,4 @@ public class Server extends AbstractSuperBean {
      */
     private boolean isFirstDiscovery;
 
-    /**
-     * 是否已经发送告警信息
-     */
-    private boolean isAlarm;
-
 }

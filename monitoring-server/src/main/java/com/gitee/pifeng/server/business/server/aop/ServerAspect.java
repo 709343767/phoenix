@@ -167,7 +167,6 @@ public class ServerAspect {
         server.setComputerName(computerName);
         com.gitee.pifeng.server.business.server.domain.Server poolServer = this.serverPool.get(ip);
         server.setFirstDiscovery(poolServer == null || poolServer.isFirstDiscovery());
-        server.setAlarm(poolServer != null && poolServer.isAlarm());
         // 更新服务器信息池
         this.serverPool.updateServerPool(ip, server);
     }
