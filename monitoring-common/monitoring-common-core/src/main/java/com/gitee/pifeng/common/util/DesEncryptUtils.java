@@ -1,11 +1,11 @@
 package com.gitee.pifeng.common.util;
 
-import com.google.common.base.Charsets;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.util.Base64;
 
@@ -40,7 +40,7 @@ public class DesEncryptUtils {
         String result = null;
         try {
             // 取需要加密内容的utf-8编码
-            byte[] encrypt = str.getBytes(Charsets.UTF_8);
+            byte[] encrypt = str.getBytes(StandardCharsets.UTF_8);
             // 取MD5Hash码，并组合加密数组
             byte[] md5Hasn = DesEncryptUtils.md5Hash(encrypt, 0, encrypt.length);
             // 组合消息体
@@ -91,7 +91,7 @@ public class DesEncryptUtils {
                     throw new Exception();
                 }
             }
-            result = new String(temp, 16, temp.length - 16, Charsets.UTF_8);
+            result = new String(temp, 16, temp.length - 16, StandardCharsets.UTF_8);
         } catch (Exception e) {
             log.error("字符串DES解密失败！", e);
         }
@@ -218,10 +218,4 @@ public class DesEncryptUtils {
         }
     }
 
-    public static void main(String[] args) {
-        String encrypt = DesEncryptUtils.encrypt("测试字符串！");
-        log.info(encrypt);
-        String decrypt = DesEncryptUtils.decrypt(encrypt);
-        log.info(decrypt);
-    }
 }
