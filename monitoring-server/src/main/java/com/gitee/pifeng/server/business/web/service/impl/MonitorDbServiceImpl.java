@@ -1,5 +1,6 @@
 package com.gitee.pifeng.server.business.web.service.impl;
 
+import cn.hutool.core.util.NumberUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -8,6 +9,7 @@ import com.gitee.pifeng.common.constant.ZeroOrOneConstants;
 import com.gitee.pifeng.server.business.web.dao.IMonitorDbDao;
 import com.gitee.pifeng.server.business.web.entity.MonitorDb;
 import com.gitee.pifeng.server.business.web.service.IMonitorDbService;
+import com.gitee.pifeng.server.business.web.vo.HomeDbVo;
 import com.gitee.pifeng.server.business.web.vo.LayUiAdminResultVo;
 import com.gitee.pifeng.server.business.web.vo.MonitorDbVo;
 import com.gitee.pifeng.server.constant.WebResponseConstants;
@@ -20,6 +22,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -174,6 +177,28 @@ public class MonitorDbServiceImpl extends ServiceImpl<IMonitorDbDao, MonitorDb> 
         }
         this.monitorDbDao.deleteBatchIds(ids);
         return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);
+    }
+
+    /**
+     * <p>
+     * 获取home页的数据库信息
+     * </p>
+     *
+     * @return home页的数据库信息表现层对象
+     * @author 皮锋
+     * @custom.date 2020/12/19 21:43
+     */
+    @Override
+    public HomeDbVo getHomeDbInfo() {
+        // 数据库正常率统计
+        Map<String, Object> map = this.monitorDbDao.getDbNormalRateStatistics();
+        return HomeDbVo.builder()
+                .dbSum(NumberUtil.parseInt(map.get("dbSum").toString()))
+                .dbConnectSum(NumberUtil.parseInt(map.get("dbConnectSum").toString()))
+                .dbDisconnectSum(NumberUtil.parseInt(map.get("dbDisconnectSum").toString()))
+                .dbUnsentSum(NumberUtil.parseInt(map.get("dbUnsentSum").toString()))
+                .dbConnectRate(map.get("dbConnectRate").toString())
+                .build();
     }
 
 }

@@ -3,6 +3,7 @@ package com.gitee.pifeng.server.business.web.service;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.gitee.pifeng.server.business.web.entity.MonitorDb;
+import com.gitee.pifeng.server.business.web.vo.HomeDbVo;
 import com.gitee.pifeng.server.business.web.vo.LayUiAdminResultVo;
 import com.gitee.pifeng.server.business.web.vo.MonitorDbVo;
 
@@ -71,5 +72,16 @@ public interface IMonitorDbService extends IService<MonitorDb> {
      * @custom.date 2020/12/19 20:59
      */
     LayUiAdminResultVo deleteMonitorDb(List<MonitorDbVo> monitorDbVos);
+
+    /**
+     * <p>
+     * 获取home页的数据库信息
+     * </p>
+     *
+     * @return home页的数据库信息表现层对象
+     * @author 皮锋
+     * @custom.date 2020/12/19 21:43
+     */
+    HomeDbVo getHomeDbInfo();
 
 }

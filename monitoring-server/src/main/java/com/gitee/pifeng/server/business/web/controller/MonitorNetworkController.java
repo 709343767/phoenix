@@ -27,7 +27,7 @@ import java.util.List;
  * @custom.date 2020/9/26 13:19
  */
 @Controller
-@RequestMapping("/network")
+@RequestMapping("/monitor-network")
 @Api(tags = "网络")
 public class MonitorNetworkController {
 

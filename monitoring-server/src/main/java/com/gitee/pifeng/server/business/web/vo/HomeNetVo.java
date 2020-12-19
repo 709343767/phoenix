@@ -24,16 +24,19 @@ import lombok.experimental.Accessors;
 @ApiModel(value = "home页的网络信息表现层对象")
 public class HomeNetVo {
 
-    @ApiModelProperty(value = "IP数量")
+    @ApiModelProperty(value = "网络数量")
     private Integer netSum;
 
-    @ApiModelProperty(value = "IP正常数量")
+    @ApiModelProperty(value = "网络正常数量")
     private Integer netConnectSum;
 
-    @ApiModelProperty(value = "IP断开数量")
+    @ApiModelProperty(value = "网络断开数量")
     private Integer netDisconnectSum;
 
-    @ApiModelProperty(value = "IP正常率")
+    @ApiModelProperty(value = "网络未知数量")
+    private Integer netUnsentSum;
+
+    @ApiModelProperty(value = "网络正常率")
     private String netConnectRate;
 
 }

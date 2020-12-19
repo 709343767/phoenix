@@ -256,6 +256,7 @@
                     var homeServerVo = data.homeServerVo;
                     var homeNetVo = data.homeNetVo;
                     var homeAlarmRecordVo = data.homeAlarmRecordVo;
+                    var homeDbVo = data.homeDbVo;
                     // 应用程序
                     var htmlInstance = '<p class="layuiadmin-big-font">' + homeInstanceVo.instanceSum +
                         '                   <i class="home-i">' + homeInstanceVo.instanceOnLineRate + '<img src="' + ctxPath + 'images/icon16/percentage-16.png"></i>' +
@@ -289,20 +290,46 @@
                         '                   </span>' +
                         '             </p>';
                     $('#server-card-list').empty().append(htmlServer);
-                    // IP
-                    var htmlIp = '<p class="layuiadmin-big-font">' + homeNetVo.netSum +
+                    // 数据库
+                    var htmlDb = '<p class="layuiadmin-big-font layuiadmin-big-font-my">' + homeDbVo.dbSum +
+                        '               <i class="home-i">' + homeDbVo.dbConnectRate + '<img src="' + ctxPath + 'images/icon16/percentage-16.png"></i>' +
+                        '         </p>' +
+                        '         <p>正常' +
+                        '               <span class="layuiadmin-span-color">' + homeDbVo.dbConnectSum +
+                        '                       <i class="layui-inline layui-icon"><img src="' + ctxPath + 'images/icon16/normal-16.png"></i>' +
+                        '               </span>' +
+                        '         </p>' +
+                        '         <p>异常' +
+                        '               <span class="layuiadmin-span-color">' + homeDbVo.dbDisconnectSum +
+                        '                       <i class="layui-inline layui-icon"><img src="' + ctxPath + 'images/icon16/exception-16.png"></i>' +
+                        '               </span>' +
+                        '         </p>' +
+                        '         <p>未知' +
+                        '               <span class="layuiadmin-span-color">' + homeDbVo.dbUnsentSum +
+                        '                       <i class="layui-inline layui-icon"><img src="' + ctxPath + 'images/icon16/unsent-16.png"></i>' +
+                        '               </span>' +
+                        '         </p>';
+                    $('#db-card-list').empty().append(htmlDb);
+                    // 网络
+                    var htmlIp = '<p class="layuiadmin-big-font layuiadmin-big-font-my">' + homeNetVo.netSum +
                         '               <i class="home-i">' + homeNetVo.netConnectRate + '<img src="' + ctxPath + 'images/icon16/percentage-16.png"></i>' +
-                        '                    </p>' +
-                        '                    <p>正常' +
-                        '                        <span class="layuiadmin-span-color">' + homeNetVo.netConnectSum +
-                        '                               <i class="layui-inline layui-icon"><img src="' + ctxPath + 'images/icon16/net-connect-16.png"></i>' +
-                        '                        </span>' +
-                        '                    </p>' +
-                        '                    <p>断网' +
-                        '                        <span class="layuiadmin-span-color">' + homeNetVo.netDisconnectSum + '' +
-                        '                               <i class="layui-inline layui-icon"><img src="' + ctxPath + 'images/icon16/net-disconnect-16.png"></i>' +
-                        '                        </span>' +
-                        '                    </p>';
+                        '         </p>' +
+                        '         <p>正常' +
+                        '               <span class="layuiadmin-span-color">' + homeNetVo.netConnectSum +
+                        '                      <i class="layui-inline layui-icon"><img src="' + ctxPath + 'images/icon16/net-connect-16.png"></i>' +
+                        '               </span>' +
+                        '         </p>' +
+                        '         <p>异常' +
+                        '               <span class="layuiadmin-span-color">' + homeNetVo.netDisconnectSum +
+                        '                      <i class="layui-inline layui-icon"><img src="' + ctxPath + 'images/icon16/net-disconnect-16.png"></i>' +
+                        '               </span>' +
+                        '         </p>' +
+                        '         <p>未知' +
+                        '               <span class="layuiadmin-span-color">' + homeNetVo.netUnsentSum +
+                        '                      <i class="layui-inline layui-icon"><img src="' + ctxPath + 'images/icon16/unsent-16.png"></i>' +
+                        '               </span>' +
+                        '         </p>'
+                    ;
                     $('#ip-card-list').empty().append(htmlIp);
                     // 告警
                     var htmlAlarm = '<p class="layuiadmin-big-font layuiadmin-big-font-my">' + homeAlarmRecordVo.alarmRecordSum +

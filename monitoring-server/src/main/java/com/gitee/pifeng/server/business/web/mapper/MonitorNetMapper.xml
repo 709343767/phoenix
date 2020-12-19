@@ -4,14 +4,17 @@
 
     <!-- 网络正常率统计 -->
     <select id="getNetNormalRateStatistics" resultType="java.util.Map" databaseId="mysql">
-        select tmp.netSum                                                    as netSum,
-               tmp.netConnectSum                                             as netConnectSum,
-               tmp.netSum - tmp.netConnectSum                                as netDisconnectSum,
-               ifnull(round(tmp.netConnectSum / tmp.netSum, 2) * 100, '100') as netConnectRate
-        from (
-                 select count(1)                  as netSum,
-                        ifnull(sum(mn.STATUS), 0) as netConnectSum
-                 from MONITOR_NET mn) tmp
+        SELECT tmp.netSum                                                    AS netSum,
+               tmp.netConnectSum                                             AS netConnectSum,
+               tmp.netDisconnectSum                                          AS netDisconnectSum,
+               tmp.netUnsentSum                                              AS netUnsentSum,
+               IFNULL(round(tmp.netConnectSum * 100 / tmp.netSum, 2), '100') AS netConnectRate
+        FROM (
+                 SELECT COUNT(ID)                                                      AS netSum,
+                        IFNULL(SUM(CASE WHEN mar.STATUS = '1' THEN 1 ELSE 0 END), 0)   AS netConnectSum,
+                        IFNULL(SUM(CASE WHEN mar.STATUS = '0' THEN 1 ELSE 0 END), 0)   AS netDisconnectSum,
+                        IFNULL(SUM(CASE WHEN mar.STATUS is null THEN 1 ELSE 0 END), 0) AS netUnsentSum
+                 FROM MONITOR_NET mar) tmp
     </select>
 
 </mapper>

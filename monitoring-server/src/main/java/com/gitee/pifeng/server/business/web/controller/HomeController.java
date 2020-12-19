@@ -1,9 +1,6 @@
 package com.gitee.pifeng.server.business.web.controller;
 
-import com.gitee.pifeng.server.business.web.service.IMonitorAlarmRecordService;
-import com.gitee.pifeng.server.business.web.service.IMonitorInstanceService;
-import com.gitee.pifeng.server.business.web.service.IMonitorNetService;
-import com.gitee.pifeng.server.business.web.service.IMonitorServerService;
+import com.gitee.pifeng.server.business.web.service.*;
 import com.gitee.pifeng.server.business.web.vo.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -55,6 +52,12 @@ public class HomeController {
     private IMonitorNetService monitorNetService;
 
     /**
+     * 数据库表服务类
+     */
+    @Autowired
+    private IMonitorDbService monitorDbService;
+
+    /**
      * <p>
      * 访问home页
      * </p>
@@ -75,6 +78,8 @@ public class HomeController {
         mv.addObject("homeServerVo", homeServerVo);
         HomeAlarmRecordVo homeAlarmRecordVo = this.monitorAlarmRecordService.getHomeAlarmRecordInfo();
         mv.addObject("homeAlarmRecordVo", homeAlarmRecordVo);
+        HomeDbVo homeDbVo = this.monitorDbService.getHomeDbInfo();
+        mv.addObject("homeDbVo", homeDbVo);
         return mv;
     }
 
@@ -95,11 +100,13 @@ public class HomeController {
         HomeNetVo homeNetVo = this.monitorNetService.getHomeNetInfo();
         HomeServerVo homeServerVo = this.monitorServerService.getHomeServerInfo();
         HomeAlarmRecordVo homeAlarmRecordVo = this.monitorAlarmRecordService.getHomeAlarmRecordInfo();
+        HomeDbVo homeDbVo = this.monitorDbService.getHomeDbInfo();
         Map<String, Object> map = new HashMap<>(16);
         map.put("homeInstanceVo", homeInstanceVo);
         map.put("homeNetVo", homeNetVo);
         map.put("homeServerVo", homeServerVo);
         map.put("homeAlarmRecordVo", homeAlarmRecordVo);
+        map.put("homeDbVo", homeDbVo);
         return LayUiAdminResultVo.ok(map);
     }
 

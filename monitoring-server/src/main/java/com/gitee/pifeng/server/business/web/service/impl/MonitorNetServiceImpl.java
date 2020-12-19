@@ -60,6 +60,7 @@ public class MonitorNetServiceImpl extends ServiceImpl<IMonitorNetDao, MonitorNe
                 .netSum(NumberUtil.parseInt(map.get("netSum").toString()))
                 .netConnectSum(NumberUtil.parseInt(map.get("netConnectSum").toString()))
                 .netDisconnectSum(NumberUtil.parseInt(map.get("netDisconnectSum").toString()))
+                .netUnsentSum(NumberUtil.parseInt(map.get("netUnsentSum").toString()))
                 .netConnectRate(map.get("netConnectRate").toString())
                 .build();
     }

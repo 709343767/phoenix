@@ -87,20 +87,29 @@
                             数据库
                             <span class="layui-badge layui-bg-green layuiadmin-badge">个</span>
                         </div>
-                        <div class="layui-card-body layuiadmin-card-list">
-
-                            <p class="layuiadmin-big-font">2</p>
+                        <div class="layui-card-body layuiadmin-card-list" id="db-card-list">
+                            <p class="layuiadmin-big-font layuiadmin-big-font-my">
+                                [[${homeDbVo.dbSum}]]
+                                <i class="home-i">[[${homeDbVo.dbConnectRate}]]
+                                    <img th:src="@{/images/icon16/percentage-16.png}"></i>
+                            </p>
                             <p>
                                 正常
-                                <span class="layuiadmin-span-color">*** <i
+                                <span class="layuiadmin-span-color">[[${homeDbVo.dbConnectSum}]] <i
                                         class="layui-inline layui-icon"><img
                                         th:src="@{/images/icon16/normal-16.png}"></i></span>
                             </p>
                             <p>
                                 异常
-                                <span class="layuiadmin-span-color">*** <i
+                                <span class="layuiadmin-span-color">[[${homeDbVo.dbDisconnectSum}]] <i
                                         class="layui-inline layui-icon"><img
                                         th:src="@{/images/icon16/exception-16.png}"></i></span>
+                            </p>
+                            <p>
+                                未知
+                                <span class="layuiadmin-span-color">[[${homeDbVo.dbUnsentSum}]]<i
+                                        class="layui-inline layui-icon"><img
+                                        th:src="@{/images/icon16/unsent-16.png}"></i></span>
                             </p>
                         </div>
                     </div>
@@ -108,11 +117,11 @@
                 <div class="layui-col-sm6 layui-col-md2">
                     <div class="layui-card">
                         <div class="layui-card-header">
-                            IP
+                            网络
                             <span class="layui-badge layui-bg-orange layuiadmin-badge">个</span>
                         </div>
                         <div class="layui-card-body layuiadmin-card-list" id="ip-card-list">
-                            <p class="layuiadmin-big-font">[[${homeNetVo.netSum}]]
+                            <p class="layuiadmin-big-font layuiadmin-big-font-my">[[${homeNetVo.netSum}]]
                                 <i class="home-i">[[${homeNetVo.netConnectRate}]]
                                     <img th:src="@{/images/icon16/percentage-16.png}"></i>
                             </p>
@@ -123,10 +132,16 @@
                                         th:src="@{/images/icon16/net-connect-16.png}"></i></span>
                             </p>
                             <p>
-                                断网
+                                异常
                                 <span class="layuiadmin-span-color">[[${homeNetVo.netDisconnectSum}]]<i
                                         class="layui-inline layui-icon"><img
                                         th:src="@{/images/icon16/net-disconnect-16.png}"></i></span>
+                            </p>
+                            <p>
+                                未知
+                                <span class="layuiadmin-span-color">[[${homeNetVo.netUnsentSum}]]<i
+                                        class="layui-inline layui-icon"><img
+                                        th:src="@{/images/icon16/unsent-16.png}"></i></span>
                             </p>
                         </div>
                     </div>
