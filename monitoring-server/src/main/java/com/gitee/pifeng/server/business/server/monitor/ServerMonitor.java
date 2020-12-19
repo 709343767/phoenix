@@ -73,6 +73,7 @@ public class ServerMonitor implements IServerMonitoringListener {
             this.sendAlarmInfo("发现新服务器", AlarmLevelEnums.INFO, server);
             server.setFirstDiscovery(false);
         }
+        log.info("服务器信息池大小：{}，详细信息：{}", this.serverPool.size(), this.serverPool.toJsonString());
     }
 
     /**
