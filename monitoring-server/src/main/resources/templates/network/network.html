@@ -41,8 +41,8 @@
                     <div class="layui-input-block">
                         <select name="status">
                             <option value="">所有</option>
-                            <option value="0">网络不通</option>
-                            <option value="1">网络正常</option>
+                            <option value="1">正常</option>
+                            <option value="0">异常</option>
                             <option value="-1">未知</option>
                         </select>
                     </div>
@@ -111,10 +111,10 @@
             done: function (res) {
                 $('[data-field="status"]').children().each(function () {
                     if ($(this).text() === '0') {
-                        $(this).html('<span style="color: #FF4500;">网络不通</span>');
+                        $(this).html('<span style="color: #FF4500;">异常</span>');
                     }
                     if ($(this).text() === '1') {
-                        $(this).text('网络正常');
+                        $(this).text('正常');
                     }
                     if ($(this).text() === null || $(this).text() === '' || $(this).text() === undefined) {
                         $(this).text('未知');
