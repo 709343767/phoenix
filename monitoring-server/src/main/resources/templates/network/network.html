@@ -87,7 +87,7 @@
         var $ = layui.$, admin = layui.admin, form = layui.form, table = layui.table, device = layui.device();
         table.render({
             elem: '#list-table',
-            url: ctxPath + 'network/get-monitor-network-list',
+            url: ctxPath + 'monitor-network/get-monitor-network-list',
             toolbar: '#list-table-toolbar',
             request: {
                 pageName: 'current',//页码的参数名称，默认：page
@@ -203,7 +203,7 @@
                     layer.confirm('确定删除吗？', function (index) {
                         admin.req({
                             type: 'post',
-                            url: ctxPath + 'network/delete-monitor-network',
+                            url: ctxPath + 'monitor-network/delete-monitor-network',
                             data: JSON.stringify(checkStatus.data),
                             dataType: 'json',
                             contentType: 'application/json;charset=utf-8',
@@ -245,7 +245,7 @@
                     layer.open({
                         type: 2,
                         title: '添加网络信息',
-                        content: ctxPath + 'network/add-monitor-network-form',
+                        content: ctxPath + 'monitor-network/add-monitor-network-form',
                         maxmin: true,
                         area: [width, height],
                         btn: ['确定', '取消'],
@@ -258,7 +258,7 @@
                                 var field = data.field; //获取提交的字段
                                 admin.req({
                                     type: 'post',
-                                    url: ctxPath + 'network/add-monitor-network',
+                                    url: ctxPath + 'monitor-network/add-monitor-network',
                                     data: field,
                                     dataType: 'json',
                                     headers: {
@@ -294,7 +294,7 @@
                 layer.confirm('确定删除吗？', function (index) {
                     admin.req({
                         type: 'post',
-                        url: ctxPath + 'network/delete-monitor-network',
+                        url: ctxPath + 'monitor-network/delete-monitor-network',
                         data: JSON.stringify([data]),
                         dataType: 'json',
                         contentType: 'application/json;charset=utf-8',
@@ -336,7 +336,7 @@
                 layer.open({
                     type: 2,
                     title: '编辑网络信息',
-                    content: ctxPath + 'network/edit-monitor-network-form?id=' + data.id,
+                    content: ctxPath + 'monitor-network/edit-monitor-network-form?id=' + data.id,
                     maxmin: true,
                     area: [width, height],
                     btn: ['确定', '取消'],
@@ -349,7 +349,7 @@
                             var field = data.field; //获取提交的字段
                             admin.req({
                                 type: 'post',
-                                url: ctxPath + 'network/edit-monitor-network',
+                                url: ctxPath + 'monitor-network/edit-monitor-network',
                                 data: field,
                                 dataType: 'json',
                                 headers: {
