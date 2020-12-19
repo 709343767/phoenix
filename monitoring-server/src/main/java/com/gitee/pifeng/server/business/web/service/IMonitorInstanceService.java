@@ -40,7 +40,7 @@ public interface IMonitorInstanceService extends IService<MonitorInstance> {
      * @param instanceName 应用实例名
      * @param endpoint     端点
      * @param isOnline     应用状态
-     * @return layUiAdmin响应对象
+     * @return 简单分页模型
      * @author 皮锋
      * @custom.date 2020/9/26 11:02
      */

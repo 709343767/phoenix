@@ -41,7 +41,7 @@ public interface IMonitorNetService extends IService<MonitorNet> {
      * @param ipSource IP地址（来源）
      * @param ipTarget IP地址（目的地）
      * @param status   状态（0：网络不通，1：网络正常）
-     * @return layUiAdmin响应对象
+     * @return 简单分页模型
      * @author 皮锋
      * @custom.date 2020/9/26 13:28
      */

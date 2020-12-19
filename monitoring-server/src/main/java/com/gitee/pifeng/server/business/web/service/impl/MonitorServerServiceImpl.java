@@ -105,7 +105,7 @@ public class MonitorServerServiceImpl extends ServiceImpl<IMonitorServerDao, Mon
      * @param osName     操作系统名称
      * @param osVersion  操作系统版本
      * @param userName   用户名称
-     * @return layUiAdmin响应对象
+     * @return 简单分页模型
      * @author 皮锋
      * @custom.date 2020/9/4 12:38
      */
