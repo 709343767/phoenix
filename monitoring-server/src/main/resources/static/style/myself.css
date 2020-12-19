@@ -76,3 +76,8 @@
 .hr-padding {
     padding: 0px;
 }
+
+.layui-bg-skyblue-my {
+    background-color: #87CEEB;
+    color: #fff !important;
+}
