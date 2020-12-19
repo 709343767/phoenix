@@ -41,7 +41,7 @@
                    class="layui-input" lay-verType="tips">
         </div>
     </div>
-    <div class="layui-form-item" lay-filter="sex">
+    <div class="layui-form-item">
         <label class="layui-form-label">选择角色</label>
         <div class="layui-input-block">
             <input type="radio" name="roleId" th:each="role,roleStat:${roles}" th:value="${role.id}"
