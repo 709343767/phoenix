@@ -45,6 +45,9 @@ public class MonitorDbVo implements ISuperBean {
     @ApiModelProperty(value = "数据库类型")
     private String dbType;
 
+    @ApiModelProperty(value = "驱动类")
+    private String driverClass;
+
     @ApiModelProperty(value = "描述")
     private String dbDesc;
 

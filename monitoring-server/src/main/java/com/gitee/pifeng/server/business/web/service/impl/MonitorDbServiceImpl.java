@@ -1,6 +1,7 @@
 package com.gitee.pifeng.server.business.web.service.impl;
 
 import cn.hutool.core.util.NumberUtil;
+import cn.hutool.db.dialect.DriverUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -115,6 +116,9 @@ public class MonitorDbServiceImpl extends ServiceImpl<IMonitorDbDao, MonitorDb> 
         }
         // 转成数据库表实体对象
         MonitorDb monitorDb = monitorDbVo.convertTo();
+        // 数据库类型
+        String dbType = monitorDb.getDbType();
+        monitorDb.setDriverClass(DriverUtil.identifyDriver(dbType));
         // 加密密码
         monitorDb.setPassword(Base64.getEncoder().encodeToString(monitorDb.getPassword().getBytes(StandardCharsets.UTF_8)));
         monitorDb.setUpdateTime(new Date());
@@ -149,6 +153,9 @@ public class MonitorDbServiceImpl extends ServiceImpl<IMonitorDbDao, MonitorDb> 
         }
         // 转成数据库表实体对象
         MonitorDb monitorDb = monitorDbVo.convertTo();
+        // 数据库类型
+        String dbType = monitorDb.getDbType();
+        monitorDb.setDriverClass(DriverUtil.identifyDriver(dbType));
         // 加密密码
         monitorDb.setPassword(Base64.getEncoder().encodeToString(monitorDb.getPassword().getBytes(StandardCharsets.UTF_8)));
         monitorDb.setInsertTime(new Date());

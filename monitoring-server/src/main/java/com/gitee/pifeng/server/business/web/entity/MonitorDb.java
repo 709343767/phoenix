@@ -52,6 +52,10 @@ public class MonitorDb implements Serializable {
     @TableField("DB_TYPE")
     private String dbType;
 
+    @ApiModelProperty(value = "驱动类")
+    @TableField("DRIVER_CLASS")
+    private String driverClass;
+
     @ApiModelProperty(value = "描述")
     @TableField("DB_DESC")
     private String dbDesc;
