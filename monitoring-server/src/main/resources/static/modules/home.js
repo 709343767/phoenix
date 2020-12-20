@@ -306,7 +306,7 @@
                         '         </p>' +
                         '         <p>未知' +
                         '               <span class="layuiadmin-span-color">' + homeDbVo.dbUnsentSum +
-                        '                       <i class="layui-inline layui-icon"><img src="' + ctxPath + 'images/icon16/unsent-16.png"></i>' +
+                        '                       <i class="layui-inline layui-icon"><img src="' + ctxPath + 'images/icon16/unknown-16.png"></i>' +
                         '               </span>' +
                         '         </p>';
                     $('#db-card-list').empty().append(htmlDb);
@@ -326,7 +326,7 @@
                         '         </p>' +
                         '         <p>未知' +
                         '               <span class="layuiadmin-span-color">' + homeNetVo.netUnsentSum +
-                        '                      <i class="layui-inline layui-icon"><img src="' + ctxPath + 'images/icon16/unsent-16.png"></i>' +
+                        '                      <i class="layui-inline layui-icon"><img src="' + ctxPath + 'images/icon16/net-unkown-16.png"></i>' +
                         '               </span>' +
                         '         </p>'
                     ;
