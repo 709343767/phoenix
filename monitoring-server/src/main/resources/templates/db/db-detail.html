@@ -2,7 +2,7 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
-    <title>编辑数据库</title>
+    <title>数据库详情</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport"
@@ -25,6 +25,13 @@
         <div class="layui-input-block">
             <input type="hidden" name="id" autocomplete="off" readonly
                    class="layui-input" th:value="${monitorDbVo.id}">
+        </div>
+    </div>
+    <div class="layui-form-item" style="display: none;">
+        <label class="layui-form-label">状态</label>
+        <div class="layui-input-block">
+            <input type="hidden" name="isOnline" autocomplete="off" readonly
+                   class="layui-input" th:value="${monitorDbVo.isOnline}">
         </div>
     </div>
     <div class="layui-form-item">
