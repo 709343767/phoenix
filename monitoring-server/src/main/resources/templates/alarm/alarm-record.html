@@ -35,6 +35,8 @@
                         <select name="type">
                             <option value="">所有</option>
                             <option value="SERVER">服务器</option>
+                            <option value="DATABASE">数据库</option>
+                            <option value="DOCKER">Docker</option>
                             <option value="NET">网络</option>
                             <option value="INSTANCE">应用</option>
                             <option value="CUSTOM">自定义</option>
@@ -148,6 +150,12 @@
                     }
                     if ($(this).text() === 'CUSTOM') {
                         $(this).text('自定义');
+                    }
+                    if ($(this).text() === 'DATABASE') {
+                        $(this).text('数据库');
+                    }
+                    if ($(this).text() === 'DOCKER') {
+                        $(this).text('Docker');
                     }
                 });
                 $('[data-field="level"]').children().each(function () {

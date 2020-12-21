@@ -21,6 +21,11 @@ public enum MonitorTypeEnums {
     SERVER,
 
     /**
+     * Docker
+     */
+    DOCKER,
+
+    /**
      * 网络
      */
     NET,

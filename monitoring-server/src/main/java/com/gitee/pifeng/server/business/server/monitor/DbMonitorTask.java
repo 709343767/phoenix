@@ -1,6 +1,10 @@
 package com.gitee.pifeng.server.business.server.monitor;
 
+import cn.hutool.db.DbUtil;
 import cn.hutool.db.ds.simple.SimpleDataSource;
+import cn.hutool.db.handler.NumberHandler;
+import cn.hutool.db.sql.SqlExecutor;
+import com.baomidou.mybatisplus.annotation.DbType;
 import com.gitee.pifeng.common.constant.AlarmLevelEnums;
 import com.gitee.pifeng.common.constant.MonitorTypeEnums;
 import com.gitee.pifeng.common.constant.ZeroOrOneConstants;
@@ -14,7 +18,8 @@ import com.gitee.pifeng.server.business.server.core.PackageConstructor;
 import com.gitee.pifeng.server.business.server.entity.MonitorDb;
 import com.gitee.pifeng.server.business.server.service.IAlarmService;
 import com.gitee.pifeng.server.business.server.service.IMonitorDbService;
-import lombok.Cleanup;
+import com.gitee.pifeng.server.business.server.sql.MySql;
+import com.gitee.pifeng.server.business.server.sql.Oracle;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.hyperic.sigar.SigarException;
@@ -77,17 +82,25 @@ public class DbMonitorTask implements CommandLineRunner {
                         // 使用多线程，加快处理速度
                         ThreadPoolExecutor threadPoolExecutor = ThreadPool.COMMON_IO_INTENSIVE_THREAD_POOL;
                         threadPoolExecutor.execute(() -> {
-                            // 数据库是否可连接
-                            boolean isConnect = this.isConnect(monitorDb);
-                            // 连接正常
-                            if (isConnect) {
-                                // 处理数据库正常
-                                this.connected(monitorDb);
-                            }
-                            // 连接异常
-                            else {
-                                // 处理数据库异常
-                                this.disconnected(monitorDb);
+                            // 数据库连接
+                            Connection connection = this.getConnection(monitorDb);
+                            try {
+                                // 数据库是否可连接
+                                boolean isConnect = this.isConnect(connection, monitorDb);
+                                // 连接正常
+                                if (isConnect) {
+                                    // 处理数据库正常
+                                    this.connected(monitorDb);
+                                }
+                                // 连接异常
+                                else {
+                                    // 处理数据库异常
+                                    this.disconnected(monitorDb);
+                                }
+                            } catch (Exception e) {
+                                log.error("执行数据库监控异常！", e);
+                            } finally {
+                                DbUtil.close(connection);
                             }
                         });
                     }
@@ -96,6 +109,32 @@ public class DbMonitorTask implements CommandLineRunner {
                 }
             }
         }, 10, 300, TimeUnit.SECONDS);
+    }
+
+    /**
+     * <p>
+     * 获取数据库连接
+     * </p>
+     *
+     * @param monitorDb 数据库信息
+     * @return 数据库连接
+     * @author 皮锋
+     * @custom.date 2020/12/21 21:42
+     */
+    private Connection getConnection(MonitorDb monitorDb) {
+        // url
+        String url = monitorDb.getUrl();
+        // 用户名
+        String username = monitorDb.getUsername();
+        // 密码
+        String password = new String(Base64.getDecoder().decode(monitorDb.getPassword()), StandardCharsets.UTF_8);
+        // 数据源
+        try (SimpleDataSource ds = new SimpleDataSource(url, username, password)) {
+            return ds.getConnection();
+        } catch (Exception e) {
+            log.error("与数据库建立连接异常！", e);
+            return null;
+        }
     }
 
     /**
@@ -157,28 +196,30 @@ public class DbMonitorTask implements CommandLineRunner {
      * 数据库是否可连接
      * </p>
      *
-     * @param monitorDb 数据库表
+     * @param connection 数据库连接
+     * @param monitorDb  数据库表
      * @return 是 或者 否
      * @author 皮锋
      * @custom.date 2020/12/20 16:07
      */
-    private boolean isConnect(MonitorDb monitorDb) {
-        // url
-        String url = monitorDb.getUrl();
-        // 用户名
-        String username = monitorDb.getUsername();
-        // 密码
-        String password = new String(Base64.getDecoder().decode(monitorDb.getPassword()), StandardCharsets.UTF_8);
+    private boolean isConnect(Connection connection, MonitorDb monitorDb) {
+        // 数据库连接为空
+        if (connection == null) {
+            return false;
+        }
         try {
-            // 数据源
-            @Cleanup
-            SimpleDataSource ds = new SimpleDataSource(url, username, password);
-            @Cleanup
-            Connection connection = ds.getConnection();
-            log.info("Catalog：{}", connection.getCatalog());
+            String dbType = monitorDb.getDbType();
+            // mysql
+            if (StringUtils.equalsIgnoreCase(dbType, DbType.MYSQL.getDb())) {
+                SqlExecutor.query(connection, MySql.CHECK_CONN, new NumberHandler());
+            }
+            // oracle
+            if (StringUtils.equalsIgnoreCase(dbType, DbType.ORACLE.getDb())) {
+                SqlExecutor.query(connection, Oracle.CHECK_CONN, new NumberHandler());
+            }
             return true;
         } catch (Exception e) {
-            log.error("与数据库建立连接异常！", e);
+            log.error("检查连接异常！", e);
             return false;
         }
     }
