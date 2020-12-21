@@ -64,6 +64,8 @@ spring:
         login-username: admin
         login-password: admin
         reset-enable: true
+        #允许所有访问
+        allow:
       #监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙
       filter:
         wall:
