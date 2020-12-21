@@ -39,7 +39,7 @@ spring:
       #归还连接时执行validationQuery检测连接是否有效，做了这个配置会降低性能
       test-on-return: false
       #标记是否删除泄露的连接
-      remove-abandoned: true
+      #remove-abandoned: true
       #泄露的连接可以被删除的超时时间（秒），该值应设置为应用程序查询可能执行的最长时间，1800秒，也就是30分钟
       remove-abandoned-timeout: 1800
       #删除泄露的连接时是否输出错误日志
@@ -48,10 +48,6 @@ spring:
       pool-prepared-statements: true
       #要启用PSCache，必须配置大于0，当大于0时，poolPreparedStatements自动触发修改为true
       max-pool-prepared-statement-per-connection-size: 20
-      #监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙
-      filter:
-        commons-log:
-          connection-logger-name: stat,wall,slf4j
       #通过connectProperties属性来打开mergeSql功能；慢SQL记录
       connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
       #合并多个DruidDataSource的监控数据
@@ -61,7 +57,30 @@ spring:
         enabled: true
         url-pattern: '/*'
         exclusions: '*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*'
+        session-stat-enable: true
+        profile-enable: true
       stat-view-servlet:
+        enabled: true
         login-username: admin
         login-password: 123456
-        reset-enable: false
+        reset-enable: true
+      #监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙
+      filter:
+        wall:
+          enabled: true
+        config:
+          enabled: true
+        encoding:
+          enabled: true
+        stat:
+          enabled: true
+        commons-log:
+          enabled: true
+        log4j:
+          enabled: true
+        log4j2:
+          enabled: true
+        slf4j:
+          enabled: true
+      #Spring监控配置
+      aop-patterns: com.gitee.pifeng.server.business.server.service.*,com.gitee.pifeng.server.business.web.service.*

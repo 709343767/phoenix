@@ -78,7 +78,7 @@
         <!-- velocity模板引擎版本 -->
         <velocity-engine-core.version>2.1</velocity-engine-core.version>
         <!-- alibaba的druid数据库连接池版本 -->
-        <druid-spring-boot-starter.version>1.1.10</druid-spring-boot-starter.version>
+        <druid-spring-boot-starter.version>1.2.4</druid-spring-boot-starter.version>
         <!-- pagehelper分页插件版本 -->
         <pagehelper.version>5.1.10</pagehelper.version>
         <!-- oracle驱动版本 -->
