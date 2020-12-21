@@ -62,7 +62,7 @@ spring:
       stat-view-servlet:
         enabled: true
         login-username: admin
-        login-password: 123456
+        login-password: admin
         reset-enable: true
       #监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙
       filter:
@@ -83,4 +83,7 @@ spring:
         slf4j:
           enabled: true
       #Spring监控配置
-      aop-patterns: com.gitee.pifeng.server.business.server.service.*,com.gitee.pifeng.server.business.web.service.*
+      aop-patterns: com.gitee.pifeng.server.business.server.controller.*,
+        com.gitee.pifeng.server.business.web.controller.*,
+        com.gitee.pifeng.server.business.server.service.*,
+        com.gitee.pifeng.server.business.web.service.*
