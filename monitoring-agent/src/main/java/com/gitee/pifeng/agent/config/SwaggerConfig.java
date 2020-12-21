@@ -78,7 +78,7 @@ public class SwaggerConfig {
                 // 版本号
                 .version("LATEST-SNAPSHOT")
                 // 描述
-                .description("“kacper”是一款监控框架，用于监控应用程序、服务器、数据库、网络。持续更新中...")
+                .description("“kacper”是一款监控框架，用于监控应用程序、服务器、Docker、数据库、网络。持续更新中...")
                 // 构建
                 .build();
     }

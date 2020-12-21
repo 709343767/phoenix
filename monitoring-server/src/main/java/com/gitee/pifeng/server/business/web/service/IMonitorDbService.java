@@ -66,7 +66,7 @@ public interface IMonitorDbService extends IService<MonitorDb> {
      * 删除数据库信息
      * </p>
      *
-     * @param monitorDbVos 删除数据库信息
+     * @param monitorDbVos 数据库信息
      * @return layUiAdmin响应对象：如果删除成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
      * @author 皮锋
      * @custom.date 2020/12/19 20:59

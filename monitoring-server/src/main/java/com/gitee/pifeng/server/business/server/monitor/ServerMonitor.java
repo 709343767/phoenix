@@ -84,6 +84,8 @@ public class ServerMonitor implements IServerMonitoringListener {
      * @param title           告警标题
      * @param alarmLevelEnums 告警级别
      * @param server          服务器
+     * @throws NetException   自定义获取网络信息异常
+     * @throws SigarException Sigar异常
      * @author 皮锋
      * @custom.date 2020/12/17 20:32
      */

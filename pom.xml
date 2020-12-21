@@ -20,7 +20,7 @@
     </modules>
     <packaging>pom</packaging>
     <name>monitoring</name>
-    <description>监控框架，用于监控应用程序、服务器、数据库、网络、...</description>
+    <description>监控框架，用于监控应用程序、服务器、Docker、数据库、网络、...</description>
     <url>https://gitee.com/pifeng/monitoring</url>
 
     <!-- 属性 -->
@@ -468,7 +468,7 @@
                 <executions>
                     <execution>
                         <id>attach-javadocs</id>
-                        <phase>deploy</phase>
+                        <phase>package</phase>
                         <goals>
                             <!-- 生成聚合的javadoc -->
                             <goal>aggregate</goal>

@@ -28,6 +28,7 @@ import java.sql.Connection;
 import java.util.Base64;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -73,18 +74,22 @@ public class DbMonitorTask implements CommandLineRunner {
                     // 查询数据库中的所有数据库信息
                     List<MonitorDb> monitorDbs = this.monitorDbService.list();
                     for (MonitorDb monitorDb : monitorDbs) {
-                        // 数据库是否可连接
-                        boolean isConnect = this.isConnect(monitorDb);
-                        // 连接正常
-                        if (isConnect) {
-                            // 处理数据库正常
-                            this.connected(monitorDb);
-                        }
-                        // 连接异常
-                        else {
-                            // 处理数据库异常
-                            this.disconnected(monitorDb);
-                        }
+                        // 使用多线程，加快处理速度
+                        ThreadPoolExecutor threadPoolExecutor = ThreadPool.COMMON_IO_INTENSIVE_THREAD_POOL;
+                        threadPoolExecutor.execute(() -> {
+                            // 数据库是否可连接
+                            boolean isConnect = this.isConnect(monitorDb);
+                            // 连接正常
+                            if (isConnect) {
+                                // 处理数据库正常
+                                this.connected(monitorDb);
+                            }
+                            // 连接异常
+                            else {
+                                // 处理数据库异常
+                                this.disconnected(monitorDb);
+                            }
+                        });
                     }
                 } catch (Exception e) {
                     log.error("定时扫描数据库“MONITOR_DB”表中的所有数据库信息异常！", e);
