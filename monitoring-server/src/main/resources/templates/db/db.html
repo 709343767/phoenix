@@ -71,6 +71,8 @@
                 </div>
             </script>
             <script type="text/html" id="list-table-toolbar-detail">
+                <a class="layui-btn layui-btn-sm layui-btn-xs" lay-event="info"><i
+                        class="layui-icon layui-icon-about"></i>详情</a>
                 <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i
                         class="layui-icon layui-icon-edit"></i>编辑</a>
                 <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i
@@ -133,6 +135,16 @@
                     title: 'ID',
                     sort: !0
                 }, {
+                    field: 'connName',
+                    title: '连接名称',
+                    minWidth: 150,
+                    sort: !0
+                }, {
+                    field: 'url',
+                    title: 'URL',
+                    minWidth: 200,
+                    sort: !0
+                }, {
                     field: 'dbType',
                     title: '类型',
                     minWidth: 100,
@@ -143,14 +155,9 @@
                     minWidth: 100,
                     sort: !0
                 }, {
-                    field: 'url',
-                    title: 'URL',
-                    minWidth: 350,
-                    sort: !0
-                }, {
                     field: 'dbDesc',
                     title: '描述',
-                    minWidth: 300,
+                    minWidth: 200,
                     sort: !0
                 }, {
                     field: 'insertTime',
@@ -164,7 +171,7 @@
                     sort: !0
                 }, {
                     title: '操作',
-                    width: 160,
+                    width: 250,
                     align: 'center',
                     fixed: 'right',
                     toolbar: '#list-table-toolbar-detail'
@@ -227,7 +234,6 @@
                     // 高度
                     var height
                     // 移动端
-                    // 移动端
                     if (device.ios || device.android) {
                         // 宽度
                         width = document.body.clientWidth * 0.8 + 'px';
@@ -237,7 +243,7 @@
                         // 宽度
                         width = document.body.clientWidth * 0.4 + 'px';
                         // 高度
-                        height = document.body.clientHeight * 0.6 + 'px';
+                        height = document.body.clientHeight * 0.68 + 'px';
                     }
                     layer.open({
                         type: 2,
@@ -313,7 +319,8 @@
                         }
                     });
                 });
-            } else if (obj.event === 'edit') {
+            }
+            if (obj.event === 'edit') {
                 // 宽度
                 var width;
                 // 高度
@@ -328,7 +335,7 @@
                     // 宽度
                     width = document.body.clientWidth * 0.4 + 'px';
                     // 高度
-                    height = document.body.clientHeight * 0.6 + 'px';
+                    height = document.body.clientHeight * 0.68 + 'px';
                 }
                 layer.open({
                     type: 2,
@@ -371,6 +378,33 @@
                         });
                         submit.trigger('click');
                     }
+                });
+            }
+            if (obj.event === 'info') {
+                // 宽度
+                var width;
+                // 高度
+                var height
+                // 移动端
+                if (device.ios || device.android) {
+                    // 宽度
+                    width = document.body.clientWidth * 0.8 + 'px';
+                    // 高度
+                    height = document.body.clientHeight * 0.55 + 'px';
+                } else {
+                    // 宽度
+                    width = document.body.clientWidth * 0.8 + 'px';
+                    // 高度
+                    height = document.body.clientHeight * 0.8 + 'px';
+                }
+                layer.open({
+                    type: 2,
+                    title: '数据库详情（ID：' + data.id + '）',
+                    content: ctxPath + 'monitor-db/db-detail?id=' + data.id,
+                    maxmin: true,
+                    shade: 0,
+                    moveOut: true,
+                    area: [width, height],
                 });
             }
         });

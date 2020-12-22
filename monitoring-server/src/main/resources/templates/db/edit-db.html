@@ -21,10 +21,17 @@
 <div class="layui-form" lay-filter="layuiadmin-form-useradmin" id="layuiadmin-form-useradmin"
      style="padding: 20px 20px 0 0;">
     <div class="layui-form-item" style="display: none;">
-        <label class="layui-form-label">网络ID</label>
+        <label class="layui-form-label">数据库ID</label>
         <div class="layui-input-block">
             <input type="hidden" name="id" autocomplete="off" readonly
                    class="layui-input" th:value="${monitorDbVo.id}">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">连接名</label>
+        <div class="layui-input-block">
+            <input type="text" th:text="${monitorDbVo.connName}" name="connName" autocomplete="off"
+                   class="layui-input" placeholder="请输入连接名" lay-verify="required" lay-verType="tips">
         </div>
     </div>
     <div class="layui-form-item">
@@ -60,7 +67,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">描述</label>
         <div class="layui-input-block">
-            <textarea th:text="${monitorDbVo.dbDesc}" name="dbDesc" class="layui-textarea" lay-verify="required"
+            <textarea th:text="${monitorDbVo.dbDesc}" name="dbDesc" class="layui-textarea"
                       placeholder="请输入描述" autocomplete="off" lay-verType="tips"></textarea>
         </div>
     </div>

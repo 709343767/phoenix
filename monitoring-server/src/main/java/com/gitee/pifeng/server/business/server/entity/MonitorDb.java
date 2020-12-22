@@ -33,6 +33,12 @@ public class MonitorDb {
     private Long id;
 
     /**
+     * 数据库连接名
+     */
+    @TableField("CONN_NAME")
+    private String connName;
+
+    /**
      * 数据库URL
      */
     @TableField("URL")

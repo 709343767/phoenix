@@ -33,6 +33,9 @@ public class MonitorDbVo implements ISuperBean {
     @ApiModelProperty(value = "主键ID")
     private Long id;
 
+    @ApiModelProperty(value = "数据库连接名")
+    private String connName;
+
     @ApiModelProperty(value = "数据库URL")
     private String url;
 

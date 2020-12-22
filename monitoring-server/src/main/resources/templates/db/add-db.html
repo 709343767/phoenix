@@ -21,6 +21,13 @@
 <div class="layui-form" lay-filter="layuiadmin-form-useradmin" id="layuiadmin-form-useradmin"
      style="padding: 20px 20px 0 0;">
     <div class="layui-form-item">
+        <label class="layui-form-label">连接名</label>
+        <div class="layui-input-block">
+            <input type="text" name="connName" autocomplete="off" class="layui-input" placeholder="请输入连接名"
+                   lay-verify="required" lay-verType="tips">
+        </div>
+    </div>
+    <div class="layui-form-item">
         <label class="layui-form-label">URL</label>
         <div class="layui-input-block">
             <textarea name="url" class="layui-textarea" placeholder="请输入URL" autocomplete="off" lay-verify="required"
@@ -53,7 +60,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">描述</label>
         <div class="layui-input-block">
-            <textarea name="dbDesc" class="layui-textarea" placeholder="请输入描述" autocomplete="off" lay-verify="required"
+            <textarea name="dbDesc" class="layui-textarea" placeholder="请输入描述" autocomplete="off"
                       lay-verType="tips"></textarea>
         </div>
     </div>

@@ -172,5 +172,23 @@ public class MonitorDbController {
         return this.monitorDbService.deleteMonitorDb(monitorDbVos);
     }
 
+    /**
+     * <p>
+     * 访问数据库详情页面
+     * </p>
+     *
+     * @param id 数据库主键ID
+     * @return {@link ModelAndView} 数据库详情页面
+     * @author 皮锋
+     * @custom.date 2020/12/22 14:47
+     */
+    @ApiOperation(value = "访问数据库详情页面")
+    @GetMapping("/db-detail")
+    public ModelAndView dbDetail(String id) {
+        ModelAndView mv = new ModelAndView("db/db-detail");
+        mv.addObject("id", id);
+        return mv;
+    }
+
 }
 

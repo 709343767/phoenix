@@ -36,6 +36,10 @@ public class MonitorDb implements Serializable {
     @TableId(value = "ID", type = IdType.AUTO)
     private Long id;
 
+    @ApiModelProperty(value = "数据库连接名")
+    @TableField("CONN_NAME")
+    private String connName;
+
     @ApiModelProperty(value = "数据库URL")
     @TableField("URL")
     private String url;
