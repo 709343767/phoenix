@@ -213,7 +213,7 @@
                     title: '操作',
                     width: 160,
                     align: 'center',
-                    fixed: 'right',
+                    fixed: (device.ios || device.android) ? false : 'right',
                     toolbar: '#alarm-definition-list-table-toolbar'
                 }]
             ],

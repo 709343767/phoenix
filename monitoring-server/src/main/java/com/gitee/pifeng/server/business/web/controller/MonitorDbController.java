@@ -186,7 +186,9 @@ public class MonitorDbController {
     @GetMapping("/db-detail")
     public ModelAndView dbDetail(String id) {
         ModelAndView mv = new ModelAndView("db/db-detail");
-        mv.addObject("id", id);
+        MonitorDb monitorDb = this.monitorDbService.getById(id);
+        MonitorDbVo monitorDbVo = MonitorDbVo.builder().build().convertFor(monitorDb);
+        mv.addObject(monitorDbVo);
         return mv;
     }
 

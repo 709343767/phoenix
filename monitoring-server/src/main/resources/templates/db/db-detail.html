@@ -17,81 +17,122 @@
     <![endif]-->
     <script type="text/javascript" charset="utf-8" th:inline="javascript">
         var ctxPath = /*[[@{/}]]*/'';
+        var tokenValue = /*[[${_csrf.token}]]*/'';
+        // 应用实例表的主键ID
+        var id = [[${id}]];
+        // 应用实例ID
+        var instanceId = [[${instanceId}]];
     </script>
 </head>
 <body>
-<div class="layui-form" lay-filter="layuiadmin-form-useradmin" id="layuiadmin-form-useradmin"
-     style="padding: 20px 20px 0 0;">
-    <div class="layui-form-item" style="display: none;">
-        <label class="layui-form-label">数据库ID</label>
-        <div class="layui-input-block">
-            <input type="hidden" name="id" autocomplete="off" readonly
-                   class="layui-input" th:value="${monitorDbVo.id}">
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-tab layui-tab-brief">
+            <ul class="layui-tab-title">
+                <li class="layui-this">内存</li>
+                <li>概要</li>
+            </ul>
+            <div class="layui-tab-content">
+                <div class="layui-tab-item layui-show">
+                    <div class="layui-card">
+                        <form class="layui-form layui-card-header layuiadmin-card-header-auto layui-card-header-my">
+                            <div class="layui-form-item">
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">时间范围(T)</label>
+                                    <div class="layui-input-block">
+                                        <select name="time1" id="time1" lay-filter="time1">
+                                            <option value="hour">1小时</option>
+                                            <option value="day">1天</option>
+                                            <option value="week">1周</option>
+                                            <option value="month">1月</option>
+                                            <option value="halfYear">6月</option>
+                                            <option value="year">1年</option>
+                                            <option value="all">全部</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        <div class="layui-card-body">
+                            <div class="layui-row layui-col-space20">
+                                <div class="layui-col-md6">
+                                    <div class="layadmin-dataview-my-292px" id="get-jvm-memory-heap-info"></div>
+                                </div>
+                                <div class="layui-col-md6">
+                                    <div class="layadmin-dataview-my-292px" id="get-jvm-memory-non-heap-info"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-card">
+                        <form class="layui-form layui-card-header layuiadmin-card-header-auto layui-card-header-my">
+                            <div class="layui-form-item">
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">图表(C)</label>
+                                    <div class="layui-input-block">
+                                        <select name="chart" id="chart" lay-filter="chart">
+                                            <option th:each="types:${jvmMemoryTypes}" th:value="${types}"
+                                                    th:text="${types}"></option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        <div class="layui-card-body">
+                            <div class="layui-row layui-col-space10">
+                                <div class="layui-col-md12">
+                                    <div class="layadmin-dataview-my-292px" id="get-jvm-memory-pool-info"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-tab-item">
+                    <div class="layui-collapse">
+                        <div class="layui-colla-item">
+                            <h2 class="layui-colla-title">线程</h2>
+                            <div class="layui-colla-content layui-show">
+                                <div class="layui-row layui-col-space10" id="thread">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-colla-item">
+                            <h2 class="layui-colla-title">类</h2>
+                            <div class="layui-colla-content layui-show">
+                                <div class="layui-row layui-col-space10" id="class-loading">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-colla-item">
+                            <h2 class="layui-colla-title">GC</h2>
+                            <div class="layui-colla-content layui-show">
+                                <div class="layui-row layui-col-space10" id="gc">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-colla-item">
+                            <h2 class="layui-colla-title">VM</h2>
+                            <div class="layui-colla-content layui-show">
+                                <div class="layui-row layui-col-space10" id="runtime">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
-    <div class="layui-form-item" style="display: none;">
-        <label class="layui-form-label">状态</label>
-        <div class="layui-input-block">
-            <input type="hidden" name="isOnline" autocomplete="off" readonly
-                   class="layui-input" th:value="${monitorDbVo.isOnline}">
-        </div>
-    </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">连接名</label>
-        <div class="layui-input-block">
-            <input type="text" th:text="${monitorDbVo.connName}" name="connName" autocomplete="off"
-                   class="layui-input" placeholder="请输入连接名" lay-verify="required" lay-verType="tips">
-        </div>
-    </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">URL</label>
-        <div class="layui-input-block">
-            <textarea th:text="${monitorDbVo.url}" name="url" class="layui-textarea" lay-verify="required"
-                      placeholder="请输入URL" autocomplete="off" lay-verType="tips"></textarea>
-        </div>
-    </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">用户名</label>
-        <div class="layui-input-block">
-            <input type="text" name="username" autocomplete="off" placeholder="请输入用户名" lay-verify="required"
-                   class="layui-input" th:value="${monitorDbVo.username}" lay-verType="tips">
-        </div>
-    </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">密码</label>
-        <div class="layui-input-block">
-            <input type="password" name="password" autocomplete="off" placeholder="请输入密码" lay-verify="required"
-                   class="layui-input" th:value="${monitorDbVo.password}" lay-verType="tips">
-        </div>
-    </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">类型</label>
-        <div class="layui-input-block">
-            <select name="dbType">
-                <option value="mysql" th:selected="${monitorDbVo.dbType=='mysql'}">MySQL</option>
-                <option value="oracle" th:selected="${monitorDbVo.dbType=='oracle'}">Oracle</option>
-            </select>
-        </div>
-    </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">描述</label>
-        <div class="layui-input-block">
-            <textarea th:text="${monitorDbVo.dbDesc}" name="dbDesc" class="layui-textarea" lay-verify="required"
-                      placeholder="请输入描述" autocomplete="off" lay-verType="tips"></textarea>
-        </div>
-    </div>
-    <div class="layui-form-item layui-hide">
-        <input type="button" lay-submit lay-filter="LAY-front-submit" id="LAY-front-submit" value="确认">
     </div>
 </div>
+<script src="./js/echarts.min.js" th:src="@{/js/echarts.min.js}"></script>
+<script src="./js/echarts.theme.infographic.js" th:src="@{/js/echarts.theme.infographic.js}"></script>
 <script src="./layui/layui.js" th:src="@{/layui/layui.js}"></script>
 <script>
     layui.config({
         base: ctxPath //静态资源所在路径
     }).extend({
-        index: 'lib/index' //主入口模块
-    }).use(['index', 'form'], function () {
-    });
+        index: 'lib/index', //主入口模块
+        instanceDetail: 'instance/instanceDetail' // 应用实例详情模块
+    }).use(['index', 'element', 'form', 'instanceDetail']);
 </script>
 </body>
 </html>

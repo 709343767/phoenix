@@ -113,7 +113,7 @@
     }).extend({
         index: 'lib/index' //主入口模块
     }).use(['index', 'table'], function () {
-        var $ = layui.$, admin = layui.admin, form = layui.form, table = layui.table;
+        var $ = layui.$, admin = layui.admin, form = layui.form, table = layui.table, device = layui.device();
         table.render({
             elem: '#alarm-record-list-table',
             url: ctxPath + 'monitor-alarm-record/get-monitor-alarm-record-list',
@@ -247,7 +247,7 @@
                     title: '操作',
                     width: 85,
                     align: 'center',
-                    fixed: 'right',
+                    fixed: (device.ios || device.android) ? false : 'right',
                     toolbar: '#alarm-record-list-table-toolbar'
                 }]
             ],
