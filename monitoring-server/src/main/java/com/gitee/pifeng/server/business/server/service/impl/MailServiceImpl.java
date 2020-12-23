@@ -1,5 +1,7 @@
 package com.gitee.pifeng.server.business.server.service.impl;
 
+import com.gitee.pifeng.server.business.server.domain.Mail;
+import com.gitee.pifeng.server.business.server.service.IMailService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -8,9 +10,6 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
-
-import com.gitee.pifeng.server.business.server.domain.Mail;
-import com.gitee.pifeng.server.business.server.service.IMailService;
 
 import javax.mail.internet.MimeMessage;
 
@@ -73,7 +72,7 @@ public class MailServiceImpl implements IMailService {
             context.setVariable("level", mail.getLevel());
             context.setVariables(mail.getAttachment());
             // 获取thymeleaf的html模板
-            String emailContent = this.templateEngine.process("mail/mail-alarm-template", context);
+            String emailContent = this.templateEngine.process("mail/mail-alarm-template2", context);
             log.info("告警邮件HTML：\r\n{}", emailContent);
             messageHelper.setText(emailContent, true);
             // 发送邮件
