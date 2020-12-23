@@ -239,7 +239,9 @@ public class DbMonitorTask implements CommandLineRunner {
      */
     private void sendAlarmInfo(String title, AlarmLevelEnums alarmLevelEnums, MonitorDb monitorDb) throws NetException, SigarException {
         StringBuilder builder = new StringBuilder();
-        builder.append("url：").append(monitorDb.getUrl()).append("，<br>类型：").append(monitorDb.getDbType());
+        builder.append("连接名：").append(monitorDb.getConnName())
+                .append("，<br>url：").append(monitorDb.getUrl())
+                .append("，<br>类型：").append(monitorDb.getDbType());
         if (StringUtils.isNotBlank(monitorDb.getDbDesc())) {
             builder.append("，<br>描述：").append(monitorDb.getDbDesc());
         }
