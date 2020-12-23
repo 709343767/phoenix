@@ -30,7 +30,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">连接名</label>
         <div class="layui-input-block">
-            <input type="text" th:text="${monitorDbVo.connName}" name="connName" autocomplete="off"
+            <input type="text" th:value="${monitorDbVo.connName}" name="connName" autocomplete="off"
                    class="layui-input" placeholder="请输入连接名" lay-verify="required" lay-verType="tips">
         </div>
     </div>
