@@ -49,6 +49,7 @@ public class MonitorDbServiceImpl extends ServiceImpl<IMonitorDbDao, MonitorDb> 
      *
      * @param current  当前页
      * @param size     每页显示条数
+     * @param connName 数据库连接名
      * @param url      数据库URL
      * @param dbType   数据库类型
      * @param isOnline 数据库状态
@@ -57,10 +58,13 @@ public class MonitorDbServiceImpl extends ServiceImpl<IMonitorDbDao, MonitorDb> 
      * @custom.date 2020/12/19 17:37
      */
     @Override
-    public Page<MonitorDbVo> getMonitorDbList(Long current, Long size, String url, String dbType, String isOnline) {
+    public Page<MonitorDbVo> getMonitorDbList(Long current, Long size, String connName, String url, String dbType, String isOnline) {
         // 查询数据库
         IPage<MonitorDb> ipage = new Page<>(current, size);
         LambdaQueryWrapper<MonitorDb> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        if (StringUtils.isNotBlank(connName)) {
+            lambdaQueryWrapper.like(MonitorDb::getConnName, connName);
+        }
         if (StringUtils.isNotBlank(url)) {
             lambdaQueryWrapper.like(MonitorDb::getUrl, url);
         }

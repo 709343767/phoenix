@@ -59,6 +59,7 @@ public class MonitorDbController {
      *
      * @param current  当前页
      * @param size     每页显示条数
+     * @param connName 数据库连接名
      * @param url      数据库URL
      * @param dbType   数据库类型
      * @param isOnline 数据库状态
@@ -70,13 +71,14 @@ public class MonitorDbController {
     @ApiImplicitParams(value = {
             @ApiImplicitParam(name = "current", value = "当前页", required = true, paramType = "query", dataType = "long"),
             @ApiImplicitParam(name = "size", value = "每页显示条数", required = true, paramType = "query", dataType = "long"),
+            @ApiImplicitParam(name = "connName", value = "数据库连接名", paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "url", value = "数据库URL", paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "dbType", value = "数据库类型", paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "isOnline", value = "数据库状态", paramType = "query", dataType = "string")})
     @GetMapping("get-monitor-db-list")
     @ResponseBody
-    public LayUiAdminResultVo getMonitorDbList(Long current, Long size, String url, String dbType, String isOnline) {
-        Page<MonitorDbVo> page = this.monitorDbService.getMonitorDbList(current, size, url, dbType, isOnline);
+    public LayUiAdminResultVo getMonitorDbList(Long current, Long size, String connName, String url, String dbType, String isOnline) {
+        Page<MonitorDbVo> page = this.monitorDbService.getMonitorDbList(current, size, connName, url, dbType, isOnline);
         return LayUiAdminResultVo.ok(page);
     }
 

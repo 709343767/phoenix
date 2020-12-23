@@ -26,6 +26,7 @@ public interface IMonitorDbService extends IService<MonitorDb> {
      *
      * @param current  当前页
      * @param size     每页显示条数
+     * @param connName 数据库连接名
      * @param url      数据库URL
      * @param dbType   数据库类型
      * @param isOnline 数据库状态
@@ -33,7 +34,7 @@ public interface IMonitorDbService extends IService<MonitorDb> {
      * @author 皮锋
      * @custom.date 2020/12/19 17:37
      */
-    Page<MonitorDbVo> getMonitorDbList(Long current, Long size, String url, String dbType, String isOnline);
+    Page<MonitorDbVo> getMonitorDbList(Long current, Long size, String connName, String url, String dbType, String isOnline);
 
     /**
      * <p>
