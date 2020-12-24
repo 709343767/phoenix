@@ -18,10 +18,8 @@
     <script type="text/javascript" charset="utf-8" th:inline="javascript">
         var ctxPath = /*[[@{/}]]*/'';
         var tokenValue = /*[[${_csrf.token}]]*/'';
-        // 应用实例表的主键ID
-        var id = [[${id}]];
-        // 应用实例ID
-        var instanceId = [[${instanceId}]];
+        // 数据库详情的主键ID
+        var id = [[${monitorDbVo.id}]];
     </script>
 </head>
 <body>
@@ -29,95 +27,97 @@
     <div class="layui-card">
         <div class="layui-tab layui-tab-brief">
             <ul class="layui-tab-title">
-                <li class="layui-this">内存</li>
-                <li>概要</li>
+                <li class="layui-this">详情</li>
             </ul>
             <div class="layui-tab-content">
                 <div class="layui-tab-item layui-show">
-                    <div class="layui-card">
-                        <form class="layui-form layui-card-header layuiadmin-card-header-auto layui-card-header-my">
-                            <div class="layui-form-item">
-                                <div class="layui-inline">
-                                    <label class="layui-form-label">时间范围(T)</label>
-                                    <div class="layui-input-block">
-                                        <select name="time1" id="time1" lay-filter="time1">
-                                            <option value="hour">1小时</option>
-                                            <option value="day">1天</option>
-                                            <option value="week">1周</option>
-                                            <option value="month">1月</option>
-                                            <option value="halfYear">6月</option>
-                                            <option value="year">1年</option>
-                                            <option value="all">全部</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
-                        <div class="layui-card-body">
-                            <div class="layui-row layui-col-space20">
-                                <div class="layui-col-md6">
-                                    <div class="layadmin-dataview-my-292px" id="get-jvm-memory-heap-info"></div>
-                                </div>
-                                <div class="layui-col-md6">
-                                    <div class="layadmin-dataview-my-292px" id="get-jvm-memory-non-heap-info"></div>
-                                </div>
+                    <form class="layui-form layui-form-pane" id="layuiadmin-form-useradmin"
+                          style="padding: 20px 20px 0 0;" action="javascript:;">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">数据库ID</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="id" disabled class="layui-input" th:value="${monitorDbVo.id}">
                             </div>
                         </div>
-                    </div>
-                    <div class="layui-card">
-                        <form class="layui-form layui-card-header layuiadmin-card-header-auto layui-card-header-my">
-                            <div class="layui-form-item">
-                                <div class="layui-inline">
-                                    <label class="layui-form-label">图表(C)</label>
-                                    <div class="layui-input-block">
-                                        <select name="chart" id="chart" lay-filter="chart">
-                                            <option th:each="types:${jvmMemoryTypes}" th:value="${types}"
-                                                    th:text="${types}"></option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
-                        <div class="layui-card-body">
-                            <div class="layui-row layui-col-space10">
-                                <div class="layui-col-md12">
-                                    <div class="layadmin-dataview-my-292px" id="get-jvm-memory-pool-info"></div>
-                                </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">连接名</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="connName" disabled class="layui-input"
+                                       th:value="${monitorDbVo.connName}">
                             </div>
                         </div>
-                    </div>
-                </div>
-                <div class="layui-tab-item">
-                    <div class="layui-collapse">
-                        <div class="layui-colla-item">
-                            <h2 class="layui-colla-title">线程</h2>
-                            <div class="layui-colla-content layui-show">
-                                <div class="layui-row layui-col-space10" id="thread">
-                                </div>
+                        <div class="layui-form-item layui-form-text">
+                            <label class="layui-form-label">URL</label>
+                            <div class="layui-input-block">
+                                <textarea th:text="${monitorDbVo.url}" name="url" class="layui-textarea" disabled>
+                                </textarea>
                             </div>
                         </div>
-                        <div class="layui-colla-item">
-                            <h2 class="layui-colla-title">类</h2>
-                            <div class="layui-colla-content layui-show">
-                                <div class="layui-row layui-col-space10" id="class-loading">
-                                </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">用户名</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="username" disabled class="layui-input"
+                                       th:value="${monitorDbVo.username}">
                             </div>
                         </div>
-                        <div class="layui-colla-item">
-                            <h2 class="layui-colla-title">GC</h2>
-                            <div class="layui-colla-content layui-show">
-                                <div class="layui-row layui-col-space10" id="gc">
-                                </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">类型</label>
+                            <div class="layui-input-inline">
+                                <select name="dbType" disabled>
+                                    <option value="MySQL" th:selected="${monitorDbVo.dbType=='MySQL'}">MySQL</option>
+                                    <option value="Oracle" th:selected="${monitorDbVo.dbType=='Oracle'}">Oracle</option>
+                                </select>
                             </div>
                         </div>
-                        <div class="layui-colla-item">
-                            <h2 class="layui-colla-title">VM</h2>
-                            <div class="layui-colla-content layui-show">
-                                <div class="layui-row layui-col-space10" id="runtime">
-                                </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">驱动类</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="driverClass" disabled class="layui-input"
+                                       th:value="${monitorDbVo.driverClass}">
                             </div>
                         </div>
-                    </div>
+                        <div class="layui-form-item layui-form-text">
+                            <label class="layui-form-label">描述</label>
+                            <div class="layui-input-block">
+                                <textarea th:text="${monitorDbVo.dbDesc}" disabled name="dbDesc"
+                                          class="layui-textarea"></textarea>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">状态</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="isOnline" disabled class="layui-input"
+                                       th:if="${monitorDbVo.isOnline=='0'}" value="离线">
+                                <input type="text" name="isOnline" disabled class="layui-input"
+                                       th:if="${monitorDbVo.isOnline=='1'}" value="正常">
+                                <input type="text" name="isOnline" disabled class="layui-input"
+                                       th:if="${monitorDbVo.isOnline=='' || monitorDbVo.isOnline==null}" value="未知">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">是否已告警</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="isAlarm" disabled class="layui-input"
+                                       th:if="${monitorDbVo.isAlarm=='0'}" value="否">
+                                <input type="text" name="isAlarm" disabled class="layui-input"
+                                       th:if="${monitorDbVo.isAlarm=='1'}" value="是">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">新增时间</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="insertTime" disabled class="layui-input"
+                                       th:value="${#dates.format(monitorDbVo.insertTime,'yyyy/MM/dd HH:mm:ss')}">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">更新时间</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="updateTime" disabled class="layui-input"
+                                       th:value="${#dates.format(monitorDbVo.updateTime,'yyyy/MM/dd HH:mm:ss')}">
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -131,8 +131,8 @@
         base: ctxPath //静态资源所在路径
     }).extend({
         index: 'lib/index', //主入口模块
-        instanceDetail: 'instance/instanceDetail' // 应用实例详情模块
-    }).use(['index', 'element', 'form', 'instanceDetail']);
+        dbSession4mysql: 'db/dbSession4mysql' // MySQL数据库会话管理模块
+    }).use(['index', 'element', 'form', 'dbSession4mysql']);
 </script>
 </body>
 </html>
