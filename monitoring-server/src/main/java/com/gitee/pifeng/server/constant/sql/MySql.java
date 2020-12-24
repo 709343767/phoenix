@@ -26,4 +26,9 @@ public final class MySql {
      */
     public static final String CHECK_CONN = "SELECT 1 FROM DUAL";
 
+    /**
+     * 会话列表
+     */
+    public static final String SESSION_LIST = "show full processlist";
+
 }
