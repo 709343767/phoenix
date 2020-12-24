@@ -1,14 +1,14 @@
-package com.gitee.pifeng.server.business.server.sql;
+package com.gitee.pifeng.server.constant.sql;
 
 /**
  * <p>
- * Oracle数据库sql语句
+ * MySQL数据库sql语句
  * </p>
  *
  * @author 皮锋
- * @custom.date 2020/12/20 16:00
+ * @custom.date 2020/12/20 15:44
  */
-public class Oracle {
+public final class MySql {
 
     /**
      * <p>
@@ -16,14 +16,14 @@ public class Oracle {
      * </p>
      *
      * @author 皮锋
-     * @custom.date 2020/12/20 16:00
+     * @custom.date 2020/12/20 15:45
      */
-    private Oracle() {
+    private MySql() {
     }
 
     /**
      * 检查连接
      */
     public static final String CHECK_CONN = "SELECT 1 FROM DUAL";
-    
+
 }
