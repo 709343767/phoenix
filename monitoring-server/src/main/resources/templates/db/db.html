@@ -387,31 +387,38 @@
                 });
             }
             if (obj.event === 'info') {
-                // 宽度
-                var width;
-                // 高度
-                var height
-                // 移动端
-                if (device.ios || device.android) {
+                // 在线
+                if (data.isOnline === '1') {
                     // 宽度
-                    width = document.body.clientWidth * 0.8 + 'px';
+                    var width;
                     // 高度
-                    height = document.body.clientHeight * 0.55 + 'px';
-                } else {
-                    // 宽度
-                    width = document.body.clientWidth * 0.8 + 'px';
-                    // 高度
-                    height = document.body.clientHeight * 0.8 + 'px';
+                    var height
+                    // 移动端
+                    if (device.ios || device.android) {
+                        // 宽度
+                        width = document.body.clientWidth * 0.8 + 'px';
+                        // 高度
+                        height = document.body.clientHeight * 0.55 + 'px';
+                    } else {
+                        // 宽度
+                        width = document.body.clientWidth * 0.8 + 'px';
+                        // 高度
+                        height = document.body.clientHeight * 0.8 + 'px';
+                    }
+                    layer.open({
+                        type: 2,
+                        title: '数据库详情（连接名：' + data.connName + '）',
+                        content: ctxPath + 'monitor-db/db-detail?id=' + data.id,
+                        maxmin: true,
+                        shade: 0,
+                        moveOut: true,
+                        area: [width, height]
+                    });
                 }
-                layer.open({
-                    type: 2,
-                    title: '数据库详情（连接名：' + data.connName + '）',
-                    content: ctxPath + 'monitor-db/db-detail?id=' + data.id,
-                    maxmin: true,
-                    shade: 0,
-                    moveOut: true,
-                    area: [width, height],
-                });
+                // 不在线
+                else {
+                    layer.msg('数据库连接异常！', {icon: 5, shift: 6});
+                }
             }
         });
     });

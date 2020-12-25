@@ -1,5 +1,7 @@
 package com.gitee.pifeng.server.business.web.service.impl;
 
+import cn.hutool.core.date.BetweenFormater;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.db.Entity;
 import cn.hutool.db.ds.simple.SimpleDataSource;
 import cn.hutool.db.handler.EntityListHandler;
@@ -10,6 +12,7 @@ import com.gitee.pifeng.server.business.web.entity.MonitorDb;
 import com.gitee.pifeng.server.business.web.service.IDbSession4MysqlService;
 import com.gitee.pifeng.server.business.web.vo.DbSession4MysqlVo;
 import com.gitee.pifeng.server.constant.sql.MySql;
+import com.google.common.collect.Lists;
 import lombok.Cleanup;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,8 +71,35 @@ public class DbSession4MysqlServiceImpl implements IDbSession4MysqlService {
         @Cleanup
         Connection connection = ds.getConnection();
         List<Entity> entityList = SqlExecutor.query(connection, MySql.SESSION_LIST, new EntityListHandler());
-
-        return null;
+        List<DbSession4MysqlVo> dbSession4MysqlVos = Lists.newArrayList();
+        for (Entity entity : entityList) {
+            Long sessionId = entity.getLong("Id");
+            String user = entity.getStr("User", StandardCharsets.UTF_8);
+            String host = entity.getStr("Host", StandardCharsets.UTF_8);
+            String db = entity.getStr("db", StandardCharsets.UTF_8);
+            String command = entity.getStr("Command", StandardCharsets.UTF_8);
+            Integer time = entity.getInt("Time");
+            String state = entity.getStr("State", StandardCharsets.UTF_8);
+            String info = entity.getStr("Info", StandardCharsets.UTF_8);
+            DbSession4MysqlVo dbSession4MysqlVo = DbSession4MysqlVo.builder()
+                    .id(sessionId)
+                    .user(user)
+                    .host(host)
+                    .db(db)
+                    .command(command)
+                    .time(DateUtil.formatBetween(time * 1000L, BetweenFormater.Level.SECOND))
+                    .state(state)
+                    .info(info)
+                    .build();
+            dbSession4MysqlVos.add(dbSession4MysqlVo);
+        }
+        // 设置返回对象
+        Page<DbSession4MysqlVo> dbSession4MysqlVoPage = new Page<>();
+        dbSession4MysqlVoPage.setRecords(dbSession4MysqlVos);
+        dbSession4MysqlVoPage.setTotal(dbSession4MysqlVos.size());
+        dbSession4MysqlVoPage.setCurrent(current);
+        dbSession4MysqlVoPage.setSize(size);
+        return dbSession4MysqlVoPage;
     }
 
 }

@@ -5,7 +5,6 @@
         table.render({
             elem: '#list-table',
             url: ctxPath + 'db-session4mysql/get-Session-list?id=' + id,
-            toolbar: '#list-table-toolbar',
             request: {
                 pageName: 'current',//页码的参数名称，默认：page
                 limitName: 'size' //每页数据量的参数名，默认：limit
@@ -25,61 +24,48 @@
                     'data': res.data.records //解析数据列表
                 };
             },
-            done: function () {
-                $('[data-field="isOnline"]').children().each(function () {
-                    if ($(this).text() === '0') {
-                        $(this).html('<span style="color: #FF4500;">离线</span>');
-                    }
-                    if ($(this).text() === '1') {
-                        $(this).text('正常');
-                    }
-                    if ($(this).text() === null || $(this).text() === '' || $(this).text() === undefined) {
-                        $(this).text('未知');
-                    }
-                });
-            },
             cols: [
                 [{
                     type: 'checkbox'
                 }, {
                     field: 'id',
-                    width: 70,
-                    title: 'ID',
+                    width: 100,
+                    title: '进程ID',
                     sort: !0
                 }, {
-                    field: 'connName',
-                    title: '连接名称',
+                    field: 'user',
+                    title: '用户',
+                    minWidth: 100,
+                    sort: !0
+                }, {
+                    field: 'host',
+                    title: '主机',
                     minWidth: 150,
                     sort: !0
                 }, {
-                    field: 'url',
-                    title: 'URL',
-                    minWidth: 200,
-                    sort: !0
-                }, {
-                    field: 'dbType',
-                    title: '类型',
+                    field: 'db',
+                    title: '数据库',
                     minWidth: 100,
                     sort: !0
                 }, {
-                    field: 'isOnline',
+                    field: 'command',
+                    title: '命令',
+                    minWidth: 100,
+                    sort: !0
+                }, {
+                    field: 'time',
+                    title: '时间',
+                    minWidth: 150,
+                    sort: !0
+                }, {
+                    field: 'state',
                     title: '状态',
-                    minWidth: 100,
+                    minWidth: 80,
                     sort: !0
                 }, {
-                    field: 'dbDesc',
-                    title: '描述',
+                    field: 'info',
+                    title: '活动查询',
                     minWidth: 200,
-                    sort: !0
-                }, {
-                    field: 'insertTime',
-                    title: '新增时间',
-                    minWidth: 170,
-                    sort: !0
-                }, {
-                    field: 'updateTime',
-                    title: '更新时间',
-                    minWidth: 170,
                     sort: !0
                 }, {
                     title: '操作',
@@ -89,23 +75,15 @@
                     toolbar: '#list-table-toolbar-detail'
                 }]
             ],
-            page: !0,
+            page: false,
             limit: 15,
-            height: 'full-240'
-        });
-        //监听搜索
-        form.on('submit(list-table-search)', function (data) {
-            var field = data.field;
-            //执行重载
-            table.reload('list-table', {
-                where: field
-            });
+            height: 'full'
         });
         // 点击表头排序
         table.on('sort(list-table)', function (obj) {
-            table.reload('list-table', {
-                initSort: obj
-            });
+            //table.reload('list-table', {
+            //  initSort: obj
+            //});
         });
         //监听工具条
         table.on('tool(list-table)', function (obj) {

@@ -27,11 +27,23 @@
     <div class="layui-card">
         <div class="layui-tab layui-tab-brief">
             <ul class="layui-tab-title">
-                <li class="layui-this">详情</li>
-                <li>会话管理</li>
+                <li class="layui-this">会话管理</li>
+                <li>详情</li>
             </ul>
             <div class="layui-tab-content">
-                <div class="layui-tab-item layui-show">
+                <div class="layui-tab-item  layui-show">
+                    <div class="layui-fluid">
+                        <table id="list-table" lay-filter="list-table"></table>
+                        <script type="text/html" id="imgTpl">
+                            <img style="display: inline-block; width: 50%; height: 100%;" src={{ d.avatar }}>
+                        </script>
+                        <script type="text/html" id="list-table-toolbar-detail">
+                            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">
+                                <i class="layui-icon layui-icon-delete"></i>结束</a>
+                        </script>
+                    </div>
+                </div>
+                <div class="layui-tab-item">
                     <form class="layui-form layui-form-pane" id="layuiadmin-form-useradmin"
                           style="padding: 20px 20px 0 0;" action="javascript:;">
                         <div class="layui-form-item">
@@ -119,47 +131,6 @@
                             </div>
                         </div>
                     </form>
-                </div>
-                <div class="layui-tab-item">
-                    <div class="layui-fluid">
-                        <div class="layui-card">
-                            <div class="layui-form layui-card-header layuiadmin-card-header-auto">
-                                <form class="layui-form-item" onsubmit="return false;">
-                                    <div class="layui-inline">
-                                        <label class="layui-form-label">连接名</label>
-                                        <div class="layui-input-block">
-                                            <input type="text" name="connName" placeholder="请输入" autocomplete="off"
-                                                   class="layui-input">
-                                        </div>
-                                    </div>
-                                    <div class="layui-inline">
-                                        <label class="layui-form-label">URL</label>
-                                        <div class="layui-input-block">
-                                            <input type="text" name="url" placeholder="请输入" autocomplete="off"
-                                                   class="layui-input">
-                                        </div>
-                                    </div>
-                                    <div class="layui-inline">
-                                        <button class="layui-btn layuiadmin-btn-useradmin" lay-submit
-                                                lay-filter="list-table-search">
-                                            <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
-                                        </button>
-                                        <button id="reset" type="reset" class="layui-btn">清空</button>
-                                    </div>
-                                </form>
-                            </div>
-                            <div class="layui-card-body">
-                                <table id="list-table" lay-filter="list-table"></table>
-                                <script type="text/html" id="imgTpl">
-                                    <img style="display: inline-block; width: 50%; height: 100%;" src={{ d.avatar }}>
-                                </script>
-                                <script type="text/html" id="list-table-toolbar-detail">
-                                    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i
-                                            class="layui-icon layui-icon-delete"></i>删除</a>
-                                </script>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
