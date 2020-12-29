@@ -11,6 +11,8 @@ import com.gitee.pifeng.server.business.web.dao.IMonitorDbDao;
 import com.gitee.pifeng.server.business.web.entity.MonitorDb;
 import com.gitee.pifeng.server.business.web.service.IDbSession4MysqlService;
 import com.gitee.pifeng.server.business.web.vo.DbSession4MysqlVo;
+import com.gitee.pifeng.server.business.web.vo.LayUiAdminResultVo;
+import com.gitee.pifeng.server.constant.WebResponseConstants;
 import com.gitee.pifeng.server.constant.sql.MySql;
 import com.google.common.collect.Lists;
 import lombok.Cleanup;
@@ -23,6 +25,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Base64;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -100,6 +103,44 @@ public class DbSession4MysqlServiceImpl implements IDbSession4MysqlService {
         dbSession4MysqlVoPage.setCurrent(current);
         dbSession4MysqlVoPage.setSize(size);
         return dbSession4MysqlVoPage;
+    }
+
+    /**
+     * <p>
+     * 结束会话
+     * </p>
+     *
+     * @param dbSession4MysqlVos MySQL数据库会话
+     * @param id                 数据库ID
+     * @return LayUiAdmin响应对象
+     * @throws SQLException SQL异常
+     * @author 皮锋
+     * @custom.date 2020/12/25 17:05
+     */
+    @Override
+    public LayUiAdminResultVo destroySession(List<DbSession4MysqlVo> dbSession4MysqlVos, Long id) throws SQLException {
+        List<Long> ids = dbSession4MysqlVos.stream().map(DbSession4MysqlVo::getId).collect(Collectors.toList());
+        // 根据ID查询到此数据库信息
+        MonitorDb monitorDb = this.monitorDbDao.selectById(id);
+        // url
+        String url = monitorDb.getUrl();
+        // 用户名
+        String username = monitorDb.getUsername();
+        // 密码
+        String password = new String(Base64.getDecoder().decode(monitorDb.getPassword()), StandardCharsets.UTF_8);
+        // 数据源
+        @Cleanup
+        SimpleDataSource ds = new SimpleDataSource(url, username, password);
+        @Cleanup
+        Connection connection = ds.getConnection();
+        for (Long sessionId : ids) {
+            try {
+                SqlExecutor.execute(connection, MySql.KILL_SESSION, sessionId);
+            } catch (SQLException e) {
+                log.error("结束会话异常！", e);
+            }
+        }
+        return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);
     }
 
 }

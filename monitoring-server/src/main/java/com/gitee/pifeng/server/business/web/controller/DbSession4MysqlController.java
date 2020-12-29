@@ -10,11 +10,10 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
+import java.util.List;
 
 /**
  * <p>
@@ -53,11 +52,30 @@ public class DbSession4MysqlController {
             @ApiImplicitParam(name = "current", value = "当前页", required = true, paramType = "query", dataType = "long"),
             @ApiImplicitParam(name = "size", value = "每页显示条数", required = true, paramType = "query", dataType = "long"),
             @ApiImplicitParam(name = "id", value = "数据库ID", required = true, paramType = "query", dataType = "long")})
-    @GetMapping("get-Session-list")
+    @GetMapping("get-session-list")
     @ResponseBody
     public LayUiAdminResultVo getSessionList(Long current, Long size, Long id) throws SQLException {
         Page<DbSession4MysqlVo> page = this.dbSession4MysqlService.getSessionList(current, size, id);
         return LayUiAdminResultVo.ok(page);
+    }
+
+    /**
+     * <p>
+     * 结束会话
+     * </p>
+     *
+     * @param dbSession4MysqlVos MySQL数据库会话
+     * @param id                 数据库ID
+     * @return layUiAdmin响应对象
+     * @throws SQLException SQL异常
+     * @author 皮锋
+     * @custom.date 2020/12/25 17:03
+     */
+    @ApiOperation(value = "结束会话")
+    @PostMapping("/destroy-session")
+    @ResponseBody
+    public LayUiAdminResultVo destroySession(@RequestBody List<DbSession4MysqlVo> dbSession4MysqlVos, Long id) throws SQLException {
+        return this.dbSession4MysqlService.destroySession(dbSession4MysqlVos, id);
     }
 
 }

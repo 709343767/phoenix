@@ -4,7 +4,8 @@
         var $ = layui.$, admin = layui.admin, form = layui.form, table = layui.table, device = layui.device();
         table.render({
             elem: '#list-table',
-            url: ctxPath + 'db-session4mysql/get-Session-list?id=' + id,
+            url: ctxPath + 'db-session4mysql/get-session-list?id=' + id,
+            toolbar: '#list-table-toolbar',
             request: {
                 pageName: 'current',//页码的参数名称，默认：page
                 limitName: 'size' //每页数据量的参数名，默认：limit
@@ -85,14 +86,47 @@
             //  initSort: obj
             //});
         });
+        //头工具栏事件
+        table.on('toolbar(list-table)', function (obj) {
+            if (obj.event === 'batchdel') {
+                var checkStatus = table.checkStatus('list-table'), checkData = checkStatus.data; //得到选中的数据
+                if (checkData.length === 0) {
+                    return layer.msg('请选择数据');
+                }
+                layer.confirm('确定结束会话吗？', function (index) {
+                    admin.req({
+                        type: 'post',
+                        url: ctxPath + 'db-session4mysql/destroy-session?id=' + id,
+                        data: JSON.stringify(checkStatus.data),
+                        dataType: 'json',
+                        contentType: 'application/json;charset=utf-8',
+                        headers: {
+                            "X-CSRF-TOKEN": tokenValue
+                        },
+                        success: function (result) {
+                            var data = result.data;
+                            if (data === webConst.SUCCESS) {
+                                table.reload('list-table'); //数据刷新
+                                layer.msg('结束会话成功！', {icon: 6});
+                            } else {
+                                layer.msg('结束会话失败！', {icon: 5, shift: 6});
+                            }
+                        },
+                        error: function () {
+                            layer.msg('系统错误！', {icon: 5, shift: 6});
+                        }
+                    });
+                });
+            }
+        });
         //监听工具条
         table.on('tool(list-table)', function (obj) {
             var data = obj.data;
             if (obj.event === 'del') {
-                layer.confirm('确定删除吗？', function (index) {
+                layer.confirm('确定结束会话吗？', function (index) {
                     admin.req({
                         type: 'post',
-                        url: ctxPath + 'monitor-db/delete-monitor-db',
+                        url: ctxPath + 'db-session4mysql/destroy-session?id=' + id,
                         data: JSON.stringify([data]),
                         dataType: 'json',
                         contentType: 'application/json;charset=utf-8',
@@ -104,9 +138,9 @@
                             if (data === webConst.SUCCESS) {
                                 obj.del();
                                 table.reload('list-table'); //数据刷新
-                                layer.msg('删除成功！', {icon: 6});
+                                layer.msg('结束会话成功！', {icon: 6});
                             } else {
-                                layer.msg('删除失败！', {icon: 5, shift: 6});
+                                layer.msg('结束会话失败！', {icon: 5, shift: 6});
                             }
                         },
                         error: function () {

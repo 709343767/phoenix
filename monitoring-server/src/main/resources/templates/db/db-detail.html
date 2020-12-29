@@ -37,6 +37,11 @@
                         <script type="text/html" id="imgTpl">
                             <img style="display: inline-block; width: 50%; height: 100%;" src={{ d.avatar }}>
                         </script>
+                        <script type="text/html" id="list-table-toolbar">
+                            <div class="layui-btn-container">
+                                <button class="layui-btn layuiadmin-btn-useradmin" lay-event="batchdel">删除</button>
+                            </div>
+                        </script>
                         <script type="text/html" id="list-table-toolbar-detail">
                             <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">
                                 <i class="layui-icon layui-icon-delete"></i>结束</a>
@@ -75,11 +80,9 @@
                         </div>
                         <div class="layui-form-item">
                             <label class="layui-form-label">类型</label>
-                            <div class="layui-input-inline">
-                                <select name="dbType" disabled>
-                                    <option value="MySQL" th:selected="${monitorDbVo.dbType=='MySQL'}">MySQL</option>
-                                    <option value="Oracle" th:selected="${monitorDbVo.dbType=='Oracle'}">Oracle</option>
-                                </select>
+                            <div class="layui-input-block">
+                                <input type="text" name="dbType" disabled class="layui-input"
+                                       th:value="${monitorDbVo.dbType}">
                             </div>
                         </div>
                         <div class="layui-form-item">
@@ -136,6 +139,7 @@
         </div>
     </div>
 </div>
+<script src="./js/common.js" th:src="@{/js/common.js}" charset="utf-8"></script>
 <script src="./js/echarts.min.js" th:src="@{/js/echarts.min.js}"></script>
 <script src="./js/echarts.theme.infographic.js" th:src="@{/js/echarts.theme.infographic.js}"></script>
 <script src="./layui/layui.js" th:src="@{/layui/layui.js}"></script>

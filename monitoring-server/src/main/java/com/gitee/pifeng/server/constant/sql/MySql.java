@@ -31,4 +31,9 @@ public final class MySql {
      */
     public static final String SESSION_LIST = "show full processlist";
 
+    /**
+     * 结束会话
+     */
+    public static final String KILL_SESSION = "kill ?";
+
 }
