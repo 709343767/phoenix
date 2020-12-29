@@ -3,7 +3,6 @@ package com.gitee.pifeng.server.business.web.service.impl;
 import cn.hutool.core.date.BetweenFormater;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.db.Entity;
-import cn.hutool.db.ds.simple.SimpleDataSource;
 import cn.hutool.db.handler.EntityListHandler;
 import cn.hutool.db.sql.SqlExecutor;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -14,6 +13,7 @@ import com.gitee.pifeng.server.business.web.vo.DbSession4MysqlVo;
 import com.gitee.pifeng.server.business.web.vo.LayUiAdminResultVo;
 import com.gitee.pifeng.server.constant.WebResponseConstants;
 import com.gitee.pifeng.server.constant.sql.MySql;
+import com.gitee.pifeng.server.util.DbUtils;
 import com.google.common.collect.Lists;
 import lombok.Cleanup;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +23,6 @@ import org.springframework.stereotype.Service;
 import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.Base64;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -64,15 +63,12 @@ public class DbSession4MysqlServiceImpl implements IDbSession4MysqlService {
         MonitorDb monitorDb = this.monitorDbDao.selectById(id);
         // url
         String url = monitorDb.getUrl();
-        // 用户名
+        //用户名
         String username = monitorDb.getUsername();
         // 密码
-        String password = new String(Base64.getDecoder().decode(monitorDb.getPassword()), StandardCharsets.UTF_8);
-        // 数据源
+        String password = monitorDb.getPassword();
         @Cleanup
-        SimpleDataSource ds = new SimpleDataSource(url, username, password);
-        @Cleanup
-        Connection connection = ds.getConnection();
+        Connection connection = DbUtils.getConnection(url, username, password);
         List<Entity> entityList = SqlExecutor.query(connection, MySql.SESSION_LIST, new EntityListHandler());
         List<DbSession4MysqlVo> dbSession4MysqlVos = Lists.newArrayList();
         for (Entity entity : entityList) {
@@ -127,12 +123,9 @@ public class DbSession4MysqlServiceImpl implements IDbSession4MysqlService {
         // 用户名
         String username = monitorDb.getUsername();
         // 密码
-        String password = new String(Base64.getDecoder().decode(monitorDb.getPassword()), StandardCharsets.UTF_8);
-        // 数据源
+        String password = monitorDb.getPassword();
         @Cleanup
-        SimpleDataSource ds = new SimpleDataSource(url, username, password);
-        @Cleanup
-        Connection connection = ds.getConnection();
+        Connection connection = DbUtils.getConnection(url, username, password);
         for (Long sessionId : ids) {
             try {
                 SqlExecutor.execute(connection, MySql.KILL_SESSION, sessionId);
