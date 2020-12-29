@@ -38,6 +38,7 @@ public class DbUtils {
      * @param username 用户名
      * @param password 密码
      * @return 数据库连接
+     * @throws SQLException SQL异常
      * @author 皮锋
      * @custom.date 2020/12/29 21:17
      */
