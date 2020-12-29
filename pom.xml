@@ -468,7 +468,7 @@
                 <executions>
                     <execution>
                         <id>attach-javadocs</id>
-                        <phase>package</phase>
+                        <phase>deploy</phase>
                         <goals>
                             <!-- 生成聚合的javadoc -->
                             <goal>aggregate</goal>
