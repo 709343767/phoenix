@@ -77,7 +77,7 @@ public class DbSession4MysqlServiceImpl implements IDbSession4MysqlService {
             String host = entity.getStr("Host", StandardCharsets.UTF_8);
             String db = entity.getStr("db", StandardCharsets.UTF_8);
             String command = entity.getStr("Command", StandardCharsets.UTF_8);
-            Integer time = entity.getInt("Time");
+            Long time = entity.getLong("Time");
             String state = entity.getStr("State", StandardCharsets.UTF_8);
             String info = entity.getStr("Info", StandardCharsets.UTF_8);
             DbSession4MysqlVo dbSession4MysqlVo = DbSession4MysqlVo.builder()

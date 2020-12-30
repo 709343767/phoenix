@@ -4,7 +4,7 @@
         var $ = layui.$, admin = layui.admin, form = layui.form, table = layui.table, device = layui.device();
         table.render({
             elem: '#list-table',
-            url: ctxPath + 'db-session4mysql/get-session-list?id=' + id,
+            url: ctxPath + 'db-session4oracle/get-session-list?id=' + id,
             toolbar: '#list-table-toolbar',
             request: {
                 pageName: 'current',//页码的参数名称，默认：page
@@ -29,43 +29,68 @@
                 [{
                     type: 'checkbox'
                 }, {
-                    field: 'id',
+                    field: 'sid',
                     width: 100,
                     title: '会话ID',
                     sort: !0
                 }, {
-                    field: 'user',
+                    field: 'serial',
+                    width: 100,
+                    title: 'serial#',
+                    sort: !0
+                }, {
+                    field: 'username',
                     title: '用户',
                     minWidth: 100,
                     sort: !0
                 }, {
-                    field: 'host',
-                    title: '主机',
-                    minWidth: 150,
-                    sort: !0
-                }, {
-                    field: 'db',
-                    title: '数据库',
+                    field: 'schemaName',
+                    title: '模式',
                     minWidth: 100,
                     sort: !0
                 }, {
-                    field: 'command',
-                    title: '命令',
-                    minWidth: 100,
-                    sort: !0
-                }, {
-                    field: 'time',
-                    title: '时间',
-                    minWidth: 150,
+                    field: 'type',
+                    title: '会话类型',
+                    minWidth: 120,
                     sort: !0
                 }, {
                     field: 'state',
                     title: '状态',
-                    minWidth: 80,
+                    minWidth: 100,
                     sort: !0
                 }, {
-                    field: 'info',
-                    title: '活动查询',
+                    field: 'logonTime',
+                    title: '登录时间',
+                    minWidth: 180,
+                    sort: !0
+                }, {
+                    field: 'machine',
+                    title: '远程主机',
+                    minWidth: 150,
+                    sort: !0
+                }, {
+                    field: 'osUser',
+                    title: '远程用户',
+                    minWidth: 100,
+                    sort: !0
+                }, {
+                    field: 'program',
+                    title: '远程程序',
+                    minWidth: 200,
+                    sort: !0
+                }, {
+                    field: 'event',
+                    title: '事件',
+                    minWidth: 200,
+                    sort: !0
+                }, {
+                    field: 'waitTime',
+                    title: '等待时间',
+                    minWidth: 200,
+                    sort: !0
+                }, {
+                    field: 'sql',
+                    title: 'SQL',
                     minWidth: 200,
                     sort: !0
                 }, {
@@ -96,7 +121,7 @@
                 layer.confirm('确定结束会话吗？', function (index) {
                     admin.req({
                         type: 'post',
-                        url: ctxPath + 'db-session4mysql/destroy-session?id=' + id,
+                        url: ctxPath + 'db-session4oracle/destroy-session?id=' + id,
                         data: JSON.stringify(checkStatus.data),
                         dataType: 'json',
                         contentType: 'application/json;charset=utf-8',
@@ -126,7 +151,7 @@
                 layer.confirm('确定结束会话吗？', function (index) {
                     admin.req({
                         type: 'post',
-                        url: ctxPath + 'db-session4mysql/destroy-session?id=' + id,
+                        url: ctxPath + 'db-session4oracle/destroy-session?id=' + id,
                         data: JSON.stringify([data]),
                         dataType: 'json',
                         contentType: 'application/json;charset=utf-8',
@@ -151,5 +176,5 @@
             }
         });
     });
-    e('dbSession4mysql', {});
+    e('dbSession4oracle', {});
 });

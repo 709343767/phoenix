@@ -1,5 +1,6 @@
 package com.gitee.pifeng.server.business.web.vo;
 
+import com.gitee.pifeng.common.inf.ISuperBean;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
@@ -22,7 +23,7 @@ import lombok.experimental.Accessors;
 @AllArgsConstructor
 @NoArgsConstructor
 @ApiModel(value = "MySQL数据库会话表现层对象")
-public class DbSession4MysqlVo {
+public class DbSession4MysqlVo implements ISuperBean {
 
     @ApiModelProperty(value = "进程ID")
     private Long id;
