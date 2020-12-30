@@ -70,7 +70,7 @@ public class InitSigar {
             // 判断文件是否存在
             if (!file.exists()) {
                 @Cleanup
-                InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream("sigar.so/" + lib);
+                InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream("sigar/" + lib);
                 @Cleanup
                 FileOutputStream fileOutputStream = new FileOutputStream(file, false);
                 @Cleanup
