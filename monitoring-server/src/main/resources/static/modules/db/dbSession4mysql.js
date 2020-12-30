@@ -78,7 +78,7 @@
             ],
             page: false,
             limit: 15,
-            height: 'full'
+            height: $(document).width() * 0.5
         });
         // 点击表头排序
         table.on('sort(list-table)', function (obj) {
