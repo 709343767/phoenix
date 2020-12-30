@@ -28,35 +28,6 @@
                 <div class="layui-col-sm6 layui-col-md2">
                     <div class="layui-card">
                         <div class="layui-card-header">
-                            应用程序
-                            <span class="layui-badge layui-bg-blue layuiadmin-badge">个</span>
-                        </div>
-                        <div class="layui-card-body layuiadmin-card-list" id="instance-card-list">
-                            <p class="layuiadmin-big-font">
-                                [[${homeInstanceVo.instanceSum}]]
-                                <i class="home-i">[[${homeInstanceVo.instanceOnLineRate}]]
-                                    <img th:src="@{/images/icon16/percentage-16.png}"></i>
-                            </p>
-                            <p>
-                                在线
-                                <span class="layuiadmin-span-color">
-                                    [[${homeInstanceVo.instanceOnLineSum}]]
-                                    <i class="layui-inline layui-icon"><img
-                                            th:src="@{/images/icon16/on-line-16.png}"></i></span>
-                            </p>
-                            <p>
-                                离线
-                                <span class="layuiadmin-span-color">
-                                    [[${homeInstanceVo.instanceOffLineSum}]]
-                                    <i class="layui-inline layui-icon"><img
-                                            th:src="@{/images/icon16/off-line-16.png}"></i></span>
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                <div class="layui-col-sm6 layui-col-md2">
-                    <div class="layui-card">
-                        <div class="layui-card-header">
                             服务器
                             <span class="layui-badge layui-bg-black layuiadmin-badge">台</span>
                         </div>
@@ -108,6 +79,35 @@
                             </p>
                             <p>
                                 停止
+                                <span class="layuiadmin-span-color">
+                                    [[${homeInstanceVo.instanceOffLineSum}]]
+                                    <i class="layui-inline layui-icon"><img
+                                            th:src="@{/images/icon16/off-line-16.png}"></i></span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-col-sm6 layui-col-md2">
+                    <div class="layui-card">
+                        <div class="layui-card-header">
+                            应用程序
+                            <span class="layui-badge layui-bg-blue layuiadmin-badge">个</span>
+                        </div>
+                        <div class="layui-card-body layuiadmin-card-list" id="instance-card-list">
+                            <p class="layuiadmin-big-font">
+                                [[${homeInstanceVo.instanceSum}]]
+                                <i class="home-i">[[${homeInstanceVo.instanceOnLineRate}]]
+                                    <img th:src="@{/images/icon16/percentage-16.png}"></i>
+                            </p>
+                            <p>
+                                在线
+                                <span class="layuiadmin-span-color">
+                                    [[${homeInstanceVo.instanceOnLineSum}]]
+                                    <i class="layui-inline layui-icon"><img
+                                            th:src="@{/images/icon16/on-line-16.png}"></i></span>
+                            </p>
+                            <p>
+                                离线
                                 <span class="layuiadmin-span-color">
                                     [[${homeInstanceVo.instanceOffLineSum}]]
                                     <i class="layui-inline layui-icon"><img
