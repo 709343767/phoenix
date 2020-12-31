@@ -11,7 +11,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
@@ -137,7 +137,7 @@ public class MonitorConfigController {
      */
     @ApiOperation(value = "更新监控配置")
     @ResponseBody
-    @PostMapping("/update-monitor-config")
+    @PutMapping("/update-monitor-config")
     public LayUiAdminResultVo updateMonitorConfig(MonitorConfigPageFormVo monitorConfigPageFormVo) {
         boolean b = this.monitorConfigService.update(monitorConfigPageFormVo);
         if (b) {

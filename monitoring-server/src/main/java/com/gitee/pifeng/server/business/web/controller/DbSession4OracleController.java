@@ -72,7 +72,7 @@ public class DbSession4OracleController {
      * @custom.date 2020/12/25 17:03
      */
     @ApiOperation(value = "结束会话")
-    @PostMapping("/destroy-session")
+    @DeleteMapping("/destroy-session")
     @ApiImplicitParams(value = {
             @ApiImplicitParam(name = "id", value = "数据库ID", required = true, paramType = "query", dataType = "long")})
     @ResponseBody

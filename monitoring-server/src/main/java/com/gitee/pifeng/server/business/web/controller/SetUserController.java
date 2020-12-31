@@ -109,7 +109,7 @@ public class SetUserController {
     @ApiImplicitParams(value = {
             @ApiImplicitParam(name = "oldPassword", value = "原始密码", required = true, paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "password", value = "新密码", required = true, paramType = "query", dataType = "string")})
-    @PostMapping("/update-password")
+    @PutMapping("/update-password")
     @ResponseBody
     public LayUiAdminResultVo updatePassword(@RequestParam(name = "oldPassword") String oldPassword,
                                              @RequestParam(name = "password") String password) {
@@ -127,7 +127,7 @@ public class SetUserController {
      * @custom.date 2020/7/13 18:55
      */
     @ApiOperation(value = "修改用户信息")
-    @PostMapping("/update-user")
+    @PutMapping("/update-user")
     @ResponseBody
     public LayUiAdminResultVo updateUser(MonitorUserVo monitorUserVo) {
         return this.monitorUserService.updateUser(monitorUserVo);

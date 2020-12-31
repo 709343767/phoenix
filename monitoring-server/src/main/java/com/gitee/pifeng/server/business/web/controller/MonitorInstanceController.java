@@ -95,7 +95,7 @@ public class MonitorInstanceController {
      * @custom.date 2020/9/26 12:59
      */
     @ApiOperation(value = "删除应用程序")
-    @PostMapping("/delete-monitor-instance")
+    @DeleteMapping("/delete-monitor-instance")
     @ResponseBody
     public LayUiAdminResultVo deleteMonitorInstance(@RequestBody List<MonitorInstanceVo> monitorInstanceVos) {
         return this.monitorInstanceService.deleteMonitorInstance(monitorInstanceVos);

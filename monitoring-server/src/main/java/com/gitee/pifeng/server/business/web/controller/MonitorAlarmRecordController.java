@@ -77,7 +77,7 @@ public class MonitorAlarmRecordController {
     @GetMapping("/get-monitor-alarm-record-list")
     @ResponseBody
     public LayUiAdminResultVo getMonitorAlarmRecordList(Long current, Long size, String type, String level, String status, String title, String content) {
-        Page<MonitorAlarmRecordVo> page = this.monitorAlarmRecordService.getMonitorAlarmRecordList(current, size, type, level,status, title, content);
+        Page<MonitorAlarmRecordVo> page = this.monitorAlarmRecordService.getMonitorAlarmRecordList(current, size, type, level, status, title, content);
         return LayUiAdminResultVo.ok(page);
     }
 
@@ -92,7 +92,7 @@ public class MonitorAlarmRecordController {
      * @custom.date 2020/8/7 16:58
      */
     @ApiOperation(value = "删除告警记录")
-    @PostMapping("/delete-monitor-alarm-record")
+    @DeleteMapping("/delete-monitor-alarm-record")
     @ResponseBody
     public LayUiAdminResultVo deleteMonitorAlarmRecord(@RequestBody List<MonitorAlarmRecordVo> monitorAlarmRecordVos) {
         return this.monitorAlarmRecordService.deleteMonitorAlarmRecord(monitorAlarmRecordVos);

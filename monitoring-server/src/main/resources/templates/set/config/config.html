@@ -302,7 +302,7 @@
         form.on('submit(config-info)', function (data) {
             // 修改用户信息
             admin.req({
-                type: 'post',
+                type: 'put',
                 url: ctxPath + 'monitor-config/update-monitor-config',
                 data: data.field,
                 dataType: 'json',

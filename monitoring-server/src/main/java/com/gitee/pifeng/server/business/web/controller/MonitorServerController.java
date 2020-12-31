@@ -92,7 +92,7 @@ public class MonitorServerController {
      * @custom.date 2020/9/4 16:10
      */
     @ApiOperation(value = "删除服务器")
-    @PostMapping("/delete-monitor-server")
+    @DeleteMapping("/delete-monitor-server")
     @ResponseBody
     public LayUiAdminResultVo deleteMonitorServer(@RequestBody List<MonitorServerVo> monitorServerVos) {
         return this.monitorServerService.deleteMonitorServer(monitorServerVos);

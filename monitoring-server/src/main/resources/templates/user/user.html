@@ -181,7 +181,7 @@
                     }
                     layer.confirm('确定删除吗？', function (index) {
                         admin.req({
-                            type: 'post',
+                            type: 'delete',
                             url: ctxPath + 'user/delete-user',
                             data: JSON.stringify(checkStatus.data),
                             dataType: 'json',
@@ -272,7 +272,7 @@
             if (obj.event === 'del') {
                 layer.confirm('确定删除吗？', function (index) {
                     admin.req({
-                        type: 'post',
+                        type: 'delete',
                         url: ctxPath + 'user/delete-user',
                         data: JSON.stringify([data]),
                         dataType: 'json',
@@ -327,7 +327,7 @@
                         iframeWindow.layui.form.on('submit(' + submitID + ')', function (data) {
                             var field = data.field; //获取提交的字段
                             admin.req({
-                                type: 'post',
+                                type: 'put',
                                 url: ctxPath + 'user/edit-user',
                                 data: field,
                                 dataType: 'json',

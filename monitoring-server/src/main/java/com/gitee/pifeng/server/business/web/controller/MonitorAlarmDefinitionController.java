@@ -149,7 +149,7 @@ public class MonitorAlarmDefinitionController {
      * @custom.date 2020/8/7 15:24
      */
     @ApiOperation(value = "编辑告警定义")
-    @PostMapping("/edit-monitor-alarm-definition")
+    @PutMapping("/edit-monitor-alarm-definition")
     @ResponseBody
     public LayUiAdminResultVo editMonitorAlarmDefinition(MonitorAlarmDefinitionVo monitorAlarmDefinitionVo) {
         return this.monitorAlarmDefinitionService.editMonitorAlarmDefinition(monitorAlarmDefinitionVo);
@@ -166,7 +166,7 @@ public class MonitorAlarmDefinitionController {
      * @custom.date 2020/8/7 15:34
      */
     @ApiOperation(value = "删除告警定义")
-    @PostMapping("/delete-monitor-alarm-definition")
+    @DeleteMapping("/delete-monitor-alarm-definition")
     @ResponseBody
     public LayUiAdminResultVo deleteMonitorAlarmDefinition(@RequestBody List<MonitorAlarmDefinitionVo> monitorAlarmDefinitionVos) {
         return this.monitorAlarmDefinitionService.deleteMonitorAlarmDefinition(monitorAlarmDefinitionVos);

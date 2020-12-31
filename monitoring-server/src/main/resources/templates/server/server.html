@@ -202,7 +202,7 @@
                     }
                     layer.confirm('确定删除吗？', function (index) {
                         admin.req({
-                            type: 'post',
+                            type: 'delete',
                             url: ctxPath + 'monitor-server/delete-monitor-server',
                             data: JSON.stringify(checkStatus.data),
                             dataType: 'json',
@@ -233,7 +233,7 @@
             if (obj.event === 'del') {
                 layer.confirm('确定删除吗？', function (index) {
                     admin.req({
-                        type: 'post',
+                        type: 'delete',
                         url: ctxPath + 'monitor-server/delete-monitor-server',
                         data: JSON.stringify([data]),
                         dataType: 'json',

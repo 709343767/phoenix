@@ -175,7 +175,7 @@ public class MonitorUserController {
      * @custom.date 2020/8/2 20:43
      */
     @ApiOperation(value = "编辑用户")
-    @PostMapping("/edit-user")
+    @PutMapping("/edit-user")
     @ResponseBody
     public LayUiAdminResultVo editUser(MonitorUserVo monitorUserVo) {
         return this.monitorUserService.editUser(monitorUserVo);
@@ -192,7 +192,7 @@ public class MonitorUserController {
      * @custom.date 2020/8/2 16:43
      */
     @ApiOperation(value = "删除用户")
-    @PostMapping("/delete-user")
+    @DeleteMapping("/delete-user")
     @ResponseBody
     public LayUiAdminResultVo deleteUser(@RequestBody List<MonitorUserVo> monitorUserVos) {
         return this.monitorUserService.deleteUser(monitorUserVos);

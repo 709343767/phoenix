@@ -95,7 +95,7 @@ public class MonitorNetworkController {
      * @custom.date 2020/9/26 12:59
      */
     @ApiOperation(value = "删除网络")
-    @PostMapping("/delete-monitor-network")
+    @DeleteMapping("/delete-monitor-network")
     @ResponseBody
     public LayUiAdminResultVo deleteMonitorNet(@RequestBody List<MonitorNetVo> monitorNetVos) {
         return this.monitorNetService.deleteMonitorNet(monitorNetVos);
@@ -150,7 +150,7 @@ public class MonitorNetworkController {
      * @custom.date 2020/11/20 13:56
      */
     @ApiOperation(value = "编辑网络信息")
-    @PostMapping("/edit-monitor-network")
+    @PutMapping("/edit-monitor-network")
     @ResponseBody
     public LayUiAdminResultVo editMonitorNetwork(MonitorNetVo monitorNetVo) {
         return this.monitorNetService.editMonitorNetwork(monitorNetVo);

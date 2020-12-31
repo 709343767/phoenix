@@ -118,7 +118,7 @@ public class MonitorDbController {
      * @custom.date 2020/12/19 19:56
      */
     @ApiOperation(value = "编辑数据库信息")
-    @PostMapping("/edit-monitor-db")
+    @PutMapping("/edit-monitor-db")
     @ResponseBody
     public LayUiAdminResultVo editMonitorDb(MonitorDbVo monitorDbVo) {
         return this.monitorDbService.editMonitorDb(monitorDbVo);
@@ -168,7 +168,7 @@ public class MonitorDbController {
      * @custom.date 2020/12/19 20:59
      */
     @ApiOperation(value = "删除数据库信息")
-    @PostMapping("/delete-monitor-db")
+    @DeleteMapping("/delete-monitor-db")
     @ResponseBody
     public LayUiAdminResultVo deleteMonitorDb(@RequestBody List<MonitorDbVo> monitorDbVos) {
         return this.monitorDbService.deleteMonitorDb(monitorDbVos);

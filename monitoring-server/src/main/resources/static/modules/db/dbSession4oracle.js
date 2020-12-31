@@ -120,7 +120,7 @@
                 }
                 layer.confirm('确定结束会话吗？', function (index) {
                     admin.req({
-                        type: 'post',
+                        type: 'delete',
                         url: ctxPath + 'db-session4oracle/destroy-session?id=' + id,
                         data: JSON.stringify(checkStatus.data),
                         dataType: 'json',
@@ -150,7 +150,7 @@
             if (obj.event === 'del') {
                 layer.confirm('确定结束会话吗？', function (index) {
                     admin.req({
-                        type: 'post',
+                        type: 'delete',
                         url: ctxPath + 'db-session4oracle/destroy-session?id=' + id,
                         data: JSON.stringify([data]),
                         dataType: 'json',
