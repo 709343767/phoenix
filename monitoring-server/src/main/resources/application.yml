@@ -123,3 +123,12 @@ management:
   server:
     #处于安全考虑，只允许在本地进行关闭操作
     address: 127.0.0.1
+
+
+##############################################swagger端点配置##############################################
+swagger:
+  #production: true
+  basic:
+    enable: true
+    username: admin
+    password: admin
