@@ -103,7 +103,7 @@
             ],
             page: false,
             limit: 15,
-            height: $(document).width() * 0.5
+            height: (device.ios || device.android) ? $(document).width() : $(document).width() * 0.5
         });
         // 点击表头排序
         table.on('sort(list-table)', function (obj) {
