@@ -41,4 +41,28 @@ public class Oracle {
      */
     public static final String KILL_SESSION = "alter system kill session 'sid, serial#' immediate";
 
+    /**
+     * 查询表空间
+     */
+    public static final String TABLE_SPACE_SELECT = "SELECT " +
+            "b.file_id fileId, " +
+            "b.file_name fileName, " +
+            "b.tablespace_name tablespaceName, " +
+            "b.bytes total, " +
+            "(b.bytes-sum(nvl(a.bytes, 0))) used, " +
+            "sum(nvl(a.bytes, 0)) free, " +
+            "sum(nvl(a.bytes, 0))/(b.bytes)* 100 freePer " +
+            "FROM " +
+            "dba_free_space a, " +
+            "dba_data_files b " +
+            "WHERE " +
+            "a.file_id = b.file_id " +
+            "GROUP BY " +
+            "b.tablespace_name, " +
+            "b.file_name, " +
+            "b.file_id, " +
+            "b.bytes " +
+            "ORDER BY " +
+            "b.tablespace_name";
+
 }

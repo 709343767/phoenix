@@ -28,10 +28,11 @@
         <div class="layui-tab layui-tab-brief">
             <ul class="layui-tab-title">
                 <li class="layui-this">会话管理</li>
+                <li th:if="${#strings.toLowerCase(monitorDbVo.dbType)} eq 'oracle'">表空间</li>
                 <li>详情</li>
             </ul>
             <div class="layui-tab-content">
-                <div class="layui-tab-item  layui-show">
+                <div class="layui-tab-item layui-show">
                     <div class="layui-fluid">
                         <table id="list-table" lay-filter="list-table"></table>
                         <script type="text/html" id="imgTpl">
@@ -45,6 +46,14 @@
                         <script type="text/html" id="list-table-toolbar-detail">
                             <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">
                                 <i class="layui-icon layui-icon-delete"></i>结束</a>
+                        </script>
+                    </div>
+                </div>
+                <div class="layui-tab-item layui-show" th:if="${#strings.toLowerCase(monitorDbVo.dbType)} eq 'oracle'">
+                    <div class="layui-fluid">
+                        <table id="list-table-space" lay-filter="list-table-space"></table>
+                        <script type="text/html" id="imgTpl-space">
+                            <img style="display: inline-block; width: 50%; height: 100%;" src={{ d.avatar }}>
                         </script>
                     </div>
                 </div>
@@ -153,7 +162,9 @@
         use.push('dbSession4mysql');
     } else if ([[${monitorDbVo.dbType}]].toLowerCase() === 'oracle') {
         extend.dbSession4oracle = 'db/dbSession4oracle';
+        extend.dbTableSpace4oracle = 'db/dbTableSpace4oracle';
         use.push('dbSession4oracle');
+        use.push('dbTableSpace4oracle');
     }
     layui.config({
         base: ctxPath //静态资源所在路径
