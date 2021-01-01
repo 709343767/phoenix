@@ -94,6 +94,10 @@
                     return layer.msg('请选择数据');
                 }
                 layer.confirm('确定结束会话吗？', function (index) {
+                    // 弹出loading框
+                    var loadingIndex = layer.load(1, {
+                        shade: [0.1, '#fff'] //0.1透明度的白色背景
+                    });
                     admin.req({
                         type: 'delete',
                         url: ctxPath + 'db-session4mysql/destroy-session?id=' + id,
@@ -111,9 +115,13 @@
                             } else {
                                 layer.msg('结束会话失败！', {icon: 5, shift: 6});
                             }
+                            // 关闭loading框
+                            layer.close(loadingIndex);
                         },
                         error: function () {
                             layer.msg('系统错误！', {icon: 5, shift: 6});
+                            // 关闭loading框
+                            layer.close(loadingIndex);
                         }
                     });
                 });
@@ -124,6 +132,10 @@
             var data = obj.data;
             if (obj.event === 'del') {
                 layer.confirm('确定结束会话吗？', function (index) {
+                    // 弹出loading框
+                    var loadingIndex = layer.load(1, {
+                        shade: [0.1, '#fff'] //0.1透明度的白色背景
+                    });
                     admin.req({
                         type: 'delete',
                         url: ctxPath + 'db-session4mysql/destroy-session?id=' + id,
@@ -142,9 +154,13 @@
                             } else {
                                 layer.msg('结束会话失败！', {icon: 5, shift: 6});
                             }
+                            // 关闭loading框
+                            layer.close(loadingIndex);
                         },
                         error: function () {
                             layer.msg('系统错误！', {icon: 5, shift: 6});
+                            // 关闭loading框
+                            layer.close(loadingIndex);
                         }
                     });
                 });
