@@ -4,7 +4,6 @@ import com.gitee.pifeng.common.exception.NetException;
 import com.gitee.pifeng.common.util.Md5Utils;
 import com.gitee.pifeng.common.util.NetUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.hyperic.sigar.SigarException;
 
 /**
@@ -19,19 +18,35 @@ import org.hyperic.sigar.SigarException;
 public class InstanceUtils {
 
     /**
-     * 实例ID
-     */
-    private static String instanceId;
-
-    /**
      * 实例名字
      */
-    private static String instanceName;
+    private static final String INSTANCE_NAME = "monitoring-server";
 
     /**
      * 实例描述
      */
-    private static String instanceDesc;
+    private static final String INSTANCE_DESC = "监控服务端程序";
+
+    /**
+     * <p>
+     * 应用实例ID
+     * </p>
+     * ThreadLocal是JDK包提供的，它提供线程本地变量，如果创建一个ThreadLocal变量，
+     * 那么访问这个变量的每个线程都会有这个变量的一个副本，在实际多线程操作的时候，
+     * 操作的是自己本地内存中的变量，从而规避了线程安全问题。
+     */
+    private static final ThreadLocal<String> INSTANCE_ID_THREAD_LOCAL = new ThreadLocal<>();
+
+    /**
+     * <p>
+     * 私有化构造方法
+     * </p>
+     *
+     * @author 皮锋
+     * @custom.date 2021/1/4 9:54
+     */
+    private InstanceUtils() {
+    }
 
     /**
      * <p>
@@ -45,12 +60,14 @@ public class InstanceUtils {
      * @custom.date 2020年3月4日 下午11:12:46
      */
     public static String getInstanceId() throws NetException, SigarException {
-        if (StringUtils.isNotEmpty(instanceId)) {
+        String instanceId = INSTANCE_ID_THREAD_LOCAL.get();
+        if (instanceId != null) {
             return instanceId;
         }
         String mac = NetUtils.getLocalMac();
         String ip = NetUtils.getLocalIp();
-        instanceId = Md5Utils.encrypt(mac + ip + getInstanceName());
+        instanceId = Md5Utils.encrypt(mac + ip + INSTANCE_NAME);
+        INSTANCE_ID_THREAD_LOCAL.set(instanceId);
         return instanceId;
     }
 
@@ -64,11 +81,7 @@ public class InstanceUtils {
      * @custom.date 2020年3月8日 下午3:35:21
      */
     public static String getInstanceName() {
-        if (StringUtils.isNotEmpty(instanceName)) {
-            return instanceName;
-        }
-        instanceName = "monitoring-server";
-        return instanceName;
+        return INSTANCE_NAME;
     }
 
     /**
@@ -81,18 +94,7 @@ public class InstanceUtils {
      * @custom.date 2020/7/31 21:24
      */
     public static String getInstanceDesc() {
-        if (StringUtils.isNotEmpty(instanceDesc)) {
-            return instanceDesc;
-        }
-        instanceDesc = "监控服务端程序";
-        return instanceDesc;
+        return INSTANCE_DESC;
     }
 
-    public static void main(String[] args) throws InterruptedException, NetException, SigarException {
-        for (int i = 0; i < 100; i++) {
-            String id = getInstanceId();
-            log.info("当前应用的ID为：" + id);
-            Thread.sleep(5L * 1000L);
-        }
-    }
 }
