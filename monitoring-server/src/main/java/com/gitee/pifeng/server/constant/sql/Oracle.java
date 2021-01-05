@@ -60,7 +60,7 @@ public class Oracle {
     public static final String KILL_SESSION = "alter system kill session 'sid, serial#' immediate";
 
     /**
-     * 查询表空间
+     * 查询表空间（按文件）
      */
     public static final String TABLE_SPACE_SELECT = "SELECT " +
             "a.file_id fileId, " +
@@ -82,5 +82,23 @@ public class Oracle {
             "a.bytes " +
             "ORDER BY " +
             "a.tablespace_name";
+
+    /**
+     * 查询表空间（汇总）
+     */
+    public static final String TABLE_SPACE_SELECT_ALL = "SELECT " +
+            "a.tablespace_name tablespaceName, " +
+            "a.bytes total, " +
+            "b.bytes used, " +
+            "c.bytes FREE, " +
+            "(b.bytes * 100) / a.bytes usedRate, " +
+            "(c.bytes * 100) / a.bytes freeRate " +
+            "FROM " +
+            "sys.sm$ts_avail a, " +
+            "sys.sm$ts_used b, " +
+            "sys.sm$ts_free c " +
+            "WHERE " +
+            "a.tablespace_name = b.tablespace_name " +
+            "AND a.tablespace_name = c.tablespace_name";
 
 }

@@ -1,7 +1,7 @@
 /** layuiAdmin.std-v2020.4.1 LPPL License By 皮锋 */
 ;layui.define(function (e) {
     layui.use(['index', 'table'], function () {
-        var $ = layui.$, admin = layui.admin, form = layui.form, table = layui.table, device = layui.device();
+        var $ = layui.$, table = layui.table, device = layui.device();
         table.render({
             elem: '#list-table-space',
             url: ctxPath + 'db-tablespace4oracle/get-tablespace-list?id=' + id,
@@ -23,6 +23,9 @@
                     'count': res.data.total, //解析数据长度
                     'data': res.data.records //解析数据列表
                 };
+            },
+            done: function (res, curr, count) {  // 重点在此处，增加done之后的执行函数，调用外面定义的merge函数
+                // merge($, res, '#list-table-space', [2], ['tablespaceName']);
             },
             cols: [
                 [{
