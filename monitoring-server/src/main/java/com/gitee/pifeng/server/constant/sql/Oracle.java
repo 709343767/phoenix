@@ -62,13 +62,13 @@ public class Oracle {
     /**
      * 查询表空间（按文件）
      */
-    public static final String TABLE_SPACE_SELECT = "SELECT " +
+    public static final String TABLE_SPACE_SELECT_FILE = "SELECT " +
             "a.file_id fileId, " +
             "a.file_name fileName, " +
             "a.tablespace_name tablespaceName, " +
             "a.bytes total, " +
             "(a.bytes-sum(nvl(b.bytes, 0))) used, " +
-            "sum(nvl(b.bytes, 0)) FREE, " +
+            "sum(nvl(b.bytes, 0)) free, " +
             "sum(nvl(b.bytes, 0))/(a.bytes)* 100 freePer " +
             "FROM " +
             "dba_data_files a, " +

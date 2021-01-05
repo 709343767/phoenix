@@ -2,7 +2,8 @@ package com.gitee.pifeng.server.business.web.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.gitee.pifeng.server.business.web.service.IDbTableSpace4OracleService;
-import com.gitee.pifeng.server.business.web.vo.DbTableSpace4OracleVo;
+import com.gitee.pifeng.server.business.web.vo.DbTableSpaceAll4OracleVo;
+import com.gitee.pifeng.server.business.web.vo.DbTableSpaceFile4OracleVo;
 import com.gitee.pifeng.server.business.web.vo.LayUiAdminResultVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -37,6 +38,31 @@ public class DbTableSpace4OracleController {
 
     /**
      * <p>
+     * 获取表空间列表(按文件)
+     * </p>
+     *
+     * @param current 当前页
+     * @param size    每页显示条数
+     * @param id      数据库ID
+     * @return layUiAdmin响应对象
+     * @throws SQLException SQL异常
+     * @author 皮锋
+     * @custom.date 2020/12/24 16:53
+     */
+    @ApiOperation(value = "获取表空间列表(按文件)")
+    @ApiImplicitParams(value = {
+            @ApiImplicitParam(name = "current", value = "当前页", required = true, paramType = "query", dataType = "long"),
+            @ApiImplicitParam(name = "size", value = "每页显示条数", required = true, paramType = "query", dataType = "long"),
+            @ApiImplicitParam(name = "id", value = "数据库ID", required = true, paramType = "query", dataType = "long")})
+    @GetMapping("/get-tablespace-list-file")
+    @ResponseBody
+    public LayUiAdminResultVo getTableSpaceListFile(Long current, Long size, Long id) throws SQLException {
+        Page<DbTableSpaceFile4OracleVo> page = this.dbTableSpace4OracleService.getTableSpaceListFile(current, size, id);
+        return LayUiAdminResultVo.ok(page);
+    }
+
+    /**
+     * <p>
      * 获取表空间列表
      * </p>
      *
@@ -53,10 +79,10 @@ public class DbTableSpace4OracleController {
             @ApiImplicitParam(name = "current", value = "当前页", required = true, paramType = "query", dataType = "long"),
             @ApiImplicitParam(name = "size", value = "每页显示条数", required = true, paramType = "query", dataType = "long"),
             @ApiImplicitParam(name = "id", value = "数据库ID", required = true, paramType = "query", dataType = "long")})
-    @GetMapping("/get-tablespace-list")
+    @GetMapping("/get-tablespace-list-all")
     @ResponseBody
-    public LayUiAdminResultVo getTableSpaceList(Long current, Long size, Long id) throws SQLException {
-        Page<DbTableSpace4OracleVo> page = this.dbTableSpace4OracleService.getTableSpaceList(current, size, id);
+    public LayUiAdminResultVo getTableSpaceListAll(Long current, Long size, Long id) throws SQLException {
+        Page<DbTableSpaceAll4OracleVo> page = this.dbTableSpace4OracleService.getTableSpaceListAll(current, size, id);
         return LayUiAdminResultVo.ok(page);
     }
 

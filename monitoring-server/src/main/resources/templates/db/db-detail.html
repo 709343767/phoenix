@@ -51,8 +51,14 @@
                 </div>
                 <div class="layui-tab-item layui-show" th:if="${#strings.toLowerCase(monitorDbVo.dbType)} eq 'oracle'">
                     <div class="layui-fluid">
-                        <table id="list-table-space" lay-filter="list-table-space"></table>
-                        <script type="text/html" id="imgTpl-space">
+                        <table id="list-table-space-all" lay-filter="list-table-space-all"></table>
+                        <script type="text/html" id="imgTpl-space-all">
+                            <img style="display: inline-block; width: 50%; height: 100%;" src={{ d.avatar }}>
+                        </script>
+                    </div>
+                    <div class="layui-fluid">
+                        <table id="list-table-space-file" lay-filter="list-table-space-file"></table>
+                        <script type="text/html" id="imgTpl-space-file">
                             <img style="display: inline-block; width: 50%; height: 100%;" src={{ d.avatar }}>
                         </script>
                     </div>

@@ -12,7 +12,7 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author 皮锋
- * @custom.date 2020/12/31 16:20
+ * @custom.date 2021/1/5 14:34
  */
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = false)
@@ -23,30 +23,24 @@ import lombok.experimental.Accessors;
 @AllArgsConstructor
 @NoArgsConstructor
 @ApiModel(value = "Oracle数据库表空间表现层对象")
-public class DbTableSpace4OracleVo implements ISuperBean {
-
-    @ApiModelProperty(value = "文件ID")
-    private Long fileId;
-
-    @ApiModelProperty(value = "文件名")
-    private String fileName;
+public class DbTableSpaceAll4OracleVo implements ISuperBean {
 
     @ApiModelProperty(value = "表空间")
     private String tablespaceName;
 
-    @ApiModelProperty(value = "表空间大小")
+    @ApiModelProperty(value = "总空间")
     private String total;
 
-    @ApiModelProperty(value = "表空间使用大小")
+    @ApiModelProperty(value = "使用空间")
     private String used;
 
-    @ApiModelProperty(value = "表空间剩余大小")
+    @ApiModelProperty(value = "剩余空间")
     private String free;
 
-    @ApiModelProperty(value = "使用百分比")
-    private Double usedPer;
+    @ApiModelProperty(value = "表空间使用率")
+    private Double usedRate;
 
-    @ApiModelProperty(value = "剩余百分比")
-    private Double freePer;
+    @ApiModelProperty(value = "表空间剩余率")
+    private Double freeRate;
 
 }
