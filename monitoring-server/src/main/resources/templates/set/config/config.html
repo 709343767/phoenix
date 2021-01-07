@@ -160,6 +160,38 @@
                                                        th:checked="${monitorConfigDb.enable==1}? true : false">
                                             </div>
                                         </div>
+                                        <div class="layui-card">
+                                            <div class="layui-card-header div-font-weight">表空间</div>
+                                            <div class="layui-card-body" pad20>
+                                                <div class="layui-form-item">
+                                                    <label class="layui-form-label"
+                                                           style="text-align: left;">过载阈值(%)</label>
+                                                    <div class="layui-input-block">
+                                                        <input type="text" name="dbTableSpaceOverloadThreshold"
+                                                               class="layui-input"
+                                                               lay-verify="number" lay-verType="tips"
+                                                               th:value="${monitorConfigDbTablespace.overloadThreshold}">
+                                                    </div>
+                                                </div>
+                                                <div class="layui-form-item">
+                                                    <label class="layui-form-label" style="text-align: left;">级别</label>
+                                                    <div class="layui-input-block">
+                                                        <input type="radio" name="dbTableSpaceLevel" value="INFO"
+                                                               title="INFO"
+                                                               th:checked="${monitorConfigDbTablespace.level=='INFO'}? true : false">
+                                                        <input type="radio" name="dbTableSpaceLevel" value="WARN"
+                                                               title="WARN"
+                                                               th:checked="${monitorConfigDbTablespace.level=='WARN'}? true : false">
+                                                        <input type="radio" name="dbTableSpaceLevel" value="ERROR"
+                                                               title="ERROR"
+                                                               th:checked="${monitorConfigDbTablespace.level=='ERROR'}? true : false">
+                                                        <input type="radio" name="dbTableSpaceLevel" value="FATAL"
+                                                               title="FATAL"
+                                                               th:checked="${monitorConfigDbTablespace.level=='FATAL'}? true : false">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="layui-card">

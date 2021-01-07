@@ -90,6 +90,12 @@ public class MonitorConfigController {
     private IMonitorConfigDbService monitorConfigDbService;
 
     /**
+     * 监控数据库表空间配置服务类
+     */
+    @Autowired
+    private IMonitorConfigDbTablespaceService monitorConfigDbTablespaceService;
+
+    /**
      * <p>
      * 访问监控配置页
      * </p>
@@ -111,6 +117,7 @@ public class MonitorConfigController {
         MonitorConfigServerCpu monitorConfigServerCpu = this.monitorConfigServerCpuService.getOne(new LambdaQueryWrapper<>());
         MonitorConfigServerDisk monitorConfigServerDisk = this.monitorConfigServerDiskService.getOne(new LambdaQueryWrapper<>());
         MonitorConfigServerMemory monitorConfigServerMemory = this.monitorConfigServerMemoryService.getOne(new LambdaQueryWrapper<>());
+        MonitorConfigDbTablespace monitorConfigDbTablespace = this.monitorConfigDbTablespaceService.getOne(new LambdaQueryWrapper<>());
         MonitorConfigDb monitorConfigDb = this.monitorConfigDbService.getOne(new LambdaQueryWrapper<>());
         mv.addObject(monitorConfig)
                 .addObject(monitorConfigNet)
@@ -121,6 +128,7 @@ public class MonitorConfigController {
                 .addObject(monitorConfigServerCpu)
                 .addObject(monitorConfigServerDisk)
                 .addObject(monitorConfigServerMemory)
+                .addObject(monitorConfigDbTablespace)
                 .addObject(monitorConfigDb);
         return mv;
     }

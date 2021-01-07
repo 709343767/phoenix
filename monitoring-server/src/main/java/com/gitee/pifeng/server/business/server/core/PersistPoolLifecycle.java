@@ -247,6 +247,7 @@ public class PersistPoolLifecycle implements InitializingBean, DisposableBean, I
      */
     private void clearPools() {
         this.instancePool.clear();
+        this.serverPool.clear();
         this.memoryPool.clear();
         this.cpuPool.clear();
         this.diskPool.clear();

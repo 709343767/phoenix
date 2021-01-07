@@ -22,4 +22,9 @@ public class MonitoringDbProperties {
      */
     private boolean enable;
 
+    /**
+     * 数据库表空间配置属性
+     */
+    private MonitoringDbTableSpaceProperties dbTableSpaceProperties;
+
 }

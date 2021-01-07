@@ -88,6 +88,12 @@ public class MonitorConfigServiceImpl extends ServiceImpl<IMonitorConfigDao, Mon
     private IMonitorConfigDbDao monitorConfigDbDao;
 
     /**
+     * 监控数据库表空间配置数据访问对象
+     */
+    @Autowired
+    private IMonitorConfigDbTablespaceDao monitorConfigDbTablespaceDao;
+
+    /**
      * 监控配置监听器
      */
     @Autowired
@@ -154,6 +160,11 @@ public class MonitorConfigServiceImpl extends ServiceImpl<IMonitorConfigDao, Mon
                 .build(), new UpdateWrapper<>());
         this.monitorConfigDbDao.update(MonitorConfigDb.builder()
                 .enable(monitorConfigPageFormVo.getDbEnable())
+                .updateTime(updateTime)
+                .build(), new UpdateWrapper<>());
+        this.monitorConfigDbTablespaceDao.update(MonitorConfigDbTablespace.builder()
+                .overloadThreshold(monitorConfigPageFormVo.getDbTableSpaceOverloadThreshold())
+                .level(monitorConfigPageFormVo.getDbTableSpaceLevel())
                 .updateTime(updateTime)
                 .build(), new UpdateWrapper<>());
         // 调用监听器回调接口

@@ -133,4 +133,16 @@ public class MonitorConfigPageFormVo implements ISuperBean {
     @ApiModelProperty(value = "是否监控数据库")
     private int dbEnable;
 
+    /**
+     * 数据库表空间过载阈值
+     */
+    @ApiModelProperty(value = "数据库表空间过载阈值")
+    private double dbTableSpaceOverloadThreshold;
+
+    /**
+     * 数据库表空间监控级别
+     */
+    @ApiModelProperty(value = "数据库表空间监控级别")
+    private String dbTableSpaceLevel;
+
 }

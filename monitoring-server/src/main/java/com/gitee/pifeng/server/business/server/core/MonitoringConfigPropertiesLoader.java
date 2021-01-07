@@ -97,6 +97,7 @@ public class MonitoringConfigPropertiesLoader implements IMonitorConfigListener 
         MonitorConfigServerDisk monitorConfigServerDisk = (MonitorConfigServerDisk) allMonitorConfig.get("monitorConfigServerDisk");
         MonitorConfigServerMemory monitorConfigServerMemory = (MonitorConfigServerMemory) allMonitorConfig.get("monitorConfigServerMemory");
         MonitorConfigDb monitorConfigDb = (MonitorConfigDb) allMonitorConfig.get("monitorConfigDb");
+        MonitorConfigDbTablespace monitorConfigDbTablespace = (MonitorConfigDbTablespace) allMonitorConfig.get("monitorConfigDbTablespace");
         // 告警邮箱配置属性
         MonitoringAlarmMailProperties monitoringAlarmMailProperties = new MonitoringAlarmMailProperties();
         monitoringAlarmMailProperties.setEmills(StrUtil.splitToArray(monitorConfigAlarmMail.getEmills(), ';'));
@@ -134,9 +135,14 @@ public class MonitoringConfigPropertiesLoader implements IMonitorConfigListener 
         monitoringServerProperties.setServerCpuProperties(monitoringServerCpuProperties);
         monitoringServerProperties.setServerDiskProperties(monitoringServerDiskProperties);
         monitoringServerProperties.setServerMemoryProperties(monitoringServerMemoryProperties);
+        // 数据库表空间配置属性
+        MonitoringDbTableSpaceProperties monitoringDbTableSpaceProperties = new MonitoringDbTableSpaceProperties();
+        monitoringDbTableSpaceProperties.setOverloadThreshold(monitorConfigDbTablespace.getOverloadThreshold());
+        monitoringDbTableSpaceProperties.setLevel(monitorConfigDbTablespace.getLevel());
         // 数据库配置
         MonitoringDbProperties monitoringDbProperties = new MonitoringDbProperties();
         monitoringDbProperties.setEnable(monitorConfigDb.getEnable().equals(1));
+        monitoringDbProperties.setDbTableSpaceProperties(monitoringDbTableSpaceProperties);
         // 监控配置属性
         MonitoringProperties properties = new MonitoringProperties();
         properties.setThreshold(monitorConfig.getThreshold());
