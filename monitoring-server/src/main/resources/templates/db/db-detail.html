@@ -49,7 +49,7 @@
                         </script>
                     </div>
                 </div>
-                <div class="layui-tab-item layui-show" th:if="${#strings.toLowerCase(monitorDbVo.dbType)} eq 'oracle'">
+                <div class="layui-tab-item" th:if="${#strings.toLowerCase(monitorDbVo.dbType)} eq 'oracle'">
                     <div class="layui-fluid">
                         <table id="list-table-space-all" lay-filter="list-table-space-all"></table>
                         <script type="text/html" id="imgTpl-space-all">
