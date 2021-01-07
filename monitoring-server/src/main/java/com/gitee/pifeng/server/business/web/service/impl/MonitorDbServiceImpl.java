@@ -19,8 +19,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -123,8 +121,10 @@ public class MonitorDbServiceImpl extends ServiceImpl<IMonitorDbDao, MonitorDb> 
         // 数据库类型
         String dbType = monitorDb.getDbType();
         monitorDb.setDriverClass(DriverUtil.identifyDriver(dbType));
-        // 加密密码
-        monitorDb.setPassword(Base64.getEncoder().encodeToString(monitorDb.getPassword().getBytes(StandardCharsets.UTF_8)));
+        if (StringUtils.isBlank(monitorDb.getPassword())) {
+            // mybatis-plus不会更新值为null字段
+            monitorDb.setPassword(null);
+        }
         monitorDb.setUpdateTime(new Date());
         // 更新
         int result = this.monitorDbDao.updateById(monitorDb);
@@ -160,8 +160,6 @@ public class MonitorDbServiceImpl extends ServiceImpl<IMonitorDbDao, MonitorDb> 
         // 数据库类型
         String dbType = monitorDb.getDbType();
         monitorDb.setDriverClass(DriverUtil.identifyDriver(dbType));
-        // 加密密码
-        monitorDb.setPassword(Base64.getEncoder().encodeToString(monitorDb.getPassword().getBytes(StandardCharsets.UTF_8)));
         monitorDb.setInsertTime(new Date());
         int result = this.monitorDbDao.insert(monitorDb);
         if (result == 1) {

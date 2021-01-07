@@ -71,6 +71,8 @@
     </div>
 </div>
 <script src="./js/common.js" th:src="@{/js/common.js}" charset="utf-8"></script>
+<script src="./js/jquery.min.js" th:src="@{/js/jquery.min.js}" charset="utf-8"></script>
+<script src="./js/jquery.base64.js" th:src="@{/js/jquery.base64.js}" charset="utf-8"></script>
 <script src="./layui/layui.js" th:src="@{/layui/layui.js}"></script>
 <script charset="utf-8" th:inline="javascript">
     layui.config({
@@ -78,7 +80,7 @@
     }).extend({
         index: 'lib/index' //主入口模块
     }).use(['index', 'table'], function () {
-        var $ = layui.$, admin = layui.admin, form = layui.form, table = layui.table, device = layui.device();
+        var admin = layui.admin, form = layui.form, table = layui.table, device = layui.device();
         table.render({
             elem: '#user-list-table',
             url: ctxPath + 'user/get-monitor-user-list',
@@ -235,6 +237,8 @@
                             //监听提交
                             iframeWindow.layui.form.on('submit(' + submitID + ')', function (data) {
                                 var field = data.field; //获取提交的字段
+                                // 加密密码
+                                field.password = $.base64.encode(field.password);
                                 admin.req({
                                     type: 'post',
                                     url: ctxPath + 'user/save-user',
@@ -326,6 +330,8 @@
                         //监听提交
                         iframeWindow.layui.form.on('submit(' + submitID + ')', function (data) {
                             var field = data.field; //获取提交的字段
+                            // 加密密码
+                            field.password = $.base64.encode(field.password);
                             admin.req({
                                 type: 'put',
                                 url: ctxPath + 'user/edit-user',

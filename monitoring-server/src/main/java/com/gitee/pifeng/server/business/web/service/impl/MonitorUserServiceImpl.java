@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.google.common.collect.Lists;
 import com.gitee.pifeng.server.business.web.dao.IMonitorRoleDao;
 import com.gitee.pifeng.server.business.web.dao.IMonitorUserDao;
 import com.gitee.pifeng.server.business.web.entity.MonitorRole;
@@ -16,6 +15,7 @@ import com.gitee.pifeng.server.business.web.vo.LayUiAdminResultVo;
 import com.gitee.pifeng.server.business.web.vo.MonitorUserVo;
 import com.gitee.pifeng.server.constant.WebResponseConstants;
 import com.gitee.pifeng.server.util.SpringSecurityUtils;
+import com.google.common.collect.Lists;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,10 +27,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
 
 /**
  * <p>
@@ -106,7 +104,10 @@ public class MonitorUserServiceImpl extends ServiceImpl<IMonitorUserDao, Monitor
      */
     @Override
     public LayUiAdminResultVo updatePassword(String oldPassword, String password) {
-        // 一.校验密码是否正确
+        // 一.解密密码
+        oldPassword = new String(Base64.getDecoder().decode(oldPassword), StandardCharsets.UTF_8);
+        password = new String(Base64.getDecoder().decode(password), StandardCharsets.UTF_8);
+        // 二.校验密码是否正确
         MonitorUserRealm monitorUserRealm = SpringSecurityUtils.getCurrentMonitorUserRealm();
         Long userId = monitorUserRealm.getId();
         // 查询数据库
@@ -119,7 +120,7 @@ public class MonitorUserServiceImpl extends ServiceImpl<IMonitorUserDao, Monitor
         if (!verify) {
             return LayUiAdminResultVo.ok(WebResponseConstants.VERIFY_FAIL);
         }
-        // 二.修改密码
+        // 三.修改密码
         // 加密密码
         String enPassword = bc.encode(password);
         // 更新数据库
@@ -237,7 +238,7 @@ public class MonitorUserServiceImpl extends ServiceImpl<IMonitorUserDao, Monitor
         monitorUser.setRegisterTime(new Date());
         BCryptPasswordEncoder bc = new BCryptPasswordEncoder();
         // 加密密码
-        String enPassword = bc.encode(monitorUser.getPassword());
+        String enPassword = bc.encode(new String(Base64.getDecoder().decode(monitorUser.getPassword()), StandardCharsets.UTF_8));
         monitorUser.setPassword(enPassword);
         int result = this.monitorUserDao.insert(monitorUser);
         // 成功
@@ -261,7 +262,7 @@ public class MonitorUserServiceImpl extends ServiceImpl<IMonitorUserDao, Monitor
     public LayUiAdminResultVo editUser(MonitorUserVo monitorUserVo) {
         MonitorUser monitorUser = monitorUserVo.convertTo();
         // 密码
-        String password = monitorUser.getPassword();
+        String password = new String(Base64.getDecoder().decode(monitorUser.getPassword()), StandardCharsets.UTF_8);
         if (StringUtils.isBlank(password)) {
             // mybatis-plus不会更新值为null字段
             monitorUser.setPassword(null);
