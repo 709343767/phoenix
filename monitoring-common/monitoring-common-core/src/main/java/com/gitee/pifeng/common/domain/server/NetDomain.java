@@ -106,6 +106,16 @@ public final class NetDomain extends AbstractSuperBean {
          */
         long txDropped;
 
+        /**
+         * 下载速度
+         */
+        double downloadbps;
+
+        /**
+         * 上传速度
+         */
+        double uploadbps;
+
     }
 
 }

@@ -3,11 +3,11 @@ package com.gitee.pifeng.server.business.web.service.impl;
 import cn.hutool.core.io.unit.DataSizeUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.google.common.collect.Lists;
 import com.gitee.pifeng.server.business.web.dao.IMonitorServerNetcardDao;
 import com.gitee.pifeng.server.business.web.entity.MonitorServerNetcard;
 import com.gitee.pifeng.server.business.web.service.IMonitorServerNetcardService;
 import com.gitee.pifeng.server.business.web.vo.ServerDetailPageServerNetcardVo;
+import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -68,6 +68,8 @@ public class MonitorServerNetcardServiceImpl extends ServiceImpl<IMonitorServerN
             serverDetailPageServerNetcardVo.setTxPackets(monitorServerNetcard.getTxPackets());
             serverDetailPageServerNetcardVo.setTxErrors(monitorServerNetcard.getTxErrors());
             serverDetailPageServerNetcardVo.setTxDropped(monitorServerNetcard.getTxDropped());
+            serverDetailPageServerNetcardVo.setDownloadbps(monitorServerNetcard.getDownloadbps());
+            serverDetailPageServerNetcardVo.setUploadbps(monitorServerNetcard.getUploadbps());
             serverDetailPageServerNetcardVos.add(serverDetailPageServerNetcardVo);
         }
         return serverDetailPageServerNetcardVos;

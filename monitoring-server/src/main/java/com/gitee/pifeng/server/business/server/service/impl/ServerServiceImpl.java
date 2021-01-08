@@ -156,6 +156,9 @@ public class ServerServiceImpl implements IServerService {
             monitorServerNetcard.setTxDropped(netInterfaceDomain.getTxDropped());
             monitorServerNetcard.setTxErrors(netInterfaceDomain.getTxErrors());
             monitorServerNetcard.setTxPackets(netInterfaceDomain.getTxPackets());
+            // 网速
+            monitorServerNetcard.setDownloadbps(netInterfaceDomain.getDownloadbps());
+            monitorServerNetcard.setUploadbps(netInterfaceDomain.getUploadbps());
             // 查询数据库中是否有当前网卡信息
             LambdaQueryWrapper<MonitorServerNetcard> lambdaQueryWrapper = new LambdaQueryWrapper<>();
             lambdaQueryWrapper.eq(MonitorServerNetcard::getIp, ip);

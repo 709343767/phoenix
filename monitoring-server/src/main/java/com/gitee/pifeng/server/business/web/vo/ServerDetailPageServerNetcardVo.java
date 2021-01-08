@@ -90,4 +90,10 @@ public class ServerDetailPageServerNetcardVo implements ISuperBean {
     @ApiModelProperty(value = "发送时丢弃的包数")
     private Long txDropped;
 
+    @ApiModelProperty(value = "下载速度")
+    private Double downloadbps;
+
+    @ApiModelProperty(value = "上传速度")
+    private Double uploadbps;
+
 }

@@ -112,4 +112,12 @@ public class MonitorServerNetcard implements Serializable {
     @TableField("TX_DROPPED")
     private Long txDropped;
 
+    @ApiModelProperty(value = "下载速度")
+    @TableField("DOWNLOAD_BPS")
+    private Double downloadbps;
+
+    @ApiModelProperty(value = "上传速度")
+    @TableField("UPLOAD_BPS")
+    private Double uploadbps;
+
 }

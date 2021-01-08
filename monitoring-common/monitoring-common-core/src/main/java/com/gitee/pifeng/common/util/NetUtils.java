@@ -330,6 +330,24 @@ public class NetUtils extends InitSigar {
                     .setTxDropped(netStat.getTxDropped())
                     .setTxErrors(netStat.getTxErrors())
                     .setTxPackets(netStat.getTxPackets());
+            // 网速
+            long start = System.currentTimeMillis();
+            long rxBytesStart = netStat.getRxBytes();
+            long txBytesStart = netStat.getTxBytes();
+            // 休眠一秒
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                log.error("线程中断异常！", e);
+            }
+            long end = System.currentTimeMillis();
+            NetInterfaceStat statEnd = SIGAR.getNetInterfaceStat(info);
+            long rxBytesEnd = statEnd.getRxBytes();
+            long txBytesEnd = statEnd.getTxBytes();
+            double rxbps = ((double) (rxBytesEnd - rxBytesStart) * 8 / (end - start) * 1000) / 1024 / 8;
+            double txbps = ((double) (txBytesEnd - txBytesStart) * 8 / (end - start) * 1000) / 1024 / 8;
+            netInterfaceDomain.setDownloadbps(rxbps)
+                    .setUploadbps(txbps);
             netInterfaceConfigDomains.add(netInterfaceDomain);
         }
         netDomain.setNetNum(netInterfaceConfigDomains.size()).setNetList(netInterfaceConfigDomains);
