@@ -93,10 +93,10 @@ public class MonitorServerNetcardVo implements ISuperBean {
     private Long txDropped;
 
     @ApiModelProperty(value = "下载速度")
-    private Double downloadbps;
+    private Double downloadBps;
 
     @ApiModelProperty(value = "上传速度")
-    private Double uploadbps;
+    private Double uploadBps;
 
     /**
      * <p>

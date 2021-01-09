@@ -1,8 +1,8 @@
 package com.gitee.pifeng.server.business.web.service.impl;
 
 import cn.hutool.core.io.unit.DataSizeUtil;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.gitee.pifeng.common.constant.ZeroOrOneConstants;
 import com.gitee.pifeng.server.business.web.dao.IMonitorServerNetcardDao;
 import com.gitee.pifeng.server.business.web.entity.MonitorServerNetcard;
 import com.gitee.pifeng.server.business.web.service.IMonitorServerNetcardService;
@@ -42,9 +42,7 @@ public class MonitorServerNetcardServiceImpl extends ServiceImpl<IMonitorServerN
      */
     @Override
     public List<ServerDetailPageServerNetcardVo> getServerDetailPageServerNetcardInfo(String ip) {
-        LambdaQueryWrapper<MonitorServerNetcard> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-        lambdaQueryWrapper.eq(MonitorServerNetcard::getIp, ip);
-        List<MonitorServerNetcard> monitorServerNetcards = this.monitorServerNetcardDao.selectList(lambdaQueryWrapper);
+        List<MonitorServerNetcard> monitorServerNetcards = this.monitorServerNetcardDao.getServerDetailPageServerNetcardInfo(ip);
         List<ServerDetailPageServerNetcardVo> serverDetailPageServerNetcardVos = Lists.newLinkedList();
         for (MonitorServerNetcard monitorServerNetcard : monitorServerNetcards) {
             ServerDetailPageServerNetcardVo serverDetailPageServerNetcardVo = new ServerDetailPageServerNetcardVo();
@@ -68,8 +66,10 @@ public class MonitorServerNetcardServiceImpl extends ServiceImpl<IMonitorServerN
             serverDetailPageServerNetcardVo.setTxPackets(monitorServerNetcard.getTxPackets());
             serverDetailPageServerNetcardVo.setTxErrors(monitorServerNetcard.getTxErrors());
             serverDetailPageServerNetcardVo.setTxDropped(monitorServerNetcard.getTxDropped());
-            serverDetailPageServerNetcardVo.setDownloadbps(monitorServerNetcard.getDownloadbps());
-            serverDetailPageServerNetcardVo.setUploadbps(monitorServerNetcard.getUploadbps());
+            String downloadSpeed = DataSizeUtil.format(monitorServerNetcard.getDownloadBps().longValue());
+            String uploadSpeed = DataSizeUtil.format(monitorServerNetcard.getUploadBps().longValue());
+            serverDetailPageServerNetcardVo.setDownloadSpeed(ZeroOrOneConstants.ZERO.equals(downloadSpeed) ? ZeroOrOneConstants.ZERO : downloadSpeed + "/s");
+            serverDetailPageServerNetcardVo.setUploadSpeed(ZeroOrOneConstants.ZERO.equals(uploadSpeed) ? ZeroOrOneConstants.ZERO : uploadSpeed + "/s");
             serverDetailPageServerNetcardVos.add(serverDetailPageServerNetcardVo);
         }
         return serverDetailPageServerNetcardVos;

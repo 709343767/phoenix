@@ -120,8 +120,8 @@
                         var txDropped = obj.txDropped;
                         var txErrors = obj.txErrors;
                         var txPackets = obj.txPackets;
-                        var downloadbps = obj.downloadbps;
-                        var uploadbps = obj.uploadbps;
+                        var downloadSpeed = obj.downloadSpeed;
+                        var uploadSpeed = obj.uploadSpeed;
                         var type = obj.type;
                         html += '<div class="layui-col-md4">' +
                             '       <label class="label-font-weight">网卡名字：</label>' + name +
@@ -169,10 +169,10 @@
                             '       <label class="label-font-weight">发送时丢弃的包数：</label>' + txDropped + ' 个' +
                             '    </div>' +
                             '    <div class="layui-col-md4">' +
-                            '       <label class="label-font-weight">上传速度：</label>' + uploadbps + ' bps' +
+                            '       <label class="label-font-weight">下载速度：</label>' + downloadSpeed +
                             '    </div>' +
                             '    <div class="layui-col-md4">' +
-                            '       <label class="label-font-weight">下载速度：</label>' + downloadbps + ' bps' +
+                            '       <label class="label-font-weight">上传速度：</label>' + uploadSpeed +
                             '    </div>';
                         if (i != data.length - 1) {
                             html += '<hr class="layui-bg-gray hr-padding">';

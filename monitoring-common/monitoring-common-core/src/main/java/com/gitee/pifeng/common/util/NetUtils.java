@@ -321,15 +321,6 @@ public class NetUtils extends InitSigar {
                     .setBroadcast(netInfo.getBroadcast())
                     .setHwAddr(netInfo.getHwaddr())
                     .setDescription(netInfo.getDescription());
-            // 网卡状态
-            netInterfaceDomain.setRxBytes(netStat.getRxBytes())
-                    .setRxDropped(netStat.getRxDropped())
-                    .setRxErrors(netStat.getRxErrors())
-                    .setRxPackets(netStat.getRxPackets())
-                    .setTxBytes(netStat.getTxBytes())
-                    .setTxDropped(netStat.getTxDropped())
-                    .setTxErrors(netStat.getTxErrors())
-                    .setTxPackets(netStat.getTxPackets());
             // 网速
             long start = System.currentTimeMillis();
             long rxBytesStart = netStat.getRxBytes();
@@ -344,10 +335,20 @@ public class NetUtils extends InitSigar {
             NetInterfaceStat statEnd = SIGAR.getNetInterfaceStat(info);
             long rxBytesEnd = statEnd.getRxBytes();
             long txBytesEnd = statEnd.getTxBytes();
-            double rxbps = ((double) (rxBytesEnd - rxBytesStart) * 8 / (end - start) * 1000) / 1024 / 8;
-            double txbps = ((double) (txBytesEnd - txBytesStart) * 8 / (end - start) * 1000) / 1024 / 8;
-            netInterfaceDomain.setDownloadbps(rxbps)
-                    .setUploadbps(txbps);
+            // 1Byte=8bit
+            double rxBps = (((double) (rxBytesEnd - rxBytesStart) * 8) / ((double) (end - start) / 1000)) / 8;
+            double txBps = (((double) (txBytesEnd - txBytesStart) * 8) / ((double) (end - start) / 1000)) / 8;
+            netInterfaceDomain.setDownloadBps(rxBps)
+                    .setUploadBps(txBps);
+            // 网卡状态
+            netInterfaceDomain.setRxBytes(statEnd.getRxBytes())
+                    .setRxDropped(statEnd.getRxDropped())
+                    .setRxErrors(statEnd.getRxErrors())
+                    .setRxPackets(statEnd.getRxPackets())
+                    .setTxBytes(statEnd.getTxBytes())
+                    .setTxDropped(statEnd.getTxDropped())
+                    .setTxErrors(statEnd.getTxErrors())
+                    .setTxPackets(statEnd.getTxPackets());
             netInterfaceConfigDomains.add(netInterfaceDomain);
         }
         netDomain.setNetNum(netInterfaceConfigDomains.size()).setNetList(netInterfaceConfigDomains);

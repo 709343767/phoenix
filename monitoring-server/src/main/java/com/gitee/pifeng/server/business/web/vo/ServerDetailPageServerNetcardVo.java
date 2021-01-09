@@ -91,9 +91,9 @@ public class ServerDetailPageServerNetcardVo implements ISuperBean {
     private Long txDropped;
 
     @ApiModelProperty(value = "下载速度")
-    private Double downloadbps;
+    private String downloadSpeed;
 
     @ApiModelProperty(value = "上传速度")
-    private Double uploadbps;
+    private String uploadSpeed;
 
 }

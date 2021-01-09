@@ -72,14 +72,6 @@ public class MonitorServerNetcard implements Serializable {
     @TableField("DESCRIPTION")
     private String description;
 
-    @ApiModelProperty(value = "新增时间")
-    @TableField("INSERT_TIME")
-    private Date insertTime;
-
-    @ApiModelProperty(value = "更新时间")
-    @TableField("UPDATE_TIME")
-    private Date updateTime;
-
     @ApiModelProperty(value = "接收到的总字节数")
     @TableField("RX_BYTES")
     private Long rxBytes;
@@ -114,10 +106,18 @@ public class MonitorServerNetcard implements Serializable {
 
     @ApiModelProperty(value = "下载速度")
     @TableField("DOWNLOAD_BPS")
-    private Double downloadbps;
+    private Double downloadBps;
 
     @ApiModelProperty(value = "上传速度")
     @TableField("UPLOAD_BPS")
-    private Double uploadbps;
+    private Double uploadBps;
+
+    @ApiModelProperty(value = "新增时间")
+    @TableField("INSERT_TIME")
+    private Date insertTime;
+
+    @ApiModelProperty(value = "更新时间")
+    @TableField("UPDATE_TIME")
+    private Date updateTime;
 
 }

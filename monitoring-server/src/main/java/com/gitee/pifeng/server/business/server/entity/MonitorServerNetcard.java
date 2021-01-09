@@ -150,12 +150,12 @@ public class MonitorServerNetcard {
      * 下载速度
      */
     @TableField("DOWNLOAD_BPS")
-    private Double downloadbps;
+    private Double downloadBps;
 
     /**
      * 上传速度
      */
     @TableField("UPLOAD_BPS")
-    private Double uploadbps;
+    private Double uploadBps;
 
 }

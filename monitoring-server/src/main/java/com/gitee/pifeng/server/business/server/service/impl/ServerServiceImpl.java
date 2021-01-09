@@ -75,7 +75,7 @@ public class ServerServiceImpl implements IServerService {
         this.operateServerMemory(serverPackage);
         // 把服务器CPU信息添加到数据库
         this.operateServerCpu(serverPackage);
-        // 把服务器网卡信息添加或更新到数据库
+        // 把服务器网卡信息添加到数据库
         this.operateServerNetcard(serverPackage);
         // 把服务器磁盘信息添加到数据库
         this.operateServerDisk(serverPackage);
@@ -120,7 +120,7 @@ public class ServerServiceImpl implements IServerService {
 
     /**
      * <p>
-     * 把服务器网卡信息添加或更新到数据库
+     * 把服务器网卡信息添加到数据库
      * </p>
      *
      * @param serverPackage 服务器信息包
@@ -157,26 +157,12 @@ public class ServerServiceImpl implements IServerService {
             monitorServerNetcard.setTxErrors(netInterfaceDomain.getTxErrors());
             monitorServerNetcard.setTxPackets(netInterfaceDomain.getTxPackets());
             // 网速
-            monitorServerNetcard.setDownloadbps(netInterfaceDomain.getDownloadbps());
-            monitorServerNetcard.setUploadbps(netInterfaceDomain.getUploadbps());
-            // 查询数据库中是否有当前网卡信息
-            LambdaQueryWrapper<MonitorServerNetcard> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-            lambdaQueryWrapper.eq(MonitorServerNetcard::getIp, ip);
-            lambdaQueryWrapper.eq(MonitorServerNetcard::getNetNo, i + 1);
-            MonitorServerNetcard monitorServerNetcardDb = this.monitorServerNetcardDao.selectOne(lambdaQueryWrapper);
-            // 新增网卡信息
-            if (monitorServerNetcardDb == null) {
-                monitorServerNetcard.setInsertTime(serverPackage.getDateTime());
-                this.monitorServerNetcardDao.insert(monitorServerNetcard);
-            }
-            // 更新网卡信息
-            else {
-                monitorServerNetcard.setUpdateTime(serverPackage.getDateTime());
-                LambdaUpdateWrapper<MonitorServerNetcard> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();
-                lambdaUpdateWrapper.eq(MonitorServerNetcard::getIp, ip);
-                lambdaUpdateWrapper.eq(MonitorServerNetcard::getNetNo, i + 1);
-                this.monitorServerNetcardDao.update(monitorServerNetcard, lambdaUpdateWrapper);
-            }
+            monitorServerNetcard.setDownloadBps(netInterfaceDomain.getDownloadBps());
+            monitorServerNetcard.setUploadBps(netInterfaceDomain.getUploadBps());
+            // 时间
+            monitorServerNetcard.setInsertTime(serverPackage.getDateTime());
+            monitorServerNetcard.setUpdateTime(serverPackage.getDateTime());
+            this.monitorServerNetcardDao.insert(monitorServerNetcard);
         }
     }
 

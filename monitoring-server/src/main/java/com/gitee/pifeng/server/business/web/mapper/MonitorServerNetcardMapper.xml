@@ -2,4 +2,18 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.gitee.pifeng.server.business.web.dao.IMonitorServerNetcardDao">
 
+    <!-- 获取服务器详情页面服务器网卡信息 -->
+    <select id="getServerDetailPageServerNetcardInfo" parameterType="java.lang.String"
+            resultType="com.gitee.pifeng.server.business.web.entity.MonitorServerNetcard">
+        SELECT *
+        FROM MONITOR_SERVER_NETCARD msn
+        WHERE IP = #{ip}
+          AND INSERT_TIME = (
+            SELECT INSERT_TIME
+            FROM MONITOR_SERVER_NETCARD
+            WHERE IP = #{ip}
+            ORDER BY INSERT_TIME DESC
+            LIMIT 1)
+    </select>
+
 </mapper>

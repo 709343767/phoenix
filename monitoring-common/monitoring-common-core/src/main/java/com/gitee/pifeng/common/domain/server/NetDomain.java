@@ -109,12 +109,12 @@ public final class NetDomain extends AbstractSuperBean {
         /**
          * 下载速度
          */
-        double downloadbps;
+        double downloadBps;
 
         /**
          * 上传速度
          */
-        double uploadbps;
+        double uploadBps;
 
     }
 
