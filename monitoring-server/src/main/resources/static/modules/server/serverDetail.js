@@ -181,10 +181,10 @@
                             '       <label class="label-font-weight">发送时丢弃的包数：</label>' + txDropped + ' 个' +
                             '    </div>' +
                             '    <div class="layui-col-md4">' +
-                            '       <label class="label-font-weight">下载速度：</label>' + downloadSpeed +
+                            '       <label class="label-font-weight">接收速度：</label>' + downloadSpeed +
                             '    </div>' +
                             '    <div class="layui-col-md4">' +
-                            '       <label class="label-font-weight">上传速度：</label>' + uploadSpeed +
+                            '       <label class="label-font-weight">发送速度：</label>' + uploadSpeed +
                             '    </div>';
                         if (i != data.length - 1) {
                             html += '<hr class="layui-bg-gray hr-padding">';
