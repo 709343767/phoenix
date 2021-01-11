@@ -935,10 +935,10 @@
                                     // 三种由深及浅的颜色
                                     [{
                                         offset: 0,
-                                        color: '#9F79EE'
+                                        color: '#7A67EE'
                                     }, {
                                         offset: 0.5,
-                                        color: '#AB82FF'
+                                        color: '#836FFF'
                                     }, {
                                         offset: 1,
                                         color: '#FFFFFF'
@@ -947,7 +947,7 @@
                             itemStyle: {
                                 normal: {
                                     // 设置颜色
-                                    color: '#8968CD'
+                                    color: '#6959CD'
                                 }
                             }
                         }, {
@@ -962,10 +962,10 @@
                                     // 三种由深及浅的颜色
                                     [{
                                         offset: 0,
-                                        color: '#B4EEB4'
+                                        color: '#00E5EE'
                                     }, {
                                         offset: 0.5,
-                                        color: '#C1FFC1'
+                                        color: '#00F5FF'
                                     }, {
                                         offset: 1,
                                         color: '#FFFFFF'
@@ -974,7 +974,7 @@
                             itemStyle: {
                                 normal: {
                                     // 设置颜色
-                                    color: '#9BCD9B'
+                                    color: '#00C5CD'
                                 }
                             }
                         }]
