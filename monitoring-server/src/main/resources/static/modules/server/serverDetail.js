@@ -816,7 +816,7 @@
             });
             admin.req({
                 type: 'get',
-                url: layui.setter.base + 'monitor-server-netcard/get-server-detail-page-server-network—speed-chart-info',
+                url: layui.setter.base + 'monitor-server-netcard/get-server-detail-page-server-network-speed-chart-info',
                 dataType: 'json',
                 contentType: 'application/json;charset=utf-8',
                 headers: {
@@ -825,7 +825,7 @@
                 data: {
                     ip: ip, // 应用实例ID
                     address: chartAddress, // 服务器网卡地址
-                    time: time, // 时间
+                    time: time // 时间
                 },
                 success: function (result) {
                     var data = result.data;

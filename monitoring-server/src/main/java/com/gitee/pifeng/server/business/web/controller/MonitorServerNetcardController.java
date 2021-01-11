@@ -67,7 +67,7 @@ public class MonitorServerNetcardController {
      */
     @ApiOperation(value = "获取服务器详情页面服务器网速图表信息")
     @ResponseBody
-    @GetMapping("/get-server-detail-page-server-network—speed-chart-info")
+    @GetMapping("/get-server-detail-page-server-network-speed-chart-info")
     @ApiImplicitParams(value = {
             @ApiImplicitParam(name = "ip", value = "服务器IP地址", required = true, paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "address", value = "服务器网卡地址", required = true, paramType = "query", dataType = "string"),
