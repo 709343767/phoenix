@@ -854,7 +854,23 @@
                         },
                         // 鼠标移到折线上展示数据
                         tooltip: {
-                            trigger: 'axis'
+                            trigger: 'axis',
+                            formatter: function (params) {
+                                var result = '';
+                                var axisName = '';
+                                params.forEach(function (item) {
+                                    axisName = item.axisValue;
+                                    var itemData = item.data;
+                                    if (itemData >= 1024) {
+                                        itemData = (itemData / 1024).toFixed(2) + ' MB/s</br>'
+                                    } else {
+                                        itemData = itemData + ' KB/s</br>'
+                                    }
+                                    var itemValue = item.marker + item.seriesName + ': ' + itemData;
+                                    result += itemValue;
+                                });
+                                return axisName + '</br>' + result;
+                            }
                         },
                         legend: {
                             data: ['接收', '发送'],
