@@ -115,6 +115,9 @@ public class MonitorServerController {
         ModelAndView mv = new ModelAndView("server/server-detail");
         mv.addObject("id", id);
         mv.addObject("ip", ip);
+        // 获取服务器网卡地址
+        List<String> netcardAddresses = this.monitorServerService.getNetcardAddress(ip);
+        mv.addObject("netcardAddresses", netcardAddresses);
         return mv;
     }
 

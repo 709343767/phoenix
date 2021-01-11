@@ -74,6 +74,27 @@
                             </div>
                         </div>
                     </div>
+                    <div class="layui-card">
+                        <form class="layui-form layui-card-header layuiadmin-card-header-auto layui-card-header-my">
+                            <div class="layui-form-item">
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">网卡地址</label>
+                                    <div class="layui-input-block">
+                                        <select name="address" id="address" lay-filter="address">
+                                            <option th:each="address:${netcardAddresses}" th:value="${address}"
+                                                    th:text="${address}" th:selected="${address eq ip}"></option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        <div class="layui-card-body">
+                            <div class="layui-row layui-col-space5">
+                                <div class="layadmin-dataview-my-330px" id="get-server-network-speed-info">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="layui-tab-item">
                     <div class="layui-collapse">

@@ -16,4 +16,29 @@
             LIMIT 1)
     </select>
 
+    <!-- 获取服务器详情页面服务器网速图表信息 -->
+    <select id="getServerDetailPageServerNetworkSpeedChartInfo" parameterType="java.util.HashMap"
+            resultType="com.gitee.pifeng.server.business.web.vo.ServerDetailPageServerNetworkSpeedChartVo">
+        SELECT
+        msn.NAME AS name,
+        msn.UPLOAD_BPS AS uploadSpeed,
+        msn.DOWNLOAD_BPS AS downloadSpeed,
+        msn.INSERT_TIME AS insertTime
+        FROM
+        MONITOR_SERVER_NETCARD msn
+        WHERE msn.IP =#{params.ip}
+        AND msn.ADDRESS=#{params.address}
+        <if test="params.startTime!=null and params.endTime!=null">
+            AND INSERT_TIME BETWEEN #{params.startTime} AND #{params.endTime}
+        </if>
+    </select>
+
+    <!-- 获取服务器网卡地址 -->
+    <select id="getNetcardAddress" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT msn.ADDRESS AS address
+        FROM MONITOR_SERVER_NETCARD msn
+        WHERE msn.IP = #{ip}
+        GROUP BY msn.ADDRESS
+    </select>
+
 </mapper>

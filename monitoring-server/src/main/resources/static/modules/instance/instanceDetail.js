@@ -284,12 +284,12 @@
                     // 最大内存量
                     var max = '无数据'
                     if (data.length !== 0) {
-                        if (data[data.length - 1].init != '未定义') {
+                        if (data[data.length - 1].init !== '未定义') {
                             init = data[data.length - 1].init + ' MB';
                         } else {
                             init = data[data.length - 1].init;
                         }
-                        if (data[data.length - 1].max != '未定义') {
+                        if (data[data.length - 1].max !== '未定义') {
                             max = data[data.length - 1].max + ' MB';
                         } else {
                             max = data[data.length - 1].max;

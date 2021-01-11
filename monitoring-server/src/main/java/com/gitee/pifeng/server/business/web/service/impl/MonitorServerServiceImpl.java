@@ -6,7 +6,6 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.google.common.collect.Lists;
 import com.gitee.pifeng.common.constant.MonitorTypeEnums;
 import com.gitee.pifeng.common.threadpool.ThreadPool;
 import com.gitee.pifeng.server.business.web.dao.*;
@@ -17,6 +16,7 @@ import com.gitee.pifeng.server.business.web.vo.LayUiAdminResultVo;
 import com.gitee.pifeng.server.business.web.vo.MonitorServerVo;
 import com.gitee.pifeng.server.constant.WebResponseConstants;
 import com.gitee.pifeng.server.inf.IServerMonitoringListener;
+import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -205,6 +205,21 @@ public class MonitorServerServiceImpl extends ServiceImpl<IMonitorServerDao, Mon
         lambdaQueryWrapper.eq(MonitorServer::getIp, ip);
         MonitorServer monitorServer = this.monitorServerDao.selectOne(lambdaQueryWrapper);
         return MonitorServerVo.builder().build().convertFor(monitorServer);
+    }
+
+    /**
+     * <p>
+     * 获取服务器网卡地址
+     * </p>
+     *
+     * @param ip 服务器IP
+     * @return 网卡地址列表
+     * @author 皮锋
+     * @custom.date 2021/1/11 9:54
+     */
+    @Override
+    public List<String> getNetcardAddress(String ip) {
+        return this.monitorServerNetcardDao.getNetcardAddress(ip);
     }
 
 }

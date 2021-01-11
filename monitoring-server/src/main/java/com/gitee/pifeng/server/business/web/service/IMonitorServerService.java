@@ -72,4 +72,16 @@ public interface IMonitorServerService extends IService<MonitorServer> {
      */
     MonitorServerVo getMonitorServerInfo(String ip);
 
+    /**
+     * <p>
+     * 获取服务器网卡地址
+     * </p>
+     *
+     * @param ip 服务器IP
+     * @return 网卡地址列表
+     * @author 皮锋
+     * @custom.date 2021/1/11 9:54
+     */
+    List<String> getNetcardAddress(String ip);
+
 }

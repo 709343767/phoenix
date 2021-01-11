@@ -7,13 +7,17 @@
         // 基于准备好的dom，初始化echarts实例
         var getServerCpuInfoChart = echarts.init(document.getElementById('get-server-cpu-info'), 'infographic');
         var getServerMemoryInfoChart = echarts.init(document.getElementById('get-server-memory-info'), 'infographic');
+        var getServerNetworkSpeedInfoChart = echarts.init(document.getElementById('get-server-network-speed-info'), 'infographic');
         // 浏览器窗口大小发生改变时
         window.addEventListener("resize", function () {
             getServerCpuInfoChart.resize();
             getServerMemoryInfoChart.resize();
+            getServerNetworkSpeedInfoChart.resize();
         });
         // 堆内存图表和非堆内存图表时间
         var time = 'hour';
+        // 服务器网卡地址
+        var chartAddress = $('#address option:selected').val() === undefined ? '' : $('#address option:selected').val();
         // 时间条件发生改变
         form.on('select(time)', function (data) {
             time = data.value;
@@ -21,8 +25,16 @@
             getServerCpuChartInfo(time);
             // 发送ajax请求，获取内存图表数据
             getServerMemoryChartInfo(time);
+            // 发送ajax请求，获取网速图表数据
+            getServerNetworkSpeedInfo(time, chartAddress);
             // 发送ajax请求，获取磁盘图表数据
             getServerDiskChartInfo();
+        });
+        // 服务器网卡地址改变
+        form.on('select(address)', function (data) {
+            chartAddress = data.value;
+            // 发送ajax请求，获取网速图表数据
+            getServerNetworkSpeedInfo(time, chartAddress);
         });
 
         // 发送ajax请求，获取CPU数据
@@ -796,10 +808,178 @@
             });
         }
 
+        // 发送ajax请求，获取网速图表数据
+        function getServerNetworkSpeedInfo(time, chartAddress) {
+            // 弹出loading框
+            var loadingIndex = layer.load(1, {
+                shade: [0.1, '#fff'] //0.1透明度的白色背景
+            });
+            admin.req({
+                type: 'get',
+                url: layui.setter.base + 'monitor-server-netcard/get-server-detail-page-server-network—speed-chart-info',
+                dataType: 'json',
+                contentType: 'application/json;charset=utf-8',
+                headers: {
+                    "X-CSRF-TOKEN": tokenValue
+                },
+                data: {
+                    ip: ip, // 应用实例ID
+                    address: chartAddress, // 服务器网卡地址
+                    time: time, // 时间
+                },
+                success: function (result) {
+                    var data = result.data;
+                    // 网卡名字
+                    var name = data.length !== 0 ? data[data.length - 1].name : "";
+                    // 时间
+                    var datetime = data.map(function (item) {
+                        return item.insertTime.replace(' ', '\n');
+                    });
+                    // 下载速度
+                    var downloadSpeed = data.map(function (item) {
+                        return item.downloadSpeed;
+                    });
+                    // 上传速度
+                    var uploadSpeed = data.map(function (item) {
+                        return item.uploadSpeed;
+                    });
+                    var option = {
+                        title: {
+                            text: name + ' 网络接收/发送',
+                            left: 'center',
+                            textStyle: {
+                                color: '#696969',
+                                fontSize: 14
+                            }
+                        },
+                        // 鼠标移到折线上展示数据
+                        tooltip: {
+                            trigger: 'axis'
+                        },
+                        legend: {
+                            data: ['接收', '发送'],
+                            orient: 'vertical',
+                            x: '80%' //图例位置，设置right发现图例和文字位置反了，设置一个数值就好了
+                        },
+                        /*dataZoom: [{
+                            type: 'inside'
+                        }],*/
+                        toolbox: {
+                            show: true,
+                            feature: {
+                                dataZoom: {
+                                    yAxisIndex: "none"
+                                },
+                                dataView: {
+                                    readOnly: false
+                                },
+                                magicType: {
+                                    type: ["line", "bar"]
+                                },
+                                restore: {},
+                                saveAsImage: {}
+                            },
+                            iconStyle: {
+                                borderColor: "rgba(105, 98, 98, 1)"
+                            },
+                            right: "2%",
+                            orient: "vertical",
+                            showTitle: false,
+                        },
+                        /*grid: {
+                            left: '150px',
+                            right: '150px'
+                        },*/
+                        xAxis: {
+                            type: 'category',
+                            // X轴从零刻度开始
+                            boundaryGap: false,
+                            data: datetime,
+                            axisLabel: {
+                                rotate: 0 //调整数值改变倾斜的幅度（范围-90到90）
+                            },
+                        },
+                        yAxis: {
+                            type: 'value',
+                            name: '速度',
+                            axisLabel: {
+                                formatter: '{value} KB/s'
+                            }
+                        },
+                        // 数据
+                        series: [{
+                            name: '接收',
+                            data: downloadSpeed,
+                            type: 'line',
+                            smooth: true,
+                            areaStyle: {
+                                type: 'default',
+                                // 渐变色实现
+                                color: new echarts.graphic.LinearGradient(0, 0, 0, 1,
+                                    // 三种由深及浅的颜色
+                                    [{
+                                        offset: 0,
+                                        color: '#9F79EE'
+                                    }, {
+                                        offset: 0.5,
+                                        color: '#AB82FF'
+                                    }, {
+                                        offset: 1,
+                                        color: '#FFFFFF'
+                                    }])
+                            },
+                            itemStyle: {
+                                normal: {
+                                    // 设置颜色
+                                    color: '#8968CD'
+                                }
+                            }
+                        }, {
+                            name: '发送',
+                            data: uploadSpeed,
+                            type: 'line',
+                            smooth: true,
+                            areaStyle: {
+                                type: 'default',
+                                // 渐变色实现
+                                color: new echarts.graphic.LinearGradient(0, 0, 0, 1,
+                                    // 三种由深及浅的颜色
+                                    [{
+                                        offset: 0,
+                                        color: '#B4EEB4'
+                                    }, {
+                                        offset: 0.5,
+                                        color: '#C1FFC1'
+                                    }, {
+                                        offset: 1,
+                                        color: '#FFFFFF'
+                                    }])
+                            },
+                            itemStyle: {
+                                normal: {
+                                    // 设置颜色
+                                    color: '#9BCD9B'
+                                }
+                            }
+                        }]
+                    };
+                    getServerNetworkSpeedInfoChart.setOption(option);
+                    // 关闭loading框
+                    layer.close(loadingIndex);
+                },
+                error: function () {
+                    // 关闭loading框
+                    layer.close(loadingIndex);
+                }
+            });
+        }
+
         // 发送ajax请求，获取CPU图表数据
         getServerCpuChartInfo(time);
         // 发送ajax请求，获取内存图表数据
         getServerMemoryChartInfo(time);
+        // 发送ajax请求，获取网速图表数据
+        getServerNetworkSpeedInfo(time, chartAddress);
         // 发送ajax请求，获取磁盘图表数据
         getServerDiskChartInfo();
         // 发送ajax请求，获取操作系统数据
@@ -814,6 +994,8 @@
             getServerCpuChartInfo(time);
             // 发送ajax请求，获取内存图表数据
             getServerMemoryChartInfo(time);
+            // 发送ajax请求，获取网速图表数据
+            getServerNetworkSpeedInfo(time, chartAddress);
             // 发送ajax请求，获取磁盘图表数据
             getServerDiskChartInfo();
             // 发送ajax请求，获取操作系统数据
