@@ -843,6 +843,20 @@
                     var uploadSpeed = data.map(function (item) {
                         return item.uploadSpeed;
                     });
+                    // 最新下载速度
+                    var lastDownloadSpeed = data.length !== 0 ? data[data.length - 1].downloadSpeed : 0;
+                    if (lastDownloadSpeed >= 1024) {
+                        lastDownloadSpeed = (lastDownloadSpeed / 1024).toFixed(2) + ' MB/s';
+                    } else {
+                        lastDownloadSpeed = lastDownloadSpeed + ' KB/s';
+                    }
+                    // 最新上传速度
+                    var lastUploadSpeed = data.length !== 0 ? data[data.length - 1].uploadSpeed : 0;
+                    if (lastUploadSpeed >= 1024) {
+                        lastUploadSpeed = (lastUploadSpeed / 1024).toFixed(2) + ' MB/s';
+                    } else {
+                        lastUploadSpeed = lastUploadSpeed + ' KB/s';
+                    }
                     var option = {
                         title: {
                             text: name + ' 网络接收/发送',
@@ -850,6 +864,10 @@
                             textStyle: {
                                 color: '#696969',
                                 fontSize: 14
+                            },
+                            subtext: '接收：' + lastDownloadSpeed + '，发送：' + lastUploadSpeed,
+                            subtextStyle: {
+                                color: '#BEBEBE'
                             }
                         },
                         // 鼠标移到折线上展示数据
