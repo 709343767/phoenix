@@ -390,14 +390,14 @@
                             iconStyle: {
                                 borderColor: "rgba(105, 98, 98, 1)"
                             },
-                            right: "1%",
+                            right: "2%",
                             orient: "vertical",
                             showTitle: false,
                         },
-                        /*grid: {
-                            left: '150px',
-                            right: '150px'
-                        },*/
+                        grid: {
+                            left: '5%',
+                            right: '10%'
+                        },
                         xAxis: {
                             type: 'category',
                             // X轴从零刻度开始
@@ -605,14 +605,14 @@
                             iconStyle: {
                                 borderColor: "rgba(105, 98, 98, 1)"
                             },
-                            right: "5%",
+                            right: "2%",
                             orient: "vertical",
                             showTitle: false,
                         },
-                        /*grid: {
-                            left: '150px',
-                            right: '150px'
-                        },*/
+                        grid: {
+                            left: '5%',
+                            right: '5%'
+                        },
                         xAxis: {
                             type: 'category',
                             // X轴从零刻度开始
@@ -859,7 +859,7 @@
                     }
                     var option = {
                         title: {
-                            text: name + ' 网络接收/发送',
+                            text: chartAddress + '（' + name + '） 网络接收/发送',
                             left: 'center',
                             textStyle: {
                                 color: '#696969',
@@ -920,10 +920,10 @@
                             orient: "vertical",
                             showTitle: false,
                         },
-                        /*grid: {
-                            left: '150px',
-                            right: '150px'
-                        },*/
+                        grid: {
+                            left: '5%',
+                            right: '5%'
+                        },
                         xAxis: {
                             type: 'category',
                             // X轴从零刻度开始
