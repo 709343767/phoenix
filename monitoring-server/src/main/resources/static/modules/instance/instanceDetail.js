@@ -352,10 +352,10 @@
                             orient: "vertical",
                             showTitle: false,
                         },
-                        /*grid: {
-                            left: '150px',
-                            right: '150px'
-                        },*/
+                        grid: {
+                            left: '5%',
+                            right: '5%'
+                        },
                         xAxis: {
                             type: 'category',
                             // X轴从零刻度开始
