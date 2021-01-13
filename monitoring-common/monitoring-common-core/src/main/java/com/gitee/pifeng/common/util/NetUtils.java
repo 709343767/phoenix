@@ -313,8 +313,13 @@ public class NetUtils extends InitSigar {
                 continue;
             }
             NetDomain.NetInterfaceDomain netInterfaceDomain = new NetDomain.NetInterfaceDomain();
+            // 网卡名字
+            String name = netInfo.getName();
+            if (name.contains("docker") || name.contains("lo")) {
+                continue;
+            }
             // 网卡配置
-            netInterfaceDomain.setName(netInfo.getName())
+            netInterfaceDomain.setName(name)
                     .setType(netInfo.getType())
                     .setAddress(netInfo.getAddress())
                     .setMask(netInfo.getNetmask())
