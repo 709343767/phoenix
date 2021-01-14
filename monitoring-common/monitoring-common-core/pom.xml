@@ -81,6 +81,21 @@
             <groupId>org.fusesource</groupId>
             <artifactId>sigar</artifactId>
         </dependency>
+        <!-- oshi依赖 -->
+        <dependency>
+            <groupId>com.github.oshi</groupId>
+            <artifactId>oshi-core</artifactId>
+        </dependency>
+        <!-- jna依赖 -->
+        <dependency>
+            <groupId>net.java.dev.jna</groupId>
+            <artifactId>jna</artifactId>
+        </dependency>
+        <!-- jna-platform依赖 -->
+        <dependency>
+            <groupId>net.java.dev.jna</groupId>
+            <artifactId>jna-platform</artifactId>
+        </dependency>
         <!-- Hutool工具包依赖 -->
         <dependency>
             <groupId>cn.hutool</groupId>
