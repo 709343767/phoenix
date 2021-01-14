@@ -2,7 +2,7 @@ package com.gitee.pifeng.server.business.web.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.gitee.pifeng.common.exception.NetException;
-import com.gitee.pifeng.common.util.NetUtils;
+import com.gitee.pifeng.common.util.server.NetUtils;
 import com.gitee.pifeng.server.business.web.entity.MonitorNet;
 import com.gitee.pifeng.server.business.web.service.IMonitorNetService;
 import com.gitee.pifeng.server.business.web.vo.LayUiAdminResultVo;

@@ -1,4 +1,4 @@
-package com.gitee.pifeng.common.util;
+package com.gitee.pifeng.common.util.server.sigar;
 
 import com.google.common.collect.Lists;
 import com.gitee.pifeng.common.domain.server.DiskDomain;

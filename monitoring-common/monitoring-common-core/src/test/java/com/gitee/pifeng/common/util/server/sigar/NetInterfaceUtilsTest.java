@@ -1,4 +1,4 @@
-package com.gitee.pifeng.common.util;
+package com.gitee.pifeng.common.util.server.sigar;
 
 import com.gitee.pifeng.common.domain.server.NetDomain;
 import lombok.extern.slf4j.Slf4j;
@@ -11,14 +11,14 @@ import static org.junit.Assert.assertNotNull;
 
 /**
  * <p>
- * 测试网络工具类
+ * 测试网络接口工具类
  * </p>
  *
  * @author 皮锋
- * @custom.date 2020/8/13 22:39
+ * @custom.date 2021/1/14 10:00
  */
 @Slf4j
-public class NetUtilsTest {
+public class NetInterfaceUtilsTest {
 
     /**
      * <p>
@@ -31,7 +31,7 @@ public class NetUtilsTest {
      */
     @Test
     public void testGetNetInfo() throws SigarException {
-        NetDomain netVo = NetUtils.getNetInfo();
+        NetDomain netVo = NetInterfaceUtils.getNetInfo();
         assertNotNull(netVo);
         int netNum = netVo.getNetNum();
         List<NetDomain.NetInterfaceDomain> netInterfaces = netVo.getNetList();

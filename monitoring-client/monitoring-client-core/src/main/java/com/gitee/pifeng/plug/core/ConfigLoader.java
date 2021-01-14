@@ -5,7 +5,7 @@ import com.gitee.pifeng.common.constant.LanguageTypeConstants;
 import com.gitee.pifeng.common.exception.ErrorConfigParamException;
 import com.gitee.pifeng.common.exception.NotFoundConfigFileException;
 import com.gitee.pifeng.common.exception.NotFoundConfigParamException;
-import com.gitee.pifeng.common.util.IpAddressUtils;
+import com.gitee.pifeng.common.util.server.IpAddressUtils;
 import com.gitee.pifeng.common.util.PropertiesUtils;
 import com.gitee.pifeng.plug.property.*;
 import lombok.extern.slf4j.Slf4j;

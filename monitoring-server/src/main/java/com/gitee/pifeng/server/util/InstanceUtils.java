@@ -2,7 +2,7 @@ package com.gitee.pifeng.server.util;
 
 import com.gitee.pifeng.common.exception.NetException;
 import com.gitee.pifeng.common.util.Md5Utils;
-import com.gitee.pifeng.common.util.NetUtils;
+import com.gitee.pifeng.common.util.server.NetUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.hyperic.sigar.SigarException;
 

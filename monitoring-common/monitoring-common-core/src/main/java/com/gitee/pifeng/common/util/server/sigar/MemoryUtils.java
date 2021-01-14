@@ -1,4 +1,4 @@
-package com.gitee.pifeng.common.util;
+package com.gitee.pifeng.common.util.server.sigar;
 
 import com.gitee.pifeng.common.domain.server.MemoryDomain;
 import com.gitee.pifeng.common.init.InitSigar;

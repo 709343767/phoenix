@@ -8,7 +8,7 @@ import com.gitee.pifeng.common.dto.AlarmPackage;
 import com.gitee.pifeng.common.exception.NetException;
 import com.gitee.pifeng.common.threadpool.ThreadPool;
 import com.gitee.pifeng.common.util.DateTimeUtils;
-import com.gitee.pifeng.common.util.NetUtils;
+import com.gitee.pifeng.common.util.server.NetUtils;
 import com.gitee.pifeng.server.business.server.core.MonitoringConfigPropertiesLoader;
 import com.gitee.pifeng.server.business.server.core.PackageConstructor;
 import com.gitee.pifeng.server.business.server.entity.MonitorNet;

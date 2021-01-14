@@ -1,8 +1,8 @@
-package com.gitee.pifeng.common.util;
+package com.gitee.pifeng.common.util.server.sigar;
 
-import com.google.common.collect.Lists;
 import com.gitee.pifeng.common.domain.server.CpuDomain;
 import com.gitee.pifeng.common.init.InitSigar;
+import com.google.common.collect.Lists;
 import org.hyperic.sigar.CpuInfo;
 import org.hyperic.sigar.CpuPerc;
 import org.hyperic.sigar.SigarException;
@@ -15,7 +15,7 @@ import java.util.List;
  * </p>
  *
  * @author 皮锋
- * @custom.date 2020/8/13 12:27
+ * @custom.date 2021/1/14 9:40
  */
 public class CpuUtils extends InitSigar {
 
@@ -64,19 +64,6 @@ public class CpuUtils extends InitSigar {
         }
         cpuDomain.setCpuNum(cpuInfoDomains.size()).setCpuList(cpuInfoDomains);
         return cpuDomain;
-    }
-
-    /**
-     * <p>
-     * 获取系统可用的处理器核心数
-     * </p>
-     *
-     * @return 系统可用的处理器核心数
-     * @author 皮锋
-     * @custom.date 2020/8/25 9:04
-     */
-    public static int getAvailableProcessors() {
-        return Runtime.getRuntime().availableProcessors();
     }
 
 }

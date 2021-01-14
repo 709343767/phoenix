@@ -1,7 +1,10 @@
-package com.gitee.pifeng.common.util;
+package com.gitee.pifeng.common.util.server;
 
 import com.gitee.pifeng.common.domain.Server;
-import com.gitee.pifeng.common.init.InitSigar;
+import com.gitee.pifeng.common.util.server.sigar.CpuUtils;
+import com.gitee.pifeng.common.util.server.sigar.DiskUtils;
+import com.gitee.pifeng.common.util.server.sigar.MemoryUtils;
+import com.gitee.pifeng.common.util.server.sigar.NetInterfaceUtils;
 import org.hyperic.sigar.SigarException;
 
 /**
@@ -12,7 +15,7 @@ import org.hyperic.sigar.SigarException;
  * @author 皮锋
  * @custom.date 2020年3月3日 上午11:55:09
  */
-public final class ServerUtils extends InitSigar {
+public final class ServerUtils {
 
     /**
      * <p>
@@ -38,7 +41,7 @@ public final class ServerUtils extends InitSigar {
         return Server.builder()
                 .cpuDomain(CpuUtils.getCpuInfo())
                 .memoryDomain(MemoryUtils.getMemoryInfo())
-                .netDomain(NetUtils.getNetInfo())
+                .netDomain(NetInterfaceUtils.getNetInfo())
                 .osDomain(OsUtils.getOsInfo())
                 .diskDomain(DiskUtils.getDiskInfo())
                 .build();

@@ -13,7 +13,6 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -26,16 +25,6 @@ import java.util.Properties;
  */
 @Slf4j
 public class InitSigar {
-
-    /**
-     * 系统属性
-     */
-    public static final Properties PROPS = System.getProperties();
-
-    /**
-     * 环境属性
-     */
-    public static final Map<String, String> ENVS = System.getenv();
 
     /**
      * 初始化Sigar，并创建Sigar对象
@@ -57,8 +46,10 @@ public class InitSigar {
             SigarLoader loader = new SigarLoader(Sigar.class);
             String lib = loader.getLibraryName();
             log.info("初始化Sigar库文件：{}", lib);
+            // 系统属性
+            Properties props = System.getProperties();
             // 当前文件夹路径
-            String currentDir = PROPS.getProperty("user.dir");
+            String currentDir = props.getProperty("user.dir");
             File tempDir = new File(currentDir + File.separator + "persistent-monitoring"
                     + File.separator + "sigar" + File.separator + "lib");
             // 判断文件夹是否存在

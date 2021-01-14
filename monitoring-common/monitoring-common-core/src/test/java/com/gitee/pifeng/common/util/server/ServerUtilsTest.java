@@ -1,4 +1,4 @@
-package com.gitee.pifeng.common.util;
+package com.gitee.pifeng.common.util.server;
 
 import com.gitee.pifeng.common.domain.Server;
 import lombok.extern.slf4j.Slf4j;

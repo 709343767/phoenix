@@ -1,7 +1,7 @@
 package com.gitee.pifeng.plug.scheduler;
 
 import com.gitee.pifeng.common.threadpool.ThreadShutdownHook;
-import com.gitee.pifeng.common.util.CpuUtils;
+import com.gitee.pifeng.common.util.server.ProcessorsUtils;
 import com.gitee.pifeng.plug.core.ConfigLoader;
 import com.gitee.pifeng.plug.thread.ServerThread;
 import lombok.extern.slf4j.Slf4j;
@@ -49,7 +49,7 @@ public class ServerTaskScheduler {
         if (serverInfoEnable) {
             final ScheduledExecutorService seService = new ScheduledThreadPoolExecutor(
                     // 线程数 = Ncpu /（1 - 阻塞系数），IO密集型阻塞系数相对较大
-                    (int) (CpuUtils.getAvailableProcessors() / (1 - 0.8)),
+                    (int) (ProcessorsUtils.getAvailableProcessors() / (1 - 0.8)),
                     new BasicThreadFactory.Builder()
                             // 设置线程名
                             .namingPattern("monitoring-server-pool-thread-%d")

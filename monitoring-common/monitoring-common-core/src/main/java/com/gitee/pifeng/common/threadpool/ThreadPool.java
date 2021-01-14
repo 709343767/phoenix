@@ -1,6 +1,6 @@
 package com.gitee.pifeng.common.threadpool;
 
-import com.gitee.pifeng.common.util.CpuUtils;
+import com.gitee.pifeng.common.util.server.ProcessorsUtils;
 import org.apache.commons.lang3.concurrent.BasicThreadFactory;
 
 import java.util.concurrent.*;
@@ -74,9 +74,9 @@ public class ThreadPool {
      */
     public static final ThreadPoolExecutor COMMON_CPU_INTENSIVE_THREAD_POOL = new ThreadPoolExecutor(
             // 线程数 = Ncpu /（1 - 阻塞系数），CPU密集型阻塞系数相对较小
-            (int) (CpuUtils.getAvailableProcessors() / (1 - 0.2)),
+            (int) (ProcessorsUtils.getAvailableProcessors() / (1 - 0.2)),
             // 线程数 = Ncpu /（1 - 阻塞系数），CPU密集型阻塞系数相对较小
-            (int) (CpuUtils.getAvailableProcessors() / (1 - 0.2)),
+            (int) (ProcessorsUtils.getAvailableProcessors() / (1 - 0.2)),
             1L,
             TimeUnit.SECONDS,
             new LinkedBlockingQueue<>(1024),
@@ -99,9 +99,9 @@ public class ThreadPool {
      */
     public static final ThreadPoolExecutor COMMON_IO_INTENSIVE_THREAD_POOL = new ThreadPoolExecutor(
             // 线程数 = Ncpu /（1 - 阻塞系数），IO密集型阻塞系数相对较大
-            (int) (CpuUtils.getAvailableProcessors() / (1 - 0.8)),
+            (int) (ProcessorsUtils.getAvailableProcessors() / (1 - 0.8)),
             // 线程数 = Ncpu /（1 - 阻塞系数），IO密集型阻塞系数相对较大
-            (int) (CpuUtils.getAvailableProcessors() / (1 - 0.8)),
+            (int) (ProcessorsUtils.getAvailableProcessors() / (1 - 0.8)),
             1L,
             TimeUnit.SECONDS,
             new LinkedBlockingQueue<>(1024),
@@ -118,7 +118,7 @@ public class ThreadPool {
      */
     public static final ScheduledExecutorService COMMON_CPU_INTENSIVE_SCHEDULED_THREAD_POOL = new ScheduledThreadPoolExecutor(
             // 线程数 = Ncpu /（1 - 阻塞系数），CPU密集型阻塞系数相对较小
-            (int) (CpuUtils.getAvailableProcessors() / (1 - 0.2)),
+            (int) (ProcessorsUtils.getAvailableProcessors() / (1 - 0.2)),
             new BasicThreadFactory.Builder()
                     // 设置线程名
                     .namingPattern("monitoring-common-cpu-intensive-scheduled-%d")
@@ -131,7 +131,7 @@ public class ThreadPool {
      */
     public static final ScheduledExecutorService COMMON_IO_INTENSIVE_SCHEDULED_THREAD_POOL = new ScheduledThreadPoolExecutor(
             // 线程数 = Ncpu /（1 - 阻塞系数），IO密集型阻塞系数相对较大
-            (int) (CpuUtils.getAvailableProcessors() / (1 - 0.8)),
+            (int) (ProcessorsUtils.getAvailableProcessors() / (1 - 0.8)),
             new BasicThreadFactory.Builder()
                     // 设置线程名
                     .namingPattern("monitoring-common-io-intensive-scheduled-%d")

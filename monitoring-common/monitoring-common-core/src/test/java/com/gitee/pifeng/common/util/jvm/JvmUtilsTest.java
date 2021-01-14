@@ -1,4 +1,4 @@
-package com.gitee.pifeng.common.util;
+package com.gitee.pifeng.common.util.jvm;
 
 import com.gitee.pifeng.common.domain.Jvm;
 import com.gitee.pifeng.common.domain.jvm.*;

@@ -1,10 +1,11 @@
-package com.gitee.pifeng.common.util;
+package com.gitee.pifeng.common.util.server;
 
 import com.gitee.pifeng.common.domain.server.OsDomain;
-import com.gitee.pifeng.common.init.InitSigar;
 
 import java.net.InetAddress;
 import java.util.Calendar;
+import java.util.Map;
+import java.util.Properties;
 import java.util.TimeZone;
 
 /**
@@ -15,7 +16,28 @@ import java.util.TimeZone;
  * @author 皮锋
  * @custom.date 2020年4月13日 下午5:05:53
  */
-public final class OsUtils extends InitSigar {
+public final class OsUtils {
+
+    /**
+     * 系统属性
+     */
+    private static final Properties PROPS = System.getProperties();
+
+    /**
+     * 环境属性
+     */
+    private static final Map<String, String> ENVS = System.getenv();
+
+    /**
+     * <p>
+     * 私有化构造方法
+     * </p>
+     *
+     * @author 皮锋
+     * @custom.date 2021/1/14 10:09
+     */
+    private OsUtils() {
+    }
 
     /**
      * <p>

@@ -1,4 +1,4 @@
-package com.gitee.pifeng.common.util;
+package com.gitee.pifeng.common.util.server;
 
 import org.apache.commons.lang3.StringUtils;
 
