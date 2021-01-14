@@ -20,7 +20,7 @@ import java.util.List;
 @AllArgsConstructor
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public class SensorDomain extends AbstractSuperBean {
+public class SensorsDomain extends AbstractSuperBean {
 
     /**
      * CPU温度（以摄氏度为单位）（如果可用）

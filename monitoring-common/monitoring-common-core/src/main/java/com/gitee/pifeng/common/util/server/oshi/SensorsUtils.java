@@ -1,6 +1,6 @@
 package com.gitee.pifeng.common.util.server.oshi;
 
-import com.gitee.pifeng.common.domain.server.SensorDomain;
+import com.gitee.pifeng.common.domain.server.SensorsDomain;
 import com.google.common.collect.Lists;
 import oshi.SystemInfo;
 import oshi.hardware.HardwareAbstractionLayer;
@@ -34,23 +34,23 @@ public class SensorsUtils {
      * 获取传感器信息
      * </p>
      *
-     * @return {@link SensorDomain}
+     * @return {@link SensorsDomain}
      * @author 皮锋
      * @custom.date 2021/1/14 17:18
      */
-    public static SensorDomain getSensorDomain() {
+    public static SensorsDomain getSensorsInfo() {
         SystemInfo systemInfo = new SystemInfo();
         HardwareAbstractionLayer hardwareAbstractionLayer = systemInfo.getHardware();
         Sensors sensors = hardwareAbstractionLayer.getSensors();
         double cpuTemperature = sensors.getCpuTemperature();
         double cpuVoltage = sensors.getCpuVoltage();
         int[] fanSpeeds = sensors.getFanSpeeds();
-        SensorDomain sensorDomain = new SensorDomain();
+        SensorsDomain sensorDomain = new SensorsDomain();
         sensorDomain.setCpuTemperature(cpuTemperature != 0 ? String.valueOf(cpuTemperature) : "未知");
         sensorDomain.setCpuVoltage(cpuVoltage != 0 ? String.valueOf(cpuVoltage) : "未知");
-        List<SensorDomain.FanSpeedDomain> fanSpeedDomains = Lists.newArrayList();
+        List<SensorsDomain.FanSpeedDomain> fanSpeedDomains = Lists.newArrayList();
         for (int fanSpeed : fanSpeeds) {
-            SensorDomain.FanSpeedDomain fanSpeedDomain = new SensorDomain.FanSpeedDomain();
+            SensorsDomain.FanSpeedDomain fanSpeedDomain = new SensorsDomain.FanSpeedDomain();
             fanSpeedDomain.setFanSpeed(fanSpeed != 0 ? String.valueOf(fanSpeed) : "未知");
             fanSpeedDomains.add(fanSpeedDomain);
             sensorDomain.setFanSpeedDomainList(fanSpeedDomains);

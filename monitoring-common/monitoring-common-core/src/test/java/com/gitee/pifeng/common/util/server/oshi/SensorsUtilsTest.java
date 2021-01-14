@@ -1,6 +1,6 @@
 package com.gitee.pifeng.common.util.server.oshi;
 
-import com.gitee.pifeng.common.domain.server.SensorDomain;
+import com.gitee.pifeng.common.domain.server.SensorsDomain;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 
@@ -26,10 +26,10 @@ public class SensorsUtilsTest {
      * @custom.date 2021/1/14 17:29
      */
     @Test
-    public void testGetSensorDomain() {
-        SensorDomain sensorDomain = SensorsUtils.getSensorDomain();
-        assertNotNull(sensorDomain);
-        log.info(sensorDomain.toJsonString());
+    public void testGetSensorsInfo() {
+        SensorsDomain sensorsDomain = SensorsUtils.getSensorsInfo();
+        assertNotNull(sensorsDomain);
+        log.info(sensorsDomain.toJsonString());
     }
 
 }
