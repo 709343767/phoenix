@@ -2,6 +2,7 @@ package com.gitee.pifeng.common.util.server.oshi;
 
 import cn.hutool.core.util.NumberUtil;
 import com.gitee.pifeng.common.domain.server.PowerSourcesDomain;
+import com.gitee.pifeng.common.util.DateTimeUtils;
 import com.google.common.collect.Lists;
 import oshi.SystemInfo;
 import oshi.hardware.HardwareAbstractionLayer;
@@ -47,7 +48,7 @@ public class PowerSourceUtils {
         List<PowerSourcesDomain.PowerSourceDomain> powerSourceDomains = Lists.newArrayList();
         for (PowerSource powerSource : powerSources) {
             PowerSourcesDomain.PowerSourceDomain powerSourceDomain = PowerSourcesDomain.PowerSourceDomain.builder()
-                    .amperage(powerSource.getAmperage())
+                    .amperage(NumberUtil.round(powerSource.getAmperage(), 2).doubleValue())
                     .chemistry(powerSource.getChemistry())
                     .currentCapacity(powerSource.getCurrentCapacity())
                     .cycleCount(powerSource.getCycleCount())
@@ -56,17 +57,17 @@ public class PowerSourceUtils {
                     .isCharging(powerSource.isCharging())
                     .isDischarging(powerSource.isDischarging())
                     .isPowerOnLine(powerSource.isPowerOnLine())
-                    .manufactureDate(powerSource.getManufactureDate())
+                    .manufactureDate(powerSource.getManufactureDate() != null ? DateTimeUtils.localDateToString(powerSource.getManufactureDate()) : "未知")
                     .manufacturer(powerSource.getManufacturer())
                     .maxCapacity(powerSource.getMaxCapacity())
                     .name(powerSource.getName())
                     .powerUsageRate(powerSource.getPowerUsageRate())
                     .remainingCapacityPercent(NumberUtil.round(powerSource.getRemainingCapacityPercent(), 4).doubleValue())
                     .serialNumber(powerSource.getSerialNumber())
-                    .temperature(powerSource.getTemperature())
+                    .temperature(powerSource.getTemperature() != 0 ? String.valueOf(powerSource.getTemperature()) : "未知")
                     .timeRemainingEstimated(powerSource.getTimeRemainingEstimated())
                     .timeRemainingInstant(powerSource.getTimeRemainingInstant())
-                    .voltage(powerSource.getVoltage())
+                    .voltage(NumberUtil.round(powerSource.getVoltage(), 2).doubleValue())
                     .build();
             powerSourceDomains.add(powerSourceDomain);
         }

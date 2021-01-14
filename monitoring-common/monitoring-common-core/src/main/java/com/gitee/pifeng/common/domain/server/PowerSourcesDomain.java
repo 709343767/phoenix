@@ -4,7 +4,6 @@ import com.gitee.pifeng.common.abs.AbstractSuperBean;
 import lombok.*;
 import lombok.experimental.Accessors;
 
-import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -127,7 +126,7 @@ public class PowerSourcesDomain extends AbstractSuperBean {
         /**
          * 电池的生产日期
          */
-        private LocalDate manufactureDate;
+        private String manufactureDate;
 
         /**
          * 电池制造商的名称
@@ -142,7 +141,7 @@ public class PowerSourcesDomain extends AbstractSuperBean {
         /**
          * 电池温度，以摄氏度为单位
          */
-        private double temperature;
+        private String temperature;
     }
 
 }

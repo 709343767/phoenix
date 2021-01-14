@@ -68,6 +68,51 @@ public class DateTimeUtils {
 
     /**
      * <p>
+     * 将日期转换为字符串格式
+     * </p>
+     *
+     * @param localDate {@link LocalDate}
+     * @return 日期字符串
+     * @author 皮锋
+     * @custom.date 2021/1/14 22:36
+     */
+    public static String localDateToString(LocalDate localDate) {
+        return localDateToString(localDate, DateTimeStylesEnums.YYYY_MM_DD);
+    }
+
+    /**
+     * <p>
+     * 将日期转换为字符串格式
+     * </p>
+     *
+     * @param localDate       {@link LocalDate}
+     * @param dateStylesEnums 日期样式-{@link DateTimeStylesEnums}
+     * @return 日期字符串
+     * @author 皮锋
+     * @custom.date 2021/1/14 22:36
+     */
+    public static String localDateToString(LocalDate localDate, DateTimeStylesEnums dateStylesEnums) {
+        return localDateToString(localDate, dateStylesEnums.getValue());
+    }
+
+    /**
+     * <p>
+     * 将日期转换为字符串格式
+     * </p>
+     *
+     * @param localDate {@link LocalDate}
+     * @param parttern  日期字符串格式
+     * @return 日期字符串
+     * @author 皮锋
+     * @custom.date 2021/1/14 22:36
+     */
+    public static String localDateToString(LocalDate localDate, String parttern) {
+        DateTimeFormatter fmt = DateTimeFormatter.ofPattern(parttern);
+        return localDate.format(fmt);
+    }
+
+    /**
+     * <p>
      * {@link Date}转{@link LocalDateTime}
      * </p>
      *
