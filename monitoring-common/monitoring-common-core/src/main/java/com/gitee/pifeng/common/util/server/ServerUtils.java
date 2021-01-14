@@ -1,6 +1,8 @@
 package com.gitee.pifeng.common.util.server;
 
 import com.gitee.pifeng.common.domain.Server;
+import com.gitee.pifeng.common.util.server.oshi.PowerSourceUtils;
+import com.gitee.pifeng.common.util.server.oshi.SensorsUtils;
 import com.gitee.pifeng.common.util.server.sigar.CpuUtils;
 import com.gitee.pifeng.common.util.server.sigar.DiskUtils;
 import com.gitee.pifeng.common.util.server.sigar.MemoryUtils;
@@ -44,6 +46,8 @@ public final class ServerUtils {
                 .netDomain(NetInterfaceUtils.getNetInfo())
                 .osDomain(OsUtils.getOsInfo())
                 .diskDomain(DiskUtils.getDiskInfo())
+                .powerSourcesDomain(PowerSourceUtils.getPowerSourcesInfo())
+                .sensorsDomain(SensorsUtils.getSensorsInfo())
                 .build();
     }
 

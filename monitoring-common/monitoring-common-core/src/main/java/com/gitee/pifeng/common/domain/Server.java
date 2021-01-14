@@ -47,4 +47,14 @@ public final class Server extends AbstractSuperBean {
      */
     private DiskDomain diskDomain;
 
+    /**
+     * 电池信息
+     */
+    private PowerSourcesDomain powerSourcesDomain;
+
+    /**
+     * 传感器信息
+     */
+    private SensorsDomain sensorsDomain;
+
 }
