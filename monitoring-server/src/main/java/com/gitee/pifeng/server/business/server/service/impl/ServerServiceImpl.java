@@ -10,6 +10,7 @@ import com.gitee.pifeng.common.dto.ServerPackage;
 import com.gitee.pifeng.server.business.server.dao.*;
 import com.gitee.pifeng.server.business.server.entity.*;
 import com.gitee.pifeng.server.business.server.service.IServerService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,6 +28,7 @@ import java.util.stream.Collectors;
  * @author 皮锋
  * @custom.date 2020/3/23 15:23
  */
+@Slf4j
 @Service
 public class ServerServiceImpl implements IServerService {
 
@@ -85,6 +87,8 @@ public class ServerServiceImpl implements IServerService {
     @Transactional(rollbackFor = Throwable.class)
     @Override
     public Result dealServerPackage(ServerPackage serverPackage) {
+        // 打印服务器信息包内容
+        log.info(serverPackage.toJsonString());
         // 把服务器信息添加或更新到数据库
         this.operateServer(serverPackage);
         // 把服务器内存信息添加到数据库
