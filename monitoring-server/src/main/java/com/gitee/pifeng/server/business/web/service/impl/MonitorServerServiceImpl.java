@@ -73,6 +73,18 @@ public class MonitorServerServiceImpl extends ServiceImpl<IMonitorServerDao, Mon
     private IMonitorServerNetcardDao monitorServerNetcardDao;
 
     /**
+     * 服务器电池数据访问对象
+     */
+    @Autowired
+    private IMonitorServerPowerSourcesDao monitorServerPowerSourcesDao;
+
+    /**
+     * 服务器传感器数据访问对象
+     */
+    @Autowired
+    private IMonitorServerSensorsDao monitorServerSensorsDao;
+
+    /**
      * <p>
      * 获取home页的服务器信息
      * </p>
@@ -177,6 +189,14 @@ public class MonitorServerServiceImpl extends ServiceImpl<IMonitorServerDao, Mon
         LambdaUpdateWrapper<MonitorServerNetcard> serverNetcardLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
         serverNetcardLambdaUpdateWrapper.in(MonitorServerNetcard::getIp, ips);
         this.monitorServerNetcardDao.delete(serverNetcardLambdaUpdateWrapper);
+        // 服务器电池表
+        LambdaUpdateWrapper<MonitorServerPowerSources> serverPowerSourcesLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+        serverPowerSourcesLambdaUpdateWrapper.in(MonitorServerPowerSources::getIp, ips);
+        this.monitorServerPowerSourcesDao.delete(serverPowerSourcesLambdaUpdateWrapper);
+        // 服务器传感器表
+        LambdaUpdateWrapper<MonitorServerSensors> serverSensorsLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+        serverSensorsLambdaUpdateWrapper.in(MonitorServerSensors::getIp, ips);
+        this.monitorServerSensorsDao.delete(serverSensorsLambdaUpdateWrapper);
         // 服务器表
         LambdaUpdateWrapper<MonitorServer> serverLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
         serverLambdaUpdateWrapper.in(MonitorServer::getIp, ips);

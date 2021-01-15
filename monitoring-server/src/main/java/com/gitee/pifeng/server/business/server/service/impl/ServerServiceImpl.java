@@ -3,17 +3,21 @@ package com.gitee.pifeng.server.business.server.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.gitee.pifeng.common.constant.ResultMsgConstants;
+import com.gitee.pifeng.common.constant.ZeroOrOneConstants;
 import com.gitee.pifeng.common.domain.Result;
 import com.gitee.pifeng.common.domain.server.*;
 import com.gitee.pifeng.common.dto.ServerPackage;
 import com.gitee.pifeng.server.business.server.dao.*;
 import com.gitee.pifeng.server.business.server.entity.*;
 import com.gitee.pifeng.server.business.server.service.IServerService;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -57,6 +61,18 @@ public class ServerServiceImpl implements IServerService {
     private IMonitorServerDiskDao monitorServerDiskDao;
 
     /**
+     * 服务器电池数据访问对象
+     */
+    @Autowired
+    private IMonitorServerPowerSourcesDao monitorServerPowerSourcesDao;
+
+    /**
+     * 服务器传感器数据访问对象
+     */
+    @Autowired
+    private IMonitorServerSensorsDao monitorServerSensorsDao;
+
+    /**
      * <p>
      * 处理服务器信息包
      * </p>
@@ -79,8 +95,114 @@ public class ServerServiceImpl implements IServerService {
         this.operateServerNetcard(serverPackage);
         // 把服务器磁盘信息添加到数据库
         this.operateServerDisk(serverPackage);
+        // 把服务器电池信息添加或更新到数据库
+        this.operateServerPowerSources(serverPackage);
+        // 把服务器传感器信息添加或更新到数据库
+        this.operateServerSensors(serverPackage);
         // 返回结果
         return Result.builder().isSuccess(true).msg(ResultMsgConstants.SUCCESS).build();
+    }
+
+    /**
+     * <p>
+     * 把服务器传感器信息添加或更新到数据库
+     * </p>
+     *
+     * @param serverPackage 服务器信息包
+     * @author 皮锋
+     * @custom.date 2021/1/15 20:43
+     */
+    private void operateServerSensors(ServerPackage serverPackage) {
+        // IP地址
+        String ip = serverPackage.getIp();
+        SensorsDomain sensorsDomain = serverPackage.getServer().getSensorsDomain();
+        // 查询数据库中是否有此IP的传感器
+        LambdaQueryWrapper<MonitorServerSensors> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(MonitorServerSensors::getIp, ip);
+        MonitorServerSensors monitorServerSensorsDb = this.monitorServerSensorsDao.selectOne(lambdaQueryWrapper);
+        // 添加或更新到数据库
+        MonitorServerSensors monitorServerSensors = new MonitorServerSensors();
+        monitorServerSensors.setIp(ip);
+        monitorServerSensors.setCpuTemperature(sensorsDomain.getCpuTemperature());
+        monitorServerSensors.setCpuVoltage(sensorsDomain.getCpuVoltage());
+        List<SensorsDomain.FanSpeedDomain> fanSpeedDomainList = sensorsDomain.getFanSpeedDomainList();
+        if (CollectionUtils.isNotEmpty(fanSpeedDomainList)) {
+            monitorServerSensors.setFanSpeed(sensorsDomain.getFanSpeedDomainList().stream().map(String::valueOf).collect(Collectors.joining(",")));
+        }
+        // 没有
+        if (monitorServerSensorsDb == null) {
+            monitorServerSensors.setInsertTime(new Date());
+            this.monitorServerSensorsDao.insert(monitorServerSensors);
+        }
+        // 有
+        else {
+            monitorServerSensors.setUpdateTime(new Date());
+            LambdaUpdateWrapper<MonitorServerSensors> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+            lambdaQueryWrapper.eq(MonitorServerSensors::getIp, ip);
+            this.monitorServerSensorsDao.update(monitorServerSensors, lambdaUpdateWrapper);
+        }
+    }
+
+    /**
+     * <p>
+     * 把服务器电池信息添加或更新到数据库
+     * </p>
+     *
+     * @param serverPackage 服务器信息包
+     * @author 皮锋
+     * @custom.date 2021/1/15 20:42
+     */
+    private void operateServerPowerSources(ServerPackage serverPackage) {
+        // IP地址
+        String ip = serverPackage.getIp();
+        // 电池信息
+        PowerSourcesDomain powerSourcesDomain = serverPackage.getServer().getPowerSourcesDomain();
+        List<PowerSourcesDomain.PowerSourceDomain> powerSourceDomains = powerSourcesDomain.getPowerSourceDomainList();
+        for (int i = 0; i < powerSourceDomains.size(); i++) {
+            PowerSourcesDomain.PowerSourceDomain powerSourceDomain = powerSourceDomains.get(i);
+            // 查询数据库中是否有此IP的电池信息
+            LambdaQueryWrapper<MonitorServerPowerSources> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+            lambdaQueryWrapper.eq(MonitorServerPowerSources::getIp, ip);
+            lambdaQueryWrapper.eq(MonitorServerPowerSources::getPowerSourcesNo, i + 1);
+            MonitorServerPowerSources monitorServerPowerSourcesDb = this.monitorServerPowerSourcesDao.selectOne(lambdaQueryWrapper);
+            // 更新或添加到数据库
+            MonitorServerPowerSources monitorServerPowerSources = new MonitorServerPowerSources();
+            monitorServerPowerSources.setIp(ip);
+            monitorServerPowerSources.setPowerSourcesNo(i + 1);
+            monitorServerPowerSources.setName(powerSourceDomain.getName());
+            monitorServerPowerSources.setDeviceName(powerSourceDomain.getDeviceName());
+            monitorServerPowerSources.setRemainingCapacityPercent(powerSourceDomain.getRemainingCapacityPercent());
+            monitorServerPowerSources.setTimeRemainingEstimated(powerSourceDomain.getTimeRemainingEstimated());
+            monitorServerPowerSources.setTimeRemainingInstant(powerSourceDomain.getTimeRemainingInstant());
+            monitorServerPowerSources.setPowerUsageRate(powerSourceDomain.getPowerUsageRate());
+            monitorServerPowerSources.setVoltage(powerSourceDomain.getVoltage());
+            monitorServerPowerSources.setAmperage(powerSourceDomain.getAmperage());
+            monitorServerPowerSources.setIsPowerOnLine(powerSourceDomain.isPowerOnLine() ? ZeroOrOneConstants.ONE : ZeroOrOneConstants.ZERO);
+            monitorServerPowerSources.setIsCharging(powerSourceDomain.isCharging() ? ZeroOrOneConstants.ONE : ZeroOrOneConstants.ZERO);
+            monitorServerPowerSources.setIsDischarging(powerSourceDomain.isDischarging() ? ZeroOrOneConstants.ONE : ZeroOrOneConstants.ZERO);
+            monitorServerPowerSources.setCurrentCapacity(powerSourceDomain.getCurrentCapacity());
+            monitorServerPowerSources.setMaxCapacity(powerSourceDomain.getMaxCapacity());
+            monitorServerPowerSources.setDesignCapacity(powerSourceDomain.getDesignCapacity());
+            monitorServerPowerSources.setCycleCount(powerSourceDomain.getCycleCount());
+            monitorServerPowerSources.setChemistry(powerSourceDomain.getChemistry());
+            monitorServerPowerSources.setManufactureDate(powerSourceDomain.getManufactureDate());
+            monitorServerPowerSources.setManufacturer(powerSourceDomain.getManufacturer());
+            monitorServerPowerSources.setSerialNumber(powerSourceDomain.getSerialNumber());
+            monitorServerPowerSources.setTemperature(powerSourceDomain.getTemperature());
+            // 没有
+            if (monitorServerPowerSourcesDb == null) {
+                monitorServerPowerSources.setInsertTime(new Date());
+                this.monitorServerPowerSourcesDao.insert(monitorServerPowerSources);
+            }
+            // 有
+            else {
+                monitorServerPowerSources.setUpdateTime(new Date());
+                LambdaUpdateWrapper<MonitorServerPowerSources> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+                lambdaUpdateWrapper.eq(MonitorServerPowerSources::getIp, ip);
+                lambdaUpdateWrapper.eq(MonitorServerPowerSources::getPowerSourcesNo, i + 1);
+                this.monitorServerPowerSourcesDao.update(monitorServerPowerSources, lambdaUpdateWrapper);
+            }
+        }
     }
 
     /**
