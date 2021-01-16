@@ -60,8 +60,8 @@ public class PackageConstructor extends AbstractPackageConstructor {
         Charset charset = alarm.getCharset();
         // 设置了字符集
         if (null != charset) {
-            alarm.setTitle(new String(alarm.getTitle().getBytes(StandardCharsets.UTF_8), StandardCharsets.UTF_8));
-            alarm.setMsg(new String(alarm.getMsg().getBytes(StandardCharsets.UTF_8), StandardCharsets.UTF_8));
+            alarm.setTitle(new String(alarm.getTitle().getBytes(charset), StandardCharsets.UTF_8));
+            alarm.setMsg(new String(alarm.getMsg().getBytes(charset), StandardCharsets.UTF_8));
             alarm.setCharset(StandardCharsets.UTF_8);
         }
         alarmPackage.setAlarm(alarm);

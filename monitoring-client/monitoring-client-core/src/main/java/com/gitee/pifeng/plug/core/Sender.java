@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.gitee.pifeng.common.dto.CiphertextPackage;
 import com.gitee.pifeng.common.util.DesEncryptUtils;
 import com.gitee.pifeng.plug.util.EnumHttpUtils;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 
@@ -15,6 +16,7 @@ import java.io.IOException;
  * @author 皮锋
  * @custom.date 2020年3月6日 上午10:20:09
  */
+@Slf4j
 public class Sender {
     /**
      * <p>
@@ -41,6 +43,8 @@ public class Sender {
      * @custom.date 2020年3月6日 上午10:21:25
      */
     public static String send(final String url, final String json) throws IOException {
+        // 打印发送的数据包
+        log.info("发送数据包：{}", json);
         // 加密请求数据
         String encrypt = DesEncryptUtils.encrypt(json);
         CiphertextPackage requestCiphertextPackage = new CiphertextPackage(encrypt);
