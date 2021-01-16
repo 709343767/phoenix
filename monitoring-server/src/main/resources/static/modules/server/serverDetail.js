@@ -37,6 +37,95 @@
             getServerNetworkSpeedInfo(time, chartAddress);
         });
 
+        // 发送ajax请求，获取电池数据
+        function getServerPowerSourcesInfo() {
+            admin.req({
+                type: 'get',
+                url: layui.setter.base + 'monitor-server-power-sources/get-server-detail-page-server-power-sources-info',
+                dataType: 'json',
+                contentType: 'application/json;charset=utf-8',
+                headers: {
+                    "X-CSRF-TOKEN": tokenValue
+                },
+                data: {
+                    ip: ip // 应用实例ID
+                },
+                success: function (result) {
+                    var data = result.data;
+                    debugger;
+                    var html = '';
+                    for (var i = 0; i < data.length; i++) {
+                        var obj = data[i];
+                        var name = obj.name;
+                        var deviceName = obj.deviceName;
+                        var amperage = obj.amperage.startsWith('-') ? '放电 ' + obj.amperage.replace('-', '') : '充电 ' + obj.amperage;
+                        var chemistry = obj.chemistry;
+                        var currentCapacity = obj.currentCapacity;
+                        var designCapacity = obj.designCapacity;
+                        var manufactureDate = obj.manufactureDate;
+                        var manufacturer = obj.manufacturer;
+                        var maxCapacity = obj.maxCapacity;
+                        var powerUsageRate = obj.powerUsageRate.startsWith('-') ? '放电 ' + obj.powerUsageRate.replace('-', '') : '充电 ' + obj.powerUsageRate;
+                        var remainingCapacityPercent = (obj.remainingCapacityPercent * 100).toFixed(2) + '%';
+                        var serialNumber = obj.serialNumber;
+                        var temperature = obj.temperature;
+                        var timeRemainingEstimated = obj.timeRemainingEstimated;
+                        var timeRemainingInstant = obj.timeRemainingInstant;
+                        var voltage = obj.voltage;
+                        html += '<div class="layui-col-md4">' +
+                            '       <label class="label-font-weight">电池名称：</label>' + name + '（' + deviceName + '）' +
+                            '    </div>' +
+                            '    <div class="layui-col-md4">' +
+                            '       <label class="label-font-weight">序列号：</label>' + serialNumber +
+                            '    </div>' +
+                            '    <div class="layui-col-md4">' +
+                            '       <label class="label-font-weight">电池类型：</label>' + chemistry +
+                            '    </div>' +
+                            '    <div class="layui-col-md4">' +
+                            '       <label class="label-font-weight">制造商：</label>' + manufacturer +
+                            '    </div>' +
+                            '    <div class="layui-col-md4">' +
+                            '       <label class="label-font-weight">生产日期：</label>' + manufactureDate +
+                            '    </div>' +
+                            '    <div class="layui-col-md4">' +
+                            '       <label class="label-font-weight">原始容量：</label>' + designCapacity +
+                            '    </div>' +
+                            '    <div class="layui-col-md4">' +
+                            '       <label class="label-font-weight">最大容量：</label>' + maxCapacity +
+                            '    </div>' +
+                            '    <div class="layui-col-md4">' +
+                            '       <label class="label-font-weight">剩余容量：</label>' + currentCapacity +
+                            '    </div>' +
+                            '    <div class="layui-col-md4">' +
+                            '       <label class="label-font-weight">剩余百分比：</label>' + remainingCapacityPercent +
+                            '    </div>' +
+                            '    <div class="layui-col-md4">' +
+                            '       <label class="label-font-weight">剩余使用时间（系统报告）：</label>' + timeRemainingEstimated +
+                            '    </div>' +
+                            '    <div class="layui-col-md4">' +
+                            '       <label class="label-font-weight">剩余使用时间（电池报告）：</label>' + timeRemainingInstant +
+                            '    </div>' +
+                            '    <div class="layui-col-md4">' +
+                            '       <label class="label-font-weight">电压：</label>' + voltage +
+                            '    </div>' +
+                            '    <div class="layui-col-md4">' +
+                            '       <label class="label-font-weight">电流：</label>' + amperage +
+                            '    </div>' +
+                            '    <div class="layui-col-md4">' +
+                            '       <label class="label-font-weight">使用功率：</label>' + powerUsageRate +
+                            '    </div>' +
+                            '    <div class="layui-col-md4">' +
+                            '       <label class="label-font-weight">温度：</label>' + temperature +
+                            '    </div>';
+                        if (i !== data.length - 1) {
+                            html += '<hr class="layui-bg-gray hr-padding">';
+                        }
+                    }
+                    $('#powerSources').empty().append(html);
+                }
+            });
+        }
+
         // 发送ajax请求，获取CPU数据
         function getServerCpuInfo() {
             admin.req({
@@ -91,7 +180,7 @@
                             '    <div class="layui-col-md4">' +
                             '       <label class="label-font-weight">错误率：</label>' + (cpuNice * 100).toFixed(2) + '%' +
                             '    </div>';
-                        if (i != data.length - 1) {
+                        if (i !== data.length - 1) {
                             html += '<hr class="layui-bg-gray hr-padding">';
                         }
                     }
@@ -186,7 +275,7 @@
                             '    <div class="layui-col-md4">' +
                             '       <label class="label-font-weight">发送速度：</label>' + uploadSpeed +
                             '    </div>';
-                        if (i != data.length - 1) {
+                        if (i !== data.length - 1) {
                             html += '<hr class="layui-bg-gray hr-padding">';
                         }
                     }
@@ -1022,6 +1111,8 @@
         getServerNetcardInfo();
         // 发送ajax请求，获取CPU数据
         getServerCpuInfo();
+        // 发送ajax请求，获取电池数据
+        getServerPowerSourcesInfo();
         // 每30秒刷新一次
         window.setInterval(function () {
             // 发送ajax请求，获取CPU图表数据
@@ -1038,6 +1129,8 @@
             getServerNetcardInfo();
             // 发送ajax请求，获取CPU数据
             getServerCpuInfo();
+            // 发送ajax请求，获取电池数据
+            getServerPowerSourcesInfo();
         }, 1000 * 30);
     });
     e('serverDetail', {});

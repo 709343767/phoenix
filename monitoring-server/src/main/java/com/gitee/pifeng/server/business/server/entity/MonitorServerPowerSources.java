@@ -63,34 +63,34 @@ public class MonitorServerPowerSources {
     private Double remainingCapacityPercent;
 
     /**
-     * 操作系统估计的电源上剩余的估计时间（以秒为单位）
+     * 操作系统估计的电源上剩余的估计时间（以毫秒为单位）
      */
     @TableField("TIME_REMAINING_ESTIMATED")
-    private Double timeRemainingEstimated;
+    private String timeRemainingEstimated;
 
     /**
-     * 估计的电源剩余时间（以秒为单位），由电池报告
+     * 估计的电源剩余时间（以毫秒为单位），由电池报告
      */
     @TableField("TIME_REMAINING_INSTANT")
-    private Double timeRemainingInstant;
+    private String timeRemainingInstant;
 
     /**
      * 电池的电源使用功率，以毫瓦（mW）为单位（如果为正，则为充电率；如果为负，则为放电速率。）
      */
     @TableField("POWER_USAGE_RATE")
-    private Double powerUsageRate;
+    private String powerUsageRate;
 
     /**
      * 电池电压，以伏特为单位
      */
     @TableField("VOLTAGE")
-    private Double voltage;
+    private String voltage;
 
     /**
      * 电池的电流，以毫安（mA）为单位（如果为正，则为充电电流；如果为负，则为放点电流。）
      */
     @TableField("AMPERAGE")
-    private Double amperage;
+    private String amperage;
 
     /**
      * 是否已插入外部电源
@@ -114,25 +114,25 @@ public class MonitorServerPowerSources {
      * 电池的当前（剩余）容量
      */
     @TableField("CURRENT_CAPACITY")
-    private Integer currentCapacity;
+    private String currentCapacity;
 
     /**
      * 电池的最大容量
      */
     @TableField("MAX_CAPACITY")
-    private Integer maxCapacity;
+    private String maxCapacity;
 
     /**
      * 电池的设计（原始）容量
      */
     @TableField("DESIGN_CAPACITY")
-    private Integer designCapacity;
+    private String designCapacity;
 
     /**
      * 电池的循环计数（如果知道）
      */
     @TableField("CYCLE_COUNT")
-    private Integer cycleCount;
+    private String cycleCount;
 
     /**
      * 电池化学成分（例如，锂离子电池）
