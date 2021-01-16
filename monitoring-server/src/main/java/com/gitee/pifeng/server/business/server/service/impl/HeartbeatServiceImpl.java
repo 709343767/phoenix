@@ -74,9 +74,9 @@ public class HeartbeatServiceImpl implements IHeartbeatService {
         // 查询数据库中有没有当前应用实例
         LambdaQueryWrapper<MonitorInstance> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         lambdaQueryWrapper.eq(MonitorInstance::getInstanceId, instanceId);
-        MonitorInstance monitorInstance = this.monitorInstanceDao.selectOne(lambdaQueryWrapper);
+        Integer selectCountDb = this.monitorInstanceDao.selectCount(lambdaQueryWrapper);
         // 插入记录
-        if (monitorInstance == null) {
+        if (selectCountDb == null || selectCountDb == 0) {
             entity.setInsertTime(heartbeatPackage.getDateTime());
             this.monitorInstanceDao.insert(entity);
         }

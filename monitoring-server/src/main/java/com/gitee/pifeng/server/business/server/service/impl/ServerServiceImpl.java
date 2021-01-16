@@ -123,7 +123,7 @@ public class ServerServiceImpl implements IServerService {
         // 查询数据库中是否有此IP的传感器
         LambdaQueryWrapper<MonitorServerSensors> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         lambdaQueryWrapper.eq(MonitorServerSensors::getIp, ip);
-        MonitorServerSensors monitorServerSensorsDb = this.monitorServerSensorsDao.selectOne(lambdaQueryWrapper);
+        Integer selectCountDb = this.monitorServerSensorsDao.selectCount(lambdaQueryWrapper);
         // 添加或更新到数据库
         MonitorServerSensors monitorServerSensors = new MonitorServerSensors();
         monitorServerSensors.setIp(ip);
@@ -134,7 +134,7 @@ public class ServerServiceImpl implements IServerService {
             monitorServerSensors.setFanSpeed(sensorsDomain.getFanSpeedDomainList().stream().map(String::valueOf).collect(Collectors.joining(",")));
         }
         // 没有
-        if (monitorServerSensorsDb == null) {
+        if (selectCountDb == null || selectCountDb == 0) {
             monitorServerSensors.setInsertTime(new Date());
             this.monitorServerSensorsDao.insert(monitorServerSensors);
         }
@@ -168,7 +168,7 @@ public class ServerServiceImpl implements IServerService {
             LambdaQueryWrapper<MonitorServerPowerSources> lambdaQueryWrapper = new LambdaQueryWrapper<>();
             lambdaQueryWrapper.eq(MonitorServerPowerSources::getIp, ip);
             lambdaQueryWrapper.eq(MonitorServerPowerSources::getPowerSourcesNo, i + 1);
-            MonitorServerPowerSources monitorServerPowerSourcesDb = this.monitorServerPowerSourcesDao.selectOne(lambdaQueryWrapper);
+            Integer selectCountDb = this.monitorServerPowerSourcesDao.selectCount(lambdaQueryWrapper);
             // 更新或添加到数据库
             MonitorServerPowerSources monitorServerPowerSources = new MonitorServerPowerSources();
             monitorServerPowerSources.setIp(ip);
@@ -194,7 +194,7 @@ public class ServerServiceImpl implements IServerService {
             monitorServerPowerSources.setSerialNumber(powerSourceDomain.getSerialNumber());
             monitorServerPowerSources.setTemperature(powerSourceDomain.getTemperature());
             // 没有
-            if (monitorServerPowerSourcesDb == null) {
+            if (selectCountDb == null || selectCountDb == 0) {
                 monitorServerPowerSources.setInsertTime(new Date());
                 this.monitorServerPowerSourcesDao.insert(monitorServerPowerSources);
             }
@@ -375,7 +375,7 @@ public class ServerServiceImpl implements IServerService {
         OsDomain osDomain = serverPackage.getServer().getOsDomain();
         LambdaQueryWrapper<MonitorServer> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         lambdaQueryWrapper.eq(MonitorServer::getIp, ip);
-        MonitorServer monitorServerDb = this.monitorServerDao.selectOne(lambdaQueryWrapper);
+        Integer selectCountDb = this.monitorServerDao.selectCount(lambdaQueryWrapper);
         MonitorServer monitorServer = new MonitorServer();
         monitorServer.setIp(ip);
         monitorServer.setServerName(osDomain.getComputerName());
@@ -385,7 +385,7 @@ public class ServerServiceImpl implements IServerService {
         monitorServer.setUserHome(osDomain.getUserHome());
         monitorServer.setUserName(osDomain.getUserName());
         // 新增服务器信息
-        if (monitorServerDb == null) {
+        if (selectCountDb == null || selectCountDb == 0) {
             monitorServer.setInsertTime(serverPackage.getDateTime());
             this.monitorServerDao.insert(monitorServer);
         }

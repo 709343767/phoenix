@@ -110,16 +110,16 @@ public class JvmServiceImpl implements IJvmService {
             LambdaQueryWrapper<MonitorJvmGarbageCollector> lambdaQueryWrapper = new LambdaQueryWrapper<>();
             lambdaQueryWrapper.eq(MonitorJvmGarbageCollector::getInstanceId, instanceId);
             lambdaQueryWrapper.eq(MonitorJvmGarbageCollector::getGarbageCollectorName, garbageCollectorInfoDomain.getName());
-            MonitorJvmGarbageCollector monitorJvmGarbageCollectorDb = this.monitorJvmGarbageCollectorDao.selectOne(lambdaQueryWrapper);
+            Integer selectCountDb = this.monitorJvmGarbageCollectorDao.selectCount(lambdaQueryWrapper);
             // 新增或更新
             MonitorJvmGarbageCollector monitorJvmGarbageCollector = new MonitorJvmGarbageCollector();
             monitorJvmGarbageCollector.setInstanceId(instanceId);
-            monitorJvmGarbageCollector.setGarbageCollectorNo(i);
+            monitorJvmGarbageCollector.setGarbageCollectorNo(i + 1);
             monitorJvmGarbageCollector.setGarbageCollectorName(garbageCollectorInfoDomain.getName());
             monitorJvmGarbageCollector.setCollectionCount(garbageCollectorInfoDomain.getCollectionCount());
             monitorJvmGarbageCollector.setCollectionTime(garbageCollectorInfoDomain.getCollectionTime());
             // 新增java虚拟机GC信息
-            if (monitorJvmGarbageCollectorDb == null) {
+            if (selectCountDb == null || selectCountDb == 0) {
                 monitorJvmGarbageCollector.setInsertTime(jvmPackage.getDateTime());
                 this.monitorJvmGarbageCollectorDao.insert(monitorJvmGarbageCollector);
             }
@@ -158,9 +158,9 @@ public class JvmServiceImpl implements IJvmService {
         // 查询数据库中有没有当前java虚拟机线程信息
         LambdaQueryWrapper<MonitorJvmThread> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         lambdaQueryWrapper.eq(MonitorJvmThread::getInstanceId, instanceId);
-        MonitorJvmThread monitorJvmThreadDb = this.monitorJvmThreadDao.selectOne(lambdaQueryWrapper);
+        Integer selectCountDb = this.monitorJvmThreadDao.selectCount(lambdaQueryWrapper);
         // 新增java虚拟机线程信息
-        if (monitorJvmThreadDb == null) {
+        if (selectCountDb == null || selectCountDb == 0) {
             monitorJvmThread.setInsertTime(jvmPackage.getDateTime());
             this.monitorJvmThreadDao.insert(monitorJvmThread);
         }
@@ -245,7 +245,7 @@ public class JvmServiceImpl implements IJvmService {
         ClassLoadingDomain classLoadingDomain = jvmPackage.getJvm().getClassLoadingDomain();
         LambdaQueryWrapper<MonitorJvmClassLoading> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         lambdaQueryWrapper.eq(MonitorJvmClassLoading::getInstanceId, instanceId);
-        MonitorJvmClassLoading monitorJvmClassLoadingDb = this.monitorJvmClassLoadingDao.selectOne(lambdaQueryWrapper);
+        Integer selectCountDb = this.monitorJvmClassLoadingDao.selectCount(lambdaQueryWrapper);
         MonitorJvmClassLoading monitorJvmClassLoading = new MonitorJvmClassLoading();
         monitorJvmClassLoading.setInstanceId(instanceId);
         monitorJvmClassLoading.setTotalLoadedClassCount(classLoadingDomain.getTotalLoadedClassCount());
@@ -253,7 +253,7 @@ public class JvmServiceImpl implements IJvmService {
         monitorJvmClassLoading.setUnloadedClassCount(classLoadingDomain.getUnloadedClassCount());
         monitorJvmClassLoading.setIsVerbose(classLoadingDomain.isVerbose() ? ZeroOrOneConstants.ONE : ZeroOrOneConstants.ZERO);
         // 新增java虚拟机类加载信息
-        if (monitorJvmClassLoadingDb == null) {
+        if (selectCountDb == null || selectCountDb == 0) {
             monitorJvmClassLoading.setInsertTime(jvmPackage.getDateTime());
             this.monitorJvmClassLoadingDao.insert(monitorJvmClassLoading);
         }
@@ -282,7 +282,7 @@ public class JvmServiceImpl implements IJvmService {
         RuntimeDomain runtimeDomain = jvmPackage.getJvm().getRuntimeDomain();
         LambdaQueryWrapper<MonitorJvmRuntime> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         lambdaQueryWrapper.eq(MonitorJvmRuntime::getInstanceId, instanceId);
-        MonitorJvmRuntime monitorJvmRuntimeDb = this.monitorJvmRuntimeDao.selectOne(lambdaQueryWrapper);
+        Integer selectCountDb = this.monitorJvmRuntimeDao.selectCount(lambdaQueryWrapper);
         MonitorJvmRuntime monitorJvmRuntime = new MonitorJvmRuntime();
         monitorJvmRuntime.setInstanceId(instanceId);
         monitorJvmRuntime.setName(runtimeDomain.getName());
@@ -301,7 +301,7 @@ public class JvmServiceImpl implements IJvmService {
         monitorJvmRuntime.setUptime(runtimeDomain.getUptime());
         monitorJvmRuntime.setStartTime(runtimeDomain.getStartTime());
         // 新增java虚拟机运行时信息
-        if (monitorJvmRuntimeDb == null) {
+        if (selectCountDb == null || selectCountDb == 0) {
             monitorJvmRuntime.setInsertTime(jvmPackage.getDateTime());
             this.monitorJvmRuntimeDao.insert(monitorJvmRuntime);
         }
