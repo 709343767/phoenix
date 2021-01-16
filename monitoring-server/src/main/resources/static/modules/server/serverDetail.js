@@ -37,6 +37,38 @@
             getServerNetworkSpeedInfo(time, chartAddress);
         });
 
+        // 发送ajax请求，获取传感器数据
+        function getServerSensorsInfo() {
+            admin.req({
+                type: 'get',
+                url: layui.setter.base + 'monitor-server-sensors/get-server-detail-page-server-sensors-info',
+                dataType: 'json',
+                contentType: 'application/json;charset=utf-8',
+                headers: {
+                    "X-CSRF-TOKEN": tokenValue
+                },
+                data: {
+                    ip: ip // 应用实例ID
+                },
+                success: function (result) {
+                    var data = result.data;
+                    var cpuTemperature = data.cpuTemperature;
+                    var cpuVoltage = data.cpuVoltage;
+                    var fanSpeed = data.fanSpeed != null ? data.fanSpeed : '未知';
+                    var html = '<div class="layui-col-md4">' +
+                        '           <label class="label-font-weight">CPU温度：</label>' + cpuTemperature +
+                        '       </div>' +
+                        '       <div class="layui-col-md4">' +
+                        '           <label class="label-font-weight">CPU电压：</label>' + cpuVoltage +
+                        '       </div>' +
+                        '       <div class="layui-col-md4">' +
+                        '           <label class="label-font-weight">风扇转速：</label>' + fanSpeed +
+                        '       </div>';
+                    $('#sensors').empty().append(html);
+                }
+            });
+        }
+
         // 发送ajax请求，获取电池数据
         function getServerPowerSourcesInfo() {
             admin.req({
@@ -52,7 +84,6 @@
                 },
                 success: function (result) {
                     var data = result.data;
-                    debugger;
                     var html = '';
                     for (var i = 0; i < data.length; i++) {
                         var obj = data[i];
@@ -1113,6 +1144,8 @@
         getServerCpuInfo();
         // 发送ajax请求，获取电池数据
         getServerPowerSourcesInfo();
+        // 发送ajax请求，获取传感器数据
+        getServerSensorsInfo();
         // 每30秒刷新一次
         window.setInterval(function () {
             // 发送ajax请求，获取CPU图表数据
@@ -1131,6 +1164,8 @@
             getServerCpuInfo();
             // 发送ajax请求，获取电池数据
             getServerPowerSourcesInfo();
+            // 发送ajax请求，获取传感器数据
+            getServerSensorsInfo();
         }, 1000 * 30);
     });
     e('serverDetail', {});

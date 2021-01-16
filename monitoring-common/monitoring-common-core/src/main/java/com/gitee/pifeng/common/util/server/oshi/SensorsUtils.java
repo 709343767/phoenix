@@ -46,12 +46,12 @@ public class SensorsUtils {
         double cpuVoltage = sensors.getCpuVoltage();
         int[] fanSpeeds = sensors.getFanSpeeds();
         SensorsDomain sensorDomain = new SensorsDomain();
-        sensorDomain.setCpuTemperature(cpuTemperature != 0 ? String.valueOf(cpuTemperature) : "未知");
-        sensorDomain.setCpuVoltage(cpuVoltage != 0 ? String.valueOf(cpuVoltage) : "未知");
+        sensorDomain.setCpuTemperature(cpuTemperature != 0 ? cpuTemperature + "℃" : "未知");
+        sensorDomain.setCpuVoltage(cpuVoltage != 0 ? cpuVoltage + "V" : "未知");
         List<SensorsDomain.FanSpeedDomain> fanSpeedDomains = Lists.newArrayList();
         for (int fanSpeed : fanSpeeds) {
             SensorsDomain.FanSpeedDomain fanSpeedDomain = new SensorsDomain.FanSpeedDomain();
-            fanSpeedDomain.setFanSpeed(fanSpeed != 0 ? String.valueOf(fanSpeed) : "未知");
+            fanSpeedDomain.setFanSpeed(fanSpeed != 0 ? fanSpeed + "rpm" : "未知");
             fanSpeedDomains.add(fanSpeedDomain);
             sensorDomain.setFanSpeedDomainList(fanSpeedDomains);
         }
