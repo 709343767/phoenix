@@ -134,7 +134,7 @@
                             max: 50
                         }, {
                             type: 'category',
-                            data: ['', '', '', '', '', '', '', '', '', '', '°C'],
+                            data: ['', '', '', '', '', '', '', '', '', '', ''],
                             position: 'left',
                             offset: -80,
                             axisLabel: {
@@ -186,7 +186,7 @@
                                             back: {
                                                 align: 'center',
                                                 lineHeight: 50,
-                                                fontSize: 40,
+                                                fontSize: 30,
                                                 fontFamily: 'digifacewide',
                                                 color: leftColor
                                             },
@@ -198,7 +198,7 @@
                                             },
                                             downTxt: {
                                                 lineHeight: 50,
-                                                fontSize: 25,
+                                                fontSize: 18,
                                                 align: 'center',
                                                 color: '#808a87'
                                             }
