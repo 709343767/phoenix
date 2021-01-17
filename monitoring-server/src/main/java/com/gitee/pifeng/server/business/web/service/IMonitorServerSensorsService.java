@@ -26,4 +26,16 @@ public interface IMonitorServerSensorsService extends IService<MonitorServerSens
      */
     MonitorServerSensorsVo getServerDetailPageServerSensorsInfo(String ip);
 
+    /**
+     * <p>
+     * 获取CPU平均温度
+     * </p>
+     *
+     * @param ip 服务器IP地址
+     * @return CPU平均温度
+     * @author 皮锋
+     * @custom.date 2021/1/17 21:02
+     */
+    Double getCpuTemperatureInfo(String ip);
+
 }

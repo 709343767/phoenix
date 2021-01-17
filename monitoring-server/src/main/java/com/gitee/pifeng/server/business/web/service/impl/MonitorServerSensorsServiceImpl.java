@@ -6,6 +6,7 @@ import com.gitee.pifeng.server.business.web.dao.IMonitorServerSensorsDao;
 import com.gitee.pifeng.server.business.web.entity.MonitorServerSensors;
 import com.gitee.pifeng.server.business.web.service.IMonitorServerSensorsService;
 import com.gitee.pifeng.server.business.web.vo.MonitorServerSensorsVo;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -42,6 +43,30 @@ public class MonitorServerSensorsServiceImpl extends ServiceImpl<IMonitorServerS
         lambdaQueryWrapper.eq(MonitorServerSensors::getIp, ip);
         MonitorServerSensors monitorServerSensors = this.monitorServerSensorsDao.selectOne(lambdaQueryWrapper);
         return MonitorServerSensorsVo.builder().build().convertFor(monitorServerSensors);
+    }
+
+    /**
+     * <p>
+     * 获取CPU平均温度
+     * </p>
+     *
+     * @param ip 服务器IP地址
+     * @return CPU平均温度
+     * @author 皮锋
+     * @custom.date 2021/1/17 21:02
+     */
+    @Override
+    public Double getCpuTemperatureInfo(String ip) {
+        LambdaQueryWrapper<MonitorServerSensors> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(MonitorServerSensors::getIp, ip);
+        MonitorServerSensors monitorServerSensors = this.monitorServerSensorsDao.selectOne(lambdaQueryWrapper);
+        if (monitorServerSensors != null) {
+            String cpuTemperature = monitorServerSensors.getCpuTemperature();
+            if (!StringUtils.equals(cpuTemperature, "未知")) {
+                return Double.valueOf(cpuTemperature.replace("℃", "").trim());
+            }
+        }
+        return Double.NaN;
     }
 
 }

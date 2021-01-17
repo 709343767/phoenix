@@ -28,4 +28,16 @@ public interface IMonitorServerPowerSourcesService extends IService<MonitorServe
      */
     List<MonitorServerPowerSourcesVo> getServerDetailPageServerPowerSourcesInfo(String ip);
 
+    /**
+     * <p>
+     * 获取电池平均剩余容量百分比
+     * </p>
+     *
+     * @param ip 服务器IP地址
+     * @return 电池平均剩余容量百分比
+     * @author 皮锋
+     * @custom.date 2021/1/17 19:47
+     */
+    Double getRemainingCapacityPercentAvg(String ip);
+
 }

@@ -1,6 +1,5 @@
 package com.gitee.pifeng.server.business.web.controller;
 
-
 import com.gitee.pifeng.server.business.web.service.IMonitorServerPowerSourcesService;
 import com.gitee.pifeng.server.business.web.vo.LayUiAdminResultVo;
 import com.gitee.pifeng.server.business.web.vo.MonitorServerPowerSourcesVo;
@@ -54,6 +53,26 @@ public class MonitorServerPowerSourcesController {
     public LayUiAdminResultVo getServerDetailPageServerPowerSourcesInfo(@RequestParam(name = "ip") String ip) {
         List<MonitorServerPowerSourcesVo> serverPowerSourcesVos = this.monitorServerPowerSourcesService.getServerDetailPageServerPowerSourcesInfo(ip);
         return LayUiAdminResultVo.ok(serverPowerSourcesVos);
+    }
+
+    /**
+     * <p>
+     * 获取服务器详情页面服务器电池图表信息
+     * </p>
+     *
+     * @param ip 服务器IP地址
+     * @return layUiAdmin响应对象
+     * @author 皮锋
+     * @custom.date 2021/1/17 19:43
+     */
+    @ApiOperation(value = "获取服务器详情页面服务器电池图表信息")
+    @ResponseBody
+    @GetMapping("/get-server-detail-page-server-power-sources-chart-info")
+    @ApiImplicitParams(value = {
+            @ApiImplicitParam(name = "ip", value = "服务器IP地址", required = true, paramType = "query", dataType = "string")})
+    public LayUiAdminResultVo getServerDetailPageServerPowerSourcesChartInfo(@RequestParam(name = "ip") String ip) {
+        Double rCapacityPercentAvg = this.monitorServerPowerSourcesService.getRemainingCapacityPercentAvg(ip);
+        return LayUiAdminResultVo.ok(rCapacityPercentAvg);
     }
 
 }

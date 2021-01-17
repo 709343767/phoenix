@@ -44,6 +44,12 @@
     height: 270px !important;
 }
 
+.layadmin-dataview-my-270px-text {
+    text-align: center !important;
+    line-height: 270px !important;
+    font-size: xx-large;;
+}
+
 .layadmin-dataview-my-420px {
     height: 420px !important;
 }

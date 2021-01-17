@@ -1,5 +1,6 @@
 package com.gitee.pifeng.server.business.web.service.impl;
 
+import cn.hutool.core.util.NumberUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gitee.pifeng.server.business.web.dao.IMonitorServerPowerSourcesDao;
@@ -7,6 +8,7 @@ import com.gitee.pifeng.server.business.web.entity.MonitorServerPowerSources;
 import com.gitee.pifeng.server.business.web.service.IMonitorServerPowerSourcesService;
 import com.gitee.pifeng.server.business.web.vo.MonitorServerPowerSourcesVo;
 import com.google.common.collect.Lists;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -51,6 +53,38 @@ public class MonitorServerPowerSourcesServiceImpl extends ServiceImpl<IMonitorSe
             result.add(powerSourcesVo);
         }
         return result;
+    }
+
+    /**
+     * <p>
+     * 获取电池平均剩余容量百分比
+     * </p>
+     *
+     * @param ip 服务器IP地址
+     * @return 电池平均剩余容量百分比
+     * @author 皮锋
+     * @custom.date 2021/1/17 19:47
+     */
+    @Override
+    public Double getRemainingCapacityPercentAvg(String ip) {
+        LambdaQueryWrapper<MonitorServerPowerSources> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        // 查询字段
+        lambdaQueryWrapper.select(MonitorServerPowerSources::getRemainingCapacityPercent);
+        // 查询条件
+        lambdaQueryWrapper.eq(MonitorServerPowerSources::getIp, ip);
+        List<Object> remainingCapacityPercents = this.monitorServerPowerSourcesDao.selectObjs(lambdaQueryWrapper);
+        if (CollectionUtils.isNotEmpty(remainingCapacityPercents)) {
+            // 求和
+            double sum = 0D;
+            for (Object obj : remainingCapacityPercents) {
+                if (obj != null) {
+                    double remainingCapacityPercent = Double.parseDouble(obj.toString()) * 100D;
+                    sum += remainingCapacityPercent;
+                }
+            }
+            return NumberUtil.round(sum / remainingCapacityPercents.size(), 4).doubleValue();
+        }
+        return Double.NaN;
     }
 
 }

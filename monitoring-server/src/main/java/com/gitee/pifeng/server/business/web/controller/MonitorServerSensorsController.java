@@ -54,5 +54,25 @@ public class MonitorServerSensorsController {
         return LayUiAdminResultVo.ok(serverSensorsVo);
     }
 
+    /**
+     * <p>
+     * 获取服务器详情页面服务器CPU温度信息
+     * </p>
+     *
+     * @param ip 服务器IP地址
+     * @return layUiAdmin响应对象
+     * @author 皮锋
+     * @custom.date 2021/1/17 21:00
+     */
+    @ApiOperation(value = "获取服务器详情页面服务器CPU温度信息")
+    @ResponseBody
+    @GetMapping("/get-server-detail-page-server-sensors-chart-info")
+    @ApiImplicitParams(value = {
+            @ApiImplicitParam(name = "ip", value = "服务器IP地址", required = true, paramType = "query", dataType = "string")})
+    public LayUiAdminResultVo getServerDetailPageServerSensorsChartInfo(@RequestParam(name = "ip") String ip) {
+        Double cpuTemperature = this.monitorServerSensorsService.getCpuTemperatureInfo(ip);
+        return LayUiAdminResultVo.ok(cpuTemperature);
+    }
+
 }
 

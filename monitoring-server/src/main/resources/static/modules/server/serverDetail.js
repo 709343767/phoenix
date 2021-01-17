@@ -9,12 +9,14 @@
         var getServerMemoryInfoChart = echarts.init(document.getElementById('get-server-memory-info'), 'infographic');
         var getServerNetworkSpeedInfoChart = echarts.init(document.getElementById('get-server-network-speed-info'), 'infographic');
         var getServerPowerSourceInfoChart = echarts.init(document.getElementById('get-server-power-source-info'), 'infographic');
+        var getServerSensorsInfoChart = echarts.init(document.getElementById('get-server-sensors-info'), 'infographic');
         // 浏览器窗口大小发生改变时
         window.addEventListener("resize", function () {
             getServerCpuInfoChart.resize();
             getServerMemoryInfoChart.resize();
             getServerNetworkSpeedInfoChart.resize();
             getServerPowerSourceInfoChart.resize();
+            getServerSensorsInfoChart.resize();
         });
         // 堆内存图表和非堆内存图表时间
         var time = 'hour';
@@ -28,22 +30,24 @@
             // 发送ajax请求，获取内存图表数据
             getServerMemoryChartInfo(time);
             // 发送ajax请求，获取网速图表数据
-            getServerNetworkSpeedInfo(time, chartAddress);
-            // 发送ajax请求，获取磁盘图表数据
-            getServerDiskChartInfo();
+            getServerNetworkSpeedChartInfo(time, chartAddress);
         });
         // 服务器网卡地址改变
         form.on('select(address)', function (data) {
             chartAddress = data.value;
             // 发送ajax请求，获取网速图表数据
-            getServerNetworkSpeedInfo(time, chartAddress);
+            getServerNetworkSpeedChartInfo(time, chartAddress);
         });
 
-        // 发送ajax请求，获取传感器数据
-        function getServerSensorsInfo() {
+        // 发送ajax请求，获取传感器图表数据
+        function getServerSensorsChartInfo() {
+            // 弹出loading框
+            var loadingIndex = layer.load(1, {
+                shade: [0.1, '#fff'] //0.1透明度的白色背景
+            });
             admin.req({
                 type: 'get',
-                url: layui.setter.base + 'monitor-server-sensors/get-server-detail-page-server-sensors-info',
+                url: layui.setter.base + 'monitor-server-sensors/get-server-detail-page-server-sensors-chart-info',
                 dataType: 'json',
                 contentType: 'application/json;charset=utf-8',
                 headers: {
@@ -53,29 +57,70 @@
                     ip: ip // 应用实例ID
                 },
                 success: function (result) {
-                    var data = result.data;
-                    var cpuTemperature = data.cpuTemperature;
-                    var cpuVoltage = data.cpuVoltage;
-                    var fanSpeed = data.fanSpeed != null ? data.fanSpeed : '未知';
-                    var html = '<div class="layui-col-md4">' +
-                        '           <label class="label-font-weight">CPU温度：</label>' + cpuTemperature +
-                        '       </div>' +
-                        '       <div class="layui-col-md4">' +
-                        '           <label class="label-font-weight">CPU电压：</label>' + cpuVoltage +
-                        '       </div>' +
-                        '       <div class="layui-col-md4">' +
-                        '           <label class="label-font-weight">风扇转速：</label>' + fanSpeed +
-                        '       </div>';
-                    $('#sensors').empty().append(html);
+                    var cpuTemperature = result.data;
+                    if (isNaN(cpuTemperature)) {
+                        $('#get-server-sensors-info').text('未知');
+                        // 关闭loading框
+                        layer.close(loadingIndex);
+                        return;
+                    }
+                    var option = {
+                        title: {
+                            text: cpuTemperature + '°C',
+                            padding: [-8, 0, 0, 0],
+                            textStyle: {
+                                color: '#04e608',
+                                fontWeight: 'normal',
+                                top: '10%',
+                            },
+                            show: true,
+                            left: '35%',
+                            top: '10%',
+                        },
+                        series: [{
+                            type: 'liquidFill',
+                            radius: '120%',  //半径
+                            center: ['50%', '60%'],  //温度计的位置，第一个参数是水平方向，第二个参数是垂直方向
+                            waveAnimation: true,
+                            amplitude: 0,
+                            data: [(cpuTemperature / 100).toFixed(2)],  //数据
+                            color: ['#00a3e9'],  //温度计液体的颜色
+                            shape: 'path://M324.234,516.886c0-41.643,0-252.383,0-258.626c0-14.688-11.906-26.594-26.593-26.594c-14.688,0-26.595,11.906-26.595,26.594c0,5.271,0,216.887,0,258.625c-13.383,8.71-22.24,23.791-22.24,40.949c0,26.97,21.863,48.834,48.834,48.834c26.969,0,48.834-21.864,48.834-48.834C346.475,540.676,337.617,525.596,324.234,516.886z',
+                            backgroundStyle: {
+                                color: 'none',
+                                borderColor: '#faaa0a',  //外框的颜色
+                                borderWidth: 3,
+                            },
+                            outline: {
+                                show: false
+                            },
+                            label: {
+                                normal: {
+                                    formatter: ''
+                                }
+                            }
+                        }]
+                    };
+                    getServerSensorsInfoChart.setOption(option);
+                    // 关闭loading框
+                    layer.close(loadingIndex);
+                },
+                error: function () {
+                    // 关闭loading框
+                    layer.close(loadingIndex);
                 }
             });
         }
 
-        // 发送ajax请求，获取电池数据
-        function getServerPowerSourcesInfo() {
+        // 发送ajax请求，获取电池图表数据
+        function getServerPowerSourcesChartInfo() {
+            // 弹出loading框
+            var loadingIndex = layer.load(1, {
+                shade: [0.1, '#fff'] //0.1透明度的白色背景
+            });
             admin.req({
                 type: 'get',
-                url: layui.setter.base + 'monitor-server-power-sources/get-server-detail-page-server-power-sources-info',
+                url: layui.setter.base + 'monitor-server-power-sources/get-server-detail-page-server-power-sources-chart-info',
                 dataType: 'json',
                 contentType: 'application/json;charset=utf-8',
                 headers: {
@@ -85,83 +130,13 @@
                     ip: ip // 应用实例ID
                 },
                 success: function (result) {
-                    var data = result.data;
-                    var html = '';
-                    for (var i = 0; i < data.length; i++) {
-                        var obj = data[i];
-                        var name = obj.name;
-                        var deviceName = obj.deviceName;
-                        var amperage = obj.amperage.startsWith('-') ? '放电 ' + obj.amperage.replace('-', '') : '充电 ' + obj.amperage;
-                        var chemistry = obj.chemistry;
-                        var currentCapacity = obj.currentCapacity;
-                        var designCapacity = obj.designCapacity;
-                        var manufactureDate = obj.manufactureDate;
-                        var manufacturer = obj.manufacturer;
-                        var maxCapacity = obj.maxCapacity;
-                        var powerUsageRate = obj.powerUsageRate.startsWith('-') ? '放电 ' + obj.powerUsageRate.replace('-', '') : '充电 ' + obj.powerUsageRate;
-                        var remainingCapacityPercent = (obj.remainingCapacityPercent * 100).toFixed(2) + '%';
-                        var serialNumber = obj.serialNumber;
-                        var temperature = obj.temperature;
-                        var timeRemainingEstimated = obj.timeRemainingEstimated;
-                        var timeRemainingInstant = obj.timeRemainingInstant;
-                        var voltage = obj.voltage;
-                        html += '<div class="layui-col-md4">' +
-                            '       <label class="label-font-weight">电池名称：</label>' + name + '（' + deviceName + '）' +
-                            '    </div>' +
-                            '    <div class="layui-col-md4">' +
-                            '       <label class="label-font-weight">序列号：</label>' + serialNumber +
-                            '    </div>' +
-                            '    <div class="layui-col-md4">' +
-                            '       <label class="label-font-weight">电池类型：</label>' + chemistry +
-                            '    </div>' +
-                            '    <div class="layui-col-md4">' +
-                            '       <label class="label-font-weight">制造商：</label>' + manufacturer +
-                            '    </div>' +
-                            '    <div class="layui-col-md4">' +
-                            '       <label class="label-font-weight">生产日期：</label>' + manufactureDate +
-                            '    </div>' +
-                            '    <div class="layui-col-md4">' +
-                            '       <label class="label-font-weight">原始容量：</label>' + designCapacity +
-                            '    </div>' +
-                            '    <div class="layui-col-md4">' +
-                            '       <label class="label-font-weight">最大容量：</label>' + maxCapacity +
-                            '    </div>' +
-                            '    <div class="layui-col-md4">' +
-                            '       <label class="label-font-weight">剩余容量：</label>' + currentCapacity +
-                            '    </div>' +
-                            '    <div class="layui-col-md4">' +
-                            '       <label class="label-font-weight">剩余百分比：</label>' + remainingCapacityPercent +
-                            '    </div>' +
-                            '    <div class="layui-col-md4">' +
-                            '       <label class="label-font-weight">剩余使用时间（系统报告）：</label>' + timeRemainingEstimated +
-                            '    </div>' +
-                            '    <div class="layui-col-md4">' +
-                            '       <label class="label-font-weight">剩余使用时间（电池报告）：</label>' + timeRemainingInstant +
-                            '    </div>' +
-                            '    <div class="layui-col-md4">' +
-                            '       <label class="label-font-weight">电压：</label>' + voltage +
-                            '    </div>' +
-                            '    <div class="layui-col-md4">' +
-                            '       <label class="label-font-weight">电流：</label>' + amperage +
-                            '    </div>' +
-                            '    <div class="layui-col-md4">' +
-                            '       <label class="label-font-weight">使用功率：</label>' + powerUsageRate +
-                            '    </div>' +
-                            '    <div class="layui-col-md4">' +
-                            '       <label class="label-font-weight">温度：</label>' + temperature +
-                            '    </div>';
-                        if (i !== data.length - 1) {
-                            html += '<hr class="layui-bg-gray hr-padding">';
-                        }
+                    var rCapacityPercentAvg = result.data;
+                    if (isNaN(rCapacityPercentAvg)) {
+                        $('#get-server-power-source-info').text('未知');
+                        // 关闭loading框
+                        layer.close(loadingIndex);
+                        return;
                     }
-                    $('#powerSources').empty().append(html);
-                    // 所有电池的电量平均值
-                    var rCapacityPercentAvg = 0;
-                    for (var j = 0; j < data.length; j++) {
-                        var object = data[j];
-                        rCapacityPercentAvg = rCapacityPercentAvg + object.remainingCapacityPercent;
-                    }
-                    rCapacityPercentAvg = (rCapacityPercentAvg / data.length).toFixed(4) * 100;
                     var option = {
                         tooltip: {				// 本系列特定的 tooltip 设定。
                             show: true,
@@ -178,7 +153,7 @@
                             {
                                 name: '电池电量',		// 系列名称,用于tooltip的显示，legend 的图例筛选，在 setOption 更新数据和配置项时用于指定对应的系列。
                                 type: 'gauge',			// 系列类型
-                                radius: '80%',			// 参数:number, string。 仪表盘半径,默认 75% ，可以是相对于容器高宽中较小的一项的一半的百分比，也可以是绝对的数值。
+                                radius: '95%',			// 参数:number, string。 仪表盘半径,默认 75% ，可以是相对于容器高宽中较小的一项的一半的百分比，也可以是绝对的数值。
                                 center: ['50%', '55%'],	// 仪表盘位置(圆心坐标)
                                 startAngle: 225,		// 仪表盘起始角度,默认 225。圆心 正右手侧为0度，正上方为90度，正左手侧为180度。
                                 endAngle: -45,			// 仪表盘结束角度,默认 -45
@@ -268,12 +243,162 @@
                         ]
                     };
                     getServerPowerSourceInfoChart.setOption(option);
+                    // 关闭loading框
+                    layer.close(loadingIndex);
+                },
+                error: function () {
+                    // 关闭loading框
+                    layer.close(loadingIndex);
+                }
+            });
+        }
+
+        // 发送ajax请求，获取传感器数据
+        function getServerSensorsInfo() {
+            // 弹出loading框
+            var loadingIndex = layer.load(1, {
+                shade: [0.1, '#fff'] //0.1透明度的白色背景
+            });
+            admin.req({
+                type: 'get',
+                url: layui.setter.base + 'monitor-server-sensors/get-server-detail-page-server-sensors-info',
+                dataType: 'json',
+                contentType: 'application/json;charset=utf-8',
+                headers: {
+                    "X-CSRF-TOKEN": tokenValue
+                },
+                data: {
+                    ip: ip // 应用实例ID
+                },
+                success: function (result) {
+                    var data = result.data;
+                    var cpuTemperature = data.cpuTemperature;
+                    var cpuVoltage = data.cpuVoltage;
+                    var fanSpeed = data.fanSpeed != null ? data.fanSpeed : '未知';
+                    var html = '<div class="layui-col-md4">' +
+                        '           <label class="label-font-weight">CPU温度：</label>' + cpuTemperature +
+                        '       </div>' +
+                        '       <div class="layui-col-md4">' +
+                        '           <label class="label-font-weight">CPU电压：</label>' + cpuVoltage +
+                        '       </div>' +
+                        '       <div class="layui-col-md4">' +
+                        '           <label class="label-font-weight">风扇转速：</label>' + fanSpeed +
+                        '       </div>';
+                    $('#sensors').empty().append(html);
+                    // 关闭loading框
+                    layer.close(loadingIndex);
+                },
+                error: function () {
+                    // 关闭loading框
+                    layer.close(loadingIndex);
+                }
+            });
+        }
+
+        // 发送ajax请求，获取电池数据
+        function getServerPowerSourcesInfo() {
+            // 弹出loading框
+            var loadingIndex = layer.load(1, {
+                shade: [0.1, '#fff'] //0.1透明度的白色背景
+            });
+            admin.req({
+                type: 'get',
+                url: layui.setter.base + 'monitor-server-power-sources/get-server-detail-page-server-power-sources-info',
+                dataType: 'json',
+                contentType: 'application/json;charset=utf-8',
+                headers: {
+                    "X-CSRF-TOKEN": tokenValue
+                },
+                data: {
+                    ip: ip // 应用实例ID
+                },
+                success: function (result) {
+                    var data = result.data;
+                    var html = '';
+                    for (var i = 0; i < data.length; i++) {
+                        var obj = data[i];
+                        var name = obj.name;
+                        var deviceName = obj.deviceName;
+                        var amperage = obj.amperage.startsWith('-') ? '放电 ' + obj.amperage.replace('-', '') : '充电 ' + obj.amperage;
+                        var chemistry = obj.chemistry;
+                        var currentCapacity = obj.currentCapacity;
+                        var designCapacity = obj.designCapacity;
+                        var manufactureDate = obj.manufactureDate;
+                        var manufacturer = obj.manufacturer;
+                        var maxCapacity = obj.maxCapacity;
+                        var powerUsageRate = obj.powerUsageRate.startsWith('-') ? '放电 ' + obj.powerUsageRate.replace('-', '') : '充电 ' + obj.powerUsageRate;
+                        var remainingCapacityPercent = (obj.remainingCapacityPercent * 100).toFixed(2) + '%';
+                        var serialNumber = obj.serialNumber;
+                        var temperature = obj.temperature;
+                        var timeRemainingEstimated = obj.timeRemainingEstimated;
+                        var timeRemainingInstant = obj.timeRemainingInstant;
+                        var voltage = obj.voltage;
+                        html += '<div class="layui-col-md4">' +
+                            '       <label class="label-font-weight">电池名称：</label>' + name + '（' + deviceName + '）' +
+                            '    </div>' +
+                            '    <div class="layui-col-md4">' +
+                            '       <label class="label-font-weight">序列号：</label>' + serialNumber +
+                            '    </div>' +
+                            '    <div class="layui-col-md4">' +
+                            '       <label class="label-font-weight">电池类型：</label>' + chemistry +
+                            '    </div>' +
+                            '    <div class="layui-col-md4">' +
+                            '       <label class="label-font-weight">制造商：</label>' + manufacturer +
+                            '    </div>' +
+                            '    <div class="layui-col-md4">' +
+                            '       <label class="label-font-weight">生产日期：</label>' + manufactureDate +
+                            '    </div>' +
+                            '    <div class="layui-col-md4">' +
+                            '       <label class="label-font-weight">原始容量：</label>' + designCapacity +
+                            '    </div>' +
+                            '    <div class="layui-col-md4">' +
+                            '       <label class="label-font-weight">最大容量：</label>' + maxCapacity +
+                            '    </div>' +
+                            '    <div class="layui-col-md4">' +
+                            '       <label class="label-font-weight">剩余容量：</label>' + currentCapacity +
+                            '    </div>' +
+                            '    <div class="layui-col-md4">' +
+                            '       <label class="label-font-weight">剩余百分比：</label>' + remainingCapacityPercent +
+                            '    </div>' +
+                            '    <div class="layui-col-md4">' +
+                            '       <label class="label-font-weight">剩余使用时间（系统报告）：</label>' + timeRemainingEstimated +
+                            '    </div>' +
+                            '    <div class="layui-col-md4">' +
+                            '       <label class="label-font-weight">剩余使用时间（电池报告）：</label>' + timeRemainingInstant +
+                            '    </div>' +
+                            '    <div class="layui-col-md4">' +
+                            '       <label class="label-font-weight">电压：</label>' + voltage +
+                            '    </div>' +
+                            '    <div class="layui-col-md4">' +
+                            '       <label class="label-font-weight">电流：</label>' + amperage +
+                            '    </div>' +
+                            '    <div class="layui-col-md4">' +
+                            '       <label class="label-font-weight">使用功率：</label>' + powerUsageRate +
+                            '    </div>' +
+                            '    <div class="layui-col-md4">' +
+                            '       <label class="label-font-weight">温度：</label>' + temperature +
+                            '    </div>';
+                        if (i !== data.length - 1) {
+                            html += '<hr class="layui-bg-gray hr-padding">';
+                        }
+                    }
+                    $('#powerSources').empty().append(html);
+                    // 关闭loading框
+                    layer.close(loadingIndex);
+                },
+                error: function () {
+                    // 关闭loading框
+                    layer.close(loadingIndex);
                 }
             });
         }
 
         // 发送ajax请求，获取CPU数据
         function getServerCpuInfo() {
+            // 弹出loading框
+            var loadingIndex = layer.load(1, {
+                shade: [0.1, '#fff'] //0.1透明度的白色背景
+            });
             admin.req({
                 type: 'get',
                 url: layui.setter.base + 'monitor-server-cpu/get-server-detail-page-server-cpu-info',
@@ -331,12 +456,22 @@
                         }
                     }
                     $('#cpu').empty().append(html);
+                    // 关闭loading框
+                    layer.close(loadingIndex);
+                },
+                error: function () {
+                    // 关闭loading框
+                    layer.close(loadingIndex);
                 }
             });
         }
 
         // 发送ajax请求，获取网卡数据
         function getServerNetcardInfo() {
+            // 弹出loading框
+            var loadingIndex = layer.load(1, {
+                shade: [0.1, '#fff'] //0.1透明度的白色背景
+            });
             admin.req({
                 type: 'get',
                 url: layui.setter.base + 'monitor-server-netcard/get-server-detail-page-server-netcard-info',
@@ -426,12 +561,22 @@
                         }
                     }
                     $('#netcard').empty().append(html);
+                    // 关闭loading框
+                    layer.close(loadingIndex);
+                },
+                error: function () {
+                    // 关闭loading框
+                    layer.close(loadingIndex);
                 }
             });
         }
 
         // 发送ajax请求，获取操作系统数据
         function getServerOsInfo() {
+            // 弹出loading框
+            var loadingIndex = layer.load(1, {
+                shade: [0.1, '#fff'] //0.1透明度的白色背景
+            });
             admin.req({
                 type: 'get',
                 url: layui.setter.base + 'monitor-server/get-server-os-info',
@@ -474,6 +619,12 @@
                         '           <label class="label-font-weight">用户目录：</label>' + userHome +
                         '       </div>';
                     $('#os').empty().append(html);
+                    // 关闭loading框
+                    layer.close(loadingIndex);
+                },
+                error: function () {
+                    // 关闭loading框
+                    layer.close(loadingIndex);
                 }
             });
         }
@@ -1044,7 +1195,7 @@
         }
 
         // 发送ajax请求，获取网速图表数据
-        function getServerNetworkSpeedInfo(time, chartAddress) {
+        function getServerNetworkSpeedChartInfo(time, chartAddress) {
             // 弹出loading框
             var loadingIndex = layer.load(1, {
                 shade: [0.1, '#fff'] //0.1透明度的白色背景
@@ -1248,7 +1399,7 @@
         // 发送ajax请求，获取内存图表数据
         getServerMemoryChartInfo(time);
         // 发送ajax请求，获取网速图表数据
-        getServerNetworkSpeedInfo(time, chartAddress);
+        getServerNetworkSpeedChartInfo(time, chartAddress);
         // 发送ajax请求，获取磁盘图表数据
         getServerDiskChartInfo();
         // 发送ajax请求，获取操作系统数据
@@ -1261,6 +1412,10 @@
         getServerPowerSourcesInfo();
         // 发送ajax请求，获取传感器数据
         getServerSensorsInfo();
+        // 发送ajax请求，获取电池图表数据
+        getServerPowerSourcesChartInfo();
+        // 发送ajax请求，获取传感器图表数据
+        getServerSensorsChartInfo();
         // 每30秒刷新一次
         window.setInterval(function () {
             // 发送ajax请求，获取CPU图表数据
@@ -1268,7 +1423,7 @@
             // 发送ajax请求，获取内存图表数据
             getServerMemoryChartInfo(time);
             // 发送ajax请求，获取网速图表数据
-            getServerNetworkSpeedInfo(time, chartAddress);
+            getServerNetworkSpeedChartInfo(time, chartAddress);
             // 发送ajax请求，获取磁盘图表数据
             getServerDiskChartInfo();
             // 发送ajax请求，获取操作系统数据
@@ -1281,6 +1436,10 @@
             getServerPowerSourcesInfo();
             // 发送ajax请求，获取传感器数据
             getServerSensorsInfo();
+            // 发送ajax请求，获取电池图表数据
+            getServerPowerSourcesChartInfo();
+            // 发送ajax请求，获取传感器图表数据
+            getServerSensorsChartInfo();
         }, 1000 * 30);
     });
     e('serverDetail', {});
