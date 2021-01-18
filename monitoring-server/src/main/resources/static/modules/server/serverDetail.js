@@ -557,6 +557,7 @@
                         var temperature = obj.temperature;
                         var timeRemainingEstimated = obj.timeRemainingEstimated;
                         var timeRemainingInstant = obj.timeRemainingInstant;
+                        var isPowerOnLine = obj.isPowerOnLine === '1' ? '充电' : '放电';
                         var voltage = obj.voltage;
                         html += '<div class="layui-col-md4">' +
                             '       <label class="label-font-weight">电池名称：</label>' + name + '（' + deviceName + '）' +
@@ -589,7 +590,7 @@
                             '       <label class="label-font-weight">剩余使用时间（系统报告）：</label>' + timeRemainingEstimated +
                             '    </div>' +
                             '    <div class="layui-col-md4">' +
-                            '       <label class="label-font-weight">剩余使用时间（电池报告）：</label>' + timeRemainingInstant +
+                            '       <label class="label-font-weight">' + isPowerOnLine + '剩余时间（电池报告）：</label>' + timeRemainingInstant +
                             '    </div>' +
                             '    <div class="layui-col-md4">' +
                             '       <label class="label-font-weight">电压：</label>' + voltage +
@@ -598,7 +599,7 @@
                             '       <label class="label-font-weight">电流：</label>' + amperage +
                             '    </div>' +
                             '    <div class="layui-col-md4">' +
-                            '       <label class="label-font-weight">使用功率：</label>' + powerUsageRate +
+                            '       <label class="label-font-weight">功率：</label>' + powerUsageRate +
                             '    </div>' +
                             '    <div class="layui-col-md4">' +
                             '       <label class="label-font-weight">温度：</label>' + temperature +
