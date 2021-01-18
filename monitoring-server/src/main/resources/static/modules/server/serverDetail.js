@@ -122,7 +122,8 @@
                         },
                         grid: {
                             left: '40%',
-                            top: '1%'
+                            top: '1%',
+                            bottom: '11%'
                             // containLabel: true
                         },
                         yAxis: [{
@@ -1618,30 +1619,8 @@
             });
         }
 
-        // 发送ajax请求，获取CPU图表数据
-        getServerCpuChartInfo(time);
-        // 发送ajax请求，获取内存图表数据
-        getServerMemoryChartInfo(time);
-        // 发送ajax请求，获取网速图表数据
-        getServerNetworkSpeedChartInfo(time, chartAddress);
-        // 发送ajax请求，获取磁盘图表数据
-        getServerDiskChartInfo();
-        // 发送ajax请求，获取操作系统数据
-        getServerOsInfo();
-        // 发送ajax请求，获取网卡数据
-        getServerNetcardInfo();
-        // 发送ajax请求，获取CPU数据
-        getServerCpuInfo();
-        // 发送ajax请求，获取电池数据
-        getServerPowerSourcesInfo();
-        // 发送ajax请求，获取传感器数据
-        getServerSensorsInfo();
-        // 发送ajax请求，获取电池图表数据
-        getServerPowerSourcesChartInfo();
-        // 发送ajax请求，获取传感器图表数据
-        getServerSensorsChartInfo();
-        // 每30秒刷新一次
-        window.setInterval(function () {
+        // 发送ajax请求
+        function execute() {
             // 发送ajax请求，获取CPU图表数据
             getServerCpuChartInfo(time);
             // 发送ajax请求，获取内存图表数据
@@ -1664,6 +1643,13 @@
             getServerPowerSourcesChartInfo();
             // 发送ajax请求，获取传感器图表数据
             getServerSensorsChartInfo();
+        }
+
+        // 页面加载后第一次执行
+        execute();
+        // 每30秒刷新一次
+        window.setInterval(function () {
+            execute();
         }, 1000 * 30);
     });
     e('serverDetail', {});

@@ -56,7 +56,7 @@
                         <div class="layui-card-body">
                             <div class="layui-row layui-col-space5">
                                 <div class="layui-col-md4">
-                                    <div class="layadmin-dataview-my-330px" style="overflow: auto;">
+                                    <div class="layadmin-dataview-my-330px" style="overflow: auto;" id="niceScroll1">
                                         <div class="layui-card">
                                             <div class="layui-card-header">磁盘</div>
                                             <div class="layui-card-body layadmin-takerates-my"
@@ -66,7 +66,7 @@
                                     </div>
                                 </div>
                                 <div class="layui-col-md4">
-                                    <div class="layadmin-dataview-my-330px" style="overflow: auto;">
+                                    <div class="layadmin-dataview-my-330px" style="overflow: auto;" id="niceScroll2">
                                         <div class="layui-card">
                                             <div class="layui-card-header">电池</div>
                                             <div class="layui-card-body layadmin-takerates-my layadmin-dataview-my-270px layadmin-dataview-my-270px-text"
@@ -76,7 +76,7 @@
                                     </div>
                                 </div>
                                 <div class="layui-col-md4">
-                                    <div class="layadmin-dataview-my-330px" style="overflow: auto;">
+                                    <div class="layadmin-dataview-my-330px" style="overflow: auto;" id="niceScroll3">
                                         <div class="layui-card">
                                             <div class="layui-card-header">CPU温度</div>
                                             <div class="layui-card-body layadmin-takerates-my layadmin-dataview-my-270px layadmin-dataview-my-270px-text"
@@ -163,6 +163,8 @@
         </div>
     </div>
 </div>
+<script src="./js/jquery.min.js" th:src="@{/js/jquery.min.js}"></script>
+<script src="./js/jquery.nicescroll.min.js" th:src="@{/js/jquery.nicescroll.min.js}"></script>
 <script src="./js/echarts.min.js" th:src="@{/js/echarts.min.js}"></script>
 <script src="./js/echarts.theme.infographic.js" th:src="@{/js/echarts.theme.infographic.js}"></script>
 <script src="./js/echarts-liquidfill.min.js" th:src="@{/js/echarts-liquidfill.min.js}"></script>
@@ -173,7 +175,18 @@
     }).extend({
         index: 'lib/index', //主入口模块
         serverDetail: 'server/serverDetail' // 服务器详情模块
-    }).use(['index', 'element', 'form', 'serverDetail']);
+    }).use(['index', 'element', 'form', 'serverDetail'], function () {
+        var device = layui.device();
+        // 不是移动端
+        if (!device.ios && !device.android) {
+            // 美化滚动条
+            $('div[id^="niceScroll"]').niceScroll();
+            // 浏览器窗口大小发生改变时
+            window.addEventListener("resize", function () {
+                $('div[id^="niceScroll"]').getNiceScroll().resize();
+            });
+        }
+    });
 </script>
 </body>
 </html>

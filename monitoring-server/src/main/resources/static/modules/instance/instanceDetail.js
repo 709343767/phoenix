@@ -446,24 +446,12 @@
             });
         }
 
-        // 发送ajax请求，获取内存图表数据
-        getJvmMemoryChartInfo('hour', 'Heap', 'Heap内存使用量');
-        getJvmMemoryChartInfo('hour', 'Non_Heap', 'Non_Heap内存使用量');
-        getJvmMemoryChartInfo('hour', chartPool, chartPool + '内存使用量');
-        // 发送ajax请求，获取线程信息
-        getJvmThreadInfo();
-        // 发送ajax请求，获取GC信息
-        getJvmGcInfo();
-        // 发送ajax请求，获取类加载数据
-        getJvmClassLoadingInfo();
-        // 发送ajax请求，获取运行时数据
-        getJvmRuntimeInfo();
-        // 每30秒刷新一次
-        window.setInterval(function () {
+        // 执行ajax请求
+        function execute() {
             // 发送ajax请求，获取内存图表数据
-            getJvmMemoryChartInfo(chartTime, 'Heap', 'Heap内存使用量');
-            getJvmMemoryChartInfo(chartTime, 'Non_Heap', 'Non_Heap内存使用量');
-            getJvmMemoryChartInfo(chartTime, chartPool, chartPool + '内存使用量');
+            getJvmMemoryChartInfo('hour', 'Heap', 'Heap内存使用量');
+            getJvmMemoryChartInfo('hour', 'Non_Heap', 'Non_Heap内存使用量');
+            getJvmMemoryChartInfo('hour', chartPool, chartPool + '内存使用量');
             // 发送ajax请求，获取线程信息
             getJvmThreadInfo();
             // 发送ajax请求，获取GC信息
@@ -472,6 +460,13 @@
             getJvmClassLoadingInfo();
             // 发送ajax请求，获取运行时数据
             getJvmRuntimeInfo();
+        }
+
+        // 页面加载后第一次执行
+        execute();
+        // 每30秒刷新一次
+        window.setInterval(function () {
+            execute();
         }, 1000 * 30);
     });
     e('instanceDetail', {});
