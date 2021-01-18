@@ -54,7 +54,7 @@
                     "X-CSRF-TOKEN": tokenValue
                 },
                 data: {
-                    ip: ip // 应用实例ID
+                    ip: ip // 服务器IP
                 },
                 success: function (result) {
                     var cpuTemperature = result.data;
@@ -120,6 +120,11 @@
                             text: 'CPU温度',
                             show: false
                         },
+                        grid: {
+                            left: '40%',
+                            top: '1%'
+                            // containLabel: true
+                        },
                         yAxis: [{
                             show: false,
                             data: [],
@@ -150,23 +155,23 @@
                         }],
                         xAxis: [{
                             show: false,
-                            min: -10,
-                            max: 80,
+                            min: -20,
+                            max: 100,
                             data: []
                         }, {
                             show: false,
-                            min: -10,
-                            max: 80,
+                            min: -20,
+                            max: 100,
                             data: []
                         }, {
                             show: false,
-                            min: -10,
-                            max: 80,
+                            min: -20,
+                            max: 100,
                             data: []
                         }, {
                             show: false,
                             min: -5,
-                            max: 80
+                            max: 40
                         }],
                         series: [{
                             name: '条',
@@ -219,7 +224,7 @@
                             xAxisIndex: 1,
                             barGap: '-100%',
                             data: [134],
-                            barWidth: 28,
+                            barWidth: 22,
                             itemStyle: {
                                 normal: {
                                     color: '#fff',
@@ -233,7 +238,7 @@
                             xAxisIndex: 2,
                             barGap: '-100%',
                             data: [135],
-                            barWidth: 38,
+                            barWidth: 28,
                             itemStyle: {
                                 normal: {
                                     color: '#D3D3D3',
@@ -261,7 +266,7 @@
                             hoverAnimation: false,
                             data: [0],
                             xAxisIndex: 1,
-                            symbolSize: 60,
+                            symbolSize: 53,
                             itemStyle: {
                                 normal: {
                                     color: '#fff',
@@ -275,7 +280,7 @@
                             hoverAnimation: false,
                             data: [0],
                             xAxisIndex: 2,
-                            symbolSize: 70,
+                            symbolSize: 60,
                             itemStyle: {
                                 normal: {
                                     color: '#D3D3D3',
@@ -292,7 +297,7 @@
                                 normal: {
                                     show: true,
                                     position: 'left',
-                                    distance: 12,
+                                    distance: 18,
                                     color: '#808a87',
                                     fontSize: 14,
                                     formatter: function (params) {
@@ -346,7 +351,7 @@
                     "X-CSRF-TOKEN": tokenValue
                 },
                 data: {
-                    ip: ip // 应用实例ID
+                    ip: ip // 服务器IP
                 },
                 success: function (result) {
                     var rCapacityPercentAvg = result.data;
@@ -487,7 +492,7 @@
                     "X-CSRF-TOKEN": tokenValue
                 },
                 data: {
-                    ip: ip // 应用实例ID
+                    ip: ip // 服务器IP
                 },
                 success: function (result) {
                     var data = result.data;
@@ -529,7 +534,7 @@
                     "X-CSRF-TOKEN": tokenValue
                 },
                 data: {
-                    ip: ip // 应用实例ID
+                    ip: ip // 服务器IP
                 },
                 success: function (result) {
                     var data = result.data;
@@ -627,7 +632,7 @@
                     "X-CSRF-TOKEN": tokenValue
                 },
                 data: {
-                    ip: ip // 应用实例ID
+                    ip: ip // 服务器IP
                 },
                 success: function (result) {
                     var data = result.data;
@@ -700,7 +705,7 @@
                     "X-CSRF-TOKEN": tokenValue
                 },
                 data: {
-                    ip: ip // 应用实例ID
+                    ip: ip // 服务器IP
                 },
                 success: function (result) {
                     var data = result.data;
@@ -805,7 +810,7 @@
                     "X-CSRF-TOKEN": tokenValue
                 },
                 data: {
-                    ip: ip // 应用实例ID
+                    ip: ip // 服务器IP
                 },
                 success: function (result) {
                     var data = result.data;
@@ -863,7 +868,7 @@
                     "X-CSRF-TOKEN": tokenValue
                 },
                 data: {
-                    ip: ip // 应用实例ID
+                    ip: ip // 服务器IP
                 },
                 success: function (result) {
                     var data = result.data;
@@ -917,7 +922,7 @@
                     "X-CSRF-TOKEN": tokenValue
                 },
                 data: {
-                    ip: ip, // 应用实例ID
+                    ip: ip, // 服务器IP
                     time: time // 时间
                 },
                 success: function (result) {
@@ -1118,7 +1123,7 @@
                     "X-CSRF-TOKEN": tokenValue
                 },
                 data: {
-                    ip: ip, // 应用实例ID
+                    ip: ip, // 服务器IP
                     time: time // 时间
                 },
                 success: function (result) {
@@ -1428,7 +1433,7 @@
                     "X-CSRF-TOKEN": tokenValue
                 },
                 data: {
-                    ip: ip, // 应用实例ID
+                    ip: ip, // 服务器IP
                     address: chartAddress, // 服务器网卡地址
                     time: time // 时间
                 },
