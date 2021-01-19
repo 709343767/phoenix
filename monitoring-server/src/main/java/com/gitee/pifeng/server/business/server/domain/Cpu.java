@@ -57,11 +57,6 @@ public class Cpu extends AbstractSuperBean {
     private String computerName;
 
     /**
-     * CPU信息
-     */
-    private CpuDomain cpuDomain;
-
-    /**
      * <p>
      * 计算平均CPU使用率
      * </p>

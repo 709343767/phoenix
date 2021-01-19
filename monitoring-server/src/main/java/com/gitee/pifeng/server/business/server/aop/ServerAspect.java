@@ -219,7 +219,6 @@ public class ServerAspect {
         Cpu cpu = new Cpu();
         cpu.setIp(ip);
         cpu.setComputerName(computerName);
-        cpu.setCpuDomain(cpuDomain);
         cpu.setAvgCpuCombined(Cpu.calculateAvgCpuCombined(cpuDomain));
         Cpu poolCpu = this.cpuPool.get(ip);
         cpu.setNum(poolCpu != null ? poolCpu.getNum() : 0);
@@ -244,7 +243,6 @@ public class ServerAspect {
         Memory memory = new Memory();
         memory.setIp(ip);
         memory.setComputerName(computerName);
-        memory.setMemoryDomain(memoryDomain);
         memory.setUsedPercent(NumberUtil.round(memoryDomain.getMenDomain().getMenUsedPercent() * 100D, 2).doubleValue());
         Memory poolMemory = this.memoryPool.get(ip);
         memory.setNum(poolMemory != null ? poolMemory.getNum() : 0);

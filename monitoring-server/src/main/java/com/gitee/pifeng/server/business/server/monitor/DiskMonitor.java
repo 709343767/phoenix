@@ -85,7 +85,7 @@ public class DiskMonitor implements IServerMonitoringListener {
                     // 告警级别字符串转告警级别枚举
                     AlarmLevelEnums alarmLevel = AlarmUtils.str2Enum(level);
                     // 发送告警
-                    this.sendAlarmInfo("磁盘分区过载", alarmLevel, disk, subregion);
+                    this.sendAlarmInfo("磁盘空间不足", alarmLevel, disk, subregion);
                     subregion.setAlarm(true);
                 }
             }

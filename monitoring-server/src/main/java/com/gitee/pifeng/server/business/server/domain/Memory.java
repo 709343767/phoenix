@@ -1,7 +1,6 @@
 package com.gitee.pifeng.server.business.server.domain;
 
 import com.gitee.pifeng.common.abs.AbstractSuperBean;
-import com.gitee.pifeng.common.domain.server.MemoryDomain;
 import lombok.*;
 import lombok.experimental.Accessors;
 
@@ -46,11 +45,6 @@ public class Memory extends AbstractSuperBean {
      * 计算机名
      */
     private String computerName;
-
-    /**
-     * 内存信息
-     */
-    private MemoryDomain memoryDomain;
 
     /**
      * 内存使用率
