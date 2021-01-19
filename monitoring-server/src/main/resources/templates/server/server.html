@@ -274,7 +274,7 @@
                     // 高度
                     height = document.body.clientHeight * 0.8 + 'px';
                 }
-                layer.open({
+                var layerIndex = layer.open({
                     type: 2,
                     title: '服务器详情（IP：' + data.ip + '）',
                     content: ctxPath + 'monitor-server/server-detail?id=' + data.id + '&ip=' + data.ip,
@@ -283,6 +283,8 @@
                     moveOut: true,
                     area: [width, height],
                 });
+                // 弹出层最大化
+                layer.full(layerIndex);
             }
         });
     });
