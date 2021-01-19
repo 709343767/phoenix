@@ -44,7 +44,7 @@ public class Sender {
      */
     public static String send(final String url, final String json) throws IOException {
         // 打印发送的数据包
-        log.info("发送数据包：{}", json);
+        log.debug("发送数据包：{}", json);
         // 加密请求数据
         String encrypt = DesEncryptUtils.encrypt(json);
         CiphertextPackage requestCiphertextPackage = new CiphertextPackage(encrypt);
