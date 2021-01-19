@@ -449,9 +449,9 @@
         // 执行ajax请求
         function execute() {
             // 发送ajax请求，获取内存图表数据
-            getJvmMemoryChartInfo('hour', 'Heap', 'Heap内存使用量');
-            getJvmMemoryChartInfo('hour', 'Non_Heap', 'Non_Heap内存使用量');
-            getJvmMemoryChartInfo('hour', chartPool, chartPool + '内存使用量');
+            getJvmMemoryChartInfo(chartTime, 'Heap', 'Heap内存使用量');
+            getJvmMemoryChartInfo(chartTime, 'Non_Heap', 'Non_Heap内存使用量');
+            getJvmMemoryChartInfo(chartTime, chartPool, chartPool + '内存使用量');
             // 发送ajax请求，获取线程信息
             getJvmThreadInfo();
             // 发送ajax请求，获取GC信息
