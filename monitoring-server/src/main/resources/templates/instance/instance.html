@@ -297,7 +297,7 @@
                     // 高度
                     height = document.body.clientHeight * 0.8 + 'px';
                 }
-                var layerIndex = layer.open({
+                layer.open({
                     type: 2,
                     title: '应用详情（ID：' + data.instanceId + '）',
                     content: ctxPath + 'monitor-instance/instance-detail?id=' + data.id + '&instanceId=' + data.instanceId,
@@ -305,9 +305,12 @@
                     shade: 0,
                     moveOut: true,
                     area: [width, height],
+                    success: function (layero, index) {
+                        // 在回调方法中的第2个参数“index”表示的是当前弹窗的索引
+                        // 通过layer.full方法将窗口放大
+                        layer.full(index);
+                    }
                 });
-                // 弹出层最大化
-                layer.full(layerIndex);
             }
         });
     });
