@@ -380,6 +380,7 @@ public class ServerServiceImpl implements IServerService {
         monitorServer.setOsTimeZone(osDomain.getOsTimeZone());
         monitorServer.setUserHome(osDomain.getUserHome());
         monitorServer.setUserName(osDomain.getUserName());
+        monitorServer.setIsOnline(ZeroOrOneConstants.ONE);
         // 新增服务器信息
         if (selectCountDb == null || selectCountDb == 0) {
             monitorServer.setInsertTime(serverPackage.getDateTime());
@@ -392,6 +393,22 @@ public class ServerServiceImpl implements IServerService {
             lambdaUpdateWrapper.eq(MonitorServer::getIp, ip);
             this.monitorServerDao.update(monitorServer, lambdaUpdateWrapper);
         }
+    }
+
+    /**
+     * <p>
+     * 更新服务器信息
+     * </p>
+     *
+     * @param monitorServer       服务器
+     * @param lambdaUpdateWrapper 更新条件
+     * @return 更新记录数
+     * @author 皮锋
+     * @custom.date 2020/6/29 15:27
+     */
+    @Override
+    public int updateInstance(MonitorServer monitorServer, LambdaUpdateWrapper<MonitorServer> lambdaUpdateWrapper) {
+        return this.monitorServerDao.update(monitorServer, lambdaUpdateWrapper);
     }
 
 }

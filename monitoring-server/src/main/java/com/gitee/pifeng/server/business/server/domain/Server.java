@@ -4,6 +4,8 @@ import com.gitee.pifeng.common.abs.AbstractSuperBean;
 import lombok.*;
 import lombok.experimental.Accessors;
 
+import java.util.Date;
+
 /**
  * <p>
  * 服务器
@@ -20,6 +22,26 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
 public class Server extends AbstractSuperBean {
+
+    /**
+     * 允许多少秒内没收到服务器信息包是正常情况
+     */
+    private int thresholdSecond;
+
+    /**
+     * 是否在线
+     */
+    private boolean isOnline;
+
+    /**
+     * 最后一次通过服务器信息包更新的时间
+     */
+    private Date dateTime;
+
+    /**
+     * 是否已经发送过离线告警消息
+     */
+    private boolean isLineAlarm;
 
     /**
      * IP地址

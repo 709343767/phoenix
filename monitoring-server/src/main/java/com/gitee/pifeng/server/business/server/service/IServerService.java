@@ -1,7 +1,9 @@
 package com.gitee.pifeng.server.business.server.service;
 
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.gitee.pifeng.common.domain.Result;
 import com.gitee.pifeng.common.dto.ServerPackage;
+import com.gitee.pifeng.server.business.server.entity.MonitorServer;
 
 /**
  * <p>
@@ -24,4 +26,18 @@ public interface IServerService {
      * @custom.date 2020/3/23 15:29
      */
     Result dealServerPackage(ServerPackage serverPackage);
+
+    /**
+     * <p>
+     * 更新服务器信息
+     * </p>
+     *
+     * @param monitorServer       服务器
+     * @param lambdaUpdateWrapper 更新条件
+     * @return 更新记录数
+     * @author 皮锋
+     * @custom.date 2020/6/29 15:27
+     */
+    int updateInstance(MonitorServer monitorServer, LambdaUpdateWrapper<MonitorServer> lambdaUpdateWrapper);
+
 }

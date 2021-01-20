@@ -49,7 +49,7 @@ import java.util.concurrent.TimeUnit;
  */
 @Slf4j
 @Component
-@Order(4)
+@Order(5)
 public class DbTableSpaceMonitorTask implements CommandLineRunner {
 
     /**

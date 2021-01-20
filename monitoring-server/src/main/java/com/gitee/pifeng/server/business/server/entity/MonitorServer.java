@@ -75,6 +75,12 @@ public class MonitorServer {
     private String osTimeZone;
 
     /**
+     * 服务器状态（0：离线，1：在线）
+     */
+    @TableField("IS_ONLINE")
+    private String isOnline;
+
+    /**
      * 新增时间
      */
     @TableField("INSERT_TIME")

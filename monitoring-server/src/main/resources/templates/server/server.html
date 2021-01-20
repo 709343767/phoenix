@@ -113,6 +113,16 @@
                     'data': res.data.records //解析数据列表
                 };
             },
+            done: function () {
+                $('[data-field="isOnline"]').children().each(function () {
+                    if ($(this).text() === '0') {
+                        $(this).html('<span style="color: #FF4500;">离线</span>');
+                    }
+                    if ($(this).text() === '1') {
+                        $(this).text('在线');
+                    }
+                });
+            },
             cols: [
                 [{
                     type: 'checkbox'
@@ -129,12 +139,12 @@
                 }, {
                     field: 'serverName',
                     title: '服务器名',
-                    minWidth: 200,
+                    minWidth: 180,
                     sort: !0
                 }, {
                     field: 'osName',
                     title: '操作系统',
-                    minWidth: 120,
+                    minWidth: 180,
                     sort: !0
                 }, {
                     field: 'osVersion',
@@ -154,6 +164,11 @@
                 }, {
                     field: 'userHome',
                     title: '用户目录',
+                    minWidth: 120,
+                    sort: !0
+                }, {
+                    field: 'isOnline',
+                    title: '状态',
                     minWidth: 120,
                     sort: !0
                 }, {

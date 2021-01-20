@@ -46,7 +46,7 @@ import java.util.concurrent.TimeUnit;
  */
 @Slf4j
 @Component
-@Order(3)
+@Order(4)
 public class DbMonitorTask implements CommandLineRunner {
 
     /**

@@ -78,7 +78,7 @@ public class MonitorInstance {
      * 应用状态（0：离线，1：在线）
      */
     @TableField("IS_ONLINE")
-    private String isOnLine;
+    private String isOnline;
 
     /**
      * 编程语言

@@ -37,7 +37,7 @@ import java.util.concurrent.TimeUnit;
  */
 @Slf4j
 @Component
-@Order(2)
+@Order(3)
 public class NetMonitorTask implements CommandLineRunner {
 
     /**

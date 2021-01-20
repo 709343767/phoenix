@@ -54,6 +54,9 @@ public class MonitorServerVo implements ISuperBean {
     @ApiModelProperty(value = "操作系统时区")
     private String osTimeZone;
 
+    @ApiModelProperty(value = "服务器状态（0：离线，1：在线）")
+    private String isOnline;
+
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @ApiModelProperty(value = "新增时间")
     private Date insertTime;

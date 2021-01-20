@@ -10,6 +10,7 @@ import com.gitee.pifeng.common.dto.ServerPackage;
 import com.gitee.pifeng.common.exception.NetException;
 import com.gitee.pifeng.common.threadpool.ThreadPool;
 import com.gitee.pifeng.server.business.server.controller.ServerController;
+import com.gitee.pifeng.server.business.server.core.MonitoringConfigPropertiesLoader;
 import com.gitee.pifeng.server.business.server.domain.Cpu;
 import com.gitee.pifeng.server.business.server.domain.Disk;
 import com.gitee.pifeng.server.business.server.domain.Memory;
@@ -27,6 +28,7 @@ import org.hyperic.sigar.SigarException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -103,18 +105,8 @@ public class ServerAspect {
         ServerPackage serverPackage = JSON.parseObject(args, ServerPackage.class);
         // IP地址
         String ip = serverPackage.getIp();
-        // 计算机名
-        String computerName = serverPackage.getComputerName();
-        // 服务器信息
-        Server server = serverPackage.getServer();
-        // 内存信息
-        MemoryDomain memoryDomain = server.getMemoryDomain();
-        // Cpu信息
-        CpuDomain cpuDomain = server.getCpuDomain();
-        // 磁盘信息
-        DiskDomain diskDomain = server.getDiskDomain();
         // 刷新服务器信息
-        this.refreshServerInfo(ip, computerName, memoryDomain, cpuDomain, diskDomain);
+        this.refreshServerInfo(serverPackage);
         // 调用监听器回调接口
         this.serverMonitoringListeners.forEach(o -> ThreadPool.COMMON_IO_INTENSIVE_THREAD_POOL.execute(() -> {
             try {
@@ -132,17 +124,27 @@ public class ServerAspect {
      * 刷新服务器信息
      * </p>
      *
-     * @param ip           IP地址
-     * @param computerName 计算机名
-     * @param memoryDomain 内存信息
-     * @param cpuDomain    CPU信息
-     * @param diskDomain   磁盘信息
+     * @param serverPackage 服务器信息包
      * @author 皮锋
      * @custom.date 2020/3/31 13:39
      */
-    private void refreshServerInfo(String ip, String computerName, MemoryDomain memoryDomain, CpuDomain cpuDomain, DiskDomain diskDomain) {
+    private void refreshServerInfo(ServerPackage serverPackage) {
+        // IP地址
+        String ip = serverPackage.getIp();
+        // 计算机名
+        String computerName = serverPackage.getComputerName();
+        // 传输频率
+        long rate = serverPackage.getRate();
+        // 服务器信息
+        Server server = serverPackage.getServer();
+        // 内存信息
+        MemoryDomain memoryDomain = server.getMemoryDomain();
+        // Cpu信息
+        CpuDomain cpuDomain = server.getCpuDomain();
+        // 磁盘信息
+        DiskDomain diskDomain = server.getDiskDomain();
         // 刷新服务器信息
-        this.refreshServer(ip, computerName);
+        this.refreshServer(ip, computerName, rate);
         // 刷新服务器内存信息
         this.refreshMemory(ip, computerName, memoryDomain);
         // 刷新服务器CPU信息
@@ -158,15 +160,21 @@ public class ServerAspect {
      *
      * @param ip           IP地址
      * @param computerName 计算机名
+     * @param rate         传输频率
      * @author 皮锋
      * @custom.date 2020/12/17 20:15
      */
-    private void refreshServer(String ip, String computerName) {
+    private void refreshServer(String ip, String computerName, long rate) {
         com.gitee.pifeng.server.business.server.domain.Server server = new com.gitee.pifeng.server.business.server.domain.Server();
+        // 服务器本身信息
         server.setIp(ip);
         server.setComputerName(computerName);
-        com.gitee.pifeng.server.business.server.domain.Server poolServer = this.serverPool.get(ip);
-        server.setFirstDiscovery(poolServer == null || poolServer.isFirstDiscovery());
+        // 服务器状态信息
+        server.setOnline(true);
+        server.setDateTime(new Date());
+        server.setLineAlarm(this.serverPool.get(ip) != null && this.serverPool.get(ip).isLineAlarm());
+        server.setThresholdSecond((int) (rate * MonitoringConfigPropertiesLoader.getMonitoringProperties().getThreshold()));
+        server.setFirstDiscovery(this.serverPool.get(ip) == null || this.serverPool.get(ip).isFirstDiscovery());
         // 更新服务器信息池
         this.serverPool.updateServerPool(ip, server);
     }
