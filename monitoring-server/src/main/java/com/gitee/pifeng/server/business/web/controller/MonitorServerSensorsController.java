@@ -56,7 +56,7 @@ public class MonitorServerSensorsController {
 
     /**
      * <p>
-     * 获取服务器详情页面服务器CPU温度信息
+     * 获取服务器详情页面服务器CPU温度图表信息
      * </p>
      *
      * @param ip 服务器IP地址
@@ -64,7 +64,7 @@ public class MonitorServerSensorsController {
      * @author 皮锋
      * @custom.date 2021/1/17 21:00
      */
-    @ApiOperation(value = "获取服务器详情页面服务器CPU温度信息")
+    @ApiOperation(value = "获取服务器详情页面服务器CPU温度图表信息")
     @ResponseBody
     @GetMapping("/get-server-detail-page-server-sensors-chart-info")
     @ApiImplicitParams(value = {
