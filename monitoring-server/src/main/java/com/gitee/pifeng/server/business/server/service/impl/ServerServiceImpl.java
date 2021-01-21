@@ -123,7 +123,6 @@ public class ServerServiceImpl implements IServerService {
     private void operateServer(ServerPackage serverPackage) {
         // IP地址
         String ip = serverPackage.getIp();
-        OsDomain osDomain = serverPackage.getServer().getOsDomain();
         // 查询数据库中是否有此IP的服务器
         LambdaQueryWrapper<MonitorServer> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         lambdaQueryWrapper.eq(MonitorServer::getIp, ip);
@@ -131,7 +130,7 @@ public class ServerServiceImpl implements IServerService {
         // 添加或更新到数据库
         MonitorServer monitorServer = new MonitorServer();
         monitorServer.setIp(ip);
-        monitorServer.setServerName(osDomain.getComputerName());
+        monitorServer.setServerName(serverPackage.getComputerName());
         monitorServer.setIsOnline(ZeroOrOneConstants.ONE);
         // 没有
         if (selectCountDb == null || selectCountDb == 0) {
