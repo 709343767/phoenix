@@ -1191,7 +1191,7 @@
                         },
                         legend: {
                             data: ['剩余率', '总使用率', '用户使用率', '系统使用率', '等待率', '错误率'],
-                            selected: {'用户使用率': false, '系统使用率': false, '等待率': false, '错误率': false},
+                            // selected: {'用户使用率': false, '系统使用率': false, '等待率': false, '错误率': false},
                             x: 'center',
                             y: '12%',
                             orient: 'horizontal'
