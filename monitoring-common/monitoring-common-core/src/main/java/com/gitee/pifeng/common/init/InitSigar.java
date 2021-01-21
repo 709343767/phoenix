@@ -50,8 +50,7 @@ public class InitSigar {
             Properties props = System.getProperties();
             // 当前文件夹路径
             String currentDir = props.getProperty("user.dir");
-            File tempDir = new File(currentDir + File.separator + "persistent-monitoring"
-                    + File.separator + "sigar" + File.separator + "lib");
+            File tempDir = new File(currentDir + File.separator + "persistent-monitoring" + File.separator + "sigar");
             // 判断文件夹是否存在
             if (!tempDir.exists()) {
                 boolean isMkdirs = tempDir.mkdirs();
