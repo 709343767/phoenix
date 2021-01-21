@@ -11,11 +11,11 @@ import java.util.Date;
 
 /**
  * <p>
- * 服务器表
+ * 服务器操作系统表
  * </p>
  *
  * @author 皮锋
- * @custom.date 2020/5/11 15:33
+ * @custom.date 2021-01-21
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -23,8 +23,8 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@TableName("MONITOR_SERVER")
-public class MonitorServer {
+@TableName("MONITOR_SERVER_OS")
+public class MonitorServerOs {
 
     /**
      * 主键ID
@@ -45,10 +45,34 @@ public class MonitorServer {
     private String serverName;
 
     /**
-     * 服务器状态（0：离线，1：在线）
+     * 操作系统名称
      */
-    @TableField("IS_ONLINE")
-    private String isOnline;
+    @TableField("OS_NAME")
+    private String osName;
+
+    /**
+     * 操作系统版本
+     */
+    @TableField("OS_VERSION")
+    private String osVersion;
+
+    /**
+     * 用户名称
+     */
+    @TableField("USER_NAME")
+    private String userName;
+
+    /**
+     * 用户主目录
+     */
+    @TableField("USER_HOME")
+    private String userHome;
+
+    /**
+     * 操作系统时区
+     */
+    @TableField("OS_TIME_ZONE")
+    private String osTimeZone;
 
     /**
      * 新增时间

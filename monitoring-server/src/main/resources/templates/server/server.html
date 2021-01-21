@@ -36,21 +36,13 @@
                     </div>
                 </div>
                 <div class="layui-inline">
-                    <label class="layui-form-label">操作系统</label>
+                    <label class="layui-form-label">状态</label>
                     <div class="layui-input-block">
-                        <input type="text" name="osName" placeholder="请输入" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-inline">
-                    <label class="layui-form-label">系统版本</label>
-                    <div class="layui-input-block">
-                        <input type="text" name="osVersion" placeholder="请输入" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-inline">
-                    <label class="layui-form-label">系统用户</label>
-                    <div class="layui-input-block">
-                        <input type="text" name="userName" placeholder="请输入" autocomplete="off" class="layui-input">
+                        <select name="isOnline">
+                            <option value="">所有</option>
+                            <option value="0">离线</option>
+                            <option value="1">在线</option>
+                        </select>
                     </div>
                 </div>
                 <div class="layui-inline">
@@ -140,31 +132,6 @@
                     field: 'serverName',
                     title: '服务器名',
                     minWidth: 180,
-                    sort: !0
-                }, {
-                    field: 'osName',
-                    title: '操作系统',
-                    minWidth: 180,
-                    sort: !0
-                }, {
-                    field: 'osVersion',
-                    title: '系统版本',
-                    minWidth: 120,
-                    sort: !0
-                }, {
-                    field: 'osTimeZone',
-                    title: '系统时区',
-                    minWidth: 120,
-                    sort: !0
-                }, {
-                    field: 'userName',
-                    title: '系统用户',
-                    minWidth: 120,
-                    sort: !0
-                }, {
-                    field: 'userHome',
-                    title: '用户目录',
-                    minWidth: 120,
                     sort: !0
                 }, {
                     field: 'isOnline',

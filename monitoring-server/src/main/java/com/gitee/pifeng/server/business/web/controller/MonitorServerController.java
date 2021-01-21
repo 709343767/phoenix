@@ -57,10 +57,8 @@ public class MonitorServerController {
      * @param current    当前页
      * @param size       每页显示条数
      * @param ip         IP
+     * @param isOnline   状态
      * @param serverName 服务器名
-     * @param osName     操作系统名称
-     * @param osVersion  操作系统版本
-     * @param userName   用户名称
      * @return layUiAdmin响应对象
      * @author 皮锋
      * @custom.date 2020/9/4 12:34
@@ -71,13 +69,11 @@ public class MonitorServerController {
             @ApiImplicitParam(name = "size", value = "每页显示条数", required = true, paramType = "query", dataType = "long"),
             @ApiImplicitParam(name = "ip", value = "IP", paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "serverName", value = "服务器名", paramType = "query", dataType = "string"),
-            @ApiImplicitParam(name = "osName", value = "操作系统名称", paramType = "query", dataType = "string"),
-            @ApiImplicitParam(name = "osVersion", value = "操作系统版本", paramType = "query", dataType = "string"),
-            @ApiImplicitParam(name = "userName", value = "用户名称", paramType = "query", dataType = "string")})
+            @ApiImplicitParam(name = "isOnline", value = "状态", paramType = "query", dataType = "string")})
     @GetMapping("/get-monitor-server-list")
     @ResponseBody
-    public LayUiAdminResultVo getMonitorServerList(Long current, Long size, String ip, String serverName, String osName, String osVersion, String userName) {
-        Page<MonitorServerVo> page = this.monitorServerService.getMonitorServerList(current, size, ip, serverName, osName, osVersion, userName);
+    public LayUiAdminResultVo getMonitorServerList(Long current, Long size, String ip, String serverName, String isOnline) {
+        Page<MonitorServerVo> page = this.monitorServerService.getMonitorServerList(current, size, ip, serverName, isOnline);
         return LayUiAdminResultVo.ok(page);
     }
 
@@ -119,26 +115,6 @@ public class MonitorServerController {
         List<String> netcardAddresses = this.monitorServerService.getNetcardAddress(ip);
         mv.addObject("netcardAddresses", netcardAddresses);
         return mv;
-    }
-
-    /**
-     * <p>
-     * 获取服务器操作系统信息
-     * </p>
-     *
-     * @param ip 服务器IP地址
-     * @return layUiAdmin响应对象
-     * @author 皮锋
-     * @custom.date 2020/10/26 20:24
-     */
-    @ApiOperation(value = "获取服务器操作系统信息")
-    @ResponseBody
-    @GetMapping("/get-server-os-info")
-    @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "ip", value = "服务器IP地址", required = true, paramType = "query", dataType = "string")})
-    public LayUiAdminResultVo getMonitorServerOsInfo(@RequestParam(name = "ip") String ip) {
-        MonitorServerVo monitorServerVo = this.monitorServerService.getMonitorServerInfo(ip);
-        return LayUiAdminResultVo.ok(monitorServerVo);
     }
 
 }

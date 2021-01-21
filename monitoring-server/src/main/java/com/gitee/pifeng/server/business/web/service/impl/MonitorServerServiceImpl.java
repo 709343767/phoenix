@@ -49,6 +49,12 @@ public class MonitorServerServiceImpl extends ServiceImpl<IMonitorServerDao, Mon
     private IMonitorServerDao monitorServerDao;
 
     /**
+     * 服务器操作系统数据访问对象
+     */
+    @Autowired
+    private IMonitorServerOsDao monitorServerOsDao;
+
+    /**
      * 服务器CPU数据访问对象
      */
     @Autowired
@@ -96,7 +102,7 @@ public class MonitorServerServiceImpl extends ServiceImpl<IMonitorServerDao, Mon
     @Override
     public HomeServerVo getHomeServerInfo() {
         // 服务器类型统计
-        Map<String, Object> map = this.monitorServerDao.getServerOsTypeStatistics();
+        Map<String, Object> map = this.monitorServerOsDao.getServerOsTypeStatistics();
         return HomeServerVo.builder()
                 .serverSum(NumberUtil.parseInt(map.get("serverSum").toString()))
                 .windowsSum(NumberUtil.parseInt(map.get("windowsSum").toString()))
@@ -114,15 +120,13 @@ public class MonitorServerServiceImpl extends ServiceImpl<IMonitorServerDao, Mon
      * @param size       每页显示条数
      * @param ip         IP
      * @param serverName 服务器名
-     * @param osName     操作系统名称
-     * @param osVersion  操作系统版本
-     * @param userName   用户名称
+     * @param isOnline   状态
      * @return 简单分页模型
      * @author 皮锋
      * @custom.date 2020/9/4 12:38
      */
     @Override
-    public Page<MonitorServerVo> getMonitorServerList(Long current, Long size, String ip, String serverName, String osName, String osVersion, String userName) {
+    public Page<MonitorServerVo> getMonitorServerList(Long current, Long size, String ip, String serverName, String isOnline) {
         // 查询数据库
         IPage<MonitorServer> ipage = new Page<>(current, size);
         LambdaQueryWrapper<MonitorServer> lambdaQueryWrapper = new LambdaQueryWrapper<>();
@@ -132,14 +136,8 @@ public class MonitorServerServiceImpl extends ServiceImpl<IMonitorServerDao, Mon
         if (StringUtils.isNotBlank(serverName)) {
             lambdaQueryWrapper.like(MonitorServer::getServerName, serverName);
         }
-        if (StringUtils.isNotBlank(osName)) {
-            lambdaQueryWrapper.like(MonitorServer::getOsName, osName);
-        }
-        if (StringUtils.isNotBlank(osVersion)) {
-            lambdaQueryWrapper.like(MonitorServer::getOsVersion, osVersion);
-        }
-        if (StringUtils.isNotBlank(userName)) {
-            lambdaQueryWrapper.like(MonitorServer::getUserName, userName);
+        if (StringUtils.isNotBlank(serverName)) {
+            lambdaQueryWrapper.eq(MonitorServer::getIsOnline, isOnline);
         }
         IPage<MonitorServer> monitorServerPage = this.monitorServerDao.selectPage(ipage, lambdaQueryWrapper);
         List<MonitorServer> monitorServers = monitorServerPage.getRecords();
@@ -173,6 +171,10 @@ public class MonitorServerServiceImpl extends ServiceImpl<IMonitorServerDao, Mon
         for (MonitorServerVo monitorServerVo : monitorServerVos) {
             ips.add(monitorServerVo.getIp());
         }
+        // 服务器操作系统表
+        LambdaUpdateWrapper<MonitorServerOs> serverOsLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+        serverOsLambdaUpdateWrapper.in(MonitorServerOs::getIp, ips);
+        this.monitorServerOsDao.delete(serverOsLambdaUpdateWrapper);
         // 服务器CPU表
         LambdaUpdateWrapper<MonitorServerCpu> serverCpuLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
         serverCpuLambdaUpdateWrapper.in(MonitorServerCpu::getIp, ips);
@@ -207,24 +209,6 @@ public class MonitorServerServiceImpl extends ServiceImpl<IMonitorServerDao, Mon
                 ThreadPool.COMMON_IO_INTENSIVE_THREAD_POOL.execute(() ->
                         e.wakeUpMonitorPool(MonitorTypeEnums.SERVER, ips)));
         return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);
-    }
-
-    /**
-     * <p>
-     * 获取服务器操作系统信息
-     * </p>
-     *
-     * @param ip 服务器IP地址
-     * @return 服务器信息表现层对象
-     * @author 皮锋
-     * @custom.date 2020/10/26 20:26
-     */
-    @Override
-    public MonitorServerVo getMonitorServerInfo(String ip) {
-        LambdaQueryWrapper<MonitorServer> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-        lambdaQueryWrapper.eq(MonitorServer::getIp, ip);
-        MonitorServer monitorServer = this.monitorServerDao.selectOne(lambdaQueryWrapper);
-        return MonitorServerVo.builder().build().convertFor(monitorServer);
     }
 
     /**

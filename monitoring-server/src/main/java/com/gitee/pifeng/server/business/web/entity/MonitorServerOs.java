@@ -16,19 +16,19 @@ import java.util.Date;
 
 /**
  * <p>
- * 服务器表
+ * 服务器操作系统表
  * </p>
  *
  * @author 皮锋
- * @custom.date 2020年3月7日 下午5:03:49
+ * @custom.date 2021-01-21
  */
 @Data
 @Builder
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("MONITOR_SERVER")
-@ApiModel(value = "MonitorServer对象", description = "服务器表")
-public class MonitorServer implements Serializable {
+@TableName("MONITOR_SERVER_OS")
+@ApiModel(value = "MonitorServerOs对象", description = "服务器操作系统表")
+public class MonitorServerOs implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -44,9 +44,25 @@ public class MonitorServer implements Serializable {
     @TableField("SERVER_NAME")
     private String serverName;
 
-    @ApiModelProperty(value = "服务器状态（0：离线，1：在线）")
-    @TableField("IS_ONLINE")
-    private String isOnline;
+    @ApiModelProperty(value = "操作系统名称")
+    @TableField("OS_NAME")
+    private String osName;
+
+    @ApiModelProperty(value = "操作系统版本")
+    @TableField("OS_VERSION")
+    private String osVersion;
+
+    @ApiModelProperty(value = "用户名称")
+    @TableField("USER_NAME")
+    private String userName;
+
+    @ApiModelProperty(value = "用户主目录")
+    @TableField("USER_HOME")
+    private String userHome;
+
+    @ApiModelProperty(value = "操作系统时区")
+    @TableField("OS_TIME_ZONE")
+    private String osTimeZone;
 
     @ApiModelProperty(value = "新增时间")
     @TableField("INSERT_TIME")

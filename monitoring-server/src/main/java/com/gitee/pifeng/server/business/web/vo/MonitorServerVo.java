@@ -39,21 +39,6 @@ public class MonitorServerVo implements ISuperBean {
     @ApiModelProperty(value = "服务器名")
     private String serverName;
 
-    @ApiModelProperty(value = "操作系统名称")
-    private String osName;
-
-    @ApiModelProperty(value = "操作系统版本")
-    private String osVersion;
-
-    @ApiModelProperty(value = "用户名称")
-    private String userName;
-
-    @ApiModelProperty(value = "用户主目录")
-    private String userHome;
-
-    @ApiModelProperty(value = "操作系统时区")
-    private String osTimeZone;
-
     @ApiModelProperty(value = "服务器状态（0：离线，1：在线）")
     private String isOnline;
 

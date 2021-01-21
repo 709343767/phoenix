@@ -39,14 +39,12 @@ public interface IMonitorServerService extends IService<MonitorServer> {
      * @param size       每页显示条数
      * @param ip         IP
      * @param serverName 服务器名
-     * @param osName     操作系统名称
-     * @param osVersion  操作系统版本
-     * @param userName   用户名称
+     * @param isOnline   状态
      * @return 简单分页模型
      * @author 皮锋
      * @custom.date 2020/9/4 12:37
      */
-    Page<MonitorServerVo> getMonitorServerList(Long current, Long size, String ip, String serverName, String osName, String osVersion, String userName);
+    Page<MonitorServerVo> getMonitorServerList(Long current, Long size, String ip, String serverName, String isOnline);
 
     /**
      * <p>
@@ -59,18 +57,6 @@ public interface IMonitorServerService extends IService<MonitorServer> {
      * @custom.date 2020/9/4 16:13
      */
     LayUiAdminResultVo deleteMonitorServer(List<MonitorServerVo> monitorServerVos);
-
-    /**
-     * <p>
-     * 获取服务器操作系统信息
-     * </p>
-     *
-     * @param ip 服务器IP地址
-     * @return 服务器信息表现层对象
-     * @author 皮锋
-     * @custom.date 2020/10/26 20:26
-     */
-    MonitorServerVo getMonitorServerInfo(String ip);
 
     /**
      * <p>

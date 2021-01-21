@@ -805,7 +805,7 @@
             });
             admin.req({
                 type: 'get',
-                url: layui.setter.base + 'monitor-server/get-server-os-info',
+                url: layui.setter.base + 'monitor-server-os/get-server-os-info',
                 dataType: 'json',
                 contentType: 'application/json;charset=utf-8',
                 headers: {

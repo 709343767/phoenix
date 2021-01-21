@@ -37,6 +37,12 @@ public class ServerServiceImpl implements IServerService {
     private IMonitorServerDao monitorServerDao;
 
     /**
+     * 服务器操作系统数据访问对象
+     */
+    @Autowired
+    private IMonitorServerOsDao monitorServerOsDao;
+
+    /**
      * 服务器内存数据访问对象
      */
     @Autowired
@@ -87,6 +93,8 @@ public class ServerServiceImpl implements IServerService {
     public Result dealServerPackage(ServerPackage serverPackage) {
         // 把服务器信息添加或更新到数据库
         this.operateServer(serverPackage);
+        // 把服务器操作系统信息添加或更新到数据库
+        this.operateServerOs(serverPackage);
         // 把服务器内存信息添加到数据库
         this.operateServerMemory(serverPackage);
         // 把服务器CPU信息添加到数据库
@@ -101,6 +109,42 @@ public class ServerServiceImpl implements IServerService {
         this.operateServerSensors(serverPackage);
         // 返回结果
         return Result.builder().isSuccess(true).msg(ResultMsgConstants.SUCCESS).build();
+    }
+
+    /**
+     * <p>
+     * 把服务器信息添加或更新到数据库
+     * </p>
+     *
+     * @param serverPackage 服务器信息包
+     * @author 皮锋
+     * @custom.date 2021/1/21 13:21
+     */
+    private void operateServer(ServerPackage serverPackage) {
+        // IP地址
+        String ip = serverPackage.getIp();
+        OsDomain osDomain = serverPackage.getServer().getOsDomain();
+        // 查询数据库中是否有此IP的服务器
+        LambdaQueryWrapper<MonitorServer> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(MonitorServer::getIp, ip);
+        Integer selectCountDb = this.monitorServerDao.selectCount(lambdaQueryWrapper);
+        // 添加或更新到数据库
+        MonitorServer monitorServer = new MonitorServer();
+        monitorServer.setIp(ip);
+        monitorServer.setServerName(osDomain.getComputerName());
+        monitorServer.setIsOnline(ZeroOrOneConstants.ONE);
+        // 没有
+        if (selectCountDb == null || selectCountDb == 0) {
+            monitorServer.setInsertTime(new Date());
+            this.monitorServerDao.insert(monitorServer);
+        }
+        // 有
+        else {
+            monitorServer.setUpdateTime(new Date());
+            LambdaUpdateWrapper<MonitorServer> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+            lambdaUpdateWrapper.eq(MonitorServer::getIp, ip);
+            this.monitorServerDao.update(monitorServer, lambdaUpdateWrapper);
+        }
     }
 
     /**
@@ -357,41 +401,40 @@ public class ServerServiceImpl implements IServerService {
 
     /**
      * <p>
-     * 把服务器信息添加或更新到数据库
+     * 把服务器操作系统信息添加或更新到数据库
      * </p>
      *
      * @param serverPackage 服务器信息包
      * @author 皮锋
      * @custom.date 2020/5/11 16:01
      */
-    private void operateServer(ServerPackage serverPackage) {
+    private void operateServerOs(ServerPackage serverPackage) {
         // IP地址
         String ip = serverPackage.getIp();
         // 操作系统信息
         OsDomain osDomain = serverPackage.getServer().getOsDomain();
-        LambdaQueryWrapper<MonitorServer> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-        lambdaQueryWrapper.eq(MonitorServer::getIp, ip);
-        Integer selectCountDb = this.monitorServerDao.selectCount(lambdaQueryWrapper);
-        MonitorServer monitorServer = new MonitorServer();
-        monitorServer.setIp(ip);
-        monitorServer.setServerName(osDomain.getComputerName());
-        monitorServer.setOsName(osDomain.getOsName());
-        monitorServer.setOsVersion(osDomain.getOsVersion());
-        monitorServer.setOsTimeZone(osDomain.getOsTimeZone());
-        monitorServer.setUserHome(osDomain.getUserHome());
-        monitorServer.setUserName(osDomain.getUserName());
-        monitorServer.setIsOnline(ZeroOrOneConstants.ONE);
-        // 新增服务器信息
+        LambdaQueryWrapper<MonitorServerOs> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(MonitorServerOs::getIp, ip);
+        Integer selectCountDb = this.monitorServerOsDao.selectCount(lambdaQueryWrapper);
+        MonitorServerOs monitorServerOs = new MonitorServerOs();
+        monitorServerOs.setIp(ip);
+        monitorServerOs.setServerName(osDomain.getComputerName());
+        monitorServerOs.setOsName(osDomain.getOsName());
+        monitorServerOs.setOsVersion(osDomain.getOsVersion());
+        monitorServerOs.setOsTimeZone(osDomain.getOsTimeZone());
+        monitorServerOs.setUserHome(osDomain.getUserHome());
+        monitorServerOs.setUserName(osDomain.getUserName());
+        // 新增服务器操作系统信息
         if (selectCountDb == null || selectCountDb == 0) {
-            monitorServer.setInsertTime(serverPackage.getDateTime());
-            this.monitorServerDao.insert(monitorServer);
+            monitorServerOs.setInsertTime(serverPackage.getDateTime());
+            this.monitorServerOsDao.insert(monitorServerOs);
         }
-        // 更新服务器信息
+        // 更新服务器操作系统信息
         else {
-            monitorServer.setUpdateTime(serverPackage.getDateTime());
-            LambdaUpdateWrapper<MonitorServer> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();
-            lambdaUpdateWrapper.eq(MonitorServer::getIp, ip);
-            this.monitorServerDao.update(monitorServer, lambdaUpdateWrapper);
+            monitorServerOs.setUpdateTime(serverPackage.getDateTime());
+            LambdaUpdateWrapper<MonitorServerOs> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+            lambdaUpdateWrapper.eq(MonitorServerOs::getIp, ip);
+            this.monitorServerOsDao.update(monitorServerOs, lambdaUpdateWrapper);
         }
     }
 
