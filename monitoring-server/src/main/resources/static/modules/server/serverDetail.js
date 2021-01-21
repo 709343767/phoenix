@@ -1365,10 +1365,10 @@
                                     // 三种由深及浅的颜色
                                     [{
                                         offset: 0,
-                                        color: '#EEE5DE'
+                                        color: '#4F4F4F'
                                     }, {
                                         offset: 0.5,
-                                        color: '#FFF5EE'
+                                        color: '#696969'
                                     }, {
                                         offset: 1,
                                         color: '#FFFFFF'
@@ -1377,7 +1377,7 @@
                             itemStyle: {
                                 normal: {
                                     // 设置颜色
-                                    color: '#CDC5BF'
+                                    color: '#363636'
                                 }
                             }
                         }, {
