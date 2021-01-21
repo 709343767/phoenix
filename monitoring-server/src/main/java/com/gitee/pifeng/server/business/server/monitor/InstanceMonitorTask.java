@@ -80,8 +80,8 @@ public class InstanceMonitorTask implements CommandLineRunner {
                     int thresholdSecond = instance.getThresholdSecond();
                     // 最后一次通过心跳包更新的时间
                     Date dateTime = instance.getDateTime();
-                    // 判决时间
-                    DateTime judgeDateTime = new DateTime(dateTime).plusSeconds(thresholdSecond);
+                    // 判决时间（在允许的误差时间内，再增加30秒误差）
+                    DateTime judgeDateTime = new DateTime(dateTime).plusSeconds(thresholdSecond).plusSeconds(30);
                     // 注册上来的服务失去响应
                     if (judgeDateTime.isBeforeNow()) {
                         // 已经离线

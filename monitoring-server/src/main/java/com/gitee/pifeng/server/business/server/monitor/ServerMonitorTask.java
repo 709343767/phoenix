@@ -74,13 +74,13 @@ public class ServerMonitorTask implements CommandLineRunner {
     @Override
     public void run(String... args) {
         ThreadPool.COMMON_IO_INTENSIVE_SCHEDULED_THREAD_POOL.scheduleWithFixedDelay(() -> {
+            // 是否监控服务器
+            boolean isEnable = MonitoringConfigPropertiesLoader.getMonitoringProperties().getServerProperties().isEnable();
+            // 不需要监控服务器
+            if (!isEnable) {
+                return;
+            }
             try {
-                // 是否监控服务器
-                boolean isEnable = MonitoringConfigPropertiesLoader.getMonitoringProperties().getServerProperties().isEnable();
-                // 不需要监控服务器
-                if (!isEnable) {
-                    return;
-                }
                 // 循环所有服务器信息
                 for (Map.Entry<String, Server> entry : this.serverPool.entrySet()) {
                     Server server = entry.getValue();
@@ -88,8 +88,8 @@ public class ServerMonitorTask implements CommandLineRunner {
                     int thresholdSecond = server.getThresholdSecond();
                     // 最后一次通过服务器信息包更新的时间
                     Date dateTime = server.getDateTime();
-                    // 判决时间
-                    DateTime judgeDateTime = new DateTime(dateTime).plusSeconds(thresholdSecond);
+                    // 判决时间（在允许的误差时间内，再增加30秒误差）
+                    DateTime judgeDateTime = new DateTime(dateTime).plusSeconds(thresholdSecond).plusSeconds(30);
                     // 注册上来的服务器失去响应
                     if (judgeDateTime.isBeforeNow()) {
                         // 已经离线

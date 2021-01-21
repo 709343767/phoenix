@@ -65,34 +65,35 @@ public class NetMonitorTask implements CommandLineRunner {
         ThreadPool.COMMON_IO_INTENSIVE_SCHEDULED_THREAD_POOL.scheduleWithFixedDelay(() -> {
             // 是否监控网络
             boolean isMonitoringEnable = MonitoringConfigPropertiesLoader.getMonitoringProperties().getNetworkProperties().isEnable();
-            if (isMonitoringEnable) {
-                try {
-                    // 获取网络信息列表
-                    List<MonitorNet> monitorNets = this.netService.getMonitorNetList(NetUtils.getLocalIp());
-                    // 循环处理每一个网络信息
-                    for (MonitorNet monitorNet : monitorNets) {
-                        // 目标IP地址
-                        String ipTarget = monitorNet.getIpTarget();
-                        // 使用多线程，加快处理速度
-                        ThreadPoolExecutor threadPoolExecutor = ThreadPool.COMMON_IO_INTENSIVE_THREAD_POOL;
-                        threadPoolExecutor.execute(() -> {
-                            // 测试IP地址能否ping通
-                            boolean isConnected = NetUtils.isConnect(ipTarget);
-                            // 网络正常
-                            if (isConnected) {
-                                // 处理网络正常
-                                this.connected(monitorNet);
-                            }
-                            // 网络异常
-                            else {
-                                // 处理网络异常
-                                this.disconnected(monitorNet);
-                            }
-                        });
-                    }
-                } catch (NetException e) {
-                    log.error("定时扫描数据库“MONITOR_NET”表中的所有网络信息异常！", e);
+            if (!isMonitoringEnable) {
+                return;
+            }
+            try {
+                // 获取网络信息列表
+                List<MonitorNet> monitorNets = this.netService.getMonitorNetList(NetUtils.getLocalIp());
+                // 循环处理每一个网络信息
+                for (MonitorNet monitorNet : monitorNets) {
+                    // 目标IP地址
+                    String ipTarget = monitorNet.getIpTarget();
+                    // 使用多线程，加快处理速度
+                    ThreadPoolExecutor threadPoolExecutor = ThreadPool.COMMON_IO_INTENSIVE_THREAD_POOL;
+                    threadPoolExecutor.execute(() -> {
+                        // 测试IP地址能否ping通
+                        boolean isConnected = NetUtils.isConnect(ipTarget);
+                        // 网络正常
+                        if (isConnected) {
+                            // 处理网络正常
+                            this.connected(monitorNet);
+                        }
+                        // 网络异常
+                        else {
+                            // 处理网络异常
+                            this.disconnected(monitorNet);
+                        }
+                    });
                 }
+            } catch (NetException e) {
+                log.error("定时扫描数据库“MONITOR_NET”表中的所有网络信息异常！", e);
             }
         }, 10, 300, TimeUnit.SECONDS);
     }

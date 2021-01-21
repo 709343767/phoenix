@@ -83,30 +83,31 @@ public class DbTableSpaceMonitorTask implements CommandLineRunner {
         ThreadPool.COMMON_IO_INTENSIVE_SCHEDULED_THREAD_POOL.scheduleAtFixedRate(() -> {
             // 是否监控数据库
             boolean isEnable = MonitoringConfigPropertiesLoader.getMonitoringProperties().getDbProperties().isEnable();
-            if (isEnable) {
-                try {
-                    // 查询数据库中的所有数据库信息
-                    List<MonitorDb> monitorDbs = this.monitorDbService.list();
-                    for (MonitorDb monitorDb : monitorDbs) {
-                        // 使用多线程，加快处理速度
-                        ThreadPoolExecutor threadPoolExecutor = ThreadPool.COMMON_IO_INTENSIVE_THREAD_POOL;
-                        threadPoolExecutor.execute(() -> {
-                            try {
-                                // 数据库是否在线（可连接）
-                                boolean isOnline = ZeroOrOneConstants.ONE.equals(monitorDb.getIsOnline());
-                                // 数据库在线（可连接）
-                                if (isOnline) {
-                                    // 计算表空间，如果表空间不足，则发送告警
-                                    this.calculateTableSpace(monitorDb);
-                                }
-                            } catch (Exception e) {
-                                log.error("执行数据库表空间监控异常！", e);
+            if (!isEnable) {
+                return;
+            }
+            try {
+                // 查询数据库中的所有数据库信息
+                List<MonitorDb> monitorDbs = this.monitorDbService.list();
+                for (MonitorDb monitorDb : monitorDbs) {
+                    // 使用多线程，加快处理速度
+                    ThreadPoolExecutor threadPoolExecutor = ThreadPool.COMMON_IO_INTENSIVE_THREAD_POOL;
+                    threadPoolExecutor.execute(() -> {
+                        try {
+                            // 数据库是否在线（可连接）
+                            boolean isOnline = ZeroOrOneConstants.ONE.equals(monitorDb.getIsOnline());
+                            // 数据库在线（可连接）
+                            if (isOnline) {
+                                // 计算表空间，如果表空间不足，则发送告警
+                                this.calculateTableSpace(monitorDb);
                             }
-                        });
-                    }
-                } catch (Exception e) {
-                    log.error("定时扫描数据库“MONITOR_DB”表中所有数据库连接对应的数据库表空间信息异常！", e);
+                        } catch (Exception e) {
+                            log.error("执行数据库表空间监控异常！", e);
+                        }
+                    });
                 }
+            } catch (Exception e) {
+                log.error("定时扫描数据库“MONITOR_DB”表中所有数据库连接对应的数据库表空间信息异常！", e);
             }
         }, initDelay, period, TimeUnit.MILLISECONDS);
     }
