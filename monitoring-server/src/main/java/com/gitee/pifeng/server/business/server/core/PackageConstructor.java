@@ -13,7 +13,7 @@ import com.gitee.pifeng.common.util.AppServerDetectorUtils;
 import com.gitee.pifeng.common.util.server.NetUtils;
 import com.gitee.pifeng.common.util.server.OsUtils;
 import com.gitee.pifeng.plug.core.ConfigLoader;
-import com.gitee.pifeng.server.util.InstanceUtils;
+import com.gitee.pifeng.plug.util.InstanceUtils;
 import lombok.SneakyThrows;
 import org.hyperic.sigar.SigarException;
 
@@ -50,8 +50,8 @@ public class PackageConstructor extends AbstractPackageConstructor {
         alarmPackage.setDateTime(new Date());
         alarmPackage.setInstanceEndpoint(EndpointTypeEnums.SERVER.getNameEn());
         alarmPackage.setInstanceId(InstanceUtils.getInstanceId());
-        alarmPackage.setInstanceName(InstanceUtils.getInstanceName());
-        alarmPackage.setInstanceDesc(InstanceUtils.getInstanceDesc());
+        alarmPackage.setInstanceName(ConfigLoader.MONITORING_PROPERTIES.getOwnProperties().getInstanceName());
+        alarmPackage.setInstanceDesc(ConfigLoader.MONITORING_PROPERTIES.getOwnProperties().getInstanceDesc());
         alarmPackage.setInstanceLanguage(LanguageTypeConstants.JAVA);
         alarmPackage.setAppServerType(AppServerDetectorUtils.getAppServerTypeEnum());
         alarmPackage.setIp(ConfigLoader.MONITORING_PROPERTIES.getServerInfoProperties().getIp() == null ? NetUtils.getLocalIp() : ConfigLoader.MONITORING_PROPERTIES.getServerInfoProperties().getIp());
@@ -84,8 +84,8 @@ public class PackageConstructor extends AbstractPackageConstructor {
         BaseResponsePackage baseResponsePackage = new BaseResponsePackage();
         baseResponsePackage.setInstanceEndpoint(EndpointTypeEnums.SERVER.getNameEn());
         baseResponsePackage.setInstanceId(InstanceUtils.getInstanceId());
-        baseResponsePackage.setInstanceName(InstanceUtils.getInstanceName());
-        baseResponsePackage.setInstanceDesc(InstanceUtils.getInstanceDesc());
+        baseResponsePackage.setInstanceName(ConfigLoader.MONITORING_PROPERTIES.getOwnProperties().getInstanceName());
+        baseResponsePackage.setInstanceDesc(ConfigLoader.MONITORING_PROPERTIES.getOwnProperties().getInstanceDesc());
         baseResponsePackage.setInstanceLanguage(LanguageTypeConstants.JAVA);
         baseResponsePackage.setAppServerType(AppServerDetectorUtils.getAppServerTypeEnum());
         baseResponsePackage.setIp(ConfigLoader.MONITORING_PROPERTIES.getServerInfoProperties().getIp() == null ? NetUtils.getLocalIp() : ConfigLoader.MONITORING_PROPERTIES.getServerInfoProperties().getIp());

@@ -56,7 +56,8 @@ public class InstanceUtils {
             return instanceId;
         }
         String mac = NetUtils.getLocalMac();
-        String ip = NetUtils.getLocalIp();
+        // 如果配置了服务器IP，用配置的，如果没有配置服务器IP，则自己获取
+        String ip = ConfigLoader.MONITORING_PROPERTIES.getServerInfoProperties().getIp() == null ? NetUtils.getLocalIp() : ConfigLoader.MONITORING_PROPERTIES.getServerInfoProperties().getIp();
         // 实例次序（不能重复）
         int order = ConfigLoader.MONITORING_PROPERTIES.getOwnProperties().getInstanceOrder();
         // 实例名称
