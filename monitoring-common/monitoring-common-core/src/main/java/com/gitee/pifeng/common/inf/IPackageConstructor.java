@@ -23,12 +23,11 @@ public interface IPackageConstructor {
      *
      * @param alarm 告警信息
      * @return {@link AlarmPackage}
-     * @throws NetException   获取网络信息异常
-     * @throws SigarException Sigar异常
+     * @throws NetException 获取网络信息异常
      * @author 皮锋
      * @custom.date 2020年3月7日 下午3:02:46
      */
-    AlarmPackage structureAlarmPackage(Alarm alarm) throws NetException, SigarException;
+    AlarmPackage structureAlarmPackage(Alarm alarm) throws NetException;
 
     /**
      * <p>
@@ -36,12 +35,11 @@ public interface IPackageConstructor {
      * </p>
      *
      * @return {@link HeartbeatPackage}
-     * @throws NetException   获取网络信息异常
-     * @throws SigarException Sigar异常
+     * @throws NetException 获取网络信息异常
      * @author 皮锋
      * @custom.date 2020年3月7日 下午3:54:30
      */
-    HeartbeatPackage structureHeartbeatPackage() throws NetException, SigarException;
+    HeartbeatPackage structureHeartbeatPackage() throws NetException;
 
     /**
      * <p>
@@ -62,12 +60,11 @@ public interface IPackageConstructor {
      * </p>
      *
      * @return {@link JvmPackage}
-     * @throws NetException   获取网络信息异常
-     * @throws SigarException Sigar异常
+     * @throws NetException 获取网络信息异常
      * @author 皮锋
      * @custom.date 2020/8/14 21:28
      */
-    JvmPackage structureJvmPackage() throws NetException, SigarException;
+    JvmPackage structureJvmPackage() throws NetException;
 
     /**
      * <p>

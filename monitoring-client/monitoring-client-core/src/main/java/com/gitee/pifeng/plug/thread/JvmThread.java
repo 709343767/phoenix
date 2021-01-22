@@ -8,7 +8,6 @@ import com.gitee.pifeng.plug.constant.UrlConstants;
 import com.gitee.pifeng.plug.core.PackageConstructor;
 import com.gitee.pifeng.plug.core.Sender;
 import lombok.extern.slf4j.Slf4j;
-import org.hyperic.sigar.SigarException;
 
 import java.io.IOException;
 
@@ -44,8 +43,6 @@ public class JvmThread implements Runnable {
             log.error("IO异常！", e);
         } catch (NetException e) {
             log.error("获取网络信息异常！", e);
-        } catch (SigarException e) {
-            log.error("Sigar异常！", e);
         } catch (Exception e) {
             log.error("其它异常！", e);
         } finally {
