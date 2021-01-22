@@ -136,7 +136,7 @@ public class MonitorServerServiceImpl extends ServiceImpl<IMonitorServerDao, Mon
         if (StringUtils.isNotBlank(serverName)) {
             lambdaQueryWrapper.like(MonitorServer::getServerName, serverName);
         }
-        if (StringUtils.isNotBlank(serverName)) {
+        if (StringUtils.isNotBlank(isOnline)) {
             lambdaQueryWrapper.eq(MonitorServer::getIsOnline, isOnline);
         }
         IPage<MonitorServer> monitorServerPage = this.monitorServerDao.selectPage(ipage, lambdaQueryWrapper);
