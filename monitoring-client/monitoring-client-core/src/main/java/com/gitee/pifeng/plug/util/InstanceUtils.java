@@ -55,6 +55,7 @@ public class InstanceUtils {
         if (instanceId != null) {
             return instanceId;
         }
+        String mac = NetUtils.getLocalMac();
         // 如果配置了服务器IP，用配置的，如果没有配置服务器IP，则自己获取
         String ip = ConfigLoader.MONITORING_PROPERTIES.getServerInfoProperties().getIp() == null ? NetUtils.getLocalIp() : ConfigLoader.MONITORING_PROPERTIES.getServerInfoProperties().getIp();
         // 实例次序（不能重复）
@@ -62,7 +63,7 @@ public class InstanceUtils {
         // 实例名称
         String instanceName = ConfigLoader.MONITORING_PROPERTIES.getOwnProperties().getInstanceName();
         // 实例ID
-        instanceId = Md5Utils.encrypt(ip + order + instanceName);
+        instanceId = Md5Utils.encrypt(mac + ip + order + instanceName);
         INSTANCE_ID_THREAD_LOCAL.set(instanceId);
         return instanceId;
     }
