@@ -16,7 +16,6 @@ import org.hyperic.sigar.SigarException;
  * @custom.date 2020/8/30 14:23
  */
 public class AbstractPackageConstructor implements IPackageConstructor {
-
     /**
      * <p>
      * 构造告警数据包
@@ -24,12 +23,13 @@ public class AbstractPackageConstructor implements IPackageConstructor {
      *
      * @param alarm 告警信息
      * @return {@link AlarmPackage}
-     * @throws NetException 获取网络信息异常
+     * @throws NetException   获取网络信息异常
+     * @throws SigarException Sigar异常
      * @author 皮锋
      * @custom.date 2020年3月7日 下午3:02:46
      */
     @Override
-    public AlarmPackage structureAlarmPackage(Alarm alarm) throws NetException {
+    public AlarmPackage structureAlarmPackage(Alarm alarm) throws NetException, SigarException {
         return null;
     }
 
@@ -39,12 +39,13 @@ public class AbstractPackageConstructor implements IPackageConstructor {
      * </p>
      *
      * @return {@link HeartbeatPackage}
-     * @throws NetException 获取网络信息异常
+     * @throws NetException   获取网络信息异常
+     * @throws SigarException Sigar异常
      * @author 皮锋
      * @custom.date 2020年3月7日 下午3:54:30
      */
     @Override
-    public HeartbeatPackage structureHeartbeatPackage() throws NetException {
+    public HeartbeatPackage structureHeartbeatPackage() throws NetException, SigarException {
         return null;
     }
 
@@ -70,12 +71,13 @@ public class AbstractPackageConstructor implements IPackageConstructor {
      * </p>
      *
      * @return {@link JvmPackage}
-     * @throws NetException 获取网络信息异常
+     * @throws NetException   获取网络信息异常
+     * @throws SigarException Sigar异常
      * @author 皮锋
      * @custom.date 2020/8/14 21:28
      */
     @Override
-    public JvmPackage structureJvmPackage() throws NetException {
+    public JvmPackage structureJvmPackage() throws NetException, SigarException {
         return null;
     }
 

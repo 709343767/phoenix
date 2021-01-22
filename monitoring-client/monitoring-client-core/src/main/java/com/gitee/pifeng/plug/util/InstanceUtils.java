@@ -1,8 +1,11 @@
 package com.gitee.pifeng.plug.util;
 
+import com.gitee.pifeng.common.exception.NetException;
 import com.gitee.pifeng.common.util.Md5Utils;
+import com.gitee.pifeng.common.util.server.NetUtils;
 import com.gitee.pifeng.plug.core.ConfigLoader;
 import lombok.extern.slf4j.Slf4j;
+import org.hyperic.sigar.SigarException;
 
 /**
  * <p>
@@ -42,20 +45,24 @@ public class InstanceUtils {
      * </p>
      *
      * @return 应用实例ID
+     * @throws NetException   获取网络信息异常
+     * @throws SigarException Sigar异常
      * @author 皮锋
      * @custom.date 2020年3月4日 下午11:12:46
      */
-    public static String getInstanceId() {
+    public static String getInstanceId() throws NetException, SigarException {
         String instanceId = INSTANCE_ID_THREAD_LOCAL.get();
         if (instanceId != null) {
             return instanceId;
         }
+        // 如果配置了服务器IP，用配置的，如果没有配置服务器IP，则自己获取
+        String ip = ConfigLoader.MONITORING_PROPERTIES.getServerInfoProperties().getIp() == null ? NetUtils.getLocalIp() : ConfigLoader.MONITORING_PROPERTIES.getServerInfoProperties().getIp();
         // 实例次序（不能重复）
         int order = ConfigLoader.MONITORING_PROPERTIES.getOwnProperties().getInstanceOrder();
         // 实例名称
         String instanceName = ConfigLoader.MONITORING_PROPERTIES.getOwnProperties().getInstanceName();
         // 实例ID
-        instanceId = Md5Utils.encrypt(order + instanceName);
+        instanceId = Md5Utils.encrypt(ip + order + instanceName);
         INSTANCE_ID_THREAD_LOCAL.set(instanceId);
         return instanceId;
     }

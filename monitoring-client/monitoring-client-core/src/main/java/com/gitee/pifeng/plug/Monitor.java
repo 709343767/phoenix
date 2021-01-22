@@ -17,6 +17,7 @@ import com.gitee.pifeng.plug.scheduler.HeartbeatTaskScheduler;
 import com.gitee.pifeng.plug.scheduler.JvmTaskScheduler;
 import com.gitee.pifeng.plug.scheduler.ServerTaskScheduler;
 import lombok.extern.slf4j.Slf4j;
+import org.hyperic.sigar.SigarException;
 
 import java.io.IOException;
 import java.util.concurrent.ScheduledExecutorService;
@@ -118,7 +119,7 @@ public class Monitor {
             String result = Sender.send(UrlConstants.ALARM_URL, alarmPackage.toJsonString());
             BaseResponsePackage baseResponsePackage = JSON.parseObject(result, BaseResponsePackage.class);
             return baseResponsePackage.getResult();
-        } catch (IOException | NetException e) {
+        } catch (IOException | NetException | SigarException e) {
             log.error("监控程序发送告警信息异常！", e);
             return Result.builder().isSuccess(false).msg(e.getMessage()).build();
         }

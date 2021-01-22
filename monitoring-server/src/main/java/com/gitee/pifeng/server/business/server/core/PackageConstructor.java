@@ -15,6 +15,7 @@ import com.gitee.pifeng.common.util.server.OsUtils;
 import com.gitee.pifeng.plug.core.ConfigLoader;
 import com.gitee.pifeng.plug.util.InstanceUtils;
 import lombok.SneakyThrows;
+import org.hyperic.sigar.SigarException;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -37,12 +38,13 @@ public class PackageConstructor extends AbstractPackageConstructor {
      *
      * @param alarm 告警
      * @return {@link AlarmPackage}
-     * @throws NetException 获取网络信息异常
+     * @throws NetException   获取网络信息异常
+     * @throws SigarException Sigar异常
      * @author 皮锋
      * @custom.date 2020/3/13 11:14
      */
     @Override
-    public AlarmPackage structureAlarmPackage(Alarm alarm) throws NetException {
+    public AlarmPackage structureAlarmPackage(Alarm alarm) throws NetException, SigarException {
         AlarmPackage alarmPackage = new AlarmPackage();
         alarmPackage.setId(IdUtil.randomUUID());
         alarmPackage.setDateTime(new Date());
