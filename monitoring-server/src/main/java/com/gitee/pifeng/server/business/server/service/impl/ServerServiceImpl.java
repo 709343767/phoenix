@@ -2,6 +2,7 @@ package com.gitee.pifeng.server.business.server.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gitee.pifeng.common.constant.ResultMsgConstants;
 import com.gitee.pifeng.common.constant.ZeroOrOneConstants;
 import com.gitee.pifeng.common.domain.Result;
@@ -28,7 +29,7 @@ import java.util.stream.Collectors;
  * @custom.date 2020/3/23 15:23
  */
 @Service
-public class ServerServiceImpl implements IServerService {
+public class ServerServiceImpl extends ServiceImpl<IMonitorServerDao, MonitorServer> implements IServerService {
 
     /**
      * 服务器数据访问对象

@@ -1,6 +1,7 @@
 package com.gitee.pifeng.server.business.server.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gitee.pifeng.server.business.server.dao.IMonitorInstanceDao;
 import com.gitee.pifeng.server.business.server.entity.MonitorInstance;
 import com.gitee.pifeng.server.business.server.service.IInstanceService;
@@ -16,7 +17,7 @@ import org.springframework.stereotype.Service;
  * @custom.date 2020/6/29 15:21
  */
 @Service
-public class InstanceServiceImpl implements IInstanceService {
+public class InstanceServiceImpl extends ServiceImpl<IMonitorInstanceDao, MonitorInstance> implements IInstanceService {
 
     /**
      * 应用实例数据访问对象

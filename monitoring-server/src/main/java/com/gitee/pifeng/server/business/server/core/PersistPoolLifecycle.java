@@ -4,7 +4,11 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 import com.gitee.pifeng.common.constant.MonitorTypeEnums;
 import com.gitee.pifeng.server.business.server.domain.*;
+import com.gitee.pifeng.server.business.server.entity.MonitorInstance;
+import com.gitee.pifeng.server.business.server.entity.MonitorServer;
 import com.gitee.pifeng.server.business.server.pool.*;
+import com.gitee.pifeng.server.business.server.service.IInstanceService;
+import com.gitee.pifeng.server.business.server.service.IServerService;
 import com.gitee.pifeng.server.constant.FileNameConstants;
 import com.gitee.pifeng.server.inf.IInstanceMonitoringListener;
 import com.gitee.pifeng.server.inf.IServerMonitoringListener;
@@ -68,6 +72,18 @@ public class PersistPoolLifecycle implements InitializingBean, DisposableBean, I
      */
     @Autowired
     private DiskPool diskPool;
+
+    /**
+     * 应用实例服务接口
+     */
+    @Autowired
+    private IInstanceService instanceService;
+
+    /**
+     * 服务器信息服务层接口
+     */
+    @Autowired
+    private IServerService serverService;
 
     /**
      * <p>
@@ -167,69 +183,196 @@ public class PersistPoolLifecycle implements InitializingBean, DisposableBean, I
      * <p>
      * 把持久化到文件系统的信息池内容加载到Spring容器
      * </p>
+     * 先从数据库中加载，再从文件系统中加载，最后取数据库与文件系统的交集。
      *
      * @author 皮锋
      * @custom.date 2020/4/28 14:39
      */
     private void loadPools() {
+        // 数据库中的应用实例
+        List<MonitorInstance> monitorInstances = this.instanceService.list();
+        // 数据库中的服务器
+        List<MonitorServer> monitorServers = this.serverService.list();
+        this.loadInstancePool(monitorInstances);
+        this.loadServerPool(monitorServers);
+        this.loadMemoryPool(monitorServers);
+        this.loadCpuPool(monitorServers);
+        this.loadDiskPool(monitorServers);
+    }
+
+    /**
+     * <p>
+     * 把持久化到文件系统的应用实例信息池内容加载到Spring容器
+     * </p>
+     *
+     * @param monitorInstances 数据库中的应用实例列表
+     * @author 皮锋
+     * @custom.date 2021/1/23 10:59
+     */
+    private void loadInstancePool(List<MonitorInstance> monitorInstances) {
         try {
             String instancePoolStr = FileUtils.readFileToString(new File(FileNameConstants.INSTANCE_POOL), StandardCharsets.UTF_8);
             if (StringUtils.isNotBlank(instancePoolStr)) {
                 Map<String, Instance> map = JSON.parseObject(instancePoolStr, new TypeReference<Map<String, Instance>>() {
                 });
-                for (Map.Entry<String, Instance> entry : map.entrySet()) {
-                    Instance instance = entry.getValue();
-                    boolean isOnline = instance.isOnline();
-                    // 如果之前是在线状态，把最后一次通过心跳包更新的时间更新到当前时间
-                    if (isOnline) {
-                        instance.setDateTime(new Date());
+                for (MonitorInstance monitorInstance : monitorInstances) {
+                    // 数据库中的应用实例ID
+                    String instanceIdDb = monitorInstance.getInstanceId();
+                    for (Map.Entry<String, Instance> entry : map.entrySet()) {
+                        Instance instance = entry.getValue();
+                        // 文件系统中的应用实例ID
+                        String instanceIdDisk = instance.getInstanceId();
+                        if (!StringUtils.equals(instanceIdDb, instanceIdDisk)) {
+                            continue;
+                        }
+                        boolean isOnline = instance.isOnline();
+                        // 如果之前是在线状态，把最后一次通过心跳包更新的时间更新到当前时间
+                        if (isOnline) {
+                            instance.setDateTime(new Date());
+                        }
+                        this.instancePool.put(instanceIdDisk, instance);
                     }
                 }
-                this.instancePool.putAll(map);
             }
             log.info("把文件系统中的应用实例池内容加载到Spring容器成功！");
         } catch (Exception ignored) {
             log.info("把文件系统中的应用实例池内容加载到Spring容器异常！");
         }
+    }
+
+    /**
+     * <p>
+     * 把持久化到文件系统的服务器信息池内容加载到Spring容器
+     * </p>
+     *
+     * @param monitorServers 数据库中的服务器信息列表
+     * @author 皮锋
+     * @custom.date 2021/1/23 10:58
+     */
+    private void loadServerPool(List<MonitorServer> monitorServers) {
         try {
             String serverPoolStr = FileUtils.readFileToString(new File(FileNameConstants.SERVER_POOL), StandardCharsets.UTF_8);
             if (StringUtils.isNotBlank(serverPoolStr)) {
                 Map<String, Server> map = JSON.parseObject(serverPoolStr, new TypeReference<Map<String, Server>>() {
                 });
-                this.serverPool.putAll(map);
+                for (MonitorServer monitorServer : monitorServers) {
+                    // 数据库中的服务器IP
+                    String ipDb = monitorServer.getIp();
+                    for (Map.Entry<String, Server> entry : map.entrySet()) {
+                        Server server = entry.getValue();
+                        // 文件系统中的服务器IP
+                        String ipDisk = server.getIp();
+                        if (!StringUtils.equals(ipDb, ipDisk)) {
+                            continue;
+                        }
+                        this.serverPool.put(ipDisk, server);
+                    }
+                }
             }
             log.info("把文件系统中的服务器信息池内容加载到Spring容器成功！");
         } catch (Exception ignored) {
             log.info("把文件系统中的服务器信息池内容加载到Spring容器异常！");
         }
+    }
+
+    /**
+     * <p>
+     * 把持久化到文件系统的内存信息池内容加载到Spring容器
+     * </p>
+     *
+     * @param monitorServers 数据库中的服务器信息列表
+     * @author 皮锋
+     * @custom.date 2021/1/23 10:57
+     */
+    private void loadMemoryPool(List<MonitorServer> monitorServers) {
         try {
             String memoryPoolStr = FileUtils.readFileToString(new File(FileNameConstants.MEMORY_POOL), StandardCharsets.UTF_8);
             if (StringUtils.isNotBlank(memoryPoolStr)) {
                 Map<String, Memory> map = JSON.parseObject(memoryPoolStr, new TypeReference<Map<String, Memory>>() {
                 });
-                this.memoryPool.putAll(map);
+                for (MonitorServer monitorServer : monitorServers) {
+                    // 数据库中的服务器IP
+                    String ipDb = monitorServer.getIp();
+                    for (Map.Entry<String, Memory> entry : map.entrySet()) {
+                        Memory memory = entry.getValue();
+                        // 文件系统中的服务器内存IP
+                        String ipDisk = memory.getIp();
+                        if (!StringUtils.equals(ipDb, ipDisk)) {
+                            continue;
+                        }
+                        this.memoryPool.put(ipDisk, memory);
+                    }
+                }
             }
             log.info("把文件系统中的服务器内存信息池内容加载到Spring容器成功！");
         } catch (Exception ignored) {
             log.info("把文件系统中的服务器内存信息池内容加载到Spring容器异常！");
         }
+    }
+
+    /**
+     * <p>
+     * 把持久化到文件系统的CPU信息池内容加载到Spring容器
+     * </p>
+     *
+     * @param monitorServers 数据库中的服务器信息列表
+     * @author 皮锋
+     * @custom.date 2021/1/23 10:56
+     */
+    private void loadCpuPool(List<MonitorServer> monitorServers) {
         try {
             String cpuPoolStr = FileUtils.readFileToString(new File(FileNameConstants.CPU_POOL), StandardCharsets.UTF_8);
             if (StringUtils.isNotBlank(cpuPoolStr)) {
                 Map<String, Cpu> map = JSON.parseObject(cpuPoolStr, new TypeReference<Map<String, Cpu>>() {
                 });
-                this.cpuPool.putAll(map);
+                for (MonitorServer monitorServer : monitorServers) {
+                    // 数据库中的服务器IP
+                    String ipDb = monitorServer.getIp();
+                    for (Map.Entry<String, Cpu> entry : map.entrySet()) {
+                        Cpu cpu = entry.getValue();
+                        // 文件系统中的服务器Cpu IP
+                        String ipDisk = cpu.getIp();
+                        if (!StringUtils.equals(ipDb, ipDisk)) {
+                            continue;
+                        }
+                        this.cpuPool.put(ipDisk, cpu);
+                    }
+                }
             }
             log.info("把文件系统中的服务器CPU信息池内容加载到Spring容器成功！");
         } catch (Exception ignored) {
             log.info("把文件系统中的服务器CPU信息池内容加载到Spring容器异常！");
         }
+    }
+
+    /**
+     * <p>
+     * 把持久化到文件系统的磁盘信息池内容加载到Spring容器
+     * </p>
+     *
+     * @param monitorServers 数据库中的服务器信息列表
+     * @author 皮锋
+     * @custom.date 2021/1/23 10:55
+     */
+    private void loadDiskPool(List<MonitorServer> monitorServers) {
         try {
             String diskPoolStr = FileUtils.readFileToString(new File(FileNameConstants.DISK_POOL), StandardCharsets.UTF_8);
             if (StringUtils.isNotBlank(diskPoolStr)) {
                 Map<String, Disk> map = JSON.parseObject(diskPoolStr, new TypeReference<Map<String, Disk>>() {
                 });
-                this.diskPool.putAll(map);
+                for (MonitorServer monitorServer : monitorServers) {
+                    // 数据库中的服务器IP
+                    String ipDb = monitorServer.getIp();
+                    for (Map.Entry<String, Disk> entry : map.entrySet()) {
+                        Disk disk = entry.getValue();
+                        // 文件系统中的磁盘IP
+                        String ipDisk = disk.getIp();
+                        if (!StringUtils.equals(ipDb, ipDisk)) {
+                            continue;
+                        }
+                        this.diskPool.put(ipDisk, disk);
+                    }
+                }
             }
             log.info("把文件系统中的服务器磁盘信息池内容加载到Spring容器成功！");
         } catch (Exception ignored) {

@@ -1,6 +1,7 @@
 package com.gitee.pifeng.server.business.server.service;
 
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.gitee.pifeng.server.business.server.entity.MonitorInstance;
 
 /**
@@ -11,7 +12,7 @@ import com.gitee.pifeng.server.business.server.entity.MonitorInstance;
  * @author 皮锋
  * @custom.date 2020/6/29 15:20
  */
-public interface IInstanceService {
+public interface IInstanceService extends IService<MonitorInstance> {
 
     /**
      * <p>
@@ -25,4 +26,5 @@ public interface IInstanceService {
      * @custom.date 2020/6/29 15:27
      */
     int updateInstance(MonitorInstance monitorInstance, LambdaUpdateWrapper<MonitorInstance> lambdaUpdateWrapper);
+
 }

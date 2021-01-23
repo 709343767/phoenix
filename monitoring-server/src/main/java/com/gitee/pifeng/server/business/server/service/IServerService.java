@@ -1,6 +1,7 @@
 package com.gitee.pifeng.server.business.server.service;
 
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.gitee.pifeng.common.domain.Result;
 import com.gitee.pifeng.common.dto.ServerPackage;
 import com.gitee.pifeng.server.business.server.entity.MonitorServer;
@@ -13,7 +14,7 @@ import com.gitee.pifeng.server.business.server.entity.MonitorServer;
  * @author 皮锋
  * @custom.date 2020/3/23 15:22
  */
-public interface IServerService {
+public interface IServerService extends IService<MonitorServer> {
 
     /**
      * <p>
