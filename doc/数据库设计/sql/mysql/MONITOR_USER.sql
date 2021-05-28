@@ -1,2 +1,2 @@
-INSERT INTO `MONITOR_USER`(`ID`, `ACCOUNT`, `USERNAME`, `PASSWORD`, `ROLE_ID`, `EMAIL`, `REMARKS`, `REGISTER_TIME`, `UPDATE_TIME`) VALUES (1, 'pifeng', '皮锋', '$2a$10$SubE3lMf2m.A4CbB4todu.r9prdXIOIHCgqb7m2xiv5zbZrZZ1.P2', 1, '709343767@qq.com', '超级管理员皮锋O(∩_∩)O', '2020-07-05 14:29:32', '2021-01-07 10:37:10');
-INSERT INTO `MONITOR_USER`(`ID`, `ACCOUNT`, `USERNAME`, `PASSWORD`, `ROLE_ID`, `EMAIL`, `REMARKS`, `REGISTER_TIME`, `UPDATE_TIME`) VALUES (21, 'guest', '访客', '$2a$10$OE0rJtueah3L7jYAh/rtHeUThXxvAvyQZlfP74OuhNGTAUfDiCd6y', 2, 'qqq@qq.com', '访客', '2020-08-02 21:22:31', '2020-12-31 12:05:33');
+INSERT INTO `monitor_user` VALUES (1, 'guest', '访客', '$2a$10$OE0rJtueah3L7jYAh/rtHeUThXxvAvyQZlfP74OuhNGTAUfDiCd6y', 2, '', '访客', '2020-8-2 21:22:31', '2020-12-31 12:05:33');
+INSERT INTO `monitor_user` VALUES (2, 'admin', '超级管理员', '$2a$10$gcWQ8riyvmxy4eSGOpJkZe.n//JfqAUBQlPaEO5iOM.Glte7Rbfsy', 1, '', '超级管理员', '2021-5-28 22:18:01', '2021-05-28 22:42:23');
