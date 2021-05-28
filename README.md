@@ -216,6 +216,7 @@ Java应用程序只要集成了监控客户端，就具有业务埋点监控的�
 ```
 // 业务埋点监控
 ScheduledExecutorService service = Monitor.buryingPoint(() -> {
+  // 假如发现了业务异常，用下面的代码发送告警
   Alarm alarm = new Alarm();
   alarm.setAlarmLevel(AlarmLevelEnums.ERROR);
   alarm.setTitle("业务埋点监控");
