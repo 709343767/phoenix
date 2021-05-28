@@ -26,11 +26,11 @@
 
 - 功能架构
 
-  ![功能导图](https://gitee.com/monitoring-platform/monitoring-files/raw/1.0.0.RELEASE/%E8%AE%BE%E8%AE%A1/%E5%8A%9F%E8%83%BD%E5%AF%BC%E5%9B%BE.png "功能导图")
+  ![功能导图](https://gitee.com/monitoring-platform/monitoring/raw/master/doc/%E5%8A%9F%E8%83%BD%E5%AF%BC%E5%9B%BE.png "功能导图")
 
 - 总体架构
 
-  ![总体架构图](https://gitee.com/monitoring-platform/monitoring-files/raw/1.0.0.RELEASE/%E8%AE%BE%E8%AE%A1/%E6%80%BB%E4%BD%93%E6%9E%B6%E6%9E%84%E5%9B%BE.png "总体架构图")
+  ![总体架构图](https://gitee.com/monitoring-platform/monitoring/raw/master/doc/%E6%80%BB%E4%BD%93%E6%9E%B6%E6%9E%84%E5%9B%BE.png "总体架构图")
 
 - 运行环境
 
@@ -233,4 +233,27 @@ ScheduledExecutorService service = Monitor.buryingPoint(() -> {
 
 **监控UI端、监控服务端、监控代理端** 直接打成可运行jar，部署后通过脚本（命令）运行。启停脚本在源码中，具体位置在：**/monitoring/doc/bat脚本、/monitoring/doc/shell脚本** 。
 
+## 功能截图
+
+![首页1](https://gitee.com/monitoring-platform/monitoring/raw/master/doc/%E6%88%AA%E5%9B%BE/%E9%A6%96%E9%A1%B51.png "首页1")
   
+![首页2](https://gitee.com/monitoring-platform/monitoring/raw/master/doc/%E6%88%AA%E5%9B%BE/%E9%A6%96%E9%A1%B52.png "首页2")
+  
+![服务器1](https://gitee.com/monitoring-platform/monitoring/raw/master/doc/%E6%88%AA%E5%9B%BE/%E6%9C%8D%E5%8A%A1%E5%99%A81.png "服务器1")
+
+![服务器2](https://gitee.com/monitoring-platform/monitoring/raw/master/doc/%E6%88%AA%E5%9B%BE/%E6%9C%8D%E5%8A%A1%E5%99%A82.png "服务器2")
+  
+![应用程序1](https://gitee.com/monitoring-platform/monitoring/raw/master/doc/%E6%88%AA%E5%9B%BE/%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F1.png "应用程序1")
+  
+![应用程序2](https://gitee.com/monitoring-platform/monitoring/raw/master/doc/%E6%88%AA%E5%9B%BE/%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F2.png "应用程序2")
+
+![数据库1](https://gitee.com/monitoring-platform/monitoring/raw/master/doc/%E6%88%AA%E5%9B%BE/%E6%95%B0%E6%8D%AE%E5%BA%931.png "数据库1")
+
+![数据库2](https://gitee.com/monitoring-platform/monitoring/raw/master/doc/%E6%88%AA%E5%9B%BE/%E6%95%B0%E6%8D%AE%E5%BA%932.png "数据库2")
+
+![网络](https://gitee.com/monitoring-platform/monitoring/raw/master/doc/%E6%88%AA%E5%9B%BE/%E7%BD%91%E7%BB%9C.png "网络")
+
+![告警设置](https://gitee.com/monitoring-platform/monitoring/raw/master/doc/%E6%88%AA%E5%9B%BE/%E5%91%8A%E8%AD%A6%E8%AE%BE%E7%BD%AE.png "告警设置")
+
+![告警记录](https://gitee.com/monitoring-platform/monitoring/raw/master/doc/%E6%88%AA%E5%9B%BE/%E5%91%8A%E8%AD%A6%E8%AE%B0%E5%BD%95.png "告警记录")
+
