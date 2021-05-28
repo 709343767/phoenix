@@ -1,0 +1,97 @@
+.home-i {
+    font-size: 15px;
+    float: right;
+}
+
+.layui-icon-server {
+    background-image: url("../images/icon16/server-16.png");
+    background-position: center center;
+    background-repeat: no-repeat;
+    height: 40px;
+    width: 14px;
+}
+
+.layui-icon-db {
+    background-image: url("../images/icon16/database-16.png");
+    background-position: center center;
+    background-repeat: no-repeat;
+    height: 40px;
+    width: 14px;
+}
+
+.layuiadmin-big-font-my {
+    line-height: 12px !important;
+    font-size: 25px !important;
+}
+
+.layuiadmin-card-list-my {
+    padding: 10px;
+}
+
+.layadmin-dataview-my-330px {
+    height: 330px !important;
+}
+
+.layadmin-dataview-my-660px {
+    height: 660px !important;
+}
+
+.layadmin-dataview-my-292px {
+    height: 292px !important;
+}
+
+.layadmin-dataview-my-270px {
+    height: 270px !important;
+}
+
+.layadmin-dataview-my-270px-text {
+    text-align: center !important;
+    line-height: 270px !important;
+    font-size: xx-large;;
+}
+
+.layadmin-dataview-my-420px {
+    height: 420px !important;
+}
+
+.layui-card-header-my {
+    padding-top: 0px !important;
+    padding-bottom: 0px !important;
+}
+
+.label-font-weight {
+    font-weight: 600;
+}
+
+.div-font-weight {
+    font-weight: 600;
+}
+
+.layadmin-takerates-my {
+    padding-top: 5px;
+}
+
+.layadmin-takerates-my .layui-progress {
+    margin: 50px 0 60px;
+}
+
+.layadmin-takerates-my .layui-progress h3 {
+    position: absolute;
+    left: 0;
+    top: -35px;
+    color: #999;
+    font-size: 14px;
+}
+
+.layui-bg-skyblue {
+    background-color: #87CEEB;
+}
+
+.hr-padding {
+    padding: 0px;
+}
+
+.layui-bg-skyblue-my {
+    background-color: #87CEEB;
+    color: #fff !important;
+}

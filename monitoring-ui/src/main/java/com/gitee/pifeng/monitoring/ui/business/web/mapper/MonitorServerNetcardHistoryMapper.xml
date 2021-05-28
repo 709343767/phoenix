@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gitee.pifeng.monitoring.ui.business.web.dao.IMonitorServerNetcardHistoryDao">
+
+    <!-- 获取服务器详情页面服务器网速图表信息 -->
+    <select id="getServerDetailPageServerNetworkSpeedChartInfo" parameterType="java.util.HashMap"
+            resultType="com.gitee.pifeng.monitoring.ui.business.web.vo.ServerDetailPageServerNetworkSpeedChartVo">
+        SELECT
+        msn.NAME AS name,
+        msn.UPLOAD_BPS AS uploadSpeed,
+        msn.DOWNLOAD_BPS AS downloadSpeed,
+        msn.INSERT_TIME AS insertTime
+        FROM
+        MONITOR_SERVER_NETCARD_HISTORY msn
+        WHERE msn.IP =#{params.ip}
+        AND msn.ADDRESS=#{params.address}
+        <if test="params.startTime!=null and params.endTime!=null">
+            AND INSERT_TIME BETWEEN #{params.startTime} AND #{params.endTime}
+        </if>
+    </select>
+
+</mapper>

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gitee.pifeng.monitoring.ui.business.web.dao.IMonitorAlarmRecordDao">
+
+    <!-- 获取最近7天的告警统计信息 -->
+    <select id="getLast7DaysAlarmRecordStatistics" resultType="java.util.Map" databaseId="mysql">
+        SELECT b.date                       AS date,
+               b.total                      AS total,
+               b.success                    AS success,
+               b.fail                       AS fail,
+               b.total - b.success - b.fail AS unsent
+        FROM (
+                 SELECT DATE_FORMAT(d.date, '%Y/%m/%d')                 as date,
+                        COUNT(a.ID)                                     AS total,
+                        SUM(CASE WHEN a.STATUS = '1' THEN 1 ELSE 0 END) AS success,
+                        SUM(CASE WHEN a.STATUS = '0' THEN 1 ELSE 0 END) AS fail
+                 FROM (
+                          SELECT DATE_SUB(CURDATE(),
+                                          INTERVAL 0 DAY) date
+                          UNION
+                          SELECT DATE_SUB(CURDATE(),
+                                          INTERVAL 1 DAY) date
+                          UNION
+                          SELECT DATE_SUB(CURDATE(),
+                                          INTERVAL 2 DAY) date
+                          UNION
+                          SELECT DATE_SUB(CURDATE(),
+                                          INTERVAL 3 DAY) date
+                          UNION
+                          SELECT DATE_SUB(CURDATE(),
+                                          INTERVAL 4 DAY) date
+                          UNION
+                          SELECT DATE_SUB(CURDATE(),
+                                          INTERVAL 5 DAY) date
+                          UNION
+                          SELECT DATE_SUB(CURDATE(),
+                                          INTERVAL 6 DAY) date) d
+                          LEFT JOIN MONITOR_ALARM_RECORD a ON
+                     (DATE_FORMAT(d.date, '%Y/%m/%d') = DATE_FORMAT(a.INSERT_TIME, '%Y/%m/%d'))
+                 GROUP BY d.date) b
+    </select>
+
+    <!-- 告警成功率统计 -->
+    <select id="getAlarmRecordSuccessRateStatistics" resultType="java.util.Map" databaseId="mysql">
+        SELECT tmp.alarmRecordSum        AS alarmRecordSum,
+               tmp.alarmRecordSuccessSum AS alarmRecordSuccessSum,
+               tmp.alarmRecordFailSum    AS alarmRecordFailSum,
+               tmp.alarmRecordUnsentSum  AS alarmRecordUnsentSum,
+               IFNULL(round(tmp.alarmRecordSuccessSum * 100 / (tmp.alarmRecordSum - tmp.alarmRecordUnsentSum), 2),
+                      '100')             AS alarmSucRate
+        FROM (
+                 SELECT COUNT(ID)                                                    AS alarmRecordSum,
+                        IFNULL(SUM(CASE WHEN mar.STATUS = '1' THEN 1 ELSE 0 END), 0) AS alarmRecordSuccessSum,
+                        IFNULL(SUM(CASE WHEN mar.STATUS = '0' THEN 1 ELSE 0 END), 0) AS alarmRecordFailSum,
+                        IFNULL(SUM(CASE WHEN mar.STATUS is null OR mar.STATUS = '' THEN 1 ELSE 0 END),
+                               0)                                                    AS alarmRecordUnsentSum
+                 FROM MONITOR_ALARM_RECORD mar) tmp
+    </select>
+
+    <!-- 获取告警类型统计信息 -->
+    <select id="getAlarmRecordTypeStatistics" resultType="java.util.Map" databaseId="mysql">
+        select d.totals as totals,
+               case d.types
+                   when 'INSTANCE' then '应用'
+                   when 'SERVER' then '服务器'
+                   when 'NET' then '网络'
+                   when 'DATABASE' then '数据库'
+                   when 'CUSTOM' then '自定义'
+                   end  as types
+        from (
+                 select t.types,
+                        count(ID) as totals
+                 from (
+                          select 'INSTANCE' types
+                          from DUAL
+                          union
+                          select 'SERVER' types
+                          from DUAL
+                          union
+                          select 'NET' types
+                          from DUAL
+                          union
+                          select 'DATABASE' types
+                          from DUAL
+                          union
+                          select 'CUSTOM' types
+                          from DUAL
+                      ) t
+                          left join MONITOR_ALARM_RECORD mar on (mar.`TYPE` = t.types)
+                 group by t.types
+             ) d
+    </select>
+
+</mapper>

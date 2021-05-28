@@ -1,0 +1,10 @@
+*.project
+*.classpath
+*.class
+*.iml
+
+.git
+.idea
+.settings
+persistent-monitoring
+target

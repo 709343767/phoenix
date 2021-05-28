@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>设置我的资料</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="./layui/css/layui.css" th:href="@{/layui/css/layui.css}" media="all">
+    <link rel="stylesheet" href="./style/admin.css" th:href="@{/style/admin.css}" media="all">
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+    <script src="./js/html5.min.js" th:src="@{/js/html5.min.js}"></script>
+    <script src="./js/respond.min.js" th:src="@{/js/respond.min.js}"></script>
+    <![endif]-->
+    <script type="text/javascript" charset="utf-8" th:inline="javascript">
+        var ctxPath = /*[[@{/}]]*/'';
+    </script>
+</head>
+<body>
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">设置我的资料</div>
+                <div class="layui-card-body" pad15>
+                    <form class="layui-form" lay-filter="">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">ID</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="id" th:value="${user.id}" readonly
+                                       class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">账号</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="account" th:value="${user.account}" readonly
+                                       class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">我的角色</label>
+                            <div class="layui-input-inline">
+                                <select name="roleId" disabled>
+                                    <option th:selected="${user.roleId==role.id}" th:each="role,roleStat:${roles}"
+                                            th:value="${role.id}" th:text="${role.roleName}">
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">用户名</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="username" th:value="${user.username}" lay-verify="username"
+                                       autocomplete="off" lay-verType="tips"
+                                       placeholder="请输入用户名" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">邮箱</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="email" th:value="${user.email}" lay-verify="email"
+                                       autocomplete="off" lay-verType="tips" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item layui-form-text">
+                            <label class="layui-form-label">备注</label>
+                            <div class="layui-input-block">
+                                <textarea name="remarks" th:text="${user.remarks}" placeholder="请输入内容"
+                                          class="layui-textarea"></textarea>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-input-block">
+                                <button class="layui-btn" lay-submit lay-filter="userInfo">确认</button>
+                                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="./js/common.js" th:src="@{/js/common.js}" charset="utf-8"></script>
+<script src="./layui/layui.js" th:src="@{/layui/layui.js}" charset="utf-8"></script>
+<script charset="utf-8" th:inline="javascript">
+    layui.config({
+        base: ctxPath //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'form', 'element', 'layer'], function () {
+        var admin = layui.admin;
+        var form = layui.form;
+        form.render();
+        //自定义验证规则
+        form.verify({
+            username: function (t) {
+                if (t.length === 0) {
+                    return '用户名不能为空';
+                }
+                return new RegExp("^[a-zA-Z0-9_一-龥\\s·]+$").test(t)
+                    ? /(^\_)|(\__)|(\_+$)/.test(t)
+                        ? "用户名首尾不能出现下划线'_'" : /^\d+$/.test(t)
+                            ? "用户名不能全为数字" : void 0 : "用户名不能有特殊字符";
+            }
+        });
+        // 监听信息提交
+        form.on('submit(userInfo)', function (data) {
+            // 修改用户信息
+            admin.req({
+                type: 'put',
+                url: ctxPath + 'set/user/update-user',
+                data: data.field,
+                dataType: 'json',
+                headers: {
+                    [[${_csrf.headerName}]]: [[${_csrf.token}]]
+                },
+                success: function (result) {
+                    var data = result.data;
+                    if (data === webConst.SUCCESS) {
+                        layer.msg('保存成功！', {icon: 6});
+                    } else {
+                        layer.msg('保存失败！', {icon: 5, shift: 6});
+                    }
+                },
+                error: function () {
+                    layer.msg('系统错误！', {icon: 5, shift: 6});
+                }
+            });
+            return false;
+        });
+    });
+</script>
+</body>
+</html>

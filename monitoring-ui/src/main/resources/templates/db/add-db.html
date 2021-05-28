@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>添加数据库</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="./layui/css/layui.css" th:href="@{/layui/css/layui.css}" media="all">
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+    <script src="./js/html5.min.js" th:src="@{/js/html5.min.js}"></script>
+    <script src="./js/respond.min.js" th:src="@{/js/respond.min.js}"></script>
+    <![endif]-->
+    <script type="text/javascript" charset="utf-8" th:inline="javascript">
+        var ctxPath = /*[[@{/}]]*/'';
+    </script>
+</head>
+<body>
+<div class="layui-form" lay-filter="layuiadmin-form-useradmin" id="layuiadmin-form-useradmin"
+     style="padding: 20px 20px 0 0;">
+    <div class="layui-form-item">
+        <label class="layui-form-label">连接名</label>
+        <div class="layui-input-block">
+            <input type="text" name="connName" autocomplete="off" class="layui-input" placeholder="请输入连接名"
+                   lay-verify="required" lay-verType="tips">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">URL</label>
+        <div class="layui-input-block">
+            <textarea name="url" class="layui-textarea" placeholder="请输入URL" autocomplete="off" lay-verify="required"
+                      lay-verType="tips"></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">用户名</label>
+        <div class="layui-input-block">
+            <input type="text" name="username" autocomplete="off" class="layui-input" placeholder="请输入用户名"
+                   lay-verify="required" lay-verType="tips">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">密码</label>
+        <div class="layui-input-block">
+            <input type="password" name="password" autocomplete="off" class="layui-input" placeholder="请输入密码"
+                   lay-verify="required" lay-verType="tips">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">类型</label>
+        <div class="layui-input-block">
+            <select name="dbType">
+                <option value="MySQL">MySQL</option>
+                <option value="Oracle">Oracle</option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">描述</label>
+        <div class="layui-input-block">
+            <textarea name="dbDesc" class="layui-textarea" placeholder="请输入描述" autocomplete="off"
+                      lay-verType="tips"></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="LAY-front-submit" id="LAY-front-submit" value="确认">
+    </div>
+</div>
+<script src="./layui/layui.js" th:src="@{/layui/layui.js}"></script>
+<script>
+    layui.config({
+        base: ctxPath //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'form'], function () {
+    });
+</script>
+</body>
+</html>

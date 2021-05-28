@@ -1,0 +1,2 @@
+com.gitee.pifeng.monitoring.starter.annotation.EnableMonitoring=\
+  com.gitee.pifeng.monitoring.starter.autoconfigure.MonitoringPlugAutoConfiguration

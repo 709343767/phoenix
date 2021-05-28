@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gitee.pifeng.monitoring.ui.business.web.dao.IMonitorNetDao">
+
+    <!-- 网络正常率统计 -->
+    <select id="getNetNormalRateStatistics" resultType="java.util.Map" databaseId="mysql">
+        SELECT tmp.netSum                                                    AS netSum,
+               tmp.netConnectSum                                             AS netConnectSum,
+               tmp.netDisconnectSum                                          AS netDisconnectSum,
+               tmp.netUnsentSum                                              AS netUnsentSum,
+               IFNULL(round(tmp.netConnectSum * 100 / tmp.netSum, 2), '100') AS netConnectRate
+        FROM (
+                 SELECT COUNT(ID)                                                    AS netSum,
+                        IFNULL(SUM(CASE WHEN mar.STATUS = '1' THEN 1 ELSE 0 END), 0) AS netConnectSum,
+                        IFNULL(SUM(CASE WHEN mar.STATUS = '0' THEN 1 ELSE 0 END), 0) AS netDisconnectSum,
+                        IFNULL(SUM(CASE WHEN mar.STATUS is null OR mar.STATUS = '' THEN 1 ELSE 0 END),
+                               0)                                                    AS netUnsentSum
+                 FROM MONITOR_NET mar) tmp
+    </select>
+
+</mapper>

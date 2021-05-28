@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>编辑告警定义</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="./layui/css/layui.css" th:href="@{/layui/css/layui.css}" media="all">
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+    <script src="./js/html5.min.js" th:src="@{/js/html5.min.js}"></script>
+    <script src="./js/respond.min.js" th:src="@{/js/respond.min.js}"></script>
+    <![endif]-->
+    <script type="text/javascript" charset="utf-8" th:inline="javascript">
+        var ctxPath = /*[[@{/}]]*/'';
+    </script>
+</head>
+<body>
+<div class="layui-form" lay-filter="layuiadmin-form-useradmin" id="layuiadmin-form-useradmin"
+     style="padding: 20px 20px 0 0;">
+    <div class="layui-form-item" style="display: none;">
+        <label class="layui-form-label">告警ID</label>
+        <div class="layui-input-inline">
+            <input type="hidden" name="id" autocomplete="off" readonly
+                   class="layui-input" th:value="${monitorAlarmDefinitionVo.id}">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">告警编码</label>
+        <div class="layui-input-inline">
+            <input type="text" name="code" lay-verify="required" placeholder="请输入告警编码" autocomplete="off"
+                   class="layui-input" lay-verType="tips" th:value="${monitorAlarmDefinitionVo.code}" readonly>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">告警类型</label>
+        <div class="layui-input-inline">
+            <select name="type">
+                <option value="SERVER" th:selected="${monitorAlarmDefinitionVo.type=='SERVER'}">服务器</option>
+                <option value="NET" th:selected="${monitorAlarmDefinitionVo.type=='NET'}">网络</option>
+                <option value="INSTANCE" th:selected="${monitorAlarmDefinitionVo.type=='INSTANCE'}">应用</option>
+                <option value="CUSTOM" th:selected="${monitorAlarmDefinitionVo.type=='CUSTOM'}">自定义</option>
+            </select>
+        </div>
+        <label class="layui-form-label">告警级别</label>
+        <div class="layui-input-inline">
+            <select name="grade">
+                <option value="INFO" th:selected="${monitorAlarmDefinitionVo.grade=='INFO'}">消息</option>
+                <option value="WARN" th:selected="${monitorAlarmDefinitionVo.grade=='WARN'}">警告</option>
+                <option value="ERROR" th:selected="${monitorAlarmDefinitionVo.grade=='ERROR'}">错误</option>
+                <option value="FATAL" th:selected="${monitorAlarmDefinitionVo.grade=='FATAL'}">致命</option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">一级分类</label>
+        <div class="layui-input-inline">
+            <input type="text" name="firstClass" lay-verify="required" placeholder="请输入一级分类" autocomplete="off"
+                   class="layui-input" lay-verType="tips" style="width: 500px;"
+                   th:value="${monitorAlarmDefinitionVo.firstClass}">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">二级分类</label>
+        <div class="layui-input-inline">
+            <input type="text" name="secondClass" placeholder="请输入二级分类" autocomplete="off"
+                   class="layui-input" style="width: 500px;"
+                   th:value="${monitorAlarmDefinitionVo.secondClass}">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">三级分类</label>
+        <div class="layui-input-inline">
+            <input type="text" name="thirdClass" placeholder="请输入三级分类" autocomplete="off"
+                   class="layui-input" style="width: 500px;"
+                   th:value="${monitorAlarmDefinitionVo.thirdClass}">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">告警标题</label>
+        <div class="layui-input-inline">
+            <input type="text" name="title" lay-verify="required" placeholder="请输入告警标题" autocomplete="off"
+                   class="layui-input" lay-verType="tips" style="width: 500px;"
+                   th:value="${monitorAlarmDefinitionVo.title}">
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">告警内容</label>
+        <div class="layui-input-block">
+            <textarea name="content" class="layui-textarea" placeholder="请输入告警内容" autocomplete="off"
+                      lay-verify="required" lay-verType="tips" style="width: 500px;"
+                      th:text="${monitorAlarmDefinitionVo.content}"></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="LAY-alarm-front-submit" id="LAY-alarm-front-submit" value="确认">
+    </div>
+</div>
+<script src="./layui/layui.js" th:src="@{/layui/layui.js}"></script>
+<script>
+    layui.config({
+        base: ctxPath //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'form']);
+</script>
+</body>
+</html>

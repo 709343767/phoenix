@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>监控配置</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="./layui/css/layui.css" th:href="@{/layui/css/layui.css}" media="all">
+    <link rel="stylesheet" href="./style/admin.css" th:href="@{/style/admin.css}" media="all">
+    <link rel="stylesheet" href="./style/myself.css" th:href="@{/style/myself.css}" media="all">
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+    <script src="./js/html5.min.js" th:src="@{/js/html5.min.js}"></script>
+    <script src="./js/respond.min.js" th:src="@{/js/respond.min.js}"></script>
+    <![endif]-->
+    <script type="text/javascript" charset="utf-8" th:inline="javascript">
+        var ctxPath = /*[[@{/}]]*/'';
+        var tokenValue = /*[[${_csrf.token}]]*/'';
+    </script>
+</head>
+<body>
+<div class="layui-fluid">
+    <div class="layui-row">
+        <div class="layadmin-homepage-content">
+            <form class="layui-form" lay-filter="">
+                <div class="layui-card">
+                    <div class="layui-card-header div-font-weight">设置</div>
+                    <div class="layui-card-body" pad20>
+                        <div class="layui-card">
+                            <div class="layui-card-header div-font-weight">监控</div>
+                            <div class="layui-card-body" pad20>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label" style="text-align: left;">阈值</label>
+                                    <div class="layui-input-block">
+                                        <input type="radio" name="threshold" th:value="${num}" th:title="${num}"
+                                               th:each="num, numStat : ${#numbers.sequence(1,10)}"
+                                               th:checked="${monitorConfigPageForm.threshold==num}? true : false">
+                                    </div>
+                                    <div class="layui-form-mid layui-word-aux">1到10，共10级，值越小监控越灵敏</div>
+                                </div>
+                                <div class="layui-card">
+                                    <div class="layui-card-header div-font-weight">告警</div>
+                                    <div class="layui-card-body" pad20>
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label" style="text-align: left;">是否告警</label>
+                                            <div class="layui-input-inline">
+                                                <input type="checkbox" name="alarmEnable" lay-text="是|否"
+                                                       th:value=1 lay-skin="switch"
+                                                       th:checked="${monitorConfigPageForm.alarmEnable==1}? true : false">
+                                            </div>
+                                        </div>
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label" style="text-align: left;">级别</label>
+                                            <div class="layui-input-block">
+                                                <input type="radio" name="alarmLevel" value="INFO" title="INFO"
+                                                       th:checked="${monitorConfigPageForm.alarmLevel=='INFO'}? true : false">
+                                                <input type="radio" name="alarmLevel" value="WARN" title="WARN"
+                                                       th:checked="${monitorConfigPageForm.alarmLevel=='WARN'}? true : false">
+                                                <input type="radio" name="alarmLevel" value="ERROR" title="ERROR"
+                                                       th:checked="${monitorConfigPageForm.alarmLevel=='ERROR'}? true : false">
+                                                <input type="radio" name="alarmLevel" value="FATAL" title="FATAL"
+                                                       th:checked="${monitorConfigPageForm.alarmLevel=='FATAL'}? true : false">
+                                            </div>
+                                        </div>
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label" style="text-align: left;">方式</label>
+                                            <div class="layui-input-block">
+                                                <input type="checkbox" name="alarmWay[0]" value="MAIL" title="邮件"
+                                                       th:checked="${#arrays.contains(monitorConfigPageForm.alarmWay,'MAIL')}? true : false">
+                                                <input type="checkbox" name="alarmWay[1]" value="SMS" title="短信"
+                                                       th:checked="${#arrays.contains(monitorConfigPageForm.alarmWay,'SMS')}? true : false">
+                                            </div>
+                                        </div>
+                                        <div class="layui-card">
+                                            <div class="layui-card-header div-font-weight">邮件</div>
+                                            <div class="layui-card-body" pad20>
+                                                <div class="layui-form-item layui-form-text">
+                                                    <label class="layui-form-label"
+                                                           style="text-align: left;">收件人邮箱</label>
+                                                    <div class="layui-input-block">
+                                                        <textarea name="alarmMailEmills" class="layui-textarea"
+                                                                  lay-verType="tips"
+                                                                  th:text="${monitorConfigPageForm.alarmMailEmills}"></textarea>
+                                                        <div class="layui-form-mid layui-word-aux">收件人邮箱地址，多个邮箱地址用英文分号隔开
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="layui-card">
+                                            <div class="layui-card-header div-font-weight">短信</div>
+                                            <div class="layui-card-body" pad20>
+                                                <div class="layui-form-item layui-form-text">
+                                                    <label class="layui-form-label"
+                                                           style="text-align: left;">收信人号码</label>
+                                                    <div class="layui-input-block">
+                                                        <textarea name="alarmSmsPhoneNumbers" class="layui-textarea"
+                                                                  lay-verType="tips"
+                                                                  th:text="${monitorConfigPageForm.alarmSmsPhoneNumbers}"></textarea>
+                                                        <div class="layui-form-mid layui-word-aux">收信人手机号码，多个手机号码用英文分号隔开
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="layui-form-item">
+                                                    <label class="layui-form-label"
+                                                           style="text-align: left;">接口地址</label>
+                                                    <div class="layui-input-block">
+                                                        <input type="text" name="alarmSmsAddress" class="layui-input"
+                                                               lay-verify="url" lay-verType="tips"
+                                                               th:value="${monitorConfigPageForm.alarmSmsAddress}">
+                                                    </div>
+                                                </div>
+                                                <div class="layui-form-item">
+                                                    <label class="layui-form-label"
+                                                           style="text-align: left;">接口协议</label>
+                                                    <div class="layui-input-block">
+                                                        <input type="radio" name="alarmSmsProtocol"
+                                                               th:value="HTTP" th:title="HTTP"
+                                                               th:checked="${monitorConfigPageForm.alarmSmsProtocol=='HTTP'}? true : false">
+                                                    </div>
+                                                </div>
+                                                <div class="layui-form-item">
+                                                    <label class="layui-form-label"
+                                                           style="text-align: left;">接口企业</label>
+                                                    <div class="layui-input-block">
+                                                        <input type="radio" name="alarmSmsEnterprise"
+                                                               th:value="KACPER" th:title="KACPER"
+                                                               th:checked="${monitorConfigPageForm.alarmSmsEnterprise=='KACPER'}? true : false">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-card">
+                                    <div class="layui-card-header div-font-weight">网络</div>
+                                    <div class="layui-card-body" pad20>
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label" style="text-align: left;">是否监控</label>
+                                            <div class="layui-input-inline">
+                                                <input type="checkbox" name="netEnable" lay-text="是|否"
+                                                       th:value=1 lay-skin="switch"
+                                                       th:checked="${monitorConfigPageForm.netEnable==1}? true : false">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-card">
+                                    <div class="layui-card-header div-font-weight">数据库</div>
+                                    <div class="layui-card-body" pad20>
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label" style="text-align: left;">是否监控</label>
+                                            <div class="layui-input-inline">
+                                                <input type="checkbox" name="dbEnable" lay-text="是|否"
+                                                       th:value=1 lay-skin="switch"
+                                                       th:checked="${monitorConfigPageForm.dbEnable==1}? true : false">
+                                            </div>
+                                        </div>
+                                        <div class="layui-card">
+                                            <div class="layui-card-header div-font-weight">表空间</div>
+                                            <div class="layui-card-body" pad20>
+                                                <div class="layui-form-item">
+                                                    <label class="layui-form-label"
+                                                           style="text-align: left;">过载阈值(%)</label>
+                                                    <div class="layui-input-block">
+                                                        <input type="text" name="dbTableSpaceOverloadThreshold"
+                                                               class="layui-input"
+                                                               lay-verify="number" lay-verType="tips"
+                                                               th:value="${monitorConfigPageForm.dbTableSpaceOverloadThreshold}">
+                                                    </div>
+                                                </div>
+                                                <div class="layui-form-item">
+                                                    <label class="layui-form-label" style="text-align: left;">级别</label>
+                                                    <div class="layui-input-block">
+                                                        <input type="radio" name="dbTableSpaceLevel" value="INFO"
+                                                               title="INFO"
+                                                               th:checked="${monitorConfigPageForm.dbTableSpaceLevel=='INFO'}? true : false">
+                                                        <input type="radio" name="dbTableSpaceLevel" value="WARN"
+                                                               title="WARN"
+                                                               th:checked="${monitorConfigPageForm.dbTableSpaceLevel=='WARN'}? true : false">
+                                                        <input type="radio" name="dbTableSpaceLevel" value="ERROR"
+                                                               title="ERROR"
+                                                               th:checked="${monitorConfigPageForm.dbTableSpaceLevel=='ERROR'}? true : false">
+                                                        <input type="radio" name="dbTableSpaceLevel" value="FATAL"
+                                                               title="FATAL"
+                                                               th:checked="${monitorConfigPageForm.dbTableSpaceLevel=='FATAL'}? true : false">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-card">
+                                    <div class="layui-card-header div-font-weight">服务器</div>
+                                    <div class="layui-card-body" pad20>
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label" style="text-align: left;">是否监控</label>
+                                            <div class="layui-input-inline">
+                                                <input type="checkbox" name="serverEnable" lay-text="是|否"
+                                                       th:value=1 lay-skin="switch"
+                                                       th:checked="${monitorConfigPageForm.serverEnable==1}? true : false">
+                                            </div>
+                                        </div>
+                                        <div class="layui-card">
+                                            <div class="layui-card-header div-font-weight">CPU</div>
+                                            <div class="layui-card-body" pad20>
+                                                <div class="layui-form-item">
+                                                    <label class="layui-form-label"
+                                                           style="text-align: left;">过载阈值(%)</label>
+                                                    <div class="layui-input-block">
+                                                        <input type="text" name="serverCpuOverloadThreshold"
+                                                               class="layui-input"
+                                                               lay-verify="number" lay-verType="tips"
+                                                               th:value="${monitorConfigPageForm.serverCpuOverloadThreshold}">
+                                                    </div>
+                                                </div>
+                                                <div class="layui-form-item">
+                                                    <label class="layui-form-label" style="text-align: left;">级别</label>
+                                                    <div class="layui-input-block">
+                                                        <input type="radio" name="serverCpuLevel" value="INFO"
+                                                               title="INFO"
+                                                               th:checked="${monitorConfigPageForm.serverCpuLevel=='INFO'}? true : false">
+                                                        <input type="radio" name="serverCpuLevel" value="WARN"
+                                                               title="WARN"
+                                                               th:checked="${monitorConfigPageForm.serverCpuLevel=='WARN'}? true : false">
+                                                        <input type="radio" name="serverCpuLevel" value="ERROR"
+                                                               title="ERROR"
+                                                               th:checked="${monitorConfigPageForm.serverCpuLevel=='ERROR'}? true : false">
+                                                        <input type="radio" name="serverCpuLevel" value="FATAL"
+                                                               title="FATAL"
+                                                               th:checked="${monitorConfigPageForm.serverCpuLevel=='FATAL'}? true : false">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="layui-card">
+                                            <div class="layui-card-header div-font-weight">内存</div>
+                                            <div class="layui-card-body" pad20>
+                                                <div class="layui-form-item">
+                                                    <label class="layui-form-label"
+                                                           style="text-align: left;">过载阈值(%)</label>
+                                                    <div class="layui-input-block">
+                                                        <input type="text" name="serverMemoryOverloadThreshold"
+                                                               class="layui-input"
+                                                               lay-verify="number" lay-verType="tips"
+                                                               th:value="${monitorConfigPageForm.serverMemoryOverloadThreshold}">
+                                                    </div>
+                                                </div>
+                                                <div class="layui-form-item">
+                                                    <label class="layui-form-label" style="text-align: left;">级别</label>
+                                                    <div class="layui-input-block">
+                                                        <input type="radio" name="serverMemoryLevel" value="INFO"
+                                                               title="INFO"
+                                                               th:checked="${monitorConfigPageForm.serverMemoryLevel=='INFO'}? true : false">
+                                                        <input type="radio" name="serverMemoryLevel" value="WARN"
+                                                               title="WARN"
+                                                               th:checked="${monitorConfigPageForm.serverMemoryLevel=='WARN'}? true : false">
+                                                        <input type="radio" name="serverMemoryLevel" value="ERROR"
+                                                               title="ERROR"
+                                                               th:checked="${monitorConfigPageForm.serverMemoryLevel=='ERROR'}? true : false">
+                                                        <input type="radio" name="serverMemoryLevel" value="FATAL"
+                                                               title="FATAL"
+                                                               th:checked="${monitorConfigPageForm.serverMemoryLevel=='FATAL'}? true : false">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="layui-card">
+                                            <div class="layui-card-header div-font-weight">磁盘</div>
+                                            <div class="layui-card-body" pad20>
+                                                <div class="layui-form-item">
+                                                    <label class="layui-form-label"
+                                                           style="text-align: left;">过载阈值(%)</label>
+                                                    <div class="layui-input-block">
+                                                        <input type="text" name="serverDiskOverloadThreshold"
+                                                               class="layui-input"
+                                                               lay-verify="number" lay-verType="tips"
+                                                               th:value="${monitorConfigPageForm.serverDiskOverloadThreshold}">
+                                                    </div>
+                                                </div>
+                                                <div class="layui-form-item">
+                                                    <label class="layui-form-label" style="text-align: left;">级别</label>
+                                                    <div class="layui-input-block">
+                                                        <input type="radio" name="serverDiskLevel" value="INFO"
+                                                               title="INFO"
+                                                               th:checked="${monitorConfigPageForm.serverDiskLevel=='INFO'}? true : false">
+                                                        <input type="radio" name="serverDiskLevel" value="WARN"
+                                                               title="WARN"
+                                                               th:checked="${monitorConfigPageForm.serverDiskLevel=='WARN'}? true : false">
+                                                        <input type="radio" name="serverDiskLevel" value="ERROR"
+                                                               title="ERROR"
+                                                               th:checked="${monitorConfigPageForm.serverDiskLevel=='ERROR'}? true : false">
+                                                        <input type="radio" name="serverDiskLevel" value="FATAL"
+                                                               title="FATAL"
+                                                               th:checked="${monitorConfigPageForm.serverDiskLevel=='FATAL'}? true : false">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-input-block">
+                                <button type="submit" class="layui-btn" lay-submit="" lay-filter="config-info">保存
+                                </button>
+                                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script src="./js/common.js" th:src="@{/js/common.js}" charset="utf-8"></script>
+<script src="./layui/layui.js" th:src="@{/layui/layui.js}"></script>
+<script charset="utf-8" th:inline="javascript">
+    layui.config({
+        base: ctxPath //静态资源所在路径
+    }).extend({
+        index: 'lib/index', //主入口模块
+    }).use(['index', 'element', 'form', 'util'], function () {
+        var admin = layui.admin;
+        var form = layui.form;
+        var util = layui.util;
+        form.render();
+        //自定义验证规则
+        form.verify({
+            url: function (value) {
+                if (value != null && value !== '' && !(/(^#)|(^http(s*):\/\/[^\s]+\.[^\s]+)/.test(value))) {
+                    return '链接格式不正确';
+                }
+            }
+        });
+        // 监听信息提交
+        form.on('submit(config-info)', function (data) {
+            // 弹出loading框
+            var loadingIndex = layer.load(1, {
+                shade: [0.1, '#fff'] //0.1透明度的白色背景
+            });
+            // 修改用户信息
+            admin.req({
+                type: 'put',
+                url: ctxPath + 'monitor-config/update-monitor-config',
+                data: data.field,
+                dataType: 'json',
+                headers: {
+                    [[${_csrf.headerName}]]: [[${_csrf.token}]]
+                },
+                success: function (result) {
+                    var data = result.data;
+                    if (data === webConst.SUCCESS) {
+                        layer.msg('保存成功！', {icon: 6});
+                    } else if (data === webConst.REFRESH_FAIL) {
+                        layer.msg('保存成功，但刷新服务端配置失败，等稍后自动刷新！', {icon: 5, shift: 6});
+                    } else {
+                        layer.msg('保存失败！', {icon: 5, shift: 6});
+                    }
+                    // 关闭loading框
+                    layer.close(loadingIndex);
+                },
+                error: function () {
+                    layer.msg('系统错误！', {icon: 5, shift: 6});
+                    // 关闭loading框
+                    layer.close(loadingIndex);
+                }
+            });
+            return false;
+        });
+        // 右下脚回到顶部小图标
+        util.fixbar({
+            showHeight: 100
+        });
+    });
+</script>
+</body>
+</html>

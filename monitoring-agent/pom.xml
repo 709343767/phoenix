@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- 监控父项目 -->
+    <parent>
+        <artifactId>monitoring</artifactId>
+        <groupId>com.gitee.pifeng</groupId>
+        <version>0.0.3.RELEASE</version>
+        <relativePath>..</relativePath>
+    </parent>
+
+    <!-- 项目基本信息 -->
+    <artifactId>monitoring-agent</artifactId>
+    <packaging>jar</packaging>
+    <name>monitoring-agent</name>
+    <description>监控代理端</description>
+
+    <!-- 属性 -->
+    <properties>
+        <maven.deploy.skip>true</maven.deploy.skip>
+    </properties>
+
+    <!-- 依赖 -->
+    <dependencies>
+        <!-- 监控WEB公共模块依赖 -->
+        <dependency>
+            <groupId>com.gitee.pifeng</groupId>
+            <artifactId>monitoring-common-web</artifactId>
+        </dependency>
+        <!-- springboot项目集成监控依赖，使之拥有监控功能 -->
+        <dependency>
+            <groupId>com.gitee.pifeng</groupId>
+            <artifactId>monitoring-client-spring-boot-starter</artifactId>
+        </dependency>
+
+        <!--lombok依赖 -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <!-- springboot对单元测试的支持依赖 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <!-- 配置文件处理器依赖，绑定配置文件，支持注解 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <!-- 支持热部署依赖 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <scope>runtime</scope>
+            <optional>true</optional>
+        </dependency>
+    </dependencies>
+
+    <!-- 构建 -->
+    <build>
+        <finalName>monitoring-agent</finalName>
+        <defaultGoal>package</defaultGoal>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <!-- 指定该Main Class为全局的唯一入口 -->
+                    <mainClass>com.gitee.pifeng.monitoring.agent.AgentApplication</mainClass>
+                </configuration>
+            </plugin>
+            <!-- sonatype的staging插件 -->
+            <plugin>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>nexus-staging-maven-plugin</artifactId>
+                <extensions>true</extensions>
+                <configuration>
+                    <serverId>ossrh</serverId>
+                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                    <!-- 忽略这个模块 -->
+                    <skipNexusStagingDeployMojo>true</skipNexusStagingDeployMojo>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

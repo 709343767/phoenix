@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>服务器详情</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="./layui/css/layui.css" th:href="@{/layui/css/layui.css}" media="all">
+    <link rel="stylesheet" href="./style/admin.css" th:href="@{/style/admin.css}" media="all">
+    <link rel="stylesheet" href="./style/myself.css" th:href="@{/style/myself.css}" media="all">
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+    <script src="./js/html5.min.js" th:src="@{/js/html5.min.js}"></script>
+    <script src="./js/respond.min.js" th:src="@{/js/respond.min.js}"></script>
+    <![endif]-->
+    <script type="text/javascript" charset="utf-8" th:inline="javascript">
+        var ctxPath = /*[[@{/}]]*/'';
+        var tokenValue = /*[[${_csrf.token}]]*/'';
+        // 应用实例表的主键ID
+        var id = [[${id}]];
+        // IP地址
+        var ip = [[${ip}]];
+    </script>
+</head>
+<body>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-tab layui-tab-brief">
+            <ul class="layui-tab-title">
+                <li class="layui-this">图表</li>
+                <li>概要</li>
+            </ul>
+            <div class="layui-tab-content">
+                <div class="layui-tab-item layui-show">
+                    <div class="layui-card">
+                        <form class="layui-form layui-card-header layuiadmin-card-header-auto layui-card-header-my">
+                            <div class="layui-form-item">
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">时间范围(T)</label>
+                                    <div class="layui-input-block">
+                                        <select name="time" id="time" lay-filter="time">
+                                            <option value="hour">1小时</option>
+                                            <option value="day">1天</option>
+                                            <!--<option value="week">1周</option>-->
+                                            <!--<option value="month">1月</option>-->
+                                            <!--<option value="halfYear">6月</option>-->
+                                            <!--<option value="year">1年</option>-->
+                                            <!--<option value="all">全部</option>-->
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        <div class="layui-card-body">
+                            <div class="layui-row layui-col-space5">
+                                <div class="layui-col-md4">
+                                    <div class="layadmin-dataview-my-330px" style="overflow: auto;" id="niceScroll1">
+                                        <div class="layui-card">
+                                            <div class="layui-card-header">磁盘</div>
+                                            <div class="layui-card-body layadmin-takerates-my"
+                                                 id="get-server-disk-info">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-col-md4">
+                                    <div class="layadmin-dataview-my-330px" style="overflow: auto;" id="niceScroll2">
+                                        <div class="layui-card">
+                                            <div class="layui-card-header">电池</div>
+                                            <div class="layui-card-body layadmin-takerates-my layadmin-dataview-my-270px layadmin-dataview-my-270px-text"
+                                                 id="get-server-power-source-info">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-col-md4">
+                                    <div class="layadmin-dataview-my-330px" style="overflow: auto;" id="niceScroll3">
+                                        <div class="layui-card">
+                                            <div class="layui-card-header">CPU温度</div>
+                                            <div class="layui-card-body layadmin-takerates-my layadmin-dataview-my-270px layadmin-dataview-my-270px-text"
+                                                 id="get-server-sensors-info">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-card">
+                        <div class="layui-card-body">
+                            <div class="layui-row layui-col-space5">
+                                <div class="layadmin-dataview-my-330px" id="get-server-cpu-info">
+                                </div>
+                                <div class="layadmin-dataview-my-330px" id="get-server-memory-info">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-card">
+                        <form class="layui-form layui-card-header layuiadmin-card-header-auto layui-card-header-my">
+                            <div class="layui-form-item">
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">网卡地址</label>
+                                    <div class="layui-input-block">
+                                        <select name="address" id="address" lay-filter="address">
+                                            <option th:each="address:${netcardAddresses}" th:value="${address}"
+                                                    th:text="${address}" th:selected="${address eq ip}"></option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        <div class="layui-card-body">
+                            <div class="layui-row layui-col-space5">
+                                <div class="layadmin-dataview-my-330px" id="get-server-network-speed-info">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-tab-item">
+                    <div class="layui-collapse">
+                        <div class="layui-colla-item">
+                            <h2 class="layui-colla-title">操作系统</h2>
+                            <div class="layui-colla-content layui-show">
+                                <div class="layui-row layui-col-space10" id="os">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-colla-item">
+                            <h2 class="layui-colla-title">CPU</h2>
+                            <div class="layui-colla-content layui-show">
+                                <div class="layui-row layui-col-space10" id="cpu">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-colla-item">
+                            <h2 class="layui-colla-title">网络</h2>
+                            <div class="layui-colla-content layui-show">
+                                <div class="layui-row layui-col-space10" id="netcard">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-colla-item">
+                            <h2 class="layui-colla-title">电池</h2>
+                            <div class="layui-colla-content layui-show">
+                                <div class="layui-row layui-col-space10" id="powerSources">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-colla-item">
+                            <h2 class="layui-colla-title">传感器</h2>
+                            <div class="layui-colla-content layui-show">
+                                <div class="layui-row layui-col-space10" id="sensors">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="./js/jquery.min.js" th:src="@{/js/jquery.min.js}"></script>
+<script src="./js/jquery.nicescroll.min.js" th:src="@{/js/jquery.nicescroll.min.js}"></script>
+<script src="./js/echarts.min.js" th:src="@{/js/echarts.min.js}"></script>
+<script src="./js/echarts.theme.infographic.js" th:src="@{/js/echarts.theme.infographic.js}"></script>
+<script src="./js/echarts-liquidfill.min.js" th:src="@{/js/echarts-liquidfill.min.js}"></script>
+<script src="./layui/layui.js" th:src="@{/layui/layui.js}"></script>
+<script>
+    layui.config({
+        base: ctxPath //静态资源所在路径
+    }).extend({
+        index: 'lib/index', //主入口模块
+        serverDetail: 'server/serverDetail' // 服务器详情模块
+    }).use(['index', 'element', 'form', 'serverDetail'], function () {
+        var device = layui.device();
+        // 不是移动端
+        if (!device.ios && !device.android) {
+            // 美化滚动条
+            $('div[id^="niceScroll"]').niceScroll();
+            // 浏览器窗口大小发生改变时
+            window.addEventListener("resize", function () {
+                $('div[id^="niceScroll"]').getNiceScroll().resize();
+            });
+        }
+    });
+</script>
+</body>
+</html>

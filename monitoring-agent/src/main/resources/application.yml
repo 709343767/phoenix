@@ -1,0 +1,74 @@
+##############################################server配置#################################################
+server:
+  servlet:
+    context-path: /monitoring-agent
+  undertow:
+    accesslog:
+      #Undertow日志存放目录
+      dir: persistent-monitoring/logs/monitoring-agent
+      #是否启动日志
+      enabled: true
+      #日志格式
+      pattern: common
+      #日志文件名前缀
+      #prefix: access_log
+      #日志文件名后缀
+      #suffix: log
+  #开启优雅停机
+  shutdown: graceful
+
+
+###############################################日志配置####################################################
+logging:
+  config: classpath:logback.xml
+  #监控相关的日志级别设置成debug
+  level:
+    com.gitee.pifeng.monitoring: debug
+
+
+###############################################spring配置#################################################
+spring:
+  mvc:
+    async:
+      #接口访问超时时间
+      request-timeout: 5000
+  jackson:
+    #设置时区
+    time-zone: GMT+8
+  #main:
+  #支持名称相同的bean的覆盖
+  #allow-bean-definition-overriding: true
+  application:
+    name: monitoring-agent
+  profiles:
+    active:
+      - dev
+  devtools:
+    livereload:
+      port: 35730
+  lifecycle:
+    #设置缓冲期，最大等待时间
+    timeout-per-shutdown-phase: 30s
+
+
+############################################springboot端点配置#############################################
+management:
+  endpoint:
+    shutdown:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: shutdown
+  server:
+    #处于安全考虑，只允许在本地进行关闭操作
+    address: 127.0.0.1
+
+
+##############################################swagger端点配置##############################################
+swagger:
+  #production: true
+  basic:
+    enable: true
+    username: admin
+    password: admin

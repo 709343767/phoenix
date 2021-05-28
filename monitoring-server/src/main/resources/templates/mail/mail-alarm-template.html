@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>监控告警</title>
+    <style type="text/css">
+        div > span {
+            position: absolute;
+        }
+    </style>
+</head>
+<body>
+<div>
+    <!--/*@thymesVar id="title" type="com.gitee.pifeng.monitoring.server.business.server.domain.Mail"*/-->
+    <div>
+        <strong>监控告警摘要：</strong>
+        <span th:utext="${title}"></span>
+    </div>
+    <br>
+    <!--/*@thymesVar id="level" type="com.gitee.pifeng.monitoring.server.business.server.domain.Mail"*/-->
+    <div>
+        <strong>监控告警级别：</strong>
+        <span th:utext="${level}"></span>
+    </div>
+    <br>
+    <!--/*@thymesVar id="content" type="com.gitee.pifeng.monitoring.server.business.server.domain.Mail"*/-->
+    <div>
+        <strong>监控告警明细：</strong>
+        <span th:utext="${content}"></span>
+    </div>
+</div>
+</body>
+</html>

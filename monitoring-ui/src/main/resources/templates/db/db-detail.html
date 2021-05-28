@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="utf-8">
+    <title>数据库详情</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="./layui/css/layui.css" th:href="@{/layui/css/layui.css}" media="all">
+    <link rel="stylesheet" href="./style/admin.css" th:href="@{/style/admin.css}" media="all">
+    <link rel="stylesheet" href="./style/myself.css" th:href="@{/style/myself.css}" media="all">
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+    <script src="./js/html5.min.js" th:src="@{/js/html5.min.js}"></script>
+    <script src="./js/respond.min.js" th:src="@{/js/respond.min.js}"></script>
+    <![endif]-->
+    <script type="text/javascript" charset="utf-8" th:inline="javascript">
+        var ctxPath = /*[[@{/}]]*/'';
+        var tokenValue = /*[[${_csrf.token}]]*/'';
+        // 数据库详情的主键ID
+        var id = [[${monitorDbVo.id}]];
+        var authority = [[${#authorization.expression('hasAuthority("超级管理员")')}]];
+    </script>
+</head>
+<body>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-tab layui-tab-brief">
+            <ul class="layui-tab-title">
+                <li class="layui-this">会话管理</li>
+                <li th:if="${#strings.toLowerCase(monitorDbVo.dbType)} eq 'oracle'">表空间</li>
+                <li>详情</li>
+            </ul>
+            <div class="layui-tab-content">
+                <div class="layui-tab-item layui-show">
+                    <div class="layui-fluid">
+                        <table id="list-table" lay-filter="list-table"></table>
+                        <script type="text/html" id="imgTpl">
+                            <img style="display: inline-block; width: 50%; height: 100%;" src={{ d.avatar }}>
+                        </script>
+                        <script type="text/html" id="list-table-toolbar">
+                            <div class="layui-btn-container" sec:authorize="hasAuthority('超级管理员')">
+                                <button class="layui-btn layui-btn-danger" lay-event="batchdel">结束</button>
+                            </div>
+                        </script>
+                        <script type="text/html" id="list-table-toolbar-detail">
+                            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"
+                               sec:authorize="hasAuthority('超级管理员')">
+                                <i class="layui-icon layui-icon-delete"></i>结束</a>
+                        </script>
+                    </div>
+                </div>
+                <div class="layui-tab-item" th:if="${#strings.toLowerCase(monitorDbVo.dbType)} eq 'oracle'">
+                    <div class="layui-fluid">
+                        <table id="list-table-space-all" lay-filter="list-table-space-all"></table>
+                        <script type="text/html" id="imgTpl-space-all">
+                            <img style="display: inline-block; width: 50%; height: 100%;" src={{ d.avatar }}>
+                        </script>
+                    </div>
+                    <div class="layui-fluid">
+                        <table id="list-table-space-file" lay-filter="list-table-space-file"></table>
+                        <script type="text/html" id="imgTpl-space-file">
+                            <img style="display: inline-block; width: 50%; height: 100%;" src={{ d.avatar }}>
+                        </script>
+                    </div>
+                </div>
+                <div class="layui-tab-item">
+                    <form class="layui-form layui-form-pane" id="layuiadmin-form-useradmin"
+                          style="padding: 20px 20px 0 0;" action="javascript:;">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">数据库ID</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="id" disabled class="layui-input" th:value="${monitorDbVo.id}">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">连接名</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="connName" disabled class="layui-input"
+                                       th:value="${monitorDbVo.connName}">
+                            </div>
+                        </div>
+                        <div class="layui-form-item layui-form-text">
+                            <label class="layui-form-label">URL</label>
+                            <div class="layui-input-block">
+                                <textarea th:text="${monitorDbVo.url}" name="url" class="layui-textarea" disabled>
+                                </textarea>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">用户名</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="username" disabled class="layui-input"
+                                       th:value="${monitorDbVo.username}">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">类型</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="dbType" disabled class="layui-input"
+                                       th:value="${monitorDbVo.dbType}">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">驱动类</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="driverClass" disabled class="layui-input"
+                                       th:value="${monitorDbVo.driverClass}">
+                            </div>
+                        </div>
+                        <div class="layui-form-item layui-form-text">
+                            <label class="layui-form-label">描述</label>
+                            <div class="layui-input-block">
+                                <textarea th:text="${monitorDbVo.dbDesc}" disabled name="dbDesc"
+                                          class="layui-textarea"></textarea>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">状态</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="isOnline" disabled class="layui-input"
+                                       th:if="${monitorDbVo.isOnline=='0'}" value="离线">
+                                <input type="text" name="isOnline" disabled class="layui-input"
+                                       th:if="${monitorDbVo.isOnline=='1'}" value="正常">
+                                <input type="text" name="isOnline" disabled class="layui-input"
+                                       th:if="${monitorDbVo.isOnline=='' || monitorDbVo.isOnline==null}" value="未知">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">新增时间</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="insertTime" disabled class="layui-input"
+                                       th:value="${#dates.format(monitorDbVo.insertTime,'yyyy/MM/dd HH:mm:ss')}">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">更新时间</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="updateTime" disabled class="layui-input"
+                                       th:value="${#dates.format(monitorDbVo.updateTime,'yyyy/MM/dd HH:mm:ss')}">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="./js/common.js" th:src="@{/js/common.js}" charset="utf-8"></script>
+<script src="./layui/layui.js" th:src="@{/layui/layui.js}"></script>
+<script charset="utf-8" th:inline="javascript">
+    var extend = {
+        index: 'lib/index'//主入口模块
+    };
+    var use = ['index', 'element', 'form'];
+    if ([[${monitorDbVo.dbType}]].toLowerCase() === 'mysql') {
+        extend.dbSession4mysql = 'db/dbSession4mysql';
+        use.push('dbSession4mysql');
+    } else if ([[${monitorDbVo.dbType}]].toLowerCase() === 'oracle') {
+        extend.dbSession4oracle = 'db/dbSession4oracle';
+        extend.dbTableSpace4oracle = 'db/dbTableSpace4oracle';
+        use.push('dbSession4oracle');
+        use.push('dbTableSpace4oracle');
+    }
+    layui.config({
+        base: ctxPath //静态资源所在路径
+    }).extend(extend).use(use);
+</script>
+</body>
+</html>

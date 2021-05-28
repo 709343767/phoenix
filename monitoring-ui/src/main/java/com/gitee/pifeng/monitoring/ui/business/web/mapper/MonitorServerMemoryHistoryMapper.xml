@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gitee.pifeng.monitoring.ui.business.web.dao.IMonitorServerMemoryHistoryDao">
+
+    <!-- 获取服务器详情页面服务器内存图表信息 -->
+    <select id="getServerDetailPageServerMemoryChartInfo" parameterType="java.util.HashMap"
+            resultType="com.gitee.pifeng.monitoring.ui.business.web.vo.ServerDetailPageServerMemoryChartVo">
+        SELECT MEM_TOTAL AS memTotal,
+        MEM_USED AS memUsed,
+        MEM_FREE AS memFree,
+        MEN_USED_PERCENT AS menUsedPercent,
+        SWAP_TOTAL AS swapTotal,
+        SWAP_USED AS swapUsed,
+        SWAP_FREE AS swapFree,
+        SWAP_USED_PERCENT AS swapUsedPercent,
+        INSERT_TIME AS insertTime
+        FROM MONITOR_SERVER_MEMORY_HISTORY
+        WHERE IP = #{params.ip}
+        <if test="params.startTime!=null and params.endTime!=null">
+            AND INSERT_TIME BETWEEN #{params.startTime} AND #{params.endTime}
+        </if>
+    </select>
+
+</mapper>

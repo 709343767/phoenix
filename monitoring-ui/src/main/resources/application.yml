@@ -1,0 +1,126 @@
+##############################################server配置#################################################
+server:
+  servlet:
+    context-path: /monitoring-ui
+    session:
+      timeout: 30m
+  undertow:
+    accesslog:
+      #Undertow日志存放目录
+      dir: persistent-monitoring/logs/monitoring-ui
+      #是否启动日志
+      enabled: true
+      #日志格式
+      pattern: common
+      #日志文件名前缀
+      #prefix: access_log
+      #日志文件名后缀
+      #suffix: log
+  #开启优雅停机
+  shutdown: graceful
+  ssl:
+    #你生成的证书名字
+    key-store: classpath:monitoring.p12
+    #密钥库密码
+    key-store-password: 19920720
+    key-store-type: PKCS12
+    #别名
+    key-alias: selfsigned_localhost_sslserver
+
+
+###############################################日志配置####################################################
+logging:
+  config: classpath:logback.xml
+  #监控相关的日志级别设置成debug
+  level:
+    com.gitee.pifeng.monitoring: debug
+
+
+###############################################spring配置#################################################
+spring:
+  mvc:
+    async:
+      #接口访问超时时间
+      request-timeout: 5000
+  jackson:
+    #设置时区
+    time-zone: GMT+8
+  #main:
+  #支持名称相同的bean的覆盖
+  #allow-bean-definition-overriding: true
+  application:
+    name: monitoring-ui
+  profiles:
+    active:
+      - dev
+  devtools:
+    livereload:
+      port: 35732
+  lifecycle:
+    #设置缓冲期，最大等待时间
+    timeout-per-shutdown-phase: 30s
+
+
+  ############################################thymeleaf配置###############################################
+  thymeleaf:
+    cache: false
+    prefix: classpath:/templates/
+    suffix: .html
+    mode: HTML
+    encoding: UTF-8
+
+
+#############################################mybatis-plus配置#############################################
+mybatis-plus:
+  #启动时是否检查MyBatis XML文件的存在，默认不检查
+  check-config-location: false
+  #扫描mapper文件的位置
+  mapper-locations:
+    - classpath:com/gitee/pifeng/monitoring/ui/business/**/mapper/*Mapper.xml
+  configuration:
+    #是否开启缓存
+    cache-enabled: false
+    #配置JdbcTypeForNull, oracle数据库必须配置
+    jdbc-type-for-null: null
+    #配置返回数据库(column下划线命名&&返回java实体是驼峰命名)，自动匹配无需as（没开启这个，SQL需要写as： select user_id as userId）
+    map-underscore-to-camel-case: true
+    #打印sql
+    #log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    #数据库厂商标识
+    database-id: mysql
+  #如果插件版本是3.0-gamma这个选项必须配置,否则会nullPoint
+  global-config:
+    db-config:
+      #数据库类型(已弃用3.1.1，这个属性没什么用)
+      #db-type: mysql
+      #主键类型  AUTO："数据库ID自增"，INPUT："用户输入ID"，ID_WORKER："全局唯一ID (数字类型唯一ID)"，UUID:"全局唯一ID UUID"
+      id-type: auto
+      #字段策略 IGNORED："忽略判断"，NOT_NULL："非 NULL 判断"，NOT_EMPTY："非空判断"(已弃用3.1.2)
+      #field-strategy: not-empty
+      #数据库大写下划线转换
+      capital-mode: false
+      #表名，是否使用下划线命名，默认数据库表使用下划线命名
+      table-underline: true
+
+
+############################################springboot端点配置#############################################
+management:
+  endpoint:
+    shutdown:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: shutdown
+  server:
+    #处于安全考虑，只允许在本地进行关闭操作
+    address: 127.0.0.1
+
+
+##############################################swagger端点配置##############################################
+swagger:
+  #production: true
+  basic:
+    enable: true
+    username: admin
+    password: admin

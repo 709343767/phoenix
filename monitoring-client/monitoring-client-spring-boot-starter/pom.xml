@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- 监控父项目，为监控客户端父项目 -->
+    <parent>
+        <artifactId>monitoring-client</artifactId>
+        <groupId>com.gitee.pifeng</groupId>
+        <version>0.0.3.RELEASE</version>
+        <relativePath>..</relativePath>
+    </parent>
+
+    <!-- 项目基本信息 -->
+    <artifactId>monitoring-client-spring-boot-starter</artifactId>
+    <name>monitoring-client-spring-boot-starter</name>
+    <packaging>jar</packaging>
+    <description>监控客户端与springboot集成的starter</description>
+
+    <!-- 依赖 -->
+    <dependencies>
+        <!-- 监控客户端模块依赖 -->
+        <dependency>
+            <groupId>com.gitee.pifeng</groupId>
+            <artifactId>monitoring-client-core</artifactId>
+        </dependency>
+
+        <!--lombok依赖 -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <!-- slf4j日志依赖 -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <!-- 日志实现依赖 -->
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <!-- springboot依赖 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
+    </dependencies>
+
+    <!-- 构建 -->
+    <build>
+        <defaultGoal>package</defaultGoal>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

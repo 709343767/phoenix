@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="utf-8">
+    <title>KACPER</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="icon" href="./images/favicon16.png" th:href="@{/images/favicon16.png}" type="image/png" sizes="16x16">
+    <link rel="icon" href="./images/favicon32.png" th:href="@{/images/favicon32.png}" type="image/png" sizes="32x32">
+    <link rel="icon" href="./images/favicon.ico" th:href="@{/images/favicon.ico}" type="image/x-icon">
+    <link rel="shortcut icon" href="./images/favicon.ico" th:href="@{/images/favicon.ico}" type="image/x-icon">
+    <link rel="bookmark" href="./images/favicon.ico" th:href="@{/images/favicon.ico}" type="image/x-icon">
+    <link rel="stylesheet" href="./layui/css/layui.css" th:href="@{/layui/css/layui.css}" media="all">
+    <link rel="stylesheet" href="./style/admin.css" th:href="@{/style/admin.css}" media="all">
+    <link rel="stylesheet" href="./style/myself.css" th:href="@{/style/myself.css}" media="all">
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+    <script src="./js/html5.min.js" th:src="@{/js/html5.min.js}"></script>
+    <script src="./js/respond.min.js" th:src="@{/js/respond.min.js}"></script>
+    <![endif]-->
+    <script type="text/javascript" charset="utf-8" th:inline="javascript">
+        var ctxPath = /*[[@{/}]]*/'';
+    </script>
+</head>
+<body class="layui-layout-body">
+<div id="LAY_app">
+    <div class="layui-layout layui-layout-admin">
+        <div class="layui-header">
+            <!-- 头部区域 -->
+            <ul class="layui-nav layui-layout-left">
+                <li class="layui-nav-item layadmin-flexible" lay-unselect>
+                    <a href="javascript:;" layadmin-event="flexible" title="侧边伸缩">
+                        <i class="layui-icon layui-icon-shrink-right" id="LAY_app_flexible"></i>
+                    </a>
+                </li>
+                <li class="layui-nav-item" lay-unselect>
+                    <a href="javascript:;" layadmin-event="refresh" title="刷新">
+                        <i class="layui-icon layui-icon-refresh-3"></i>
+                    </a>
+                </li>
+            </ul>
+            <ul class="layui-nav layui-layout-right" lay-filter="layadmin-layout-right">
+                <li class="layui-nav-item" lay-unselect>
+                    <a lay-href="app/message/index.html" layadmin-event="message" lay-text="消息中心">
+                        <i class="layui-icon layui-icon-notice"></i>
+                        <!-- 如果有新消息，则显示小圆点 -->
+                        <span class="layui-badge-dot"></span>
+                    </a>
+                </li>
+                <li class="layui-nav-item layui-hide-xs" lay-unselect>
+                    <a href="javascript:;" layadmin-event="theme">
+                        <i class="layui-icon layui-icon-theme"></i>
+                    </a>
+                </li>
+                <li class="layui-nav-item layui-hide-xs" lay-unselect>
+                    <a href="javascript:;" layadmin-event="note">
+                        <i class="layui-icon layui-icon-note"></i>
+                    </a>
+                </li>
+                <li class="layui-nav-item layui-hide-xs" lay-unselect>
+                    <a href="javascript:;" layadmin-event="fullscreen">
+                        <i class="layui-icon layui-icon-screen-full"></i>
+                    </a>
+                </li>
+                <li class="layui-nav-item" lay-unselect>
+                    <a href="javascript:;">
+                        <cite sec:authentication="principal.usrname">超级管理员</cite>
+                    </a>
+                    <dl class="layui-nav-child">
+                        <dd><a th:attr="lay-href=@{/set/user/info}">基本资料</a></dd>
+                        <dd><a th:attr="lay-href=@{/set/user/password}">修改密码</a></dd>
+                        <hr>
+                        <dd style="text-align: center;"><a href="javascript:;" id="logout">退出</a></dd>
+                        <!-- 一个隐藏的表单，用来提交退出登录请求 -->
+                        <form th:action="@{/logout}" method="post" style="display: none;">
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                            <input type="submit" value="提交" id="logout-submit">
+                        </form>
+                    </dl>
+                </li>
+                <li class="layui-nav-item layui-hide-xs" lay-unselect>
+                    <a href="javascript:;" layadmin-event="about"><i
+                            class="layui-icon layui-icon-more-vertical"></i></a>
+                </li>
+                <li class="layui-nav-item layui-show-xs-inline-block layui-hide-sm" lay-unselect>
+                    <a href="javascript:;" layadmin-event="more">
+                        <i class="layui-icon layui-icon-more-vertical"></i></a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- 侧边菜单 -->
+        <div class="layui-side layui-side-menu">
+            <div class="layui-side-scroll">
+                <div class="layui-logo" th:attr="lay-href=@{/home}">
+                    <span>KACPER云监控平台</span>
+                </div>
+
+                <ul class="layui-nav layui-nav-tree" lay-shrink="all" id="LAY-system-side-menu"
+                    lay-filter="layadmin-system-side-menu">
+                    <li data-name="home" class="layui-nav-item layui-nav-itemed">
+                        <a href="javascript:;" lay-tips="主页" lay-direction="2"
+                           th:attr="lay-href=@{/home}">
+                            <i class="layui-icon layui-icon-home"></i>
+                            <cite>主页</cite>
+                        </a>
+                    </li>
+                    <li data-name="home" class="layui-nav-item layui-nav-item">
+                        <a href="javascript:;" lay-tips="服务器" lay-direction="2"
+                           th:attr="lay-href=@{/monitor-server/list}">
+                            <i class="layui-icon layui-icon-server"></i>
+                            <cite>服务器</cite>
+                        </a>
+                    </li>
+                    <li data-name="home" class="layui-nav-item layui-nav-item">
+                        <a href="javascript:;" lay-tips="应用程序" lay-direction="2"
+                           th:attr="lay-href=@{/monitor-instance/list}">
+                            <i class="layui-icon layui-icon-app"></i>
+                            <cite>应用程序</cite>
+                        </a>
+                    </li>
+                    <li data-name="home" class="layui-nav-item layui-nav-item">
+                        <a href="javascript:;" lay-tips="数据库" lay-direction="2"
+                           th:attr="lay-href=@{/monitor-db/list}">
+                            <i class="layui-icon layui-icon-db"></i>
+                            <cite>数据库</cite>
+                        </a>
+                    </li>
+                    <li data-name="home" class="layui-nav-item layui-nav-item">
+                        <a href="javascript:;" lay-tips="网络" lay-direction="2"
+                           th:attr="lay-href=@{/monitor-network/list}">
+                            <i class="layui-icon layui-icon-website"></i>
+                            <cite>网络</cite>
+                        </a>
+                    </li>
+                    <li data-name="alarm" class="layui-nav-item">
+                        <a href="javascript:;" lay-tips="告警" lay-direction="2">
+                            <i class="layui-icon layui-icon-notice"></i>
+                            <cite>告警</cite>
+                        </a>
+                        <dl class="layui-nav-child">
+                            <dd>
+                                <a th:attr="lay-href=@{/monitor-alarm-definition/list}">告警定义</a>
+                            </dd>
+                            <dd>
+                                <a th:attr="lay-href=@{/monitor-alarm-record/list}">告警记录</a>
+                            </dd>
+                        </dl>
+                    </li>
+                    <li data-name="user" class="layui-nav-item" sec:authorize="hasAuthority('超级管理员')">
+                        <a href="javascript:;" lay-tips="用户" lay-direction="2">
+                            <i class="layui-icon layui-icon-user"></i>
+                            <cite>用户</cite>
+                        </a>
+                        <dl class="layui-nav-child">
+                            <dd>
+                                <a th:attr="lay-href=@{/user/list}">用户管理</a>
+                            </dd>
+                            <dd>
+                                <a th:attr="lay-href=@{/role/list}">角色管理</a>
+                            </dd>
+                        </dl>
+                    </li>
+                    <li data-name="set" class="layui-nav-item">
+                        <a href="javascript:;" lay-tips="设置" lay-direction="2">
+                            <i class="layui-icon layui-icon-set"></i>
+                            <cite>设置</cite>
+                        </a>
+                        <dl class="layui-nav-child">
+                            <dd class="layui-nav-itemed" sec:authorize="hasAuthority('超级管理员')">
+                                <a th:attr="lay-href=@{/monitor-config/config}">监控设置</a>
+                            </dd>
+                            <dd class="layui-nav-itemed">
+                                <a href="javascript:;">我的设置</a>
+                                <dl class="layui-nav-child">
+                                    <dd><a th:attr="lay-href=@{/set/user/info}">基本资料</a></dd>
+                                    <dd><a th:attr="lay-href=@{/set/user/password}">修改密码</a></dd>
+                                </dl>
+                            </dd>
+                        </dl>
+                    </li>
+                    <li data-name="user" class="layui-nav-item" sec:authorize="hasAuthority('超级管理员')">
+                        <a href="javascript:;" lay-tips="附加功能" lay-direction="2">
+                            <i class="layui-icon layui-icon-component"></i>
+                            <cite>kacper</cite>
+                        </a>
+                        <dl class="layui-nav-child">
+                            <dd>
+                                <a th:attr="lay-href=@{/druid/webapp.html}">druid</a>
+                            </dd>
+                            <dd>
+                                <a th:attr="lay-href=@{/swagger-ui.html}">swagger-ui</a>
+                            </dd>
+                            <dd>
+                                <a th:attr="lay-href=@{/docs.html}">swagger-layer-ui</a>
+                            </dd>
+                            <dd>
+                                <a th:attr="lay-href=@{/doc.html}">swagger-bootstrap-ui</a>
+                            </dd>
+                        </dl>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 页面标签 -->
+        <div class="layadmin-pagetabs" id="LAY_app_tabs">
+            <div class="layui-icon layadmin-tabs-control layui-icon-prev" layadmin-event="leftPage"></div>
+            <div class="layui-icon layadmin-tabs-control layui-icon-next" layadmin-event="rightPage"></div>
+            <div class="layui-icon layadmin-tabs-control layui-icon-down">
+                <ul class="layui-nav layadmin-tabs-select" lay-filter="layadmin-pagetabs-nav">
+                    <li class="layui-nav-item" lay-unselect>
+                        <a href="javascript:;"></a>
+                        <dl class="layui-nav-child layui-anim-fadein">
+                            <dd layadmin-event="closeThisTabs"><a href="javascript:;">关闭当前标签页</a></dd>
+                            <dd layadmin-event="closeOtherTabs"><a href="javascript:;">关闭其它标签页</a></dd>
+                            <dd layadmin-event="closeAllTabs"><a href="javascript:;">关闭全部标签页</a></dd>
+                        </dl>
+                    </li>
+                </ul>
+            </div>
+            <div class="layui-tab" lay-unauto lay-allowClose="true" lay-filter="layadmin-layout-tabs">
+                <ul class="layui-tab-title" id="LAY_app_tabsheader">
+                    <li th:attr="lay-id=@{/home},lay-attr=@{/home}" class="layui-this"><i
+                            class="layui-icon layui-icon-home"></i></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 主体内容 -->
+        <div class="layui-body" id="LAY_app_body">
+            <div class="layadmin-tabsbody-item layui-show">
+                <iframe th:src="@{/home}" frameborder="0" class="layadmin-iframe"></iframe>
+            </div>
+        </div>
+
+        <!-- 辅助元素，一般用于移动设备下遮罩 -->
+        <div class="layadmin-body-shade" layadmin-event="shade"></div>
+    </div>
+</div>
+<script src="./layui/layui.js" th:src="@{/layui/layui.js}" charset="utf-8"></script>
+<script charset="utf-8" th:inline="javascript">
+    layui.config({
+        base: ctxPath //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['jquery', 'index', 'layer'], function () {
+        var $ = layui.$, layer = layui.layer;
+        $('#logout').click(function () {
+            layer.confirm('确定要退出登录吗？', {
+                btn: ['确定', '取消']
+            }, function () {
+                // 触发表单提交
+                $('#logout-submit').click();
+            }, function (index) {
+                layer.close(index);
+            });
+        });
+    });
+</script>
+</body>
+</html>
