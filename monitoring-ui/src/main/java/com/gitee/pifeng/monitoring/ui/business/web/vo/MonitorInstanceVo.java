@@ -36,7 +36,7 @@ public class MonitorInstanceVo implements ISuperBean {
     @ApiModelProperty(value = "应用实例ID")
     private String instanceId;
 
-    @ApiModelProperty(value = "端点（客户端<client>、代理端<agent>、服务端<server>）")
+    @ApiModelProperty(value = "端点（客户端<client>、代理端<agent>、服务端<server>、UI端<ui>）")
     private String endpoint;
 
     @ApiModelProperty(value = "应用实例名")

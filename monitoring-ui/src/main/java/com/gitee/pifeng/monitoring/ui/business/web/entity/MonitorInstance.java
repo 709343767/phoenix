@@ -40,7 +40,7 @@ public class MonitorInstance implements Serializable {
     @TableField("INSTANCE_ID")
     private String instanceId;
 
-    @ApiModelProperty(value = "端点（客户端<client>、代理端<agent>、服务端<server>）")
+    @ApiModelProperty(value = "端点（客户端<client>、代理端<agent>、服务端<server>、UI端<ui>）")
     @TableField("ENDPOINT")
     private String endpoint;
 

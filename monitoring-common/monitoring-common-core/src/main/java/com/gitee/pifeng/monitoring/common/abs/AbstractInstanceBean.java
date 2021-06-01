@@ -23,7 +23,7 @@ import lombok.experimental.Accessors;
 public abstract class AbstractInstanceBean extends AbstractSuperBean {
 
     /**
-     * 应用实例端点（服务端、代理端、客户端、UI）
+     * 应用实例端点（服务端、代理端、客户端、UI端）
      */
     protected String instanceEndpoint;
 

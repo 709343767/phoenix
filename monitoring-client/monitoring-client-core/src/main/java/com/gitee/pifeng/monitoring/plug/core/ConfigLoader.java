@@ -186,7 +186,7 @@ public class ConfigLoader {
      * </p>
      *
      * @param instanceOrder    实例次序(整数)
-     * @param instanceEndpoint 实例端点类型（服务端、代理端、客户端）
+     * @param instanceEndpoint 实例端点类型（服务端、代理端、客户端、UI端）
      * @param instanceName     实例名称
      * @param instanceDesc     实例描述
      * @param instanceLanguage 程序语言
