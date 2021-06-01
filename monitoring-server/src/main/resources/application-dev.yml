@@ -80,15 +80,14 @@ spring:
         slf4j:
           enabled: true
       #Spring监控配置
-      aop-patterns: com.gitee.pifeng.monitoring.server.business.server.controller.*,
-        com.gitee.pifeng.monitoring.server.business.server.service.*
+      aop-patterns: com.gitee.pifeng.monitoring.server.business.server.*
 
 
   #############################################电子邮件配置###############################################
   mail:
     host: smtp.qq.com
-    username: 
-    password: 
+    username:
+    password:
     protocol: smtp
     default-encoding: UTF-8
     port: 465

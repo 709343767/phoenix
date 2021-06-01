@@ -80,5 +80,4 @@ spring:
         slf4j:
           enabled: true
       #Spring监控配置
-      aop-patterns: com.gitee.pifeng.monitoring.ui.business.web.controller.*,
-        com.gitee.pifeng.monitoring.ui.business.web.service.*
+      aop-patterns: com.gitee.pifeng.monitoring.ui.business.web.*

@@ -11,8 +11,8 @@ spring:
       #数据源配置
       driver-class-name: com.mysql.cj.jdbc.Driver
       url: jdbc:mysql://ip:3306/monitoring?useSSL=false&serverTimezone=GMT%2b8&useUnicode=true&characterEncoding=utf-8&autoReconnect=true&failOverReadOnly=false
-      username: 
-      password: 
+      username:
+      password:
       #初始化来连接大小
       initial-size: 5
       #连接池中最小的空闲连接数
@@ -80,15 +80,14 @@ spring:
         slf4j:
           enabled: true
       #Spring监控配置
-      aop-patterns: com.gitee.pifeng.monitoring.server.business.server.controller.*,
-        com.gitee.pifeng.monitoring.server.business.server.service.*
+      aop-patterns: com.gitee.pifeng.monitoring.server.business.server.*
 
 
   #############################################电子邮件配置###############################################
   mail:
     host: smtp.qq.com
-    username: 
-    password: 
+    username:
+    password:
     protocol: smtp
     default-encoding: UTF-8
     port: 465
