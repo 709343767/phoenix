@@ -17,11 +17,11 @@ import com.gitee.pifeng.monitoring.common.exception.NetException;
 import com.gitee.pifeng.monitoring.common.threadpool.ThreadPool;
 import com.gitee.pifeng.monitoring.common.util.DateTimeUtils;
 import com.gitee.pifeng.monitoring.common.util.Md5Utils;
-import com.gitee.pifeng.monitoring.server.business.server.service.IAlarmService;
-import com.gitee.pifeng.monitoring.server.business.server.service.IDbService;
 import com.gitee.pifeng.monitoring.server.business.server.core.MonitoringConfigPropertiesLoader;
 import com.gitee.pifeng.monitoring.server.business.server.core.PackageConstructor;
 import com.gitee.pifeng.monitoring.server.business.server.entity.MonitorDb;
+import com.gitee.pifeng.monitoring.server.business.server.service.IAlarmService;
+import com.gitee.pifeng.monitoring.server.business.server.service.IDbService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.hyperic.sigar.SigarException;
@@ -159,11 +159,11 @@ public class DbMonitorTask implements CommandLineRunner {
             } catch (Exception e) {
                 log.error("数据库告警异常！", e);
             }
-            monitorDb.setIsOnline(ZeroOrOneConstants.ZERO);
-            monitorDb.setUpdateTime(new Date());
-            // 更新数据库
-            this.dbService.updateById(monitorDb);
         }
+        monitorDb.setIsOnline(ZeroOrOneConstants.ZERO);
+        monitorDb.setUpdateTime(new Date());
+        // 更新数据库
+        this.dbService.updateById(monitorDb);
     }
 
     /**
@@ -187,11 +187,11 @@ public class DbMonitorTask implements CommandLineRunner {
             } catch (Exception e) {
                 log.error("数据库告警异常！", e);
             }
-            monitorDb.setIsOnline(ZeroOrOneConstants.ONE);
-            monitorDb.setUpdateTime(new Date());
-            // 更新数据库
-            this.dbService.updateById(monitorDb);
         }
+        monitorDb.setIsOnline(ZeroOrOneConstants.ONE);
+        monitorDb.setUpdateTime(new Date());
+        // 更新数据库
+        this.dbService.updateById(monitorDb);
     }
 
     /**

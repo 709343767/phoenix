@@ -12,11 +12,11 @@ import com.gitee.pifeng.monitoring.common.threadpool.ThreadPool;
 import com.gitee.pifeng.monitoring.common.util.DateTimeUtils;
 import com.gitee.pifeng.monitoring.common.util.Md5Utils;
 import com.gitee.pifeng.monitoring.common.util.server.NetUtils;
-import com.gitee.pifeng.monitoring.server.business.server.service.IAlarmService;
-import com.gitee.pifeng.monitoring.server.business.server.service.INetService;
 import com.gitee.pifeng.monitoring.server.business.server.core.MonitoringConfigPropertiesLoader;
 import com.gitee.pifeng.monitoring.server.business.server.core.PackageConstructor;
 import com.gitee.pifeng.monitoring.server.business.server.entity.MonitorNet;
+import com.gitee.pifeng.monitoring.server.business.server.service.IAlarmService;
+import com.gitee.pifeng.monitoring.server.business.server.service.INetService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.hyperic.sigar.SigarException;
@@ -120,11 +120,11 @@ public class NetMonitorTask implements CommandLineRunner {
             } catch (Exception e) {
                 log.error("网络告警异常！", e);
             }
-            monitorNet.setStatus(ZeroOrOneConstants.ZERO);
-            monitorNet.setUpdateTime(new Date());
-            // 更新数据库
-            this.netService.updateById(monitorNet);
         }
+        monitorNet.setStatus(ZeroOrOneConstants.ZERO);
+        monitorNet.setUpdateTime(new Date());
+        // 更新数据库
+        this.netService.updateById(monitorNet);
     }
 
     /**
@@ -148,11 +148,11 @@ public class NetMonitorTask implements CommandLineRunner {
             } catch (Exception e) {
                 log.error("网络告警异常！", e);
             }
-            monitorNet.setStatus(ZeroOrOneConstants.ONE);
-            monitorNet.setUpdateTime(new Date());
-            // 更新数据库
-            this.netService.updateById(monitorNet);
         }
+        monitorNet.setStatus(ZeroOrOneConstants.ONE);
+        monitorNet.setUpdateTime(new Date());
+        // 更新数据库
+        this.netService.updateById(monitorNet);
     }
 
     /**
