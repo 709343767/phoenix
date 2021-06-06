@@ -150,15 +150,10 @@ public class DbMonitorTask implements CommandLineRunner {
      * @custom.date 2020/12/20 22:20
      */
     private void disconnected(MonitorDb monitorDb) {
-        // 是否在线
-        boolean isOnline = StringUtils.equals(monitorDb.getIsOnline(), ZeroOrOneConstants.ONE);
-        // 在线
-        if (isOnline) {
-            try {
-                this.sendAlarmInfo("数据库连接异常", AlarmLevelEnums.FATAL, AlarmReasonEnums.NORMAL_2_ABNORMAL, monitorDb);
-            } catch (Exception e) {
-                log.error("数据库告警异常！", e);
-            }
+        try {
+            this.sendAlarmInfo("数据库连接异常", AlarmLevelEnums.FATAL, AlarmReasonEnums.NORMAL_2_ABNORMAL, monitorDb);
+        } catch (Exception e) {
+            log.error("数据库告警异常！", e);
         }
         monitorDb.setIsOnline(ZeroOrOneConstants.ZERO);
         monitorDb.setUpdateTime(new Date());
@@ -176,17 +171,12 @@ public class DbMonitorTask implements CommandLineRunner {
      * @custom.date 2020/12/20 22:12
      */
     private void connected(MonitorDb monitorDb) {
-        // 是否在线
-        boolean isOnline = StringUtils.equals(monitorDb.getIsOnline(), ZeroOrOneConstants.ONE);
-        // 离线
-        if (!isOnline) {
-            try {
-                if (StringUtils.isNotBlank(monitorDb.getIsOnline())) {
-                    this.sendAlarmInfo("数据库连接恢复", AlarmLevelEnums.INFO, AlarmReasonEnums.ABNORMAL_2_NORMAL, monitorDb);
-                }
-            } catch (Exception e) {
-                log.error("数据库告警异常！", e);
+        try {
+            if (StringUtils.isNotBlank(monitorDb.getIsOnline())) {
+                this.sendAlarmInfo("数据库连接恢复", AlarmLevelEnums.INFO, AlarmReasonEnums.ABNORMAL_2_NORMAL, monitorDb);
             }
+        } catch (Exception e) {
+            log.error("数据库告警异常！", e);
         }
         monitorDb.setIsOnline(ZeroOrOneConstants.ONE);
         monitorDb.setUpdateTime(new Date());

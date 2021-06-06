@@ -111,15 +111,10 @@ public class NetMonitorTask implements CommandLineRunner {
      * @custom.date 2020/11/23 11:19
      */
     private void disconnected(MonitorNet monitorNet) {
-        // 是否在线
-        boolean isOnline = StringUtils.equals(monitorNet.getStatus(), ZeroOrOneConstants.ONE);
-        // 在线
-        if (isOnline) {
-            try {
-                this.sendAlarmInfo("网络中断", AlarmLevelEnums.FATAL, AlarmReasonEnums.NORMAL_2_ABNORMAL, monitorNet);
-            } catch (Exception e) {
-                log.error("网络告警异常！", e);
-            }
+        try {
+            this.sendAlarmInfo("网络中断", AlarmLevelEnums.FATAL, AlarmReasonEnums.NORMAL_2_ABNORMAL, monitorNet);
+        } catch (Exception e) {
+            log.error("网络告警异常！", e);
         }
         monitorNet.setStatus(ZeroOrOneConstants.ZERO);
         monitorNet.setUpdateTime(new Date());
@@ -137,17 +132,12 @@ public class NetMonitorTask implements CommandLineRunner {
      * @custom.date 2020/11/23 11:12
      */
     private void connected(MonitorNet monitorNet) {
-        // 是否在线
-        boolean isOnline = StringUtils.equals(monitorNet.getStatus(), ZeroOrOneConstants.ONE);
-        // 离线
-        if (!isOnline) {
-            try {
-                if (StringUtils.isNotBlank(monitorNet.getStatus())) {
-                    this.sendAlarmInfo("网络恢复", AlarmLevelEnums.INFO, AlarmReasonEnums.ABNORMAL_2_NORMAL, monitorNet);
-                }
-            } catch (Exception e) {
-                log.error("网络告警异常！", e);
+        try {
+            if (StringUtils.isNotBlank(monitorNet.getStatus())) {
+                this.sendAlarmInfo("网络恢复", AlarmLevelEnums.INFO, AlarmReasonEnums.ABNORMAL_2_NORMAL, monitorNet);
             }
+        } catch (Exception e) {
+            log.error("网络告警异常！", e);
         }
         monitorNet.setStatus(ZeroOrOneConstants.ONE);
         monitorNet.setUpdateTime(new Date());
