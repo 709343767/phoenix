@@ -18,12 +18,12 @@ import com.gitee.pifeng.monitoring.common.threadpool.ThreadPool;
 import com.gitee.pifeng.monitoring.common.util.DateTimeUtils;
 import com.gitee.pifeng.monitoring.common.util.Md5Utils;
 import com.gitee.pifeng.monitoring.common.util.db.DbUtils;
-import com.gitee.pifeng.monitoring.server.business.server.service.IAlarmService;
-import com.gitee.pifeng.monitoring.server.business.server.service.IDbService;
 import com.gitee.pifeng.monitoring.server.business.server.core.MonitoringConfigPropertiesLoader;
 import com.gitee.pifeng.monitoring.server.business.server.core.PackageConstructor;
 import com.gitee.pifeng.monitoring.server.business.server.domain.DbTableSpace;
 import com.gitee.pifeng.monitoring.server.business.server.entity.MonitorDb;
+import com.gitee.pifeng.monitoring.server.business.server.service.IAlarmService;
+import com.gitee.pifeng.monitoring.server.business.server.service.IDbService;
 import lombok.Cleanup;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -207,7 +207,7 @@ public class DbTableSpaceMonitorTask implements CommandLineRunner {
         builder.append("，<br>时间：").append(DateTimeUtils.dateToString(new Date()));
         Alarm alarm = Alarm.builder()
                 // 保证code的唯一性
-                .code(Md5Utils.encrypt32(monitorDb.getUrl() + monitorDb.getUsername() + monitorDb.getPassword() + dbTableSpace.getTablespaceName()))
+                .code(Md5Utils.encrypt32(monitorDb.getUrl() + monitorDb.getUsername() + dbTableSpace.getTablespaceName()))
                 .title(title)
                 .msg(builder.toString())
                 .alarmLevel(alarmLevelEnum)
