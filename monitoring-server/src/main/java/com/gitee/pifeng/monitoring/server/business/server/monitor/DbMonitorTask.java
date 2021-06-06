@@ -242,7 +242,7 @@ public class DbMonitorTask implements CommandLineRunner {
         builder.append("，<br>时间：").append(DateTimeUtils.dateToString(new Date()));
         Alarm alarm = Alarm.builder()
                 // 保证code的唯一性
-                .code(Md5Utils.encrypt32(monitorDb.getUrl() + monitorDb.getUsername() + monitorDb.getPassword()))
+                .code(Md5Utils.encrypt32(monitorDb.getUrl() + monitorDb.getUsername()))
                 .title(title)
                 .msg(builder.toString())
                 .alarmLevel(alarmLevelEnum)
