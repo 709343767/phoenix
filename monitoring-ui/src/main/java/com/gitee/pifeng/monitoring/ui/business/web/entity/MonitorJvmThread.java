@@ -32,7 +32,7 @@ public class MonitorJvmThread implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "主键IO")
+    @ApiModelProperty(value = "主键ID")
     @TableId(value = "ID", type = IdType.AUTO)
     private Long id;
 

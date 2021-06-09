@@ -30,7 +30,7 @@ import java.util.Date;
 @ApiModel(value = "java虚拟机线程信息表现层对象")
 public class MonitorJvmThreadVo implements ISuperBean {
 
-    @ApiModelProperty(value = "主键IO")
+    @ApiModelProperty(value = "主键ID")
     private Long id;
 
     @ApiModelProperty(value = "应用实例ID")
@@ -85,4 +85,5 @@ public class MonitorJvmThreadVo implements ISuperBean {
         BeanUtils.copyProperties(monitorJvmThread, this);
         return this;
     }
+
 }
