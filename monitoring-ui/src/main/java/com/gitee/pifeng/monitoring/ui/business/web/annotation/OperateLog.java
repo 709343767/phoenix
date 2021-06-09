@@ -18,7 +18,7 @@ public @interface OperateLog {
     /**
      * 操作模块
      */
-    String operModul();
+    String operModule();
 
     /**
      * 操作类型
