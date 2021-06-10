@@ -1,9 +1,12 @@
 package com.gitee.pifeng.monitoring.ui.business.web.controller;
 
 import com.gitee.pifeng.monitoring.common.exception.NetException;
+import com.gitee.pifeng.monitoring.ui.business.web.annotation.OperateLog;
 import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorConfigService;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.LayUiAdminResultVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.MonitorConfigPageFormVo;
+import com.gitee.pifeng.monitoring.ui.constant.OperateTypeConstants;
+import com.gitee.pifeng.monitoring.ui.constant.UiModuleConstants;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.hyperic.sigar.SigarException;
@@ -69,6 +72,7 @@ public class MonitorConfigController {
     @ApiOperation(value = "更新监控配置")
     @ResponseBody
     @PutMapping("/update-monitor-config")
+    @OperateLog(operModule = UiModuleConstants.SET + "#监控设置", operType = OperateTypeConstants.UPDATE, operDesc = "更新监控配置")
     public LayUiAdminResultVo updateMonitorConfig(MonitorConfigPageFormVo monitorConfigPageFormVo) throws NetException, SigarException {
         return this.monitorConfigService.update(monitorConfigPageFormVo);
     }

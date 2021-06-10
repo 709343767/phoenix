@@ -1,10 +1,13 @@
 package com.gitee.pifeng.monitoring.ui.business.web.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.gitee.pifeng.monitoring.ui.business.web.annotation.OperateLog;
 import com.gitee.pifeng.monitoring.ui.business.web.service.IDbTableSpace4OracleService;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.DbTableSpaceAll4OracleVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.DbTableSpaceFile4OracleVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.LayUiAdminResultVo;
+import com.gitee.pifeng.monitoring.ui.constant.OperateTypeConstants;
+import com.gitee.pifeng.monitoring.ui.constant.UiModuleConstants;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -56,6 +59,7 @@ public class DbTableSpace4OracleController {
             @ApiImplicitParam(name = "id", value = "数据库ID", required = true, paramType = "query", dataType = "long")})
     @GetMapping("/get-tablespace-list-file")
     @ResponseBody
+    @OperateLog(operModule = UiModuleConstants.DATABASE + "#表空间", operType = OperateTypeConstants.QUERY, operDesc = "获取表空间列表(按文件)")
     public LayUiAdminResultVo getTableSpaceListFile(Long current, Long size, Long id) throws SQLException {
         Page<DbTableSpaceFile4OracleVo> page = this.dbTableSpace4OracleService.getTableSpaceListFile(current, size, id);
         return LayUiAdminResultVo.ok(page);
@@ -81,6 +85,7 @@ public class DbTableSpace4OracleController {
             @ApiImplicitParam(name = "id", value = "数据库ID", required = true, paramType = "query", dataType = "long")})
     @GetMapping("/get-tablespace-list-all")
     @ResponseBody
+    @OperateLog(operModule = UiModuleConstants.DATABASE + "#表空间", operType = OperateTypeConstants.QUERY, operDesc = "获取表空间列表")
     public LayUiAdminResultVo getTableSpaceListAll(Long current, Long size, Long id) throws SQLException {
         Page<DbTableSpaceAll4OracleVo> page = this.dbTableSpace4OracleService.getTableSpaceListAll(current, size, id);
         return LayUiAdminResultVo.ok(page);

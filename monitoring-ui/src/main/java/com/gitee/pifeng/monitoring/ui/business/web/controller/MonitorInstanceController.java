@@ -1,10 +1,13 @@
 package com.gitee.pifeng.monitoring.ui.business.web.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.gitee.pifeng.monitoring.ui.business.web.annotation.OperateLog;
 import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorInstanceService;
 import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorJvmMemoryService;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.LayUiAdminResultVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.MonitorInstanceVo;
+import com.gitee.pifeng.monitoring.ui.constant.OperateTypeConstants;
+import com.gitee.pifeng.monitoring.ui.constant.UiModuleConstants;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -79,6 +82,7 @@ public class MonitorInstanceController {
             @ApiImplicitParam(name = "isOnline", value = "应用状态", paramType = "query", dataType = "string")})
     @GetMapping("/get-monitor-instance-list")
     @ResponseBody
+    @OperateLog(operModule = UiModuleConstants.INSTANCE, operType = OperateTypeConstants.QUERY, operDesc = "获取应用程序列表")
     public LayUiAdminResultVo getMonitorInstanceList(Long current, Long size, String instanceName, String endpoint, String isOnline) {
         Page<MonitorInstanceVo> page = this.monitorInstanceService.getMonitorInstanceList(current, size, instanceName, endpoint, isOnline);
         return LayUiAdminResultVo.ok(page);
@@ -97,6 +101,7 @@ public class MonitorInstanceController {
     @ApiOperation(value = "删除应用程序")
     @DeleteMapping("/delete-monitor-instance")
     @ResponseBody
+    @OperateLog(operModule = UiModuleConstants.INSTANCE, operType = OperateTypeConstants.DELETE, operDesc = "删除应用程序")
     public LayUiAdminResultVo deleteMonitorInstance(@RequestBody List<MonitorInstanceVo> monitorInstanceVos) {
         return this.monitorInstanceService.deleteMonitorInstance(monitorInstanceVos);
     }

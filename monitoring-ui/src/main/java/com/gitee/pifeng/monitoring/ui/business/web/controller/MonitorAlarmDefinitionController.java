@@ -1,10 +1,13 @@
 package com.gitee.pifeng.monitoring.ui.business.web.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.gitee.pifeng.monitoring.ui.business.web.annotation.OperateLog;
 import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorAlarmDefinition;
 import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorAlarmDefinitionService;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.LayUiAdminResultVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.MonitorAlarmDefinitionVo;
+import com.gitee.pifeng.monitoring.ui.constant.OperateTypeConstants;
+import com.gitee.pifeng.monitoring.ui.constant.UiModuleConstants;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -76,6 +79,7 @@ public class MonitorAlarmDefinitionController {
             @ApiImplicitParam(name = "content", value = "告警内容", paramType = "query", dataType = "string")})
     @ResponseBody
     @GetMapping("/get-monitor-alarm-definition-list")
+    @OperateLog(operModule = UiModuleConstants.ALARM + "#告警定义", operType = OperateTypeConstants.QUERY, operDesc = "获取告警定义列表")
     public LayUiAdminResultVo getMonitorAlarmDefinitionList(Long current, Long size, String type, String grade, String title, String content) {
         Page<MonitorAlarmDefinitionVo> page = this.monitorAlarmDefinitionService.getMonitorAlarmDefinitionList(current, size, type, grade, title, content);
         return LayUiAdminResultVo.ok(page);
@@ -133,6 +137,7 @@ public class MonitorAlarmDefinitionController {
     @ApiOperation(value = "添加告警定义")
     @PostMapping("/save-monitor-alarm-definition")
     @ResponseBody
+    @OperateLog(operModule = UiModuleConstants.ALARM + "#告警定义", operType = OperateTypeConstants.ADD, operDesc = "添加告警定义")
     public LayUiAdminResultVo saveMonitorAlarmDefinition(MonitorAlarmDefinitionVo monitorAlarmDefinitionVo) {
         return this.monitorAlarmDefinitionService.saveMonitorAlarmDefinition(monitorAlarmDefinitionVo);
     }
@@ -150,6 +155,7 @@ public class MonitorAlarmDefinitionController {
     @ApiOperation(value = "编辑告警定义")
     @PutMapping("/edit-monitor-alarm-definition")
     @ResponseBody
+    @OperateLog(operModule = UiModuleConstants.ALARM + "#告警定义", operType = OperateTypeConstants.UPDATE, operDesc = "编辑告警定义")
     public LayUiAdminResultVo editMonitorAlarmDefinition(MonitorAlarmDefinitionVo monitorAlarmDefinitionVo) {
         return this.monitorAlarmDefinitionService.editMonitorAlarmDefinition(monitorAlarmDefinitionVo);
     }
@@ -167,6 +173,7 @@ public class MonitorAlarmDefinitionController {
     @ApiOperation(value = "删除告警定义")
     @DeleteMapping("/delete-monitor-alarm-definition")
     @ResponseBody
+    @OperateLog(operModule = UiModuleConstants.ALARM + "#告警定义", operType = OperateTypeConstants.DELETE, operDesc = "删除告警定义")
     public LayUiAdminResultVo deleteMonitorAlarmDefinition(@RequestBody List<MonitorAlarmDefinitionVo> monitorAlarmDefinitionVos) {
         return this.monitorAlarmDefinitionService.deleteMonitorAlarmDefinition(monitorAlarmDefinitionVos);
     }

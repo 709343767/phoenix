@@ -3,10 +3,13 @@ package com.gitee.pifeng.monitoring.ui.business.web.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.gitee.pifeng.monitoring.common.exception.NetException;
 import com.gitee.pifeng.monitoring.common.util.server.NetUtils;
+import com.gitee.pifeng.monitoring.ui.business.web.annotation.OperateLog;
 import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorNet;
 import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorNetService;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.LayUiAdminResultVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.MonitorNetVo;
+import com.gitee.pifeng.monitoring.ui.constant.OperateTypeConstants;
+import com.gitee.pifeng.monitoring.ui.constant.UiModuleConstants;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -79,6 +82,7 @@ public class MonitorNetworkController {
             @ApiImplicitParam(name = "status", value = "状态（0：网络不通，1：网络正常）", paramType = "query", dataType = "string")})
     @GetMapping("/get-monitor-network-list")
     @ResponseBody
+    @OperateLog(operModule = UiModuleConstants.NET, operType = OperateTypeConstants.QUERY, operDesc = "获取网络列表")
     public LayUiAdminResultVo getMonitorNetList(Long current, Long size, String ipSource, String ipTarget, String status) {
         Page<MonitorNetVo> page = this.monitorNetService.getMonitorNetList(current, size, ipSource, ipTarget, status);
         return LayUiAdminResultVo.ok(page);
@@ -97,6 +101,7 @@ public class MonitorNetworkController {
     @ApiOperation(value = "删除网络")
     @DeleteMapping("/delete-monitor-network")
     @ResponseBody
+    @OperateLog(operModule = UiModuleConstants.NET, operType = OperateTypeConstants.DELETE, operDesc = "删除网络")
     public LayUiAdminResultVo deleteMonitorNet(@RequestBody List<MonitorNetVo> monitorNetVos) {
         return this.monitorNetService.deleteMonitorNet(monitorNetVos);
     }
@@ -152,6 +157,7 @@ public class MonitorNetworkController {
     @ApiOperation(value = "编辑网络信息")
     @PutMapping("/edit-monitor-network")
     @ResponseBody
+    @OperateLog(operModule = UiModuleConstants.NET, operType = OperateTypeConstants.UPDATE, operDesc = "编辑网络信息")
     public LayUiAdminResultVo editMonitorNetwork(MonitorNetVo monitorNetVo) {
         return this.monitorNetService.editMonitorNetwork(monitorNetVo);
     }
@@ -171,6 +177,7 @@ public class MonitorNetworkController {
     @ApiOperation(value = "添加网络信息")
     @PostMapping("/add-monitor-network")
     @ResponseBody
+    @OperateLog(operModule = UiModuleConstants.NET, operType = OperateTypeConstants.ADD, operDesc = "添加网络信息")
     public LayUiAdminResultVo addMonitorNetwork(MonitorNetVo monitorNetVo) throws NetException {
         return this.monitorNetService.addMonitorNetwork(monitorNetVo);
     }

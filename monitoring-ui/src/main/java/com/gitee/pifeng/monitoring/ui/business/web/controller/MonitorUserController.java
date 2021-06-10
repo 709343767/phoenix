@@ -1,6 +1,7 @@
 package com.gitee.pifeng.monitoring.ui.business.web.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.gitee.pifeng.monitoring.ui.business.web.annotation.OperateLog;
 import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorRole;
 import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorUser;
 import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorRoleService;
@@ -8,6 +9,8 @@ import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorUserService;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.LayUiAdminResultVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.MonitorRoleVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.MonitorUserVo;
+import com.gitee.pifeng.monitoring.ui.constant.OperateTypeConstants;
+import com.gitee.pifeng.monitoring.ui.constant.UiModuleConstants;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -83,6 +86,7 @@ public class MonitorUserController {
             @ApiImplicitParam(name = "email", value = "电子邮箱", paramType = "query", dataType = "string")})
     @GetMapping("/get-monitor-user-list")
     @ResponseBody
+    @OperateLog(operModule = UiModuleConstants.USER + "#用户管理", operType = OperateTypeConstants.QUERY, operDesc = "获取监控用户列表")
     public LayUiAdminResultVo getMonitorUserList(Long current, Long size, String account, String username, String email) {
         Page<MonitorUserVo> page = this.monitorUserService.getMonitorUserList(current, size, account, username, email);
         return LayUiAdminResultVo.ok(page);
@@ -160,6 +164,7 @@ public class MonitorUserController {
     @ApiOperation(value = "添加用户")
     @PostMapping("/save-user")
     @ResponseBody
+    @OperateLog(operModule = UiModuleConstants.USER + "#用户管理", operType = OperateTypeConstants.ADD, operDesc = "添加用户")
     public LayUiAdminResultVo saveUser(MonitorUserVo monitorUserVo) {
         return this.monitorUserService.saveUser(monitorUserVo);
     }
@@ -177,6 +182,7 @@ public class MonitorUserController {
     @ApiOperation(value = "编辑用户")
     @PutMapping("/edit-user")
     @ResponseBody
+    @OperateLog(operModule = UiModuleConstants.USER + "#用户管理", operType = OperateTypeConstants.UPDATE, operDesc = "编辑用户")
     public LayUiAdminResultVo editUser(MonitorUserVo monitorUserVo) {
         return this.monitorUserService.editUser(monitorUserVo);
     }
@@ -194,6 +200,7 @@ public class MonitorUserController {
     @ApiOperation(value = "删除用户")
     @DeleteMapping("/delete-user")
     @ResponseBody
+    @OperateLog(operModule = UiModuleConstants.USER + "#用户管理", operType = OperateTypeConstants.DELETE, operDesc = "删除用户")
     public LayUiAdminResultVo deleteUser(@RequestBody List<MonitorUserVo> monitorUserVos) {
         return this.monitorUserService.deleteUser(monitorUserVos);
     }

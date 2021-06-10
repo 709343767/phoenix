@@ -1,9 +1,12 @@
 package com.gitee.pifeng.monitoring.ui.business.web.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.gitee.pifeng.monitoring.ui.business.web.annotation.OperateLog;
 import com.gitee.pifeng.monitoring.ui.business.web.service.IDbSession4MysqlService;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.DbSession4MysqlVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.LayUiAdminResultVo;
+import com.gitee.pifeng.monitoring.ui.constant.OperateTypeConstants;
+import com.gitee.pifeng.monitoring.ui.constant.UiModuleConstants;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -54,6 +57,7 @@ public class DbSession4MysqlController {
             @ApiImplicitParam(name = "id", value = "数据库ID", required = true, paramType = "query", dataType = "long")})
     @GetMapping("/get-session-list")
     @ResponseBody
+    @OperateLog(operModule = UiModuleConstants.DATABASE + "#会话", operType = OperateTypeConstants.QUERY, operDesc = "获取会话列表")
     public LayUiAdminResultVo getSessionList(Long current, Long size, Long id) throws SQLException {
         Page<DbSession4MysqlVo> page = this.dbSession4MysqlService.getSessionList(current, size, id);
         return LayUiAdminResultVo.ok(page);
@@ -76,6 +80,7 @@ public class DbSession4MysqlController {
     @ApiImplicitParams(value = {
             @ApiImplicitParam(name = "id", value = "数据库ID", required = true, paramType = "query", dataType = "long")})
     @ResponseBody
+    @OperateLog(operModule = UiModuleConstants.DATABASE + "#会话", operType = OperateTypeConstants.DELETE, operDesc = "结束会话")
     public LayUiAdminResultVo destroySession(@RequestBody List<DbSession4MysqlVo> dbSession4MysqlVos, Long id) throws SQLException {
         return this.dbSession4MysqlService.destroySession(dbSession4MysqlVos, id);
     }

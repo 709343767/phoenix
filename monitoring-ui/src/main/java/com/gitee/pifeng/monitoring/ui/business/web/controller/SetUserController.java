@@ -1,5 +1,6 @@
 package com.gitee.pifeng.monitoring.ui.business.web.controller;
 
+import com.gitee.pifeng.monitoring.ui.business.web.annotation.OperateLog;
 import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorRole;
 import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorUser;
 import com.gitee.pifeng.monitoring.ui.business.web.realm.MonitorUserRealm;
@@ -8,6 +9,8 @@ import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorUserService;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.LayUiAdminResultVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.MonitorRoleVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.MonitorUserVo;
+import com.gitee.pifeng.monitoring.ui.constant.OperateTypeConstants;
+import com.gitee.pifeng.monitoring.ui.constant.UiModuleConstants;
 import com.gitee.pifeng.monitoring.ui.util.SpringSecurityUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -111,6 +114,7 @@ public class SetUserController {
             @ApiImplicitParam(name = "password", value = "新密码", required = true, paramType = "query", dataType = "string")})
     @PutMapping("/update-password")
     @ResponseBody
+    @OperateLog(operModule = UiModuleConstants.SET + "#我的设置", operType = OperateTypeConstants.UPDATE, operDesc = "修改密码")
     public LayUiAdminResultVo updatePassword(@RequestParam(name = "oldPassword") String oldPassword,
                                              @RequestParam(name = "password") String password) {
         return this.monitorUserService.updatePassword(oldPassword, password);
@@ -129,6 +133,7 @@ public class SetUserController {
     @ApiOperation(value = "修改用户信息")
     @PutMapping("/update-user")
     @ResponseBody
+    @OperateLog(operModule = UiModuleConstants.SET + "#我的设置", operType = OperateTypeConstants.UPDATE, operDesc = "修改用户信息")
     public LayUiAdminResultVo updateUser(MonitorUserVo monitorUserVo) {
         return this.monitorUserService.updateUser(monitorUserVo);
     }

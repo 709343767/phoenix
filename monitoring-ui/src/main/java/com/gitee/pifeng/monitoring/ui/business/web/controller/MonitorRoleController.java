@@ -1,10 +1,13 @@
 package com.gitee.pifeng.monitoring.ui.business.web.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.gitee.pifeng.monitoring.ui.business.web.annotation.OperateLog;
 import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorRole;
 import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorRoleService;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.LayUiAdminResultVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.MonitorRoleVo;
+import com.gitee.pifeng.monitoring.ui.constant.OperateTypeConstants;
+import com.gitee.pifeng.monitoring.ui.constant.UiModuleConstants;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -82,6 +85,7 @@ public class MonitorRoleController {
             @ApiImplicitParam(name = "roleId", value = "角色ID", paramType = "query", dataType = "long")})
     @GetMapping("/get-monitor-role-list")
     @ResponseBody
+    @OperateLog(operModule = UiModuleConstants.USER + "#角色管理", operType = OperateTypeConstants.QUERY, operDesc = "获取监控角色列表")
     public LayUiAdminResultVo getMonitorRoleList(Long current, Long size, Long roleId) {
         Page<MonitorRoleVo> page = this.monitorRoleService.getMonitorRoleList(current, size, roleId);
         return LayUiAdminResultVo.ok(page);

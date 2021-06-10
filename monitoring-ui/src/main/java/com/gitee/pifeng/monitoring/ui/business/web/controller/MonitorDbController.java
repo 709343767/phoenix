@@ -1,10 +1,13 @@
 package com.gitee.pifeng.monitoring.ui.business.web.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.gitee.pifeng.monitoring.ui.business.web.annotation.OperateLog;
 import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorDb;
 import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorDbService;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.LayUiAdminResultVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.MonitorDbVo;
+import com.gitee.pifeng.monitoring.ui.constant.OperateTypeConstants;
+import com.gitee.pifeng.monitoring.ui.constant.UiModuleConstants;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -77,6 +80,7 @@ public class MonitorDbController {
             @ApiImplicitParam(name = "isOnline", value = "数据库状态", paramType = "query", dataType = "string")})
     @GetMapping("get-monitor-db-list")
     @ResponseBody
+    @OperateLog(operModule = UiModuleConstants.DATABASE, operType = OperateTypeConstants.QUERY, operDesc = "获取数据库列表")
     public LayUiAdminResultVo getMonitorDbList(Long current, Long size, String connName, String url, String dbType, String isOnline) {
         Page<MonitorDbVo> page = this.monitorDbService.getMonitorDbList(current, size, connName, url, dbType, isOnline);
         return LayUiAdminResultVo.ok(page);
@@ -120,6 +124,7 @@ public class MonitorDbController {
     @ApiOperation(value = "编辑数据库信息")
     @PutMapping("/edit-monitor-db")
     @ResponseBody
+    @OperateLog(operModule = UiModuleConstants.DATABASE, operType = OperateTypeConstants.UPDATE, operDesc = "编辑数据库信息")
     public LayUiAdminResultVo editMonitorDb(MonitorDbVo monitorDbVo) {
         return this.monitorDbService.editMonitorDb(monitorDbVo);
     }
@@ -153,6 +158,7 @@ public class MonitorDbController {
     @ApiOperation(value = "添加数据库信息")
     @PostMapping("/add-monitor-db")
     @ResponseBody
+    @OperateLog(operModule = UiModuleConstants.DATABASE, operType = OperateTypeConstants.ADD, operDesc = "添加数据库信息")
     public LayUiAdminResultVo addMonitorDb(MonitorDbVo monitorDbVo) {
         return this.monitorDbService.addMonitorDb(monitorDbVo);
     }
@@ -170,6 +176,7 @@ public class MonitorDbController {
     @ApiOperation(value = "删除数据库信息")
     @DeleteMapping("/delete-monitor-db")
     @ResponseBody
+    @OperateLog(operModule = UiModuleConstants.DATABASE, operType = OperateTypeConstants.DELETE, operDesc = "删除数据库信息")
     public LayUiAdminResultVo deleteMonitorDb(@RequestBody List<MonitorDbVo> monitorDbVos) {
         return this.monitorDbService.deleteMonitorDb(monitorDbVos);
     }

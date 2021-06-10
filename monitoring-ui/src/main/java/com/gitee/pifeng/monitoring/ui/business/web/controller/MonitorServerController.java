@@ -1,9 +1,12 @@
 package com.gitee.pifeng.monitoring.ui.business.web.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.gitee.pifeng.monitoring.ui.business.web.annotation.OperateLog;
 import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorServerService;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.LayUiAdminResultVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.MonitorServerVo;
+import com.gitee.pifeng.monitoring.ui.constant.OperateTypeConstants;
+import com.gitee.pifeng.monitoring.ui.constant.UiModuleConstants;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -72,6 +75,7 @@ public class MonitorServerController {
             @ApiImplicitParam(name = "isOnline", value = "状态", paramType = "query", dataType = "string")})
     @GetMapping("/get-monitor-server-list")
     @ResponseBody
+    @OperateLog(operModule = UiModuleConstants.SERVER, operType = OperateTypeConstants.QUERY, operDesc = "获取服务器列表")
     public LayUiAdminResultVo getMonitorServerList(Long current, Long size, String ip, String serverName, String isOnline) {
         Page<MonitorServerVo> page = this.monitorServerService.getMonitorServerList(current, size, ip, serverName, isOnline);
         return LayUiAdminResultVo.ok(page);
@@ -90,6 +94,7 @@ public class MonitorServerController {
     @ApiOperation(value = "删除服务器")
     @DeleteMapping("/delete-monitor-server")
     @ResponseBody
+    @OperateLog(operModule = UiModuleConstants.SERVER, operType = OperateTypeConstants.DELETE, operDesc = "删除服务器")
     public LayUiAdminResultVo deleteMonitorServer(@RequestBody List<MonitorServerVo> monitorServerVos) {
         return this.monitorServerService.deleteMonitorServer(monitorServerVos);
     }
