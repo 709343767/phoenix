@@ -12,7 +12,7 @@ import com.gitee.pifeng.monitoring.ui.business.web.annotation.OperateLog;
 import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorAlarmRecordService;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.LayUiAdminResultVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.MonitorAlarmRecordVo;
-import com.gitee.pifeng.monitoring.ui.constant.OperateLogTypeConstants;
+import com.gitee.pifeng.monitoring.ui.constant.OperateTypeConstants;
 import com.gitee.pifeng.monitoring.ui.constant.UiModuleConstants;
 import com.gitee.pifeng.monitoring.ui.core.CustomExcelExportStyler;
 import io.swagger.annotations.Api;
@@ -94,6 +94,7 @@ public class MonitorAlarmRecordController {
             @ApiImplicitParam(name = "content", value = "告警内容", paramType = "query", dataType = "string")})
     @GetMapping("/get-monitor-alarm-record-list")
     @ResponseBody
+    @OperateLog(operModule = UiModuleConstants.ALARM + "#告警记录", operType = OperateTypeConstants.QUERY, operDesc = "获取告警记录列表")
     public LayUiAdminResultVo getMonitorAlarmRecordList(Long current, Long size, String type, String level, String status, String title, String content) {
         Page<MonitorAlarmRecordVo> page = this.monitorAlarmRecordService.getMonitorAlarmRecordList(current, size, type, level, status, title, content);
         return LayUiAdminResultVo.ok(page);
@@ -112,6 +113,7 @@ public class MonitorAlarmRecordController {
     @ApiOperation(value = "删除告警记录")
     @DeleteMapping("/delete-monitor-alarm-record")
     @ResponseBody
+    @OperateLog(operModule = UiModuleConstants.ALARM + "#告警记录", operType = OperateTypeConstants.DELETE, operDesc = "删除告警记录")
     public LayUiAdminResultVo deleteMonitorAlarmRecord(@RequestBody List<MonitorAlarmRecordVo> monitorAlarmRecordVos) {
         return this.monitorAlarmRecordService.deleteMonitorAlarmRecord(monitorAlarmRecordVos);
     }
@@ -137,7 +139,7 @@ public class MonitorAlarmRecordController {
             @ApiImplicitParam(name = "title", value = "告警标题", paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "content", value = "告警内容", paramType = "query", dataType = "string")})
     @GetMapping("/export-monitor-alarm-record-list")
-    @OperateLog(operModule = UiModuleConstants.ALARM_RECORD, operType = OperateLogTypeConstants.EXPORT, operDesc = "导出告警记录列表")
+    @OperateLog(operModule = UiModuleConstants.ALARM + "#告警记录", operType = OperateTypeConstants.EXPORT, operDesc = "导出告警记录列表")
     public void exportMonitorAlarmRecordList(String type, String level, String status, String title, String content) {
         String name = "告警记录";
         List<MonitorAlarmRecordVo> monitorAlarmRecordVos = this.monitorAlarmRecordService.getMonitorAlarmRecordList(type, level, status, title, content);

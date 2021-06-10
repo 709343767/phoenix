@@ -2,13 +2,13 @@ package com.gitee.pifeng.monitoring.ui.constant;
 
 /**
  * <p>
- * 操作日志类型常量
+ * 操作类型常量
  * </p>
  *
  * @author 皮锋
  * @custom.date 2021/6/10 14:58
  */
-public final class OperateLogTypeConstants {
+public final class OperateTypeConstants {
 
     /**
      * 新增
