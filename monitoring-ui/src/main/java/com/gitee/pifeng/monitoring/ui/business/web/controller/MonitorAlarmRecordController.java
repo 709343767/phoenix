@@ -8,9 +8,12 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.gitee.pifeng.monitoring.common.constant.DateTimeStylesEnums;
 import com.gitee.pifeng.monitoring.common.util.DateTimeUtils;
 import com.gitee.pifeng.monitoring.common.web.util.ContextUtils;
+import com.gitee.pifeng.monitoring.ui.business.web.annotation.OperateLog;
 import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorAlarmRecordService;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.LayUiAdminResultVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.MonitorAlarmRecordVo;
+import com.gitee.pifeng.monitoring.ui.constant.OperateLogTypeConstants;
+import com.gitee.pifeng.monitoring.ui.constant.UiModuleConstants;
 import com.gitee.pifeng.monitoring.ui.core.CustomExcelExportStyler;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -134,6 +137,7 @@ public class MonitorAlarmRecordController {
             @ApiImplicitParam(name = "title", value = "告警标题", paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "content", value = "告警内容", paramType = "query", dataType = "string")})
     @GetMapping("/export-monitor-alarm-record-list")
+    @OperateLog(operModule = UiModuleConstants.ALARM_RECORD, operType = OperateLogTypeConstants.EXPORT, operDesc = "导出告警记录列表")
     public void exportMonitorAlarmRecordList(String type, String level, String status, String title, String content) {
         String name = "告警记录";
         List<MonitorAlarmRecordVo> monitorAlarmRecordVos = this.monitorAlarmRecordService.getMonitorAlarmRecordList(type, level, status, title, content);
