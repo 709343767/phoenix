@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.gitee.pifeng.monitoring.common.web.util.AccessObjectUtil;
 import com.gitee.pifeng.monitoring.common.web.util.ContextUtils;
 import com.gitee.pifeng.monitoring.ui.business.web.annotation.OperateLog;
+import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorLogException;
 import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorLogOperation;
 import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorLogExceptionService;
 import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorLogOperationService;
@@ -130,7 +131,27 @@ public class OperateLogAspect {
      */
     @AfterThrowing(pointcut = "exceptionLogPointCut()", throwing = "e")
     public void saveExceptionLog(JoinPoint joinPoint, Throwable e) {
-
+        HttpServletRequest request = ContextUtils.getRequest();
+        // 从切面织入点处通过反射机制获取织入点处的方法
+        MethodSignature signature = (MethodSignature) joinPoint.getSignature();
+        // 获取切入点所在的方法
+        Method method = signature.getMethod();
+        // 获取请求的类名
+        String className = joinPoint.getTarget().getClass().getName();
+        // 获取请求的方法名
+        String methodName = className + "#" + method.getName();
+        // 异常日志
+        MonitorLogException.MonitorLogExceptionBuilder builder = MonitorLogException.builder();
+        builder.reqParam(JSON.toJSONString(this.convertParamMap(request.getParameterMap())));
+        builder.excName(e.getClass().getName());
+        builder.excMessage(this.stackTraceToString(e.getClass().getName(), e.getMessage(), e.getStackTrace()));
+        builder.userId(SpringSecurityUtils.getCurrentMonitorUserRealm().getId());
+        builder.username(SpringSecurityUtils.getCurrentMonitorUserRealm().getUsrname());
+        builder.operMethod(methodName);
+        builder.uri(request.getRequestURI());
+        builder.ip(AccessObjectUtil.getClientAddress(request));
+        builder.insertTime(new Date());
+        this.monitorLogExceptionService.save(builder.build());
     }
 
     /**
@@ -149,6 +170,26 @@ public class OperateLogAspect {
             rtnMap.put(key, paramMap.get(key)[0]);
         }
         return rtnMap;
+    }
+
+    /**
+     * <p>
+     * 转换异常信息为字符串
+     * </p>
+     *
+     * @param exceptionName    异常名称
+     * @param exceptionMessage 异常信息
+     * @param elements         堆栈信息
+     * @return 异常信息字符串
+     * @author 皮锋
+     * @custom.date 2021/6/11 11:04
+     */
+    private String stackTraceToString(String exceptionName, String exceptionMessage, StackTraceElement[] elements) {
+        StringBuilder builder = new StringBuilder();
+        for (StackTraceElement stet : elements) {
+            builder.append(stet).append("\n");
+        }
+        return exceptionName + ":" + exceptionMessage + "\n" + builder.toString();
     }
 
 }
