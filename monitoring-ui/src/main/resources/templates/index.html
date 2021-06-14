@@ -164,6 +164,20 @@
                             </dd>
                         </dl>
                     </li>
+                    <li data-name="log" class="layui-nav-item" sec:authorize="hasAuthority('超级管理员')">
+                        <a href="javascript:;" lay-tips="日志" lay-direction="2">
+                            <i class="layui-icon layui-icon-log-my"></i>
+                            <cite>日志</cite>
+                        </a>
+                        <dl class="layui-nav-child">
+                            <dd>
+                                <a th:attr="lay-href=@{/monitor-log-operation/list}">操作日志</a>
+                            </dd>
+                            <dd>
+                                <a th:attr="lay-href=@{/monitor-log-exception/list}">异常日志</a>
+                            </dd>
+                        </dl>
+                    </li>
                     <li data-name="set" class="layui-nav-item">
                         <a href="javascript:;" lay-tips="设置" lay-direction="2">
                             <i class="layui-icon layui-icon-set"></i>

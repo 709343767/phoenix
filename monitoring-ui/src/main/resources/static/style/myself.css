@@ -11,6 +11,14 @@
     width: 14px;
 }
 
+.layui-icon-log-my {
+    background-image: url("../images/icon16/log-16.png");
+    background-position: center center;
+    background-repeat: no-repeat;
+    height: 40px;
+    width: 14px;
+}
+
 .layui-icon-db {
     background-image: url("../images/icon16/database-16.png");
     background-position: center center;
