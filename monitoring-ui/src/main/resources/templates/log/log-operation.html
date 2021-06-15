@@ -26,26 +26,34 @@
         <div class="layui-form layui-card-header layuiadmin-card-header-auto">
             <form class="layui-form-item" onsubmit="return false;">
                 <div class="layui-inline">
-                    <label class="layui-form-label">源IP</label>
+                    <label class="layui-form-label">功能模块</label>
                     <div class="layui-input-block">
-                        <input type="text" name="ipSource" placeholder="请输入" autocomplete="off" class="layui-input">
+                        <input type="text" name="operModule" placeholder="请输入" autocomplete="off" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-inline">
-                    <label class="layui-form-label">目标IP</label>
+                    <label class="layui-form-label">操作描述</label>
                     <div class="layui-input-block">
-                        <input type="text" name="ipTarget" placeholder="请输入" autocomplete="off" class="layui-input">
+                        <input type="text" name="operDesc" placeholder="请输入" autocomplete="off" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-inline">
-                    <label class="layui-form-label">状态</label>
+                    <label class="layui-form-label">操作类型</label>
                     <div class="layui-input-block">
-                        <select name="status">
+                        <select name="operType">
                             <option value="">所有</option>
-                            <option value="1">正常</option>
-                            <option value="0">异常</option>
-                            <option value="-1">未知</option>
+                            <option value="新增">新增</option>
+                            <option value="更新">更新</option>
+                            <option value="删除">删除</option>
+                            <option value="查询">查询</option>
+                            <option value="导出">导出</option>
                         </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">日期范围</label>
+                    <div class="layui-input-inline">
+                        <input type="text" class="layui-input" id="insertTime" name="insertTime" placeholder=" ~ ">
                     </div>
                 </div>
                 <div class="layui-inline">
@@ -84,8 +92,14 @@
         base: ctxPath //静态资源所在路径
     }).extend({
         index: 'lib/index' //主入口模块
-    }).use(['index', 'table'], function () {
-        var $ = layui.$, admin = layui.admin, form = layui.form, table = layui.table, device = layui.device();
+    }).use(['index', 'table', 'laydate'], function () {
+        var $ = layui.$, admin = layui.admin, form = layui.form, table = layui.table, laydate = layui.laydate,
+            device = layui.device();
+        laydate.render({
+            elem: '#insertTime',
+            type: 'date',
+            range: '~'
+        });
         table.render({
             elem: '#list-table',
             url: ctxPath + 'monitor-log-operation/get-monitor-log-operation-list',

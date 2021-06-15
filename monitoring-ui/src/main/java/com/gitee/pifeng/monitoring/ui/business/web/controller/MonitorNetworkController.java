@@ -93,7 +93,7 @@ public class MonitorNetworkController {
      * 删除网络
      * </p>
      *
-     * @param monitorNetVos 删除网络
+     * @param monitorNetVos 网络信息
      * @return layUiAdmin响应对象：如果删除成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
      * @author 皮锋
      * @custom.date 2020/9/26 12:59

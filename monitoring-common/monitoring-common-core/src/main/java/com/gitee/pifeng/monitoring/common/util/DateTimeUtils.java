@@ -1,8 +1,10 @@
 package com.gitee.pifeng.monitoring.common.util;
 
 import com.gitee.pifeng.monitoring.common.constant.DateTimeStylesEnums;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
+import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -141,6 +143,51 @@ public class DateTimeUtils {
         ZoneId zoneId = ZoneId.systemDefault();
         Instant instant = localDateTime.atZone(zoneId).toInstant();
         return Date.from(instant);
+    }
+
+    /**
+     * <p>
+     * 将日期字符串转换为日期格式
+     * </p>
+     *
+     * @param datetimeStr 日期字符串
+     * @return {@link Date}
+     * @author 皮锋
+     * @custom.date 2021/6/15 17:24
+     */
+    public static Date string2Date(String datetimeStr) {
+        return string2Date(datetimeStr, DateTimeStylesEnums.YYYY_MM_DD_HH_MM_SS);
+    }
+
+    /**
+     * <p>
+     * 将日期字符串转换为日期格式
+     * </p>
+     *
+     * @param datetimeStr     日期字符串
+     * @param dateStylesEnums 日期时间样式-{@link DateTimeStylesEnums}
+     * @return {@link Date}
+     * @author 皮锋
+     * @custom.date 2021/6/15 17:23
+     */
+    public static Date string2Date(String datetimeStr, DateTimeStylesEnums dateStylesEnums) {
+        return string2Date(datetimeStr, dateStylesEnums.getValue());
+    }
+
+    /**
+     * <p>
+     * 将日期字符串转换为日期格式
+     * </p>
+     *
+     * @param datetimeStr 日期字符串
+     * @param parttern    日期时间字符串格式
+     * @return {@link Date}
+     * @author 皮锋
+     * @custom.date 2021/6/15 17:18
+     */
+    @SneakyThrows
+    public static Date string2Date(String datetimeStr, String parttern) {
+        return new SimpleDateFormat(parttern).parse(datetimeStr);
     }
 
     /**

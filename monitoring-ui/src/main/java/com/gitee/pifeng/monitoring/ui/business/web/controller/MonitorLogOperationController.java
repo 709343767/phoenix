@@ -14,11 +14,10 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.List;
 
 /**
  * <p>
@@ -65,8 +64,12 @@ public class MonitorLogOperationController {
      * 获取操作日志列表
      * </p>
      *
-     * @param current 当前页
-     * @param size    每页显示条数
+     * @param current    当前页
+     * @param size       每页显示条数
+     * @param operModule 功能模块
+     * @param operDesc   操作描述
+     * @param operType   操作类型
+     * @param insertTime 插入时间
      * @return layUiAdmin响应对象
      * @author 皮锋
      * @custom.date 2021/6/14 21:24
@@ -74,13 +77,36 @@ public class MonitorLogOperationController {
     @ApiOperation(value = "获取操作日志列表")
     @ApiImplicitParams(value = {
             @ApiImplicitParam(name = "current", value = "当前页", required = true, paramType = "query", dataType = "long"),
-            @ApiImplicitParam(name = "size", value = "每页显示条数", required = true, paramType = "query", dataType = "long")})
+            @ApiImplicitParam(name = "size", value = "每页显示条数", required = true, paramType = "query", dataType = "long"),
+            @ApiImplicitParam(name = "operModule", value = "功能模块", required = true, paramType = "query", dataType = "string"),
+            @ApiImplicitParam(name = "operDesc", value = "操作描述", required = true, paramType = "query", dataType = "string"),
+            @ApiImplicitParam(name = "operType", value = "操作类型", required = true, paramType = "query", dataType = "string"),
+            @ApiImplicitParam(name = "insertTime", value = "插入时间", required = true, paramType = "query", dataType = "string")
+    })
     @GetMapping("/get-monitor-log-operation-list")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.LOG + "#操作日志", operType = OperateTypeConstants.QUERY, operDesc = "获取操作日志列表")
-    public LayUiAdminResultVo getMonitorLogOperationList(Long current, Long size) {
-        Page<MonitorLogOperationVo> page = this.monitorLogOperationService.getMonitorLogOperationList(current, size);
+    public LayUiAdminResultVo getMonitorLogOperationList(Long current, Long size, String operModule, String operDesc, String operType, String insertTime) {
+        Page<MonitorLogOperationVo> page = this.monitorLogOperationService.getMonitorLogOperationList(current, size, operModule, operDesc, operType, insertTime);
         return LayUiAdminResultVo.ok(page);
+    }
+
+    /**
+     * <p>
+     * 删除操作日志
+     * </p>
+     *
+     * @param monitorLogOperationVos 操作日志信息
+     * @return layUiAdmin响应对象：如果删除成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @author 皮锋
+     * @custom.date 2021/6/15 14:30
+     */
+    @ApiOperation(value = "删除操作日志")
+    @DeleteMapping("/delete-monitor-log-operation")
+    @ResponseBody
+    @OperateLog(operModule = UiModuleConstants.LOG + "#操作日志", operType = OperateTypeConstants.DELETE, operDesc = "删除操作日志")
+    public LayUiAdminResultVo deleteMonitorLogOperation(@RequestBody List<MonitorLogOperationVo> monitorLogOperationVos) {
+        return this.monitorLogOperationService.deleteMonitorLogOperation(monitorLogOperationVos);
     }
 
 }
