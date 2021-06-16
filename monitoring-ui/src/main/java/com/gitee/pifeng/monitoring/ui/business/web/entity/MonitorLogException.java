@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.gitee.pifeng.monitoring.common.inf.ISuperBean;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
@@ -28,7 +29,7 @@ import java.util.Date;
 @Accessors(chain = true)
 @TableName("MONITOR_LOG_EXCEPTION")
 @ApiModel(value = "MonitorLogException对象", description = "异常日志表")
-public class MonitorLogException implements Serializable {
+public class MonitorLogException implements Serializable, ISuperBean {
 
     private static final long serialVersionUID = 1L;
 

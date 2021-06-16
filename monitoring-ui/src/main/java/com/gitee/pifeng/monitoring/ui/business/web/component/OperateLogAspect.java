@@ -1,8 +1,12 @@
 package com.gitee.pifeng.monitoring.ui.business.web.component;
 
 import com.alibaba.fastjson.JSON;
+import com.gitee.pifeng.monitoring.common.constant.AlarmLevelEnums;
+import com.gitee.pifeng.monitoring.common.constant.MonitorTypeEnums;
+import com.gitee.pifeng.monitoring.common.domain.Alarm;
 import com.gitee.pifeng.monitoring.common.web.util.AccessObjectUtil;
 import com.gitee.pifeng.monitoring.common.web.util.ContextUtils;
+import com.gitee.pifeng.monitoring.plug.Monitor;
 import com.gitee.pifeng.monitoring.ui.business.web.annotation.OperateLog;
 import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorLogException;
 import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorLogOperation;
@@ -20,6 +24,7 @@ import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -121,7 +126,7 @@ public class OperateLogAspect {
 
     /**
      * <p>
-     * 异常返回通知，用于记录异常日志，连接点抛出异常后执行
+     * 异常返回通知，用于记录异常日志，发送告警，连接点抛出异常后执行
      * </p>
      *
      * @param joinPoint 切入点
@@ -140,18 +145,30 @@ public class OperateLogAspect {
         String className = joinPoint.getTarget().getClass().getName();
         // 获取请求的方法名
         String methodName = className + "#" + method.getName();
-        // 异常日志
+        // 异常名称
+        String excName = e.getClass().getName();
+        // 构建异常日志
         MonitorLogException.MonitorLogExceptionBuilder builder = MonitorLogException.builder();
         builder.reqParam(JSON.toJSONString(this.convertParamMap(request.getParameterMap())));
-        builder.excName(e.getClass().getName());
-        builder.excMessage(this.stackTraceToString(e.getClass().getName(), e.getMessage(), e.getStackTrace()));
+        builder.excName(excName);
+        builder.excMessage(this.stackTraceToString(excName, e.getMessage(), e.getStackTrace()));
         builder.userId(SpringSecurityUtils.getCurrentMonitorUserRealm().getId());
         builder.username(SpringSecurityUtils.getCurrentMonitorUserRealm().getUsrname());
         builder.operMethod(methodName);
         builder.uri(request.getRequestURI());
         builder.ip(AccessObjectUtil.getClientAddress(request));
         builder.insertTime(new Date());
-        this.monitorLogExceptionService.save(builder.build());
+        MonitorLogException monitorLogException = builder.build();
+        this.monitorLogExceptionService.save(monitorLogException);
+        // 发送告警
+        Alarm alarm = Alarm.builder()
+                .alarmLevel(AlarmLevelEnums.ERROR)
+                .monitorType(MonitorTypeEnums.CUSTOM)
+                .charset(StandardCharsets.UTF_8)
+                .title(excName)
+                .msg(monitorLogException.toJsonString())
+                .build();
+        Monitor.sendAlarm(alarm);
     }
 
     /**

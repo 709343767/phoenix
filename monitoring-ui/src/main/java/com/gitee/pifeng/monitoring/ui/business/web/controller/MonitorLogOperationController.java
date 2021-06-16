@@ -85,7 +85,7 @@ public class MonitorLogOperationController {
     })
     @GetMapping("/get-monitor-log-operation-list")
     @ResponseBody
-    @OperateLog(operModule = UiModuleConstants.LOG + "#操作日志", operType = OperateTypeConstants.QUERY, operDesc = "获取操作日志列表")
+    // @OperateLog(operModule = UiModuleConstants.LOG + "#操作日志", operType = OperateTypeConstants.QUERY, operDesc = "获取操作日志列表")
     public LayUiAdminResultVo getMonitorLogOperationList(Long current, Long size, String operModule, String operDesc, String operType, String insertTime) {
         Page<MonitorLogOperationVo> page = this.monitorLogOperationService.getMonitorLogOperationList(current, size, operModule, operDesc, operType, insertTime);
         return LayUiAdminResultVo.ok(page);
