@@ -46,7 +46,7 @@ CREATE TABLE `MONITOR_ALARM_RECORD` (
   `WAY` varchar(10) NOT NULL COMMENT '告警方式（SMS、MAIL、...）',
   `LEVEL` varchar(5) NOT NULL COMMENT '告警级别（INFO、WARM、ERROR、FATAL）',
   `TITLE` varchar(125) NOT NULL COMMENT '告警标题',
-  `CONTENT` varchar(1000) NOT NULL COMMENT '告警内容',
+  `CONTENT` longtext NOT NULL COMMENT '告警内容',
   `STATUS` varchar(1) DEFAULT NULL COMMENT '告警发送状态（0：失败；1：成功）',
   `NUMBER` varchar(500) DEFAULT NULL COMMENT '被告警人号码（手机号码、电子邮箱、...）',
   `INSERT_TIME` datetime NOT NULL COMMENT '告警时间',
