@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.gitee.pifeng.monitoring.common.constant.AlarmLevelEnums;
 import com.gitee.pifeng.monitoring.common.constant.MonitorTypeEnums;
 import com.gitee.pifeng.monitoring.common.domain.Alarm;
+import com.gitee.pifeng.monitoring.common.util.DateTimeUtils;
 import com.gitee.pifeng.monitoring.common.web.util.AccessObjectUtil;
 import com.gitee.pifeng.monitoring.common.web.util.ContextUtils;
 import com.gitee.pifeng.monitoring.plug.Monitor;
@@ -161,12 +162,20 @@ public class OperateLogAspect {
         MonitorLogException monitorLogException = builder.build();
         this.monitorLogExceptionService.save(monitorLogException);
         // 发送告警
+        String msg = "请求参数：" + monitorLogException.getReqParam() +
+                "，<br>异常名称：" + monitorLogException.getExcName() +
+                "，<br>异常信息：" + monitorLogException.getExcMessage() +
+                "，<br>操作用户：" + monitorLogException.getUsername() +
+                "，<br>操作方法：" + monitorLogException.getOperMethod() +
+                "，<br>请求URI：" + monitorLogException.getUri() +
+                "，<br>请求IP：" + monitorLogException.getIp() +
+                "，<br>时间：" + DateTimeUtils.dateToString(monitorLogException.getInsertTime());
         Alarm alarm = Alarm.builder()
                 .alarmLevel(AlarmLevelEnums.ERROR)
                 .monitorType(MonitorTypeEnums.CUSTOM)
                 .charset(StandardCharsets.UTF_8)
                 .title(excName)
-                .msg(monitorLogException.toJsonString())
+                .msg(msg)
                 .build();
         Monitor.sendAlarm(alarm);
     }

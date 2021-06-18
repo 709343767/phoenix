@@ -186,10 +186,10 @@
                     }
                 });
                 $('[data-field="way"]').children().each(function () {
-                    $(this).html($(this).text().replace('MAIL', '邮件').replace('SMS', '短信').replace(';', '<br>'));
+                    $(this).html($(this).text().replace(new RegExp('MAIL', 'g'), '邮件').replace(new RegExp('SMS', 'g'), '短信').replace(new RegExp(';', 'g'), '<br>'));
                 });
                 $('[data-field="number"]').children().each(function () {
-                    $(this).html($(this).text().replace(';', '<br>'));
+                    $(this).html($(this).text().replace(new RegExp(';', 'g'), '<br>'));
                 });
             },
             cols: [
