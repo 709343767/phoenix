@@ -7,9 +7,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.gitee.pifeng.monitoring.common.inf.ISuperBean;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
@@ -25,6 +23,8 @@ import java.util.Date;
  */
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 @TableName("MONITOR_LOG_EXCEPTION")
