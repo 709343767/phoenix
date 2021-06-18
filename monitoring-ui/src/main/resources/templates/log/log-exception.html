@@ -247,6 +247,38 @@
                     });
                 });
             }
+            if (obj.event === 'info') {
+                // 宽度
+                var width;
+                // 高度
+                var height;
+                // 移动端
+                if (device.ios || device.android) {
+                    // 宽度
+                    width = document.body.clientWidth * 0.8 + 'px';
+                    // 高度
+                    height = document.body.clientHeight * 0.55 + 'px';
+                } else {
+                    // 宽度
+                    width = document.body.clientWidth * 0.8 + 'px';
+                    // 高度
+                    height = document.body.clientHeight * 0.8 + 'px';
+                }
+                layer.open({
+                    type: 2,
+                    title: '异常日志详情',
+                    content: ctxPath + 'monitor-log-exception/monitor-log-exception-detail?id=' + data.id,
+                    maxmin: true,
+                    shade: 0,
+                    moveOut: true,
+                    area: [width, height],
+                    success: function (layero, index) {
+                        // 在回调方法中的第2个参数“index”表示的是当前弹窗的索引
+                        // 通过layer.full方法将窗口放大
+                        layer.full(index);
+                    }
+                });
+            }
         });
     });
 </script>

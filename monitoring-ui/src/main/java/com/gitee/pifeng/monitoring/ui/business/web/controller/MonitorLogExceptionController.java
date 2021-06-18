@@ -67,9 +67,9 @@ public class MonitorLogExceptionController {
     @ApiImplicitParams(value = {
             @ApiImplicitParam(name = "current", value = "当前页", required = true, paramType = "query", dataType = "long"),
             @ApiImplicitParam(name = "size", value = "每页显示条数", required = true, paramType = "query", dataType = "long"),
-            @ApiImplicitParam(name = "excName", value = "异常名称", required = true, paramType = "query", dataType = "string"),
-            @ApiImplicitParam(name = "excMessage", value = "异常信息", required = true, paramType = "query", dataType = "string"),
-            @ApiImplicitParam(name = "insertTime", value = "插入时间", required = true, paramType = "query", dataType = "string")
+            @ApiImplicitParam(name = "excName", value = "异常名称", paramType = "query", dataType = "string"),
+            @ApiImplicitParam(name = "excMessage", value = "异常信息", paramType = "query", dataType = "string"),
+            @ApiImplicitParam(name = "insertTime", value = "插入时间", paramType = "query", dataType = "string")
     })
     @GetMapping("/get-monitor-log-exception-list")
     @ResponseBody
@@ -97,6 +97,45 @@ public class MonitorLogExceptionController {
         return this.monitorLogExceptionService.deleteMonitorLogException(monitorLogExceptionVos);
     }
 
+    /**
+     * <p>
+     * 获取异常日志信息
+     * </p>
+     *
+     * @param id 异常日志ID
+     * @return layUiAdmin响应对象
+     * @author 皮锋
+     * @custom.date 2021/6/18 16:24
+     */
+    @ApiOperation(value = "获取异常日志信息")
+    @ResponseBody
+    @GetMapping("/get-monitor-log-exception-info")
+    @ApiImplicitParams(value = {
+            @ApiImplicitParam(name = "id", value = "异常日志ID", required = true, paramType = "query", dataType = "long")})
+    public LayUiAdminResultVo getMonitorLogExceptionInfo(@RequestParam(name = "id") Long id) {
+        MonitorLogExceptionVo monitorLogExceptionInfo = this.monitorLogExceptionService.getMonitorLogExceptionInfo(id);
+        return LayUiAdminResultVo.ok(monitorLogExceptionInfo);
+    }
+
+    /**
+     * <p>
+     * 访问异常日志详情页面
+     * </p>
+     *
+     * @param id 异常日志ID
+     * @return {@link ModelAndView} 异常日志详情页面
+     * @author 皮锋
+     * @custom.date 2021/6/18 17:20
+     */
+    @ApiOperation(value = "访问异常日志详情页面")
+    @GetMapping("/monitor-log-exception-detail")
+    @ApiImplicitParams(value = {
+            @ApiImplicitParam(name = "id", value = "异常日志ID", required = true, paramType = "query", dataType = "long")})
+    public ModelAndView monitorLogExceptionDetail(Long id) {
+        ModelAndView mv = new ModelAndView("log/log-exception-detail");
+        mv.addObject("id", id);
+        return mv;
+    }
 
 }
 

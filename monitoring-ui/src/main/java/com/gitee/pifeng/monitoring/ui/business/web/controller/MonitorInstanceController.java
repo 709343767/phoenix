@@ -112,15 +112,18 @@ public class MonitorInstanceController {
      * 访问应用程序详情页面
      * </p>
      *
-     * @param id         应用实例表的主键ID
+     * @param id         应用实例主键ID
      * @param instanceId 应用实例ID
      * @return {@link ModelAndView} 应用程序详情页面
      * @author 皮锋
      * @custom.date 2020/9/26 10:53
      */
     @ApiOperation(value = "访问应用程序详情页面")
+    @ApiImplicitParams(value = {
+            @ApiImplicitParam(name = "id", value = "应用实例主键ID", required = true, paramType = "query", dataType = "long"),
+            @ApiImplicitParam(name = "instanceId", value = "应用实例ID", required = true, paramType = "query", dataType = "string")})
     @GetMapping("/instance-detail")
-    public ModelAndView instanceDetail(String id, String instanceId) {
+    public ModelAndView instanceDetail(Long id, String instanceId) {
         ModelAndView mv = new ModelAndView("instance/instance-detail");
         mv.addObject("id", id);
         mv.addObject("instanceId", instanceId);

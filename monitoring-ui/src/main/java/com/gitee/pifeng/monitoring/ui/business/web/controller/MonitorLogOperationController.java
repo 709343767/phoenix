@@ -3,7 +3,6 @@ package com.gitee.pifeng.monitoring.ui.business.web.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.gitee.pifeng.monitoring.ui.business.web.annotation.OperateLog;
-import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorLogExceptionService;
 import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorLogOperationService;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.LayUiAdminResultVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.MonitorLogOperationVo;
@@ -39,12 +38,6 @@ public class MonitorLogOperationController {
     private IMonitorLogOperationService monitorLogOperationService;
 
     /**
-     * 异常日志服务类
-     */
-    @Autowired
-    private IMonitorLogExceptionService monitorLogExceptionService;
-
-    /**
      * <p>
      * 访问操作日志列表页面
      * </p>
@@ -78,10 +71,10 @@ public class MonitorLogOperationController {
     @ApiImplicitParams(value = {
             @ApiImplicitParam(name = "current", value = "当前页", required = true, paramType = "query", dataType = "long"),
             @ApiImplicitParam(name = "size", value = "每页显示条数", required = true, paramType = "query", dataType = "long"),
-            @ApiImplicitParam(name = "operModule", value = "功能模块", required = true, paramType = "query", dataType = "string"),
-            @ApiImplicitParam(name = "operDesc", value = "操作描述", required = true, paramType = "query", dataType = "string"),
-            @ApiImplicitParam(name = "operType", value = "操作类型", required = true, paramType = "query", dataType = "string"),
-            @ApiImplicitParam(name = "insertTime", value = "插入时间", required = true, paramType = "query", dataType = "string")
+            @ApiImplicitParam(name = "operModule", value = "功能模块", paramType = "query", dataType = "string"),
+            @ApiImplicitParam(name = "operDesc", value = "操作描述", paramType = "query", dataType = "string"),
+            @ApiImplicitParam(name = "operType", value = "操作类型", paramType = "query", dataType = "string"),
+            @ApiImplicitParam(name = "insertTime", value = "插入时间", paramType = "query", dataType = "string")
     })
     @GetMapping("/get-monitor-log-operation-list")
     @ResponseBody
@@ -107,6 +100,46 @@ public class MonitorLogOperationController {
     @OperateLog(operModule = UiModuleConstants.LOG + "#操作日志", operType = OperateTypeConstants.DELETE, operDesc = "删除操作日志")
     public LayUiAdminResultVo deleteMonitorLogOperation(@RequestBody List<MonitorLogOperationVo> monitorLogOperationVos) {
         return this.monitorLogOperationService.deleteMonitorLogOperation(monitorLogOperationVos);
+    }
+
+    /**
+     * <p>
+     * 获取操作日志信息
+     * </p>
+     *
+     * @param id 操作日志ID
+     * @return layUiAdmin响应对象
+     * @author 皮锋
+     * @custom.date 2021/6/18 16:24
+     */
+    @ApiOperation(value = "获取操作日志信息")
+    @ResponseBody
+    @GetMapping("/get-monitor-log-operation-info")
+    @ApiImplicitParams(value = {
+            @ApiImplicitParam(name = "id", value = "操作日志ID", required = true, paramType = "query", dataType = "long")})
+    public LayUiAdminResultVo getMonitorLogOperationInfo(@RequestParam(name = "id") Long id) {
+        MonitorLogOperationVo monitorLogOperationVo = this.monitorLogOperationService.getMonitorLogOperationInfo(id);
+        return LayUiAdminResultVo.ok(monitorLogOperationVo);
+    }
+
+    /**
+     * <p>
+     * 访问操作日志详情页面
+     * </p>
+     *
+     * @param id 操作日志ID
+     * @return {@link ModelAndView} 操作日志详情页面
+     * @author 皮锋
+     * @custom.date 2021/6/18 17:20
+     */
+    @ApiOperation(value = "访问操作日志详情页面")
+    @GetMapping("/monitor-log-operation-detail")
+    @ApiImplicitParams(value = {
+            @ApiImplicitParam(name = "id", value = "操作日志ID", required = true, paramType = "query", dataType = "long")})
+    public ModelAndView monitorLogOperationDetail(Long id) {
+        ModelAndView mv = new ModelAndView("log/log-operation-detail");
+        mv.addObject("id", id);
+        return mv;
     }
 
 }

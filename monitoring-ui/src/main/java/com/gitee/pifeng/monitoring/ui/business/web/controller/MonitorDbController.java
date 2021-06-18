@@ -192,8 +192,10 @@ public class MonitorDbController {
      * @custom.date 2020/12/22 14:47
      */
     @ApiOperation(value = "访问数据库详情页面")
+    @ApiImplicitParams(value = {
+            @ApiImplicitParam(name = "id", value = "数据库ID", required = true, paramType = "query", dataType = "long")})
     @GetMapping("/db-detail")
-    public ModelAndView dbDetail(String id) {
+    public ModelAndView dbDetail(Long id) {
         ModelAndView mv = new ModelAndView("db/db-detail");
         MonitorDb monitorDb = this.monitorDbService.getById(id);
         MonitorDbVo monitorDbVo = MonitorDbVo.builder().build().convertFor(monitorDb);

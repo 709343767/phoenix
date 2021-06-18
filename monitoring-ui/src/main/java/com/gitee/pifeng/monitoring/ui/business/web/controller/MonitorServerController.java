@@ -104,15 +104,18 @@ public class MonitorServerController {
      * 访问服务器详情页面
      * </p>
      *
-     * @param id 服务器表的主键
+     * @param id 服务器主键ID
      * @param ip 服务器IP
      * @return {@link ModelAndView} 服务器详情页面
      * @author 皮锋
      * @custom.date 2020/10/16 15:59
      */
     @ApiOperation(value = "访问服务器详情页面")
+    @ApiImplicitParams(value = {
+            @ApiImplicitParam(name = "id", value = "服务器主键ID", required = true, paramType = "query", dataType = "long"),
+            @ApiImplicitParam(name = "ip", value = "服务器IP", required = true, paramType = "query", dataType = "string")})
     @GetMapping("/server-detail")
-    public ModelAndView serverDetail(String id, String ip) {
+    public ModelAndView serverDetail(Long id, String ip) {
         ModelAndView mv = new ModelAndView("server/server-detail");
         mv.addObject("id", id);
         mv.addObject("ip", ip);

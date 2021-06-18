@@ -110,4 +110,20 @@ public class MonitorLogOperationServiceImpl extends ServiceImpl<IMonitorLogOpera
         this.monitorLogOperationDao.deleteBatchIds(ids);
         return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);
     }
+
+    /**
+     * <p>
+     * 获取操作日志信息
+     * </p>
+     *
+     * @param id 操作日志ID
+     * @return 操作日志表现层对象
+     * @author 皮锋
+     * @custom.date 2021/6/18 16:25
+     */
+    @Override
+    public MonitorLogOperationVo getMonitorLogOperationInfo(Long id) {
+        MonitorLogOperation monitorLogOperation = this.monitorLogOperationDao.selectById(id);
+        return MonitorLogOperationVo.builder().build().convertFor(monitorLogOperation);
+    }
 }

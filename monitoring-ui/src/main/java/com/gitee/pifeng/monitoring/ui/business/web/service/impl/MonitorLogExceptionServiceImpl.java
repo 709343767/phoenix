@@ -103,4 +103,20 @@ public class MonitorLogExceptionServiceImpl extends ServiceImpl<IMonitorLogExcep
         this.monitorLogExceptionDao.deleteBatchIds(ids);
         return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);
     }
+
+    /**
+     * <p>
+     * 获取异常日志信息
+     * </p>
+     *
+     * @param id 异常日志ID
+     * @return 异常日志表现层对象
+     * @author 皮锋
+     * @custom.date 2021/6/18 16:31
+     */
+    @Override
+    public MonitorLogExceptionVo getMonitorLogExceptionInfo(Long id) {
+        MonitorLogException monitorLogException = this.monitorLogExceptionDao.selectById(id);
+        return MonitorLogExceptionVo.builder().build().convertFor(monitorLogException);
+    }
 }
