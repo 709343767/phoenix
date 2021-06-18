@@ -104,26 +104,6 @@ public class MonitorLogOperationController {
 
     /**
      * <p>
-     * 获取操作日志信息
-     * </p>
-     *
-     * @param id 操作日志ID
-     * @return layUiAdmin响应对象
-     * @author 皮锋
-     * @custom.date 2021/6/18 16:24
-     */
-    @ApiOperation(value = "获取操作日志信息")
-    @ResponseBody
-    @GetMapping("/get-monitor-log-operation-info")
-    @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "id", value = "操作日志ID", required = true, paramType = "query", dataType = "long")})
-    public LayUiAdminResultVo getMonitorLogOperationInfo(@RequestParam(name = "id") Long id) {
-        MonitorLogOperationVo monitorLogOperationVo = this.monitorLogOperationService.getMonitorLogOperationInfo(id);
-        return LayUiAdminResultVo.ok(monitorLogOperationVo);
-    }
-
-    /**
-     * <p>
      * 访问操作日志详情页面
      * </p>
      *
@@ -138,7 +118,8 @@ public class MonitorLogOperationController {
             @ApiImplicitParam(name = "id", value = "操作日志ID", required = true, paramType = "query", dataType = "long")})
     public ModelAndView monitorLogOperationDetail(Long id) {
         ModelAndView mv = new ModelAndView("log/log-operation-detail");
-        mv.addObject("id", id);
+        MonitorLogOperationVo monitorLogOperationInfo = this.monitorLogOperationService.getMonitorLogOperationInfo(id);
+        mv.addObject("monitorLogOperationInfo", monitorLogOperationInfo);
         return mv;
     }
 

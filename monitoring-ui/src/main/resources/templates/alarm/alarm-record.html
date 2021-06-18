@@ -103,6 +103,8 @@
                 </div>
             </script>
             <script type="text/html" id="alarm-record-list-table-toolbar">
+                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="info">
+                    <i class="layui-icon layui-icon-about"></i>详情</a>
                 <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"
                    sec:authorize="hasAuthority('超级管理员')">
                     <i class="layui-icon layui-icon-delete"></i>删除</a>
@@ -248,8 +250,7 @@
                     sort: !0
                 }, {
                     title: '操作',
-                    hide: !authority,
-                    width: 85,
+                    width: 160,
                     align: 'center',
                     fixed: (device.ios || device.android) ? false : 'right',
                     toolbar: '#alarm-record-list-table-toolbar'
@@ -346,6 +347,38 @@
                             layer.msg('系统错误！', {icon: 5, shift: 6});
                         }
                     });
+                });
+            }
+            if (obj.event === 'info') {
+                // 宽度
+                var width;
+                // 高度
+                var height;
+                // 移动端
+                if (device.ios || device.android) {
+                    // 宽度
+                    width = document.body.clientWidth * 0.8 + 'px';
+                    // 高度
+                    height = document.body.clientHeight * 0.55 + 'px';
+                } else {
+                    // 宽度
+                    width = document.body.clientWidth * 0.8 + 'px';
+                    // 高度
+                    height = document.body.clientHeight * 0.8 + 'px';
+                }
+                layer.open({
+                    type: 2,
+                    title: '告警记录详情',
+                    content: ctxPath + 'monitor-alarm-record/monitor-alarm-record-detail?id=' + data.id,
+                    maxmin: true,
+                    shade: 0,
+                    moveOut: true,
+                    area: [width, height],
+                    success: function (layero, index) {
+                        // 在回调方法中的第2个参数“index”表示的是当前弹窗的索引
+                        // 通过layer.full方法将窗口放大
+                        layer.full(index);
+                    }
                 });
             }
         });

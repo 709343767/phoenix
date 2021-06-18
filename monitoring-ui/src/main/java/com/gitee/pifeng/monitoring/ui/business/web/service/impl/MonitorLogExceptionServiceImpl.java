@@ -1,5 +1,6 @@
 package com.gitee.pifeng.monitoring.ui.business.web.service.impl;
 
+import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -117,6 +118,8 @@ public class MonitorLogExceptionServiceImpl extends ServiceImpl<IMonitorLogExcep
     @Override
     public MonitorLogExceptionVo getMonitorLogExceptionInfo(Long id) {
         MonitorLogException monitorLogException = this.monitorLogExceptionDao.selectById(id);
-        return MonitorLogExceptionVo.builder().build().convertFor(monitorLogException);
+        MonitorLogExceptionVo monitorLogExceptionVo = MonitorLogExceptionVo.builder().build().convertFor(monitorLogException);
+        monitorLogExceptionVo.setReqParam(JSONUtil.formatJsonStr(monitorLogExceptionVo.getReqParam()));
+        return monitorLogExceptionVo;
     }
 }

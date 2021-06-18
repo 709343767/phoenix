@@ -78,7 +78,7 @@
             </script>
             <script type="text/html" id="list-table-toolbar-detail">
                 <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="info">
-                    <i class="layui-icon layui-icon-edit"></i>详情</a>
+                    <i class="layui-icon layui-icon-about"></i>详情</a>
                 <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"
                    sec:authorize="hasAuthority('超级管理员')">
                     <i class="layui-icon layui-icon-delete"></i>删除</a>
@@ -165,17 +165,16 @@
                     sort: !0
                 }, {
                     field: 'username',
-                    title: '用户',
+                    title: '操作用户',
                     minWidth: 50,
                     sort: !0
                 }, {
                     field: 'insertTime',
-                    title: '新增时间',
+                    title: '时间',
                     minWidth: 170,
                     sort: !0
                 }, {
                     title: '操作',
-                    hide: !authority,
                     width: 160,
                     align: 'center',
                     fixed: (device.ios || device.android) ? false : 'right',

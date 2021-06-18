@@ -164,4 +164,25 @@ public class MonitorAlarmRecordController {
         PoiBaseView.render(map, request, response, NormalExcelConstants.EASYPOI_EXCEL_VIEW);
     }
 
+    /**
+     * <p>
+     * 访问告警记录详情页面
+     * </p>
+     *
+     * @param id 告警记录ID
+     * @return {@link ModelAndView} 告警记录详情页面
+     * @author 皮锋
+     * @custom.date 2021/6/18 17:20
+     */
+    @ApiOperation(value = "访问告警记录详情页面")
+    @GetMapping("/monitor-alarm-record-detail")
+    @ApiImplicitParams(value = {
+            @ApiImplicitParam(name = "id", value = "告警记录ID", required = true, paramType = "query", dataType = "long")})
+    public ModelAndView monitorAlarmRecordDetail(Long id) {
+        ModelAndView mv = new ModelAndView("alarm/alarm-record-detail");
+        MonitorAlarmRecordVo monitorAlarmRecordInfo = this.monitorAlarmRecordService.monitorAlarmRecordDetail(id);
+        mv.addObject("monitorAlarmRecordInfo", monitorAlarmRecordInfo);
+        return mv;
+    }
+
 }

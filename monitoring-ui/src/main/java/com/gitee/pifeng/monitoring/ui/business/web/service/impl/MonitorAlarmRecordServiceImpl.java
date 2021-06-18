@@ -5,6 +5,9 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.gitee.pifeng.monitoring.common.constant.AlarmLevelEnums;
+import com.gitee.pifeng.monitoring.common.constant.AlarmWayEnums;
+import com.gitee.pifeng.monitoring.common.constant.MonitorTypeEnums;
 import com.gitee.pifeng.monitoring.common.constant.ZeroOrOneConstants;
 import com.gitee.pifeng.monitoring.ui.business.web.dao.IMonitorAlarmRecordDao;
 import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorAlarmRecord;
@@ -231,6 +234,55 @@ public class MonitorAlarmRecordServiceImpl extends ServiceImpl<IMonitorAlarmReco
             }
         }
         return LayUiAdminResultVo.ok(maps);
+    }
+
+    /**
+     * <p>
+     * 获取监控告警记录信息
+     * </p>
+     *
+     * @param id 告警记录ID
+     * @return 监控告警表现层对象
+     * @author 皮锋
+     * @custom.date 2021/6/18 22:15
+     */
+    @Override
+    public MonitorAlarmRecordVo monitorAlarmRecordDetail(Long id) {
+        MonitorAlarmRecord monitorAlarmRecord = this.monitorAlarmRecordDao.selectById(id);
+        MonitorAlarmRecordVo monitorAlarmRecordVo = MonitorAlarmRecordVo.builder().build().convertFor(monitorAlarmRecord);
+        // 告警类型（SERVER、NET、INSTANCE、DATABASE、CUSTOM）
+        String type = monitorAlarmRecordVo.getType();
+        if (StringUtils.equals(MonitorTypeEnums.SERVER.name(), type)) {
+            monitorAlarmRecordVo.setType("服务器");
+        }
+        if (StringUtils.equals(MonitorTypeEnums.NET.name(), type)) {
+            monitorAlarmRecordVo.setType("网络");
+        }
+        if (StringUtils.equals(MonitorTypeEnums.INSTANCE.name(), type)) {
+            monitorAlarmRecordVo.setType("应用");
+        }
+        if (StringUtils.equals(MonitorTypeEnums.CUSTOM.name(), type)) {
+            monitorAlarmRecordVo.setType("自定义");
+        }
+        if (StringUtils.equals(MonitorTypeEnums.DATABASE.name(), type)) {
+            monitorAlarmRecordVo.setType("数据库");
+        }
+        // 告警方式（SMS、MAIL、...）
+        String way = monitorAlarmRecordVo.getWay();
+        monitorAlarmRecordVo.setWay(StringUtils.replaceEach(way,
+                new String[]{AlarmWayEnums.SMS.name(), AlarmWayEnums.MAIL.name()},
+                new String[]{"短信", "邮件"}));
+        // 告警级别（INFO、WARM、ERROR、FATAL）
+        String level = monitorAlarmRecordVo.getLevel();
+        monitorAlarmRecordVo.setLevel(StringUtils.replaceEach(level,
+                new String[]{AlarmLevelEnums.INFO.name(), AlarmLevelEnums.WARN.name(), AlarmLevelEnums.ERROR.name(), AlarmLevelEnums.FATAL.name()},
+                new String[]{"消息", "警告", "错误", "致命"}));
+        // 告警发送状态（0：失败；1：成功）
+        String status = monitorAlarmRecordVo.getStatus();
+        monitorAlarmRecordVo.setStatus(StringUtils.replaceEach(status,
+                new String[]{ZeroOrOneConstants.ZERO, ZeroOrOneConstants.ONE, null, ""},
+                new String[]{"失败", "成功", "不提醒", "不提醒"}));
+        return monitorAlarmRecordVo;
     }
 
 }

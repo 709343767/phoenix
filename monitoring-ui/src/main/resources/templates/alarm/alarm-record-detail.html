@@ -2,7 +2,7 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
-    <title>操作日志详情</title>
+    <title>告警记录详情</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport"
@@ -25,63 +25,57 @@
         <div class="layui-card-body">
             <div class="layui-collapse" lay-filter="component-panel">
                 <div class="layui-colla-item">
-                    <h2 class="layui-colla-title">操作类型</h2>
+                    <h2 class="layui-colla-title">告警类型</h2>
                     <div class="layui-colla-content layui-show">
-                        <p th:text="${monitorLogOperationInfo.operType}"></p>
+                        <p th:text="${monitorAlarmRecordInfo.type}"></p>
                     </div>
                 </div>
                 <div class="layui-colla-item">
-                    <h2 class="layui-colla-title">操作方法</h2>
+                    <h2 class="layui-colla-title">告警方式</h2>
                     <div class="layui-colla-content layui-show">
-                        <p th:text="${monitorLogOperationInfo.operMethod}"></p>
+                        <p th:text="${monitorAlarmRecordInfo.way}"></p>
                     </div>
                 </div>
                 <div class="layui-colla-item">
-                    <h2 class="layui-colla-title">功能模块</h2>
+                    <h2 class="layui-colla-title">告警级别</h2>
                     <div class="layui-colla-content layui-show">
-                        <p th:text="${monitorLogOperationInfo.operModule}"></p>
+                        <p th:text="${monitorAlarmRecordInfo.level}"></p>
                     </div>
                 </div>
                 <div class="layui-colla-item">
-                    <h2 class="layui-colla-title">操作描述</h2>
+                    <h2 class="layui-colla-title">告警标题</h2>
                     <div class="layui-colla-content layui-show">
-                        <p th:text="${monitorLogOperationInfo.operDesc}"></p>
+                        <p th:text="${monitorAlarmRecordInfo.title}"></p>
                     </div>
                 </div>
                 <div class="layui-colla-item">
-                    <h2 class="layui-colla-title">请求参数</h2>
+                    <h2 class="layui-colla-title">告警内容</h2>
                     <div class="layui-colla-content layui-show">
-                        <p th:text="${monitorLogOperationInfo.reqParam}"></p>
+                        <p th:utext="${monitorAlarmRecordInfo.content}"></p>
                     </div>
                 </div>
                 <div class="layui-colla-item">
-                    <h2 class="layui-colla-title">返回参数</h2>
+                    <h2 class="layui-colla-title">状态</h2>
                     <div class="layui-colla-content layui-show">
-                        <p th:text="${monitorLogOperationInfo.respParam}"></p>
+                        <p th:text="${monitorAlarmRecordInfo.status}"></p>
                     </div>
                 </div>
                 <div class="layui-colla-item">
-                    <h2 class="layui-colla-title">URI</h2>
+                    <h2 class="layui-colla-title">号码</h2>
                     <div class="layui-colla-content layui-show">
-                        <p th:text="${monitorLogOperationInfo.uri}"></p>
+                        <p th:text="${monitorAlarmRecordInfo.number}"></p>
                     </div>
                 </div>
                 <div class="layui-colla-item">
-                    <h2 class="layui-colla-title">请求IP</h2>
+                    <h2 class="layui-colla-title">告警时间</h2>
                     <div class="layui-colla-content layui-show">
-                        <p th:text="${monitorLogOperationInfo.ip}"></p>
+                        <p th:text="${#dates.format(monitorAlarmRecordInfo.insertTime,'yyyy/MM/dd HH:mm:ss')}"></p>
                     </div>
                 </div>
                 <div class="layui-colla-item">
-                    <h2 class="layui-colla-title">操作用户</h2>
+                    <h2 class="layui-colla-title">更新时间</h2>
                     <div class="layui-colla-content layui-show">
-                        <p th:text="${monitorLogOperationInfo.username}"></p>
-                    </div>
-                </div>
-                <div class="layui-colla-item">
-                    <h2 class="layui-colla-title">时间</h2>
-                    <div class="layui-colla-content layui-show">
-                        <p th:text="${#dates.format(monitorLogOperationInfo.insertTime,'yyyy/MM/dd HH:mm:ss')}"></p>
+                        <p th:text="${#dates.format(monitorAlarmRecordInfo.updateTime,'yyyy/MM/dd HH:mm:ss')}"></p>
                     </div>
                 </div>
             </div>

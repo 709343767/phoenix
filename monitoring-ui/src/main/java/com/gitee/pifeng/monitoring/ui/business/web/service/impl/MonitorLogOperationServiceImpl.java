@@ -1,5 +1,6 @@
 package com.gitee.pifeng.monitoring.ui.business.web.service.impl;
 
+import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -124,6 +125,9 @@ public class MonitorLogOperationServiceImpl extends ServiceImpl<IMonitorLogOpera
     @Override
     public MonitorLogOperationVo getMonitorLogOperationInfo(Long id) {
         MonitorLogOperation monitorLogOperation = this.monitorLogOperationDao.selectById(id);
-        return MonitorLogOperationVo.builder().build().convertFor(monitorLogOperation);
+        MonitorLogOperationVo monitorLogOperationVo = MonitorLogOperationVo.builder().build().convertFor(monitorLogOperation);
+        monitorLogOperationVo.setReqParam(JSONUtil.formatJsonStr(monitorLogOperationVo.getReqParam()));
+        monitorLogOperationVo.setRespParam(JSONUtil.formatJsonStr(monitorLogOperationVo.getRespParam()));
+        return monitorLogOperationVo;
     }
 }

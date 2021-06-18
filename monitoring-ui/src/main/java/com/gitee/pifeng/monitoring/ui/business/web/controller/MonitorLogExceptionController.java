@@ -99,26 +99,6 @@ public class MonitorLogExceptionController {
 
     /**
      * <p>
-     * 获取异常日志信息
-     * </p>
-     *
-     * @param id 异常日志ID
-     * @return layUiAdmin响应对象
-     * @author 皮锋
-     * @custom.date 2021/6/18 16:24
-     */
-    @ApiOperation(value = "获取异常日志信息")
-    @ResponseBody
-    @GetMapping("/get-monitor-log-exception-info")
-    @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "id", value = "异常日志ID", required = true, paramType = "query", dataType = "long")})
-    public LayUiAdminResultVo getMonitorLogExceptionInfo(@RequestParam(name = "id") Long id) {
-        MonitorLogExceptionVo monitorLogExceptionInfo = this.monitorLogExceptionService.getMonitorLogExceptionInfo(id);
-        return LayUiAdminResultVo.ok(monitorLogExceptionInfo);
-    }
-
-    /**
-     * <p>
      * 访问异常日志详情页面
      * </p>
      *
@@ -133,7 +113,8 @@ public class MonitorLogExceptionController {
             @ApiImplicitParam(name = "id", value = "异常日志ID", required = true, paramType = "query", dataType = "long")})
     public ModelAndView monitorLogExceptionDetail(Long id) {
         ModelAndView mv = new ModelAndView("log/log-exception-detail");
-        mv.addObject("id", id);
+        MonitorLogExceptionVo monitorLogExceptionInfo = this.monitorLogExceptionService.getMonitorLogExceptionInfo(id);
+        mv.addObject("monitorLogExceptionInfo", monitorLogExceptionInfo);
         return mv;
     }
 
