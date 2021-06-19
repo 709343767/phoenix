@@ -51,13 +51,15 @@
                 <div class="layui-colla-item">
                     <h2 class="layui-colla-title">请求参数</h2>
                     <div class="layui-colla-content layui-show">
-                        <p th:text="${monitorLogOperationInfo.reqParam}"></p>
+                        <p style="white-space:pre"
+                           th:utext="${#strings.replace(#strings.replace(#strings.replace(monitorLogOperationInfo.reqParam,'\r\n','<br>'),'\\n','<br>'),'\n','<br>')}"></p>
                     </div>
                 </div>
                 <div class="layui-colla-item">
                     <h2 class="layui-colla-title">返回参数</h2>
                     <div class="layui-colla-content layui-show">
-                        <p th:text="${monitorLogOperationInfo.respParam}"></p>
+                        <p style="white-space:pre"
+                           th:utext="${#strings.replace(#strings.replace(#strings.replace(monitorLogOperationInfo.respParam,'\r\n','<br>'),'\\n','<br>'),'\n','<br>')}"></p>
                     </div>
                 </div>
                 <div class="layui-colla-item">
