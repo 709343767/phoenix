@@ -280,8 +280,11 @@ public class MonitorAlarmRecordServiceImpl extends ServiceImpl<IMonitorAlarmReco
         // 告警发送状态（0：失败；1：成功）
         String status = monitorAlarmRecordVo.getStatus();
         monitorAlarmRecordVo.setStatus(StringUtils.replaceEach(status,
-                new String[]{ZeroOrOneConstants.ZERO, ZeroOrOneConstants.ONE, null, ""},
-                new String[]{"失败", "成功", "不提醒", "不提醒"}));
+                new String[]{ZeroOrOneConstants.ZERO, ZeroOrOneConstants.ONE},
+                new String[]{"失败", "成功"}));
+        if (StringUtils.isBlank(monitorAlarmRecordVo.getStatus())) {
+            monitorAlarmRecordVo.setStatus("不提醒");
+        }
         return monitorAlarmRecordVo;
     }
 
