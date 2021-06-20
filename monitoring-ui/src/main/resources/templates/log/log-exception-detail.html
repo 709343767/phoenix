@@ -27,50 +27,51 @@
                 <div class="layui-colla-item">
                     <h2 class="layui-colla-title">操作方法</h2>
                     <div class="layui-colla-content layui-show">
-                        <p th:text="${monitorLogExceptionInfo.operMethod}"></p>
+                        <p style="word-wrap:break-word;" th:text="${monitorLogExceptionInfo.operMethod}"></p>
                     </div>
                 </div>
                 <div class="layui-colla-item">
                     <h2 class="layui-colla-title">异常名称</h2>
                     <div class="layui-colla-content layui-show">
-                        <p th:text="${monitorLogExceptionInfo.excName}"></p>
+                        <p style="word-wrap:break-word;" th:text="${monitorLogExceptionInfo.excName}"></p>
                     </div>
                 </div>
                 <div class="layui-colla-item">
                     <h2 class="layui-colla-title">异常信息</h2>
                     <div class="layui-colla-content layui-show">
-                        <p th:text="${monitorLogExceptionInfo.excMessage}"></p>
+                        <p style="word-wrap:break-word;" th:text="${monitorLogExceptionInfo.excMessage}"></p>
                     </div>
                 </div>
                 <div class="layui-colla-item">
                     <h2 class="layui-colla-title">请求参数</h2>
                     <div class="layui-colla-content layui-show">
-                        <p style="white-space:pre"
+                        <p style="word-wrap:break-word;"
                            th:utext="${#strings.replace(#strings.replace(#strings.replace(monitorLogExceptionInfo.reqParam,'\r\n','<br>'),'\\n','<br>'),'\n','<br>')}"></p>
                     </div>
                 </div>
                 <div class="layui-colla-item">
                     <h2 class="layui-colla-title">URI</h2>
                     <div class="layui-colla-content layui-show">
-                        <p th:text="${monitorLogExceptionInfo.uri}"></p>
+                        <p style="word-wrap:break-word;" th:text="${monitorLogExceptionInfo.uri}"></p>
                     </div>
                 </div>
                 <div class="layui-colla-item">
                     <h2 class="layui-colla-title">请求IP</h2>
                     <div class="layui-colla-content layui-show">
-                        <p th:text="${monitorLogExceptionInfo.ip}"></p>
+                        <p style="word-wrap:break-word;" th:text="${monitorLogExceptionInfo.ip}"></p>
                     </div>
                 </div>
                 <div class="layui-colla-item">
                     <h2 class="layui-colla-title">操作用户</h2>
                     <div class="layui-colla-content layui-show">
-                        <p th:text="${monitorLogExceptionInfo.username}"></p>
+                        <p style="word-wrap:break-word;" th:text="${monitorLogExceptionInfo.username}"></p>
                     </div>
                 </div>
                 <div class="layui-colla-item">
                     <h2 class="layui-colla-title">时间</h2>
                     <div class="layui-colla-content layui-show">
-                        <p th:text="${#dates.format(monitorLogExceptionInfo.insertTime,'yyyy/MM/dd HH:mm:ss')}"></p>
+                        <p style="word-wrap:break-word;"
+                           th:text="${#dates.format(monitorLogExceptionInfo.insertTime,'yyyy/MM/dd HH:mm:ss')}"></p>
                     </div>
                 </div>
             </div>
