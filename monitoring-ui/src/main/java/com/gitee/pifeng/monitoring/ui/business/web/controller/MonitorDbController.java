@@ -199,6 +199,8 @@ public class MonitorDbController {
         ModelAndView mv = new ModelAndView("db/db-detail");
         MonitorDb monitorDb = this.monitorDbService.getById(id);
         MonitorDbVo monitorDbVo = MonitorDbVo.builder().build().convertFor(monitorDb);
+        // 屏蔽密码
+        monitorDbVo.setPassword(null);
         mv.addObject(monitorDbVo);
         return mv;
     }
