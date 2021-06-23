@@ -13,8 +13,8 @@ import com.gitee.pifeng.monitoring.ui.business.web.realm.MonitorUserRealm;
 import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorUserService;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.LayUiAdminResultVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.MonitorUserVo;
-import com.gitee.pifeng.monitoring.ui.util.SpringSecurityUtils;
 import com.gitee.pifeng.monitoring.ui.constant.WebResponseConstants;
+import com.gitee.pifeng.monitoring.ui.util.SpringSecurityUtils;
 import com.google.common.collect.Lists;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -201,6 +201,8 @@ public class MonitorUserServiceImpl extends ServiceImpl<IMonitorUserDao, Monitor
                 String roleName = monitorRole.getRoleName();
                 if (roleId == id) {
                     MonitorUserVo monitorUserVo = MonitorUserVo.builder().roleName(roleName).build().convertFor(monitorUser);
+                    // 屏蔽密码
+                    monitorUserVo.setPassword(null);
                     monitorUserVos.add(monitorUserVo);
                 }
             }
