@@ -86,7 +86,7 @@ spring:
   #############################################电子邮件配置###############################################
   mail:
     host: smtp.qq.com
-    username: 709343767@qq.com
+    username:
     password:
     protocol: smtp
     default-encoding: UTF-8
