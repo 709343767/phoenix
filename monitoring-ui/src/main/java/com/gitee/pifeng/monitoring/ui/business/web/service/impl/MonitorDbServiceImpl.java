@@ -60,6 +60,10 @@ public class MonitorDbServiceImpl extends ServiceImpl<IMonitorDbDao, MonitorDb> 
         // 查询数据库
         IPage<MonitorDb> ipage = new Page<>(current, size);
         LambdaQueryWrapper<MonitorDb> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        // 只查询部分字段
+        lambdaQueryWrapper.select(MonitorDb::getId, MonitorDb::getConnName, MonitorDb::getUrl,
+                MonitorDb::getDbType, MonitorDb::getIsOnline, MonitorDb::getDbDesc,
+                MonitorDb::getInsertTime, MonitorDb::getUpdateTime);
         if (StringUtils.isNotBlank(connName)) {
             lambdaQueryWrapper.like(MonitorDb::getConnName, connName);
         }
