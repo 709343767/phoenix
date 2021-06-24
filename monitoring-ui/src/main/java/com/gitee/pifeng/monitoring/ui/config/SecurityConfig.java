@@ -10,6 +10,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 /**
@@ -108,6 +110,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 //.tokenRepository(this.persistentTokenRepository())
                 .tokenValiditySeconds(60 * 60 * 24 * 30)
                 .and()
+                .sessionManagement()
+                .maximumSessions(1)
+                .sessionRegistry(this.sessionRegistry())
+                .and()
+                .and()
                 // 退出登录配置
                 .logout()
                 .logoutUrl("/logout")
@@ -120,6 +127,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .headers()
                 .frameOptions()
                 .disable();
+    }
+
+    /**
+     * <p>
+     * 维护session注册信息
+     * </p>
+     *
+     * @return {@link SessionRegistry}
+     * @author 皮锋
+     * @custom.date 2021/6/24 18:12
+     */
+    @Bean
+    public SessionRegistry sessionRegistry() {
+        return new SessionRegistryImpl();
     }
 
     /**

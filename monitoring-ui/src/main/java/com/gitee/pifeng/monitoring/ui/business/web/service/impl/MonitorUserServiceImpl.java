@@ -21,6 +21,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -51,6 +52,12 @@ public class MonitorUserServiceImpl extends ServiceImpl<IMonitorUserDao, Monitor
      */
     @Autowired
     private IMonitorRoleDao monitorRoleDao;
+
+    /**
+     * session注册信息
+     */
+    @Autowired
+    private SessionRegistry sessionRegistry;
 
     /**
      * <p>
@@ -127,9 +134,11 @@ public class MonitorUserServiceImpl extends ServiceImpl<IMonitorUserDao, Monitor
         lambdaUpdateWrapper.eq(MonitorUser::getId, userId).set(MonitorUser::getPassword, enPassword);
         int result = this.monitorUserDao.update(null, lambdaUpdateWrapper);
         if (result == 1) {
-            // 更新springsecurity中当前用户
             MonitorUserRealm realm = (MonitorUserRealm) this.loadUserByUsername(monitorUser.getAccount());
+            // 更新springsecurity中当前用户
             SpringSecurityUtils.updateCurrentMonitorUserRealm(realm);
+            // 使当前用户的所有session全部过期，让用户强制下线
+            SpringSecurityUtils.letUserSessionExpireNow(this.sessionRegistry, realm);
             return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);
         }
         return LayUiAdminResultVo.ok(WebResponseConstants.FAIL);

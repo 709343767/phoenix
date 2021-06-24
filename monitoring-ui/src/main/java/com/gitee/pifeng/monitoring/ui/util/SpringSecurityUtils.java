@@ -1,12 +1,17 @@
 package com.gitee.pifeng.monitoring.ui.util;
 
 import com.gitee.pifeng.monitoring.ui.business.web.realm.MonitorUserRealm;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.session.SessionInformation;
+import org.springframework.security.core.session.SessionRegistry;
 
 import java.util.Collection;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * <p>
@@ -72,4 +77,35 @@ public class SpringSecurityUtils {
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(monitorUserRealm, credentials, authorities);
         SecurityContextHolder.getContext().setAuthentication(token);
     }
+
+    /**
+     * <p>
+     * 使某个用户的所有session全部过期，让用户强制下线
+     * </p>
+     *
+     * @param sessionRegistry  {@link SessionRegistry}
+     * @param monitorUserRealm {@link MonitorUserRealm}
+     * @author 皮锋
+     * @custom.date 2021/6/24 17:57
+     */
+    public static void letUserSessionExpireNow(SessionRegistry sessionRegistry, MonitorUserRealm monitorUserRealm) {
+        List<Object> users = sessionRegistry.getAllPrincipals();
+        // 获取session中所有的用户信息
+        for (Object principal : users) {
+            if (principal instanceof MonitorUserRealm) {
+                final MonitorUserRealm loggedUser = (MonitorUserRealm) principal;
+                if (Objects.equals(monitorUserRealm.getId(), loggedUser.getId())) {
+                    // false代表不包含过期session
+                    List<SessionInformation> sessionsInfo = sessionRegistry.getAllSessions(principal, false);
+                    if (CollectionUtils.isNotEmpty(sessionsInfo)) {
+                        for (SessionInformation sessionInformation : sessionsInfo) {
+                            // 让session过去
+                            sessionInformation.expireNow();
+                        }
+                    }
+                }
+            }
+        }
+    }
+
 }
