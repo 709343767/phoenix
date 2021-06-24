@@ -1,5 +1,6 @@
 package com.gitee.pifeng.monitoring.ui.util;
 
+import cn.hutool.core.util.ArrayUtil;
 import com.gitee.pifeng.monitoring.ui.business.web.realm.MonitorUserRealm;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -11,7 +12,6 @@ import org.springframework.security.core.session.SessionRegistry;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * <p>
@@ -80,21 +80,21 @@ public class SpringSecurityUtils {
 
     /**
      * <p>
-     * 使某个用户的所有session全部过期，让用户强制下线
+     * 使某些用户的所有session全部过期，让用户强制下线
      * </p>
      *
-     * @param sessionRegistry  {@link SessionRegistry}
-     * @param monitorUserRealm {@link MonitorUserRealm}
+     * @param sessionRegistry {@link SessionRegistry} session注册信息
+     * @param userIds         用户ID数组
      * @author 皮锋
      * @custom.date 2021/6/24 17:57
      */
-    public static void letUserSessionExpireNow(SessionRegistry sessionRegistry, MonitorUserRealm monitorUserRealm) {
+    public static void letUserSessionExpireNow(SessionRegistry sessionRegistry, Long... userIds) {
         List<Object> users = sessionRegistry.getAllPrincipals();
         // 获取session中所有的用户信息
         for (Object principal : users) {
             if (principal instanceof MonitorUserRealm) {
                 final MonitorUserRealm loggedUser = (MonitorUserRealm) principal;
-                if (Objects.equals(monitorUserRealm.getId(), loggedUser.getId())) {
+                if (ArrayUtil.contains(userIds, loggedUser.getId())) {
                     // false代表不包含过期session
                     List<SessionInformation> sessionsInfo = sessionRegistry.getAllSessions(principal, false);
                     if (CollectionUtils.isNotEmpty(sessionsInfo)) {

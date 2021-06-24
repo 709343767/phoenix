@@ -36,7 +36,7 @@ public interface IMonitorUserService extends IService<MonitorUser>, UserDetailsS
 
     /**
      * <p>
-     * 修改用户信息
+     * 修改当前用户信息
      * </p>
      *
      * @param monitorUserVo 用户信息

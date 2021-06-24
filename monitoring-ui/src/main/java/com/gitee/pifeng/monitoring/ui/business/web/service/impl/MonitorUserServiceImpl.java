@@ -137,8 +137,6 @@ public class MonitorUserServiceImpl extends ServiceImpl<IMonitorUserDao, Monitor
             MonitorUserRealm realm = (MonitorUserRealm) this.loadUserByUsername(monitorUser.getAccount());
             // 更新springsecurity中当前用户
             SpringSecurityUtils.updateCurrentMonitorUserRealm(realm);
-            // 使当前用户的所有session全部过期，让用户强制下线
-            SpringSecurityUtils.letUserSessionExpireNow(this.sessionRegistry, realm);
             return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);
         }
         return LayUiAdminResultVo.ok(WebResponseConstants.FAIL);
@@ -146,7 +144,7 @@ public class MonitorUserServiceImpl extends ServiceImpl<IMonitorUserDao, Monitor
 
     /**
      * <p>
-     * 修改用户信息
+     * 修改当前用户信息
      * </p>
      *
      * @param monitorUserVo 用户信息
@@ -283,6 +281,18 @@ public class MonitorUserServiceImpl extends ServiceImpl<IMonitorUserDao, Monitor
         monitorUser.setUpdateTime(new Date());
         int result = this.monitorUserDao.updateById(monitorUser);
         if (result == 1) {
+            Long currentMonitorUserRealmId = SpringSecurityUtils.getCurrentMonitorUserRealm().getId();
+            // 如果修改的是当前用户
+            if (Objects.equals(currentMonitorUserRealmId, monitorUser.getId())) {
+                // 更新springsecurity中当前用户
+                MonitorUserRealm realm = (MonitorUserRealm) this.loadUserByUsername(monitorUser.getAccount());
+                SpringSecurityUtils.updateCurrentMonitorUserRealm(realm);
+            }
+            // 如果修改的不是当前用户
+            else {
+                // 使这个用户的所有session全部过期，让用户强制下线
+                SpringSecurityUtils.letUserSessionExpireNow(this.sessionRegistry, monitorUser.getId());
+            }
             return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);
         }
         return LayUiAdminResultVo.ok(WebResponseConstants.FAIL);
@@ -308,6 +318,8 @@ public class MonitorUserServiceImpl extends ServiceImpl<IMonitorUserDao, Monitor
         }
         int result = this.monitorUserDao.deleteBatchIds(ids);
         if (size == result) {
+            // 使这些用户的所有session全部过期，让用户强制下线
+            SpringSecurityUtils.letUserSessionExpireNow(this.sessionRegistry, ids.toArray(new Long[]{}));
             return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);
         }
         return LayUiAdminResultVo.ok(WebResponseConstants.FAIL);

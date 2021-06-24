@@ -90,6 +90,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.authorizeRequests()
+                // 如果有允许匿名的url，填在下面
+                .antMatchers("/login").permitAll()
                 // 所有的访问都必须进行认证处理后才可以正常访问
                 .anyRequest().authenticated()
                 .and()
@@ -111,7 +113,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .tokenValiditySeconds(60 * 60 * 24 * 30)
                 .and()
                 .sessionManagement()
+                // session超时后的操作
+                .invalidSessionUrl("/login?timeout=true")
                 .maximumSessions(1)
+                // 当达到最大值时，是否保留已经登录的用户
+                .maxSessionsPreventsLogin(false)
+                // 当达到最大值时，旧用户被踢出后的操作
+                .expiredUrl("/login?expire=true")
                 .sessionRegistry(this.sessionRegistry())
                 .and()
                 .and()

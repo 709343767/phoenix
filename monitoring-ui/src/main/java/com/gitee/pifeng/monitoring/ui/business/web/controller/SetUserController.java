@@ -122,7 +122,7 @@ public class SetUserController {
 
     /**
      * <p>
-     * 修改用户信息
+     * 修改当前用户信息
      * </p>
      *
      * @param monitorUserVo 用户信息
@@ -130,10 +130,10 @@ public class SetUserController {
      * @author 皮锋
      * @custom.date 2020/7/13 18:55
      */
-    @ApiOperation(value = "修改用户信息")
+    @ApiOperation(value = "修改当前用户信息")
     @PutMapping("/update-user")
     @ResponseBody
-    @OperateLog(operModule = UiModuleConstants.SET + "#我的设置", operType = OperateTypeConstants.UPDATE, operDesc = "修改用户信息")
+    @OperateLog(operModule = UiModuleConstants.SET + "#我的设置", operType = OperateTypeConstants.UPDATE, operDesc = "修改当前用户信息")
     public LayUiAdminResultVo updateUser(MonitorUserVo monitorUserVo) {
         return this.monitorUserService.updateUser(monitorUserVo);
     }
