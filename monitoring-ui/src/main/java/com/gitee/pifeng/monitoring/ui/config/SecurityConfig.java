@@ -91,7 +91,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.authorizeRequests()
                 // 如果有允许匿名的url，填在下面
-                .antMatchers("/login").permitAll()
+                .antMatchers("/login", "logout").permitAll()
                 // 所有的访问都必须进行认证处理后才可以正常访问
                 .anyRequest().authenticated()
                 .and()
