@@ -1,5 +1,6 @@
 package com.gitee.pifeng.monitoring.ui.business.web;
 
+import cn.hutool.core.lang.Console;
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.core.exceptions.MybatisPlusException;
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
@@ -38,7 +39,7 @@ public class MybaisPlusAutoGenerator {
     @SuppressWarnings("resource")
     private static String scanner() {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("请输入表名，多个表名用英文逗号分割：");
+        Console.log("请输入表名，多个表名用英文逗号分割：");
         if (scanner.hasNext()) {
             String ipt = scanner.next();
             if (StringUtils.isNotEmpty(ipt)) {

@@ -1,5 +1,6 @@
 package com.gitee.pifeng.monitoring.common.init;
 
+import cn.hutool.core.lang.Console;
 import lombok.Cleanup;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
@@ -63,8 +64,8 @@ public class InitBanner {
         try {
             // 加载
             String banner = loadBanner();
-            // 打印banner就要用syso，不要用logger
-            System.out.println(banner);
+            // 打印banner
+            Console.log(banner);
         } catch (IOException e) {
             log.error("控制台打印banner异常！", e);
         }

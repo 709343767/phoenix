@@ -1,5 +1,6 @@
 package com.gitee.pifeng.monitoring.plug;
 
+import cn.hutool.core.lang.Console;
 import com.gitee.pifeng.monitoring.common.constant.AlarmLevelEnums;
 import com.gitee.pifeng.monitoring.common.constant.MonitorTypeEnums;
 import com.gitee.pifeng.monitoring.common.constant.ThreadTypeEnums;
@@ -45,7 +46,7 @@ public class MonitorTest {
                     .build();
             // 发送告警信息
             Result result = Monitor.sendAlarm(alarm);
-            System.out.println(result.toJsonString());
+            Console.log(result.toJsonString());
         }, 5, 60, TimeUnit.SECONDS, ThreadTypeEnums.IO_INTENSIVE_THREAD);
 
         service.shutdown();
