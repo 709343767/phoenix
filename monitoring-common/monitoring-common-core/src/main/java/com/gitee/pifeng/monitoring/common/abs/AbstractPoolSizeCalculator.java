@@ -1,5 +1,7 @@
 package com.gitee.pifeng.monitoring.common.abs;
 
+import cn.hutool.core.lang.Console;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Timer;
@@ -58,11 +60,11 @@ public abstract class AbstractPoolSizeCalculator {
     private void calculateOptimalCapacity(BigDecimal targetQueueSizeBytes) {
         long mem = calculateMemoryUsage();
         BigDecimal queueCapacity = targetQueueSizeBytes.divide(new BigDecimal(mem), RoundingMode.HALF_UP);
-        System.out.println("Target queue memory usage (bytes): " + targetQueueSizeBytes);
-        System.out.println("createTask() produced " + creatTask().getClass().getName() + " which took " + mem
+        Console.log("Target queue memory usage (bytes): " + targetQueueSizeBytes);
+        Console.log("createTask() produced " + creatTask().getClass().getName() + " which took " + mem
                 + " bytes in a queue");
-        System.out.println("Formula: " + targetQueueSizeBytes + " / " + mem);
-        System.out.println("* Recommended queue capacity (bytes): " + queueCapacity);
+        Console.log("Formula: " + targetQueueSizeBytes + " / " + mem);
+        Console.log("* Recommended queue capacity (bytes): " + queueCapacity);
     }
 
     /**
@@ -78,14 +80,14 @@ public abstract class AbstractPoolSizeCalculator {
         BigDecimal numberOfCPU = new BigDecimal(Runtime.getRuntime().availableProcessors());
         BigDecimal optimalthreadcount = numberOfCPU.multiply(targetUtilization).multiply(
                 new BigDecimal(1).add(waitTime.divide(computeTime, RoundingMode.HALF_UP)));
-        System.out.println("Number of CPU: " + numberOfCPU);
-        System.out.println("Target utilization: " + targetUtilization);
-        System.out.println("Elapsed time (nanos): " + (testtime * 1000000));
-        System.out.println("Compute time (nanos): " + cpu);
-        System.out.println("Wait time (nanos): " + wait);
-        System.out.println("Formula: " + numberOfCPU + " * " + targetUtilization + " * (1 + " + waitTime + " / "
+        Console.log("Number of CPU: " + numberOfCPU);
+        Console.log("Target utilization: " + targetUtilization);
+        Console.log("Elapsed time (nanos): " + (testtime * 1000000));
+        Console.log("Compute time (nanos): " + cpu);
+        Console.log("Wait time (nanos): " + wait);
+        Console.log("Formula: " + numberOfCPU + " * " + targetUtilization + " * (1 + " + waitTime + " / "
                 + computeTime + ")");
-        System.out.println("* Optimal thread count: " + optimalthreadcount);
+        Console.log("* Optimal thread count: " + optimalthreadcount);
     }
 
     /**
