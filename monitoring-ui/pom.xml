@@ -81,6 +81,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
+        <!-- 数据库session管理依赖 -->
+        <dependency>
+            <groupId>org.springframework.session</groupId>
+            <artifactId>spring-session-jdbc</artifactId>
+        </dependency>
         <!-- 社交登录依赖 -->
         <dependency>
             <groupId>org.springframework.social</groupId>

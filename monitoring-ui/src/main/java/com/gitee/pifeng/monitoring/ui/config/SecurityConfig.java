@@ -13,6 +13,10 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+
+import javax.sql.DataSource;
 
 /**
  * <p>
@@ -63,6 +67,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private IMonitorUserService monitorUserService;
 
     /**
+     * 数据源
+     */
+    @Autowired
+    private DataSource dataSource;
+
+    /**
      * <p>
      * WebSecurity主要针对全局请求忽略规则配置（比如说静态文件，比如说注册页面）、全局HttpFirewall配置、是否debug配置、全局SecurityFilterChain配置、privilegeEvaluator、expressionHandler、securityInterceptor等。
      * </p>
@@ -108,9 +118,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // 记住我
                 .rememberMe()
                 .rememberMeParameter("remember")
-                // 配置数据库源
-                //.tokenRepository(this.persistentTokenRepository())
                 .tokenValiditySeconds(60 * 60 * 24 * 30)
+                // 持久化token
+                .tokenRepository(this.persistentTokenRepository())
+                .userDetailsService(this.monitorUserService)
                 .and()
                 .sessionManagement()
                 // session超时后的操作
@@ -135,6 +146,27 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .headers()
                 .frameOptions()
                 .disable();
+    }
+
+    /**
+     * <p>
+     * 持久化token
+     * </p>
+     * spring Security中，默认是使用PersistentTokenRepository的子类InMemoryTokenRepositoryImpl，将token放在内存中，<br>
+     * 如果使用JdbcTokenRepositoryImpl，会创建表persistent_logins，将token持久化到数据库。
+     *
+     * @return {@link PersistentTokenRepository}
+     * @author 皮锋
+     * @custom.date 2021/7/1 11:29
+     */
+    @Bean
+    public PersistentTokenRepository persistentTokenRepository() {
+        JdbcTokenRepositoryImpl jdbcTokenRepository = new JdbcTokenRepositoryImpl();
+        // 启动创建表，创建成功后注释掉
+        jdbcTokenRepository.setCreateTableOnStartup(false);
+        // 设置数据源
+        jdbcTokenRepository.setDataSource(this.dataSource);
+        return jdbcTokenRepository;
     }
 
     /**
