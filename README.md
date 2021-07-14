@@ -113,10 +113,10 @@
 
 ### 初始化“监控数据库”
 
-请下载项目源码并解压，进入目录：**/monitoring/doc/数据库设计/sql/mysql** ，找到三个SQL脚本并执行即可。
+请下载项目源码并解压，进入目录：**/monitoring/doc/数据库设计/sql/mysql** ，找到SQL脚本并执行即可。
 
 ```
-monitoring.sql、MONITOR_ROLE.sql、MONITOR_USER.sql
+monitoring.sql
 ```
 
 ### 编译源码
