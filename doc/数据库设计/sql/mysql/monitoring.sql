@@ -1,5 +1,4 @@
 /*
-
  Target Server Type    : MySQL
  Target Server Version : 50734
  File Encoding         : 65001
@@ -672,4 +671,4 @@ INSERT INTO `MONITOR_ROLE`(`ID`, `ROLE_NAME`, `CREATE_TIME`, `UPDATE_TIME`) VALU
 INSERT INTO `MONITOR_USER` VALUES (1, 'admin', '超级管理员', '$2a$10$gcWQ8riyvmxy4eSGOpJkZe.n//JfqAUBQlPaEO5iOM.Glte7Rbfsy', 1, '', '超级管理员', '2021-5-28 22:18:01', '2021-05-28 22:42:23');
 INSERT INTO `MONITOR_USER` VALUES (2, 'guest', '访客', '$2a$10$OE0rJtueah3L7jYAh/rtHeUThXxvAvyQZlfP74OuhNGTAUfDiCd6y', 2, '', '访客', '2020-8-2 21:22:31', '2020-12-31 12:05:33');
 
-commit;
+COMMIT;
