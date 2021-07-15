@@ -119,7 +119,7 @@ public class MonitorLogExceptionServiceImpl extends ServiceImpl<IMonitorLogExcep
     public MonitorLogExceptionVo getMonitorLogExceptionInfo(Long id) {
         MonitorLogException monitorLogException = this.monitorLogExceptionDao.selectById(id);
         MonitorLogExceptionVo monitorLogExceptionVo = MonitorLogExceptionVo.builder().build().convertFor(monitorLogException);
-        monitorLogExceptionVo.setReqParam(JSONUtil.formatJsonStr(monitorLogExceptionVo.getReqParam()));
+        monitorLogExceptionVo.setReqParam(monitorLogExceptionVo.getReqParam() != null ? JSONUtil.formatJsonStr(monitorLogExceptionVo.getReqParam()) : null);
         return monitorLogExceptionVo;
     }
 }

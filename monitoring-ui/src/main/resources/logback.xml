@@ -14,7 +14,7 @@
                 class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符 -->
             <pattern>
-                <![CDATA[%highlight(%d{yyyy-MM-dd HH:mm:ss.SSS}) %highlight(%-5level) %highlight([%thread]) %highlight(%logger{500}.%M) -%highlight(%msg) %n%n]]>
+                <![CDATA[%highlight(%d{yyyy-MM-dd HH:mm:ss.SSS}) %highlight(%-5level) %highlight([%thread]) %highlight(%logger{500}.%M) -%highlight(%msg) %n]]>
             </pattern>
             <!-- 此处设置字符集 -->
             <charset>UTF-8</charset>
@@ -40,7 +40,7 @@
         <encoder
                 class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符 -->
-            <pattern><![CDATA[%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] %logger{50}.%M -%msg%n%n]]></pattern>
+            <pattern><![CDATA[%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] %logger{50}.%M -%msg%n]]></pattern>
             <!-- 此处设置字符集 -->
             <charset>UTF-8</charset>
         </encoder>
@@ -65,7 +65,7 @@
         <encoder
                 class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符 -->
-            <pattern><![CDATA[%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] %logger{50}.%M -%msg%n%n]]></pattern>
+            <pattern><![CDATA[%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] %logger{50}.%M -%msg%n]]></pattern>
             <!-- 此处设置字符集 -->
             <charset>UTF-8</charset>
         </encoder>

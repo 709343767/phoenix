@@ -21,9 +21,9 @@ server:
 ###############################################日志配置####################################################
 logging:
   config: classpath:logback.xml
-  #监控相关的日志级别设置成debug
+  #监控相关的日志级别设置成info
   level:
-    com.gitee.pifeng.monitoring: debug
+    com.gitee.pifeng.monitoring: info
 
 
 ###############################################spring配置#################################################
