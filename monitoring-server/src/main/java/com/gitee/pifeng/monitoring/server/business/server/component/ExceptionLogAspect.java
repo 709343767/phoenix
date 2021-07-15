@@ -98,7 +98,9 @@ public class ExceptionLogAspect {
         String excName = e.getClass().getName();
         // 构建异常日志
         MonitorLogException.MonitorLogExceptionBuilder builder = MonitorLogException.builder();
-        builder.reqParam(JSON.toJSONString(request != null ? this.convertParamMap(request.getParameterMap()) : null));
+        // 转换请求参数
+        Map<String, String> reqParamMap = request != null ? this.convertParamMap(request.getParameterMap()) : null;
+        builder.reqParam((reqParamMap == null || reqParamMap.isEmpty()) ? null : JSON.toJSONString(reqParamMap));
         builder.excName(excName);
         builder.excMessage(this.stackTraceToString(excName, e.getMessage(), e.getStackTrace()));
         builder.userId(-1L);

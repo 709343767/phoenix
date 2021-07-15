@@ -40,7 +40,7 @@ import java.util.Map;
  */
 @Aspect
 @Component
-public class OperateLogAspect {
+public class LogAspect {
 
     /**
      * 异常日志服务类
@@ -114,8 +114,10 @@ public class OperateLogAspect {
             // 操作描述
             builder.operDesc(operateDesc);
         }
-        builder.reqParam(JSON.toJSONString(this.convertParamMap(request.getParameterMap())));
-        builder.respParam(JSON.toJSONString(response));
+        // 转换请求参数
+        Map<String, String> reqParamMap = this.convertParamMap(request.getParameterMap());
+        builder.reqParam(reqParamMap.isEmpty() ? null : JSON.toJSONString(reqParamMap));
+        builder.respParam(response != null ? JSON.toJSONString(response) : null);
         builder.userId(SpringSecurityUtils.getCurrentMonitorUserRealm().getId());
         builder.username(SpringSecurityUtils.getCurrentMonitorUserRealm().getUsrname());
         builder.operMethod(methodName);
@@ -150,7 +152,9 @@ public class OperateLogAspect {
         String excName = e.getClass().getName();
         // 构建异常日志
         MonitorLogException.MonitorLogExceptionBuilder builder = MonitorLogException.builder();
-        builder.reqParam(JSON.toJSONString(this.convertParamMap(request.getParameterMap())));
+        // 转换请求参数
+        Map<String, String> reqParamMap = this.convertParamMap(request.getParameterMap());
+        builder.reqParam(reqParamMap.isEmpty() ? null : JSON.toJSONString(reqParamMap));
         builder.excName(excName);
         builder.excMessage(this.stackTraceToString(excName, e.getMessage(), e.getStackTrace()));
         builder.userId(SpringSecurityUtils.getCurrentMonitorUserRealm().getId());
