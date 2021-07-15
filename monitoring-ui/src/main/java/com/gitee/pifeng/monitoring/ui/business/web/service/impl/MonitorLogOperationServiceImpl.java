@@ -126,8 +126,8 @@ public class MonitorLogOperationServiceImpl extends ServiceImpl<IMonitorLogOpera
     public MonitorLogOperationVo getMonitorLogOperationInfo(Long id) {
         MonitorLogOperation monitorLogOperation = this.monitorLogOperationDao.selectById(id);
         MonitorLogOperationVo monitorLogOperationVo = MonitorLogOperationVo.builder().build().convertFor(monitorLogOperation);
-        monitorLogOperationVo.setReqParam(JSONUtil.formatJsonStr(monitorLogOperationVo.getReqParam()));
-        monitorLogOperationVo.setRespParam(JSONUtil.formatJsonStr(monitorLogOperationVo.getRespParam()));
+        monitorLogOperationVo.setReqParam(monitorLogOperationVo.getReqParam() != null ? JSONUtil.formatJsonStr(monitorLogOperationVo.getReqParam()) : null);
+        monitorLogOperationVo.setRespParam(monitorLogOperationVo.getRespParam() != null ? JSONUtil.formatJsonStr(monitorLogOperationVo.getRespParam()) : null);
         return monitorLogOperationVo;
     }
 }
