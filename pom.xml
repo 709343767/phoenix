@@ -27,8 +27,8 @@
 
     <!-- 属性 -->
     <properties>
-        <!-- 监控框架版本 -->
-        <revision>0.0.3.RELEASE</revision>
+        <!-- 监控框架版本，引用项目的version -->
+        <revision>${project.version}</revision>
         <!-- spring-boot-starter-parent版本 -->
         <spring-boot-starter-parent.version>2.3.0.RELEASE</spring-boot-starter-parent.version>
         <!-- 解决eclipse中maven报错的问题 -->
