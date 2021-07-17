@@ -80,7 +80,7 @@ public class SpringSecurityUtils {
 
     /**
      * <p>
-     * 使某些用户的所有session全部过期，让用户强制下线
+     * 使某些用户的session过期，让用户强制下线
      * </p>
      *
      * @param sessionRegistry {@link SessionRegistry} session注册信息
@@ -99,7 +99,7 @@ public class SpringSecurityUtils {
                     List<SessionInformation> sessionsInfo = sessionRegistry.getAllSessions(principal, false);
                     if (CollectionUtils.isNotEmpty(sessionsInfo)) {
                         for (SessionInformation sessionInformation : sessionsInfo) {
-                            // 让session过去
+                            // 让session过期
                             sessionInformation.expireNow();
                         }
                     }
