@@ -25,7 +25,7 @@ import java.util.Scanner;
  * @author 皮锋
  * @custom.date 2020/6/2 15:58
  */
-public class MybaisPlusAutoGenerator {
+public class MyBatisPlusAutoGenerator {
 
     /**
      * <p>
