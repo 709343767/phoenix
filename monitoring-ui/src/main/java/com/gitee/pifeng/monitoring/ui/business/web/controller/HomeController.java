@@ -1,7 +1,10 @@
 package com.gitee.pifeng.monitoring.ui.business.web.controller;
 
+import com.gitee.pifeng.monitoring.ui.business.web.annotation.OperateLog;
 import com.gitee.pifeng.monitoring.ui.business.web.service.*;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.*;
+import com.gitee.pifeng.monitoring.ui.constant.OperateTypeConstants;
+import com.gitee.pifeng.monitoring.ui.constant.UiModuleConstants;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,14 +20,14 @@ import java.util.Map;
 
 /**
  * <p>
- * home页
+ * 主页
  * </p>
  *
  * @author 皮锋
  * @custom.date 2020/8/3 15:11
  */
 @Controller
-@Api(tags = "home页")
+@Api(tags = "主页")
 public class HomeController {
 
     /**
@@ -59,15 +62,16 @@ public class HomeController {
 
     /**
      * <p>
-     * 访问home页
+     * 访问主页
      * </p>
      *
-     * @return {@link ModelAndView} home页
+     * @return {@link ModelAndView} 主页
      * @author 皮锋
      * @custom.date 2020/8/3 15:14
      */
-    @ApiOperation(value = "访问home页")
+    @ApiOperation(value = "访问主页")
     @GetMapping("/home")
+    @OperateLog(operModule = UiModuleConstants.HOME, operType = OperateTypeConstants.PAGE, operDesc = "访问主页")
     public ModelAndView home() {
         ModelAndView mv = new ModelAndView("home");
         HomeInstanceVo homeInstanceVo = this.monitorInstanceService.getHomeInstanceInfo();
@@ -85,14 +89,14 @@ public class HomeController {
 
     /**
      * <p>
-     * 获取home页的摘要信息
+     * 获取主页的摘要信息
      * </p>
      *
      * @return layUiAdmin响应对象
      * @author 皮锋
      * @custom.date 2020/10/13 14:31
      */
-    @ApiOperation(value = "获取home页的摘要信息")
+    @ApiOperation(value = "获取主页的摘要信息")
     @ResponseBody
     @PostMapping("/home/get-summary-info")
     public LayUiAdminResultVo getSummaryInfo() {

@@ -39,4 +39,10 @@ public final class OperateTypeConstants {
      * 导出
      */
     public static final String EXPORT = "导出";
+
+    /**
+     * 访问页面
+     */
+    public static final String PAGE = "访问页面";
+
 }

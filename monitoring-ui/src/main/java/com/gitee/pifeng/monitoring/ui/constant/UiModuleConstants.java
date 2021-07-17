@@ -18,7 +18,7 @@ public final class UiModuleConstants {
     /**
      * home页
      */
-    public static final String HOME = "home页";
+    public static final String HOME = "主页";
 
     /**
      * 服务器
