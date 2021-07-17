@@ -11,6 +11,11 @@ package com.gitee.pifeng.monitoring.ui.constant;
 public final class UiModuleConstants {
 
     /**
+     * 登录
+     */
+    public static final String LOGIN = "登录";
+
+    /**
      * home页
      */
     public static final String HOME = "home页";

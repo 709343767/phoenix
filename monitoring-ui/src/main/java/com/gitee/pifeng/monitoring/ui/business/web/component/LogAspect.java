@@ -5,7 +5,9 @@ import com.gitee.pifeng.monitoring.common.constant.AlarmLevelEnums;
 import com.gitee.pifeng.monitoring.common.constant.MonitorTypeEnums;
 import com.gitee.pifeng.monitoring.common.domain.Alarm;
 import com.gitee.pifeng.monitoring.common.util.DateTimeUtils;
-import com.gitee.pifeng.monitoring.common.web.util.AccessObjectUtil;
+import com.gitee.pifeng.monitoring.common.util.ExceptionUtils;
+import com.gitee.pifeng.monitoring.common.util.MapUtils;
+import com.gitee.pifeng.monitoring.common.web.util.AccessObjectUtils;
 import com.gitee.pifeng.monitoring.common.web.util.ContextUtils;
 import com.gitee.pifeng.monitoring.plug.Monitor;
 import com.gitee.pifeng.monitoring.ui.business.web.annotation.OperateLog;
@@ -27,7 +29,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -115,14 +116,14 @@ public class LogAspect {
             builder.operDesc(operateDesc);
         }
         // 转换请求参数
-        Map<String, String> reqParamMap = this.convertParamMap(request.getParameterMap());
+        Map<String, String> reqParamMap = MapUtils.convertParamMap(request.getParameterMap());
         builder.reqParam(reqParamMap.isEmpty() ? null : JSON.toJSONString(reqParamMap));
         builder.respParam(response != null ? JSON.toJSONString(response) : null);
         builder.userId(SpringSecurityUtils.getCurrentMonitorUserRealm().getId());
         builder.username(SpringSecurityUtils.getCurrentMonitorUserRealm().getUsrname());
         builder.operMethod(methodName);
         builder.uri(request.getRequestURI());
-        builder.ip(AccessObjectUtil.getClientAddress(request));
+        builder.ip(AccessObjectUtils.getClientAddress(request));
         builder.insertTime(new Date());
         this.monitorLogOperationService.save(builder.build());
     }
@@ -153,15 +154,15 @@ public class LogAspect {
         // 构建异常日志
         MonitorLogException.MonitorLogExceptionBuilder builder = MonitorLogException.builder();
         // 转换请求参数
-        Map<String, String> reqParamMap = this.convertParamMap(request.getParameterMap());
+        Map<String, String> reqParamMap = MapUtils.convertParamMap(request.getParameterMap());
         builder.reqParam(reqParamMap.isEmpty() ? null : JSON.toJSONString(reqParamMap));
         builder.excName(excName);
-        builder.excMessage(this.stackTraceToString(excName, e.getMessage(), e.getStackTrace()));
+        builder.excMessage(ExceptionUtils.stackTraceToString(excName, e.getMessage(), e.getStackTrace()));
         builder.userId(SpringSecurityUtils.getCurrentMonitorUserRealm().getId());
         builder.username(SpringSecurityUtils.getCurrentMonitorUserRealm().getUsrname());
         builder.operMethod(methodName);
         builder.uri(request.getRequestURI());
-        builder.ip(AccessObjectUtil.getClientAddress(request));
+        builder.ip(AccessObjectUtils.getClientAddress(request));
         builder.insertTime(new Date());
         MonitorLogException monitorLogException = builder.build();
         this.monitorLogExceptionService.save(monitorLogException);
@@ -182,44 +183,6 @@ public class LogAspect {
                 .msg(msg)
                 .build();
         Monitor.sendAlarm(alarm);
-    }
-
-    /**
-     * <p>
-     * 转换请求参数
-     * </p>
-     *
-     * @param paramMap 请求参数
-     * @return {@link Map}
-     * @author 皮锋
-     * @custom.date 2021/6/10 13:45
-     */
-    private Map<String, String> convertParamMap(Map<String, String[]> paramMap) {
-        Map<String, String> rtnMap = new HashMap<>(16);
-        for (String key : paramMap.keySet()) {
-            rtnMap.put(key, paramMap.get(key)[0]);
-        }
-        return rtnMap;
-    }
-
-    /**
-     * <p>
-     * 转换异常信息为字符串
-     * </p>
-     *
-     * @param exceptionName    异常名称
-     * @param exceptionMessage 异常信息
-     * @param elements         堆栈信息
-     * @return 异常信息字符串
-     * @author 皮锋
-     * @custom.date 2021/6/11 11:04
-     */
-    private String stackTraceToString(String exceptionName, String exceptionMessage, StackTraceElement[] elements) {
-        StringBuilder builder = new StringBuilder();
-        for (StackTraceElement stet : elements) {
-            builder.append(stet).append("\n");
-        }
-        return exceptionName + ":" + exceptionMessage + "\n" + builder.toString();
     }
 
 }

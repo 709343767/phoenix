@@ -15,7 +15,7 @@ import java.net.UnknownHostException;
  * @custom.date 2021/6/10 14:04
  */
 @Slf4j
-public class AccessObjectUtil {
+public class AccessObjectUtils {
 
     /**
      * <p>

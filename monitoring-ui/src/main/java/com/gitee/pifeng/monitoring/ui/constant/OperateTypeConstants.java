@@ -11,6 +11,11 @@ package com.gitee.pifeng.monitoring.ui.constant;
 public final class OperateTypeConstants {
 
     /**
+     * 登录
+     */
+    public static final String LOGIN = "登录";
+
+    /**
      * 新增
      */
     public static final String ADD = "新增";
