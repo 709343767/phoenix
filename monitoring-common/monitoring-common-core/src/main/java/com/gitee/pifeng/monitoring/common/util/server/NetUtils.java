@@ -93,7 +93,7 @@ public class NetUtils {
             return sb.toString().toUpperCase();
         } catch (Exception e) {
             String exp = "获取本机MAC地址异常！";
-            log.error(exp, e);
+            // log.error(exp, e);
             throw new NetException(exp);
         }
     }
