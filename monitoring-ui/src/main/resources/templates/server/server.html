@@ -72,6 +72,9 @@
                 <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"
                    sec:authorize="hasAuthority('超级管理员')">
                     <i class="layui-icon layui-icon-delete"></i>删除</a>
+                <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="clear"
+                   sec:authorize="hasAuthority('超级管理员')">
+                    <i class="layui-icon layui-icon-reduce-circle"></i>清理</a>
             </script>
         </div>
     </div>
@@ -157,7 +160,7 @@
                     sort: !0
                 }, {
                     title: '操作',
-                    width: authority ? 160 : 100,
+                    width: authority ? 220 : 100,
                     align: 'center',
                     fixed: (device.ios || device.android) ? false : 'right',
                     toolbar: '#list-table-toolbar-detail'
@@ -277,6 +280,9 @@
                         layer.full(index);
                     }
                 });
+            }
+            if (obj.event === 'clear') {
+
             }
         });
     });
