@@ -87,7 +87,7 @@ public class MonitorServerController {
      * </p>
      *
      * @param monitorServerVos 服务器信息
-     * @return layUiAdmin响应对象：如果删除用户成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @return layUiAdmin响应对象：如果删除成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
      * @author 皮锋
      * @custom.date 2020/9/4 16:10
      */
@@ -97,6 +97,29 @@ public class MonitorServerController {
     @OperateLog(operModule = UiModuleConstants.SERVER, operType = OperateTypeConstants.DELETE, operDesc = "删除服务器")
     public LayUiAdminResultVo deleteMonitorServer(@RequestBody List<MonitorServerVo> monitorServerVos) {
         return this.monitorServerService.deleteMonitorServer(monitorServerVos);
+    }
+
+    /**
+     * <p>
+     * 清理服务器监控数据
+     * </p>
+     *
+     * @param ip   服务器信息
+     * @param time 时间
+     * @return layUiAdmin响应对象：如果清理成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @author 皮锋
+     * @custom.date 2021/7/20 20:52
+     */
+    @ApiOperation(value = "清理服务器监控数据")
+    @ApiImplicitParams(value = {
+            @ApiImplicitParam(name = "ip", value = "服务器IP", required = true, paramType = "query", dataType = "string"),
+            @ApiImplicitParam(name = "time", value = "时间", required = true, paramType = "query", dataType = "string")})
+    @DeleteMapping("/clear-monitor-server")
+    @ResponseBody
+    @OperateLog(operModule = UiModuleConstants.SERVER, operType = OperateTypeConstants.DELETE, operDesc = "清理服务器监控数据")
+    public LayUiAdminResultVo clearMonitorServer(String ip, String time) {
+        // return this.monitorServerService.clearMonitorServer(monitorServerVos);
+        return null;
     }
 
     /**
@@ -122,6 +145,27 @@ public class MonitorServerController {
         // 获取服务器网卡地址
         List<String> netcardAddresses = this.monitorServerService.getNetcardAddress(ip);
         mv.addObject("netcardAddresses", netcardAddresses);
+        return mv;
+    }
+
+
+    /**
+     * <p>
+     * 访问清理服务器监控数据表单页面
+     * </p>
+     *
+     * @param ip 服务器IP
+     * @return {@link ModelAndView} 清理服务器监控数据表单页面
+     * @author 皮锋
+     * @custom.date 2021/7/20 20:56
+     */
+    @ApiOperation(value = "访问清理服务器监控数据表单页面")
+    @ApiImplicitParams(value = {
+            @ApiImplicitParam(name = "ip", value = "服务器IP", required = true, paramType = "query", dataType = "string")})
+    @GetMapping("server-clear")
+    public ModelAndView serverClear(String ip) {
+        ModelAndView mv = new ModelAndView("server/server-clear-form");
+        mv.addObject("ip", ip);
         return mv;
     }
 

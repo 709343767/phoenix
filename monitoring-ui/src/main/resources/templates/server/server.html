@@ -282,7 +282,61 @@
                 });
             }
             if (obj.event === 'clear') {
-
+                // 宽度
+                var width;
+                // 高度
+                var height;
+                // 移动端
+                if (device.ios || device.android) {
+                    // 宽度
+                    width = document.body.clientWidth * 0.6 + 'px';
+                    // 高度
+                    height = document.body.clientHeight * 0.4 + 'px';
+                } else {
+                    // 宽度
+                    width = document.body.clientWidth * 0.25 + 'px';
+                    // 高度
+                    height = document.body.clientHeight * 0.45 + 'px';
+                }
+                layer.open({
+                    type: 2,
+                    title: '请选择时间',
+                    content: ctxPath + 'monitor-server/server-clear?ip=' + data.ip,
+                    maxmin: true,
+                    area: [width, height],
+                    btn: ['确定', '取消'],
+                    yes: function (index, layero) {
+                        var iframeWindow = window['layui-layer-iframe' + index],
+                            submitID = 'LAY-front-submit',
+                            submit = layero.find('iframe').contents().find('#' + submitID);
+                        //监听提交
+                        iframeWindow.layui.form.on('submit(' + submitID + ')', function (data) {
+                            var field = data.field; //获取提交的字段
+                            admin.req({
+                                type: 'delete',
+                                url: ctxPath + 'monitor-server/clear-monitor-server',
+                                data: field,
+                                dataType: 'json',
+                                headers: {
+                                    [[${_csrf.headerName}]]: [[${_csrf.token}]]
+                                },
+                                success: function (result) {
+                                    var data = result.data;
+                                    if (data === webConst.SUCCESS) {
+                                        layer.close(index); //关闭弹层
+                                        layer.msg('清理成功！', {icon: 6});
+                                    } else {
+                                        layer.msg('清理失败！', {icon: 5, shift: 6});
+                                    }
+                                },
+                                error: function () {
+                                    layer.msg('系统错误！', {icon: 5, shift: 6});
+                                }
+                            });
+                        });
+                        submit.trigger('click');
+                    }
+                });
             }
         });
     });

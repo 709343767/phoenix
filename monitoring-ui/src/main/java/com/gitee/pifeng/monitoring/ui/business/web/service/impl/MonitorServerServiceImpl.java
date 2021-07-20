@@ -180,7 +180,7 @@ public class MonitorServerServiceImpl extends ServiceImpl<IMonitorServerDao, Mon
      * </p>
      *
      * @param monitorServerVos 服务器信息
-     * @return layUiAdmin响应对象：如果删除用户成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @return layUiAdmin响应对象：如果删除成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
      * @author 皮锋
      * @custom.date 2020/9/4 16:13
      */
