@@ -11,7 +11,7 @@ if (($count > 0)); then
   kill $pid
 fi
 #打印关掉的进程ID
-echo "关闭进程：$pid"  
+echo "关闭进程：$pid"
 count=$(ps -ef | grep monitoring-ui.jar | grep -v "grep" | wc -l)
 sec=5
 sum=12
@@ -36,6 +36,6 @@ if (($count > 0)); then
 fi
 
 #启动进程
-nohup java -jar monitoring-ui.jar --spring.profiles.active=prod >/dev/null 2>&1 &
+nohup java -jar -Xms128m -Xmx128m monitoring-ui.jar --spring.profiles.active=prod >/dev/null 2>&1 &
 pid=$(ps -ef | grep monitoring-ui.jar | grep -v "grep" | awk '{print $2}')
 echo "监控UI端进程已经启动，进程ID为：$pid"
