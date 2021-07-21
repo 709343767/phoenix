@@ -46,4 +46,9 @@ public class WebResponseConstants {
      */
     public static final String REFRESH_FAIL = "refreshFail";
 
+    /**
+     * 必选项（必填项）为空
+     */
+    public static final String REQUIRED_IS_NULL = "requiredIsNull";
+
 }

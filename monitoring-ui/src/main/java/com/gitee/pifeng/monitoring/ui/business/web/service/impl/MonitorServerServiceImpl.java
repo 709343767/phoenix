@@ -12,13 +12,16 @@ import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorServerService
 import com.gitee.pifeng.monitoring.ui.business.web.vo.HomeServerVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.LayUiAdminResultVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.MonitorServerVo;
+import com.gitee.pifeng.monitoring.ui.constant.TimeSelectConstants;
 import com.gitee.pifeng.monitoring.ui.constant.WebResponseConstants;
+import com.gitee.pifeng.monitoring.ui.core.CalculateDateTime;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -255,6 +258,53 @@ public class MonitorServerServiceImpl extends ServiceImpl<IMonitorServerDao, Mon
     @Override
     public List<String> getNetcardAddress(String ip) {
         return this.monitorServerNetcardDao.getNetcardAddress(ip);
+    }
+
+    /**
+     * <p>
+     * 清理服务器监控历史数据
+     * </p>
+     *
+     * @param ip   IP地址
+     * @param time 时间
+     * @return layUiAdmin响应对象：如果清理成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @author 皮锋
+     * @custom.date 2021/7/21 8:57
+     */
+    @Override
+    public LayUiAdminResultVo clearMonitorServerHistory(String ip, String time) {
+        // 时间为空
+        if (StringUtils.isBlank(time)) {
+            return LayUiAdminResultVo.ok(WebResponseConstants.REQUIRED_IS_NULL);
+        }
+        CalculateDateTime calculateDateTime = new CalculateDateTime(time).invoke();
+        // 清理时间
+        Date clearTime = calculateDateTime.getStartTime();
+        // 清理所有时间点的数据，相当于清理当前时间前的数据
+        if (StringUtils.equalsIgnoreCase(time, TimeSelectConstants.ALL)) {
+            clearTime = new Date();
+        }
+        // 服务器CPU历史记录表
+        LambdaUpdateWrapper<MonitorServerCpuHistory> serverCpuHistoryLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+        serverCpuHistoryLambdaUpdateWrapper.eq(MonitorServerCpuHistory::getIp, ip);
+        serverCpuHistoryLambdaUpdateWrapper.lt(MonitorServerCpuHistory::getInsertTime, clearTime);
+        this.monitorServerCpuHistoryDao.delete(serverCpuHistoryLambdaUpdateWrapper);
+        // 服务器磁盘历史记录
+        LambdaUpdateWrapper<MonitorServerDiskHistory> serverDiskHistoryLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+        serverDiskHistoryLambdaUpdateWrapper.eq(MonitorServerDiskHistory::getIp, ip);
+        serverDiskHistoryLambdaUpdateWrapper.lt(MonitorServerDiskHistory::getInsertTime, clearTime);
+        this.monitorServerDiskHistoryDao.delete(serverDiskHistoryLambdaUpdateWrapper);
+        // 服务器内存历史记录表
+        LambdaUpdateWrapper<MonitorServerMemoryHistory> serverMemoryHistoryLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+        serverMemoryHistoryLambdaUpdateWrapper.eq(MonitorServerMemoryHistory::getIp, ip);
+        serverMemoryHistoryLambdaUpdateWrapper.lt(MonitorServerMemoryHistory::getInsertTime, clearTime);
+        this.monitorServerMemoryHistoryDao.delete(serverMemoryHistoryLambdaUpdateWrapper);
+        // 服务器网卡历史记录表
+        LambdaUpdateWrapper<MonitorServerNetcardHistory> serverNetcardHistoryLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+        serverNetcardHistoryLambdaUpdateWrapper.eq(MonitorServerNetcardHistory::getIp, ip);
+        serverNetcardHistoryLambdaUpdateWrapper.lt(MonitorServerNetcardHistory::getInsertTime, clearTime);
+        this.monitorServerNetcardHistoryDao.delete(serverNetcardHistoryLambdaUpdateWrapper);
+        return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);
     }
 
 }

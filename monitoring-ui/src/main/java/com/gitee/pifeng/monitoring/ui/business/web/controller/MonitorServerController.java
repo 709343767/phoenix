@@ -101,25 +101,24 @@ public class MonitorServerController {
 
     /**
      * <p>
-     * 清理服务器监控数据
+     * 清理服务器监控历史数据
      * </p>
      *
-     * @param ip   服务器信息
+     * @param ip   IP地址
      * @param time 时间
      * @return layUiAdmin响应对象：如果清理成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
      * @author 皮锋
      * @custom.date 2021/7/20 20:52
      */
-    @ApiOperation(value = "清理服务器监控数据")
+    @ApiOperation(value = "清理服务器监控历史数据")
     @ApiImplicitParams(value = {
             @ApiImplicitParam(name = "ip", value = "服务器IP", required = true, paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "time", value = "时间", required = true, paramType = "query", dataType = "string")})
-    @DeleteMapping("/clear-monitor-server")
+    @DeleteMapping("/clear-monitor-server-history")
     @ResponseBody
-    @OperateLog(operModule = UiModuleConstants.SERVER, operType = OperateTypeConstants.DELETE, operDesc = "清理服务器监控数据")
-    public LayUiAdminResultVo clearMonitorServer(String ip, String time) {
-        // return this.monitorServerService.clearMonitorServer(monitorServerVos);
-        return null;
+    @OperateLog(operModule = UiModuleConstants.SERVER, operType = OperateTypeConstants.DELETE, operDesc = "清理服务器监控历史数据")
+    public LayUiAdminResultVo clearMonitorServerHistory(String ip, String time) {
+        return this.monitorServerService.clearMonitorServerHistory(ip, time);
     }
 
     /**

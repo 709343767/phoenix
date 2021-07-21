@@ -289,7 +289,7 @@
                 // 移动端
                 if (device.ios || device.android) {
                     // 宽度
-                    width = document.body.clientWidth * 0.6 + 'px';
+                    width = document.body.clientWidth * 0.65 + 'px';
                     // 高度
                     height = document.body.clientHeight * 0.4 + 'px';
                 } else {
@@ -300,7 +300,7 @@
                 }
                 layer.open({
                     type: 2,
-                    title: '请选择时间',
+                    title: '请选择要清理的历史数据',
                     content: ctxPath + 'monitor-server/server-clear?ip=' + data.ip,
                     maxmin: true,
                     area: [width, height],
@@ -314,7 +314,7 @@
                             var field = data.field; //获取提交的字段
                             admin.req({
                                 type: 'delete',
-                                url: ctxPath + 'monitor-server/clear-monitor-server',
+                                url: ctxPath + 'monitor-server/clear-monitor-server-history',
                                 data: field,
                                 dataType: 'json',
                                 headers: {
@@ -325,6 +325,8 @@
                                     if (data === webConst.SUCCESS) {
                                         layer.close(index); //关闭弹层
                                         layer.msg('清理成功！', {icon: 6});
+                                    } else if (data === webConst.REQUIRED_IS_NULL) {
+                                        layer.msg('必选项不能为空！', {icon: 5, shift: 6});
                                     } else {
                                         layer.msg('清理失败！', {icon: 5, shift: 6});
                                     }

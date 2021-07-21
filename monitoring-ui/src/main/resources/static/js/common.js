@@ -18,7 +18,11 @@ var webConst = {
     /**
      * 刷新失败
      */
-    REFRESH_FAIL: 'refreshFail'
+    REFRESH_FAIL: 'refreshFail',
+    /**
+     * 必选项（必填项）为空
+     */
+    REQUIRED_IS_NULL: 'requiredIsNull'
 };
 
 /**
