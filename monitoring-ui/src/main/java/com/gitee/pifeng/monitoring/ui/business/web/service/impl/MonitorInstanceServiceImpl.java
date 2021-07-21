@@ -12,13 +12,16 @@ import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorInstanceServi
 import com.gitee.pifeng.monitoring.ui.business.web.vo.HomeInstanceVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.LayUiAdminResultVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.MonitorInstanceVo;
+import com.gitee.pifeng.monitoring.ui.constant.TimeSelectConstants;
 import com.gitee.pifeng.monitoring.ui.constant.WebResponseConstants;
+import com.gitee.pifeng.monitoring.ui.core.CalculateDateTime;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -184,6 +187,38 @@ public class MonitorInstanceServiceImpl extends ServiceImpl<IMonitorInstanceDao,
         LambdaUpdateWrapper<MonitorInstance> monitorInstanceLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
         monitorInstanceLambdaUpdateWrapper.in(MonitorInstance::getInstanceId, instances);
         this.monitorInstanceDao.delete(monitorInstanceLambdaUpdateWrapper);
+        return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);
+    }
+
+    /**
+     * <p>
+     * 清理应用程序监控历史数据
+     * </p>
+     *
+     * @param instanceId 应用实例ID
+     * @param time       时间
+     * @return layUiAdmin响应对象：如果清理成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @author 皮锋
+     * @custom.date 2021/7/21 22:06
+     */
+    @Override
+    public LayUiAdminResultVo clearMonitorInstanceHistory(String instanceId, String time) {
+        // 时间为空
+        if (StringUtils.isBlank(time)) {
+            return LayUiAdminResultVo.ok(WebResponseConstants.REQUIRED_IS_NULL);
+        }
+        CalculateDateTime calculateDateTime = new CalculateDateTime(time).invoke();
+        // 清理时间
+        Date clearTime = calculateDateTime.getStartTime();
+        // 清理所有时间点的数据，相当于清理当前时间前的数据
+        if (StringUtils.equalsIgnoreCase(time, TimeSelectConstants.ALL)) {
+            clearTime = new Date();
+        }
+        // java虚拟机内存历史记录表
+        LambdaUpdateWrapper<MonitorJvmMemoryHistory> jvmMemoryHistoryLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+        jvmMemoryHistoryLambdaUpdateWrapper.eq(MonitorJvmMemoryHistory::getInstanceId, instanceId);
+        jvmMemoryHistoryLambdaUpdateWrapper.lt(MonitorJvmMemoryHistory::getInsertTime, clearTime);
+        this.monitorJvmMemoryHistoryDao.delete(jvmMemoryHistoryLambdaUpdateWrapper);
         return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);
     }
 

@@ -106,6 +106,27 @@ public class MonitorInstanceController {
         return this.monitorInstanceService.deleteMonitorInstance(monitorInstanceVos);
     }
 
+    /**
+     * <p>
+     * 清理应用程序监控历史数据
+     * </p>
+     *
+     * @param instanceId 应用实例ID
+     * @param time       时间
+     * @return layUiAdmin响应对象：如果清理成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @author 皮锋
+     * @custom.date 2021/7/20 20:52
+     */
+    @ApiOperation(value = "清理应用程序监控历史数据")
+    @ApiImplicitParams(value = {
+            @ApiImplicitParam(name = "instanceId", value = "应用实例ID", required = true, paramType = "query", dataType = "string"),
+            @ApiImplicitParam(name = "time", value = "时间", required = true, paramType = "query", dataType = "string")})
+    @DeleteMapping("/clear-monitor-instance-history")
+    @ResponseBody
+    @OperateLog(operModule = UiModuleConstants.INSTANCE, operType = OperateTypeConstants.DELETE, operDesc = "清理应用程序监控历史数据")
+    public LayUiAdminResultVo clearMonitorInstanceHistory(String instanceId, String time) {
+        return this.monitorInstanceService.clearMonitorInstanceHistory(instanceId, time);
+    }
 
     /**
      * <p>
@@ -132,6 +153,26 @@ public class MonitorInstanceController {
         jvmMemoryTypes.remove("Heap");
         jvmMemoryTypes.remove("Non_Heap");
         mv.addObject("jvmMemoryTypes", jvmMemoryTypes);
+        return mv;
+    }
+
+    /**
+     * <p>
+     * 访问清理应用程序监控历史数据表单页面
+     * </p>
+     *
+     * @param instanceId 应用实例ID
+     * @return {@link ModelAndView} 清理应用程序监控历史数据表单页面
+     * @author 皮锋
+     * @custom.date 2021/7/20 20:56
+     */
+    @ApiOperation(value = "访问清理应用程序监控历史数据表单页面")
+    @ApiImplicitParams(value = {
+            @ApiImplicitParam(name = "instanceId", value = "应用实例ID", required = true, paramType = "query", dataType = "string")})
+    @GetMapping("instance-clear")
+    public ModelAndView instanceClear(String instanceId) {
+        ModelAndView mv = new ModelAndView("instance/instance-clear-form");
+        mv.addObject("instanceId", instanceId);
         return mv;
     }
 

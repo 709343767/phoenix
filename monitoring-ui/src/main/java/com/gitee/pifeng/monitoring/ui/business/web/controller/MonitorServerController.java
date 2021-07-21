@@ -150,15 +150,15 @@ public class MonitorServerController {
 
     /**
      * <p>
-     * 访问清理服务器监控数据表单页面
+     * 访问清理服务器监控历史数据表单页面
      * </p>
      *
      * @param ip 服务器IP
-     * @return {@link ModelAndView} 清理服务器监控数据表单页面
+     * @return {@link ModelAndView} 清理服务器监控历史数据表单页面
      * @author 皮锋
      * @custom.date 2021/7/20 20:56
      */
-    @ApiOperation(value = "访问清理服务器监控数据表单页面")
+    @ApiOperation(value = "访问清理服务器监控历史数据表单页面")
     @ApiImplicitParams(value = {
             @ApiImplicitParam(name = "ip", value = "服务器IP", required = true, paramType = "query", dataType = "string")})
     @GetMapping("server-clear")
