@@ -38,7 +38,17 @@
   Jdk1.8+  
   Lombok  
   Mysql5.7+
+  
+- 技术选型
 
+  核心框架：SpringBoot  
+  安全框架：SpringSecurity  
+  持久层框架：MyBatis、 MyBatis-Plus  
+  数据库连接池：Alibaba Druid  
+  日志管理：SLF4J、Logback  
+  前端框架：Layui、ECharts  
+  系统监控框架：sigar、oshi
+  
 - 模块结构
 
   平台使用Java+layui+echarts开发，数据库采用MySQL。
