@@ -72,8 +72,6 @@
         <easypoi-spring-boot-starter.version>4.3.0</easypoi-spring-boot-starter.version>
         <!-- cglib动态代理版本 -->
         <cglib.version>3.3.0</cglib.version>
-        <!-- 社交登录依赖版本 -->
-        <spring-social-config.version>1.1.6.RELEASE</spring-social-config.version>
         <!-- servlet-api版本 -->
         <servlet-api.version>2.5</servlet-api.version>
         <!--swagger版本 -->
@@ -278,12 +276,6 @@
                 <groupId>cglib</groupId>
                 <artifactId>cglib</artifactId>
                 <version>${cglib.version}</version>
-            </dependency>
-            <!-- 社交登录依赖 -->
-            <dependency>
-                <groupId>org.springframework.social</groupId>
-                <artifactId>spring-social-config</artifactId>
-                <version>${spring-social-config.version}</version>
             </dependency>
             <!-- servlet依赖 -->
             <dependency>

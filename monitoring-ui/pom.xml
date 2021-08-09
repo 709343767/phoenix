@@ -86,11 +86,6 @@
             <groupId>org.springframework.session</groupId>
             <artifactId>spring-session-jdbc</artifactId>
         </dependency>
-        <!-- 社交登录依赖 -->
-        <dependency>
-            <groupId>org.springframework.social</groupId>
-            <artifactId>spring-social-config</artifactId>
-        </dependency>
         <!-- easypoi工具包依赖 -->
         <dependency>
             <groupId>cn.afterturn</groupId>
