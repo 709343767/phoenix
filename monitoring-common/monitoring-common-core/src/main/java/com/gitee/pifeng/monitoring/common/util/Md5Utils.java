@@ -86,10 +86,4 @@ public final class Md5Utils {
         return encrypt16(encryptStr);
     }
 
-    public static void main(String[] args) {
-        for (int i = 0; i < 10; i++) {
-            log.info(encrypt32("http://localhost:12000/monitoring-agent"));
-        }
-    }
-
 }
