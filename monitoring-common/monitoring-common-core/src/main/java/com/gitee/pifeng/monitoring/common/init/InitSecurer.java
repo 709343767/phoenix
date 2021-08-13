@@ -32,6 +32,11 @@ public class InitSecurer {
     public static final String SECRET_KEY_DES = PROPS.getStr("secret.key.des");
 
     /**
+     * AES密钥
+     */
+    public static final String SECRET_KEY_AES = PROPS.getStr("secret.key.aes");
+
+    /**
      * <p>
      * 字符串加密
      * </p>
