@@ -1,4 +1,4 @@
-package com.gitee.pifeng.monitoring.common.util;
+package com.gitee.pifeng.monitoring.common.util.secure;
 
 import com.gitee.pifeng.monitoring.common.init.InitSecurer;
 import lombok.extern.slf4j.Slf4j;

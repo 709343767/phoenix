@@ -1,4 +1,4 @@
-package com.gitee.pifeng.monitoring.common.util;
+package com.gitee.pifeng.monitoring.common.util.secure;
 
 import junit.framework.TestCase;
 import lombok.extern.slf4j.Slf4j;

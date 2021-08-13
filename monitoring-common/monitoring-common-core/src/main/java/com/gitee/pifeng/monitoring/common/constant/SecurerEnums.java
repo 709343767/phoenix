@@ -1,7 +1,7 @@
 package com.gitee.pifeng.monitoring.common.constant;
 
 import com.gitee.pifeng.monitoring.common.inf.ISecurer;
-import com.gitee.pifeng.monitoring.common.util.DesEncryptUtils;
+import com.gitee.pifeng.monitoring.common.util.secure.DesEncryptUtils;
 
 /**
  * <p>
