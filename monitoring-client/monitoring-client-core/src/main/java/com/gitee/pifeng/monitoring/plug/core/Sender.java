@@ -2,7 +2,7 @@ package com.gitee.pifeng.monitoring.plug.core;
 
 import com.alibaba.fastjson.JSON;
 import com.gitee.pifeng.monitoring.common.dto.CiphertextPackage;
-import com.gitee.pifeng.monitoring.common.util.DesEncryptUtils;
+import com.gitee.pifeng.monitoring.common.init.InitSecurer;
 import com.gitee.pifeng.monitoring.plug.util.EnumHttpUtils;
 import lombok.extern.slf4j.Slf4j;
 
@@ -46,7 +46,7 @@ public class Sender {
         // 打印发送的数据包
         log.debug("发送数据包：{}", json);
         // 加密请求数据
-        String encrypt = DesEncryptUtils.encrypt(json);
+        String encrypt = InitSecurer.encrypt(json);
         CiphertextPackage requestCiphertextPackage = new CiphertextPackage(encrypt);
         // 发送请求
         EnumHttpUtils httpClient = EnumHttpUtils.getInstance();
@@ -54,7 +54,7 @@ public class Sender {
         // 响应结果
         CiphertextPackage responseCiphertextPackage = JSON.parseObject(result, CiphertextPackage.class);
         // 解密响应数据
-        return DesEncryptUtils.decrypt(responseCiphertextPackage.getCiphertext());
+        return InitSecurer.decrypt(responseCiphertextPackage.getCiphertext());
     }
 
 }

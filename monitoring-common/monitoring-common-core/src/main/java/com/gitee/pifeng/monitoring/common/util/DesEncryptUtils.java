@@ -1,6 +1,6 @@
 package com.gitee.pifeng.monitoring.common.util;
 
-import cn.hutool.setting.dialect.Props;
+import com.gitee.pifeng.monitoring.common.init.InitSecurer;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.crypto.Cipher;
@@ -19,7 +19,7 @@ import java.util.Base64;
  * @custom.date 2020/4/28 15:47
  */
 @Slf4j
-public class DesEncryptUtils {
+public class DesEncryptUtils extends InitSecurer {
 
     /**
      * 算法
@@ -34,7 +34,7 @@ public class DesEncryptUtils {
     /**
      * 密钥是16位长度的byte[]进行Base64转换后得到的字符串
      */
-    private static final String KEY = new Props("monitoring-bootstrap.properties", StandardCharsets.UTF_8).getStr("des_secret_key");
+    private static final String KEY = SECRET_KEY_DES;
 
     /**
      * <p>
