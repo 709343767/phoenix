@@ -3,6 +3,7 @@ package com.gitee.pifeng.monitoring.common.constant;
 import com.gitee.pifeng.monitoring.common.inf.ISecurer;
 import com.gitee.pifeng.monitoring.common.util.secure.AesEncryptUtils;
 import com.gitee.pifeng.monitoring.common.util.secure.DesEncryptUtils;
+import com.gitee.pifeng.monitoring.common.util.secure.Sm4EncryptUtils;
 
 /**
  * <p>
@@ -41,6 +42,21 @@ public enum SecurerEnums implements ISecurer {
         @Override
         public String decrypt(String str) {
             return AesEncryptUtils.decrypt(str);
+        }
+    },
+
+    /**
+     * 国密SM4加解密
+     */
+    SM4() {
+        @Override
+        public String encrypt(String str) {
+            return Sm4EncryptUtils.encrypt(str);
+        }
+
+        @Override
+        public String decrypt(String str) {
+            return Sm4EncryptUtils.decrypt(str);
         }
     }
 }

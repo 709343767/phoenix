@@ -87,6 +87,8 @@
         <mybatis-plus-generator.version>3.1.2</mybatis-plus-generator.version>
         <!-- velocity模板引擎版本 -->
         <velocity-engine-core.version>2.1</velocity-engine-core.version>
+        <!-- bouncy castle加解密版本 -->
+        <bcprov-jdk15on.version>1.69</bcprov-jdk15on.version>
         <!-- alibaba的druid数据库连接池版本 -->
         <druid-spring-boot-starter.version>1.2.4</druid-spring-boot-starter.version>
         <!-- pagehelper分页插件版本 -->
@@ -365,6 +367,12 @@
                 <groupId>org.apache.velocity</groupId>
                 <artifactId>velocity-engine-core</artifactId>
                 <version>${velocity-engine-core.version}</version>
+            </dependency>
+            <!-- bouncy castle加解密依赖 -->
+            <dependency>
+                <groupId>org.bouncycastle</groupId>
+                <artifactId>bcprov-jdk15on</artifactId>
+                <version>${bcprov-jdk15on.version}</version>
             </dependency>
             <!-- alibaba的druid数据库连接池依赖 -->
             <dependency>
