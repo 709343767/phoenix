@@ -18,6 +18,7 @@ import java.util.Base64;
  * @author 皮锋
  * @custom.date 2020/4/28 15:47
  */
+@Deprecated
 @Slf4j
 public class DesEncryptUtils extends InitSecurer {
 

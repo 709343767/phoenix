@@ -3,6 +3,7 @@ package com.gitee.pifeng.monitoring.common.init;
 import cn.hutool.crypto.KeyUtil;
 import cn.hutool.setting.dialect.Props;
 import com.gitee.pifeng.monitoring.common.constant.SecurerEnums;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
 import java.nio.charset.StandardCharsets;
@@ -16,6 +17,7 @@ import java.util.Base64;
  * @author 皮锋
  * @custom.date 2021/8/13 11:08
  */
+@Slf4j
 public class InitSecurer {
 
     /**
@@ -43,6 +45,10 @@ public class InitSecurer {
      * 国密SM4密钥
      */
     public static final String SECRET_KEY_SM4 = PROPS.getStr("secret.key.sm4");
+
+    static {
+        log.info("数据传输加解密算法：{}", SECRET_TYPE);
+    }
 
     /**
      * <p>

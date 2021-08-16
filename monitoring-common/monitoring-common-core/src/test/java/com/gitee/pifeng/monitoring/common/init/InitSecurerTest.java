@@ -24,7 +24,8 @@ public class InitSecurerTest extends TestCase {
      * @custom.date 2021/8/14 14:45
      */
     public void testGenerateKey() {
-        String key = InitSecurer.generateKey(StringUtils.upperCase(InitSecurer.SECRET_TYPE), 128);
+        log.info(InitSecurer.SECRET_TYPE);
+        String key = InitSecurer.generateKey(StringUtils.upperCase(InitSecurer.SECRET_TYPE), 64);
         log.info(key);
     }
 
