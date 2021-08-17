@@ -61,6 +61,10 @@ public class InitSecurer {
      * @custom.date 2021/8/13 11:11
      */
     public static String encrypt(String str) {
+        // 没选择加解密类型，则不加密
+        if (StringUtils.isBlank(SECRET_TYPE)) {
+            return str;
+        }
         return SecurerEnums.valueOf(StringUtils.upperCase(SECRET_TYPE)).encrypt(str);
     }
 
@@ -75,6 +79,10 @@ public class InitSecurer {
      * @custom.date 2021/8/13 11:11
      */
     public static String decrypt(String str) {
+        // 没选择加解密类型，则不解密
+        if (StringUtils.isBlank(SECRET_TYPE)) {
+            return str;
+        }
         return SecurerEnums.valueOf(StringUtils.upperCase(SECRET_TYPE)).decrypt(str);
     }
 

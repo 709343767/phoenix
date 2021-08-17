@@ -226,11 +226,11 @@ monitoring.sql
 > 引导配置项说明：
 
   |配置项                 |含义                                        |必须项                         |默认值| 
-  |----------------------|--------------------------------------------|------------------------------|-----|
-  |secret.type           |加解密类型（des、aes、sm4）                   |必须选择一种加解密算法           |      |
-  |secret.key.des        |DES密钥                                     |secret.type=des时，需要配置     |      |
-  |secret.key.aes        |AES密钥                                     |secret.type=aes时，需要配置     |      |
-  |secret.key.sm4        |国密SM4密钥                                 |secret.type=ms4时，需要配置      |      |
+  |----------------------|-------------------------------------------|------------------------------|-----|
+  |secret.type           |加解密类型，值只能是 des、aes、sm4 之一         |否，为空则不进行加解密           |      |
+  |secret.key.des        |DES密钥                                     |否，secret.type=des时，需要配置     |      |
+  |secret.key.aes        |AES密钥                                     |否，secret.type=aes时，需要配置     |      |
+  |secret.key.sm4        |国密SM4密钥                                  |否，secret.type=ms4时，需要配置      |      |
 
 
 ### 业务埋点
