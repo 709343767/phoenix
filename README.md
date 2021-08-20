@@ -232,6 +232,7 @@ monitoring.sql
   |secret.key.aes        |AES密钥                                     |否，secret.type=aes时，需要配置     |      |
   |secret.key.sm4        |国密SM4密钥                                  |否，secret.type=ms4时，需要配置      |      |
 
+秘钥可通过 **com.gitee.pifeng.monitoring.common.init.InitSecurerTest#testGenerateKey** 方法生成，然后填入配置文件。
 
 ### 业务埋点
 
