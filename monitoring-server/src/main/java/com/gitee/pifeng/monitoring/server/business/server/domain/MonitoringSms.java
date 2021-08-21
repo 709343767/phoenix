@@ -5,7 +5,7 @@ import lombok.*;
 
 /**
  * <p>
- * kacper短信实体对象
+ * monitoring短信实体对象
  * </p>
  *
  * @author 皮锋
@@ -17,7 +17,7 @@ import lombok.*;
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class KacperSms extends AbstractSuperBean {
+public class MonitoringSms extends AbstractSuperBean {
 
     /**
      * 手机号码，多个手机号码用英文分号隔开

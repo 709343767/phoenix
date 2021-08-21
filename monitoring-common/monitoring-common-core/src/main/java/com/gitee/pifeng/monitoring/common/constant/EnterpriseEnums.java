@@ -13,9 +13,9 @@ import org.apache.commons.lang3.StringUtils;
 public enum EnterpriseEnums {
 
     /**
-     * Kacper
+     * monitoring
      */
-    KACPER;
+    MONITORING;
 
     /**
      * <p>
@@ -28,9 +28,9 @@ public enum EnterpriseEnums {
      * @custom.date 2021/1/28 21:03
      */
     public static EnterpriseEnums str2Enum(String enterpriseStr) {
-        // Kacper
-        if (StringUtils.equalsIgnoreCase(EnterpriseEnums.KACPER.name(), enterpriseStr)) {
-            return EnterpriseEnums.KACPER;
+        // monitoring
+        if (StringUtils.equalsIgnoreCase(EnterpriseEnums.MONITORING.name(), enterpriseStr)) {
+            return EnterpriseEnums.MONITORING;
         }
         return null;
     }

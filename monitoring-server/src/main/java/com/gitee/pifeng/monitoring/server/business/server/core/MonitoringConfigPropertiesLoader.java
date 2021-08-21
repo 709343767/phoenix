@@ -125,7 +125,7 @@ public class MonitoringConfigPropertiesLoader {
         // 告警邮箱配置属性
         MonitoringAlarmMailProperties alarmMailProperties = new MonitoringAlarmMailProperties();
         // 告警短信配置属性
-        MonitoringAlarmSmsProperties alarmSmsProperties = new MonitoringAlarmSmsProperties(null, null, ProtocolTypeEnums.HTTP, EnterpriseEnums.KACPER);
+        MonitoringAlarmSmsProperties alarmSmsProperties = new MonitoringAlarmSmsProperties(null, null, ProtocolTypeEnums.HTTP, EnterpriseEnums.MONITORING);
         // 告警配置属性
         MonitoringAlarmProperties alarmProperties = new MonitoringAlarmProperties(false, AlarmLevelEnums.INFO, new AlarmWayEnums[]{AlarmWayEnums.MAIL, AlarmWayEnums.SMS}, alarmSmsProperties, alarmMailProperties);
         // 网络配置属性
