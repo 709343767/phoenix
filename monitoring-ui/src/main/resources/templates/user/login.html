@@ -52,7 +52,7 @@
             </div>
             <div class="layui-form-item" th:if="${param.expire}">
                 <label style="color: red;">
-                    此账号已在其它地方登录或被管理员修改，您被迫下线！
+                    此账号已被管理员修改，您被迫下线！
                 </label>
             </div>
             <div class="layui-form-item" th:if="${param.timeout}">
@@ -61,7 +61,7 @@
                 </label>
             </div>
             <div class="layui-form-item" style="margin-bottom: 20px;">
-                <input type="checkbox" name="remember" lay-skin="primary" title="记住我">
+                <input type="checkbox" name="remember-me" lay-skin="primary" title="记住我">
                 <!--<a href="javascript:;" class="layadmin-user-jump-change layadmin-link"
                    style="margin-top: 7px;">忘记密码？</a>-->
             </div>

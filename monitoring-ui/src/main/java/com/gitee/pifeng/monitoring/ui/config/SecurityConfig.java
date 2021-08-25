@@ -117,7 +117,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 // 记住我
                 .rememberMe()
-                .rememberMeParameter("remember")
+                .rememberMeParameter("remember-me")
                 .tokenValiditySeconds(60 * 60 * 24 * 30)
                 // 持久化token
                 .tokenRepository(this.persistentTokenRepository())
@@ -126,7 +126,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement()
                 // session超时后的操作
                 .invalidSessionUrl("/login?timeout=true")
-                .maximumSessions(1)
+                .maximumSessions(-1)
                 // 当达到最大值时，是否保留已经登录的用户
                 .maxSessionsPreventsLogin(false)
                 // 当达到最大值时，旧用户被踢出后的操作
@@ -144,6 +144,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 // 允许嵌入iframe
                 .headers()
+                // 禁用缓存
+                .cacheControl()
+                .disable()
                 .frameOptions()
                 .disable();
     }
