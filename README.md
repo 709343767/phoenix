@@ -280,7 +280,7 @@ ScheduledExecutorService service = Monitor.buryingPoint(() -> {
 
 ![网络](https://gitee.com/monitoring-platform/monitoring/raw/master/doc/%E6%88%AA%E5%9B%BE/%E7%BD%91%E7%BB%9C.png "网络")
 
-![告警设置](https://gitee.com/monitoring-platform/monitoring/raw/master/doc/%E6%88%AA%E5%9B%BE/%E5%91%8A%E8%AD%A6%E8%AE%BE%E7%BD%AE.png "告警设置")
+![监控设置](https://gitee.com/monitoring-platform/monitoring/raw/master/doc/%E6%88%AA%E5%9B%BE/%E7%9B%91%E6%8E%A7%E8%AE%BE%E7%BD%AE.png "监控设置")
 
 ![告警记录](https://gitee.com/monitoring-platform/monitoring/raw/master/doc/%E6%88%AA%E5%9B%BE/%E5%91%8A%E8%AD%A6%E8%AE%B0%E5%BD%95.png "告警记录")
 
