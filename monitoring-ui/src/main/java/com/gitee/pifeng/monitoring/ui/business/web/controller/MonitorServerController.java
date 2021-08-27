@@ -193,6 +193,9 @@ public class MonitorServerController {
         ModelAndView mv = new ModelAndView("server/edit-server");
         mv.addObject("id", id);
         mv.addObject("ip", ip);
+        // 服务器信息
+        MonitorServerVo monitorServerVo = this.monitorServerService.getMonitorServerInfo(id, ip);
+        mv.addObject("serverSummary", monitorServerVo.getServerSummary());
         return mv;
     }
 

@@ -332,4 +332,24 @@ public class MonitorServerServiceImpl extends ServiceImpl<IMonitorServerDao, Mon
         return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);
     }
 
+    /**
+     * <p>
+     * 根据条件获取服务器信息
+     * </p>
+     *
+     * @param id 服务器主键ID
+     * @param ip IP地址
+     * @return MonitorServerVo 服务器信息
+     * @author 皮锋
+     * @custom.date 2021/8/27 14:32
+     */
+    @Override
+    public MonitorServerVo getMonitorServerInfo(Long id, String ip) {
+        LambdaQueryWrapper<MonitorServer> monitorServerLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        monitorServerLambdaQueryWrapper.eq(MonitorServer::getId, id);
+        monitorServerLambdaQueryWrapper.eq(MonitorServer::getIp, ip);
+        MonitorServer monitorServer = this.getOne(monitorServerLambdaQueryWrapper);
+        return new MonitorServerVo().convertFor(monitorServer);
+    }
+
 }

@@ -95,4 +95,17 @@ public interface IMonitorServerService extends IService<MonitorServer> {
      * @custom.date 2021/8/27 13:48
      */
     LayUiAdminResultVo editMonitorServer(MonitorServerVo monitorServerVo);
+
+    /**
+     * <p>
+     * 根据条件获取服务器信息
+     * </p>
+     *
+     * @param id 服务器主键ID
+     * @param ip IP地址
+     * @return MonitorServerVo 服务器信息
+     * @author 皮锋
+     * @custom.date 2021/8/27 14:32
+     */
+    MonitorServerVo getMonitorServerInfo(Long id, String ip);
 }
