@@ -43,8 +43,8 @@
 
   核心框架：SpringBoot  
   安全框架：SpringSecurity  
+  任务调度：SpringTask  
   持久层框架：MyBatis、 MyBatis-Plus  
-  任务调度：SpringTask
   数据库连接池：Alibaba Druid  
   日志管理：SLF4J、Logback  
   前端框架：Layui、ECharts  
