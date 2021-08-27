@@ -2,7 +2,7 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
-    <title>清理服务器监控历史数据表单页</title>
+    <title>编辑服务器信息</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport"
@@ -30,15 +30,11 @@
             <input type="hidden" name="ip" class="layui-input" th:value="${ip}" readonly>
         </div>
     </div>
-    <div class="layui-form-item" pane>
-        <div style="margin: 0 0 0 35px;">
-            <input type="radio" name="time" value="hour" title="一小时前数据"><br>
-            <input type="radio" name="time" value="day" title="一天前数据"><br>
-            <input type="radio" name="time" value="week" title="一星期前数据"><br>
-            <input type="radio" name="time" value="month" title="一个月前数据"><br>
-            <input type="radio" name="time" value="halfYear" title="半年前数据"><br>
-            <input type="radio" name="time" value="year" title="一年前数据"><br>
-            <input type="radio" name="time" value="all" title="所有数据">
+    <div class="layui-form-item">
+        <label class="layui-form-label">描述</label>
+        <div class="layui-input-block">
+            <textarea name="serverSummary" class="layui-textarea" maxlength="500"
+                      placeholder="请输入描述" autocomplete="off"></textarea>
         </div>
     </div>
     <div class="layui-form-item layui-hide">

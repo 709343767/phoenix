@@ -39,6 +39,9 @@ public class MonitorServerVo implements ISuperBean {
     @ApiModelProperty(value = "服务器名")
     private String serverName;
 
+    @ApiModelProperty(value = "服务器摘要")
+    private String serverSummary;
+
     @ApiModelProperty(value = "服务器状态（0：离线，1：在线）")
     private String isOnline;
 

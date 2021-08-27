@@ -45,6 +45,12 @@ public class MonitorServer {
     private String serverName;
 
     /**
+     * 服务器摘要
+     */
+    @TableField("SERVER_SUMMARY")
+    private String serverSummary;
+
+    /**
      * 服务器状态（0：离线，1：在线）
      */
     @TableField("IS_ONLINE")

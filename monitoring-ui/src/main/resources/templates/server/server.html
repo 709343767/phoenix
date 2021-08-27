@@ -69,6 +69,9 @@
             <script type="text/html" id="list-table-toolbar-detail">
                 <a class="layui-btn layui-btn-sm layui-btn-xs" lay-event="info"><i
                         class="layui-icon layui-icon-about"></i>详情</a>
+                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"
+                   sec:authorize="hasAuthority('超级管理员')">
+                    <i class="layui-icon layui-icon-edit"></i>编辑</a>
                 <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"
                    sec:authorize="hasAuthority('超级管理员')">
                     <i class="layui-icon layui-icon-delete"></i>删除</a>
@@ -149,6 +152,11 @@
                     minWidth: 120,
                     sort: !0
                 }, {
+                    field: 'serverSummary',
+                    title: '描述',
+                    minWidth: 200,
+                    sort: !0
+                }, {
                     field: 'insertTime',
                     title: '新增时间',
                     minWidth: 170,
@@ -160,7 +168,7 @@
                     sort: !0
                 }, {
                     title: '操作',
-                    width: authority ? 220 : 100,
+                    width: authority ? 280 : 100,
                     align: 'center',
                     fixed: (device.ios || device.android) ? false : 'right',
                     toolbar: '#list-table-toolbar-detail'
@@ -301,7 +309,7 @@
                 layer.open({
                     type: 2,
                     title: '请选择要清理的历史数据',
-                    content: ctxPath + 'monitor-server/server-clear?ip=' + data.ip,
+                    content: ctxPath + 'monitor-server/server-clear?id=' + data.id + '&ip=' + data.ip,
                     maxmin: true,
                     area: [width, height],
                     btn: ['确定', '取消'],
@@ -329,6 +337,64 @@
                                         layer.msg('必选项不能为空！', {icon: 5, shift: 6});
                                     } else {
                                         layer.msg('清理失败！', {icon: 5, shift: 6});
+                                    }
+                                },
+                                error: function () {
+                                    layer.msg('系统错误！', {icon: 5, shift: 6});
+                                }
+                            });
+                        });
+                        submit.trigger('click');
+                    }
+                });
+            }
+            if (obj.event === 'edit') {
+                // 宽度
+                var width;
+                // 高度
+                var height;
+                // 移动端
+                if (device.ios || device.android) {
+                    // 宽度
+                    width = document.body.clientWidth * 0.68 + 'px';
+                    // 高度
+                    height = document.body.clientHeight * 0.4 + 'px';
+                } else {
+                    // 宽度
+                    width = document.body.clientWidth * 0.3 + 'px';
+                    // 高度
+                    height = document.body.clientHeight * 0.3 + 'px';
+                }
+                layer.open({
+                    type: 2,
+                    title: '编辑服务器描述',
+                    content: ctxPath + 'monitor-server/edit-monitor-server-form?id=' + data.id + '&ip=' + data.ip,
+                    maxmin: true,
+                    area: [width, height],
+                    btn: ['确定', '取消'],
+                    yes: function (index, layero) {
+                        var iframeWindow = window['layui-layer-iframe' + index],
+                            submitID = 'LAY-front-submit',
+                            submit = layero.find('iframe').contents().find('#' + submitID);
+                        //监听提交
+                        iframeWindow.layui.form.on('submit(' + submitID + ')', function (data) {
+                            var field = data.field; //获取提交的字段
+                            admin.req({
+                                type: 'put',
+                                url: ctxPath + 'monitor-server/edit-monitor-server',
+                                data: field,
+                                dataType: 'json',
+                                headers: {
+                                    [[${_csrf.headerName}]]: [[${_csrf.token}]]
+                                },
+                                success: function (result) {
+                                    var data = result.data;
+                                    if (data === webConst.SUCCESS) {
+                                        table.reload('list-table'); //数据刷新
+                                        layer.close(index); //关闭弹层
+                                        layer.msg('编辑成功！', {icon: 6});
+                                    } else {
+                                        layer.msg('编辑失败！', {icon: 5, shift: 6});
                                     }
                                 },
                                 error: function () {
