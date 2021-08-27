@@ -10,15 +10,16 @@ import com.gitee.pifeng.monitoring.common.dto.AlarmPackage;
 import com.gitee.pifeng.monitoring.common.exception.NetException;
 import com.gitee.pifeng.monitoring.common.util.DateTimeUtils;
 import com.gitee.pifeng.monitoring.common.util.Md5Utils;
-import com.gitee.pifeng.monitoring.server.business.server.service.IAlarmService;
-import com.gitee.pifeng.monitoring.server.business.server.service.IServerMemoryService;
-import com.gitee.pifeng.monitoring.server.inf.IServerMonitoringListener;
 import com.gitee.pifeng.monitoring.server.business.server.core.MonitoringConfigPropertiesLoader;
 import com.gitee.pifeng.monitoring.server.business.server.core.PackageConstructor;
 import com.gitee.pifeng.monitoring.server.business.server.entity.MonitorServer;
 import com.gitee.pifeng.monitoring.server.business.server.entity.MonitorServerMemory;
+import com.gitee.pifeng.monitoring.server.business.server.service.IAlarmService;
+import com.gitee.pifeng.monitoring.server.business.server.service.IServerMemoryService;
 import com.gitee.pifeng.monitoring.server.business.server.service.IServerService;
+import com.gitee.pifeng.monitoring.server.inf.IServerMonitoringListener;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.hyperic.sigar.SigarException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -105,10 +106,11 @@ public class ServerMemoryMonitor implements IServerMonitoringListener {
     private void dealMemoryNotOverLoad(String ip, double menUsedPercent) {
         MonitorServer monitorServer = this.serverService.getOne(new LambdaQueryWrapper<MonitorServer>().eq(MonitorServer::getIp, ip));
         String serverName = monitorServer.getServerName();
+        String serverSummary = monitorServer.getServerSummary();
         // 发送告警信息
         try {
             // 不用担心头次检测到内存正常（非异常转正常）会发送告警，最终是否发送告警由“实时监控服务”决定
-            this.sendAlarmInfo("服务器内存恢复正常", ip, serverName, menUsedPercent, AlarmLevelEnums.INFO, AlarmReasonEnums.ABNORMAL_2_NORMAL);
+            this.sendAlarmInfo("服务器内存恢复正常", ip, serverName, serverSummary, menUsedPercent, AlarmLevelEnums.INFO, AlarmReasonEnums.ABNORMAL_2_NORMAL);
         } catch (Exception e) {
             log.error("服务器内存恢复正常告警异常！", e);
         }
@@ -127,11 +129,12 @@ public class ServerMemoryMonitor implements IServerMonitoringListener {
     private void dealMemoryOverLoad(String ip, double menUsedPercent) {
         MonitorServer monitorServer = this.serverService.getOne(new LambdaQueryWrapper<MonitorServer>().eq(MonitorServer::getIp, ip));
         String serverName = monitorServer.getServerName();
+        String serverSummary = monitorServer.getServerSummary();
         // 告警级别
         AlarmLevelEnums alarmLevelEnum = MonitoringConfigPropertiesLoader.getMonitoringProperties().getServerProperties().getServerMemoryProperties().getLevelEnum();
         // 发送告警信息
         try {
-            this.sendAlarmInfo("服务器内存过载", ip, serverName, menUsedPercent, alarmLevelEnum, AlarmReasonEnums.NORMAL_2_ABNORMAL);
+            this.sendAlarmInfo("服务器内存过载", ip, serverName, serverSummary, menUsedPercent, alarmLevelEnum, AlarmReasonEnums.NORMAL_2_ABNORMAL);
         } catch (Exception e) {
             log.error("服务器内存过载告警异常！", e);
         }
@@ -145,6 +148,7 @@ public class ServerMemoryMonitor implements IServerMonitoringListener {
      * @param title           告警标题
      * @param ip              IP地址
      * @param serverName      服务器名
+     * @param serverSummary   服务器摘要
      * @param menUsedPercent  物理内存使用率
      * @param alarmLevelEnum  告警级别
      * @param alarmReasonEnum 告警原因
@@ -153,10 +157,14 @@ public class ServerMemoryMonitor implements IServerMonitoringListener {
      * @author 皮锋
      * @custom.date 2020/3/25 14:46
      */
-    private void sendAlarmInfo(String title, String ip, String serverName, double menUsedPercent, AlarmLevelEnums alarmLevelEnum, AlarmReasonEnums alarmReasonEnum) throws NetException, SigarException {
+    private void sendAlarmInfo(String title, String ip, String serverName, String serverSummary, double menUsedPercent,
+                               AlarmLevelEnums alarmLevelEnum, AlarmReasonEnums alarmReasonEnum) throws NetException, SigarException {
         String msg = "IP地址：" + ip
-                + "，<br>服务器：" + serverName
-                + "，<br>内存使用率：" + menUsedPercent
+                + "，<br>服务器：" + serverName;
+        if (StringUtils.isNotBlank(serverSummary)) {
+            msg += "，<br>服务器描述：" + serverSummary;
+        }
+        msg += "，<br>内存使用率：" + menUsedPercent
                 + "%，<br>时间：" + DateTimeUtils.dateToString(new Date());
         Alarm alarm = Alarm.builder()
                 // 保证code的唯一性

@@ -10,16 +10,17 @@ import com.gitee.pifeng.monitoring.common.dto.AlarmPackage;
 import com.gitee.pifeng.monitoring.common.exception.NetException;
 import com.gitee.pifeng.monitoring.common.util.DateTimeUtils;
 import com.gitee.pifeng.monitoring.common.util.Md5Utils;
-import com.gitee.pifeng.monitoring.server.business.server.service.IAlarmService;
-import com.gitee.pifeng.monitoring.server.business.server.service.IServerDiskService;
-import com.gitee.pifeng.monitoring.server.inf.IServerMonitoringListener;
 import com.gitee.pifeng.monitoring.server.business.server.core.MonitoringConfigPropertiesLoader;
 import com.gitee.pifeng.monitoring.server.business.server.core.PackageConstructor;
 import com.gitee.pifeng.monitoring.server.business.server.entity.MonitorServer;
 import com.gitee.pifeng.monitoring.server.business.server.entity.MonitorServerDisk;
+import com.gitee.pifeng.monitoring.server.business.server.service.IAlarmService;
+import com.gitee.pifeng.monitoring.server.business.server.service.IServerDiskService;
 import com.gitee.pifeng.monitoring.server.business.server.service.IServerService;
+import com.gitee.pifeng.monitoring.server.inf.IServerMonitoringListener;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.hyperic.sigar.SigarException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -113,10 +114,11 @@ public class ServerDiskMonitor implements IServerMonitoringListener {
     private void dealDiskNotOverLoad(String ip, String devName, double usePercent) {
         MonitorServer monitorServer = this.serverService.getOne(new LambdaQueryWrapper<MonitorServer>().eq(MonitorServer::getIp, ip));
         String serverName = monitorServer.getServerName();
+        String serverSummary = monitorServer.getServerSummary();
         // 发送告警信息
         try {
             // 不用担心头次检测到磁盘正常（非异常转正常）会发送告警，最终是否发送告警由“实时监控服务”决定
-            this.sendAlarmInfo("服务器磁盘空间恢复正常", ip, serverName, devName, usePercent, AlarmLevelEnums.INFO, AlarmReasonEnums.ABNORMAL_2_NORMAL);
+            this.sendAlarmInfo("服务器磁盘空间恢复正常", ip, serverName, serverSummary, devName, usePercent, AlarmLevelEnums.INFO, AlarmReasonEnums.ABNORMAL_2_NORMAL);
         } catch (Exception e) {
             log.error("服务器磁盘空间恢复正常告警异常！", e);
         }
@@ -136,11 +138,12 @@ public class ServerDiskMonitor implements IServerMonitoringListener {
     private void dealDiskOverLoad(String ip, String devName, double usePercent) {
         MonitorServer monitorServer = this.serverService.getOne(new LambdaQueryWrapper<MonitorServer>().eq(MonitorServer::getIp, ip));
         String serverName = monitorServer.getServerName();
+        String serverSummary = monitorServer.getServerSummary();
         // 告警级别
         AlarmLevelEnums alarmLevelEnum = MonitoringConfigPropertiesLoader.getMonitoringProperties().getServerProperties().getServerDiskProperties().getLevelEnum();
         // 发送告警信息
         try {
-            this.sendAlarmInfo("服务器磁盘空间不足", ip, serverName, devName, usePercent, alarmLevelEnum, AlarmReasonEnums.NORMAL_2_ABNORMAL);
+            this.sendAlarmInfo("服务器磁盘空间不足", ip, serverName, serverSummary, devName, usePercent, alarmLevelEnum, AlarmReasonEnums.NORMAL_2_ABNORMAL);
         } catch (Exception e) {
             log.error("服务器磁盘空间不足告警异常！", e);
         }
@@ -154,6 +157,7 @@ public class ServerDiskMonitor implements IServerMonitoringListener {
      * @param title           告警标题
      * @param ip              IP地址
      * @param serverName      服务器名
+     * @param serverSummary   服务器摘要
      * @param devName         分区的盘符名称
      * @param usePercent      磁盘资源的利用率
      * @param alarmLevelEnum  告警级别
@@ -163,10 +167,14 @@ public class ServerDiskMonitor implements IServerMonitoringListener {
      * @author 皮锋
      * @custom.date 2020/3/25 14:46
      */
-    private void sendAlarmInfo(String title, String ip, String serverName, String devName, double usePercent, AlarmLevelEnums alarmLevelEnum, AlarmReasonEnums alarmReasonEnum) throws NetException, SigarException {
+    private void sendAlarmInfo(String title, String ip, String serverName, String serverSummary, String devName, double usePercent,
+                               AlarmLevelEnums alarmLevelEnum, AlarmReasonEnums alarmReasonEnum) throws NetException, SigarException {
         String msg = "IP地址：" + ip
-                + "，<br>服务器：" + serverName
-                + "，<br>磁盘分区：" + devName
+                + "，<br>服务器：" + serverName;
+        if (StringUtils.isNotBlank(serverSummary)) {
+            msg += "，<br>服务器描述：" + serverSummary;
+        }
+        msg += "，<br>磁盘分区：" + devName
                 + "，<br>磁盘分区使用率：" + usePercent
                 + "%，<br>时间：" + DateTimeUtils.dateToString(new Date());
         Alarm alarm = Alarm.builder()

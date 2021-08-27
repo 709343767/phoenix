@@ -183,8 +183,12 @@ public class ServerMonitorTask implements CommandLineRunner {
      */
     private void sendAlarmInfo(String title, AlarmLevelEnums alarmLevelEnum, AlarmReasonEnums alarmReasonEnum, MonitorServer server) throws NetException, SigarException {
         String msg = "IP地址：" + server.getIp()
-                + "，<br>服务器：" + server.getServerName()
-                + "，<br>时间：" + DateTimeUtils.dateToString(new Date());
+                + "，<br>服务器：" + server.getServerName();
+        String serverSummary = server.getServerSummary();
+        if (StringUtils.isNotBlank(serverSummary)) {
+            msg += "，<br>服务器描述：" + serverSummary;
+        }
+        msg += "，<br>时间：" + DateTimeUtils.dateToString(new Date());
         Alarm alarm = Alarm.builder()
                 // 保证code的唯一性
                 .code(Md5Utils.encrypt32(server.getIp() + server.getServerName()))
