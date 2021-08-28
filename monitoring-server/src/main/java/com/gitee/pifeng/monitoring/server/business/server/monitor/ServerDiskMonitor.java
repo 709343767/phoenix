@@ -169,19 +169,19 @@ public class ServerDiskMonitor implements IServerMonitoringListener {
      */
     private void sendAlarmInfo(String title, String ip, String serverName, String serverSummary, String devName, double usePercent,
                                AlarmLevelEnums alarmLevelEnum, AlarmReasonEnums alarmReasonEnum) throws NetException, SigarException {
-        String msg = "IP地址：" + ip
-                + "，<br>服务器：" + serverName;
+        StringBuilder msgBuilder = new StringBuilder();
+        msgBuilder.append("IP地址：").append(ip).append("，<br>服务器：").append(serverName);
         if (StringUtils.isNotBlank(serverSummary)) {
-            msg += "，<br>服务器描述：" + serverSummary;
+            msgBuilder.append("，<br>服务器描述：").append(serverSummary);
         }
-        msg += "，<br>磁盘分区：" + devName
-                + "，<br>磁盘分区使用率：" + usePercent
-                + "%，<br>时间：" + DateTimeUtils.dateToString(new Date());
+        msgBuilder.append("，<br>磁盘分区：").append(devName)
+                .append("，<br>磁盘分区使用率：").append(usePercent)
+                .append("%，<br>时间：").append(DateTimeUtils.dateToString(new Date()));
         Alarm alarm = Alarm.builder()
                 // 保证code的唯一性
-                .code(Md5Utils.encrypt32(ip + devName + ServerDiskMonitor.class.getName()))
+                .code(Md5Utils.encrypt32(ip + serverName + devName + ServerDiskMonitor.class.getName()))
                 .title(title)
-                .msg(msg)
+                .msg(msgBuilder.toString())
                 .alarmLevel(alarmLevelEnum)
                 .alarmReason(alarmReasonEnum)
                 .monitorType(MonitorTypeEnums.SERVER)

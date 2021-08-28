@@ -175,18 +175,17 @@ public class ServerCpuMonitor implements IServerMonitoringListener {
      */
     private void sendAlarmInfo(String title, String ip, String serverName, String serverSummary, double cpuAvgCombined,
                                AlarmLevelEnums alarmLevelEnum, AlarmReasonEnums alarmReasonEnum) throws NetException, SigarException {
-        String msg = "IP地址：" + ip
-                + "，<br>服务器：" + serverName;
+        StringBuilder msgBuilder = new StringBuilder();
+        msgBuilder.append("IP地址：").append(ip).append("，<br>服务器：").append(serverName);
         if (StringUtils.isNotBlank(serverSummary)) {
-            msg += "，<br>服务器描述：" + serverSummary;
+            msgBuilder.append("，<br>服务器描述：").append(serverSummary);
         }
-        msg += "，<br>CPU使用率：" + cpuAvgCombined
-                + "%，<br>时间：" + DateTimeUtils.dateToString(new Date());
+        msgBuilder.append("，<br>CPU使用率：").append(cpuAvgCombined).append("%，<br>时间：").append(DateTimeUtils.dateToString(new Date()));
         Alarm alarm = Alarm.builder()
                 // 保证code的唯一性
-                .code(Md5Utils.encrypt32(ip + ServerCpuMonitor.class.getName()))
+                .code(Md5Utils.encrypt32(ip + serverName + ServerCpuMonitor.class.getName()))
                 .title(title)
-                .msg(msg)
+                .msg(msgBuilder.toString())
                 .alarmLevel(alarmLevelEnum)
                 .alarmReason(alarmReasonEnum)
                 .monitorType(MonitorTypeEnums.SERVER)

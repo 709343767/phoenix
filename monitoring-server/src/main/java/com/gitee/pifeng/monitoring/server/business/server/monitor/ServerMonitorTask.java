@@ -182,18 +182,18 @@ public class ServerMonitorTask implements CommandLineRunner {
      * @custom.date 2020/12/17 20:32
      */
     private void sendAlarmInfo(String title, AlarmLevelEnums alarmLevelEnum, AlarmReasonEnums alarmReasonEnum, MonitorServer server) throws NetException, SigarException {
-        String msg = "IP地址：" + server.getIp()
-                + "，<br>服务器：" + server.getServerName();
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("IP地址：").append(server.getIp()).append("，<br>服务器：").append(server.getServerName());
         String serverSummary = server.getServerSummary();
         if (StringUtils.isNotBlank(serverSummary)) {
-            msg += "，<br>服务器描述：" + serverSummary;
+            stringBuilder.append("，<br>服务器描述：").append(serverSummary);
         }
-        msg += "，<br>时间：" + DateTimeUtils.dateToString(new Date());
+        stringBuilder.append("，<br>时间：").append(DateTimeUtils.dateToString(new Date()));
         Alarm alarm = Alarm.builder()
                 // 保证code的唯一性
-                .code(Md5Utils.encrypt32(server.getIp() + server.getServerName()))
+                .code(Md5Utils.encrypt32(server.getIp() + server.getServerName() + ServerMonitorTask.class.getName()))
                 .title(title)
-                .msg(msg)
+                .msg(stringBuilder.toString())
                 .alarmLevel(alarmLevelEnum)
                 .alarmReason(alarmReasonEnum)
                 .monitorType(MonitorTypeEnums.SERVER)

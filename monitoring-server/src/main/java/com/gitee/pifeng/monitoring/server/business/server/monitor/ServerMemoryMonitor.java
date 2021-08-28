@@ -159,18 +159,17 @@ public class ServerMemoryMonitor implements IServerMonitoringListener {
      */
     private void sendAlarmInfo(String title, String ip, String serverName, String serverSummary, double menUsedPercent,
                                AlarmLevelEnums alarmLevelEnum, AlarmReasonEnums alarmReasonEnum) throws NetException, SigarException {
-        String msg = "IP地址：" + ip
-                + "，<br>服务器：" + serverName;
+        StringBuilder msgBuilder = new StringBuilder();
+        msgBuilder.append("IP地址：").append(ip).append("，<br>服务器：").append(serverName);
         if (StringUtils.isNotBlank(serverSummary)) {
-            msg += "，<br>服务器描述：" + serverSummary;
+            msgBuilder.append("，<br>服务器描述：").append(serverSummary);
         }
-        msg += "，<br>内存使用率：" + menUsedPercent
-                + "%，<br>时间：" + DateTimeUtils.dateToString(new Date());
+        msgBuilder.append("，<br>内存使用率：").append(menUsedPercent).append("%，<br>时间：").append(DateTimeUtils.dateToString(new Date()));
         Alarm alarm = Alarm.builder()
                 // 保证code的唯一性
-                .code(Md5Utils.encrypt32(ip + ServerMemoryMonitor.class.getName()))
+                .code(Md5Utils.encrypt32(ip + serverName + ServerMemoryMonitor.class.getName()))
                 .title(title)
-                .msg(msg)
+                .msg(msgBuilder.toString())
                 .alarmLevel(alarmLevelEnum)
                 .alarmReason(alarmReasonEnum)
                 .monitorType(MonitorTypeEnums.SERVER)
