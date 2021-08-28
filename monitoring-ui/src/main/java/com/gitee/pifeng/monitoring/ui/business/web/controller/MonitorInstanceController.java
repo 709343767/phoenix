@@ -176,4 +176,47 @@ public class MonitorInstanceController {
         return mv;
     }
 
+    /**
+     * <p>
+     * 访问应用程序编辑页面
+     * </p>
+     *
+     * @param instanceId 应用实例ID
+     * @return {@link ModelAndView} 应用程序编辑页面
+     * @author 皮锋
+     * @custom.date 2021/8/28 20:18
+     */
+    @ApiOperation(value = "访问应用程序编辑页面")
+    @ApiImplicitParams(value = {
+            @ApiImplicitParam(name = "instanceId", value = "应用实例ID", required = true, paramType = "query", dataType = "string")})
+    @GetMapping("edit-monitor-instance-form")
+    public ModelAndView editMonitorInstanceForm(String instanceId) {
+        ModelAndView mv = new ModelAndView("instance/edit-instance");
+        mv.addObject("instanceId", instanceId);
+        MonitorInstanceVo monitorInstanceVo = this.monitorInstanceService.getMonitorInstanceInfo(instanceId);
+        String instanceSummary = monitorInstanceVo.getInstanceSummary();
+        mv.addObject("instanceSummary", instanceSummary);
+        String instanceDesc = monitorInstanceVo.getInstanceDesc();
+        mv.addObject("instanceDesc", instanceDesc);
+        return mv;
+    }
+
+    /**
+     * <p>
+     * 编辑应用程序信息
+     * </p>
+     *
+     * @param monitorInstanceVo 应用程序信息
+     * @return 如果编辑成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @author 皮锋
+     * @custom.date 2021/8/28 20:44
+     */
+    @ApiOperation(value = "编辑应用程序信息")
+    @PutMapping("/edit-monitor-instance")
+    @ResponseBody
+    @OperateLog(operModule = UiModuleConstants.INSTANCE, operType = OperateTypeConstants.UPDATE, operDesc = "编辑应用程序信息")
+    public LayUiAdminResultVo editMonitorInstance(MonitorInstanceVo monitorInstanceVo) {
+        return this.monitorInstanceService.editMonitorInstance(monitorInstanceVo);
+    }
+
 }

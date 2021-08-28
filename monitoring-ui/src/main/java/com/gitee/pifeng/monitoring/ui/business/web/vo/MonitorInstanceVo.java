@@ -45,6 +45,9 @@ public class MonitorInstanceVo implements ISuperBean {
     @ApiModelProperty(value = "应用实例描述")
     private String instanceDesc;
 
+    @ApiModelProperty(value = "应用实例摘要")
+    private String instanceSummary;
+
     @ApiModelProperty(value = "IP地址")
     private String ip;
 

@@ -10,11 +10,11 @@ import com.gitee.pifeng.monitoring.common.dto.AlarmPackage;
 import com.gitee.pifeng.monitoring.common.exception.NetException;
 import com.gitee.pifeng.monitoring.common.threadpool.ThreadPool;
 import com.gitee.pifeng.monitoring.common.util.DateTimeUtils;
-import com.gitee.pifeng.monitoring.server.business.server.service.IAlarmService;
-import com.gitee.pifeng.monitoring.server.business.server.service.IInstanceService;
 import com.gitee.pifeng.monitoring.server.business.server.core.MonitoringConfigPropertiesLoader;
 import com.gitee.pifeng.monitoring.server.business.server.core.PackageConstructor;
 import com.gitee.pifeng.monitoring.server.business.server.entity.MonitorInstance;
+import com.gitee.pifeng.monitoring.server.business.server.service.IAlarmService;
+import com.gitee.pifeng.monitoring.server.business.server.service.IInstanceService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.hyperic.sigar.SigarException;
@@ -179,8 +179,17 @@ public class InstanceMonitorTask implements CommandLineRunner {
         StringBuilder builder = new StringBuilder();
         builder.append("应用ID：").append(instance.getInstanceId())
                 .append("，<br>应用名称：").append(instance.getInstanceName());
-        if (StringUtils.isNotBlank(instance.getInstanceDesc())) {
-            builder.append("，<br>应用描述：").append(instance.getInstanceDesc());
+        // 应用实例描述
+        String instanceDesc = instance.getInstanceDesc();
+        if (StringUtils.isNotBlank(instanceDesc)) {
+            // 应用实例摘要
+            String instanceSummary = instance.getInstanceSummary();
+            // 如果应用实例摘要不为空，则把摘要当做描述。因为：摘要是用户通过UI界面设置的，优先级比描述高。
+            if (StringUtils.isNotBlank(instanceSummary)) {
+                builder.append("，<br>应用描述：").append(instanceSummary);
+            } else {
+                builder.append("，<br>应用描述：").append(instanceDesc);
+            }
         }
         builder.append("，<br>应用端点：").append(instance.getEndpoint())
                 .append("，<br>IP地址：").append(instance.getIp())

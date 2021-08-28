@@ -70,4 +70,28 @@ public interface IMonitorInstanceService extends IService<MonitorInstance> {
      * @custom.date 2021/7/21 22:06
      */
     LayUiAdminResultVo clearMonitorInstanceHistory(String instanceId, String time);
+
+    /**
+     * <p>
+     * 根据条件获取应用程序信息
+     * </p>
+     *
+     * @param instanceId 应用实例ID
+     * @return 应用程序信息
+     * @author 皮锋
+     * @custom.date 2021/8/28 20:22
+     */
+    MonitorInstanceVo getMonitorInstanceInfo(String instanceId);
+
+    /**
+     * <p>
+     * 编辑应用程序信息
+     * </p>
+     *
+     * @param monitorInstanceVo 应用程序信息
+     * @return 如果编辑成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @author 皮锋
+     * @custom.date 2021/8/28 20:45
+     */
+    LayUiAdminResultVo editMonitorInstance(MonitorInstanceVo monitorInstanceVo);
 }

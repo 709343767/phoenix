@@ -133,6 +133,11 @@ public class MonitorInstanceServiceImpl extends ServiceImpl<IMonitorInstanceDao,
         List<MonitorInstanceVo> monitorInstanceVos = Lists.newLinkedList();
         for (MonitorInstance monitorInstance : monitorInstances) {
             MonitorInstanceVo monitorInstanceVo = MonitorInstanceVo.builder().build().convertFor(monitorInstance);
+            // 如果应用实例摘要信息不为空，则把 应用实例摘要信息 赋给 应用实例描述。因为：摘要信息是用户通过UI界面设置的，优先级大于描述。
+            String instanceSummary = monitorInstanceVo.getInstanceSummary();
+            if (StringUtils.isNotBlank(instanceSummary)) {
+                monitorInstanceVo.setInstanceDesc(instanceSummary);
+            }
             monitorInstanceVos.add(monitorInstanceVo);
         }
         // 设置返回对象
@@ -219,6 +224,43 @@ public class MonitorInstanceServiceImpl extends ServiceImpl<IMonitorInstanceDao,
         jvmMemoryHistoryLambdaUpdateWrapper.eq(MonitorJvmMemoryHistory::getInstanceId, instanceId);
         jvmMemoryHistoryLambdaUpdateWrapper.lt(MonitorJvmMemoryHistory::getInsertTime, clearTime);
         this.monitorJvmMemoryHistoryDao.delete(jvmMemoryHistoryLambdaUpdateWrapper);
+        return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);
+    }
+
+    /**
+     * <p>
+     * 根据条件获取应用程序信息
+     * </p>
+     *
+     * @param instanceId 应用实例ID
+     * @return 应用程序信息
+     * @author 皮锋
+     * @custom.date 2021/8/28 20:22
+     */
+    @Override
+    public MonitorInstanceVo getMonitorInstanceInfo(String instanceId) {
+        LambdaQueryWrapper<MonitorInstance> monitorInstanceLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        monitorInstanceLambdaQueryWrapper.eq(MonitorInstance::getInstanceId, instanceId);
+        MonitorInstance monitorInstance = this.monitorInstanceDao.selectOne(monitorInstanceLambdaQueryWrapper);
+        return new MonitorInstanceVo().convertFor(monitorInstance);
+    }
+
+    /**
+     * <p>
+     * 编辑应用程序信息
+     * </p>
+     *
+     * @param monitorInstanceVo 应用程序信息
+     * @return 如果编辑成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @author 皮锋
+     * @custom.date 2021/8/28 20:45
+     */
+    @Override
+    public LayUiAdminResultVo editMonitorInstance(MonitorInstanceVo monitorInstanceVo) {
+        MonitorInstance monitorInstance = monitorInstanceVo.convertTo();
+        LambdaUpdateWrapper<MonitorInstance> monitorInstanceLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+        monitorInstanceLambdaUpdateWrapper.eq(MonitorInstance::getInstanceId, monitorInstance.getInstanceId());
+        this.monitorInstanceDao.update(monitorInstance, monitorInstanceLambdaUpdateWrapper);
         return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);
     }
 

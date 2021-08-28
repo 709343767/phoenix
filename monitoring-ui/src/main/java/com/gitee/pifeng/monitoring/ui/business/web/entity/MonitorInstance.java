@@ -52,6 +52,10 @@ public class MonitorInstance implements Serializable {
     @TableField("INSTANCE_DESC")
     private String instanceDesc;
 
+    @ApiModelProperty(value = "应用实例摘要")
+    @TableField("INSTANCE_SUMMARY")
+    private String instanceSummary;
+
     @ApiModelProperty(value = "IP地址")
     @TableField("IP")
     private String ip;
