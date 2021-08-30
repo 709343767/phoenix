@@ -8,7 +8,6 @@ import lombok.experimental.Accessors;
  * <p>
  * 监控告警信息包
  * </p>
- * 用来定义监控告警信息的数据格式
  *
  * @author 皮锋
  * @custom.date 2020/3/3 10:01
