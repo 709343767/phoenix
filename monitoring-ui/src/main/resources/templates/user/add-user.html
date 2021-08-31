@@ -93,6 +93,13 @@
                 if (!(/^[\S]{6,12}$/.test(value))) {
                     return '密码必须6到12位，且不能出现空格'
                 }
+            },
+            email: function (value) {
+                if (value.length !== 0) {
+                    if (!(/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/.test(value))) {
+                        return '邮箱格式不正确';
+                    }
+                }
             }
         });
     });
