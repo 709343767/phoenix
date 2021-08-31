@@ -7,6 +7,7 @@ import com.gitee.pifeng.monitoring.ui.constant.OperateTypeConstants;
 import com.gitee.pifeng.monitoring.ui.constant.UiModuleConstants;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +18,9 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+
+import static com.gitee.pifeng.monitoring.common.util.CollectionUtils.distinctByKey;
 
 /**
  * <p>
@@ -160,6 +164,10 @@ public class HomeController {
     @PostMapping("/home/get-last-5-alarm-record")
     public LayUiAdminResultVo getLast5AlarmRecord() {
         List<MonitorAlarmRecordVo> monitorAlarmRecordVos = this.monitorAlarmRecordService.getMonitorAlarmRecordList(1L, 5L, null, null, null, null, null).getRecords();
+        if (CollectionUtils.isNotEmpty(monitorAlarmRecordVos)) {
+            // 根据 code（告警代码） 去重重复值
+            monitorAlarmRecordVos = monitorAlarmRecordVos.stream().filter(distinctByKey(MonitorAlarmRecordVo::getCode)).collect(Collectors.toList());
+        }
         return LayUiAdminResultVo.ok(monitorAlarmRecordVos);
     }
 
