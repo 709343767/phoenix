@@ -8,7 +8,7 @@
     <parent>
         <artifactId>monitoring-common</artifactId>
         <groupId>com.gitee.pifeng</groupId>
-        <version>0.0.5.RELEASE</version>
+        <version>0.0.6.RELEASE</version>
         <relativePath>..</relativePath>
     </parent>
 
