@@ -109,4 +109,15 @@ public interface IMonitorAlarmRecordService extends IService<MonitorAlarmRecord>
      * @custom.date 2021/6/18 22:15
      */
     MonitorAlarmRecordVo monitorAlarmRecordDetail(Long id);
+
+    /**
+     * <p>
+     * 获取最新的5条告警记录
+     * </p>
+     *
+     * @return layUiAdmin响应对象
+     * @author 皮锋
+     * @custom.date 2021/9/1 9:30
+     */
+    LayUiAdminResultVo getLast5AlarmRecord();
 }

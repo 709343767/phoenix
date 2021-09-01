@@ -17,6 +17,7 @@ import com.gitee.pifeng.monitoring.ui.business.web.vo.LayUiAdminResultVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.MonitorAlarmRecordVo;
 import com.gitee.pifeng.monitoring.ui.constant.WebResponseConstants;
 import com.google.common.collect.Lists;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import static com.gitee.pifeng.monitoring.common.util.CollectionUtils.distinctByKey;
 
 /**
  * <p>
@@ -286,6 +289,30 @@ public class MonitorAlarmRecordServiceImpl extends ServiceImpl<IMonitorAlarmReco
             monitorAlarmRecordVo.setStatus("不提醒");
         }
         return monitorAlarmRecordVo;
+    }
+
+    /**
+     * <p>
+     * 获取最新的5条告警记录
+     * </p>
+     *
+     * @return layUiAdmin响应对象
+     * @author 皮锋
+     * @custom.date 2021/9/1 9:30
+     */
+    @Override
+    public LayUiAdminResultVo getLast5AlarmRecord() {
+        List<MonitorAlarmRecordVo> monitorAlarmRecordVos = this.getMonitorAlarmRecordList(1L, 20L, null, null, null, null, null).getRecords();
+        if (CollectionUtils.isNotEmpty(monitorAlarmRecordVos)) {
+            // 根据 code（告警代码） 去重重复值
+            monitorAlarmRecordVos = monitorAlarmRecordVos.stream().filter(distinctByKey(MonitorAlarmRecordVo::getCode)).collect(Collectors.toList());
+            // 取出前5条
+            if (monitorAlarmRecordVos.size() > 5) {
+                // 左闭右开(包括fromIndex元素,不包括toIndex)
+                monitorAlarmRecordVos = monitorAlarmRecordVos.subList(0, 5);
+            }
+        }
+        return LayUiAdminResultVo.ok(monitorAlarmRecordVos);
     }
 
 }
