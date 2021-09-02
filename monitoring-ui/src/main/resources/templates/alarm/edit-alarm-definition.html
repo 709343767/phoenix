@@ -40,6 +40,7 @@
             <select name="type">
                 <option value="SERVER" th:selected="${monitorAlarmDefinitionVo.type=='SERVER'}">服务器</option>
                 <option value="NET" th:selected="${monitorAlarmDefinitionVo.type=='NET'}">网络</option>
+                <option value="DATABASE" th:selected="${monitorAlarmDefinitionVo.type=='DATABASE'}">数据库</option>
                 <option value="INSTANCE" th:selected="${monitorAlarmDefinitionVo.type=='INSTANCE'}">应用</option>
                 <option value="CUSTOM" th:selected="${monitorAlarmDefinitionVo.type=='CUSTOM'}">自定义</option>
             </select>

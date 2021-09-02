@@ -40,6 +40,10 @@ public class MonitorAlarmRecord implements Serializable {
     @TableField("CODE")
     private String code;
 
+    @ApiModelProperty(value = "告警定义编码")
+    @TableField("ALARM_DEF_CODE")
+    private String alarmDefCode;
+
     @ApiModelProperty(value = "告警类型（SERVER、NET、INSTANCE、DATABASE、CUSTOM）")
     @TableField("TYPE")
     private String type;

@@ -155,7 +155,7 @@ public class AlarmServiceImpl implements IAlarmService {
             }
         }
         // 不管发不发送告警信息，先把告警记录存入数据库
-        this.insertMonitorAlarmRecordToDb(alarmUuid, alarmTitle, alarmMsg, monitorTypeEnum, alarmLevelEnum, alarmWayEnums);
+        this.insertMonitorAlarmRecordToDb(alarmUuid, code, alarmTitle, alarmMsg, monitorTypeEnum, alarmLevelEnum, alarmWayEnums);
         // 是否发送告警信息
         if (!this.isSendAlarm(result, alarm)) {
             return;
@@ -336,6 +336,7 @@ public class AlarmServiceImpl implements IAlarmService {
      * </p>
      *
      * @param alarmUuid       告警代码
+     * @param alarmDefCode    告警定义编码
      * @param alarmTitle      告警标题
      * @param alarmMsg        告警内容
      * @param monitorTypeEnum 监控类型（SERVER、NET、INSTANCE、CUSTOM）
@@ -344,11 +345,12 @@ public class AlarmServiceImpl implements IAlarmService {
      * @author 皮锋
      * @custom.date 2020/5/13 16:21
      */
-    private void insertMonitorAlarmRecordToDb(String alarmUuid, String alarmTitle, String alarmMsg,
+    private void insertMonitorAlarmRecordToDb(String alarmUuid, String alarmDefCode, String alarmTitle, String alarmMsg,
                                               MonitorTypeEnums monitorTypeEnum, AlarmLevelEnums alarmLevelEnum,
                                               AlarmWayEnums[] alarmWayEnums) {
         MonitorAlarmRecord monitorAlarmRecord = new MonitorAlarmRecord();
         monitorAlarmRecord.setCode(alarmUuid);
+        monitorAlarmRecord.setAlarmDefCode(alarmDefCode);
         monitorAlarmRecord.setTitle(alarmTitle);
         monitorAlarmRecord.setContent(alarmMsg);
         monitorAlarmRecord.setLevel(alarmLevelEnum != null ? alarmLevelEnum.name() : null);

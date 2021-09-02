@@ -39,6 +39,12 @@ public class MonitorAlarmRecord {
     private String code;
 
     /**
+     * 告警定义编码
+     */
+    @TableField("ALARM_DEF_CODE")
+    private String alarmDefCode;
+
+    /**
      * 告警类型（SERVER、NET、INSTANCE、DATABASE、CUSTOM）
      */
     @TableField("TYPE")
