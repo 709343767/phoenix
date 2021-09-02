@@ -55,6 +55,12 @@
                     </div>
                 </div>
                 <div class="layui-colla-item">
+                    <h2 class="layui-colla-title">告警编码</h2>
+                    <div class="layui-colla-content layui-show">
+                        <p style="word-wrap:break-word;" th:utext="${monitorAlarmRecordInfo.alarmDefCode}"></p>
+                    </div>
+                </div>
+                <div class="layui-colla-item">
                     <h2 class="layui-colla-title">状态</h2>
                     <div class="layui-colla-content layui-show">
                         <p th:text="${monitorAlarmRecordInfo.status}"></p>
