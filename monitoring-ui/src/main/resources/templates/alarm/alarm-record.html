@@ -52,7 +52,7 @@
                             <option value="INFO">消息</option>
                             <option value="WARN">警告</option>
                             <option value="ERROR">错误</option>
-                            <option value="FATAL">致命</option>
+                            <option value="FATAL">严重</option>
                         </select>
                     </div>
                 </div>
@@ -173,7 +173,7 @@
                         $(this).text('错误');
                     }
                     if ($(this).text() === 'FATAL') {
-                        $(this).text('致命');
+                        $(this).text('严重');
                     }
                 });
                 $('[data-field="status"]').children().each(function () {

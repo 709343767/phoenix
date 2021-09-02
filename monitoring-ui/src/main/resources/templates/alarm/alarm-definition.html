@@ -45,7 +45,7 @@
                             <option value="INFO">消息</option>
                             <option value="WARN">警告</option>
                             <option value="ERROR">错误</option>
-                            <option value="FATAL">致命</option>
+                            <option value="FATAL">严重</option>
                         </select>
                     </div>
                 </div>
@@ -151,7 +151,7 @@
                         $(this).html('<span style="color: #FF4500;">错误</span>');
                     }
                     if ($(this).text() === 'FATAL') {
-                        $(this).html('<span style="color: #B22222;">致命</span>');
+                        $(this).html('<span style="color: #B22222;">严重</span>');
                     }
                 });
             },

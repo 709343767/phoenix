@@ -93,7 +93,7 @@ public enum AlarmLevelEnums {
         if (StringUtils.equalsIgnoreCase(AlarmLevelEnums.ERROR.name(), alarmLevelStr)) {
             return AlarmLevelEnums.ERROR;
         }
-        // 致命
+        // 严重
         if (StringUtils.equalsIgnoreCase(AlarmLevelEnums.FATAL.name(), alarmLevelStr)) {
             return AlarmLevelEnums.FATAL;
         }

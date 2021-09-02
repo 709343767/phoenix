@@ -279,7 +279,7 @@ public class MonitorAlarmRecordServiceImpl extends ServiceImpl<IMonitorAlarmReco
         String level = monitorAlarmRecordVo.getLevel();
         monitorAlarmRecordVo.setLevel(StringUtils.replaceEach(level,
                 new String[]{AlarmLevelEnums.INFO.name(), AlarmLevelEnums.WARN.name(), AlarmLevelEnums.ERROR.name(), AlarmLevelEnums.FATAL.name()},
-                new String[]{"消息", "警告", "错误", "致命"}));
+                new String[]{"消息", "警告", "错误", "严重"}));
         // 告警发送状态（0：失败；1：成功）
         String status = monitorAlarmRecordVo.getStatus();
         monitorAlarmRecordVo.setStatus(StringUtils.replaceEach(status,

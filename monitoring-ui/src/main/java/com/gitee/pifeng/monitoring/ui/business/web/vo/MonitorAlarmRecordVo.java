@@ -46,7 +46,7 @@ public class MonitorAlarmRecordVo implements ISuperBean {
     @ApiModelProperty(value = "告警方式（SMS、MAIL、...）")
     private String way;
 
-    @Excel(name = "告警级别", orderNum = "4", replace = {"消息_INFO", "警告_WARM", "错误_ERROR", "致命_FATAL"})
+    @Excel(name = "告警级别", orderNum = "4", replace = {"消息_INFO", "警告_WARM", "错误_ERROR", "严重_FATAL"})
     @ApiModelProperty(value = "告警级别（INFO、WARM、ERROR、FATAL）")
     private String level;
 
