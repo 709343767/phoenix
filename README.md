@@ -35,7 +35,7 @@
 - 运行环境
 
   Maven3+  
-  Jdk1.8+  
+  Jdk1.8  
   Lombok  
   Mysql5.7+
   
