@@ -293,6 +293,10 @@ ScheduledExecutorService service = Monitor.buryingPoint(() -> {
 
 ![异常日志2](https://gitee.com/monitoring-platform/monitoring/raw/master/doc/%E6%88%AA%E5%9B%BE/%E5%BC%82%E5%B8%B8%E6%97%A5%E5%BF%972.png "异常日志2")
 
+## 常见问题
+
+[https://gitee.com/monitoring-platform/monitoring/wikis/pages?sort_id=4438763&doc_id=935794](https://gitee.com/monitoring-platform/monitoring/wikis/pages?sort_id=4438763&doc_id=935794)
+
 ## 期望 | Futures
 
 欢迎提出更好的意见，帮助完善 monitoring
