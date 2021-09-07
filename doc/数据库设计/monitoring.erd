@@ -1,92 +1,101 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<diagram version="1" name="monitoring.erd">
+<diagram version="1" name="monitoring">
 	<entities>
-		<data-source id="mysql8-1787bd25ed3-7015d55a199b14ae">
-			<entity id="1" name="MONITOR_ALARM_DEFINITION" fq-name="monitoring.MONITOR_ALARM_DEFINITION" order="0" x="0" y="1294">
+		<data-source id="mysql8-17ba05fe9bf-2f5950fe95c587a">
+			<entity id="1" name="MONITOR_ALARM_DEFINITION" fq-name="monitoring.MONITOR_ALARM_DEFINITION">
 				<path name="monitoring"/>
 			</entity>
-			<entity id="2" name="MONITOR_ALARM_RECORD" fq-name="monitoring.MONITOR_ALARM_RECORD" order="1" x="20" y="4566">
+			<entity id="2" name="MONITOR_ALARM_RECORD" fq-name="monitoring.MONITOR_ALARM_RECORD">
 				<path name="monitoring"/>
 			</entity>
-			<entity id="3" name="MONITOR_CONFIG" fq-name="monitoring.MONITOR_CONFIG" order="2" x="20" y="1714">
+			<entity id="3" name="MONITOR_CONFIG" fq-name="monitoring.MONITOR_CONFIG">
 				<path name="monitoring"/>
 			</entity>
-			<entity id="4" name="MONITOR_DB" fq-name="monitoring.MONITOR_DB" order="3" x="638" y="4566">
+			<entity id="4" name="MONITOR_DB" fq-name="monitoring.MONITOR_DB">
 				<path name="monitoring"/>
 			</entity>
-			<entity id="5" name="MONITOR_INSTANCE" fq-name="monitoring.MONITOR_INSTANCE" order="4" x="1519" y="702">
+			<entity id="5" name="MONITOR_INSTANCE" fq-name="monitoring.MONITOR_INSTANCE">
 				<path name="monitoring"/>
 			</entity>
-			<entity id="6" name="MONITOR_JVM_CLASS_LOADING" fq-name="monitoring.MONITOR_JVM_CLASS_LOADING" order="5" x="638" y="234">
+			<entity id="6" name="MONITOR_JVM_CLASS_LOADING" fq-name="monitoring.MONITOR_JVM_CLASS_LOADING">
 				<path name="monitoring"/>
 			</entity>
-			<entity id="7" name="MONITOR_JVM_GARBAGE_COLLECTOR" fq-name="monitoring.MONITOR_JVM_GARBAGE_COLLECTOR" order="6" x="638" y="742">
+			<entity id="7" name="MONITOR_JVM_GARBAGE_COLLECTOR" fq-name="monitoring.MONITOR_JVM_GARBAGE_COLLECTOR">
 				<path name="monitoring"/>
 			</entity>
-			<entity id="8" name="MONITOR_JVM_MEMORY" fq-name="monitoring.MONITOR_JVM_MEMORY" order="7" x="638" y="478">
+			<entity id="8" name="MONITOR_JVM_MEMORY" fq-name="monitoring.MONITOR_JVM_MEMORY">
 				<path name="monitoring"/>
 			</entity>
-			<entity id="9" name="MONITOR_JVM_MEMORY_HISTORY" fq-name="monitoring.MONITOR_JVM_MEMORY_HISTORY" order="8" x="20" y="478">
+			<entity id="9" name="MONITOR_JVM_MEMORY_HISTORY" fq-name="monitoring.MONITOR_JVM_MEMORY_HISTORY">
 				<path name="monitoring"/>
 			</entity>
-			<entity id="10" name="MONITOR_JVM_RUNTIME" fq-name="monitoring.MONITOR_JVM_RUNTIME" order="9" x="638" y="986">
+			<entity id="10" name="MONITOR_JVM_RUNTIME" fq-name="monitoring.MONITOR_JVM_RUNTIME">
 				<path name="monitoring"/>
 			</entity>
-			<entity id="11" name="MONITOR_JVM_THREAD" fq-name="monitoring.MONITOR_JVM_THREAD" order="10" x="638" y="1450">
+			<entity id="11" name="MONITOR_JVM_THREAD" fq-name="monitoring.MONITOR_JVM_THREAD">
 				<path name="monitoring"/>
 			</entity>
-			<entity id="12" name="MONITOR_LOG_EXCEPTION" fq-name="monitoring.MONITOR_LOG_EXCEPTION" order="11" x="17" y="3853">
+			<entity id="12" name="MONITOR_LOG_EXCEPTION" fq-name="monitoring.MONITOR_LOG_EXCEPTION">
 				<path name="monitoring"/>
 			</entity>
-			<entity id="13" name="MONITOR_LOG_OPERATION" fq-name="monitoring.MONITOR_LOG_OPERATION" order="12" x="19" y="4255">
+			<entity id="13" name="MONITOR_LOG_OPERATION" fq-name="monitoring.MONITOR_LOG_OPERATION">
 				<path name="monitoring"/>
 			</entity>
-			<entity id="14" name="MONITOR_NET" fq-name="monitoring.MONITOR_NET" order="13" x="25" y="769">
+			<entity id="14" name="MONITOR_NET" fq-name="monitoring.MONITOR_NET">
 				<path name="monitoring"/>
 			</entity>
-			<entity id="15" name="MONITOR_REALTIME_MONITORING" fq-name="monitoring.MONITOR_REALTIME_MONITORING" order="14" x="638" y="1694">
+			<entity id="15" name="MONITOR_REALTIME_MONITORING" fq-name="monitoring.MONITOR_REALTIME_MONITORING">
 				<path name="monitoring"/>
 			</entity>
-			<entity id="16" name="MONITOR_ROLE" fq-name="monitoring.MONITOR_ROLE" order="15" x="638" y="70">
+			<entity id="16" name="MONITOR_ROLE" fq-name="monitoring.MONITOR_ROLE">
 				<path name="monitoring"/>
 			</entity>
-			<entity id="17" name="MONITOR_SERVER" fq-name="monitoring.MONITOR_SERVER" order="16" x="1519" y="2980">
+			<entity id="17" name="MONITOR_SERVER" fq-name="monitoring.MONITOR_SERVER">
 				<path name="monitoring"/>
 			</entity>
-			<entity id="18" name="MONITOR_SERVER_CPU" fq-name="monitoring.MONITOR_SERVER_CPU" order="17" x="638" y="1898">
+			<entity id="18" name="MONITOR_SERVER_CPU" fq-name="monitoring.MONITOR_SERVER_CPU">
 				<path name="monitoring"/>
 			</entity>
-			<entity id="19" name="MONITOR_SERVER_CPU_HISTORY" fq-name="monitoring.MONITOR_SERVER_CPU_HISTORY" order="18" x="20" y="1898">
+			<entity id="19" name="MONITOR_SERVER_CPU_HISTORY" fq-name="monitoring.MONITOR_SERVER_CPU_HISTORY">
 				<path name="monitoring"/>
 			</entity>
-			<entity id="20" name="MONITOR_SERVER_DISK" fq-name="monitoring.MONITOR_SERVER_DISK" order="19" x="638" y="2262">
+			<entity id="20" name="MONITOR_SERVER_DISK" fq-name="monitoring.MONITOR_SERVER_DISK">
 				<path name="monitoring"/>
 			</entity>
-			<entity id="21" name="MONITOR_SERVER_DISK_HISTORY" fq-name="monitoring.MONITOR_SERVER_DISK_HISTORY" order="20" x="20" y="2262">
+			<entity id="21" name="MONITOR_SERVER_DISK_HISTORY" fq-name="monitoring.MONITOR_SERVER_DISK_HISTORY">
 				<path name="monitoring"/>
 			</entity>
-			<entity id="22" name="MONITOR_SERVER_MEMORY" fq-name="monitoring.MONITOR_SERVER_MEMORY" order="21" x="638" y="2626">
+			<entity id="22" name="MONITOR_SERVER_MEMORY" fq-name="monitoring.MONITOR_SERVER_MEMORY">
 				<path name="monitoring"/>
 			</entity>
-			<entity id="23" name="MONITOR_SERVER_MEMORY_HISTORY" fq-name="monitoring.MONITOR_SERVER_MEMORY_HISTORY" order="22" x="20" y="2626">
+			<entity id="23" name="MONITOR_SERVER_MEMORY_HISTORY" fq-name="monitoring.MONITOR_SERVER_MEMORY_HISTORY">
 				<path name="monitoring"/>
 			</entity>
-			<entity id="24" name="MONITOR_SERVER_NETCARD" fq-name="monitoring.MONITOR_SERVER_NETCARD" order="23" x="638" y="3234">
+			<entity id="24" name="MONITOR_SERVER_NETCARD" fq-name="monitoring.MONITOR_SERVER_NETCARD">
 				<path name="monitoring"/>
 			</entity>
-			<entity id="25" name="MONITOR_SERVER_NETCARD_HISTORY" fq-name="monitoring.MONITOR_SERVER_NETCARD_HISTORY" order="24" x="20" y="3234">
+			<entity id="25" name="MONITOR_SERVER_NETCARD_HISTORY" fq-name="monitoring.MONITOR_SERVER_NETCARD_HISTORY">
 				<path name="monitoring"/>
 			</entity>
-			<entity id="26" name="MONITOR_SERVER_OS" fq-name="monitoring.MONITOR_SERVER_OS" order="25" x="638" y="2950">
+			<entity id="26" name="MONITOR_SERVER_OS" fq-name="monitoring.MONITOR_SERVER_OS">
 				<path name="monitoring"/>
 			</entity>
-			<entity id="27" name="MONITOR_SERVER_POWER_SOURCES" fq-name="monitoring.MONITOR_SERVER_POWER_SOURCES" order="26" x="638" y="3758">
+			<entity id="27" name="MONITOR_SERVER_POWER_SOURCES" fq-name="monitoring.MONITOR_SERVER_POWER_SOURCES">
 				<path name="monitoring"/>
 			</entity>
-			<entity id="28" name="MONITOR_SERVER_SENSORS" fq-name="monitoring.MONITOR_SERVER_SENSORS" order="27" x="638" y="4342">
+			<entity id="28" name="MONITOR_SERVER_SENSORS" fq-name="monitoring.MONITOR_SERVER_SENSORS">
 				<path name="monitoring"/>
 			</entity>
-			<entity id="29" name="MONITOR_USER" fq-name="monitoring.MONITOR_USER" order="28" x="20" y="20">
+			<entity id="29" name="MONITOR_USER" fq-name="monitoring.MONITOR_USER">
+				<path name="monitoring"/>
+			</entity>
+			<entity id="30" name="SPRING_SESSION" fq-name="monitoring.SPRING_SESSION">
+				<path name="monitoring"/>
+			</entity>
+			<entity id="31" name="SPRING_SESSION_ATTRIBUTES" fq-name="monitoring.SPRING_SESSION_ATTRIBUTES">
+				<path name="monitoring"/>
+			</entity>
+			<entity id="32" name="persistent_logins" fq-name="monitoring.persistent_logins">
 				<path name="monitoring"/>
 			</entity>
 		</data-source>
@@ -110,5 +119,6 @@
 		<relation name="MONITOR_SERVER_DISK_HISTORY_SERVER_DISK_FK" fq-name="monitoring.MONITOR_SERVER_DISK_HISTORY.MONITOR_SERVER_DISK_HISTORY_SERVER_DISK_FK" type="fk" pk-ref="20" fk-ref="21"/>
 		<relation name="MONITOR_SERVER_MEMORY_HISTORY_SERVER_MEMORY_FK" fq-name="monitoring.MONITOR_SERVER_MEMORY_HISTORY.MONITOR_SERVER_MEMORY_HISTORY_SERVER_MEMORY_FK" type="fk" pk-ref="22" fk-ref="23"/>
 		<relation name="MONITOR_SERVER_NETCARD_HISTORY_SERVER_NETCARD_FK" fq-name="monitoring.MONITOR_SERVER_NETCARD_HISTORY.MONITOR_SERVER_NETCARD_HISTORY_SERVER_NETCARD_FK" type="fk" pk-ref="24" fk-ref="25"/>
+		<relation name="SPRING_SESSION_ATTRIBUTES_FK" fq-name="monitoring.SPRING_SESSION_ATTRIBUTES.SPRING_SESSION_ATTRIBUTES_FK" type="fk" pk-ref="30" fk-ref="31"/>
 	</relations>
 </diagram>
