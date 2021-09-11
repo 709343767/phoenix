@@ -57,4 +57,9 @@ public final class Server extends AbstractSuperBean {
      */
     private SensorsDomain sensorsDomain;
 
+    /**
+     * 进程信息
+     */
+    private ProcessDomain processDomain;
+
 }

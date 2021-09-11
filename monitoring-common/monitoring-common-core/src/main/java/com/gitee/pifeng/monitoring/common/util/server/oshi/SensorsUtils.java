@@ -2,8 +2,8 @@ package com.gitee.pifeng.monitoring.common.util.server.oshi;
 
 import cn.hutool.core.util.NumberUtil;
 import com.gitee.pifeng.monitoring.common.domain.server.SensorsDomain;
+import com.gitee.pifeng.monitoring.common.init.InitOshi;
 import com.google.common.collect.Lists;
-import oshi.SystemInfo;
 import oshi.hardware.HardwareAbstractionLayer;
 import oshi.hardware.Sensors;
 
@@ -17,7 +17,7 @@ import java.util.List;
  * @author 皮锋
  * @custom.date 2021/1/14 16:21
  */
-public class SensorsUtils {
+public class SensorsUtils extends InitOshi {
 
     /**
      * <p>
@@ -40,8 +40,7 @@ public class SensorsUtils {
      * @custom.date 2021/1/14 17:18
      */
     public static SensorsDomain getSensorsInfo() {
-        SystemInfo systemInfo = new SystemInfo();
-        HardwareAbstractionLayer hardwareAbstractionLayer = systemInfo.getHardware();
+        HardwareAbstractionLayer hardwareAbstractionLayer = SYSTEM_INFO.getHardware();
         Sensors sensors = hardwareAbstractionLayer.getSensors();
         double cpuTemperature = NumberUtil.round(sensors.getCpuTemperature(), 2).doubleValue();
         double cpuVoltage = NumberUtil.round(sensors.getCpuVoltage(), 2).doubleValue();
