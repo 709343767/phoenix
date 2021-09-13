@@ -82,7 +82,7 @@ public class ProcessDomain extends AbstractSuperBean {
         /**
          * 进程的累积CPU使用率
          */
-        private double processCpuLoadCumulative;
+        private double cpuLoadCumulative;
         /**
          * 进程的位数
          */

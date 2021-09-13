@@ -138,7 +138,7 @@ public class ProcessUtils extends InitOshi {
             // 进程的开始时间
             String startTime = DateTimeUtils.dateToString(DateUtil.date(process.getStartTime()), DateTimeStylesEnums.YYYY_MM_DD_HH_MM_SS);
             // 进程的累积CPU使用率
-            double processCpuLoadCumulative = NumberUtil.round(process.getProcessCpuLoadCumulative(), 2).doubleValue();
+            double cpuLoadCumulative = NumberUtil.round(process.getProcessCpuLoadCumulative(), 2).doubleValue();
             // 进程的位数
             String bitness = process.getBitness() > 0 ? String.valueOf(process.getBitness()) : "未知";
             // 占用内存大小（单位：byte），RSS
@@ -155,7 +155,7 @@ public class ProcessUtils extends InitOshi {
             processInfoDomain.setKernelTime(kernelTime);
             processInfoDomain.setUpTime(upTime);
             processInfoDomain.setStartTime(startTime);
-            processInfoDomain.setProcessCpuLoadCumulative(processCpuLoadCumulative);
+            processInfoDomain.setCpuLoadCumulative(cpuLoadCumulative);
             processInfoDomain.setBitness(bitness);
             processInfoDomain.setMemorySize(memorySize);
             processInfoList.add(processInfoDomain);
