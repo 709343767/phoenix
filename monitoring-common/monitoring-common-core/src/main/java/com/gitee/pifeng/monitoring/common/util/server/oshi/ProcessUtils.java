@@ -42,7 +42,7 @@ public class ProcessUtils extends InitOshi {
      * <p>
      * 获取进程信息。
      * </p>
-     * 进程信息 = CPU占用率排名前10进程信息 + 内存占用率排名前10进程信息；总数小于等于20个进程信息。
+     * 进程信息 = CPU占用率排名前10进程信息 + 内存占用率排名前10进程信息；总数小于等于20个进程信息，因为做了去重操作。
      *
      * @return {@link ProcessDomain}
      * @author 皮锋
@@ -141,6 +141,8 @@ public class ProcessUtils extends InitOshi {
             double processCpuLoadCumulative = NumberUtil.round(process.getProcessCpuLoadCumulative(), 2).doubleValue();
             // 进程的位数
             String bitness = process.getBitness() > 0 ? String.valueOf(process.getBitness()) : "未知";
+            // 占用内存大小（单位：byte），RSS
+            long memorySize = process.getResidentSetSize();
             // 封装数据
             ProcessDomain.ProcessInfoDomain processInfoDomain = new ProcessDomain.ProcessInfoDomain();
             processInfoDomain.setProcessId(processId);
@@ -155,6 +157,7 @@ public class ProcessUtils extends InitOshi {
             processInfoDomain.setStartTime(startTime);
             processInfoDomain.setProcessCpuLoadCumulative(processCpuLoadCumulative);
             processInfoDomain.setBitness(bitness);
+            processInfoDomain.setMemorySize(memorySize);
             processInfoList.add(processInfoDomain);
         }
         return processInfoList;

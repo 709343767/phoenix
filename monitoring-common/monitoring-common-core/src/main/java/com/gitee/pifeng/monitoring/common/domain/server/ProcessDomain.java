@@ -87,5 +87,9 @@ public class ProcessDomain extends AbstractSuperBean {
          * 进程的位数
          */
         private String bitness;
+        /**
+         * 占用内存大小
+         */
+        private long memorySize;
     }
 }
