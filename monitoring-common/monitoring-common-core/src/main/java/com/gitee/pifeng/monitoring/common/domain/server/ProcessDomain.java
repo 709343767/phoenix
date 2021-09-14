@@ -4,6 +4,7 @@ import com.gitee.pifeng.monitoring.common.abs.AbstractSuperBean;
 import lombok.*;
 import lombok.experimental.Accessors;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -78,7 +79,7 @@ public class ProcessDomain extends AbstractSuperBean {
         /**
          * 进程的开始时间
          */
-        private String startTime;
+        private Date startTime;
         /**
          * 进程的累积CPU使用率
          */

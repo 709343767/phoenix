@@ -3,15 +3,14 @@ package com.gitee.pifeng.monitoring.common.util.server.oshi;
 import cn.hutool.core.date.BetweenFormatter;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.NumberUtil;
-import com.gitee.pifeng.monitoring.common.constant.DateTimeStylesEnums;
 import com.gitee.pifeng.monitoring.common.domain.server.ProcessDomain;
 import com.gitee.pifeng.monitoring.common.init.InitOshi;
-import com.gitee.pifeng.monitoring.common.util.DateTimeUtils;
 import com.google.common.collect.Lists;
 import org.apache.commons.collections.CollectionUtils;
 import oshi.software.os.OSProcess;
 import oshi.software.os.OperatingSystem;
 
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -136,7 +135,7 @@ public class ProcessUtils extends InitOshi {
             // 进程已启动的毫秒数
             String upTime = DateUtil.formatBetween(process.getUpTime(), BetweenFormatter.Level.MILLISECOND);
             // 进程的开始时间
-            String startTime = DateTimeUtils.dateToString(DateUtil.date(process.getStartTime()), DateTimeStylesEnums.YYYY_MM_DD_HH_MM_SS);
+            Date startTime = DateUtil.date(process.getStartTime()).toJdkDate();
             // 进程的累积CPU使用率
             double cpuLoadCumulative = NumberUtil.round(process.getProcessCpuLoadCumulative(), 2).doubleValue();
             // 进程的位数
