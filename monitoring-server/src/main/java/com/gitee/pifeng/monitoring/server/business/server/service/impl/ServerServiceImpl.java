@@ -103,6 +103,18 @@ public class ServerServiceImpl extends ServiceImpl<IMonitorServerDao, MonitorSer
     private IMonitorServerSensorsDao monitorServerSensorsDao;
 
     /**
+     * 服务器进程信息数据访问对象
+     */
+    @Autowired
+    private IMonitorServerProcessDao monitorServerProcessDao;
+
+    /**
+     * 服务器进程历史记录信息数据访问对象
+     */
+    @Autowired
+    private IMonitorServerProcessHistoryDao monitorServerProcessHistoryDao;
+
+    /**
      * <p>
      * 处理服务器信息包
      * </p>
@@ -139,6 +151,10 @@ public class ServerServiceImpl extends ServiceImpl<IMonitorServerDao, MonitorSer
         this.operateServerPowerSources(serverPackage);
         // 把服务器传感器信息添加或更新到数据库
         this.operateServerSensors(serverPackage);
+        // 把服务器进程信息添加或更新到数据库
+        this.operateServerProcess(serverPackage);
+        // 把服务器进程历史记录添加到数据库
+        this.operateServerProcessHistory(serverPackage);
         // 返回结果
         return Result.builder().isSuccess(true).msg(ResultMsgConstants.SUCCESS).build();
     }
@@ -176,6 +192,70 @@ public class ServerServiceImpl extends ServiceImpl<IMonitorServerDao, MonitorSer
             lambdaUpdateWrapper.eq(MonitorServer::getIp, ip);
             this.monitorServerDao.update(monitorServer, lambdaUpdateWrapper);
         }
+    }
+
+    /**
+     * <p>
+     * 把服务器进程信息添加或更新到数据库
+     * </p>
+     *
+     * @param serverPackage 服务器信息包
+     * @author 皮锋
+     * @custom.date 2021/9/15 14:49
+     */
+    private void operateServerProcess(ServerPackage serverPackage) {
+        // IP地址
+        String ip = serverPackage.getIp();
+        ProcessDomain processDomain = serverPackage.getServer().getProcessDomain();
+        List<ProcessDomain.ProcessInfoDomain> processInfoList = processDomain.getProcessInfoList();
+        // 先删除此服务器对应的进程信息
+        LambdaUpdateWrapper<MonitorServerProcess> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+        lambdaUpdateWrapper.eq(MonitorServerProcess::getIp, ip);
+        this.monitorServerProcessDao.delete(lambdaUpdateWrapper);
+        // 循环所有进程信息
+        for (ProcessDomain.ProcessInfoDomain processInfo : processInfoList) {
+            MonitorServerProcess monitorServerProcess = MonitorServerProcess.builder().build();
+            monitorServerProcess.setIp(ip);
+            monitorServerProcess.setProcessId(processInfo.getProcessId());
+            monitorServerProcess.setName(processInfo.getName());
+            monitorServerProcess.setPath(processInfo.getPath());
+            monitorServerProcess.setCommandLine(processInfo.getCommandLine());
+            monitorServerProcess.setCurrentWorkingDirectory(processInfo.getCurrentWorkingDirectory());
+            monitorServerProcess.setUser(processInfo.getUser());
+            monitorServerProcess.setState(processInfo.getState());
+            monitorServerProcess.setKernelTime(processInfo.getKernelTime());
+            monitorServerProcess.setUpTime(processInfo.getUpTime());
+            monitorServerProcess.setStartTime(processInfo.getStartTime());
+            monitorServerProcess.setCpuLoadCumulative(processInfo.getCpuLoadCumulative());
+            monitorServerProcess.setBitness(processInfo.getBitness());
+            monitorServerProcess.setMemorySize(processInfo.getMemorySize());
+            monitorServerProcess.setInsertTime(serverPackage.getDateTime());
+            monitorServerProcess.setUpdateTime(serverPackage.getDateTime());
+            this.monitorServerProcessDao.insert(monitorServerProcess);
+        }
+    }
+
+    /**
+     * <p>
+     * 把服务器进程历史记录添加到数据库
+     * </p>
+     *
+     * @param serverPackage 服务器信息包
+     * @author 皮锋
+     * @custom.date 2021/9/15 15:04
+     */
+    private void operateServerProcessHistory(ServerPackage serverPackage) {
+        // IP地址
+        String ip = serverPackage.getIp();
+        ProcessDomain processDomain = serverPackage.getServer().getProcessDomain();
+        int processNum = processDomain.getProcessNum();
+        // 添加记录到数据库
+        MonitorServerProcessHistory monitorServerProcessHistory = MonitorServerProcessHistory.builder().build();
+        monitorServerProcessHistory.setIp(ip);
+        monitorServerProcessHistory.setProcessNum(processNum);
+        monitorServerProcessHistory.setInsertTime(serverPackage.getDateTime());
+        monitorServerProcessHistory.setUpdateTime(serverPackage.getDateTime());
+        this.monitorServerProcessHistoryDao.insert(monitorServerProcessHistory);
     }
 
     /**
