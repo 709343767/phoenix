@@ -9,7 +9,7 @@ import com.gitee.pifeng.monitoring.server.business.server.entity.MonitorRealtime
  * </p>
  *
  * @author 皮锋
- * @since 2021-01-29
+ * @custom.date 2021-01-29
  */
 public interface IMonitorRealtimeMonitoringDao extends BaseMapper<MonitorRealtimeMonitoring> {
 
