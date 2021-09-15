@@ -303,7 +303,7 @@ ScheduledExecutorService service = Monitor.buryingPoint(() -> {
 
 ## 版权 | License
 
-[Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0)
+[GNU General Public License v3.0](https://www.gnu.org/licenses/gpl-3.0.txt)
 
 
 
