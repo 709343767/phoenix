@@ -10,6 +10,7 @@ import org.apache.commons.collections.CollectionUtils;
 import oshi.software.os.OSProcess;
 import oshi.software.os.OperatingSystem;
 
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -59,7 +60,10 @@ public class ProcessUtils extends InitOshi {
         processInfoList.addAll(processOccupyMemoryTop10Info);
         if (CollectionUtils.isNotEmpty(processInfoList)) {
             processInfoList = processInfoList.stream()
+                    // 根据进程ID去重
                     .filter(distinctByKey(ProcessDomain.ProcessInfoDomain::getProcessId))
+                    // 根据CPU占用率降序排列
+                    .sorted(Comparator.comparing(ProcessDomain.ProcessInfoDomain::getCpuLoadCumulative).reversed())
                     .collect(Collectors.toList());
         }
         // 进程信息
