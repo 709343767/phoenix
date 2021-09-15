@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <diagram version="1" name="monitoring">
 	<entities>
-		<data-source id="mysql8-17ba05fe9bf-2f5950fe95c587a">
+		<data-source id="mysql8-17ba05c370c-734ef6169707ed90">
 			<entity id="1" name="MONITOR_ALARM_DEFINITION" fq-name="monitoring.MONITOR_ALARM_DEFINITION">
 				<path name="monitoring"/>
 			</entity>
@@ -83,19 +83,25 @@
 			<entity id="27" name="MONITOR_SERVER_POWER_SOURCES" fq-name="monitoring.MONITOR_SERVER_POWER_SOURCES">
 				<path name="monitoring"/>
 			</entity>
-			<entity id="28" name="MONITOR_SERVER_SENSORS" fq-name="monitoring.MONITOR_SERVER_SENSORS">
+			<entity id="28" name="MONITOR_SERVER_PROCESS" fq-name="monitoring.MONITOR_SERVER_PROCESS">
 				<path name="monitoring"/>
 			</entity>
-			<entity id="29" name="MONITOR_USER" fq-name="monitoring.MONITOR_USER">
+			<entity id="29" name="MONITOR_SERVER_PROCESS_HISTORY" fq-name="monitoring.MONITOR_SERVER_PROCESS_HISTORY">
 				<path name="monitoring"/>
 			</entity>
-			<entity id="30" name="SPRING_SESSION" fq-name="monitoring.SPRING_SESSION">
+			<entity id="30" name="MONITOR_SERVER_SENSORS" fq-name="monitoring.MONITOR_SERVER_SENSORS">
 				<path name="monitoring"/>
 			</entity>
-			<entity id="31" name="SPRING_SESSION_ATTRIBUTES" fq-name="monitoring.SPRING_SESSION_ATTRIBUTES">
+			<entity id="31" name="MONITOR_USER" fq-name="monitoring.MONITOR_USER">
 				<path name="monitoring"/>
 			</entity>
-			<entity id="32" name="persistent_logins" fq-name="monitoring.persistent_logins">
+			<entity id="32" name="SPRING_SESSION" fq-name="monitoring.SPRING_SESSION">
+				<path name="monitoring"/>
+			</entity>
+			<entity id="33" name="SPRING_SESSION_ATTRIBUTES" fq-name="monitoring.SPRING_SESSION_ATTRIBUTES">
+				<path name="monitoring"/>
+			</entity>
+			<entity id="34" name="persistent_logins" fq-name="monitoring.persistent_logins">
 				<path name="monitoring"/>
 			</entity>
 		</data-source>
@@ -104,21 +110,23 @@
 		<relation name="MONITOR_JVM_CLASS_LOADING_INSTANCE_FK" fq-name="monitoring.MONITOR_JVM_CLASS_LOADING.MONITOR_JVM_CLASS_LOADING_INSTANCE_FK" type="fk" pk-ref="5" fk-ref="6"/>
 		<relation name="MONITOR_JVM_GARBAGE_COLLECTOR_INSTANCE_FK" fq-name="monitoring.MONITOR_JVM_GARBAGE_COLLECTOR.MONITOR_JVM_GARBAGE_COLLECTOR_INSTANCE_FK" type="fk" pk-ref="5" fk-ref="7"/>
 		<relation name="MONITOR_JVM_MEMORY_INSTANCE_FK" fq-name="monitoring.MONITOR_JVM_MEMORY.MONITOR_JVM_MEMORY_INSTANCE_FK" type="fk" pk-ref="5" fk-ref="8"/>
+		<relation name="MONITOR_JVM_MEMORY_HISTORY_INSTANCE_FK" fq-name="monitoring.MONITOR_JVM_MEMORY_HISTORY.MONITOR_JVM_MEMORY_HISTORY_INSTANCE_FK" type="fk" pk-ref="5" fk-ref="9"/>
 		<relation name="MONITOR_JVM_RUNTIME_INSTANCE_FK" fq-name="monitoring.MONITOR_JVM_RUNTIME.MONITOR_JVM_RUNTIME_INSTANCE_FK" type="fk" pk-ref="5" fk-ref="10"/>
 		<relation name="MONITOR_JVM_THREAD_INSTANCE_FK" fq-name="monitoring.MONITOR_JVM_THREAD.MONITOR_JVM_THREAD_INSTANCE_FK" type="fk" pk-ref="5" fk-ref="11"/>
-		<relation name="MONITOR_JVM_MEMORY_HISTORY_JVM_MEMORY_FK" fq-name="monitoring.MONITOR_JVM_MEMORY_HISTORY.MONITOR_JVM_MEMORY_HISTORY_JVM_MEMORY_FK" type="fk" pk-ref="8" fk-ref="9"/>
-		<relation name="MONITOR_USER_ROLE_FK" fq-name="monitoring.MONITOR_USER.MONITOR_USER_ROLE_FK" type="fk" pk-ref="16" fk-ref="29"/>
+		<relation name="MONITOR_USER_ROLE_FK" fq-name="monitoring.MONITOR_USER.MONITOR_USER_ROLE_FK" type="fk" pk-ref="16" fk-ref="31"/>
 		<relation name="MONITOR_SERVER_CPU_SERVER_FK" fq-name="monitoring.MONITOR_SERVER_CPU.MONITOR_SERVER_CPU_SERVER_FK" type="fk" pk-ref="17" fk-ref="18"/>
+		<relation name="MONITOR_SERVER_CPU_HISTORY_SERVER_FK" fq-name="monitoring.MONITOR_SERVER_CPU_HISTORY.MONITOR_SERVER_CPU_HISTORY_SERVER_FK" type="fk" pk-ref="17" fk-ref="19"/>
 		<relation name="MONITOR_SERVER_DISK_SERVER_FK" fq-name="monitoring.MONITOR_SERVER_DISK.MONITOR_SERVER_DISK_SERVER_FK" type="fk" pk-ref="17" fk-ref="20"/>
+		<relation name="MONITOR_SERVER_DISK_HISTORY_SERVER_FK" fq-name="monitoring.MONITOR_SERVER_DISK_HISTORY.MONITOR_SERVER_DISK_HISTORY_SERVER_FK" type="fk" pk-ref="17" fk-ref="21"/>
 		<relation name="MONITOR_SERVER_MEMORY_SERVER_FK" fq-name="monitoring.MONITOR_SERVER_MEMORY.MONITOR_SERVER_MEMORY_SERVER_FK" type="fk" pk-ref="17" fk-ref="22"/>
+		<relation name="MONITOR_SERVER_MEMORY_HISTORY_SERVER_FK" fq-name="monitoring.MONITOR_SERVER_MEMORY_HISTORY.MONITOR_SERVER_MEMORY_HISTORY_SERVER_FK" type="fk" pk-ref="17" fk-ref="23"/>
 		<relation name="MONITOR_SERVER_NETCARD_SERVER_FK" fq-name="monitoring.MONITOR_SERVER_NETCARD.MONITOR_SERVER_NETCARD_SERVER_FK" type="fk" pk-ref="17" fk-ref="24"/>
+		<relation name="MONITOR_SERVER_NETCARD_HISTORY_SERVER_FK" fq-name="monitoring.MONITOR_SERVER_NETCARD_HISTORY.MONITOR_SERVER_NETCARD_HISTORY_SERVER_FK" type="fk" pk-ref="17" fk-ref="25"/>
 		<relation name="MONITOR_SERVER_OS_SERVER_FK" fq-name="monitoring.MONITOR_SERVER_OS.MONITOR_SERVER_OS_SERVER_FK" type="fk" pk-ref="17" fk-ref="26"/>
 		<relation name="MONITOR_SERVER_POWER_SOURCES_SERVER_FK" fq-name="monitoring.MONITOR_SERVER_POWER_SOURCES.MONITOR_SERVER_POWER_SOURCES_SERVER_FK" type="fk" pk-ref="17" fk-ref="27"/>
-		<relation name="MONITOR_SERVER_SENSORS_SERVER_FK" fq-name="monitoring.MONITOR_SERVER_SENSORS.MONITOR_SERVER_SENSORS_SERVER_FK" type="fk" pk-ref="17" fk-ref="28"/>
-		<relation name="MONITOR_SERVER_CPU_HISTORY_SERVER_CPU_FK" fq-name="monitoring.MONITOR_SERVER_CPU_HISTORY.MONITOR_SERVER_CPU_HISTORY_SERVER_CPU_FK" type="fk" pk-ref="18" fk-ref="19"/>
-		<relation name="MONITOR_SERVER_DISK_HISTORY_SERVER_DISK_FK" fq-name="monitoring.MONITOR_SERVER_DISK_HISTORY.MONITOR_SERVER_DISK_HISTORY_SERVER_DISK_FK" type="fk" pk-ref="20" fk-ref="21"/>
-		<relation name="MONITOR_SERVER_MEMORY_HISTORY_SERVER_MEMORY_FK" fq-name="monitoring.MONITOR_SERVER_MEMORY_HISTORY.MONITOR_SERVER_MEMORY_HISTORY_SERVER_MEMORY_FK" type="fk" pk-ref="22" fk-ref="23"/>
-		<relation name="MONITOR_SERVER_NETCARD_HISTORY_SERVER_NETCARD_FK" fq-name="monitoring.MONITOR_SERVER_NETCARD_HISTORY.MONITOR_SERVER_NETCARD_HISTORY_SERVER_NETCARD_FK" type="fk" pk-ref="24" fk-ref="25"/>
-		<relation name="SPRING_SESSION_ATTRIBUTES_FK" fq-name="monitoring.SPRING_SESSION_ATTRIBUTES.SPRING_SESSION_ATTRIBUTES_FK" type="fk" pk-ref="30" fk-ref="31"/>
+		<relation name="MONITOR_SERVER_PROCESS_SERVER_FK" fq-name="monitoring.MONITOR_SERVER_PROCESS.MONITOR_SERVER_PROCESS_SERVER_FK" type="fk" pk-ref="17" fk-ref="28"/>
+		<relation name="MONITOR_SERVER_PROCESS_HISTORY_SERVER_FK" fq-name="monitoring.MONITOR_SERVER_PROCESS_HISTORY.MONITOR_SERVER_PROCESS_HISTORY_SERVER_FK" type="fk" pk-ref="17" fk-ref="29"/>
+		<relation name="MONITOR_SERVER_SENSORS_SERVER_FK" fq-name="monitoring.MONITOR_SERVER_SENSORS.MONITOR_SERVER_SENSORS_SERVER_FK" type="fk" pk-ref="17" fk-ref="30"/>
+		<relation name="SPRING_SESSION_ATTRIBUTES_FK" fq-name="monitoring.SPRING_SESSION_ATTRIBUTES.SPRING_SESSION_ATTRIBUTES_FK" type="fk" pk-ref="32" fk-ref="33"/>
 	</relations>
 </diagram>
