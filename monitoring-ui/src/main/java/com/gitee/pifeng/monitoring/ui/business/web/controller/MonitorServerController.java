@@ -104,7 +104,6 @@ public class MonitorServerController {
      * 清理服务器监控历史数据
      * </p>
      *
-     * @param id   服务器主键ID
      * @param ip   IP地址
      * @param time 时间
      * @return layUiAdmin响应对象：如果清理成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
@@ -113,14 +112,13 @@ public class MonitorServerController {
      */
     @ApiOperation(value = "清理服务器监控历史数据")
     @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "id", value = "服务器主键ID", required = true, paramType = "query", dataType = "long"),
             @ApiImplicitParam(name = "ip", value = "服务器IP", required = true, paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "time", value = "时间", required = true, paramType = "query", dataType = "string")})
     @DeleteMapping("/clear-monitor-server-history")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.SERVER, operType = OperateTypeConstants.DELETE, operDesc = "清理服务器监控历史数据")
-    public LayUiAdminResultVo clearMonitorServerHistory(Long id, String ip, String time) {
-        return this.monitorServerService.clearMonitorServerHistory(id, ip, time);
+    public LayUiAdminResultVo clearMonitorServerHistory(String ip, String time) {
+        return this.monitorServerService.clearMonitorServerHistory(ip, time);
     }
 
     /**
@@ -155,7 +153,6 @@ public class MonitorServerController {
      * 访问清理服务器监控历史数据表单页面
      * </p>
      *
-     * @param id 服务器主键ID
      * @param ip 服务器IP
      * @return {@link ModelAndView} 清理服务器监控历史数据表单页面
      * @author 皮锋
@@ -163,12 +160,10 @@ public class MonitorServerController {
      */
     @ApiOperation(value = "访问清理服务器监控历史数据表单页面")
     @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "id", value = "服务器主键ID", required = true, paramType = "query", dataType = "long"),
             @ApiImplicitParam(name = "ip", value = "服务器IP", required = true, paramType = "query", dataType = "string")})
     @GetMapping("/server-clear")
-    public ModelAndView serverClear(Long id, String ip) {
+    public ModelAndView serverClear(String ip) {
         ModelAndView mv = new ModelAndView("server/server-clear-form");
-        mv.addObject("id", id);
         mv.addObject("ip", ip);
         return mv;
     }

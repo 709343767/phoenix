@@ -75,14 +75,13 @@ public interface IMonitorServerService extends IService<MonitorServer> {
      * 清理服务器监控历史数据
      * </p>
      *
-     * @param id   服务器主键ID
      * @param ip   IP地址
      * @param time 时间
      * @return layUiAdmin响应对象：如果清理成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
      * @author 皮锋
      * @custom.date 2021/7/21 8:57
      */
-    LayUiAdminResultVo clearMonitorServerHistory(Long id, String ip, String time);
+    LayUiAdminResultVo clearMonitorServerHistory(String ip, String time);
 
     /**
      * <p>

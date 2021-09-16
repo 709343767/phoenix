@@ -109,6 +109,18 @@ public class MonitorServerServiceImpl extends ServiceImpl<IMonitorServerDao, Mon
     private IMonitorServerSensorsDao monitorServerSensorsDao;
 
     /**
+     * 服务器进程信息数据访问对象
+     */
+    @Autowired
+    private IMonitorServerProcessDao monitorServerProcessDao;
+
+    /**
+     * 服务器进程历史记录信息数据访问对象
+     */
+    @Autowired
+    private IMonitorServerProcessHistoryDao monitorServerProcessHistoryDao;
+
+    /**
      * <p>
      * 获取home页的服务器信息
      * </p>
@@ -238,6 +250,14 @@ public class MonitorServerServiceImpl extends ServiceImpl<IMonitorServerDao, Mon
         LambdaUpdateWrapper<MonitorServerSensors> serverSensorsLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
         serverSensorsLambdaUpdateWrapper.in(MonitorServerSensors::getIp, ips);
         this.monitorServerSensorsDao.delete(serverSensorsLambdaUpdateWrapper);
+        // 服务器进程表
+        LambdaUpdateWrapper<MonitorServerProcess> serverProcessLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+        serverProcessLambdaUpdateWrapper.in(MonitorServerProcess::getIp, ips);
+        this.monitorServerProcessDao.delete(serverProcessLambdaUpdateWrapper);
+        // 服务器进程历史记录表
+        LambdaUpdateWrapper<MonitorServerProcessHistory> serverProcessHistoryLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+        serverProcessHistoryLambdaUpdateWrapper.in(MonitorServerProcessHistory::getIp, ips);
+        this.monitorServerProcessHistoryDao.delete(serverProcessHistoryLambdaUpdateWrapper);
         // 服务器表
         LambdaUpdateWrapper<MonitorServer> serverLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
         serverLambdaUpdateWrapper.in(MonitorServer::getIp, ips);
@@ -265,7 +285,6 @@ public class MonitorServerServiceImpl extends ServiceImpl<IMonitorServerDao, Mon
      * 清理服务器监控历史数据
      * </p>
      *
-     * @param id   服务器主键ID
      * @param ip   IP地址
      * @param time 时间
      * @return layUiAdmin响应对象：如果清理成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
@@ -273,7 +292,7 @@ public class MonitorServerServiceImpl extends ServiceImpl<IMonitorServerDao, Mon
      * @custom.date 2021/7/21 8:57
      */
     @Override
-    public LayUiAdminResultVo clearMonitorServerHistory(Long id, String ip, String time) {
+    public LayUiAdminResultVo clearMonitorServerHistory(String ip, String time) {
         // 时间为空
         if (StringUtils.isBlank(time)) {
             return LayUiAdminResultVo.ok(WebResponseConstants.REQUIRED_IS_NULL);
@@ -287,28 +306,29 @@ public class MonitorServerServiceImpl extends ServiceImpl<IMonitorServerDao, Mon
         }
         // 服务器CPU历史记录表
         LambdaUpdateWrapper<MonitorServerCpuHistory> serverCpuHistoryLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
-        serverCpuHistoryLambdaUpdateWrapper.eq(MonitorServerCpuHistory::getId, id);
         serverCpuHistoryLambdaUpdateWrapper.eq(MonitorServerCpuHistory::getIp, ip);
         serverCpuHistoryLambdaUpdateWrapper.lt(MonitorServerCpuHistory::getInsertTime, clearTime);
         this.monitorServerCpuHistoryDao.delete(serverCpuHistoryLambdaUpdateWrapper);
         // 服务器磁盘历史记录
         LambdaUpdateWrapper<MonitorServerDiskHistory> serverDiskHistoryLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
-        serverDiskHistoryLambdaUpdateWrapper.eq(MonitorServerDiskHistory::getId, id);
         serverDiskHistoryLambdaUpdateWrapper.eq(MonitorServerDiskHistory::getIp, ip);
         serverDiskHistoryLambdaUpdateWrapper.lt(MonitorServerDiskHistory::getInsertTime, clearTime);
         this.monitorServerDiskHistoryDao.delete(serverDiskHistoryLambdaUpdateWrapper);
         // 服务器内存历史记录表
         LambdaUpdateWrapper<MonitorServerMemoryHistory> serverMemoryHistoryLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
-        serverMemoryHistoryLambdaUpdateWrapper.eq(MonitorServerMemoryHistory::getId, id);
         serverMemoryHistoryLambdaUpdateWrapper.eq(MonitorServerMemoryHistory::getIp, ip);
         serverMemoryHistoryLambdaUpdateWrapper.lt(MonitorServerMemoryHistory::getInsertTime, clearTime);
         this.monitorServerMemoryHistoryDao.delete(serverMemoryHistoryLambdaUpdateWrapper);
         // 服务器网卡历史记录表
         LambdaUpdateWrapper<MonitorServerNetcardHistory> serverNetcardHistoryLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
-        serverNetcardHistoryLambdaUpdateWrapper.eq(MonitorServerNetcardHistory::getId, id);
         serverNetcardHistoryLambdaUpdateWrapper.eq(MonitorServerNetcardHistory::getIp, ip);
         serverNetcardHistoryLambdaUpdateWrapper.lt(MonitorServerNetcardHistory::getInsertTime, clearTime);
         this.monitorServerNetcardHistoryDao.delete(serverNetcardHistoryLambdaUpdateWrapper);
+        // 服务器进程历史记录表
+        LambdaUpdateWrapper<MonitorServerProcessHistory> serverProcessHistoryLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+        serverProcessHistoryLambdaUpdateWrapper.eq(MonitorServerProcessHistory::getIp, ip);
+        serverProcessHistoryLambdaUpdateWrapper.lt(MonitorServerProcessHistory::getInsertTime, clearTime);
+        this.monitorServerProcessHistoryDao.delete(serverProcessHistoryLambdaUpdateWrapper);
         return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);
     }
 
