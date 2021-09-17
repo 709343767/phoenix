@@ -148,6 +148,7 @@ public class MonitorAlarmRecordController {
             String alarmRecordVoContent = monitorAlarmRecordVo.getContent() != null ? monitorAlarmRecordVo.getContent() : "";
             // 替换
             monitorAlarmRecordVo.setContent(StringUtils.replace(alarmRecordVoContent, "<br>", "\n"));
+            alarmRecordVoContent = monitorAlarmRecordVo.getContent();
             // 截取
             monitorAlarmRecordVo.setContent(alarmRecordVoContent.length() >= 500 ? StringUtils.substring(alarmRecordVoContent, 0, 500) + "......" : alarmRecordVoContent);
         }
