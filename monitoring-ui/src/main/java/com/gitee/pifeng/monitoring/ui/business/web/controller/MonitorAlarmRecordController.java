@@ -144,7 +144,12 @@ public class MonitorAlarmRecordController {
         String name = "告警记录";
         List<MonitorAlarmRecordVo> monitorAlarmRecordVos = this.monitorAlarmRecordService.getMonitorAlarmRecordList(type, level, status, title, content);
         for (MonitorAlarmRecordVo monitorAlarmRecordVo : monitorAlarmRecordVos) {
-            monitorAlarmRecordVo.setContent(StringUtils.replace(monitorAlarmRecordVo.getContent(), "<br>", "\n"));
+            // 单独处理下告警内容
+            String alarmRecordVoContent = monitorAlarmRecordVo.getContent() != null ? monitorAlarmRecordVo.getContent() : "";
+            // 替换
+            monitorAlarmRecordVo.setContent(StringUtils.replace(alarmRecordVoContent, "<br>", "\n"));
+            // 截取
+            monitorAlarmRecordVo.setContent(alarmRecordVoContent.length() >= 500 ? StringUtils.substring(alarmRecordVoContent, 0, 500) + "......" : alarmRecordVoContent);
         }
         ExportParams params = new ExportParams(name, name, ExcelType.XSSF);
         // 不设置列高
