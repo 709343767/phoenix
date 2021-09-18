@@ -58,4 +58,13 @@ var merge = function ($, res, tableId, columsIndex, columsName) {
         mergeIndex = 0;
         mark = 1;
     }
-}
+};
+
+/**
+ * 判断字符串是否为空
+ * @param o 字符串对象
+ * @returns {boolean}
+ */
+var isEmpty = function (o) {
+    return typeof o === 'undefined' || o == null || o === '';
+};

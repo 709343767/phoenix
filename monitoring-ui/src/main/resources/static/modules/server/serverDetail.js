@@ -7,7 +7,7 @@
         // 基于准备好的dom，初始化echarts实例
         var getServerCpuInfoChart = echarts.init(document.getElementById('get-server-cpu-info'), 'infographic');
         var getServerMemoryInfoChart = echarts.init(document.getElementById('get-server-memory-info'), 'infographic');
-        var getServerProcessInfoChart = echarts.init(document.getElementById('get-server-process-info'), 'infographic');
+        var getServerProcessChartInfoChart = echarts.init(document.getElementById('get-server-process-info'), 'infographic');
         var getServerNetworkSpeedInfoChart = echarts.init(document.getElementById('get-server-network-speed-info'), 'infographic');
         var getServerPowerSourceInfoChart = echarts.init(document.getElementById('get-server-power-source-info'), 'infographic');
         var getServerSensorsInfoChart = echarts.init(document.getElementById('get-server-sensors-info'), 'infographic');
@@ -15,7 +15,7 @@
         window.addEventListener("resize", function () {
             getServerCpuInfoChart.resize();
             getServerMemoryInfoChart.resize();
-            getServerProcessInfoChart.resize();
+            getServerProcessChartInfoChart.resize();
             getServerNetworkSpeedInfoChart.resize();
             getServerPowerSourceInfoChart.resize();
             getServerSensorsInfoChart.resize();
@@ -33,7 +33,7 @@
             // 发送ajax请求，获取内存图表数据
             getServerMemoryChartInfo(time);
             // 发送ajax请求，获取进程图表数据
-            getServerProcessInfo(time);
+            getServerProcessChartInfo(time);
             // 发送ajax请求，获取网速图表数据
             getServerNetworkSpeedChartInfo(time, chartAddress);
         });
@@ -624,6 +624,108 @@
             });
         }
 
+        // 发送ajax请求，获取进程数据
+        function getServerProcessInfo() {
+            // 弹出loading框
+            var loadingIndex = layer.load(1, {
+                shade: [0.1, '#fff'] //0.1透明度的白色背景
+            });
+            admin.req({
+                type: 'get',
+                url: layui.setter.base + 'monitor-server-process/get-server-detail-page-server-process-info',
+                dataType: 'json',
+                contentType: 'application/json;charset=utf-8',
+                headers: {
+                    "X-CSRF-TOKEN": tokenValue
+                },
+                data: {
+                    ip: ip // 服务器IP
+                },
+                success: function (result) {
+                    var data = result.data;
+                    var html = '';
+                    for (var i = 0; i < data.length; i++) {
+                        var obj = data[i];
+                        // 进程ID
+                        var processId = obj.processId;
+                        // 进程名
+                        var name = obj.name;
+                        //执行进程的完整路径
+                        var path = (!isEmpty(obj.path) && obj.path.length > 50) ? obj.path.substr(0, 50) + ' ......' : obj.path;
+                        // 进程命令行
+                        var commandLine = (!isEmpty(obj.commandLine) && obj.commandLine.length > 50) ? obj.commandLine.substr(0, 50) + ' ......' : obj.commandLine;
+                        //进程当前的工作目录
+                        var currentWorkingDirectory = (!isEmpty(obj.currentWorkingDirectory) && obj.currentWorkingDirectory.length > 50) ? obj.currentWorkingDirectory.substr(0, 50) + ' ......' : obj.currentWorkingDirectory;
+                        // 用户名
+                        var user = obj.user;
+                        //进程执行状态
+                        var state = obj.state;
+                        // 进程已执行的毫秒数
+                        var kernelTime = obj.kernelTime;
+                        // 进程已启动的毫秒数
+                        var upTime = obj.upTime;
+                        // 进程的开始时间
+                        var startTime = obj.startTime;
+                        // 进程的累积CPU使用率
+                        var cpuLoadCumulative = obj.cpuLoadCumulative;
+                        // 进程的位数
+                        var bitness = obj.bitness;
+                        // 占用内存大小
+                        var memorySize = obj.memorySizeStr;
+                        html += '<div class="layui-col-md4">' +
+                            '       <label class="label-font-weight">进程ID：</label>' + processId +
+                            '    </div>' +
+                            '    <div class="layui-col-md4">' +
+                            '       <label class="label-font-weight">进程名：</label>' + name +
+                            '    </div>' +
+                            '    <div class="layui-col-md4">' +
+                            '       <label class="label-font-weight">CPU使用率：</label>' + cpuLoadCumulative + '%' +
+                            '    </div>' +
+                            '    <div class="layui-col-md4">' +
+                            '       <label class="label-font-weight">占用内存：</label>' + memorySize +
+                            '    </div>' +
+                            '    <div class="layui-col-md4">' +
+                            '       <label class="label-font-weight">状态：</label>' + state +
+                            '    </div>' +
+                            '    <div class="layui-col-md4">' +
+                            '       <label class="label-font-weight">开始时间：</label>' + startTime +
+                            '    </div>' +
+                            '    <div class="layui-col-md4">' +
+                            '       <label class="label-font-weight">启动时间：</label>' + upTime +
+                            '    </div>' +
+                            '    <div class="layui-col-md4">' +
+                            '       <label class="label-font-weight">执行时间：</label>' + kernelTime +
+                            '    </div>' +
+                            '    <div class="layui-col-md4">' +
+                            '       <label class="label-font-weight">用户名：</label>' + user +
+                            '    </div>' +
+                            '    <div class="layui-col-md4">' +
+                            '       <label class="label-font-weight">命令行：</label>' + commandLine +
+                            '    </div>' +
+                            '    <div class="layui-col-md4">' +
+                            '       <label class="label-font-weight">路径：</label>' + path +
+                            '    </div>' +
+                            '    <div class="layui-col-md4">' +
+                            '       <label class="label-font-weight">工作目录：</label>' + currentWorkingDirectory +
+                            '    </div>' +
+                            '    <div class="layui-col-md4">' +
+                            '       <label class="label-font-weight">位数：</label>' + bitness +
+                            '    </div>';
+                        if (i !== data.length - 1) {
+                            html += '<hr class="layui-bg-gray hr-padding">';
+                        }
+                    }
+                    $('#process').empty().append(html);
+                    // 关闭loading框
+                    layer.close(loadingIndex);
+                },
+                error: function () {
+                    // 关闭loading框
+                    layer.close(loadingIndex);
+                }
+            });
+        }
+
         // 发送ajax请求，获取CPU数据
         function getServerCpuInfo() {
             // 弹出loading框
@@ -1116,7 +1218,7 @@
         }
 
         // 发送ajax请求，获取进程图表数据
-        function getServerProcessInfo(time) {
+        function getServerProcessChartInfo(time) {
             // 弹出loading框
             var loadingIndex = layer.load(1, {
                 shade: [0.1, '#fff'] //0.1透明度的白色背景
@@ -1199,7 +1301,7 @@
                         },
                         grid: {
                             left: '5%',
-                            right: '10%'
+                            right: '5%'
                         },
                         xAxis: {
                             type: 'category',
@@ -1248,7 +1350,7 @@
                             }
                         }]
                     };
-                    getServerProcessInfoChart.setOption(option);
+                    getServerProcessChartInfoChart.setOption(option);
                     // 关闭loading框
                     layer.close(loadingIndex);
                 },
@@ -1777,7 +1879,7 @@
             // 发送ajax请求，获取内存图表数据
             getServerMemoryChartInfo(time);
             // 发送ajax请求，获取进程图表数据
-            getServerProcessInfo(time);
+            getServerProcessChartInfo(time);
             // 发送ajax请求，获取网速图表数据
             getServerNetworkSpeedChartInfo(time, chartAddress);
             // 发送ajax请求，获取磁盘图表数据
@@ -1796,6 +1898,8 @@
             getServerPowerSourcesChartInfo();
             // 发送ajax请求，获取传感器图表数据
             getServerSensorsChartInfo();
+            // 发送ajax请求，获取进程数据
+            getServerProcessInfo();
         }
 
         // 页面加载后第一次执行

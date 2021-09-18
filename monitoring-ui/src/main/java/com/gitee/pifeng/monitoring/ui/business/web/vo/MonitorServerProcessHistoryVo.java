@@ -1,5 +1,6 @@
 package com.gitee.pifeng.monitoring.ui.business.web.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.gitee.pifeng.monitoring.common.inf.ISuperBean;
 import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorServerProcessHistory;
 import io.swagger.annotations.ApiModel;
@@ -38,9 +39,11 @@ public class MonitorServerProcessHistoryVo implements ISuperBean {
     @ApiModelProperty(value = "正在运行的进程数")
     private Integer processNum;
 
+    @JsonFormat(pattern = "yyyy/MM/dd HH:mm:ss", timezone = "GMT+8")
     @ApiModelProperty(value = "新增时间")
     private Date insertTime;
 
+    @JsonFormat(pattern = "yyyy/MM/dd HH:mm:ss", timezone = "GMT+8")
     @ApiModelProperty(value = "更新时间")
     private Date updateTime;
 

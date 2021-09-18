@@ -1,5 +1,6 @@
 package com.gitee.pifeng.monitoring.ui.business.web.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.gitee.pifeng.monitoring.common.inf.ISuperBean;
 import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorServerProcess;
 import io.swagger.annotations.ApiModel;
@@ -62,6 +63,7 @@ public class MonitorServerProcessVo implements ISuperBean {
     @ApiModelProperty(value = "进程已启动的毫秒数")
     private String upTime;
 
+    @JsonFormat(pattern = "yyyy/MM/dd HH:mm:ss", timezone = "GMT+8")
     @ApiModelProperty(value = "进程的开始时间")
     private Date startTime;
 
@@ -74,9 +76,14 @@ public class MonitorServerProcessVo implements ISuperBean {
     @ApiModelProperty(value = "占用内存大小（单位：byte）")
     private Long memorySize;
 
+    @ApiModelProperty(value = "占用内存大小（智能转换单位后的大小）")
+    private String memorySizeStr;
+
+    @JsonFormat(pattern = "yyyy/MM/dd HH:mm:ss", timezone = "GMT+8")
     @ApiModelProperty(value = "新增时间")
     private Date insertTime;
 
+    @JsonFormat(pattern = "yyyy/MM/dd HH:mm:ss", timezone = "GMT+8")
     @ApiModelProperty(value = "更新时间")
     private Date updateTime;
 
