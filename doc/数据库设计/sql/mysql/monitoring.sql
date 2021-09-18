@@ -684,7 +684,6 @@ CREATE TABLE `MONITOR_SERVER_PROCESS`
     `CURRENT_WORKING_DIRECTORY` varchar(255)  DEFAULT NULL COMMENT '进程当前的工作目录',
     `USER`                      varchar(255)  DEFAULT NULL COMMENT '用户名',
     `STATE`                     varchar(10)   DEFAULT NULL COMMENT '进程执行状态',
-    `KERNEL_TIME`               varchar(255)  DEFAULT NULL COMMENT '进程已执行的毫秒数',
     `UP_TIME`                   varchar(255)  DEFAULT NULL COMMENT '进程已启动的毫秒数',
     `START_TIME`                datetime      DEFAULT NULL COMMENT '进程的开始时间',
     `CPU_LOAD_CUMULATIVE`       double(16, 4) DEFAULT NULL COMMENT '进程的累积CPU使用率',

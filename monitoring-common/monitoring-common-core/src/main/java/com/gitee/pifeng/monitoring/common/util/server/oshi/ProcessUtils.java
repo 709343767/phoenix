@@ -134,8 +134,6 @@ public class ProcessUtils extends InitOshi {
             String user = process.getUser();
             // 进程执行状态
             String state = process.getState().name();
-            // 进程已执行的毫秒数
-            String kernelTime = DateUtil.formatBetween(process.getKernelTime(), BetweenFormatter.Level.MILLISECOND);
             // 进程已启动的毫秒数
             String upTime = DateUtil.formatBetween(process.getUpTime(), BetweenFormatter.Level.MILLISECOND);
             // 进程的开始时间
@@ -155,7 +153,6 @@ public class ProcessUtils extends InitOshi {
             processInfoDomain.setCurrentWorkingDirectory(currentWorkingDirectory);
             processInfoDomain.setUser(user);
             processInfoDomain.setState(state);
-            processInfoDomain.setKernelTime(kernelTime);
             processInfoDomain.setUpTime(upTime);
             processInfoDomain.setStartTime(startTime);
             processInfoDomain.setCpuLoadCumulative(cpuLoadCumulative);

@@ -223,7 +223,6 @@ public class ServerServiceImpl extends ServiceImpl<IMonitorServerDao, MonitorSer
             monitorServerProcess.setCurrentWorkingDirectory(processInfo.getCurrentWorkingDirectory());
             monitorServerProcess.setUser(processInfo.getUser());
             monitorServerProcess.setState(processInfo.getState());
-            monitorServerProcess.setKernelTime(processInfo.getKernelTime());
             monitorServerProcess.setUpTime(processInfo.getUpTime());
             monitorServerProcess.setStartTime(processInfo.getStartTime());
             monitorServerProcess.setCpuLoadCumulative(processInfo.getCpuLoadCumulative());

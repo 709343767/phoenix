@@ -81,12 +81,6 @@ public class MonitorServerProcess {
     private String state;
 
     /**
-     * 进程已执行的毫秒数
-     */
-    @TableField("KERNEL_TIME")
-    private String kernelTime;
-
-    /**
      * 进程已启动的毫秒数
      */
     @TableField("UP_TIME")

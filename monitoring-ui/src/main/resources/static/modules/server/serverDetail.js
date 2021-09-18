@@ -660,8 +660,6 @@
                         var user = obj.user;
                         //进程执行状态
                         var state = obj.state;
-                        // 进程已执行的毫秒数
-                        var kernelTime = obj.kernelTime;
                         // 进程已启动的毫秒数
                         var upTime = obj.upTime;
                         // 进程的开始时间
@@ -682,7 +680,7 @@
                             '       <label class="label-font-weight">CPU使用率：</label>' + cpuLoadCumulative + '%' +
                             '    </div>' +
                             '    <div class="layui-col-md4">' +
-                            '       <label class="label-font-weight">占用内存：</label>' + memorySize +
+                            '       <label class="label-font-weight">占用内存（RSS）：</label>' + memorySize +
                             '    </div>' +
                             '    <div class="layui-col-md4">' +
                             '       <label class="label-font-weight">状态：</label>' + state +
@@ -694,10 +692,7 @@
                             '       <label class="label-font-weight">开始时间：</label>' + startTime +
                             '    </div>' +
                             '    <div class="layui-col-md4">' +
-                            '       <label class="label-font-weight">启动时间：</label>' + upTime +
-                            '    </div>' +
-                            '    <div class="layui-col-md4">' +
-                            '       <label class="label-font-weight">执行时间：</label>' + kernelTime +
+                            '       <label class="label-font-weight">运行时间：</label>' + upTime +
                             '    </div>' +
                             '    <div class="layui-col-md4">' +
                             '       <label class="label-font-weight">用户名：</label>' + user +

@@ -68,10 +68,6 @@ public class MonitorServerProcess implements Serializable {
     @TableField("STATE")
     private String state;
 
-    @ApiModelProperty(value = "进程已执行的毫秒数")
-    @TableField("KERNEL_TIME")
-    private String kernelTime;
-
     @ApiModelProperty(value = "进程已启动的毫秒数")
     @TableField("UP_TIME")
     private String upTime;

@@ -57,9 +57,6 @@ public class MonitorServerProcessVo implements ISuperBean {
     @ApiModelProperty(value = "进程执行状态")
     private String state;
 
-    @ApiModelProperty(value = "进程已执行的毫秒数")
-    private String kernelTime;
-
     @ApiModelProperty(value = "进程已启动的毫秒数")
     private String upTime;
 

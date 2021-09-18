@@ -68,10 +68,7 @@ public class ProcessDomain extends AbstractSuperBean {
          * 进程执行状态
          */
         private String state;
-        /**
-         * 进程已执行的毫秒数
-         */
-        private String kernelTime;
+
         /**
          * 进程已启动的毫秒数
          */
