@@ -139,6 +139,7 @@ public class MonitorAlarmRecordController {
             @ApiImplicitParam(name = "title", value = "告警标题", paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "content", value = "告警内容", paramType = "query", dataType = "string")})
     @GetMapping("/export-monitor-alarm-record-list")
+    @ResponseBody
     @OperateLog(operModule = UiModuleConstants.ALARM + "#告警记录", operType = OperateTypeConstants.EXPORT, operDesc = "导出告警记录列表")
     public void exportMonitorAlarmRecordList(String type, String level, String status, String title, String content) {
         String name = "告警记录";
