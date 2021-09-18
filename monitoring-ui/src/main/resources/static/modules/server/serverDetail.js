@@ -688,6 +688,9 @@
                             '       <label class="label-font-weight">状态：</label>' + state +
                             '    </div>' +
                             '    <div class="layui-col-md4">' +
+                            '       <label class="label-font-weight">位数：</label>' + bitness +
+                            '    </div>' +
+                            '    <div class="layui-col-md4">' +
                             '       <label class="label-font-weight">开始时间：</label>' + startTime +
                             '    </div>' +
                             '    <div class="layui-col-md4">' +
@@ -707,9 +710,6 @@
                             '    </div>' +
                             '    <div class="layui-col-md4">' +
                             '       <label class="label-font-weight">工作目录：</label>' + currentWorkingDirectory +
-                            '    </div>' +
-                            '    <div class="layui-col-md4">' +
-                            '       <label class="label-font-weight">位数：</label>' + bitness +
                             '    </div>';
                         if (i !== data.length - 1) {
                             html += '<hr class="layui-bg-gray hr-padding">';
