@@ -7,6 +7,7 @@
         // 基于准备好的dom，初始化echarts实例
         var getServerCpuInfoChart = echarts.init(document.getElementById('get-server-cpu-info'), 'infographic');
         var getServerMemoryInfoChart = echarts.init(document.getElementById('get-server-memory-info'), 'infographic');
+        var getServerProcessInfoChart = echarts.init(document.getElementById('get-server-process-info'), 'infographic');
         var getServerNetworkSpeedInfoChart = echarts.init(document.getElementById('get-server-network-speed-info'), 'infographic');
         var getServerPowerSourceInfoChart = echarts.init(document.getElementById('get-server-power-source-info'), 'infographic');
         var getServerSensorsInfoChart = echarts.init(document.getElementById('get-server-sensors-info'), 'infographic');
@@ -14,14 +15,16 @@
         window.addEventListener("resize", function () {
             getServerCpuInfoChart.resize();
             getServerMemoryInfoChart.resize();
+            getServerProcessInfoChart.resize();
             getServerNetworkSpeedInfoChart.resize();
             getServerPowerSourceInfoChart.resize();
             getServerSensorsInfoChart.resize();
         });
         // 堆内存图表和非堆内存图表时间
         var time = 'hour';
+        var $addressOptionSelected = $('#address option:selected');
         // 服务器网卡地址
-        var chartAddress = $('#address option:selected').val() === undefined ? '' : $('#address option:selected').val();
+        var chartAddress = $addressOptionSelected.val() === undefined ? '' : $addressOptionSelected.val();
         // 时间条件发生改变
         form.on('select(time)', function (data) {
             time = data.value;
@@ -29,6 +32,8 @@
             getServerCpuChartInfo(time);
             // 发送ajax请求，获取内存图表数据
             getServerMemoryChartInfo(time);
+            // 发送ajax请求，获取进程图表数据
+            getServerProcessInfo(time);
             // 发送ajax请求，获取网速图表数据
             getServerNetworkSpeedChartInfo(time, chartAddress);
         });
@@ -69,7 +74,7 @@
                     var Gradient = [];
                     var leftColor = '';
                     var boxPosition = [65, 0];
-                    var TP_txt = ''
+                    var TP_txt = '';
                     // 刻度使用柱状图模拟，短设置1，长的设置3；构造一个数据
                     for (var i = 0, len = 135; i <= len; i++) {
                         if (i < 10 || i > 130) {
@@ -1110,6 +1115,150 @@
             });
         }
 
+        // 发送ajax请求，获取进程图表数据
+        function getServerProcessInfo(time) {
+            // 弹出loading框
+            var loadingIndex = layer.load(1, {
+                shade: [0.1, '#fff'] //0.1透明度的白色背景
+            });
+            admin.req({
+                type: 'get',
+                url: layui.setter.base + 'monitor-server-process-history/get-server-detail-page-server-process-chart-info',
+                dataType: 'json',
+                contentType: 'application/json;charset=utf-8',
+                headers: {
+                    "X-CSRF-TOKEN": tokenValue
+                },
+                data: {
+                    ip: ip, // 服务器IP
+                    time: time // 时间
+                },
+                success: function (result) {
+                    var data = result.data;
+                    // 运行进程数
+                    var processNum = data.map(function (item) {
+                        return item.processNum;
+                    });
+                    // 新增时间
+                    var insertTime = data.map(function (item) {
+                        return item.insertTime.replace(' ', '\n');
+                    });
+                    var option = {
+                        title: {
+                            text: '进程',
+                            left: 'center',
+                            textStyle: {
+                                color: '#696969',
+                                fontSize: 14
+                            }
+                        },
+                        // 鼠标移到折线上展示数据
+                        tooltip: {
+                            trigger: 'axis',
+                            formatter: function (params) {
+                                var result = '';
+                                var axisName = '';
+                                params.forEach(function (item) {
+                                    axisName = item.axisValue;
+                                    var itemValue = item.marker + item.seriesName + ': ' + item.data + ' 个</br>';
+                                    result += itemValue;
+                                });
+                                return axisName + '</br>' + result;
+                            }
+                        },
+                        legend: {
+                            data: ['运行中进程数'],
+                            x: 'center',
+                            y: '12%',
+                            orient: 'horizontal'
+                        },
+                        /*dataZoom: [{
+                            type: 'inside'
+                        }],*/
+                        toolbox: {
+                            show: true,
+                            feature: {
+                                dataZoom: {
+                                    yAxisIndex: "none"
+                                },
+                                dataView: {
+                                    readOnly: false
+                                },
+                                magicType: {
+                                    type: ["line", "bar"]
+                                },
+                                restore: {},
+                                saveAsImage: {}
+                            },
+                            iconStyle: {
+                                borderColor: "rgba(105, 98, 98, 1)"
+                            },
+                            right: "2%",
+                            orient: "vertical",
+                            showTitle: false,
+                        },
+                        grid: {
+                            left: '5%',
+                            right: '10%'
+                        },
+                        xAxis: {
+                            type: 'category',
+                            // X轴从零刻度开始
+                            boundaryGap: false,
+                            data: insertTime,
+                            axisLabel: {
+                                rotate: 0 //调整数值改变倾斜的幅度（范围-90到90）
+                            }
+                        },
+                        yAxis: [{
+                            type: 'value',
+                            name: '个',
+                            axisLabel: {
+                                formatter: '{value}'
+                            }
+                        }],
+                        // 数据
+                        series: [{
+                            name: '运行中进程数',
+                            yAxisIndex: 0,
+                            data: processNum,
+                            type: 'line',
+                            smooth: true,
+                            areaStyle: {
+                                type: 'default',
+                                // 渐变色实现
+                                color: new echarts.graphic.LinearGradient(0, 0, 0, 1,
+                                    // 三种由深及浅的颜色
+                                    [{
+                                        offset: 0,
+                                        color: '#B4EEB4'
+                                    }, {
+                                        offset: 0.5,
+                                        color: '#C1FFC1'
+                                    }, {
+                                        offset: 1,
+                                        color: '#FFFFFF'
+                                    }])
+                            },
+                            itemStyle: {
+                                normal: {
+                                    // 设置颜色
+                                    color: '#9BCD9B'
+                                }
+                            }
+                        }]
+                    };
+                    getServerProcessInfoChart.setOption(option);
+                    // 关闭loading框
+                    layer.close(loadingIndex);
+                },
+                error: function () {
+                    // 关闭loading框
+                    layer.close(loadingIndex);
+                }
+            });
+        }
+
         // 发送ajax请求，获取CPU图表数据
         function getServerCpuChartInfo(time) {
             // 弹出loading框
@@ -1627,6 +1776,8 @@
             getServerCpuChartInfo(time);
             // 发送ajax请求，获取内存图表数据
             getServerMemoryChartInfo(time);
+            // 发送ajax请求，获取进程图表数据
+            getServerProcessInfo(time);
             // 发送ajax请求，获取网速图表数据
             getServerNetworkSpeedChartInfo(time, chartAddress);
             // 发送ajax请求，获取磁盘图表数据

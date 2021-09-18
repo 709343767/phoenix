@@ -54,8 +54,8 @@ public class MonitorServerCpuHistoryController {
             @ApiImplicitParam(name = "time", value = "时间", paramType = "query", dataType = "string")})
     public LayUiAdminResultVo getServerDetailPageServerCpuChartInfo(@RequestParam(name = "ip") String ip,
                                                                     @RequestParam(name = "time", required = false) String time) {
-        List<ServerDetailPageServerCpuChartVo> monitorJvmMemoryChartVos = this.monitorServerCpuHistoryService.getServerDetailPageServerCpuChartInfo(ip, time);
-        return LayUiAdminResultVo.ok(monitorJvmMemoryChartVos);
+        List<ServerDetailPageServerCpuChartVo> monitorServerCpuChartVos = this.monitorServerCpuHistoryService.getServerDetailPageServerCpuChartInfo(ip, time);
+        return LayUiAdminResultVo.ok(monitorServerCpuChartVos);
     }
 
 }
