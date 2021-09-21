@@ -692,7 +692,7 @@
                             '       <label class="label-font-weight">开始时间：</label>' + startTime +
                             '    </div>' +
                             '    <div class="layui-col-md4">' +
-                            '       <label class="label-font-weight">运行时间：</label>' + upTime +
+                            '       <label class="label-font-weight">运行时长：</label>' + upTime +
                             '    </div>' +
                             '    <div class="layui-col-md4">' +
                             '       <label class="label-font-weight">用户名：</label>' + user +
