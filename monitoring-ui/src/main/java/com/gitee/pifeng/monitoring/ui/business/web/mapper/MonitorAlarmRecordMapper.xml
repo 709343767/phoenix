@@ -37,7 +37,8 @@
                                           INTERVAL 6 DAY) date) d
                           LEFT JOIN MONITOR_ALARM_RECORD a ON
                      (DATE_FORMAT(d.date, '%Y/%m/%d') = DATE_FORMAT(a.INSERT_TIME, '%Y/%m/%d'))
-                 GROUP BY d.date) b
+                 GROUP BY d.date
+                 ORDER BY d.date ASC) b
     </select>
 
     <!-- 告警成功率统计 -->

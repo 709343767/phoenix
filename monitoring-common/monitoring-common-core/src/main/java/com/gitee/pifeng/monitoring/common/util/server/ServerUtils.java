@@ -2,6 +2,7 @@ package com.gitee.pifeng.monitoring.common.util.server;
 
 import com.gitee.pifeng.monitoring.common.domain.Server;
 import com.gitee.pifeng.monitoring.common.util.server.oshi.PowerSourceUtils;
+import com.gitee.pifeng.monitoring.common.util.server.oshi.ProcessUtils;
 import com.gitee.pifeng.monitoring.common.util.server.oshi.SensorsUtils;
 import com.gitee.pifeng.monitoring.common.util.server.sigar.CpuUtils;
 import com.gitee.pifeng.monitoring.common.util.server.sigar.DiskUtils;
@@ -48,6 +49,7 @@ public final class ServerUtils {
                 .diskDomain(DiskUtils.getDiskInfo())
                 .powerSourcesDomain(PowerSourceUtils.getPowerSourcesInfo())
                 .sensorsDomain(SensorsUtils.getSensorsInfo())
+                .processDomain(ProcessUtils.getProcessInfo())
                 .build();
     }
 

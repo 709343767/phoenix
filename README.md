@@ -12,7 +12,7 @@
 
 - 服务器
 
-  支持Windows、Linux，监控内容包括：在线状态、操作系统、CPU、磁盘、内存、网卡、电池、传感器；
+  支持Windows、Linux，监控内容包括：在线状态、操作系统、CPU、进程、磁盘、内存、网卡、电池、传感器；
 
 - 数据库
 
@@ -303,7 +303,7 @@ ScheduledExecutorService service = Monitor.buryingPoint(() -> {
 
 ## 版权 | License
 
-[Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0)
+[GNU General Public License v3.0](https://www.gnu.org/licenses/gpl-3.0.txt)
 
 
 

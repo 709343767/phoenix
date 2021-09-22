@@ -139,12 +139,19 @@ public class MonitorAlarmRecordController {
             @ApiImplicitParam(name = "title", value = "告警标题", paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "content", value = "告警内容", paramType = "query", dataType = "string")})
     @GetMapping("/export-monitor-alarm-record-list")
+    @ResponseBody
     @OperateLog(operModule = UiModuleConstants.ALARM + "#告警记录", operType = OperateTypeConstants.EXPORT, operDesc = "导出告警记录列表")
     public void exportMonitorAlarmRecordList(String type, String level, String status, String title, String content) {
         String name = "告警记录";
         List<MonitorAlarmRecordVo> monitorAlarmRecordVos = this.monitorAlarmRecordService.getMonitorAlarmRecordList(type, level, status, title, content);
         for (MonitorAlarmRecordVo monitorAlarmRecordVo : monitorAlarmRecordVos) {
-            monitorAlarmRecordVo.setContent(StringUtils.replace(monitorAlarmRecordVo.getContent(), "<br>", "\n"));
+            // 单独处理下告警内容
+            String alarmRecordVoContent = monitorAlarmRecordVo.getContent() != null ? monitorAlarmRecordVo.getContent() : "";
+            // 替换
+            monitorAlarmRecordVo.setContent(StringUtils.replace(alarmRecordVoContent, "<br>", "\n"));
+            alarmRecordVoContent = monitorAlarmRecordVo.getContent();
+            // 截取
+            monitorAlarmRecordVo.setContent(alarmRecordVoContent.length() >= 500 ? StringUtils.substring(alarmRecordVoContent, 0, 500) + "......" : alarmRecordVoContent);
         }
         ExportParams params = new ExportParams(name, name, ExcelType.XSSF);
         // 不设置列高
