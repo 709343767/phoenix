@@ -30,9 +30,17 @@
                 "function" == typeof a && a(t)
             }, error: function (e, t) {
                 // 皮锋做了下修改：增加一个if判断，如果config.js中，debug: true，才弹出错误框，否则不弹框
-                if(r.debug){
+                if (r.debug) {
                     var a = ["请求异常，请重试<br><cite>错误信息：</cite>" + t, d()].join("");
                     i.error(a), "function" == typeof n && n(res)
+                }
+                // 相应文本
+                var responseText = e.responseText;
+                // 是否为登录页面
+                var isLoginPage = responseText.indexOf('<title>登录</title>') !== -1;
+                if (isLoginPage) {
+                    // 跳转到登录页
+                    window.location.href = layui.setter.base + 'login?timeout=true';
                 }
             }
         }, e))
