@@ -40,7 +40,7 @@
                 var isLoginPage = responseText.indexOf('<title>登录</title>') !== -1;
                 if (isLoginPage) {
                     // 跳转到登录页
-                    window.location.href = layui.setter.base + 'login?timeout=true';
+                    window.top.location.href = layui.setter.base + 'login?timeout=true';
                 }
             }
         }, e))
