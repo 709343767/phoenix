@@ -25,11 +25,11 @@
     <div class="layui-card">
         <div class="layui-form layui-card-header layuiadmin-card-header-auto">
             <form class="layui-form-item" onsubmit="return false;">
-                <div class="layui-inline">
+                <div class="layui-inline" style="display: none;">
                     <label class="layui-form-label">告警类型</label>
                     <div class="layui-input-block">
                         <select name="type">
-                            <option value="">所有</option>
+                            <option value="" selected>所有</option>
                             <option value="SERVER">服务器</option>
                             <option value="NET">网络</option>
                             <option value="INSTANCE">应用</option>
@@ -191,7 +191,7 @@
                     sort: !0
                 }, {
                     field: 'code',
-                    minWidth: 100,
+                    minWidth: 180,
                     title: '告警编码',
                     sort: !0
                 }, {
@@ -289,7 +289,7 @@
                         // 宽度
                         width = document.body.clientWidth * 0.4 + 'px';
                         // 高度
-                        height = document.body.clientHeight * 0.65 + 'px';
+                        height = document.body.clientHeight * 0.62 + 'px';
                     }
                     layer.open({
                         type: 2,
@@ -380,7 +380,7 @@
                     // 宽度
                     width = document.body.clientWidth * 0.4 + 'px';
                     // 高度
-                    height = document.body.clientHeight * 0.65 + 'px';
+                    height = document.body.clientHeight * 0.62 + 'px';
                 }
                 layer.open({
                     type: 2,

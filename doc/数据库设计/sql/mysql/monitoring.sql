@@ -25,7 +25,7 @@ CREATE TABLE `MONITOR_ALARM_DEFINITION`
     `SECOND_CLASS` varchar(255) DEFAULT NULL COMMENT '二级分类',
     `THIRD_CLASS`  varchar(255) DEFAULT NULL COMMENT '三级分类',
     `GRADE`        varchar(5)   NOT NULL COMMENT '告警级别（INFO、WARN、ERROR、FATAL）',
-    `CODE`         varchar(8)   NOT NULL COMMENT '告警编码',
+    `CODE`         varchar(32)   NOT NULL COMMENT '告警编码',
     `TITLE`        varchar(125) NOT NULL COMMENT '告警标题',
     `CONTENT`      varchar(255) NOT NULL COMMENT '告警内容',
     `INSERT_TIME`  datetime     NOT NULL COMMENT '插入时间',

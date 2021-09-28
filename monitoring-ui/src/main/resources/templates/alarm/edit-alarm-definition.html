@@ -33,11 +33,9 @@
             <input type="text" name="code" lay-verify="required" placeholder="请输入告警编码" autocomplete="off"
                    class="layui-input" lay-verType="tips" th:value="${monitorAlarmDefinitionVo.code}" readonly>
         </div>
-    </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">告警类型</label>
-        <div class="layui-input-inline">
-            <select name="type">
+        <label class="layui-form-label" style="display: none;">告警类型</label>
+        <div class="layui-input-inline" style="display: none;">
+            <select name="type" disabled>
                 <option value="SERVER" th:selected="${monitorAlarmDefinitionVo.type=='SERVER'}">服务器</option>
                 <option value="NET" th:selected="${monitorAlarmDefinitionVo.type=='NET'}">网络</option>
                 <option value="DATABASE" th:selected="${monitorAlarmDefinitionVo.type=='DATABASE'}">数据库</option>

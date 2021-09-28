@@ -23,19 +23,17 @@
     <div class="layui-form-item">
         <label class="layui-form-label">告警编码</label>
         <div class="layui-input-inline">
-            <input type="text" name="code" lay-verify="required" placeholder="请输入告警编码" autocomplete="off"
+            <input type="text" id="code" name="code" lay-verify="required" placeholder="请输入告警编码" autocomplete="off"
                    class="layui-input" lay-verType="tips">
         </div>
-    </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">告警类型</label>
-        <div class="layui-input-inline">
-            <select name="type">
+        <label class="layui-form-label" style="display: none;">告警类型</label>
+        <div class="layui-input-inline" style="display: none;">
+            <select name="type" disabled>
                 <option value="SERVER">服务器</option>
                 <option value="NET">网络</option>
                 <option value="DATABASE">数据库</option>
                 <option value="INSTANCE">应用</option>
-                <option value="CUSTOM">自定义</option>
+                <option value="CUSTOM" selected>自定义</option>
             </select>
         </div>
         <label class="layui-form-label">告警级别</label>
@@ -87,13 +85,18 @@
         <input type="button" lay-submit lay-filter="LAY-alarm-front-submit" id="LAY-alarm-front-submit" value="确认">
     </div>
 </div>
+<script src="./js/common.js" th:src="@{/js/common.js}" charset="utf-8"></script>
+<script src="./js/md5.js" th:src="@{/js/md5.js}"></script>
 <script src="./layui/layui.js" th:src="@{/layui/layui.js}"></script>
 <script>
     layui.config({
         base: ctxPath //静态资源所在路径
     }).extend({
         index: 'lib/index' //主入口模块
-    }).use(['index', 'form']);
+    }).use(['index', 'form'], function () {
+        var $ = layui.$;
+        $('#code').val(md5(new Date() + getUUID()).substr(8, 16));
+    });
 </script>
 </body>
 </html>
