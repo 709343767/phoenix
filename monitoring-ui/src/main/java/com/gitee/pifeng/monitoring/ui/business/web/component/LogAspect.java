@@ -177,7 +177,7 @@ public class LogAspect {
                 "，<br>时间：" + DateTimeUtils.dateToString(monitorLogException.getInsertTime());
         Alarm alarm = Alarm.builder()
                 .alarmLevel(AlarmLevelEnums.ERROR)
-                .monitorType(MonitorTypeEnums.CUSTOM)
+                .monitorType(MonitorTypeEnums.INSTANCE)
                 .charset(StandardCharsets.UTF_8)
                 .title(excName)
                 .msg(msg)
