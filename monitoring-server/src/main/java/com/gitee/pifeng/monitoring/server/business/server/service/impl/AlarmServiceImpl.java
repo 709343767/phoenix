@@ -115,16 +115,8 @@ public class AlarmServiceImpl implements IAlarmService {
         String alarmUuid = alarmPackage.getId();
         // 监控类型
         MonitorTypeEnums monitorTypeEnum = alarm.getMonitorType();
-        // 告警级别
-        AlarmLevelEnums alarmLevelEnum = alarm.getAlarmLevel();
-        // 告警方式
-        AlarmWayEnums[] alarmWayEnums = MonitoringConfigPropertiesLoader.getMonitoringProperties().getAlarmProperties().getWayEnums();
         // 告警代码
         String code = alarm.getCode();
-        // 告警内容标题
-        String alarmTitle = alarm.getTitle();
-        // 告警内容
-        String alarmMsg = alarm.getMsg();
         // 如果告警类型是自定义的业务告警，并且有告警代码，查询数据库中此告警代码对应的告警级别、告警标题、告警内容，数据库中有就用数据库的
         if (monitorTypeEnum == MonitorTypeEnums.CUSTOM && StringUtils.isNotBlank(code)) {
             try {
@@ -135,17 +127,18 @@ public class AlarmServiceImpl implements IAlarmService {
                     // 数据库中的告警级别
                     String dbLevel = monitorAlarmDefinition.getGrade();
                     if (StringUtils.isNotBlank(dbLevel)) {
-                        alarmLevelEnum = AlarmLevelEnums.str2Enum(dbLevel);
+                        AlarmLevelEnums alarmLevelEnum = AlarmLevelEnums.str2Enum(dbLevel);
+                        alarm.setAlarmLevel(alarmLevelEnum);
                     }
                     // 数据库中的告警标题
                     String dbTitle = monitorAlarmDefinition.getTitle();
                     if (StringUtils.isNotBlank(dbTitle)) {
-                        alarmTitle = dbTitle;
+                        alarm.setTitle(dbTitle);
                     }
                     // 数据库中的告警内容
                     String dbMsg = monitorAlarmDefinition.getContent();
                     if (StringUtils.isNotBlank(dbMsg)) {
-                        alarmMsg = dbMsg;
+                        alarm.setMsg(dbMsg);
                     }
                 }
             } catch (Exception e) {
@@ -155,13 +148,13 @@ public class AlarmServiceImpl implements IAlarmService {
             }
         }
         // 不管发不发送告警信息，先把告警记录存入数据库
-        this.insertMonitorAlarmRecordToDb(alarmUuid, code, alarmTitle, alarmMsg, monitorTypeEnum, alarmLevelEnum, alarmWayEnums);
+        this.insertMonitorAlarmRecordToDb(alarm, alarmUuid);
         // 是否发送告警信息
         if (!this.isSendAlarm(result, alarm)) {
             return;
         }
         // 发送告警以及把告警记录计入数据库
-        this.sendAlarmAndOperateDb(result, alarmUuid, alarmTitle, alarmMsg, alarmLevelEnum, alarmWayEnums);
+        this.sendAlarmAndOperateDb(result, alarm, alarmUuid);
     }
 
     /**
@@ -172,18 +165,20 @@ public class AlarmServiceImpl implements IAlarmService {
      * 2.发送告警；<br>
      * 3.更新数据库中的告警发送结果。<br>
      *
-     * @param result         返回结果
-     * @param alarmUuid      告警代码
-     * @param alarmTitle     告警内容标题
-     * @param alarmMsg       告警内容
-     * @param alarmLevelEnum 告警级别
-     * @param alarmWayEnums  告警方式
+     * @param result    返回结果
+     * @param alarmUuid 告警代码
      * @author 皮锋
      * @custom.date 2020/9/14 12:56
      */
-    private void sendAlarmAndOperateDb(Result result,
-                                       String alarmUuid, String alarmTitle, String alarmMsg,
-                                       AlarmLevelEnums alarmLevelEnum, AlarmWayEnums[] alarmWayEnums) {
+    private void sendAlarmAndOperateDb(Result result, Alarm alarm, String alarmUuid) {
+        // 告警级别
+        AlarmLevelEnums alarmLevelEnum = alarm.getAlarmLevel();
+        // 告警内容标题
+        String alarmTitle = alarm.getTitle();
+        // 告警内容
+        String alarmMsg = alarm.getMsg();
+        // 告警方式
+        AlarmWayEnums[] alarmWayEnums = MonitoringConfigPropertiesLoader.getMonitoringProperties().getAlarmProperties().getWayEnums();
         List<AlarmWayEnums> alarmWayEnumsList = Arrays.asList(alarmWayEnums);
         // 告警方式为短信告警和邮件告警
         if (alarmWayEnumsList.contains(AlarmWayEnums.SMS) && alarmWayEnumsList.contains(AlarmWayEnums.MAIL)) {
@@ -335,22 +330,27 @@ public class AlarmServiceImpl implements IAlarmService {
      * 把告警信息插入数据库
      * </p>
      *
-     * @param alarmUuid       告警代码
-     * @param alarmDefCode    告警定义编码
-     * @param alarmTitle      告警标题
-     * @param alarmMsg        告警内容
-     * @param monitorTypeEnum 监控类型（SERVER、NET、INSTANCE、CUSTOM）
-     * @param alarmLevelEnum  告警级别（INFO、WARM、ERROR、FATAL）
-     * @param alarmWayEnums   告警方式（SMS、MAIL、...）
+     * @param alarm     告警信息
+     * @param alarmUuid 告警代码
      * @author 皮锋
      * @custom.date 2020/5/13 16:21
      */
-    private void insertMonitorAlarmRecordToDb(String alarmUuid, String alarmDefCode, String alarmTitle, String alarmMsg,
-                                              MonitorTypeEnums monitorTypeEnum, AlarmLevelEnums alarmLevelEnum,
-                                              AlarmWayEnums[] alarmWayEnums) {
+    private void insertMonitorAlarmRecordToDb(Alarm alarm, String alarmUuid) {
+        // 告警定义编码
+        String code = alarm.getCode();
+        // 告警级别
+        AlarmLevelEnums alarmLevelEnum = alarm.getAlarmLevel();
+        // 监控类型
+        MonitorTypeEnums monitorTypeEnum = alarm.getMonitorType();
+        // 告警内容标题
+        String alarmTitle = alarm.getTitle();
+        // 告警内容
+        String alarmMsg = alarm.getMsg();
+        // 告警方式
+        AlarmWayEnums[] alarmWayEnums = MonitoringConfigPropertiesLoader.getMonitoringProperties().getAlarmProperties().getWayEnums();
         MonitorAlarmRecord monitorAlarmRecord = new MonitorAlarmRecord();
         monitorAlarmRecord.setCode(alarmUuid);
-        monitorAlarmRecord.setAlarmDefCode(alarmDefCode);
+        monitorAlarmRecord.setAlarmDefCode(code);
         monitorAlarmRecord.setTitle(alarmTitle);
         monitorAlarmRecord.setContent(alarmMsg);
         monitorAlarmRecord.setLevel(alarmLevelEnum != null ? alarmLevelEnum.name() : null);

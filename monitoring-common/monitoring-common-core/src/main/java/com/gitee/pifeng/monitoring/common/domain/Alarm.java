@@ -47,11 +47,12 @@ public final class Alarm extends AbstractSuperBean {
     private AlarmReasonEnums alarmReason = AlarmReasonEnums.IGNORE;
 
     /**
-     * 监控类型
+     * 监控类型，默认为：CUSTOM(自定义)
      *
      * @see MonitorTypeEnums
      */
-    private MonitorTypeEnums monitorType;
+    @Builder.Default
+    private MonitorTypeEnums monitorType = MonitorTypeEnums.CUSTOM;
 
     /**
      * 字符集，如果当前字符集不是UTF-8，请指明字符集
