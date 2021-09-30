@@ -95,7 +95,7 @@ public class MonitorInstanceServiceImpl extends ServiceImpl<IMonitorInstanceDao,
                 .instanceSum(NumberUtil.parseInt(map.get("instanceSum").toString()))
                 .instanceOnLineSum(NumberUtil.parseInt(map.get("instanceOnLineSum").toString()))
                 .instanceOffLineSum(NumberUtil.parseInt(map.get("instanceOffLineSum").toString()))
-                .instanceOnLineRate(map.get("instanceOnLineRate").toString())
+                .instanceOnLineRate(NumberUtil.round(map.get("instanceOnLineRate").toString(), 2).toString())
                 .build();
     }
 

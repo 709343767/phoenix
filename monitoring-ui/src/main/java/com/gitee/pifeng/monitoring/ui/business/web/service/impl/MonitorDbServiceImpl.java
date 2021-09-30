@@ -210,7 +210,7 @@ public class MonitorDbServiceImpl extends ServiceImpl<IMonitorDbDao, MonitorDb> 
                 .dbConnectSum(NumberUtil.parseInt(map.get("dbConnectSum").toString()))
                 .dbDisconnectSum(NumberUtil.parseInt(map.get("dbDisconnectSum").toString()))
                 .dbUnsentSum(NumberUtil.parseInt(map.get("dbUnsentSum").toString()))
-                .dbConnectRate(map.get("dbConnectRate").toString())
+                .dbConnectRate(NumberUtil.round(map.get("dbConnectRate").toString(), 2).toString())
                 .build();
     }
 

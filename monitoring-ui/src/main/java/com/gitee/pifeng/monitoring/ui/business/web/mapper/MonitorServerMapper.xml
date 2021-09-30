@@ -3,13 +3,13 @@
 <mapper namespace="com.gitee.pifeng.monitoring.ui.business.web.dao.IMonitorServerDao">
     <!-- 服务器在线率统计 -->
     <select id="getServerOnlineRateStatistics" resultType="java.util.Map" databaseId="mysql">
-        select tmp.serverSum                                                      as serverSum,
-               tmp.serverOnLineSum                                                as serverOnLineSum,
-               tmp.serverSum - tmp.serverOnLineSum                                as serverOffLineSum,
-               ifnull(round(tmp.serverOnLineSum / tmp.serverSum, 2) * 100, '100') as serverOnLineRate
+        select tmp.serverSum                                                         as serverSum,
+               tmp.serverOnLineSum                                                   as serverOnLineSum,
+               tmp.serverSum - tmp.serverOnLineSum                                   as serverOffLineSum,
+               ifnull(round(tmp.serverOnLineSum / tmp.serverSum, 2) * 100, '100.00') as serverOnLineRate
         from (
-                     select count(1)                     as serverSum,
-                            ifnull(sum(ms.IS_ONLINE), 0) as serverOnLineSum
-                     from MONITOR_SERVER ms) tmp
+                 select count(1)                     as serverSum,
+                        ifnull(sum(ms.IS_ONLINE), 0) as serverOnLineSum
+                 from MONITOR_SERVER ms) tmp
     </select>
 </mapper>

@@ -142,7 +142,7 @@ public class MonitorServerServiceImpl extends ServiceImpl<IMonitorServerDao, Mon
                 .otherSum(NumberUtil.parseInt(serverOsTypeMap.get("otherSum").toString()))
                 .serverOnLineSum(NumberUtil.parseInt(serverOnlineRateMap.get("serverOnLineSum").toString()))
                 .serverOffLineSum(NumberUtil.parseInt(serverOnlineRateMap.get("serverOffLineSum").toString()))
-                .serverOnLineRate(serverOnlineRateMap.get("serverOnLineRate").toString())
+                .serverOnLineRate(NumberUtil.round(serverOnlineRateMap.get("serverOnLineRate").toString(), 2).toString())
                 .build();
     }
 

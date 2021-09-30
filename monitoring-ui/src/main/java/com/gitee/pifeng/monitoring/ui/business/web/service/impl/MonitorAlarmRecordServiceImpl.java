@@ -62,7 +62,7 @@ public class MonitorAlarmRecordServiceImpl extends ServiceImpl<IMonitorAlarmReco
                 .alarmRecordSuccessSum(NumberUtil.parseInt(map.get("alarmRecordSuccessSum").toString()))
                 .alarmRecordFailSum(NumberUtil.parseInt(map.get("alarmRecordFailSum").toString()))
                 .alarmRecordUnsentSum(NumberUtil.parseInt(map.get("alarmRecordUnsentSum").toString()))
-                .alarmSucRate(map.get("alarmSucRate").toString())
+                .alarmSucRate(NumberUtil.round(map.get("alarmSucRate").toString(), 2).toString())
                 .build();
     }
 
