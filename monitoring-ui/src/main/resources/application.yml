@@ -19,6 +19,7 @@ server:
   #开启优雅停机
   shutdown: graceful
   ssl:
+    enabled: true
     #你生成的证书名字
     key-store: classpath:monitoring.p12
     #密钥库密码

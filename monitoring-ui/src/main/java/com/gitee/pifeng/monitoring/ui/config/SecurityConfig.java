@@ -106,7 +106,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.authorizeRequests()
                 // 如果有允许匿名的url，填在下面
-                .antMatchers("/login", "logout").permitAll()
+                .antMatchers("/login", "/logout").permitAll()
                 // 所有的访问都必须进行认证处理后才可以正常访问
                 .anyRequest().authenticated()
                 .and()
@@ -117,13 +117,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginPage("/login")
                 .loginProcessingUrl("/doLogin")
                 .failureUrl("/login?error=true")
-                .defaultSuccessUrl("/login-success")
+                .defaultSuccessUrl("/login-success", true)
                 .permitAll()
                 .and()
                 // 记住我
                 .rememberMe()
                 .rememberMeParameter("remember-me")
-                .tokenValiditySeconds(60 * 60 * 24 * 30)
+                // 60 * 60 * 24 * 30 = 一个月
+                .tokenValiditySeconds(2592000)
                 // 持久化token
                 .tokenRepository(this.persistentTokenRepository())
                 .userDetailsService(this.monitorUserService)
