@@ -45,11 +45,6 @@
                     账号或密码错误，请重新输入！
                 </label>
             </div>
-            <div class="layui-form-item" th:if="${param.logout}">
-                <label style="color: red;">
-                    退出登录成功，请重新登录！
-                </label>
-            </div>
             <div class="layui-form-item" th:if="${param.expire}">
                 <label style="color: red;">
                     此账号已被管理员修改，您被迫下线！

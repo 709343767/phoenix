@@ -52,4 +52,19 @@ public class LoginController {
         return "redirect:index";
     }
 
+    /**
+     * <p>
+     * 退出登录成功重定向到首页
+     * </p>
+     *
+     * @return 重定向首页URL
+     * @author 皮锋
+     * @custom.date 2021/9/30 21:10
+     */
+    @ApiOperation(value = "退出登录成功重定向到首页")
+    @GetMapping("/logout-success")
+    public String logoutSuccess() {
+        return "redirect:index";
+    }
+
 }
