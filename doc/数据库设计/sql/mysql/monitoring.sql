@@ -759,21 +759,6 @@ CREATE TABLE `MONITOR_USER`
   ROW_FORMAT = COMPACT COMMENT ='监控用户表';
 
 -- ----------------------------
--- Table structure for persistent_logins
--- ----------------------------
-DROP TABLE IF EXISTS `persistent_logins`;
-CREATE TABLE `persistent_logins`
-(
-    `username`  varchar(64) NOT NULL,
-    `series`    varchar(64) NOT NULL,
-    `token`     varchar(64) NOT NULL,
-    `last_used` timestamp   NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    PRIMARY KEY (`series`) USING BTREE
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4
-  ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
 -- Table structure for SPRING_SESSION
 -- ----------------------------
 DROP TABLE IF EXISTS `SPRING_SESSION`;

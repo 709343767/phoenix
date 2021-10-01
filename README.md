@@ -42,7 +42,7 @@
 - 技术选型
 
   核心框架：SpringBoot  
-  安全框架：SpringSecurity  
+  安全框架：SpringSecurity、SpringSession  
   任务调度：SpringTask  
   持久层框架：MyBatis、 MyBatis-Plus  
   数据库连接池：Alibaba Druid  
