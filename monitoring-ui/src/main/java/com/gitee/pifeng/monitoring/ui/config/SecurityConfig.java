@@ -12,11 +12,13 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.RememberMeServices;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.session.FindByIndexNameSessionRepository;
 import org.springframework.session.Session;
 import org.springframework.session.security.SpringSessionBackedSessionRegistry;
+import org.springframework.session.security.web.authentication.SpringSessionRememberMeServices;
 
 import javax.sql.DataSource;
 
@@ -122,11 +124,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 // 记住我
                 .rememberMe()
-                .rememberMeParameter("remember-me")
-                // 60 * 60 * 24 * 30 = 一个月
-                .tokenValiditySeconds(2592000)
-                // 持久化token
-                .tokenRepository(this.persistentTokenRepository())
+                .rememberMeServices(this.rememberMeServices())
                 .userDetailsService(this.monitorUserService)
                 .and()
                 .sessionManagement()
@@ -218,6 +216,24 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    /**
+     * <p>
+     * 记住我
+     * </p>
+     *
+     * @return {@link RememberMeServices}
+     * @author 皮锋
+     * @custom.date 2021/10/1 17:55
+     */
+    @Bean
+    public RememberMeServices rememberMeServices() {
+        SpringSessionRememberMeServices rememberMeServices = new SpringSessionRememberMeServices();
+        // 60 * 60 * 24 * 30 = 一个月
+        rememberMeServices.setValiditySeconds(2592000);
+        rememberMeServices.setRememberMeParameterName("remember-me");
+        return rememberMeServices;
     }
 
 }
