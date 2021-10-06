@@ -86,4 +86,14 @@ public interface IMonitorNetService extends IService<MonitorNet> {
      */
     LayUiAdminResultVo addMonitorNetwork(MonitorNetVo monitorNetVo) throws NetException;
 
+    /**
+     * <p>
+     * 获取被监控网络源IP地址，获取失败则返回null。
+     * </p>
+     *
+     * @return 被监控网络源IP地址
+     * @author 皮锋
+     * @custom.date 2021/10/6 22:19
+     */
+    String getSourceIp();
 }

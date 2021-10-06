@@ -127,7 +127,7 @@
                 for (var i in res.data) {		//遍历整个表格数据
                     var item = res.data[i];		//获取当前行数据
                     // 源IP与当前监控服务端所在的服务器IP不同，把这条记录标红
-                    if (item.ipSource !== ipSource) {
+                    if (item.ipSource !== ipSource && ipSource != null && ipSource !== 'null') {
                         $('tr[data-index=' + i + ']').css('color', '#FF4500');
                     }
                 }

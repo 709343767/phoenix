@@ -2,7 +2,6 @@ package com.gitee.pifeng.monitoring.ui.business.web.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.gitee.pifeng.monitoring.common.exception.NetException;
-import com.gitee.pifeng.monitoring.common.util.server.NetUtils;
 import com.gitee.pifeng.monitoring.ui.business.web.annotation.OperateLog;
 import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorNet;
 import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorNetService;
@@ -46,16 +45,15 @@ public class MonitorNetworkController {
      * </p>
      *
      * @return {@link ModelAndView} 网络列表页面
-     * @throws NetException 自定义获取网络信息异常
      * @author 皮锋
      * @custom.date 2020/9/26 10:53
      */
     @ApiOperation(value = "访问网络列表页面")
     @GetMapping("/list")
-    public ModelAndView list() throws NetException {
+    public ModelAndView list() {
         ModelAndView mv = new ModelAndView("network/network");
         // 源IP
-        mv.addObject("ipSource", NetUtils.getLocalIp());
+        mv.addObject("ipSource", this.monitorNetService.getSourceIp());
         return mv;
     }
 

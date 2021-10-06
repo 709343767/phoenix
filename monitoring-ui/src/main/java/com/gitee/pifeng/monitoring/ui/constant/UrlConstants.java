@@ -33,4 +33,9 @@ public class UrlConstants {
      */
     public static final String MONITORING_PROPERTIES_CONFIG_REFRESH_URL = ROOT_URI + "/monitoring-properties-config/refresh";
 
+    /**
+     * 获取被监控网络源IP地址
+     */
+    public static final String GET_SOURCE_IP = ROOT_URI + "/network/get-source-ip";
+
 }
