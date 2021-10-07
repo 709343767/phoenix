@@ -38,4 +38,34 @@ public class UrlConstants {
      */
     public static final String GET_SOURCE_IP = ROOT_URI + "/network/get-source-ip";
 
+    /**
+     * MySQL数据库：获取会话列表
+     */
+    public static final String MYSQL_GET_SESSION_LIST = ROOT_URI + "/db-session4mysql/get-session-list";
+
+    /**
+     * MySQL数据库：结束会话
+     */
+    public static final String MYSQL_DESTROY_SESSION = ROOT_URI + "/db-session4mysql/destroy-session";
+
+    /**
+     * Oracle数据库：获取会话列表
+     */
+    public static final String ORACLE_GET_SESSION_LIST = ROOT_URI + "/db-session4oracle/get-session-list";
+
+    /**
+     * Oracle数据库：结束会话
+     */
+    public static final String ORACLE_DESTROY_SESSION = ROOT_URI + "/db-session4oracle/destroy-session";
+
+    /**
+     * Oracle数据库：获取表空间列表(按文件)
+     */
+    public static final String ORACLE_GET_TABLESPACE_LIST_FILE = ROOT_URI + "/db-tablespace4oracle/get-tablespace-list-file";
+
+    /**
+     * Oracle数据库：获取表空间列表
+     */
+    public static final String ORACLE_GET_TABLESPACE_LIST_ALL = ROOT_URI + "/db-tablespace4oracle/get-tablespace-list-all";
+
 }

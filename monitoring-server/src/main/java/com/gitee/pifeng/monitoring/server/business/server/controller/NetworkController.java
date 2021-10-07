@@ -38,7 +38,7 @@ public class NetworkController {
      * 获取被监控网络源IP地址
      * </p>
      *
-     * @return 被监控网络源IP地址
+     * @return {@link BaseResponsePackage}
      * @author 皮锋
      * @custom.date 2021/10/6 22:04
      */

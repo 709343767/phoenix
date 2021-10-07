@@ -3,24 +3,28 @@ package com.gitee.pifeng.monitoring.ui.business.web.service.impl;
 import cn.hutool.core.io.unit.DataSizeUtil;
 import cn.hutool.core.util.NumberUtil;
 import cn.hutool.db.Entity;
-import cn.hutool.db.handler.EntityListHandler;
-import cn.hutool.db.sql.SqlExecutor;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.gitee.pifeng.monitoring.common.constant.sql.Oracle;
-import com.gitee.pifeng.monitoring.common.util.db.DbUtils;
+import com.gitee.pifeng.monitoring.common.domain.Result;
+import com.gitee.pifeng.monitoring.common.dto.BaseRequestPackage;
+import com.gitee.pifeng.monitoring.common.dto.BaseResponsePackage;
+import com.gitee.pifeng.monitoring.common.exception.NetException;
+import com.gitee.pifeng.monitoring.plug.core.Sender;
 import com.gitee.pifeng.monitoring.ui.business.web.dao.IMonitorDbDao;
 import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorDb;
 import com.gitee.pifeng.monitoring.ui.business.web.service.IDbTableSpace4OracleService;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.DbTableSpaceAll4OracleVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.DbTableSpaceFile4OracleVo;
+import com.gitee.pifeng.monitoring.ui.constant.UrlConstants;
+import com.gitee.pifeng.monitoring.ui.core.PackageConstructor;
 import com.google.common.collect.Lists;
-import lombok.Cleanup;
+import org.hyperic.sigar.SigarException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -49,12 +53,14 @@ public class DbTableSpace4OracleServiceImpl implements IDbTableSpace4OracleServi
      * @param size    每页显示条数
      * @param id      数据库ID
      * @return 简单分页模型
-     * @throws SQLException SQL异常
+     * @throws NetException   自定义获取网络信息异常
+     * @throws SigarException Sigar异常
+     * @throws IOException    IO异常
      * @author 皮锋
      * @custom.date 2020/12/31 16:15
      */
     @Override
-    public Page<DbTableSpaceFile4OracleVo> getTableSpaceListFile(Long current, Long size, Long id) throws SQLException {
+    public Page<DbTableSpaceFile4OracleVo> getTableSpaceListFile(Long current, Long size, Long id) throws IOException, NetException, SigarException {
         // 根据ID查询到此数据库信息
         MonitorDb monitorDb = this.monitorDbDao.selectById(id);
         // url
@@ -63,9 +69,20 @@ public class DbTableSpace4OracleServiceImpl implements IDbTableSpace4OracleServi
         String username = monitorDb.getUsername();
         // 密码
         String password = monitorDb.getPassword();
-        @Cleanup
-        Connection connection = DbUtils.getConnection(url, username, password);
-        List<Entity> entityList = SqlExecutor.query(connection, Oracle.TABLE_SPACE_SELECT_FILE, new EntityListHandler());
+        // 封装请求数据
+        JSONObject extraMsg = new JSONObject();
+        extraMsg.put("url", url);
+        extraMsg.put("username", username);
+        extraMsg.put("password", password);
+        BaseRequestPackage baseRequestPackage = new PackageConstructor().structureBaseRequestPackage();
+        baseRequestPackage.setExtraMsg(extraMsg);
+        // 从服务端获取数据
+        String resultStr = Sender.send(UrlConstants.ORACLE_GET_TABLESPACE_LIST_FILE, baseRequestPackage.toJsonString());
+        BaseResponsePackage baseResponsePackage = JSON.parseObject(resultStr, BaseResponsePackage.class);
+        Result result = baseResponsePackage.getResult();
+        String msg = result.getMsg();
+        List<Entity> entityList = JSON.parseArray(msg, Entity.class);
+        // 解析数据
         List<DbTableSpaceFile4OracleVo> dbTableSpace4OracleVos = Lists.newArrayList();
         for (Entity entity : entityList) {
             Long fileId = entity.getLong("FILEID");
@@ -106,12 +123,14 @@ public class DbTableSpace4OracleServiceImpl implements IDbTableSpace4OracleServi
      * @param size    每页显示条数
      * @param id      数据库ID
      * @return 简单分页模型
-     * @throws SQLException SQL异常
+     * @throws NetException   自定义获取网络信息异常
+     * @throws SigarException Sigar异常
+     * @throws IOException    IO异常
      * @author 皮锋
      * @custom.date 2020/12/31 16:15
      */
     @Override
-    public Page<DbTableSpaceAll4OracleVo> getTableSpaceListAll(Long current, Long size, Long id) throws SQLException {
+    public Page<DbTableSpaceAll4OracleVo> getTableSpaceListAll(Long current, Long size, Long id) throws NetException, SigarException, IOException {
         // 根据ID查询到此数据库信息
         MonitorDb monitorDb = this.monitorDbDao.selectById(id);
         // url
@@ -120,9 +139,20 @@ public class DbTableSpace4OracleServiceImpl implements IDbTableSpace4OracleServi
         String username = monitorDb.getUsername();
         // 密码
         String password = monitorDb.getPassword();
-        @Cleanup
-        Connection connection = DbUtils.getConnection(url, username, password);
-        List<Entity> entityList = SqlExecutor.query(connection, Oracle.TABLE_SPACE_SELECT_ALL, new EntityListHandler());
+        // 封装请求数据
+        JSONObject extraMsg = new JSONObject();
+        extraMsg.put("url", url);
+        extraMsg.put("username", username);
+        extraMsg.put("password", password);
+        BaseRequestPackage baseRequestPackage = new PackageConstructor().structureBaseRequestPackage();
+        baseRequestPackage.setExtraMsg(extraMsg);
+        // 从服务端获取数据
+        String resultStr = Sender.send(UrlConstants.ORACLE_GET_TABLESPACE_LIST_ALL, baseRequestPackage.toJsonString());
+        BaseResponsePackage baseResponsePackage = JSON.parseObject(resultStr, BaseResponsePackage.class);
+        Result result = baseResponsePackage.getResult();
+        String msg = result.getMsg();
+        List<Entity> entityList = JSON.parseArray(msg, Entity.class);
+        // 解析数据
         List<DbTableSpaceAll4OracleVo> dbTableSpace4OracleVos = Lists.newArrayList();
         for (Entity entity : entityList) {
             String tablespaceName = entity.getStr("TABLESPACENAME", StandardCharsets.UTF_8);

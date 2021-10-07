@@ -1,5 +1,6 @@
 package com.gitee.pifeng.monitoring.common.dto;
 
+import com.alibaba.fastjson.JSONObject;
 import com.gitee.pifeng.monitoring.common.abs.AbstractInstanceBean;
 import lombok.*;
 import lombok.experimental.Accessors;
@@ -31,5 +32,10 @@ public class BaseRequestPackage extends AbstractInstanceBean {
      * 时间
      */
     protected Date dateTime;
+
+    /**
+     * 附加信息
+     */
+    protected JSONObject extraMsg;
 
 }

@@ -3,26 +3,30 @@ package com.gitee.pifeng.monitoring.ui.business.web.service.impl;
 import cn.hutool.core.date.BetweenFormatter;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.db.Entity;
-import cn.hutool.db.handler.EntityListHandler;
-import cn.hutool.db.sql.SqlExecutor;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.gitee.pifeng.monitoring.common.constant.sql.MySql;
-import com.gitee.pifeng.monitoring.common.util.db.DbUtils;
+import com.gitee.pifeng.monitoring.common.domain.Result;
+import com.gitee.pifeng.monitoring.common.dto.BaseRequestPackage;
+import com.gitee.pifeng.monitoring.common.dto.BaseResponsePackage;
+import com.gitee.pifeng.monitoring.common.exception.NetException;
+import com.gitee.pifeng.monitoring.plug.core.Sender;
 import com.gitee.pifeng.monitoring.ui.business.web.dao.IMonitorDbDao;
 import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorDb;
 import com.gitee.pifeng.monitoring.ui.business.web.service.IDbSession4MysqlService;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.DbSession4MysqlVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.LayUiAdminResultVo;
+import com.gitee.pifeng.monitoring.ui.constant.UrlConstants;
 import com.gitee.pifeng.monitoring.ui.constant.WebResponseConstants;
+import com.gitee.pifeng.monitoring.ui.core.PackageConstructor;
 import com.google.common.collect.Lists;
-import lombok.Cleanup;
 import lombok.extern.slf4j.Slf4j;
+import org.hyperic.sigar.SigarException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -53,12 +57,14 @@ public class DbSession4MysqlServiceImpl implements IDbSession4MysqlService {
      * @param size    每页显示条数
      * @param id      数据库ID
      * @return 简单分页模型
-     * @throws SQLException SQL异常
+     * @throws NetException   自定义获取网络信息异常
+     * @throws SigarException Sigar异常
+     * @throws IOException    IO异常
      * @author 皮锋
      * @custom.date 2020/12/24 16:55
      */
     @Override
-    public Page<DbSession4MysqlVo> getSessionList(Long current, Long size, Long id) throws SQLException {
+    public Page<DbSession4MysqlVo> getSessionList(Long current, Long size, Long id) throws NetException, SigarException, IOException {
         // 根据ID查询到此数据库信息
         MonitorDb monitorDb = this.monitorDbDao.selectById(id);
         // url
@@ -67,9 +73,20 @@ public class DbSession4MysqlServiceImpl implements IDbSession4MysqlService {
         String username = monitorDb.getUsername();
         // 密码
         String password = monitorDb.getPassword();
-        @Cleanup
-        Connection connection = DbUtils.getConnection(url, username, password);
-        List<Entity> entityList = SqlExecutor.query(connection, MySql.SESSION_LIST, new EntityListHandler());
+        // 封装请求数据
+        JSONObject extraMsg = new JSONObject();
+        extraMsg.put("url", url);
+        extraMsg.put("username", username);
+        extraMsg.put("password", password);
+        BaseRequestPackage baseRequestPackage = new PackageConstructor().structureBaseRequestPackage();
+        baseRequestPackage.setExtraMsg(extraMsg);
+        // 从服务端获取数据
+        String resultStr = Sender.send(UrlConstants.MYSQL_GET_SESSION_LIST, baseRequestPackage.toJsonString());
+        BaseResponsePackage baseResponsePackage = JSON.parseObject(resultStr, BaseResponsePackage.class);
+        Result result = baseResponsePackage.getResult();
+        String msg = result.getMsg();
+        List<Entity> entityList = JSON.parseArray(msg, Entity.class);
+        // 解析数据
         List<DbSession4MysqlVo> dbSession4MysqlVos = Lists.newArrayList();
         for (Entity entity : entityList) {
             Long sessionId = entity.getLong("Id");
@@ -109,13 +126,15 @@ public class DbSession4MysqlServiceImpl implements IDbSession4MysqlService {
      * @param dbSession4MysqlVos MySQL数据库会话
      * @param id                 数据库ID
      * @return LayUiAdmin响应对象
-     * @throws SQLException SQL异常
+     * @throws NetException   自定义获取网络信息异常
+     * @throws SigarException Sigar异常
+     * @throws IOException    IO异常
      * @author 皮锋
      * @custom.date 2020/12/25 17:05
      */
     @Override
-    public LayUiAdminResultVo destroySession(List<DbSession4MysqlVo> dbSession4MysqlVos, Long id) throws SQLException {
-        List<Long> ids = dbSession4MysqlVos.stream().map(DbSession4MysqlVo::getId).collect(Collectors.toList());
+    public LayUiAdminResultVo destroySession(List<DbSession4MysqlVo> dbSession4MysqlVos, Long id) throws NetException, SigarException, IOException {
+        List<Long> sessionIds = dbSession4MysqlVos.stream().map(DbSession4MysqlVo::getId).collect(Collectors.toList());
         // 根据ID查询到此数据库信息
         MonitorDb monitorDb = this.monitorDbDao.selectById(id);
         // url
@@ -124,16 +143,23 @@ public class DbSession4MysqlServiceImpl implements IDbSession4MysqlService {
         String username = monitorDb.getUsername();
         // 密码
         String password = monitorDb.getPassword();
-        @Cleanup
-        Connection connection = DbUtils.getConnection(url, username, password);
-        for (Long sessionId : ids) {
-            try {
-                SqlExecutor.execute(connection, MySql.KILL_SESSION, sessionId);
-            } catch (SQLException e) {
-                log.error("结束会话异常！", e);
-            }
+        // 封装请求数据
+        JSONObject extraMsg = new JSONObject();
+        extraMsg.put("url", url);
+        extraMsg.put("username", username);
+        extraMsg.put("password", password);
+        extraMsg.put("sessionIds", sessionIds);
+        BaseRequestPackage baseRequestPackage = new PackageConstructor().structureBaseRequestPackage();
+        baseRequestPackage.setExtraMsg(extraMsg);
+        // 从服务端获取数据
+        String resultStr = Sender.send(UrlConstants.MYSQL_DESTROY_SESSION, baseRequestPackage.toJsonString());
+        BaseResponsePackage baseResponsePackage = JSON.parseObject(resultStr, BaseResponsePackage.class);
+        Result result = baseResponsePackage.getResult();
+        boolean b = result.isSuccess();
+        if (b) {
+            return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);
         }
-        return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);
+        return LayUiAdminResultVo.ok(WebResponseConstants.FAIL);
     }
 
 }

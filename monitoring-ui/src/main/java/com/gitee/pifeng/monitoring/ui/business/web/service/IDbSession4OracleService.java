@@ -1,10 +1,12 @@
 package com.gitee.pifeng.monitoring.ui.business.web.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.gitee.pifeng.monitoring.common.exception.NetException;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.DbSession4OracleVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.LayUiAdminResultVo;
+import org.hyperic.sigar.SigarException;
 
-import java.sql.SQLException;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -26,11 +28,13 @@ public interface IDbSession4OracleService {
      * @param size    每页显示条数
      * @param id      数据库ID
      * @return 简单分页模型
-     * @throws SQLException SQL异常
+     * @throws NetException   自定义获取网络信息异常
+     * @throws SigarException Sigar异常
+     * @throws IOException    IO异常
      * @author 皮锋
      * @custom.date 2020/12/30 12:46
      */
-    Page<DbSession4OracleVo> getSessionList(Long current, Long size, Long id) throws SQLException;
+    Page<DbSession4OracleVo> getSessionList(Long current, Long size, Long id) throws NetException, SigarException, IOException;
 
     /**
      * <p>
@@ -40,10 +44,12 @@ public interface IDbSession4OracleService {
      * @param dbSession4OracleVos Oracle数据库会话
      * @param id                  数据库ID
      * @return LayUiAdmin响应对象
-     * @throws SQLException SQL异常
+     * @throws NetException   自定义获取网络信息异常
+     * @throws SigarException Sigar异常
+     * @throws IOException    IO异常
      * @author 皮锋
      * @custom.date 2020/12/30 15:22
      */
-    LayUiAdminResultVo destroySession(List<DbSession4OracleVo> dbSession4OracleVos, Long id) throws SQLException;
+    LayUiAdminResultVo destroySession(List<DbSession4OracleVo> dbSession4OracleVos, Long id) throws IOException, NetException, SigarException;
 
 }
