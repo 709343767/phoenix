@@ -7,13 +7,13 @@ import com.gitee.pifeng.monitoring.server.business.server.core.PackageConstructo
 import com.gitee.pifeng.monitoring.server.business.server.service.IAlarmService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
 /**
@@ -24,7 +24,6 @@ import java.util.concurrent.Future;
  * @author 皮锋
  * @custom.date 2020年3月6日 下午3:46:11
  */
-@Slf4j
 @RestController
 @RequestMapping("/alarm")
 @Api(tags = "信息包.告警包")
@@ -43,21 +42,18 @@ public class AlarmController {
      *
      * @param alarmPackage 告警包
      * @return {@link BaseResponsePackage}
+     * @throws ExecutionException   执行异常
+     * @throws InterruptedException 中断异常
      * @author 皮锋
      * @custom.date 2020年3月6日 下午3:49:45
      */
     @ApiOperation(value = "接收和响应监控代理端程序或者监控客户端程序发的告警包", notes = "接收告警包")
     @PostMapping("/accept-alarm-package")
-    public BaseResponsePackage acceptAlarmPackage(@RequestBody AlarmPackage alarmPackage) {
-        try {
-            Future<Result> resultFuture = this.alarmService.dealAlarmPackage(alarmPackage);
-            // 返回值
-            Result result = resultFuture.get();
-            return new PackageConstructor().structureBaseResponsePackage(result);
-        } catch (Exception e) {
-            log.error("处理告警包异常！", e);
-            return new PackageConstructor().structureBaseResponsePackage(Result.builder().isSuccess(false).msg(e.getMessage()).build());
-        }
+    public BaseResponsePackage acceptAlarmPackage(@RequestBody AlarmPackage alarmPackage) throws ExecutionException, InterruptedException {
+        Future<Result> resultFuture = this.alarmService.dealAlarmPackage(alarmPackage);
+        // 返回值
+        Result result = resultFuture.get();
+        return new PackageConstructor().structureBaseResponsePackage(result);
     }
 
 }

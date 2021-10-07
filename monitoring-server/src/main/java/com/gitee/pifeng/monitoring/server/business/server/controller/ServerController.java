@@ -7,7 +7,6 @@ import com.gitee.pifeng.monitoring.server.business.server.core.PackageConstructo
 import com.gitee.pifeng.monitoring.server.business.server.service.IServerService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,7 +21,6 @@ import org.springframework.web.bind.annotation.RestController;
  * @author 皮锋
  * @custom.date 2020年3月7日 下午5:03:49
  */
-@Slf4j
 @RestController
 @RequestMapping("/server")
 @Api(tags = "信息包.服务器信息包")
@@ -47,13 +45,8 @@ public class ServerController {
     @ApiOperation(value = "接收和响应监控代理端程序或者监控客户端程序发的服务器信息包", notes = "接收服务器信息包")
     @PostMapping("/accept-server-package")
     public BaseResponsePackage acceptServerPackage(@RequestBody ServerPackage serverPackage) {
-        try {
-            Result result = this.serverService.dealServerPackage(serverPackage);
-            return new PackageConstructor().structureBaseResponsePackage(result);
-        } catch (Exception e) {
-            log.error("处理服务器信息包异常！", e);
-            return new PackageConstructor().structureBaseResponsePackage(Result.builder().isSuccess(false).msg(e.getMessage()).build());
-        }
+        Result result = this.serverService.dealServerPackage(serverPackage);
+        return new PackageConstructor().structureBaseResponsePackage(result);
     }
 
 }

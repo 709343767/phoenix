@@ -26,7 +26,7 @@ public class HttpInputMessagePackageEncrypt {
      * @author 皮锋
      * @custom.date 2021/4/11 10:57
      */
-    public Object encrypt(Object inputOjbect) {
+    public CiphertextPackage encrypt(Object inputOjbect) {
         // 转成json字符串
         String jsonString = JSON.toJSONString(inputOjbect);
         // 打印日志

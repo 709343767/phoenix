@@ -10,7 +10,6 @@ import com.gitee.pifeng.monitoring.server.business.server.core.PackageConstructo
 import com.gitee.pifeng.monitoring.server.business.server.service.IDbTableSpace4OracleService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,7 +30,6 @@ import java.util.List;
 @RestController
 @Api(tags = "数据库表空间.Oracle")
 @RequestMapping("/db-tablespace4oracle")
-@Slf4j
 public class DbTableSpace4OracleController {
 
     /**
@@ -47,24 +45,20 @@ public class DbTableSpace4OracleController {
      *
      * @param baseRequestPackage 基础请求包
      * @return {@link BaseResponsePackage}
+     * @throws SQLException SQL异常
      * @author 皮锋
      * @custom.date 2020/12/24 16:53
      */
     @ApiOperation(value = "获取表空间列表(按文件)")
     @PostMapping("/get-tablespace-list-file")
-    public BaseResponsePackage getTableSpaceListFile(@RequestBody BaseRequestPackage baseRequestPackage) {
+    public BaseResponsePackage getTableSpaceListFile(@RequestBody BaseRequestPackage baseRequestPackage) throws SQLException {
         JSONObject extraMsg = baseRequestPackage.getExtraMsg();
         String url = extraMsg.getString("url");
         String username = extraMsg.getString("username");
         String password = extraMsg.getString("password");
-        try {
-            List<Entity> entities = this.dbTableSpace4OracleService.getTableSpaceListFile(url, username, password);
-            String jsonString = JSON.toJSONString(entities);
-            return new PackageConstructor().structureBaseResponsePackage(Result.builder().isSuccess(true).msg(jsonString).build());
-        } catch (SQLException e) {
-            log.error("获取表空间列表(按文件)失败！", e);
-            return new PackageConstructor().structureBaseResponsePackage(Result.builder().isSuccess(false).msg(e.getMessage()).build());
-        }
+        List<Entity> entities = this.dbTableSpace4OracleService.getTableSpaceListFile(url, username, password);
+        String jsonString = JSON.toJSONString(entities);
+        return new PackageConstructor().structureBaseResponsePackage(Result.builder().isSuccess(true).msg(jsonString).build());
     }
 
     /**
@@ -74,24 +68,20 @@ public class DbTableSpace4OracleController {
      *
      * @param baseRequestPackage 基础请求包
      * @return {@link BaseResponsePackage}
+     * @throws SQLException SQL异常
      * @author 皮锋
      * @custom.date 2020/12/24 16:53
      */
     @ApiOperation(value = "获取表空间列表")
     @PostMapping("/get-tablespace-list-all")
-    public BaseResponsePackage getTableSpaceListAll(@RequestBody BaseRequestPackage baseRequestPackage) {
+    public BaseResponsePackage getTableSpaceListAll(@RequestBody BaseRequestPackage baseRequestPackage) throws SQLException {
         JSONObject extraMsg = baseRequestPackage.getExtraMsg();
         String url = extraMsg.getString("url");
         String username = extraMsg.getString("username");
         String password = extraMsg.getString("password");
-        try {
-            List<Entity> entities = this.dbTableSpace4OracleService.getTableSpaceListAll(url, username, password);
-            String jsonString = JSON.toJSONString(entities);
-            return new PackageConstructor().structureBaseResponsePackage(Result.builder().isSuccess(true).msg(jsonString).build());
-        } catch (SQLException e) {
-            log.error("获取表空间列表失败！", e);
-            return new PackageConstructor().structureBaseResponsePackage(Result.builder().isSuccess(false).msg(e.getMessage()).build());
-        }
+        List<Entity> entities = this.dbTableSpace4OracleService.getTableSpaceListAll(url, username, password);
+        String jsonString = JSON.toJSONString(entities);
+        return new PackageConstructor().structureBaseResponsePackage(Result.builder().isSuccess(true).msg(jsonString).build());
     }
 
 }

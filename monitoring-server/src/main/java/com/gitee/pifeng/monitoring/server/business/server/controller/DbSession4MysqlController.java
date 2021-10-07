@@ -12,7 +12,6 @@ import com.gitee.pifeng.monitoring.server.business.server.core.PackageConstructo
 import com.gitee.pifeng.monitoring.server.business.server.service.IDbSession4MysqlService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -33,7 +32,6 @@ import java.util.List;
 @RestController
 @Api(tags = "数据库会话.MySQL")
 @RequestMapping("/db-session4mysql")
-@Slf4j
 public class DbSession4MysqlController {
 
     /**
@@ -49,24 +47,20 @@ public class DbSession4MysqlController {
      *
      * @param baseRequestPackage 基础请求包
      * @return {@link BaseResponsePackage}
+     * @throws SQLException SQL异常
      * @author 皮锋
      * @custom.date 2020/12/24 16:53
      */
     @ApiOperation(value = "获取会话列表")
     @PostMapping("/get-session-list")
-    public BaseResponsePackage getSessionList(@RequestBody BaseRequestPackage baseRequestPackage) {
+    public BaseResponsePackage getSessionList(@RequestBody BaseRequestPackage baseRequestPackage) throws SQLException {
         JSONObject extraMsg = baseRequestPackage.getExtraMsg();
         String url = extraMsg.getString("url");
         String username = extraMsg.getString("username");
         String password = extraMsg.getString("password");
-        try {
-            List<Entity> entities = this.dbSession4MysqlService.getSessionList(url, username, password);
-            String jsonString = JSON.toJSONString(entities);
-            return new PackageConstructor().structureBaseResponsePackage(Result.builder().isSuccess(true).msg(jsonString).build());
-        } catch (SQLException e) {
-            log.error("获取会话列表失败！", e);
-            return new PackageConstructor().structureBaseResponsePackage(Result.builder().isSuccess(false).msg(e.getMessage()).build());
-        }
+        List<Entity> entities = this.dbSession4MysqlService.getSessionList(url, username, password);
+        String jsonString = JSON.toJSONString(entities);
+        return new PackageConstructor().structureBaseResponsePackage(Result.builder().isSuccess(true).msg(jsonString).build());
     }
 
     /**
@@ -76,25 +70,21 @@ public class DbSession4MysqlController {
      *
      * @param baseRequestPackage 基础请求包
      * @return {@link BaseResponsePackage}
+     * @throws SQLException SQL异常
      * @author 皮锋
      * @custom.date 2020/12/25 17:03
      */
     @ApiOperation(value = "结束会话")
     @PostMapping("/destroy-session")
-    public BaseResponsePackage destroySession(@RequestBody BaseRequestPackage baseRequestPackage) {
+    public BaseResponsePackage destroySession(@RequestBody BaseRequestPackage baseRequestPackage) throws SQLException {
         JSONObject extraMsg = baseRequestPackage.getExtraMsg();
         String url = extraMsg.getString("url");
         String username = extraMsg.getString("username");
         String password = extraMsg.getString("password");
         List<Long> sessionIds = extraMsg.getObject("sessionIds", new TypeReference<List<Long>>() {
         });
-        try {
-            this.dbSession4MysqlService.destroySession(url, username, password, sessionIds);
-            return new PackageConstructor().structureBaseResponsePackage(Result.builder().isSuccess(true).msg(ResultMsgConstants.SUCCESS).build());
-        } catch (SQLException e) {
-            log.error("获取会话列表失败！", e);
-            return new PackageConstructor().structureBaseResponsePackage(Result.builder().isSuccess(false).msg(e.getMessage()).build());
-        }
+        this.dbSession4MysqlService.destroySession(url, username, password, sessionIds);
+        return new PackageConstructor().structureBaseResponsePackage(Result.builder().isSuccess(true).msg(ResultMsgConstants.SUCCESS).build());
     }
 
 }

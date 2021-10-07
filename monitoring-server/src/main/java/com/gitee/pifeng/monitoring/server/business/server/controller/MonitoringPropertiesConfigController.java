@@ -1,18 +1,16 @@
 package com.gitee.pifeng.monitoring.server.business.server.controller;
 
+import com.gitee.pifeng.monitoring.common.constant.ResultMsgConstants;
+import com.gitee.pifeng.monitoring.common.domain.Result;
+import com.gitee.pifeng.monitoring.common.dto.BaseResponsePackage;
 import com.gitee.pifeng.monitoring.server.business.server.core.MonitoringConfigPropertiesLoader;
 import com.gitee.pifeng.monitoring.server.business.server.core.PackageConstructor;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.gitee.pifeng.monitoring.common.constant.ResultMsgConstants;
-import com.gitee.pifeng.monitoring.common.domain.Result;
-import com.gitee.pifeng.monitoring.common.dto.BaseResponsePackage;
-
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 
 /**
  * <p>
