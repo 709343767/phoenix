@@ -166,6 +166,7 @@ public class AlarmServiceImpl implements IAlarmService {
      * 3.更新数据库中的告警发送结果。<br>
      *
      * @param result    返回结果
+     * @param alarm     告警信息
      * @param alarmUuid 告警代码
      * @author 皮锋
      * @custom.date 2020/9/14 12:56
