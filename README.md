@@ -309,7 +309,7 @@ ScheduledExecutorService service = Monitor.buryingPoint(() -> {
 
 感谢你们的支持！
 
-![捐赠](https://gitee.com/monitoring-platform/monitoring/raw/master/doc/%E6%88%AA%E5%9B%BE/%E5%BC%82%E5%B8%B8%E6%97%A5%E5%BF%972.png "捐赠")
+![捐赠](https://gitee.com/monitoring-platform/monitoring/raw/master/doc/%E5%85%B6%E5%AE%83/donate.jpg "捐赠")
 
 
 
