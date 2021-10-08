@@ -305,5 +305,14 @@ ScheduledExecutorService service = Monitor.buryingPoint(() -> {
 
 [GNU General Public License v3.0](https://www.gnu.org/licenses/gpl-3.0.txt)
 
+##捐赠 | Donate
+
+感谢你们的支持！
+
+![捐赠](https://gitee.com/monitoring-platform/monitoring/raw/master/doc/%E6%88%AA%E5%9B%BE/%E5%BC%82%E5%B8%B8%E6%97%A5%E5%BF%972.png "捐赠")
+
+
+
+
 
 
