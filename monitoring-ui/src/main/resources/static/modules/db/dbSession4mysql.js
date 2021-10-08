@@ -113,9 +113,9 @@
                             var data = result.data;
                             if (data === webConst.SUCCESS) {
                                 table.reload('list-table'); //数据刷新
-                                layer.msg('结束会话成功！', {icon: 6});
+                                layer.msg('操作成功！', {icon: 6});
                             } else {
-                                layer.msg('结束会话失败！', {icon: 5, shift: 6});
+                                layer.msg('操作失败！', {icon: 5, shift: 6});
                             }
                             // 关闭loading框
                             layer.close(loadingIndex);
@@ -152,9 +152,9 @@
                             if (data === webConst.SUCCESS) {
                                 obj.del();
                                 table.reload('list-table'); //数据刷新
-                                layer.msg('结束会话成功！', {icon: 6});
+                                layer.msg('操作成功！', {icon: 6});
                             } else {
-                                layer.msg('结束会话失败！', {icon: 5, shift: 6});
+                                layer.msg('操作失败！', {icon: 5, shift: 6});
                             }
                             // 关闭loading框
                             layer.close(loadingIndex);

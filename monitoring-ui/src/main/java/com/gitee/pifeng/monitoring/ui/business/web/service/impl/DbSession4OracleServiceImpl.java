@@ -95,7 +95,7 @@ public class DbSession4OracleServiceImpl implements IDbSession4OracleService {
             String schemaName = entity.getStr("SCHEMANAME", StandardCharsets.UTF_8);
             String type = entity.getStr("TYPE", StandardCharsets.UTF_8);
             String state = entity.getStr("STATE", StandardCharsets.UTF_8);
-            Date logonTime = new Date(entity.getTimestamp("LOGONTIME").getTime());
+            Date logonTime = new Date(entity.getLong("LOGONTIME"));
             String machine = entity.getStr("MACHINE", StandardCharsets.UTF_8);
             String osUser = entity.getStr("OSUSER", StandardCharsets.UTF_8);
             String program = entity.getStr("PROGRAM", StandardCharsets.UTF_8);

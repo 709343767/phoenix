@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -105,6 +106,8 @@ public class DbTableSpace4OracleServiceImpl implements IDbTableSpace4OracleServi
                     .build();
             dbTableSpace4OracleVos.add(dbTableSpace4OracleVo);
         }
+        // 按文件ID排序
+        dbTableSpace4OracleVos.sort(Comparator.comparing(DbTableSpaceFile4OracleVo::getFileId));
         // 设置返回对象
         Page<DbTableSpaceFile4OracleVo> dbTableSpace4OracleVoPage = new Page<>();
         dbTableSpace4OracleVoPage.setRecords(dbTableSpace4OracleVos);
@@ -171,6 +174,8 @@ public class DbTableSpace4OracleServiceImpl implements IDbTableSpace4OracleServi
                     .build();
             dbTableSpace4OracleVos.add(dbTableSpace4OracleVo);
         }
+        // 按使用率排序
+        dbTableSpace4OracleVos.sort(Comparator.comparing(DbTableSpaceAll4OracleVo::getUsedRate).reversed());
         // 设置返回对象
         Page<DbTableSpaceAll4OracleVo> dbTableSpace4OracleVoPage = new Page<>();
         dbTableSpace4OracleVoPage.setRecords(dbTableSpace4OracleVos);
