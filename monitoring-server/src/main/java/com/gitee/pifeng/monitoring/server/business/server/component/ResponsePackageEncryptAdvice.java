@@ -40,7 +40,7 @@ public class ResponsePackageEncryptAdvice implements ResponseBodyAdvice<Object> 
     @ExceptionHandler(value = Throwable.class)
     public CiphertextPackage handler(Throwable throwable) {
         log.error("异常：", throwable);
-        Result build = Result.builder().isSuccess(false).msg(throwable.getMessage()).build();
+        Result build = Result.builder().isSuccess(false).msg(throwable.toString()).build();
         BaseResponsePackage baseResponsePackage = new PackageConstructor().structureBaseResponsePackage(build);
         return new HttpInputMessagePackageEncrypt().encrypt(baseResponsePackage);
     }

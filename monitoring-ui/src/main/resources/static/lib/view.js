@@ -24,13 +24,16 @@
             type: "get", dataType: "json", success: function (t) {
                 var n = s.statusCode;
                 if (t[s.statusName] == n.ok) "function" == typeof e.done && e.done(t); else if (t[s.statusName] == n.logout) i.exit(); else {
-                    var r = ["<cite>Error：</cite> " + (t[s.msgName] || "返回状态码异常"), d()].join("");
-                    i.error(r)
+                    //  皮锋做了下修改：增加一个if判断，如果config.js中，debug: true，才弹出错误框，否则不弹框
+                    if (layui.setter.debug) {
+                        var r = ["<cite>Error：</cite> " + (t[s.msgName] || "返回状态码异常"), d()].join("");
+                        i.error(r)
+                    }
                 }
                 "function" == typeof a && a(t)
             }, error: function (e, t) {
                 // 皮锋做了下修改：增加一个if判断，如果config.js中，debug: true，才弹出错误框，否则不弹框
-                if (r.debug) {
+                if (layui.setter.debug) {
                     var a = ["请求异常，请重试<br><cite>错误信息：</cite>" + t, d()].join("");
                     i.error(a), "function" == typeof n && n(res)
                 }
