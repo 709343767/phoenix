@@ -365,7 +365,7 @@ public class MonitorUserServiceImpl extends ServiceImpl<IMonitorUserDao, Monitor
      * @custom.date 2020/8/2 17:35
      */
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Throwable.class)
     public LayUiAdminResultVo deleteUser(List<MonitorUserVo> monitorUserVos) throws NotFoundUserException {
         int size = monitorUserVos.size();
         List<Long> ids = Lists.newArrayList();

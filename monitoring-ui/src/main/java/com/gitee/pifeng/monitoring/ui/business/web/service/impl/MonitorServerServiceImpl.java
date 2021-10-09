@@ -291,6 +291,7 @@ public class MonitorServerServiceImpl extends ServiceImpl<IMonitorServerDao, Mon
      * @author 皮锋
      * @custom.date 2021/7/21 8:57
      */
+    @Transactional(rollbackFor = Throwable.class)
     @Override
     public LayUiAdminResultVo clearMonitorServerHistory(String ip, String time) {
         // 时间为空
