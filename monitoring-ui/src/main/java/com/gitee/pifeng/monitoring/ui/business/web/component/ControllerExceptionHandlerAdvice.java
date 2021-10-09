@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
  * @custom.date 2020/9/4 21:35
  */
 @Slf4j
-@RestControllerAdvice(basePackages = "com.gitee.pifeng.ui.business.web.controller")
+@RestControllerAdvice(basePackages = "com.gitee.pifeng.monitoring.ui.business.web.controller")
 public class ControllerExceptionHandlerAdvice {
 
     /**
