@@ -1,6 +1,7 @@
 package com.gitee.pifeng.monitoring.ui.business.web.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.gitee.pifeng.monitoring.common.exception.NotFoundUserException;
 import com.gitee.pifeng.monitoring.ui.business.web.annotation.OperateLog;
 import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorRole;
 import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorUser;
@@ -194,6 +195,7 @@ public class MonitorUserController {
      *
      * @param monitorUserVos 用户信息
      * @return layUiAdmin响应对象：如果删除用户成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @throws NotFoundUserException 找不到用户异常
      * @author 皮锋
      * @custom.date 2020/8/2 16:43
      */
@@ -201,7 +203,7 @@ public class MonitorUserController {
     @DeleteMapping("/delete-user")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.USER + "#用户管理", operType = OperateTypeConstants.DELETE, operDesc = "删除用户")
-    public LayUiAdminResultVo deleteUser(@RequestBody List<MonitorUserVo> monitorUserVos) {
+    public LayUiAdminResultVo deleteUser(@RequestBody List<MonitorUserVo> monitorUserVos) throws NotFoundUserException {
         return this.monitorUserService.deleteUser(monitorUserVos);
     }
 

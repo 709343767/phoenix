@@ -2,9 +2,12 @@ package com.gitee.pifeng.monitoring.ui.business.web.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.gitee.pifeng.monitoring.common.exception.NotFoundUserException;
 import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorUser;
+import com.gitee.pifeng.monitoring.ui.business.web.realm.MonitorUserRealm;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.LayUiAdminResultVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.MonitorUserVo;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
@@ -18,6 +21,31 @@ import java.util.List;
  * @custom.date 2020/7/1 17:39
  */
 public interface IMonitorUserService extends IService<MonitorUser>, UserDetailsService {
+
+    /**
+     * <p>
+     * 获取用户权限信息
+     * </p>
+     *
+     * @param monitorUser 监控用户
+     * @return 用户权限信息
+     * @author 皮锋
+     * @custom.date 2021/10/9 9:25
+     */
+    List<GrantedAuthority> getGrantedAuthorities(MonitorUser monitorUser);
+
+    /**
+     * <p>
+     * 根据条件获取监控用户域
+     * </p>
+     *
+     * @param ids 用户主键ID
+     * @return {@link MonitorUserRealm}
+     * @throws NotFoundUserException 找不到用户异常
+     * @author 皮锋
+     * @custom.date 2021/10/8 17:36
+     */
+    List<MonitorUserRealm> getMonitorUserRealms(List<Long> ids) throws NotFoundUserException;
 
     /**
      * <p>
@@ -94,8 +122,9 @@ public interface IMonitorUserService extends IService<MonitorUser>, UserDetailsS
      *
      * @param monitorUserVos 用户信息
      * @return layUiAdmin响应对象：如果删除用户成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @throws NotFoundUserException 找不到用户异常
      * @author 皮锋
      * @custom.date 2020/8/2 17:35
      */
-    LayUiAdminResultVo deleteUser(List<MonitorUserVo> monitorUserVos);
+    LayUiAdminResultVo deleteUser(List<MonitorUserVo> monitorUserVos) throws NotFoundUserException;
 }

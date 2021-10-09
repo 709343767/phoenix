@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.gitee.pifeng.monitoring.common.exception.NotFoundUserException;
 import com.gitee.pifeng.monitoring.ui.business.web.dao.IMonitorRoleDao;
 import com.gitee.pifeng.monitoring.ui.business.web.dao.IMonitorUserDao;
 import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorRole;
@@ -26,6 +27,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.nio.charset.StandardCharsets;
 import java.util.*;
@@ -61,6 +63,32 @@ public class MonitorUserServiceImpl extends ServiceImpl<IMonitorUserDao, Monitor
 
     /**
      * <p>
+     * 获取用户权限信息
+     * </p>
+     *
+     * @param monitorUser 监控用户
+     * @return 用户权限信息
+     * @author 皮锋
+     * @custom.date 2021/10/9 9:25
+     */
+    @Override
+    public List<GrantedAuthority> getGrantedAuthorities(MonitorUser monitorUser) {
+        // 根据角色ID在数据库中查询角色
+        LambdaQueryWrapper<MonitorRole> roleQueryWrapper = new LambdaQueryWrapper<>();
+        roleQueryWrapper.eq(MonitorRole::getId, monitorUser.getRoleId());
+        List<MonitorRole> monitorRoles = this.monitorRoleDao.selectList(roleQueryWrapper);
+        // 设置授权信息
+        List<GrantedAuthority> grantedAuthorityList = new ArrayList<>();
+        if (CollectionUtils.isNotEmpty(monitorRoles)) {
+            for (MonitorRole monitorRole : monitorRoles) {
+                grantedAuthorityList.add(new SimpleGrantedAuthority(monitorRole.getRoleName()));
+            }
+        }
+        return grantedAuthorityList;
+    }
+
+    /**
+     * <p>
      * 根据账号获取用户
      * </p>
      *
@@ -79,20 +107,47 @@ public class MonitorUserServiceImpl extends ServiceImpl<IMonitorUserDao, Monitor
         if (monitorUser == null) {
             throw new UsernameNotFoundException("用户不存在！");
         }
-        // 根据角色ID在数据库中查询角色
-        LambdaQueryWrapper<MonitorRole> roleQueryWrapper = new LambdaQueryWrapper<>();
-        roleQueryWrapper.eq(MonitorRole::getId, monitorUser.getRoleId());
-        List<MonitorRole> monitorRoles = this.monitorRoleDao.selectList(roleQueryWrapper);
-        // 设置授权信息
-        List<GrantedAuthority> grantedAuthorityList = new ArrayList<>();
-        if (CollectionUtils.isNotEmpty(monitorRoles)) {
-            for (MonitorRole monitorRole : monitorRoles) {
-                grantedAuthorityList.add(new SimpleGrantedAuthority(monitorRole.getRoleName()));
-            }
-        }
+        // 获取用户权限信息
+        List<GrantedAuthority> grantedAuthorityList = this.getGrantedAuthorities(monitorUser);
         return new MonitorUserRealm(monitorUser.getId(), monitorUser.getUsername(), account, monitorUser.getPassword(),
                 monitorUser.getRoleId(), monitorUser.getRegisterTime(), monitorUser.getUpdateTime(), monitorUser.getEmail(),
                 monitorUser.getRemarks(), grantedAuthorityList);
+    }
+
+    /**
+     * <p>
+     * 根据条件获取监控用户域
+     * </p>
+     *
+     * @param ids 用户主键ID
+     * @return {@link MonitorUserRealm}
+     * @throws NotFoundUserException 找不到用户异常
+     * @author 皮锋
+     * @custom.date 2021/10/8 17:36
+     */
+    @Override
+    public List<MonitorUserRealm> getMonitorUserRealms(List<Long> ids) throws NotFoundUserException {
+        LambdaQueryWrapper<MonitorUser> userQueryWrapper = new LambdaQueryWrapper<>();
+        if (CollectionUtils.isNotEmpty(ids)) {
+            userQueryWrapper.in(MonitorUser::getId, ids);
+        }
+        List<MonitorUser> monitorUsers = this.monitorUserDao.selectList(userQueryWrapper);
+        // 用户为空
+        if (CollectionUtils.isEmpty(monitorUsers)) {
+            throw new NotFoundUserException("用户不存在！");
+        }
+        List<MonitorUserRealm> monitorUserRealms = Lists.newArrayList();
+        for (MonitorUser monitorUser : monitorUsers) {
+            // 获取用户权限信息
+            List<GrantedAuthority> grantedAuthorityList = this.getGrantedAuthorities(monitorUser);
+            MonitorUserRealm monitorUserRealm = new MonitorUserRealm(monitorUser.getId(), monitorUser.getUsername(),
+                    monitorUser.getAccount(), monitorUser.getPassword(), monitorUser.getRoleId(),
+                    monitorUser.getRegisterTime(), monitorUser.getUpdateTime(), monitorUser.getEmail(),
+                    monitorUser.getRemarks(), grantedAuthorityList);
+            // 添加到list
+            monitorUserRealms.add(monitorUserRealm);
+        }
+        return monitorUserRealms;
     }
 
     /**
@@ -282,16 +337,16 @@ public class MonitorUserServiceImpl extends ServiceImpl<IMonitorUserDao, Monitor
         int result = this.monitorUserDao.updateById(monitorUser);
         if (result == 1) {
             Long currentMonitorUserRealmId = SpringSecurityUtils.getCurrentMonitorUserRealm().getId();
+            MonitorUserRealm realm = (MonitorUserRealm) this.loadUserByUsername(monitorUser.getAccount());
             // 如果修改的是当前用户
             if (Objects.equals(currentMonitorUserRealmId, monitorUser.getId())) {
                 // 更新springsecurity中当前用户
-                MonitorUserRealm realm = (MonitorUserRealm) this.loadUserByUsername(monitorUser.getAccount());
                 SpringSecurityUtils.updateCurrentMonitorUserRealm(realm);
             }
             // 如果修改的不是当前用户
             else {
                 // 使这个用户的session过期，让用户强制下线
-                SpringSecurityUtils.letUserSessionExpireNow(this.sessionRegistry, monitorUser.getId());
+                SpringSecurityUtils.letUserSessionExpireNow(this.sessionRegistry, realm);
             }
             return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);
         }
@@ -305,21 +360,24 @@ public class MonitorUserServiceImpl extends ServiceImpl<IMonitorUserDao, Monitor
      *
      * @param monitorUserVos 用户信息
      * @return layUiAdmin响应对象：如果删除用户成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @throws NotFoundUserException 找不到用户异常
      * @author 皮锋
      * @custom.date 2020/8/2 17:35
      */
     @Override
-    public LayUiAdminResultVo deleteUser(List<MonitorUserVo> monitorUserVos) {
+    @Transactional
+    public LayUiAdminResultVo deleteUser(List<MonitorUserVo> monitorUserVos) throws NotFoundUserException {
         int size = monitorUserVos.size();
         List<Long> ids = Lists.newArrayList();
         for (MonitorUserVo monitorUserVo : monitorUserVos) {
             Long id = monitorUserVo.getId();
             ids.add(id);
         }
+        List<MonitorUserRealm> monitorUserRealms = this.getMonitorUserRealms(ids);
         int result = this.monitorUserDao.deleteBatchIds(ids);
         if (size == result) {
             // 使这些用户的session过期，让用户强制下线
-            SpringSecurityUtils.letUserSessionExpireNow(this.sessionRegistry, ids.toArray(new Long[]{}));
+            SpringSecurityUtils.letUserSessionExpireNow(this.sessionRegistry, monitorUserRealms.toArray());
             return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);
         }
         return LayUiAdminResultVo.ok(WebResponseConstants.FAIL);

@@ -88,6 +88,7 @@ public class SpringSecurityUtils {
      * @author 皮锋
      * @custom.date 2021/6/24 17:57
      */
+    @Deprecated
     public static void letUserSessionExpireNow(SessionRegistry sessionRegistry, Long... userIds) {
         List<Object> users = sessionRegistry.getAllPrincipals();
         // 获取session中所有的用户信息
@@ -102,6 +103,32 @@ public class SpringSecurityUtils {
                             // 让session过期
                             sessionInformation.expireNow();
                         }
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * <p>
+     * 使某些用户的session过期，让用户强制下线
+     * </p>
+     *
+     * @param sessionRegistry {@link SessionRegistry} session注册信息
+     * @param principals      授权用户列表
+     * @author 皮锋
+     * @custom.date 2021/10/8 17:16
+     */
+    public static void letUserSessionExpireNow(SessionRegistry sessionRegistry, Object... principals) {
+        if (ArrayUtil.isNotEmpty(principals)) {
+            for (Object principal : principals) {
+                // false代表不包含过期session
+                List<SessionInformation> sessionInformations = sessionRegistry.getAllSessions(principal, false);
+                if (CollectionUtils.isNotEmpty(sessionInformations)) {
+                    // 循环每一个session信息
+                    for (SessionInformation sessionInformation : sessionInformations) {
+                        // 让session过期
+                        sessionInformation.expireNow();
                     }
                 }
             }

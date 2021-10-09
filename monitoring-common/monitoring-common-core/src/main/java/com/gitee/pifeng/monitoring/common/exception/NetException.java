@@ -2,7 +2,7 @@ package com.gitee.pifeng.monitoring.common.exception;
 
 /**
  * <p>
- * 自定义获取网络信息异常类
+ * 自定义获取网络信息异常
  * </p>
  *
  * @author 皮锋
