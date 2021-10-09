@@ -8,7 +8,7 @@ package com.gitee.pifeng.monitoring.common.exception;
  * @author 皮锋
  * @custom.date 2021/1/26 14:56
  */
-public class MonitoringUniversalException extends Exception {
+public class MonitoringUniversalException extends RuntimeException {
 
     /**
      * serialVersionUID
