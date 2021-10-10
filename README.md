@@ -52,7 +52,7 @@
   
 - 模块结构
 
-  平台使用Java+layui+echarts开发，数据库采用MySQL。
+  平台使用Java+Layui+ECharts开发，数据库采用MySQL。
 
   monitoring（监控平台父工程）  
   ├── monitoring-common（监控公共模块父工程）  
@@ -171,7 +171,7 @@ monitoring.sql
   |monitoring.heartbeat.rate       |与服务端或者代理端发心跳包的频率（秒），最小不能小于30秒                    |否           |30    |
   |monitoring.server-info.enable   |是否采集服务器信息                                                   |否           |false |
   |monitoring.server-info.rate     |与服务端或者代理端发服务器信息包的频率（秒），最小不能小于30秒               |否           |60    |
-  |monitoring.server-info.ip       |服务器本机ip地址                                                    |否（自动获取） |      |
+  |monitoring.server-info.ip       |被监控服务器本机ip地址                                                    |否（自动获取） |      |
   |monitoring.jvm-info.enable      |是否采集Java虚拟机信息                                               |否           |false |
   |monitoring.jvm-info.rate        |与服务端或者代理端发送Java虚拟机信息的频率（秒），最小不能小于30秒           |否           |60    |
 
