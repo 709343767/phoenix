@@ -108,28 +108,28 @@
                             <cite>主页</cite>
                         </a>
                     </li>
-                    <li data-name="home" class="layui-nav-item layui-nav-item">
+                    <li data-name="home" class="layui-nav-item">
                         <a href="javascript:;" lay-tips="服务器" lay-direction="2"
                            th:attr="lay-href=@{/monitor-server/list}">
                             <i class="layui-icon layui-icon-server"></i>
                             <cite>服务器</cite>
                         </a>
                     </li>
-                    <li data-name="home" class="layui-nav-item layui-nav-item">
+                    <li data-name="home" class="layui-nav-item">
                         <a href="javascript:;" lay-tips="应用程序" lay-direction="2"
                            th:attr="lay-href=@{/monitor-instance/list}">
                             <i class="layui-icon layui-icon-app"></i>
                             <cite>应用程序</cite>
                         </a>
                     </li>
-                    <li data-name="home" class="layui-nav-item layui-nav-item">
+                    <li data-name="home" class="layui-nav-item">
                         <a href="javascript:;" lay-tips="数据库" lay-direction="2"
                            th:attr="lay-href=@{/monitor-db/list}">
                             <i class="layui-icon layui-icon-db"></i>
                             <cite>数据库</cite>
                         </a>
                     </li>
-                    <li data-name="home" class="layui-nav-item layui-nav-item">
+                    <li data-name="home" class="layui-nav-item">
                         <a href="javascript:;" lay-tips="网络" lay-direction="2"
                            th:attr="lay-href=@{/monitor-network/list}">
                             <i class="layui-icon layui-icon-website"></i>
@@ -196,15 +196,19 @@
                             </dd>
                         </dl>
                     </li>
-                    <li data-name="user" class="layui-nav-item" sec:authorize="hasAuthority('超级管理员')">
-                        <a href="javascript:;" lay-tips="附加功能" lay-direction="2">
+                    <li data-name="druid" class="layui-nav-item" sec:authorize="hasAuthority('超级管理员')">
+                        <a href="javascript:;" lay-tips="Druid" lay-direction="2"
+                           th:attr="lay-href=@{/druid/webapp.html}">
+                            <i class="layui-icon layui-icon-snowflake"></i>
+                            <cite>Druid</cite>
+                        </a>
+                    </li>
+                    <li data-name="swagger" class="layui-nav-item" sec:authorize="hasAuthority('超级管理员')">
+                        <a href="javascript:;" lay-tips="Swagger" lay-direction="2">
                             <i class="layui-icon layui-icon-component"></i>
-                            <cite>Druid+Swagger</cite>
+                            <cite>Swagger</cite>
                         </a>
                         <dl class="layui-nav-child">
-                            <dd>
-                                <a th:attr="lay-href=@{/druid/webapp.html}">druid</a>
-                            </dd>
                             <dd>
                                 <a th:attr="lay-href=@{/swagger-ui.html}">swagger-ui</a>
                             </dd>
