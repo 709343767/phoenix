@@ -12,4 +12,39 @@
                         ifnull(sum(ms.IS_ONLINE), 0) as serverOnLineSum
                  from MONITOR_SERVER ms) tmp
     </select>
+
+    <!-- 获取服务器列表 -->
+    <select id="getMonitorServerList" databaseId="mysql"
+            resultType="com.gitee.pifeng.monitoring.ui.business.web.vo.MonitorServerVo">
+        SELECT S.*,
+        CAST(AVG(1 - CPU.CPU_IDLE)*100 AS DECIMAL(10, 2)) AS CPU_USER_PERCENT,
+        CAST(AVG(MEMORY.MEN_USED_PERCENT)*100 AS DECIMAL(10, 2)) AS MEN_USED_PERCENT,
+        NETCARD.DOWNLOAD_BPS,
+        NETCARD.UPLOAD_BPS
+        FROM MONITOR_SERVER S
+        LEFT JOIN MONITOR_SERVER_CPU CPU ON CPU.IP = S.IP
+        LEFT JOIN MONITOR_SERVER_MEMORY MEMORY ON MEMORY.IP = S.IP
+        LEFT JOIN MONITOR_SERVER_NETCARD NETCARD ON (NETCARD.IP = S.IP AND NETCARD.ADDRESS = S.IP)
+        WHERE 1 = 1
+        <if test="criteria.ip!=null and criteria.ip!=''">
+            AND S.IP like concat('%',#{criteria.ip},'%')
+        </if>
+        <if test="criteria.serverName!=null and criteria.serverName!=''">
+            AND S.SERVER_NAME like concat('%',#{criteria.serverName},'%')
+        </if>
+        <if test="criteria.isOnline!=null and criteria.isOnline!=''">
+            AND S.IS_ONLINE=#{criteria.isOnline}
+        </if>
+        GROUP BY S.ID,
+        S.IP,
+        S.SERVER_NAME,
+        S.SERVER_SUMMARY,
+        S.IS_ONLINE,
+        S.CONN_FREQUENCY,
+        S.INSERT_TIME,
+        S.UPDATE_TIME,
+        NETCARD.DOWNLOAD_BPS,
+        NETCARD.UPLOAD_BPS
+        ORDER BY S.ID
+    </select>
 </mapper>

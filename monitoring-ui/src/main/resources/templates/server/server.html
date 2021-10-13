@@ -133,13 +133,13 @@
                     hide: !authority
                 }, {
                     field: 'id',
-                    width: 100,
+                    minWidth: 80,
                     title: 'ID',
                     sort: !0
                 }, {
                     field: 'ip',
                     title: 'IP',
-                    width: 150,
+                    minWidth: 140,
                     sort: !0
                 }, {
                     field: 'serverName',
@@ -149,7 +149,27 @@
                 }, {
                     field: 'isOnline',
                     title: '状态',
-                    minWidth: 120,
+                    minWidth: 80,
+                    sort: !0
+                }, {
+                    field: 'cpuUserPercent',
+                    title: 'CPU(%)',
+                    minWidth: 100,
+                    sort: !0
+                }, {
+                    field: 'menUsedPercent',
+                    title: '内存(%)',
+                    minWidth: 100,
+                    sort: !0
+                }, {
+                    field: 'downloadBps',
+                    title: '下行带宽',
+                    minWidth: 110,
+                    sort: !0
+                }, {
+                    field: 'uploadBps',
+                    title: '上行带宽',
+                    minWidth: 110,
                     sort: !0
                 }, {
                     field: 'serverSummary',

@@ -879,10 +879,10 @@
                             '       <label class="label-font-weight">发送时丢弃的包数：</label>' + txDropped + ' 个' +
                             '    </div>' +
                             '    <div class="layui-col-md4">' +
-                            '       <label class="label-font-weight">接收速度：</label>' + downloadSpeed +
+                            '       <label class="label-font-weight">下行带宽：</label>' + downloadSpeed +
                             '    </div>' +
                             '    <div class="layui-col-md4">' +
-                            '       <label class="label-font-weight">发送速度：</label>' + uploadSpeed +
+                            '       <label class="label-font-weight">上行带宽：</label>' + uploadSpeed +
                             '    </div>';
                         if (i !== data.length - 1) {
                             html += '<hr class="layui-bg-gray hr-padding">';
@@ -1718,13 +1718,13 @@
                     }
                     var option = {
                         title: {
-                            text: chartAddress + '（' + name + '） 网络接收/发送',
+                            text: chartAddress + '（' + name + '） 上行/下行 带宽',
                             left: 'center',
                             textStyle: {
                                 color: '#696969',
                                 fontSize: 14
                             },
-                            subtext: '接收：' + lastDownloadSpeed + '，发送：' + lastUploadSpeed,
+                            subtext: '上行带宽：' + lastUploadSpeed + '，下行带宽：' + lastDownloadSpeed,
                             subtextStyle: {
                                 color: '#BEBEBE'
                             }
@@ -1750,7 +1750,7 @@
                             }
                         },
                         legend: {
-                            data: ['接收', '发送'],
+                            data: ['上行带宽', '下行带宽'],
                             orient: 'vertical',
                             x: '80%' //图例位置，设置right发现图例和文字位置反了，设置一个数值就好了
                         },
@@ -1794,14 +1794,14 @@
                         },
                         yAxis: {
                             type: 'value',
-                            name: '速度',
+                            name: '带宽',
                             axisLabel: {
                                 formatter: '{value} KB/s'
                             }
                         },
                         // 数据
                         series: [{
-                            name: '接收',
+                            name: '下行带宽',
                             data: downloadSpeed,
                             type: 'line',
                             smooth: true,
@@ -1828,7 +1828,7 @@
                                 }
                             }
                         }, {
-                            name: '发送',
+                            name: '上行带宽',
                             data: uploadSpeed,
                             type: 'line',
                             smooth: true,

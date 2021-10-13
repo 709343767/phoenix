@@ -56,6 +56,18 @@ public class MonitorServerVo implements ISuperBean {
     @ApiModelProperty(value = "更新时间")
     private Date updateTime;
 
+    @ApiModelProperty(value = "CPU使用率")
+    private Double cpuUserPercent;
+
+    @ApiModelProperty(value = "内存使用率")
+    private Double menUsedPercent;
+
+    @ApiModelProperty(value = "下行带宽")
+    private String downloadBps;
+
+    @ApiModelProperty(value = "上行带宽")
+    private String uploadBps;
+
     /**
      * <p>
      * MonitorServerVo转MonitorServer

@@ -6,6 +6,8 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.gitee.pifeng.monitoring.common.constant.ZeroOrOneConstants;
+import com.gitee.pifeng.monitoring.common.util.DataSizeUtil;
 import com.gitee.pifeng.monitoring.ui.business.web.dao.*;
 import com.gitee.pifeng.monitoring.ui.business.web.entity.*;
 import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorServerService;
@@ -22,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -164,23 +167,26 @@ public class MonitorServerServiceImpl extends ServiceImpl<IMonitorServerDao, Mon
     public Page<MonitorServerVo> getMonitorServerList(Long current, Long size, String ip, String serverName, String isOnline) {
         // 查询数据库
         IPage<MonitorServer> ipage = new Page<>(current, size);
-        LambdaQueryWrapper<MonitorServer> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-        if (StringUtils.isNotBlank(ip)) {
-            lambdaQueryWrapper.like(MonitorServer::getIp, ip);
-        }
-        if (StringUtils.isNotBlank(serverName)) {
-            lambdaQueryWrapper.like(MonitorServer::getServerName, serverName);
-        }
-        if (StringUtils.isNotBlank(isOnline)) {
-            lambdaQueryWrapper.eq(MonitorServer::getIsOnline, isOnline);
-        }
-        IPage<MonitorServer> monitorServerPage = this.monitorServerDao.selectPage(ipage, lambdaQueryWrapper);
-        List<MonitorServer> monitorServers = monitorServerPage.getRecords();
-        // 转换成服务器信息表现层对象
-        List<MonitorServerVo> monitorServerVos = Lists.newLinkedList();
-        for (MonitorServer monitorServer : monitorServers) {
-            MonitorServerVo monitorServerVo = MonitorServerVo.builder().build().convertFor(monitorServer);
-            monitorServerVos.add(monitorServerVo);
+        // 查询条件
+        Map<String, Object> criteria = new HashMap<>(16);
+        criteria.put("ip", ip);
+        criteria.put("serverName", serverName);
+        criteria.put("isOnline", isOnline);
+        IPage<MonitorServerVo> monitorServerPage = this.monitorServerDao.getMonitorServerList(ipage, criteria);
+        List<MonitorServerVo> monitorServerVos = monitorServerPage.getRecords();
+        for (MonitorServerVo monitorServerVo : monitorServerVos) {
+            // 下行带宽
+            String downloadBps = monitorServerVo.getDownloadBps();
+            // 上行带宽
+            String uploadBps = monitorServerVo.getUploadBps();
+            if (StringUtils.isNoneBlank(downloadBps)) {
+                String format = DataSizeUtil.format(Double.parseDouble(downloadBps));
+                monitorServerVo.setDownloadBps(ZeroOrOneConstants.ZERO.equals(format) ? ZeroOrOneConstants.ZERO : format + "/s");
+            }
+            if (StringUtils.isNoneBlank(uploadBps)) {
+                String format = DataSizeUtil.format(Double.parseDouble(uploadBps));
+                monitorServerVo.setUploadBps(ZeroOrOneConstants.ZERO.equals(format) ? ZeroOrOneConstants.ZERO : format + "/s");
+            }
         }
         // 设置返回对象
         Page<MonitorServerVo> monitorServerVoPage = new Page<>();
