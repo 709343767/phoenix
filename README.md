@@ -297,19 +297,17 @@ ScheduledExecutorService service = Monitor.buryingPoint(() -> {
 
 [https://gitee.com/monitoring-platform/monitoring/wikis/pages?sort_id=4438763&doc_id=935794](https://gitee.com/monitoring-platform/monitoring/wikis/pages?sort_id=4438763&doc_id=935794)
 
-## 期望 | Futures
+## 期望
 
 欢迎提出更好的意见，帮助完善 monitoring
 
-## 版权 | License
+## 版权
 
 [GNU General Public License v3.0](https://www.gnu.org/licenses/gpl-3.0.txt)
 
-## 捐赠 | Donate
+## 联系
 
-感谢你们的支持！
-
-![捐赠](https://gitee.com/monitoring-platform/monitoring/raw/master/doc/%E5%85%B6%E5%AE%83/donate.jpg "捐赠")
+邮箱：709343767@qq.com
 
 
 
