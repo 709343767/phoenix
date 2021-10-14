@@ -651,11 +651,12 @@
                         // 进程名
                         var name = obj.name;
                         //执行进程的完整路径
-                        var path = (!isEmpty(obj.path) && obj.path.length > 50) ? obj.path.substr(0, 50) + ' ......' : obj.path;
+                        var path = (!isEmpty(obj.path) && obj.path.length > 200) ? obj.path.substr(0, 200) + ' ......' : obj.path;
                         // 进程命令行
-                        var commandLine = (!isEmpty(obj.commandLine) && obj.commandLine.length > 50) ? obj.commandLine.substr(0, 50) + ' ......' : obj.commandLine;
+                        var commandLine = (!isEmpty(obj.commandLine) && obj.commandLine.length > 200) ? obj.commandLine.substr(0, 200) + ' ......' : obj.commandLine;
                         //进程当前的工作目录
-                        var currentWorkingDirectory = (!isEmpty(obj.currentWorkingDirectory) && obj.currentWorkingDirectory.length > 50) ? obj.currentWorkingDirectory.substr(0, 50) + ' ......' : obj.currentWorkingDirectory;
+                        var currentWorkingDirectory = (!isEmpty(obj.currentWorkingDirectory) && obj.currentWorkingDirectory.length > 200) ? obj.currentWorkingDirectory.substr(0, 200) + ' ......' : obj.currentWorkingDirectory;
+                        currentWorkingDirectory = currentWorkingDirectory == null ? '' : currentWorkingDirectory;
                         // 用户名
                         var user = obj.user;
                         //进程执行状态
@@ -697,13 +698,13 @@
                             '    <div class="layui-col-md4">' +
                             '       <label class="label-font-weight">用户名：</label>' + user +
                             '    </div>' +
-                            '    <div class="layui-col-md4">' +
+                            '    <div class="layui-col-md12">' +
                             '       <label class="label-font-weight">命令行：</label>' + commandLine +
                             '    </div>' +
-                            '    <div class="layui-col-md4">' +
+                            '    <div class="layui-col-md12">' +
                             '       <label class="label-font-weight">路径：</label>' + path +
                             '    </div>' +
-                            '    <div class="layui-col-md4">' +
+                            '    <div class="layui-col-md12">' +
                             '       <label class="label-font-weight">工作目录：</label>' + currentWorkingDirectory +
                             '    </div>';
                         if (i !== data.length - 1) {
