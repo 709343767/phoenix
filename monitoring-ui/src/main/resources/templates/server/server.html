@@ -17,6 +17,10 @@
     <![endif]-->
     <script type="text/javascript" charset="utf-8" th:inline="javascript">
         var ctxPath = /*[[@{/}]]*/'';
+        // CPU过载阈值
+        var serverCpuOverloadThreshold = [[${monitorConfigPageFormInfo.serverCpuOverloadThreshold}]];
+        // 内存过载阈值
+        var serverMemoryOverloadThreshold = [[${monitorConfigPageFormInfo.serverMemoryOverloadThreshold}]];
         var authority = [[${#authorization.expression('hasAuthority("超级管理员")')}]];
     </script>
 </head>
@@ -117,13 +121,23 @@
             done: function () {
                 $('[data-field="isOnline"]').children().each(function () {
                     if ($(this).text() === '0') {
-                        $(this).html('<span style="color: #FF4500;">离线</span>');
+                        $(this).html('<span style="color: #FF4500;font-weight: bold;">离线</span>');
                     }
                     if ($(this).text() === '1') {
                         $(this).text('在线');
                     }
                     if ($(this).text() === null || $(this).text() === '' || $(this).text() === undefined) {
                         $(this).text('未知');
+                    }
+                });
+                $('[data-field="cpuUserPercent"]').children().each(function () {
+                    if ($(this).text() >= serverCpuOverloadThreshold) {
+                        $(this).html('<span style="color: #FF4500;font-weight: bold;">' + $(this).text() + '</span>');
+                    }
+                });
+                $('[data-field="menUsedPercent"]').children().each(function () {
+                    if ($(this).text() >= serverMemoryOverloadThreshold) {
+                        $(this).html('<span style="color: #FF4500;font-weight: bold;"">' + $(this).text() + '</span>');
                     }
                 });
             },

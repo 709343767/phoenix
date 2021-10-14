@@ -2,8 +2,10 @@ package com.gitee.pifeng.monitoring.ui.business.web.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.gitee.pifeng.monitoring.ui.business.web.annotation.OperateLog;
+import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorConfigService;
 import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorServerService;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.LayUiAdminResultVo;
+import com.gitee.pifeng.monitoring.ui.business.web.vo.MonitorConfigPageFormVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.MonitorServerVo;
 import com.gitee.pifeng.monitoring.ui.constant.OperateTypeConstants;
 import com.gitee.pifeng.monitoring.ui.constant.UiModuleConstants;
@@ -38,6 +40,12 @@ public class MonitorServerController {
     private IMonitorServerService monitorServerService;
 
     /**
+     * 监控配置服务类
+     */
+    @Autowired
+    private IMonitorConfigService monitorConfigService;
+
+    /**
      * <p>
      * 访问服务器列表页面
      * </p>
@@ -49,7 +57,10 @@ public class MonitorServerController {
     @ApiOperation(value = "访问服务器列表页面")
     @GetMapping("/list")
     public ModelAndView list() {
-        return new ModelAndView("server/server");
+        ModelAndView mv = new ModelAndView("server/server");
+        MonitorConfigPageFormVo monitorConfigPageFormInfo = this.monitorConfigService.getMonitorConfigPageFormInfo();
+        mv.addObject("monitorConfigPageFormInfo", monitorConfigPageFormInfo);
+        return mv;
     }
 
     /**

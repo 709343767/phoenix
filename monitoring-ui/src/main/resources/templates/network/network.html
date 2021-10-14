@@ -115,7 +115,7 @@
             done: function (res) {
                 $('[data-field="status"]').children().each(function () {
                     if ($(this).text() === '0') {
-                        $(this).html('<span style="color: #FF4500;">异常</span>');
+                        $(this).html('<span style="color: #FF4500;font-weight: bold;">异常</span>');
                     }
                     if ($(this).text() === '1') {
                         $(this).text('正常');

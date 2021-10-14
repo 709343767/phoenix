@@ -123,7 +123,7 @@
             done: function () {
                 $('[data-field="isOnline"]').children().each(function () {
                     if ($(this).text() === '0') {
-                        $(this).html('<span style="color: #FF4500;">离线</span>');
+                        $(this).html('<span style="color: #FF4500;font-weight: bold;">离线</span>');
                     }
                     if ($(this).text() === '1') {
                         $(this).text('在线');

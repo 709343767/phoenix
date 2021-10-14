@@ -178,7 +178,7 @@
                 });
                 $('[data-field="status"]').children().each(function () {
                     if ($(this).text() === '0') {
-                        $(this).html('<span style="color: #FF4500;">失败</span>');
+                        $(this).html('<span style="color: #FF4500;font-weight: bold;">失败</span>');
                     }
                     if ($(this).text() === '1') {
                         $(this).text('成功');
