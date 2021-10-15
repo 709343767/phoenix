@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.gitee.pifeng.monitoring.common.constant.DbEnums;
 import com.gitee.pifeng.monitoring.common.constant.ZeroOrOneConstants;
 import com.gitee.pifeng.monitoring.ui.business.web.dao.IMonitorDbDao;
 import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorDb;
@@ -18,6 +19,7 @@ import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import redis.clients.jedis.Jedis;
 
 import java.util.Date;
 import java.util.List;
@@ -125,6 +127,10 @@ public class MonitorDbServiceImpl extends ServiceImpl<IMonitorDbDao, MonitorDb> 
         // 数据库类型
         String dbType = monitorDb.getDbType();
         monitorDb.setDriverClass(DriverUtil.identifyDriver(dbType));
+        // Redis数据库
+        if (StringUtils.equalsAnyIgnoreCase(DbEnums.Redis.name(), dbType)) {
+            monitorDb.setDriverClass(Jedis.class.getName());
+        }
         if (StringUtils.isBlank(monitorDb.getPassword())) {
             // mybatis-plus不会更新值为null字段
             monitorDb.setPassword(null);
@@ -164,6 +170,10 @@ public class MonitorDbServiceImpl extends ServiceImpl<IMonitorDbDao, MonitorDb> 
         // 数据库类型
         String dbType = monitorDb.getDbType();
         monitorDb.setDriverClass(DriverUtil.identifyDriver(dbType));
+        // Redis数据库
+        if (StringUtils.equalsAnyIgnoreCase(DbEnums.Redis.name(), dbType)) {
+            monitorDb.setDriverClass(Jedis.class.getName());
+        }
         monitorDb.setInsertTime(new Date());
         int result = this.monitorDbDao.insert(monitorDb);
         if (result == 1) {

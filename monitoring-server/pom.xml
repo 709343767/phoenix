@@ -112,7 +112,6 @@
         <dependency>
             <groupId>redis.clients</groupId>
             <artifactId>jedis</artifactId>
-            <scope>runtime</scope>
         </dependency>
     </dependencies>
 
