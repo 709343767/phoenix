@@ -95,6 +95,8 @@
         <pagehelper.version>5.1.10</pagehelper.version>
         <!-- oracle驱动版本 -->
         <ojdbc6.version>11.2.0.3</ojdbc6.version>
+        <!-- redis驱动版本 -->
+        <jedis.version>3.7.0</jedis.version>
 
         <!-- 编译插件版本 -->
         <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
@@ -391,6 +393,13 @@
                 <groupId>com.oracle</groupId>
                 <artifactId>ojdbc6</artifactId>
                 <version>${ojdbc6.version}</version>
+                <scope>runtime</scope>
+            </dependency>
+            <!-- redis数据库驱动 -->
+            <dependency>
+                <groupId>redis.clients</groupId>
+                <artifactId>jedis</artifactId>
+                <version>${jedis.version}</version>
                 <scope>runtime</scope>
             </dependency>
         </dependencies>

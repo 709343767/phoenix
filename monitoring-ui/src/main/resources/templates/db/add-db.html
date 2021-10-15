@@ -21,6 +21,16 @@
 <div class="layui-form" lay-filter="layuiadmin-form-useradmin" id="layuiadmin-form-useradmin"
      style="padding: 20px 20px 0 0;">
     <div class="layui-form-item">
+        <label class="layui-form-label">类型</label>
+        <div class="layui-input-block">
+            <select name="dbType" lay-filter="dbType">
+                <option value="MySQL">MySQL</option>
+                <option value="Oracle">Oracle</option>
+                <option value="Redis">Redis</option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
         <label class="layui-form-label">连接名</label>
         <div class="layui-input-block">
             <input type="text" name="connName" autocomplete="off" class="layui-input" placeholder="请输入连接名"
@@ -28,13 +38,13 @@
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">URL</label>
+        <label class="layui-form-label" id="urlLabel">URL</label>
         <div class="layui-input-block">
-            <textarea name="url" class="layui-textarea" placeholder="请输入URL" autocomplete="off" lay-verify="required"
-                      lay-verType="tips"></textarea>
+            <textarea id="url" name="url" class="layui-textarea" placeholder="请输入URL" autocomplete="off"
+                      lay-verify="required" lay-verType="tips"></textarea>
         </div>
     </div>
-    <div class="layui-form-item">
+    <div class="layui-form-item" id="usernameDiv">
         <label class="layui-form-label">用户名</label>
         <div class="layui-input-block">
             <input type="text" name="username" autocomplete="off" class="layui-input" placeholder="请输入用户名"
@@ -46,15 +56,6 @@
         <div class="layui-input-block">
             <input type="password" name="password" autocomplete="off" class="layui-input" placeholder="请输入密码"
                    lay-verify="required" lay-verType="tips">
-        </div>
-    </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">类型</label>
-        <div class="layui-input-block">
-            <select name="dbType">
-                <option value="MySQL">MySQL</option>
-                <option value="Oracle">Oracle</option>
-            </select>
         </div>
     </div>
     <div class="layui-form-item">
@@ -74,7 +75,23 @@
         base: ctxPath //静态资源所在路径
     }).extend({
         index: 'lib/index' //主入口模块
-    }).use(['index', 'form'], function () {
+    }).use(['index', 'form', 'jquery'], function () {
+        var $ = layui.jquery;
+        var form = layui.form;
+        // 监听数据库类型下拉选择
+        form.on('select(dbType)', function (data) {
+            var dbType = data.value;
+            // Redis数据库
+            if (dbType === 'Redis') {
+                $('#urlLabel').text('地址');
+                $('#url').attr('placeholder', '例如：127.0.0.1:3306');
+                $('#usernameDiv').hide();
+            } else {
+                $('#urlLabel').text('URL');
+                $('#url').attr('placeholder', '请输入URL');
+                $('#usernameDiv').show();
+            }
+        });
     });
 </script>
 </body>

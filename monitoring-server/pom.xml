@@ -108,6 +108,12 @@
             <artifactId>mysql-connector-java</artifactId>
             <scope>runtime</scope>
         </dependency>
+        <!-- redis数据库驱动 -->
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+            <scope>runtime</scope>
+        </dependency>
     </dependencies>
 
     <!-- 构建 -->
