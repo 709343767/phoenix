@@ -125,9 +125,6 @@ public class DbMonitorTask implements CommandLineRunner {
             int port = Integer.parseInt(address[1]);
             // 密码
             String password = monitorDb.getPassword();
-            if (StringUtils.isNotBlank(password)) {
-                password = new String(Base64.getDecoder().decode(monitorDb.getPassword()), StandardCharsets.UTF_8);
-            }
             // 获取 Jedis
             jedis = RedisUtils.getJedis(host, port, password);
             // Redis数据库是否可连接

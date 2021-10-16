@@ -7,7 +7,7 @@ import java.util.List;
 
 /**
  * <p>
- * Oracle数据库会话服务类
+ * Oracle数据库会话服务接口
  * </p>
  *
  * @author 皮锋

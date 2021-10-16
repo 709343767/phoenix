@@ -34,10 +34,12 @@
                     会话管理
                 </li>
                 <li th:if="${#strings.toLowerCase(monitorDbVo.dbType)} eq 'oracle'">表空间</li>
+                <li class="layui-this" th:if="${#strings.toLowerCase(monitorDbVo.dbType)} eq 'redis'">信息</li>
                 <li>详情</li>
             </ul>
             <div class="layui-tab-content">
-                <div class="layui-tab-item layui-show">
+                <div class="layui-tab-item layui-show"
+                     th:if="${#strings.toLowerCase(monitorDbVo.dbType)} eq 'oracle' or ${#strings.toLowerCase(monitorDbVo.dbType)} eq 'mysql'">
                     <div class="layui-fluid">
                         <table id="list-table" lay-filter="list-table"></table>
                         <script type="text/html" id="imgTpl">
@@ -68,6 +70,9 @@
                             <img style="display: inline-block; width: 50%; height: 100%;" src={{ d.avatar }}>
                         </script>
                     </div>
+                </div>
+                <div class="layui-tab-item layui-show" th:if="${#strings.toLowerCase(monitorDbVo.dbType)} eq 'redis'">
+                    <div class="layui-card" id="redis-info"></div>
                 </div>
                 <div class="layui-tab-item">
                     <form class="layui-form layui-form-pane" id="layuiadmin-form-useradmin"
@@ -167,6 +172,9 @@
         extend.dbTableSpace4oracle = 'db/dbTableSpace4oracle';
         use.push('dbSession4oracle');
         use.push('dbTableSpace4oracle');
+    } else if ([[${monitorDbVo.dbType}]].toLowerCase() === 'redis') {
+        extend.dbInfo4redis = 'db/dbInfo4redis';
+        use.push('dbInfo4redis');
     }
     layui.config({
         base: ctxPath //静态资源所在路径

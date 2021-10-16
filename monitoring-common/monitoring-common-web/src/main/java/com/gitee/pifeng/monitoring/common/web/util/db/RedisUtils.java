@@ -4,6 +4,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import redis.clients.jedis.Jedis;
 
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
+
 /**
  * <p>
  * Redis工具类
@@ -42,6 +45,8 @@ public class RedisUtils {
         try {
             Jedis jedis = new Jedis(host, port, 5000);
             if (StringUtils.isNotBlank(password)) {
+                // 解密
+                password = new String(Base64.getDecoder().decode(password), StandardCharsets.UTF_8);
                 jedis.auth(password);
             }
             return jedis;

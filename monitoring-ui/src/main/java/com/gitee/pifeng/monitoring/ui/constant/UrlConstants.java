@@ -68,4 +68,9 @@ public class UrlConstants {
      */
     public static final String ORACLE_GET_TABLESPACE_LIST_ALL = ROOT_URI + "/db-tablespace4oracle/get-tablespace-list-all";
 
+    /**
+     * Redis数据库：获取Redis信息
+     */
+    public static final String REDIS_GET_REDIS_INFO = ROOT_URI + "/db-info4redis/get-redis-info";
+
 }
