@@ -29,7 +29,10 @@
     <div class="layui-card">
         <div class="layui-tab layui-tab-brief">
             <ul class="layui-tab-title">
-                <li class="layui-this">会话管理</li>
+                <li class="layui-this"
+                    th:if="${#strings.toLowerCase(monitorDbVo.dbType)} eq 'oracle' or ${#strings.toLowerCase(monitorDbVo.dbType)} eq 'mysql'">
+                    会话管理
+                </li>
                 <li th:if="${#strings.toLowerCase(monitorDbVo.dbType)} eq 'oracle'">表空间</li>
                 <li>详情</li>
             </ul>
@@ -83,13 +86,14 @@
                             </div>
                         </div>
                         <div class="layui-form-item layui-form-text">
-                            <label class="layui-form-label">URL</label>
+                            <label class="layui-form-label"
+                                   th:text="${monitorDbVo.dbType=='Redis'?'地址':'URL'}">URL</label>
                             <div class="layui-input-block">
                                 <textarea th:text="${monitorDbVo.url}" name="url" class="layui-textarea" disabled>
                                 </textarea>
                             </div>
                         </div>
-                        <div class="layui-form-item">
+                        <div class="layui-form-item" th:style="${monitorDbVo.dbType=='Redis'?'display: none;':''}">
                             <label class="layui-form-label">用户名</label>
                             <div class="layui-input-block">
                                 <input type="text" name="username" disabled class="layui-input"
