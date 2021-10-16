@@ -45,13 +45,14 @@
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label" id="urlLabel">URL</label>
+        <label class="layui-form-label" id="urlLabel" th:text="${monitorDbVo.dbType=='Redis'?'地址':'URL'}">URL</label>
         <div class="layui-input-block">
             <textarea th:text="${monitorDbVo.url}" id="url" name="url" class="layui-textarea" lay-verify="required"
-                      placeholder="请输入URL" autocomplete="off" lay-verType="tips"></textarea>
+                      th:placeholder="${monitorDbVo.dbType=='Redis'?'例如：127.0.0.1:6379':'请输入URL'}" autocomplete="off"
+                      lay-verType="tips"></textarea>
         </div>
     </div>
-    <div class="layui-form-item" id="usernameDiv">
+    <div class="layui-form-item" id="usernameDiv" th:style="${monitorDbVo.dbType=='Redis'?'display: none;':''}">
         <label class="layui-form-label">用户名</label>
         <div class="layui-input-block">
             <input type="text" name="username" autocomplete="off" placeholder="请输入用户名" lay-verify="username"
@@ -86,16 +87,6 @@
         var form = layui.form;
         // Redis数据库
         var redis = 'Redis';
-        // 页面加载完执行，重新渲染页面
-        $(function () {
-            var dbType = $('select[name="dbType"]').val();
-            // Redis数据库
-            if (dbType === redis) {
-                $('#urlLabel').text('地址');
-                $('#url').attr('placeholder', '例如：127.0.0.1:6379');
-                $('#usernameDiv').hide();
-            }
-        });
         // 监听数据库类型下拉选择
         form.on('select(dbType)', function (data) {
             var dbType = data.value;
