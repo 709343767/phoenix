@@ -128,7 +128,7 @@ public class MonitorDbServiceImpl extends ServiceImpl<IMonitorDbDao, MonitorDb> 
         String dbType = monitorDb.getDbType();
         monitorDb.setDriverClass(DriverUtil.identifyDriver(dbType));
         // Redis数据库
-        if (StringUtils.equalsAnyIgnoreCase(DbEnums.Redis.name(), dbType)) {
+        if (StringUtils.equalsIgnoreCase(DbEnums.Redis.name(), dbType)) {
             monitorDb.setDriverClass(Jedis.class.getName());
         }
         if (StringUtils.isBlank(monitorDb.getPassword())) {
@@ -171,7 +171,7 @@ public class MonitorDbServiceImpl extends ServiceImpl<IMonitorDbDao, MonitorDb> 
         String dbType = monitorDb.getDbType();
         monitorDb.setDriverClass(DriverUtil.identifyDriver(dbType));
         // Redis数据库
-        if (StringUtils.equalsAnyIgnoreCase(DbEnums.Redis.name(), dbType)) {
+        if (StringUtils.equalsIgnoreCase(DbEnums.Redis.name(), dbType)) {
             monitorDb.setDriverClass(Jedis.class.getName());
         }
         monitorDb.setInsertTime(new Date());

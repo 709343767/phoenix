@@ -5,10 +5,7 @@ import cn.hutool.db.ds.simple.SimpleDataSource;
 import cn.hutool.db.handler.NumberHandler;
 import cn.hutool.db.sql.SqlExecutor;
 import com.baomidou.mybatisplus.annotation.DbType;
-import com.gitee.pifeng.monitoring.common.constant.AlarmLevelEnums;
-import com.gitee.pifeng.monitoring.common.constant.AlarmReasonEnums;
-import com.gitee.pifeng.monitoring.common.constant.MonitorTypeEnums;
-import com.gitee.pifeng.monitoring.common.constant.ZeroOrOneConstants;
+import com.gitee.pifeng.monitoring.common.constant.*;
 import com.gitee.pifeng.monitoring.common.constant.sql.MySql;
 import com.gitee.pifeng.monitoring.common.constant.sql.Oracle;
 import com.gitee.pifeng.monitoring.common.domain.Alarm;
@@ -17,6 +14,7 @@ import com.gitee.pifeng.monitoring.common.exception.NetException;
 import com.gitee.pifeng.monitoring.common.threadpool.ThreadPool;
 import com.gitee.pifeng.monitoring.common.util.DateTimeUtils;
 import com.gitee.pifeng.monitoring.common.util.Md5Utils;
+import com.gitee.pifeng.monitoring.common.web.util.RedisUtils;
 import com.gitee.pifeng.monitoring.server.business.server.core.MonitoringConfigPropertiesLoader;
 import com.gitee.pifeng.monitoring.server.business.server.core.PackageConstructor;
 import com.gitee.pifeng.monitoring.server.business.server.entity.MonitorDb;
@@ -29,6 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+import redis.clients.jedis.Jedis;
 
 import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
@@ -86,25 +85,17 @@ public class DbMonitorTask implements CommandLineRunner {
                     // 使用多线程，加快处理速度
                     ThreadPoolExecutor threadPoolExecutor = ThreadPool.COMMON_IO_INTENSIVE_THREAD_POOL;
                     threadPoolExecutor.execute(() -> {
-                        // 数据库连接
-                        Connection connection = this.getConnection(monitorDb);
-                        try {
-                            // 数据库是否可连接
-                            boolean isConnect = this.isConnect(connection, monitorDb);
-                            // 连接正常
-                            if (isConnect) {
-                                // 处理数据库正常
-                                this.connected(monitorDb);
-                            }
-                            // 连接异常
-                            else {
-                                // 处理数据库异常
-                                this.disconnected(monitorDb);
-                            }
-                        } catch (Exception e) {
-                            log.error("执行数据库监控异常！", e);
-                        } finally {
-                            DbUtil.close(connection);
+                        String dbType = monitorDb.getDbType();
+                        // 关系型数据库
+                        if (StringUtils.equalsIgnoreCase(DbEnums.MySQL.name(), dbType)
+                                || StringUtils.equalsIgnoreCase(DbEnums.Oracle.name(), dbType)) {
+                            // 处理关系型数据库
+                            this.dealRelationalDb(monitorDb);
+                        }
+                        // Redis数据库
+                        if (StringUtils.equalsIgnoreCase(DbEnums.Redis.name(), dbType)) {
+                            // 处理Redis数据库
+                            this.dealRedisDb(monitorDb);
                         }
                     });
                 }
@@ -116,27 +107,77 @@ public class DbMonitorTask implements CommandLineRunner {
 
     /**
      * <p>
-     * 获取数据库连接
+     * 处理Redis数据库
      * </p>
      *
      * @param monitorDb 数据库信息
-     * @return 数据库连接
      * @author 皮锋
-     * @custom.date 2020/12/21 21:42
+     * @custom.date 2021/10/16 14:00
      */
-    private Connection getConnection(MonitorDb monitorDb) {
-        // url
-        String url = monitorDb.getUrl();
-        // 用户名
-        String username = monitorDb.getUsername();
-        // 密码
-        String password = new String(Base64.getDecoder().decode(monitorDb.getPassword()), StandardCharsets.UTF_8);
-        // 数据源
-        try (SimpleDataSource ds = new SimpleDataSource(url, username, password)) {
-            return ds.getConnection();
+    private void dealRedisDb(MonitorDb monitorDb) {
+        Jedis jedis = null;
+        try {
+            String url = monitorDb.getUrl();
+            String[] address = StringUtils.split(url, ":");
+            // 主机
+            String host = address[0];
+            // 端口
+            int port = Integer.parseInt(address[1]);
+            // 密码
+            String password = monitorDb.getPassword();
+            if (StringUtils.isNotBlank(password)) {
+                password = new String(Base64.getDecoder().decode(monitorDb.getPassword()), StandardCharsets.UTF_8);
+            }
+            // 获取 Jedis
+            jedis = RedisUtils.getJedis(host, port, password);
+            // Redis数据库是否可连接
+            boolean isConnect = RedisUtils.isConnect(jedis);
+            // 连接正常
+            if (isConnect) {
+                // 处理数据库正常
+                this.connected(monitorDb);
+            }
+            // 连接异常
+            else {
+                // 处理数据库异常
+                this.disconnected(monitorDb);
+            }
         } catch (Exception e) {
-            log.error("与数据库建立连接异常！", e);
-            return null;
+            log.error("执行数据库监控异常！", e);
+        } finally {
+            RedisUtils.close(jedis);
+        }
+    }
+
+    /**
+     * <p>
+     * 处理关系型数据库
+     * </p>
+     *
+     * @param monitorDb 数据库信息
+     * @author 皮锋
+     * @custom.date 2021/10/16 13:55
+     */
+    private void dealRelationalDb(MonitorDb monitorDb) {
+        // 关系型数据库连接
+        Connection connection = this.getRelationalDbConnection(monitorDb);
+        try {
+            // 关系型数据库是否可连接
+            boolean isConnect = this.isRelationalDbConnect(connection, monitorDb);
+            // 连接正常
+            if (isConnect) {
+                // 处理数据库正常
+                this.connected(monitorDb);
+            }
+            // 连接异常
+            else {
+                // 处理数据库异常
+                this.disconnected(monitorDb);
+            }
+        } catch (Exception e) {
+            log.error("执行数据库监控异常！", e);
+        } finally {
+            DbUtil.close(connection);
         }
     }
 
@@ -186,7 +227,33 @@ public class DbMonitorTask implements CommandLineRunner {
 
     /**
      * <p>
-     * 数据库是否可连接
+     * 获取关系型数据库连接
+     * </p>
+     *
+     * @param monitorDb 数据库信息
+     * @return 数据库连接
+     * @author 皮锋
+     * @custom.date 2020/12/21 21:42
+     */
+    private Connection getRelationalDbConnection(MonitorDb monitorDb) {
+        // url
+        String url = monitorDb.getUrl();
+        // 用户名
+        String username = monitorDb.getUsername();
+        // 密码
+        String password = new String(Base64.getDecoder().decode(monitorDb.getPassword()), StandardCharsets.UTF_8);
+        // 数据源
+        try (SimpleDataSource ds = new SimpleDataSource(url, username, password)) {
+            return ds.getConnection();
+        } catch (Exception e) {
+            log.error("与数据库建立连接异常！", e);
+            return null;
+        }
+    }
+
+    /**
+     * <p>
+     * 关系型数据库是否可连接
      * </p>
      *
      * @param connection 数据库连接
@@ -195,7 +262,7 @@ public class DbMonitorTask implements CommandLineRunner {
      * @author 皮锋
      * @custom.date 2020/12/20 16:07
      */
-    private boolean isConnect(Connection connection, MonitorDb monitorDb) {
+    private boolean isRelationalDbConnect(Connection connection, MonitorDb monitorDb) {
         // 数据库连接为空
         if (connection == null) {
             return false;

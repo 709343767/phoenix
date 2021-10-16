@@ -118,6 +118,11 @@
             <groupId>com.github.xiaoymin</groupId>
             <artifactId>swagger-bootstrap-ui</artifactId>
         </dependency>
+        <!-- redis数据库驱动 -->
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+        </dependency>
     </dependencies>
 
     <!-- 构建 -->
