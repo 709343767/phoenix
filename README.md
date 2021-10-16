@@ -16,7 +16,11 @@
 
 - 数据库
 
-  支持MySQL、Oracle，监控内容包括：连接状态、会话，Oracle数据库则还能监控表空间；
+  支持MySQL、Oracle、Redis；  
+  监控内容：  
+      &emsp;&emsp;MySQL：会话；  
+      &emsp;&emsp;Oracle：会话、表空间；  
+      &emsp;&emsp;Redis：Redis信息全集 ；   
 
 - 网络：支持监控网络状态；
 
