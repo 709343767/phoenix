@@ -297,9 +297,16 @@ public class DbMonitorTask implements CommandLineRunner {
      */
     private void sendAlarmInfo(String title, AlarmLevelEnums alarmLevelEnum, AlarmReasonEnums alarmReasonEnum, MonitorDb monitorDb) throws NetException, SigarException {
         StringBuilder builder = new StringBuilder();
-        builder.append("连接名：").append(monitorDb.getConnName())
-                .append("，<br>url：").append(monitorDb.getUrl())
-                .append("，<br>类型：").append(monitorDb.getDbType());
+        // 数据库类型
+        String dbType = monitorDb.getDbType();
+        builder.append("连接名：").append(monitorDb.getConnName());
+        if (StringUtils.equalsIgnoreCase(DbEnums.Redis.name(), dbType)) {
+            builder.append("，<br>地址：");
+        } else {
+            builder.append("，<br>URL：");
+        }
+        builder.append(monitorDb.getUrl())
+                .append("，<br>类型：").append(dbType);
         if (StringUtils.isNotBlank(monitorDb.getDbDesc())) {
             builder.append("，<br>描述：").append(monitorDb.getDbDesc());
         }
