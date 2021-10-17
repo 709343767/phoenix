@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
+
 /**
  * <p>
  * 心跳服务实现。
@@ -77,12 +79,12 @@ public class HeartbeatServiceImpl implements IHeartbeatService {
         entity.setAppServerType(heartbeatPackage.getAppServerType().getName());
         // 插入记录
         if (selectCountDb == null || selectCountDb == 0) {
-            entity.setInsertTime(heartbeatPackage.getDateTime());
+            entity.setInsertTime(new Date());
             this.monitorInstanceDao.insert(entity);
         }
         // 更新记录
         else {
-            entity.setUpdateTime(heartbeatPackage.getDateTime());
+            entity.setUpdateTime(new Date());
             LambdaUpdateWrapper<MonitorInstance> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();
             lambdaUpdateWrapper.eq(MonitorInstance::getInstanceId, instanceId);
             this.monitorInstanceDao.update(entity, lambdaUpdateWrapper);

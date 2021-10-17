@@ -81,7 +81,7 @@ public class DbTableSpaceMonitorTask implements CommandLineRunner {
         long period = 24 * 60 * 60 * 1000L;
         // 初始化执行时间，每天早上8点
         long initDelay = DateTimeUtils.getTimeMillis("08:00:00") - System.currentTimeMillis();
-        initDelay = initDelay > 0 ? initDelay : period + initDelay;
+        initDelay = initDelay >= 0 ? initDelay : period + initDelay;
         ThreadPool.COMMON_IO_INTENSIVE_SCHEDULED_THREAD_POOL.scheduleAtFixedRate(() -> {
             // 是否监控数据库
             boolean isEnable = MonitoringConfigPropertiesLoader.getMonitoringProperties().getDbProperties().isEnable();

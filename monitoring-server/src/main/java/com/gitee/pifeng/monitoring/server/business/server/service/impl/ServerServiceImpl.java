@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -182,12 +183,12 @@ public class ServerServiceImpl extends ServiceImpl<IMonitorServerDao, MonitorSer
         monitorServer.setConnFrequency((int) serverPackage.getRate());
         // 没有
         if (selectCountDb == null || selectCountDb == 0) {
-            monitorServer.setInsertTime(serverPackage.getDateTime());
+            monitorServer.setInsertTime(new Date());
             this.monitorServerDao.insert(monitorServer);
         }
         // 有
         else {
-            monitorServer.setUpdateTime(serverPackage.getDateTime());
+            monitorServer.setUpdateTime(new Date());
             LambdaUpdateWrapper<MonitorServer> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();
             lambdaUpdateWrapper.eq(MonitorServer::getIp, ip);
             this.monitorServerDao.update(monitorServer, lambdaUpdateWrapper);
