@@ -70,8 +70,13 @@ public class RedisUtils {
         if (jedis == null) {
             return false;
         }
-        String ping = jedis.ping();
-        return "PONG".equalsIgnoreCase(ping);
+        try {
+            String ping = jedis.ping();
+            return "PONG".equalsIgnoreCase(ping);
+        } catch (Exception e) {
+            log.error("检查连接异常！", e);
+            return false;
+        }
     }
 
     /**
