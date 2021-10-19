@@ -474,6 +474,12 @@
                         <outputDirectory>
                             ${session.executionRootDirectory}/target
                         </outputDirectory>
+                        <excludes>
+                            <exclude>
+                                <groupId>org.projectlombok</groupId>
+                                <artifactId>lombok</artifactId>
+                            </exclude>
+                        </excludes>
                     </configuration>
                     <executions>
                         <execution>
