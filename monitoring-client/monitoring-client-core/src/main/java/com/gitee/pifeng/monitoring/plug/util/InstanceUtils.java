@@ -1,11 +1,10 @@
 package com.gitee.pifeng.monitoring.plug.util;
 
-import org.hyperic.sigar.SigarException;
-
 import com.gitee.pifeng.monitoring.common.exception.NetException;
 import com.gitee.pifeng.monitoring.common.util.Md5Utils;
 import com.gitee.pifeng.monitoring.common.util.server.NetUtils;
 import com.gitee.pifeng.monitoring.plug.core.ConfigLoader;
+import org.hyperic.sigar.SigarException;
 
 /**
  * <p>
@@ -65,6 +64,18 @@ public class InstanceUtils {
         instanceId = Md5Utils.encrypt(mac + ip + order + instanceName);
         INSTANCE_ID_THREAD_LOCAL.set(instanceId);
         return instanceId;
+    }
+
+    /**
+     * <p>
+     * 回收本地线程
+     * </p>
+     *
+     * @author 皮锋
+     * @custom.date 2021/10/19 16:49
+     */
+    public static void remove() {
+        INSTANCE_ID_THREAD_LOCAL.remove();
     }
 
 }
