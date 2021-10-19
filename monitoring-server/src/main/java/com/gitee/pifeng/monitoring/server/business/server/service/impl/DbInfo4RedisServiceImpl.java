@@ -1,5 +1,6 @@
 package com.gitee.pifeng.monitoring.server.business.server.service.impl;
 
+import com.gitee.pifeng.monitoring.common.exception.DbException;
 import com.gitee.pifeng.monitoring.common.web.util.db.RedisUtils;
 import com.gitee.pifeng.monitoring.server.business.server.service.IDbInfo4RedisService;
 import lombok.Cleanup;
@@ -37,7 +38,7 @@ public class DbInfo4RedisServiceImpl implements IDbInfo4RedisService {
         if (jedis != null) {
             return jedis.info();
         } else {
-            throw new RuntimeException("获取Redis信息异常！");
+            throw new DbException("获取Redis信息异常！");
         }
     }
 
