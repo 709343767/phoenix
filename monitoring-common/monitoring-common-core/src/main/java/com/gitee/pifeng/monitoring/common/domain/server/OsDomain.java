@@ -29,6 +29,12 @@ public final class OsDomain extends AbstractSuperBean {
      * 操作系统名称
      */
     private String osName;
+
+    /**
+     * 操作系统架构
+     */
+    private String osArch;
+
     /**
      * 操作系统版本
      */

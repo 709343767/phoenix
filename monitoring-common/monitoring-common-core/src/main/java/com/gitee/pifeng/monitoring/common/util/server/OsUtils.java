@@ -71,7 +71,8 @@ public final class OsUtils {
         Calendar cal = Calendar.getInstance();
         TimeZone timeZone = cal.getTimeZone();
         return new OsDomain()
-                .setOsName(PROPS.getProperty("os.name") + " " + PROPS.getProperty("os.arch"))
+                .setOsName(PROPS.getProperty("os.name"))
+                .setOsArch(PROPS.getProperty("os.arch"))
                 .setOsVersion(PROPS.getProperty("os.version"))
                 .setUserName(PROPS.getProperty("user.name"))
                 .setUserHome(PROPS.getProperty("user.home"))

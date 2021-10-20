@@ -48,6 +48,10 @@ public class MonitorServerOs implements Serializable {
     @TableField("OS_NAME")
     private String osName;
 
+    @ApiModelProperty(value = "操作系统架构")
+    @TableField("OS_ARCH")
+    private String osArch;
+
     @ApiModelProperty(value = "操作系统版本")
     @TableField("OS_VERSION")
     private String osVersion;

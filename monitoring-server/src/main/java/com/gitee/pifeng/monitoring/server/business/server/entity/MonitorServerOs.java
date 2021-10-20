@@ -51,6 +51,12 @@ public class MonitorServerOs {
     private String osName;
 
     /**
+     * 操作系统架构
+     */
+    @TableField("OS_ARCH")
+    private String osArch;
+
+    /**
      * 操作系统版本
      */
     @TableField("OS_VERSION")

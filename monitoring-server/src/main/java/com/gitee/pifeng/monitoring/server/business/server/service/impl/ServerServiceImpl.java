@@ -746,6 +746,7 @@ public class ServerServiceImpl extends ServiceImpl<IMonitorServerDao, MonitorSer
         monitorServerOs.setIp(ip);
         monitorServerOs.setServerName(osDomain.getComputerName());
         monitorServerOs.setOsName(osDomain.getOsName());
+        monitorServerOs.setOsArch(osDomain.getOsArch());
         monitorServerOs.setOsVersion(osDomain.getOsVersion());
         monitorServerOs.setOsTimeZone(osDomain.getOsTimeZone());
         monitorServerOs.setUserHome(osDomain.getUserHome());

@@ -921,6 +921,7 @@
                     var data = result.data;
                     var ip = data.ip;
                     var osName = data.osName;
+                    var osArch = data.osArch;
                     var osTimeZone = data.osTimeZone;
                     var osVersion = data.osVersion;
                     var serverName = data.serverName;
@@ -933,13 +934,16 @@
                         '           <label class="label-font-weight">服务器名：</label>' + serverName +
                         '       </div>' +
                         '       <div class="layui-col-md4">' +
+                        '           <label class="label-font-weight">系统时区：</label>' + osTimeZone +
+                        '       </div>' +
+                        '       <div class="layui-col-md4">' +
                         '           <label class="label-font-weight">操作系统：</label>' + osName +
                         '       </div>' +
                         '       <div class="layui-col-md4">' +
-                        '           <label class="label-font-weight">系统版本：</label>' + osVersion +
+                        '           <label class="label-font-weight">系统架构：</label>' + osArch +
                         '       </div>' +
                         '       <div class="layui-col-md4">' +
-                        '           <label class="label-font-weight">系统时区：</label>' + osTimeZone +
+                        '           <label class="label-font-weight">系统版本：</label>' + osVersion +
                         '       </div>' +
                         '       <div class="layui-col-md4">' +
                         '           <label class="label-font-weight">系统用户：</label>' + userName +

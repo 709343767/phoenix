@@ -42,6 +42,9 @@ public class MonitorServerOsVo implements ISuperBean {
     @ApiModelProperty(value = "操作系统名称")
     private String osName;
 
+    @ApiModelProperty(value = "操作系统架构")
+    private String osArch;
+
     @ApiModelProperty(value = "操作系统版本")
     private String osVersion;
 
