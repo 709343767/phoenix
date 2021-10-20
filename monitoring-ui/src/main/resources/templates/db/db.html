@@ -53,8 +53,8 @@
                     <div class="layui-input-block">
                         <select name="isOnline">
                             <option value="">所有</option>
-                            <option value="0">离线</option>
                             <option value="1">正常</option>
+                            <option value="0">离线</option>
                             <option value="-1">未知</option>
                         </select>
                     </div>
@@ -147,6 +147,12 @@
                     field: 'id',
                     width: 70,
                     title: 'ID',
+                    sort: !0,
+                    hide: true
+                }, {
+                    field: 'dbType',
+                    title: '类型',
+                    minWidth: 100,
                     sort: !0
                 }, {
                     field: 'connName',
@@ -157,11 +163,6 @@
                     field: 'url',
                     title: 'URL/地址',
                     minWidth: 200,
-                    sort: !0
-                }, {
-                    field: 'dbType',
-                    title: '类型',
-                    minWidth: 100,
                     sort: !0
                 }, {
                     field: 'isOnline',
