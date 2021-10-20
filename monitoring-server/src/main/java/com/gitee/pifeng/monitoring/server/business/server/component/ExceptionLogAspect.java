@@ -101,7 +101,7 @@ public class ExceptionLogAspect {
         MonitorLogException.MonitorLogExceptionBuilder builder = MonitorLogException.builder();
         // 转换请求参数
         Map<String, String> reqParamMap = request != null ? MapUtils.convertParamMap(request.getParameterMap()) : null;
-        builder.reqParam((reqParamMap == null || reqParamMap.isEmpty()) ? null : JSON.toJSONString(reqParamMap));
+        builder.reqParam((reqParamMap == null || reqParamMap.isEmpty()) ? "" : JSON.toJSONString(reqParamMap));
         builder.excName(excName);
         builder.excMessage(ExceptionUtils.stackTraceToString(excName, e.getMessage(), e.getStackTrace()));
         builder.userId(-1L);

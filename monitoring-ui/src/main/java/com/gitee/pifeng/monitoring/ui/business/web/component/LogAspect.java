@@ -117,8 +117,8 @@ public class LogAspect {
         }
         // 转换请求参数
         Map<String, String> reqParamMap = MapUtils.convertParamMap(request.getParameterMap());
-        builder.reqParam(reqParamMap.isEmpty() ? null : JSON.toJSONString(reqParamMap));
-        builder.respParam(response != null ? JSON.toJSONString(response) : null);
+        builder.reqParam(reqParamMap.isEmpty() ? "" : JSON.toJSONString(reqParamMap));
+        builder.respParam(response != null ? JSON.toJSONString(response) : "");
         builder.userId(SpringSecurityUtils.getCurrentMonitorUserRealm().getId());
         builder.username(SpringSecurityUtils.getCurrentMonitorUserRealm().getUsrname());
         builder.operMethod(methodName);
@@ -155,7 +155,7 @@ public class LogAspect {
         MonitorLogException.MonitorLogExceptionBuilder builder = MonitorLogException.builder();
         // 转换请求参数
         Map<String, String> reqParamMap = MapUtils.convertParamMap(request.getParameterMap());
-        builder.reqParam(reqParamMap.isEmpty() ? null : JSON.toJSONString(reqParamMap));
+        builder.reqParam(reqParamMap.isEmpty() ? "" : JSON.toJSONString(reqParamMap));
         builder.excName(excName);
         builder.excMessage(ExceptionUtils.stackTraceToString(excName, e.getMessage(), e.getStackTrace()));
         builder.userId(SpringSecurityUtils.getCurrentMonitorUserRealm().getId());

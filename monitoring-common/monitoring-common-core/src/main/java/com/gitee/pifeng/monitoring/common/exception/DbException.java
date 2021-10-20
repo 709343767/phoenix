@@ -2,7 +2,7 @@ package com.gitee.pifeng.monitoring.common.exception;
 
 /**
  * <p>
- * 数据库异常
+ * 自定义数据库异常
  * </p>
  *
  * @author 皮锋
@@ -13,7 +13,7 @@ public class DbException extends MonitoringUniversalException {
     /**
      * serialVersionUID
      */
-
+    private static final long serialVersionUID = 6047087509207781738L;
 
     public DbException() {
         super();

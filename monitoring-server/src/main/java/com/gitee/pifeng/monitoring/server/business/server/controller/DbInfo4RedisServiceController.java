@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.gitee.pifeng.monitoring.common.domain.Result;
 import com.gitee.pifeng.monitoring.common.dto.BaseRequestPackage;
 import com.gitee.pifeng.monitoring.common.dto.BaseResponsePackage;
+import com.gitee.pifeng.monitoring.common.exception.DbException;
 import com.gitee.pifeng.monitoring.server.business.server.core.PackageConstructor;
 import com.gitee.pifeng.monitoring.server.business.server.service.IDbInfo4RedisService;
 import io.swagger.annotations.Api;
@@ -40,12 +41,13 @@ public class DbInfo4RedisServiceController {
      *
      * @param baseRequestPackage 基础请求包
      * @return {@link BaseResponsePackage}
+     * @throws DbException 自定义数据库异常
      * @author 皮锋
      * @custom.date 2021/10/16 20:22
      */
     @ApiOperation(value = "获取Redis信息")
     @PostMapping("/get-redis-info")
-    public BaseResponsePackage getRedisInfo(@RequestBody BaseRequestPackage baseRequestPackage) {
+    public BaseResponsePackage getRedisInfo(@RequestBody BaseRequestPackage baseRequestPackage) throws DbException {
         JSONObject extraMsg = baseRequestPackage.getExtraMsg();
         String host = extraMsg.getString("host");
         int port = extraMsg.getIntValue("port");
