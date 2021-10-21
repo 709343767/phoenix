@@ -225,9 +225,9 @@ public class MonitorAlarmRecordServiceImpl extends ServiceImpl<IMonitorAlarmReco
     public LayUiAdminResultVo getAlarmRecordTypeStatistics() {
         List<Map<String, Object>> maps = this.monitorAlarmRecordDao.getAlarmRecordTypeStatistics();
         // 总数
-        int total = (int) maps.stream().collect(Collectors.summarizingInt(e -> NumberUtil.parseInt(e.get("totals").toString()))).getSum();
+        long total = maps.stream().collect(Collectors.summarizingLong(e -> NumberUtil.parseLong(String.valueOf(e.get("totals"))))).getSum();
         for (Map<String, Object> map : maps) {
-            int totals = NumberUtil.parseInt(map.get("totals").toString());
+            long totals = NumberUtil.parseLong(String.valueOf(map.get("totals")));
             if (total != 0) {
                 // 占比，四舍五入保留两位小数
                 String rate = NumberUtil.formatPercent((double) totals / (double) total, 2);
