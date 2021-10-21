@@ -937,7 +937,7 @@
                         '           <label class="label-font-weight">系统时区：</label>' + osTimeZone +
                         '       </div>' +
                         '       <div class="layui-col-md4">' +
-                        '           <label class="label-font-weight">操作系统：</label>' + osName +
+                        '           <label class="label-font-weight">系统名称：</label>' + osName +
                         '       </div>' +
                         '       <div class="layui-col-md4">' +
                         '           <label class="label-font-weight">系统架构：</label>' + osArch +
