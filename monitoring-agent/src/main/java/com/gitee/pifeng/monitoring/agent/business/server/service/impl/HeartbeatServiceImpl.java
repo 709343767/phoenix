@@ -1,12 +1,16 @@
 package com.gitee.pifeng.monitoring.agent.business.server.service.impl;
 
-import com.gitee.pifeng.monitoring.agent.constant.UrlConstants;
 import com.gitee.pifeng.monitoring.agent.business.server.service.IHeartbeatService;
 import com.gitee.pifeng.monitoring.agent.business.server.service.IHttpService;
+import com.gitee.pifeng.monitoring.agent.constant.UrlConstants;
 import com.gitee.pifeng.monitoring.common.dto.BaseResponsePackage;
 import com.gitee.pifeng.monitoring.common.dto.HeartbeatPackage;
+import com.gitee.pifeng.monitoring.common.util.server.NetUtils;
+import com.gitee.pifeng.monitoring.plug.core.ConfigLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.TreeSet;
 
 /**
  * <p>
@@ -38,7 +42,18 @@ public class HeartbeatServiceImpl implements IHeartbeatService {
      */
     @Override
     public BaseResponsePackage sendHeartbeatPackage(HeartbeatPackage heartbeatPackage) throws Exception {
-        return this.httpService.sendHttpPost(heartbeatPackage.toJsonString(), UrlConstants.HEARTBEAT_URL);
+        // IP地址
+        String ip = ConfigLoader.MONITORING_PROPERTIES.getServerInfoProperties().getIp() == null ? NetUtils.getLocalIp() : ConfigLoader.MONITORING_PROPERTIES.getServerInfoProperties().getIp();
+        // 请求包地址链中添加当前IP地址
+        TreeSet<String> requestNetworkChain = heartbeatPackage.getNetworkChain();
+        requestNetworkChain.add(ip);
+        heartbeatPackage.setNetworkChain(requestNetworkChain);
+        BaseResponsePackage baseResponsePackage = this.httpService.sendHttpPost(heartbeatPackage.toJsonString(), UrlConstants.HEARTBEAT_URL);
+        // 响应包地址链中添加当前IP地址
+        TreeSet<String> responseNetworkChain = baseResponsePackage.getNetworkChain();
+        responseNetworkChain.add(ip);
+        baseResponsePackage.setNetworkChain(responseNetworkChain);
+        return baseResponsePackage;
     }
 
 }

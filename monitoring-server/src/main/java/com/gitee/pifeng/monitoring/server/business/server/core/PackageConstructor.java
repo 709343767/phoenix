@@ -20,6 +20,7 @@ import org.hyperic.sigar.SigarException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
+import java.util.TreeSet;
 
 /**
  * <p>
@@ -54,7 +55,11 @@ public class PackageConstructor extends AbstractPackageConstructor {
         alarmPackage.setInstanceDesc(ConfigLoader.MONITORING_PROPERTIES.getOwnProperties().getInstanceDesc());
         alarmPackage.setInstanceLanguage(LanguageTypeConstants.JAVA);
         alarmPackage.setAppServerType(AppServerDetectorUtils.getAppServerTypeEnum());
-        alarmPackage.setIp(ConfigLoader.MONITORING_PROPERTIES.getServerInfoProperties().getIp() == null ? NetUtils.getLocalIp() : ConfigLoader.MONITORING_PROPERTIES.getServerInfoProperties().getIp());
+        String ip = ConfigLoader.MONITORING_PROPERTIES.getServerInfoProperties().getIp() == null ? NetUtils.getLocalIp() : ConfigLoader.MONITORING_PROPERTIES.getServerInfoProperties().getIp();
+        alarmPackage.setIp(ip);
+        TreeSet<String> networkChain = new TreeSet<>();
+        networkChain.add(ip);
+        alarmPackage.setNetworkChain(networkChain);
         alarmPackage.setComputerName(OsUtils.getComputerName());
         // 判断字符集
         Charset charset = alarm.getCharset();
@@ -88,7 +93,11 @@ public class PackageConstructor extends AbstractPackageConstructor {
         baseResponsePackage.setInstanceDesc(ConfigLoader.MONITORING_PROPERTIES.getOwnProperties().getInstanceDesc());
         baseResponsePackage.setInstanceLanguage(LanguageTypeConstants.JAVA);
         baseResponsePackage.setAppServerType(AppServerDetectorUtils.getAppServerTypeEnum());
-        baseResponsePackage.setIp(ConfigLoader.MONITORING_PROPERTIES.getServerInfoProperties().getIp() == null ? NetUtils.getLocalIp() : ConfigLoader.MONITORING_PROPERTIES.getServerInfoProperties().getIp());
+        String ip = ConfigLoader.MONITORING_PROPERTIES.getServerInfoProperties().getIp() == null ? NetUtils.getLocalIp() : ConfigLoader.MONITORING_PROPERTIES.getServerInfoProperties().getIp();
+        baseResponsePackage.setIp(ip);
+        TreeSet<String> networkChain = new TreeSet<>();
+        networkChain.add(ip);
+        baseResponsePackage.setNetworkChain(networkChain);
         baseResponsePackage.setComputerName(OsUtils.getComputerName());
         baseResponsePackage.setId(IdUtil.randomUUID());
         baseResponsePackage.setDateTime(new Date());

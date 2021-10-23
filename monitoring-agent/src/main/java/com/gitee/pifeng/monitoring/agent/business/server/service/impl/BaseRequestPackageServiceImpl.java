@@ -4,8 +4,12 @@ import com.gitee.pifeng.monitoring.agent.business.server.service.IBaseRequestPac
 import com.gitee.pifeng.monitoring.agent.business.server.service.IHttpService;
 import com.gitee.pifeng.monitoring.common.dto.BaseRequestPackage;
 import com.gitee.pifeng.monitoring.common.dto.BaseResponsePackage;
+import com.gitee.pifeng.monitoring.common.util.server.NetUtils;
+import com.gitee.pifeng.monitoring.plug.core.ConfigLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.TreeSet;
 
 /**
  * <p>
@@ -38,7 +42,18 @@ public class BaseRequestPackageServiceImpl implements IBaseRequestPackageService
      */
     @Override
     public BaseResponsePackage sendBaseRequestPackage(BaseRequestPackage baseRequestPackage, String url) throws Exception {
-        return this.httpService.sendHttpPost(baseRequestPackage.toJsonString(), url);
+        // IP地址
+        String ip = ConfigLoader.MONITORING_PROPERTIES.getServerInfoProperties().getIp() == null ? NetUtils.getLocalIp() : ConfigLoader.MONITORING_PROPERTIES.getServerInfoProperties().getIp();
+        // 请求包地址链中添加当前IP地址
+        TreeSet<String> requestNetworkChain = baseRequestPackage.getNetworkChain();
+        requestNetworkChain.add(ip);
+        baseRequestPackage.setNetworkChain(requestNetworkChain);
+        BaseResponsePackage baseResponsePackage = this.httpService.sendHttpPost(baseRequestPackage.toJsonString(), url);
+        // 响应包地址链中添加当前IP地址
+        TreeSet<String> responseNetworkChain = baseResponsePackage.getNetworkChain();
+        responseNetworkChain.add(ip);
+        baseResponsePackage.setNetworkChain(responseNetworkChain);
+        return baseResponsePackage;
     }
 
 }

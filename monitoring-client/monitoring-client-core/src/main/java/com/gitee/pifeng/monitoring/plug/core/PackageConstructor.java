@@ -19,6 +19,7 @@ import org.hyperic.sigar.SigarException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
+import java.util.TreeSet;
 
 /**
  * <p>
@@ -53,7 +54,11 @@ public class PackageConstructor extends AbstractPackageConstructor {
         alarmPackage.setInstanceDesc(ConfigLoader.MONITORING_PROPERTIES.getOwnProperties().getInstanceDesc());
         alarmPackage.setInstanceLanguage(ConfigLoader.MONITORING_PROPERTIES.getOwnProperties().getInstanceLanguage());
         alarmPackage.setAppServerType(AppServerDetectorUtils.getAppServerTypeEnum());
-        alarmPackage.setIp(ConfigLoader.MONITORING_PROPERTIES.getServerInfoProperties().getIp() == null ? NetUtils.getLocalIp() : ConfigLoader.MONITORING_PROPERTIES.getServerInfoProperties().getIp());
+        String ip = ConfigLoader.MONITORING_PROPERTIES.getServerInfoProperties().getIp() == null ? NetUtils.getLocalIp() : ConfigLoader.MONITORING_PROPERTIES.getServerInfoProperties().getIp();
+        alarmPackage.setIp(ip);
+        TreeSet<String> networkChain = new TreeSet<>();
+        networkChain.add(ip);
+        alarmPackage.setNetworkChain(networkChain);
         alarmPackage.setComputerName(OsUtils.getComputerName());
         // 判断字符集
         Charset charset = alarm.getCharset();
@@ -88,7 +93,11 @@ public class PackageConstructor extends AbstractPackageConstructor {
         heartbeatPackage.setInstanceDesc(ConfigLoader.MONITORING_PROPERTIES.getOwnProperties().getInstanceDesc());
         heartbeatPackage.setInstanceLanguage(ConfigLoader.MONITORING_PROPERTIES.getOwnProperties().getInstanceLanguage());
         heartbeatPackage.setAppServerType(AppServerDetectorUtils.getAppServerTypeEnum());
-        heartbeatPackage.setIp(ConfigLoader.MONITORING_PROPERTIES.getServerInfoProperties().getIp() == null ? NetUtils.getLocalIp() : ConfigLoader.MONITORING_PROPERTIES.getServerInfoProperties().getIp());
+        String ip = ConfigLoader.MONITORING_PROPERTIES.getServerInfoProperties().getIp() == null ? NetUtils.getLocalIp() : ConfigLoader.MONITORING_PROPERTIES.getServerInfoProperties().getIp();
+        heartbeatPackage.setIp(ip);
+        TreeSet<String> networkChain = new TreeSet<>();
+        networkChain.add(ip);
+        heartbeatPackage.setNetworkChain(networkChain);
         heartbeatPackage.setComputerName(OsUtils.getComputerName());
         heartbeatPackage.setDateTime(new Date());
         heartbeatPackage.setRate(ConfigLoader.MONITORING_PROPERTIES.getHeartbeatProperties().getRate());
@@ -117,7 +126,11 @@ public class PackageConstructor extends AbstractPackageConstructor {
         serverPackage.setInstanceDesc(ConfigLoader.MONITORING_PROPERTIES.getOwnProperties().getInstanceDesc());
         serverPackage.setInstanceLanguage(ConfigLoader.MONITORING_PROPERTIES.getOwnProperties().getInstanceLanguage());
         serverPackage.setAppServerType(AppServerDetectorUtils.getAppServerTypeEnum());
-        serverPackage.setIp(ConfigLoader.MONITORING_PROPERTIES.getServerInfoProperties().getIp() == null ? NetUtils.getLocalIp() : ConfigLoader.MONITORING_PROPERTIES.getServerInfoProperties().getIp());
+        String ip = ConfigLoader.MONITORING_PROPERTIES.getServerInfoProperties().getIp() == null ? NetUtils.getLocalIp() : ConfigLoader.MONITORING_PROPERTIES.getServerInfoProperties().getIp();
+        serverPackage.setIp(ip);
+        TreeSet<String> networkChain = new TreeSet<>();
+        networkChain.add(ip);
+        serverPackage.setNetworkChain(networkChain);
         serverPackage.setComputerName(OsUtils.getComputerName());
         serverPackage.setServer(ServerUtils.getServerInfo());
         serverPackage.setRate(ConfigLoader.MONITORING_PROPERTIES.getServerInfoProperties().getRate());
@@ -146,7 +159,11 @@ public class PackageConstructor extends AbstractPackageConstructor {
         jvmPackage.setInstanceDesc(ConfigLoader.MONITORING_PROPERTIES.getOwnProperties().getInstanceDesc());
         jvmPackage.setInstanceLanguage(ConfigLoader.MONITORING_PROPERTIES.getOwnProperties().getInstanceLanguage());
         jvmPackage.setAppServerType(AppServerDetectorUtils.getAppServerTypeEnum());
-        jvmPackage.setIp(ConfigLoader.MONITORING_PROPERTIES.getServerInfoProperties().getIp() == null ? NetUtils.getLocalIp() : ConfigLoader.MONITORING_PROPERTIES.getServerInfoProperties().getIp());
+        String ip = ConfigLoader.MONITORING_PROPERTIES.getServerInfoProperties().getIp() == null ? NetUtils.getLocalIp() : ConfigLoader.MONITORING_PROPERTIES.getServerInfoProperties().getIp();
+        jvmPackage.setIp(ip);
+        TreeSet<String> networkChain = new TreeSet<>();
+        networkChain.add(ip);
+        jvmPackage.setNetworkChain(networkChain);
         jvmPackage.setComputerName(OsUtils.getComputerName());
         jvmPackage.setJvm(JvmUtils.getJvmInfo());
         jvmPackage.setRate(ConfigLoader.MONITORING_PROPERTIES.getJvmInfoProperties().getRate());

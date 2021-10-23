@@ -7,6 +7,8 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
+import java.util.TreeSet;
+
 /**
  * <p>
  * 应用实例
@@ -61,5 +63,10 @@ public abstract class AbstractInstanceBean extends AbstractSuperBean {
      * 计算机名
      */
     protected String computerName;
+
+    /**
+     * 网络链路
+     */
+    private TreeSet<String> networkChain;
 
 }

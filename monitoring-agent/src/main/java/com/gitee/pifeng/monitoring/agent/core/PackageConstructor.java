@@ -14,6 +14,7 @@ import com.gitee.pifeng.monitoring.plug.util.InstanceUtils;
 import lombok.SneakyThrows;
 
 import java.util.Date;
+import java.util.TreeSet;
 
 /**
  * <p>
@@ -45,7 +46,11 @@ public class PackageConstructor extends AbstractPackageConstructor {
         baseResponsePackage.setInstanceDesc(ConfigLoader.MONITORING_PROPERTIES.getOwnProperties().getInstanceDesc());
         baseResponsePackage.setInstanceLanguage(LanguageTypeConstants.JAVA);
         baseResponsePackage.setAppServerType(AppServerDetectorUtils.getAppServerTypeEnum());
-        baseResponsePackage.setIp(ConfigLoader.MONITORING_PROPERTIES.getServerInfoProperties().getIp() == null ? NetUtils.getLocalIp() : ConfigLoader.MONITORING_PROPERTIES.getServerInfoProperties().getIp());
+        String ip = ConfigLoader.MONITORING_PROPERTIES.getServerInfoProperties().getIp() == null ? NetUtils.getLocalIp() : ConfigLoader.MONITORING_PROPERTIES.getServerInfoProperties().getIp();
+        baseResponsePackage.setIp(ip);
+        TreeSet<String> networkChain = new TreeSet<>();
+        networkChain.add(ip);
+        baseResponsePackage.setNetworkChain(networkChain);
         baseResponsePackage.setComputerName(OsUtils.getComputerName());
         baseResponsePackage.setDateTime(new Date());
         baseResponsePackage.setId(IdUtil.randomUUID());

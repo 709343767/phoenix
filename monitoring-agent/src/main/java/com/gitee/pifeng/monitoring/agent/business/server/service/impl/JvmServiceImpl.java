@@ -1,12 +1,16 @@
 package com.gitee.pifeng.monitoring.agent.business.server.service.impl;
 
-import com.gitee.pifeng.monitoring.agent.constant.UrlConstants;
 import com.gitee.pifeng.monitoring.agent.business.server.service.IHttpService;
 import com.gitee.pifeng.monitoring.agent.business.server.service.IJvmService;
+import com.gitee.pifeng.monitoring.agent.constant.UrlConstants;
 import com.gitee.pifeng.monitoring.common.dto.BaseResponsePackage;
 import com.gitee.pifeng.monitoring.common.dto.JvmPackage;
+import com.gitee.pifeng.monitoring.common.util.server.NetUtils;
+import com.gitee.pifeng.monitoring.plug.core.ConfigLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.TreeSet;
 
 /**
  * <p>
@@ -38,6 +42,18 @@ public class JvmServiceImpl implements IJvmService {
      */
     @Override
     public BaseResponsePackage sendServerPackage(JvmPackage jvmPackage) throws Exception {
-        return this.httpService.sendHttpPost(jvmPackage.toJsonString(), UrlConstants.JVM_URL);
+        // IP地址
+        String ip = ConfigLoader.MONITORING_PROPERTIES.getServerInfoProperties().getIp() == null ? NetUtils.getLocalIp() : ConfigLoader.MONITORING_PROPERTIES.getServerInfoProperties().getIp();
+        // 请求包地址链中添加当前IP地址
+        TreeSet<String> requestNetworkChain = jvmPackage.getNetworkChain();
+        requestNetworkChain.add(ip);
+        jvmPackage.setNetworkChain(requestNetworkChain);
+        BaseResponsePackage baseResponsePackage = this.httpService.sendHttpPost(jvmPackage.toJsonString(), UrlConstants.JVM_URL);
+        // 响应包地址链中添加当前IP地址
+        TreeSet<String> responseNetworkChain = baseResponsePackage.getNetworkChain();
+        responseNetworkChain.add(ip);
+        baseResponsePackage.setNetworkChain(responseNetworkChain);
+        return baseResponsePackage;
     }
+
 }
