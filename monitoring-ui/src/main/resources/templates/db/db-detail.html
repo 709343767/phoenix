@@ -72,7 +72,11 @@
                     </div>
                 </div>
                 <div class="layui-tab-item layui-show" th:if="${#strings.toLowerCase(monitorDbVo.dbType)} eq 'redis'">
-                    <div class="layui-card" id="redis-info"></div>
+                    <div class="layui-card">
+                        <div class="layui-card-body" style="word-wrap:break-word;">
+                            <div class="layui-row layui-col-space10" id="redis-info"></div>
+                        </div>
+                    </div>
                 </div>
                 <div class="layui-tab-item">
                     <form class="layui-form layui-form-pane" id="layuiadmin-form-useradmin"
