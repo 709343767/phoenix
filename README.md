@@ -32,9 +32,9 @@
 
   ![功能导图](https://gitee.com/monitoring-platform/monitoring/raw/master/doc/%E5%8A%9F%E8%83%BD%E5%AF%BC%E5%9B%BE.png "功能导图")
 
-- 总体架构
+- 逻辑架构
 
-  ![总体架构图](https://gitee.com/monitoring-platform/monitoring/raw/master/doc/%E6%80%BB%E4%BD%93%E6%9E%B6%E6%9E%84%E5%9B%BE.png "总体架构图")
+  ![逻辑架构图](https://gitee.com/monitoring-platform/monitoring/raw/master/doc/%E9%80%BB%E8%BE%91%E6%9E%B6%E6%9E%84%E5%9B%BE.png "逻辑架构图")
 
 - 运行环境
 
@@ -283,11 +283,17 @@ ScheduledExecutorService service = Monitor.buryingPoint(() -> {
 
 ![数据库2](https://gitee.com/monitoring-platform/monitoring/raw/master/doc/%E6%88%AA%E5%9B%BE/%E6%95%B0%E6%8D%AE%E5%BA%932.png "数据库2")
 
+![数据库3](https://gitee.com/monitoring-platform/monitoring/raw/master/doc/%E6%88%AA%E5%9B%BE/%E6%95%B0%E6%8D%AE%E5%BA%933.png "数据库3")
+
 ![网络](https://gitee.com/monitoring-platform/monitoring/raw/master/doc/%E6%88%AA%E5%9B%BE/%E7%BD%91%E7%BB%9C.png "网络")
 
 ![监控设置](https://gitee.com/monitoring-platform/monitoring/raw/master/doc/%E6%88%AA%E5%9B%BE/%E7%9B%91%E6%8E%A7%E8%AE%BE%E7%BD%AE.png "监控设置")
 
+![告警定义](https://gitee.com/monitoring-platform/monitoring/raw/master/doc/%E6%88%AA%E5%9B%BE/%E5%91%8A%E8%AD%A6%E5%AE%9A%E4%B9%89.png "告警定义")
+
 ![告警记录](https://gitee.com/monitoring-platform/monitoring/raw/master/doc/%E6%88%AA%E5%9B%BE/%E5%91%8A%E8%AD%A6%E8%AE%B0%E5%BD%95.png "告警记录")
+
+![用户管理](https://gitee.com/monitoring-platform/monitoring/raw/master/doc/%E6%88%AA%E5%9B%BE/%E7%94%A8%E6%88%B7%E7%AE%A1%E7%90%86.png "用户管理")
 
 ![操作日志1](https://gitee.com/monitoring-platform/monitoring/raw/master/doc/%E6%88%AA%E5%9B%BE/%E6%93%8D%E4%BD%9C%E6%97%A5%E5%BF%971.png "操作日志1")
 
