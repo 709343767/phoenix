@@ -30,6 +30,8 @@
                     var info = result.data;
                     // 定义要展示的内容
                     var server, clients, memory, persistence, stats, replication, cpu, cluster, keyspace;
+                    var redisVersion, os, processId, usedMemoryHuman, usedMemoryPeakHuman, usedMemoryLua,
+                        connectedClients, totalConnectionsReceived, totalCommandsProcessed;
                     if (!isEmpty(info)) {
                         info = info.replace(new RegExp('\r\n\r\n', 'g'), '<br><br>')
                             .replace(new RegExp('\n\r\n\r', 'g'), '<br><br>')
@@ -66,6 +68,111 @@
                             }
                         }
                     }
+                    // Redis版本
+                    redisVersion = server.slice('redis_version:'.length + server.indexOf('redis_version:'), server.indexOf('<br>redis_git_sha1'));
+                    // OS
+                    os = server.slice('os:'.length + server.indexOf('os:'), server.indexOf('<br>arch_bits'));
+                    // 进程ID
+                    processId = server.slice('process_id:'.length + server.indexOf('process_id:'), server.indexOf('<br>run_id'));
+                    // 已用内存
+                    usedMemoryHuman = memory.slice('used_memory_human:'.length + memory.indexOf('used_memory_human:'), memory.indexOf('<br>used_memory_rss'));
+                    // 内存峰值
+                    usedMemoryPeakHuman = memory.slice('used_memory_peak_human:'.length + memory.indexOf('used_memory_peak_human:'), memory.indexOf('<br>used_memory_lua'));
+                    // Lua内存
+                    usedMemoryLua = convertSize(memory.slice('used_memory_lua:'.length + memory.indexOf('used_memory_lua:'), memory.indexOf('<br>mem_fragmentation_ratio')));
+                    // 客户端连接数
+                    connectedClients = clients.slice('connected_clients:'.length + clients.indexOf('connected_clients:'), clients.indexOf('<br>client_longest_output_list'));
+                    // 历史连接数
+                    totalConnectionsReceived = stats.slice('total_connections_received:'.length + stats.indexOf('total_connections_received:'), stats.indexOf('<br>total_commands_processed'));
+                    // 历史命令数
+                    totalCommandsProcessed = stats.slice('total_commands_processed:'.length + stats.indexOf('total_commands_processed:'), stats.indexOf('<br>instantaneous_ops_per_sec'));
+                    var mainInfoHtml = '<form class="layui-form layui-form-pane">' +
+                        '                  <div class="layui-col-xs12 layui-col-sm4">' +
+                        '                     <div class="layui-card">' +
+                        '                        <div class="layui-card-header" style="font-weight: bold;">' +
+                        '                             服务器' +
+                        '                       </div>' +
+                        '                        <div class="layui-card-body layuiadmin-card-list"' +
+                        '                             id="redis-server-card-list">' +
+                        '                           <div class="layui-form-item">' +
+                        '                              <label class="layui-form-label">Redis版本</label>' +
+                        '                              <div class="layui-input-block">' +
+                        '                                 <input class="layui-input" readonly type="text" value="' + redisVersion + '">' +
+                        '                             </div>' +
+                        '                           </div>' +
+                        '                            <div class="layui-form-item">' +
+                        '                               <label class="layui-form-label">OS</label>' +
+                        '                               <div class="layui-input-block">' +
+                        '                                  <input class="layui-input" readonly type="text" value="' + os + '">' +
+                        '                              </div>' +
+                        '                            </div>' +
+                        '                            <div class="layui-form-item">' +
+                        '                               <label class="layui-form-label">进程ID</label>' +
+                        '                               <div class="layui-input-block">' +
+                        '                                  <input class="layui-input" readonly type="text" value="' + processId + '">' +
+                        '                            </div>' +
+                        '                        </div>' +
+                        '                     </div>' +
+                        '                   </div>' +
+                        '                </div>' +
+                        '            <div class="layui-col-xs12 layui-col-sm4">' +
+                        '               <div class="layui-card">' +
+                        '                  <div class="layui-card-header" style="font-weight: bold;">' +
+                        '                       内存' +
+                        '                 </div>' +
+                        '                  <div class="layui-card-body layuiadmin-card-list"' +
+                        '                       id="redis-memory-card-list">' +
+                        '                     <div class="layui-form-item">' +
+                        '                        <label class="layui-form-label">已用内存</label>' +
+                        '                        <div class="layui-input-block">' +
+                        '                           <input class="layui-input" readonly type="text" value="' + usedMemoryHuman + '">' +
+                        '                       </div>' +
+                        '                     </div>' +
+                        '                      <div class="layui-form-item">' +
+                        '                         <label class="layui-form-label">内存峰值</label>' +
+                        '                      <div class="layui-input-block">' +
+                        '                         <input class="layui-input" readonly type="text" value="' + usedMemoryPeakHuman + '">' +
+                        '                    </div>' +
+                        '                  </div>' +
+                        '                   <div class="layui-form-item">' +
+                        '                      <label class="layui-form-label">Lua内存</label>' +
+                        '                      <div class="layui-input-block">' +
+                        '                         <input class="layui-input" readonly type="text" value="' + usedMemoryLua + '">' +
+                        '                     </div>' +
+                        '                   </div>' +
+                        '                 </div>' +
+                        '               </div>' +
+                        '             </div>' +
+                        '              <div class="layui-col-xs12 layui-col-sm4">' +
+                        '                 <div class="layui-card">' +
+                        '                    <div class="layui-card-header" style="font-weight: bold;">' +
+                        '                         状态' +
+                        '                   </div>' +
+                        '                    <div class="layui-card-body layuiadmin-card-list"' +
+                        '                         id="redis-status-card-list">' +
+                        '                       <div class="layui-form-item">' +
+                        '                          <label class="layui-form-label">连接数</label>' +
+                        '                          <div class="layui-input-block">' +
+                        '                             <input class="layui-input" readonly type="text" value="' + connectedClients + '">' +
+                        '                         </div>' +
+                        '                       </div>' +
+                        '                        <div class="layui-form-item">' +
+                        '                           <label class="layui-form-label">历史连接数</label>' +
+                        '                           <div class="layui-input-block">' +
+                        '                              <input class="layui-input" readonly type="text" value="' + totalConnectionsReceived + '">' +
+                        '                           </div>' +
+                        '                        </div>' +
+                        '                         <div class="layui-form-item">' +
+                        '                            <label class="layui-form-label">历史命令数</label>' +
+                        '                         <div class="layui-input-block">' +
+                        '                             <input class="layui-input" readonly type="text" value="' + totalCommandsProcessed + '">' +
+                        '                         </div>' +
+                        '                       </div>' +
+                        '                     </div>' +
+                        '                   </div>' +
+                        '                 </div>' +
+                        '               </form>';
+                    $('#redis-main-info').empty().html(mainInfoHtml);
                     var html = '<div class="layui-col-xs12 layui-col-sm4">' +
                         '          <div class="layui-collapse">' +
                         '             <div class="layui-colla-item">' +
@@ -114,7 +221,7 @@
                         '             </div>' +
                         '          </div>' +
                         '       </div>';
-                    $('#redis-info').html(html);
+                    $('#redis-info').empty().html(html);
                     //更新全部
                     element.render();
                     // 关闭loading框
