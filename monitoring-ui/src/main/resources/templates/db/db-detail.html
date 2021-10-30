@@ -74,6 +74,14 @@
                 <div class="layui-tab-item layui-show" th:if="${#strings.toLowerCase(monitorDbVo.dbType)} eq 'redis'">
                     <div class="layui-card">
                         <div class="layui-card-body" style="word-wrap:break-word;">
+                            <form class="layui-form layui-form-pane">
+                                <div class="layui-form-item" style="text-align: right;">
+                                    <div class="layui-input-block">
+                                        <input type="checkbox" name="redisAutoRefresh" value=1
+                                               checked title="自动刷新" lay-filter="redisAutoRefresh">
+                                    </div>
+                                </div>
+                            </form>
                             <div class="layui-row layui-col-space10" id="redis-info"></div>
                         </div>
                     </div>
