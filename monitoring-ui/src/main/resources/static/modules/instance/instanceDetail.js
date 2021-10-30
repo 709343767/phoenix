@@ -16,6 +16,8 @@
         var chartTime = 'hour';
         // 内存池图表内存类型
         var chartPool = $('#chart option:selected').val() === undefined ? '' : $('#chart option:selected').val();
+        // 是否自动刷新
+        var autoRefresh = true;
         // 图表条件发生改变
         form.on('select(chart)', function (data) {
             // 内存池类型
@@ -30,6 +32,11 @@
             getJvmMemoryChartInfo(chartTime, 'Heap', 'Heap内存使用量');
             getJvmMemoryChartInfo(chartTime, 'Non_Heap', 'Non_Heap内存使用量');
             getJvmMemoryChartInfo(chartTime, chartPool, chartPool + '内存使用量');
+        });
+        // 自动刷新条件改变
+        form.on('switch(autoRefresh)', function (data) {
+            //是否被选中，true或者false
+            autoRefresh = data.elem.checked;
         });
 
         // 发送ajax请求，获取线程信息
@@ -448,10 +455,12 @@
 
         // 执行ajax请求
         function execute() {
-            // 发送ajax请求，获取内存图表数据
-            getJvmMemoryChartInfo(chartTime, 'Heap', 'Heap内存使用量');
-            getJvmMemoryChartInfo(chartTime, 'Non_Heap', 'Non_Heap内存使用量');
-            getJvmMemoryChartInfo(chartTime, chartPool, chartPool + '内存使用量');
+            if (autoRefresh) {
+                // 发送ajax请求，获取内存图表数据
+                getJvmMemoryChartInfo(chartTime, 'Heap', 'Heap内存使用量');
+                getJvmMemoryChartInfo(chartTime, 'Non_Heap', 'Non_Heap内存使用量');
+                getJvmMemoryChartInfo(chartTime, chartPool, chartPool + '内存使用量');
+            }
             // 发送ajax请求，获取线程信息
             getJvmThreadInfo();
             // 发送ajax请求，获取GC信息
