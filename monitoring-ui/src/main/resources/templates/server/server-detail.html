@@ -35,7 +35,7 @@
             <div class="layui-tab-content">
                 <div class="layui-tab-item layui-show">
                     <div class="layui-card">
-                        <form class="layui-form layui-card-header layuiadmin-card-header-auto layui-card-header-my">
+                        <form class="layui-form layuiadmin-card-header-auto layui-card-header-my">
                             <div class="layui-form-item">
                                 <div class="layui-inline">
                                     <label class="layui-form-label">时间范围(T)</label>
@@ -49,6 +49,13 @@
                                             <!--<option value="year">1年</option>-->
                                             <!--<option value="all">全部</option>-->
                                         </select>
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">自动刷新</label>
+                                    <div class="layui-input-block">
+                                        <input type="checkbox" name="autoRefresh" lay-filter="autoRefresh" checked
+                                               lay-skin="switch" lay-text="开启|关闭">
                                     </div>
                                 </div>
                             </div>

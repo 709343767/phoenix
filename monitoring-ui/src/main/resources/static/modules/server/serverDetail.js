@@ -25,6 +25,8 @@
         var $addressOptionSelected = $('#address option:selected');
         // 服务器网卡地址
         var chartAddress = $addressOptionSelected.val() === undefined ? '' : $addressOptionSelected.val();
+        // 是否自动刷新
+        var autoRefresh = true;
         // 时间条件发生改变
         form.on('select(time)', function (data) {
             time = data.value;
@@ -42,6 +44,11 @@
             chartAddress = data.value;
             // 发送ajax请求，获取网速图表数据
             getServerNetworkSpeedChartInfo(time, chartAddress);
+        });
+        // 自动刷新条件改变
+        form.on('switch(autoRefresh)', function (data) {
+            //是否被选中，true或者false
+            autoRefresh = data.elem.checked;
         });
 
         // 发送ajax请求，获取传感器图表数据
@@ -1874,16 +1881,22 @@
 
         // 发送ajax请求
         function execute() {
-            // 发送ajax请求，获取CPU图表数据
-            getServerCpuChartInfo(time);
-            // 发送ajax请求，获取内存图表数据
-            getServerMemoryChartInfo(time);
-            // 发送ajax请求，获取进程图表数据
-            getServerProcessChartInfo(time);
-            // 发送ajax请求，获取网速图表数据
-            getServerNetworkSpeedChartInfo(time, chartAddress);
-            // 发送ajax请求，获取磁盘图表数据
-            getServerDiskChartInfo();
+            if (autoRefresh) {
+                // 发送ajax请求，获取CPU图表数据
+                getServerCpuChartInfo(time);
+                // 发送ajax请求，获取内存图表数据
+                getServerMemoryChartInfo(time);
+                // 发送ajax请求，获取进程图表数据
+                getServerProcessChartInfo(time);
+                // 发送ajax请求，获取网速图表数据
+                getServerNetworkSpeedChartInfo(time, chartAddress);
+                // 发送ajax请求，获取磁盘图表数据
+                getServerDiskChartInfo();
+                // 发送ajax请求，获取电池图表数据
+                getServerPowerSourcesChartInfo();
+                // 发送ajax请求，获取传感器图表数据
+                getServerSensorsChartInfo();
+            }
             // 发送ajax请求，获取操作系统数据
             getServerOsInfo();
             // 发送ajax请求，获取网卡数据
@@ -1894,10 +1907,6 @@
             getServerPowerSourcesInfo();
             // 发送ajax请求，获取传感器数据
             getServerSensorsInfo();
-            // 发送ajax请求，获取电池图表数据
-            getServerPowerSourcesChartInfo();
-            // 发送ajax请求，获取传感器图表数据
-            getServerSensorsChartInfo();
             // 发送ajax请求，获取进程数据
             getServerProcessInfo();
         }
