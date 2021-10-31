@@ -108,7 +108,7 @@
                         '                  <div class="layui-col-xs12 layui-col-sm4">' +
                         '                     <div class="layui-card">' +
                         '                        <div class="layui-card-header" style="font-weight: bold;">' +
-                        '                             服务器' +
+                        '                             服务' +
                         '                       </div>' +
                         '                        <div class="layui-card-body layuiadmin-card-list"' +
                         '                             id="redis-server-card-list">' +
