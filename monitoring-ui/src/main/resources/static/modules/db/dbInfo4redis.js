@@ -69,23 +69,41 @@
                         }
                     }
                     // Redis版本
-                    redisVersion = server.slice('redis_version:'.length + server.indexOf('redis_version:'), server.indexOf('<br>redis_git_sha1'));
+                    redisVersion = server.split('<br>').find(function (value) {
+                        return value.indexOf('redis_version:') !== -1;
+                    }).slice('redis_version:'.length);
                     // OS
-                    os = server.slice('os:'.length + server.indexOf('os:'), server.indexOf('<br>arch_bits'));
+                    os = server.split('<br>').find(function (value) {
+                        return value.indexOf('os:') !== -1;
+                    }).slice('os:'.length);
                     // 进程ID
-                    processId = server.slice('process_id:'.length + server.indexOf('process_id:'), server.indexOf('<br>run_id'));
+                    processId = server.split('<br>').find(function (value) {
+                        return value.indexOf('process_id:') !== -1;
+                    }).slice('process_id:'.length);
                     // 已用内存
-                    usedMemoryHuman = memory.slice('used_memory_human:'.length + memory.indexOf('used_memory_human:'), memory.indexOf('<br>used_memory_rss'));
+                    usedMemoryHuman = memory.split('<br>').find(function (value) {
+                        return value.indexOf('used_memory_human:') !== -1;
+                    }).slice('used_memory_human:'.length);
                     // 内存峰值
-                    usedMemoryPeakHuman = memory.slice('used_memory_peak_human:'.length + memory.indexOf('used_memory_peak_human:'), memory.indexOf('<br>used_memory_lua'));
+                    usedMemoryPeakHuman = memory.split('<br>').find(function (value) {
+                        return value.indexOf('used_memory_peak_human:') !== -1;
+                    }).slice('used_memory_peak_human:'.length);
                     // Lua内存
-                    usedMemoryLua = convertSize(memory.slice('used_memory_lua:'.length + memory.indexOf('used_memory_lua:'), memory.indexOf('<br>mem_fragmentation_ratio')));
+                    usedMemoryLua = convertSize(memory.split('<br>').find(function (value) {
+                        return value.indexOf('used_memory_lua:') !== -1;
+                    }).slice('used_memory_lua:'.length));
                     // 客户端连接数
-                    connectedClients = clients.slice('connected_clients:'.length + clients.indexOf('connected_clients:'), clients.indexOf('<br>client_longest_output_list'));
+                    connectedClients = clients.split('<br>').find(function (value) {
+                        return value.indexOf('connected_clients:') !== -1;
+                    }).slice('connected_clients:'.length);
                     // 历史连接数
-                    totalConnectionsReceived = stats.slice('total_connections_received:'.length + stats.indexOf('total_connections_received:'), stats.indexOf('<br>total_commands_processed'));
+                    totalConnectionsReceived = stats.split('<br>').find(function (value) {
+                        return value.indexOf('total_connections_received:') !== -1;
+                    }).slice('total_connections_received:'.length);
                     // 历史命令数
-                    totalCommandsProcessed = stats.slice('total_commands_processed:'.length + stats.indexOf('total_commands_processed:'), stats.indexOf('<br>instantaneous_ops_per_sec'));
+                    totalCommandsProcessed = stats.split('<br>').find(function (value) {
+                        return value.indexOf('total_commands_processed:') !== -1;
+                    }).slice('total_commands_processed:'.length);
                     var mainInfoHtml = '<form class="layui-form layui-form-pane">' +
                         '                  <div class="layui-col-xs12 layui-col-sm4">' +
                         '                     <div class="layui-card">' +
