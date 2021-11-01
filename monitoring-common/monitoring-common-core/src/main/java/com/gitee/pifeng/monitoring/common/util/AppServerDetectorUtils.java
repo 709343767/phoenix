@@ -28,6 +28,8 @@ public class AppServerDetectorUtils {
 
     public static final String UNDERTOW_CLASS = "/io/undertow/Undertow.class";
 
+    public static final String NETTY_CLASS = "/reactor/netty/http/server/HttpServer.class";
+
     /**
      * <p>
      * 获取应用服务器枚举类型
@@ -49,6 +51,9 @@ public class AppServerDetectorUtils {
         }
         if (isJetty()) {
             return AppServerTypeEnums.JETTY;
+        }
+        if (isNetty()) {
+            return AppServerTypeEnums.NETTY;
         }
         return AppServerTypeEnums.UNKNOWN;
     }
@@ -79,6 +84,20 @@ public class AppServerDetectorUtils {
     private static boolean isUndertow() {
         Class<?> c = AppServerDetectorUtils.class;
         return c.getResource(UNDERTOW_CLASS) != null;
+    }
+
+    /**
+     * <p>
+     * 是不是Netty服务器
+     * </p>
+     *
+     * @return 是 或者 否
+     * @author 皮锋
+     * @custom.date 2021/11/1 9:18
+     */
+    private static boolean isNetty() {
+        Class<?> c = AppServerDetectorUtils.class;
+        return c.getResource(NETTY_CLASS) != null;
     }
 
 }

@@ -38,6 +38,11 @@ public enum AppServerTypeEnums {
     WEBLOGIC("WebLogic"),
 
     /**
+     * Netty
+     */
+    NETTY("Netty"),
+
+    /**
      * 未知
      */
     UNKNOWN("未知");
