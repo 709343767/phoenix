@@ -104,6 +104,56 @@
                     totalCommandsProcessed = stats.split('<br>').find(function (value) {
                         return value.indexOf('total_commands_processed:') !== -1;
                     }).slice('total_commands_processed:'.length);
+                    // 键值统计
+                    var keyspaces = keyspace.split('<br>').filter(function (item) {
+                        return !isEmpty(item);
+                    });
+                    var keyValueInfoHtml = '<div class="layui-card">' +
+                        '                      <div class="layui-card-header" style="font-weight: bold;">' +
+                        '                           键值统计' +
+                        '                     </div>' +
+                        '                      <div class="layui-card-body layuiadmin-card-list">' +
+                        '                         <table class="layui-table">' +
+                        '                            <colgroup>' +
+                        '                               <col>' +
+                        '                               <col>' +
+                        '                               <col>' +
+                        '                               <col>' +
+                        '                           </colgroup>' +
+                        '                            <thead>' +
+                        '                               <tr>' +
+                        '                                  <th>DB</th>' +
+                        '                                  <th>Keys</th>' +
+                        '                                  <th>Expires</th>' +
+                        '                                  <th>Avg TTL</th>' +
+                        '                              </tr>' +
+                        '                           </thead>' +
+                        '                            <tbody>';
+                    for (var j = 0; j < keyspaces.length; j++) {
+                        var db = keyspaces[j].split(':');
+                        var dbkey = db[0];
+                        var dbvalue = db[1];
+                        var keys = dbvalue.split(',').find(function (value) {
+                            return value.indexOf('keys=') !== -1;
+                        }).slice('keys='.length);
+                        var expires = dbvalue.split(',').find(function (value) {
+                            return value.indexOf('expires=') !== -1;
+                        }).slice('expires='.length);
+                        var avgttl = dbvalue.split(',').find(function (value) {
+                            return value.indexOf('avg_ttl=') !== -1;
+                        }).slice('avg_ttl='.length);
+                        keyValueInfoHtml += '<tr>' +
+                            '                   <td>' + dbkey + '</td>' +
+                            '                   <td>' + keys + '</td>' +
+                            '                   <td>' + expires + '</td>' +
+                            '                   <td>' + avgttl + '</td>' +
+                            '               </tr>';
+                    }
+                    keyValueInfoHtml += '         </tbody>' +
+                        '                      </table>' +
+                        '                   </div>' +
+                        '                </div>';
+                    $('#redis-key-value-info').empty().html(keyValueInfoHtml);
                     var mainInfoHtml = '<form class="layui-form layui-form-pane">' +
                         '                  <div class="layui-col-xs12 layui-col-sm4">' +
                         '                     <div class="layui-card">' +
@@ -191,53 +241,60 @@
                         '                 </div>' +
                         '               </form>';
                     $('#redis-main-info').empty().html(mainInfoHtml);
-                    var html = '<div class="layui-col-xs12 layui-col-sm4">' +
-                        '          <div class="layui-collapse">' +
-                        '             <div class="layui-colla-item">' +
-                        '                <h2 class="layui-colla-title">Server</h2>' +
-                        '                <div class="layui-colla-content layui-show">' + server + '</div>' +
-                        '             </div>' +
-                        '             <div class="layui-colla-item">' +
-                        '                <h2 class="layui-colla-title">Clients</h2>' +
-                        '                <div class="layui-colla-content layui-show">' + clients + '</div>' +
-                        '             </div>' +
-                        '             <div class="layui-colla-item">' +
-                        '                <h2 class="layui-colla-title">Cluster</h2>' +
-                        '                <div class="layui-colla-content layui-show">' + cluster + '</div>' +
-                        '             </div>' +
+                    var html = '<div class="layui-card">' +
+                        '          <div class="layui-card-header" style="font-weight: bold;">' +
+                        '               Redis信息全集' +
                         '          </div>' +
-                        '       </div>' +
-                        '       <div class="layui-col-xs12 layui-col-sm4">' +
-                        '          <div class="layui-collapse">' +
-                        '             <div class="layui-colla-item">' +
-                        '                <h2 class="layui-colla-title">Memory</h2>' +
-                        '                <div class="layui-colla-content layui-show">' + memory + '</div>' +
+                        '          <div class="layui-card-body layuiadmin-card-list">' +
+                        '             <div class="layui-col-xs12 layui-col-sm4">' +
+                        '                <div class="layui-collapse">' +
+                        '                   <div class="layui-colla-item">' +
+                        '                      <h2 class="layui-colla-title">Server</h2>' +
+                        '                      <div class="layui-colla-content">' + server + '</div>' +
+                        '                   </div>' +
+                        '                   <div class="layui-colla-item">' +
+                        '                      <h2 class="layui-colla-title">Clients</h2>' +
+                        '                      <div class="layui-colla-content">' + clients + '</div>' +
+                        '                   </div>' +
+                        '                   <div class="layui-colla-item">' +
+                        '                      <h2 class="layui-colla-title">Cluster</h2>' +
+                        '                      <div class="layui-colla-content">' + cluster + '</div>' +
+                        '                   </div>' +
+                        '                </div>' +
                         '             </div>' +
-                        '             <div class="layui-colla-item">' +
-                        '                <h2 class="layui-colla-title">CPU</h2>' +
-                        '                <div class="layui-colla-content layui-show">' + cpu + '</div>' +
+                        '             <div class="layui-col-xs12 layui-col-sm4">' +
+                        '                <div class="layui-collapse">' +
+                        '                   <div class="layui-colla-item">' +
+                        '                      <h2 class="layui-colla-title">Memory</h2>' +
+                        '                      <div class="layui-colla-content">' + memory + '</div>' +
+                        '                  </div>' +
+                        '                   <div class="layui-colla-item">' +
+                        '                      <h2 class="layui-colla-title">CPU</h2>' +
+                        '                      <div class="layui-colla-content">' + cpu + '</div>' +
+                        '                   </div>' +
+                        '                   <div class="layui-colla-item">' +
+                        '                      <h2 class="layui-colla-title">Stats</h2>' +
+                        '                      <div class="layui-colla-content">' + stats + '</div>' +
+                        '                   </div>' +
+                        '                </div>' +
                         '             </div>' +
-                        '             <div class="layui-colla-item">' +
-                        '                <h2 class="layui-colla-title">Stats</h2>' +
-                        '                <div class="layui-colla-content layui-show">' + stats + '</div>' +
-                        '             </div>' +
-                        '          </div>' +
-                        '       </div>' +
-                        '       <div class="layui-col-xs12 layui-col-sm4">' +
-                        '          <div class="layui-collapse">' +
-                        '             <div class="layui-colla-item">' +
-                        '                <h2 class="layui-colla-title">Replication</h2>' +
-                        '                <div class="layui-colla-content layui-show">' + replication + '</div>' +
-                        '             </div>' +
-                        '             <div class="layui-colla-item">' +
-                        '                <h2 class="layui-colla-title">Persistence</h2>' +
-                        '                <div class="layui-colla-content layui-show">' + persistence + '</div>' +
-                        '             </div>' +
-                        '             <div class="layui-colla-item">' +
-                        '                <h2 class="layui-colla-title">Keyspace</h2>' +
-                        '                <div class="layui-colla-content layui-show">' + keyspace + '</div>' +
-                        '             </div>' +
-                        '          </div>' +
+                        '             <div class="layui-col-xs12 layui-col-sm4">' +
+                        '                <div class="layui-collapse">' +
+                        '                   <div class="layui-colla-item">' +
+                        '                      <h2 class="layui-colla-title">Replication</h2>' +
+                        '                      <div class="layui-colla-content">' + replication + '</div>' +
+                        '                   </div>' +
+                        '                   <div class="layui-colla-item">' +
+                        '                      <h2 class="layui-colla-title">Persistence</h2>' +
+                        '                      <div class="layui-colla-content">' + persistence + '</div>' +
+                        '                   </div>' +
+                        '                   <div class="layui-colla-item">' +
+                        '                      <h2 class="layui-colla-title">Keyspace</h2>' +
+                        '                      <div class="layui-colla-content">' + keyspace + '</div>' +
+                        '                   </div>' +
+                        '                </div>' +
+                        '              </div>' +
+                        '           </div>' +
                         '       </div>';
                     $('#redis-info').empty().html(html);
                     //更新全部
