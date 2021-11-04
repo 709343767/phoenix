@@ -138,6 +138,17 @@
                         jq(this).text('未知');
                     }
                 });
+                jq('[data-field="dbType"]').children().each(function () {
+                    if (jq(this).text().toLowerCase() === 'MySQL'.toLowerCase()) {
+                        jq(this).html('<span><img src="' + ctxPath + 'images/db/mysql-small.png" alt="MySQL" title="MySQL"></span>');
+                    }
+                    if (jq(this).text().toLowerCase() === 'Oracle'.toLowerCase()) {
+                        jq(this).html('<span><img src="' + ctxPath + 'images/db/oracle-small.png" alt="Oracle" title="Oracle"></span>');
+                    }
+                    if (jq(this).text().toLowerCase() === 'Redis'.toLowerCase()) {
+                        jq(this).html('<span><img src="' + ctxPath + 'images/db/redis-small.png" alt="Redis" title="Redis"></span>');
+                    }
+                });
             },
             cols: [
                 [{
@@ -152,7 +163,7 @@
                 }, {
                     field: 'dbType',
                     title: '类型',
-                    minWidth: 100,
+                    width: 80,
                     sort: !0
                 }, {
                     field: 'connName',
