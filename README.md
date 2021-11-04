@@ -262,7 +262,7 @@ ScheduledExecutorService service = Monitor.buryingPoint(() -> {
 
 ### 打包部署运行
 
-**监控UI端、监控服务端、监控代理端** 直接打成可运行jar，部署后通过脚本（命令）运行。启停脚本在源码中，具体位置在：**/monitoring/doc/bat脚本、/monitoring/doc/shell脚本** 。  
+**监控UI端、监控服务端、监控代理端** 直接打成可运行jar，打包后jar包在 **monitoring/target** 目录下，部署后通过脚本（命令）运行。启停脚本在源码中，具体位置在：**/monitoring/doc/bat脚本、/monitoring/doc/shell脚本** 。  
 **监控UI端** 访问URL：**https://localhost/monitoring-ui/index** ，初始账号/密码：**admin/admin123**，**guest/guest123**。
 
 ## 功能截图
