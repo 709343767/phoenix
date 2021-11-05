@@ -35,7 +35,7 @@
                 </li>
                 <li th:if="${#strings.toLowerCase(monitorDbVo.dbType)} eq 'oracle'">表空间</li>
                 <li class="layui-this" th:if="${#strings.toLowerCase(monitorDbVo.dbType)} eq 'redis'">信息</li>
-                <li>详情</li>
+                <li>概要</li>
             </ul>
             <div class="layui-tab-content">
                 <div class="layui-tab-item layui-show"
@@ -46,8 +46,16 @@
                             <img style="display: inline-block; width: 50%; height: 100%;" src={{ d.avatar }}>
                         </script>
                         <script type="text/html" id="list-table-toolbar">
-                            <div class="layui-btn-container" sec:authorize="hasAuthority('超级管理员')">
-                                <button class="layui-btn layui-btn-danger" lay-event="batchdel">结束</button>
+                            <div class="layui-btn-container">
+                                <button class="layui-btn layui-btn-sm layuiadmin-btn-useradmin"
+                                        lay-event="batchRefresh">
+                                    <i class="layui-icon layui-icon-refresh"></i>刷新
+                                </button>
+                                <button class="layui-btn layui-btn-sm layui-btn-danger"
+                                        sec:authorize="hasAuthority('超级管理员')"
+                                        lay-event="batchdel">
+                                    <i class="layui-icon layui-icon-delete"></i>结束
+                                </button>
                             </div>
                         </script>
                         <script type="text/html" id="list-table-toolbar-detail">

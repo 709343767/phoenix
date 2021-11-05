@@ -153,6 +153,10 @@
                     });
                 });
             }
+            // 刷新
+            if (obj.event === 'batchRefresh') {
+                table.reload('list-table'); //数据刷新
+            }
         });
         //监听工具条
         table.on('tool(list-table)', function (obj) {
