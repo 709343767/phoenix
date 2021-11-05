@@ -149,6 +149,9 @@
                             '                   <td>' + avgttl + '</td>' +
                             '               </tr>';
                     }
+                    if (keyspaces.length === 0) {
+                        keyValueInfoHtml += '<tr><td style="text-align: center;" colspan="4">暂无数据</td></tr>'
+                    }
                     keyValueInfoHtml += '         </tbody>' +
                         '                      </table>' +
                         '                   </div>' +

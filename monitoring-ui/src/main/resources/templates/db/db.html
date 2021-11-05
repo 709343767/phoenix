@@ -54,7 +54,7 @@
                         <select name="isOnline">
                             <option value="">所有</option>
                             <option value="1">正常</option>
-                            <option value="0">离线</option>
+                            <option value="0">异常</option>
                             <option value="-1">未知</option>
                         </select>
                     </div>
@@ -133,7 +133,7 @@
             done: function () {
                 jq('[data-field="isOnline"]').children().each(function () {
                     if (jq(this).text() === '0') {
-                        jq(this).html('<span style="color: #FF4500;font-weight: bold;">离线</span>');
+                        jq(this).html('<span style="color: #FF4500;font-weight: bold;">异常</span>');
                     }
                     if (jq(this).text() === '1') {
                         jq(this).text('正常');
