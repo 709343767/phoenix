@@ -146,7 +146,8 @@ public class InstanceMonitorTask implements CommandLineRunner {
      */
     private void offLine(MonitorInstance instance) {
         // 是否在线
-        boolean isOnline = StringUtils.equals(instance.getIsOnline(), ZeroOrOneConstants.ONE);
+        String isOnlineStr = instance.getIsOnline();
+        boolean isOnline = StringUtils.equals(isOnlineStr, ZeroOrOneConstants.ONE);
         // 在线
         if (isOnline) {
             try {
@@ -155,8 +156,8 @@ public class InstanceMonitorTask implements CommandLineRunner {
             } catch (Exception e) {
                 log.error("应用实例告警异常！", e);
             }
-            // 原本是在线
-            if (StringUtils.equalsIgnoreCase(instance.getIsOnline(), ZeroOrOneConstants.ONE)) {
+            // 原本是在线或者未知
+            if (StringUtils.equalsIgnoreCase(isOnlineStr, ZeroOrOneConstants.ONE) || StringUtils.isBlank(isOnlineStr)) {
                 // 离线次数 +1
                 int offlineCount = instance.getOfflineCount() == null ? 0 : instance.getOfflineCount();
                 instance.setOfflineCount(offlineCount + 1);

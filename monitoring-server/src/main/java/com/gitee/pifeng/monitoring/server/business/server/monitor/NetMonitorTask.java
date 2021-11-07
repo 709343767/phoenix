@@ -116,8 +116,9 @@ public class NetMonitorTask implements CommandLineRunner {
         } catch (Exception e) {
             log.error("网络告警异常！", e);
         }
-        // 原本是在线
-        if (StringUtils.equalsIgnoreCase(monitorNet.getStatus(), ZeroOrOneConstants.ONE)) {
+        // 原本是在线或者未知
+        String status = monitorNet.getStatus();
+        if (StringUtils.equalsIgnoreCase(status, ZeroOrOneConstants.ONE) || StringUtils.isBlank(status)) {
             // 离线次数 +1
             int offlineCount = monitorNet.getOfflineCount() == null ? 0 : monitorNet.getOfflineCount();
             monitorNet.setOfflineCount(offlineCount + 1);

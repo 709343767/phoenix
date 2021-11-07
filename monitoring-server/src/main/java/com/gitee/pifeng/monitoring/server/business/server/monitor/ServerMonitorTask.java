@@ -152,7 +152,8 @@ public class ServerMonitorTask implements CommandLineRunner {
      */
     private void offLine(MonitorServer server) {
         // 是否在线
-        boolean isOnline = StringUtils.equals(server.getIsOnline(), ZeroOrOneConstants.ONE);
+        String isOnlineStr = server.getIsOnline();
+        boolean isOnline = StringUtils.equals(isOnlineStr, ZeroOrOneConstants.ONE);
         // 在线
         if (isOnline) {
             try {
@@ -161,8 +162,8 @@ public class ServerMonitorTask implements CommandLineRunner {
             } catch (Exception e) {
                 log.error("服务器告警异常！", e);
             }
-            // 原本是在线
-            if (StringUtils.equalsIgnoreCase(server.getIsOnline(), ZeroOrOneConstants.ONE)) {
+            // 原本是在线或者未知
+            if (StringUtils.equalsIgnoreCase(isOnlineStr, ZeroOrOneConstants.ONE) || StringUtils.isBlank(isOnlineStr)) {
                 // 离线次数 +1
                 int offlineCount = server.getOfflineCount() == null ? 0 : server.getOfflineCount();
                 server.setOfflineCount(offlineCount + 1);
