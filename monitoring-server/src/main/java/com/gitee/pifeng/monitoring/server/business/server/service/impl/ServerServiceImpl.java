@@ -184,6 +184,7 @@ public class ServerServiceImpl extends ServiceImpl<IMonitorServerDao, MonitorSer
         // 没有
         if (selectCountDb == null || selectCountDb == 0) {
             monitorServer.setInsertTime(new Date());
+            monitorServer.setOfflineCount(0);
             this.monitorServerDao.insert(monitorServer);
         }
         // 有

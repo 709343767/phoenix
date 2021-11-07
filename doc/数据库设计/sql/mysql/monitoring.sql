@@ -82,17 +82,18 @@ CREATE TABLE `MONITOR_CONFIG`
 DROP TABLE IF EXISTS `MONITOR_DB`;
 CREATE TABLE `MONITOR_DB`
 (
-    `ID`           bigint(20)    NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-    `CONN_NAME`    varchar(255)  NOT NULL COMMENT '连接名称',
-    `URL`          varchar(1000) NOT NULL COMMENT '数据库URL',
-    `USERNAME`     varchar(50)   DEFAULT NULL COMMENT '用户名',
-    `PASSWORD`     varchar(255)  DEFAULT NULL COMMENT '密码',
-    `DB_TYPE`      varchar(50)   NOT NULL COMMENT '数据库类型',
-    `DRIVER_CLASS` varchar(255)  DEFAULT NULL COMMENT '驱动类',
-    `DB_DESC`      varchar(1000) DEFAULT NULL COMMENT '描述',
-    `IS_ONLINE`    varchar(255)  DEFAULT NULL COMMENT '数据库状态（0：离线，1：在线）',
-    `INSERT_TIME`  datetime      NOT NULL COMMENT '插入时间',
-    `UPDATE_TIME`  datetime      DEFAULT NULL COMMENT '更新时间',
+    `ID`            bigint(20)    NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `CONN_NAME`     varchar(255)  NOT NULL COMMENT '连接名称',
+    `URL`           varchar(1000) NOT NULL COMMENT '数据库URL',
+    `USERNAME`      varchar(50)   DEFAULT NULL COMMENT '用户名',
+    `PASSWORD`      varchar(255)  DEFAULT NULL COMMENT '密码',
+    `DB_TYPE`       varchar(50)   NOT NULL COMMENT '数据库类型',
+    `DRIVER_CLASS`  varchar(255)  DEFAULT NULL COMMENT '驱动类',
+    `DB_DESC`       varchar(1000) DEFAULT NULL COMMENT '描述',
+    `IS_ONLINE`     varchar(255)  DEFAULT NULL COMMENT '数据库状态（0：离线，1：在线）',
+    `OFFLINE_COUNT` int(8)        DEFAULT NULL COMMENT '离线次数',
+    `INSERT_TIME`   datetime      NOT NULL COMMENT '插入时间',
+    `UPDATE_TIME`   datetime      DEFAULT NULL COMMENT '更新时间',
     PRIMARY KEY (`ID`) USING BTREE
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
@@ -114,6 +115,7 @@ CREATE TABLE `MONITOR_INSTANCE`
     `APP_SERVER_TYPE`  varchar(32)  DEFAULT NULL COMMENT '应用服务器类型',
     `IP`               varchar(15) NOT NULL COMMENT 'IP地址',
     `IS_ONLINE`        varchar(1)   DEFAULT NULL COMMENT '应用状态（0：离线，1：在线）',
+    `OFFLINE_COUNT`    int(8)       DEFAULT NULL COMMENT '离线次数',
     `CONN_FREQUENCY`   int(8)      NOT NULL COMMENT '连接频率',
     `INSERT_TIME`      datetime    NOT NULL COMMENT '新增时间',
     `UPDATE_TIME`      datetime     DEFAULT NULL COMMENT '更新时间',
@@ -313,13 +315,14 @@ CREATE TABLE `MONITOR_LOG_OPERATION`
 DROP TABLE IF EXISTS `MONITOR_NET`;
 CREATE TABLE `MONITOR_NET`
 (
-    `ID`          bigint(20)  NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-    `IP_SOURCE`   varchar(15) NOT NULL COMMENT 'IP地址（来源）',
-    `IP_TARGET`   varchar(15) NOT NULL COMMENT 'IP地址（目的地）',
-    `IP_DESC`     varchar(500) DEFAULT NULL COMMENT 'IP地址描述',
-    `STATUS`      varchar(1)   DEFAULT NULL COMMENT '状态（0：网络不通，1：网络正常）',
-    `INSERT_TIME` datetime    NOT NULL COMMENT '新增时间',
-    `UPDATE_TIME` datetime     DEFAULT NULL COMMENT '更新时间',
+    `ID`            bigint(20)  NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `IP_SOURCE`     varchar(15) NOT NULL COMMENT 'IP地址（来源）',
+    `IP_TARGET`     varchar(15) NOT NULL COMMENT 'IP地址（目的地）',
+    `IP_DESC`       varchar(500) DEFAULT NULL COMMENT 'IP地址描述',
+    `STATUS`        varchar(1)   DEFAULT NULL COMMENT '状态（0：网络不通，1：网络正常）',
+    `OFFLINE_COUNT` int(8)       DEFAULT NULL COMMENT '离线次数',
+    `INSERT_TIME`   datetime    NOT NULL COMMENT '新增时间',
+    `UPDATE_TIME`   datetime     DEFAULT NULL COMMENT '更新时间',
     PRIMARY KEY (`ID`) USING BTREE,
     KEY `NX_IP_SOURCE` (`IP_SOURCE`) USING BTREE COMMENT '索引_IP地址（来源）',
     KEY `NX_IP_TARGET` (`IP_TARGET`) USING BTREE COMMENT '索引_IP地址（目的地）'
@@ -371,6 +374,7 @@ CREATE TABLE `MONITOR_SERVER`
     `SERVER_NAME`    varchar(30)  DEFAULT NULL COMMENT '服务器名',
     `SERVER_SUMMARY` varchar(500) DEFAULT NULL COMMENT '服务器摘要',
     `IS_ONLINE`      varchar(1)   DEFAULT NULL COMMENT '服务器状态（0：离线，1：在线）',
+    `OFFLINE_COUNT`  int(8)       DEFAULT NULL COMMENT '离线次数',
     `CONN_FREQUENCY` int(8)      NOT NULL COMMENT '连接频率',
     `INSERT_TIME`    datetime    NOT NULL COMMENT '新增时间',
     `UPDATE_TIME`    datetime     DEFAULT NULL COMMENT '更新时间',

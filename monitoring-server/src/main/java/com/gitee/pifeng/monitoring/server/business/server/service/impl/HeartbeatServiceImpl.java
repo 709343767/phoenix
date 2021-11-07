@@ -80,6 +80,7 @@ public class HeartbeatServiceImpl implements IHeartbeatService {
         // 插入记录
         if (selectCountDb == null || selectCountDb == 0) {
             entity.setInsertTime(new Date());
+            entity.setOfflineCount(0);
             this.monitorInstanceDao.insert(entity);
         }
         // 更新记录

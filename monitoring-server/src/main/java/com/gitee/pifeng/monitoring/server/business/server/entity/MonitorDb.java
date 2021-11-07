@@ -81,6 +81,12 @@ public class MonitorDb {
     private String isOnline;
 
     /**
+     * 离线次数
+     */
+    @TableField("OFFLINE_COUNT")
+    private Integer offlineCount;
+
+    /**
      * 插入时间
      */
     @TableField("INSERT_TIME")

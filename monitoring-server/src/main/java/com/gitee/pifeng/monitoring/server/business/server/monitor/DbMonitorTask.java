@@ -193,6 +193,12 @@ public class DbMonitorTask implements CommandLineRunner {
         } catch (Exception e) {
             log.error("数据库告警异常！", e);
         }
+        // 原本是在线
+        if (StringUtils.equalsIgnoreCase(monitorDb.getIsOnline(), ZeroOrOneConstants.ONE)) {
+            // 离线次数 +1
+            int offlineCount = monitorDb.getOfflineCount() == null ? 0 : monitorDb.getOfflineCount();
+            monitorDb.setOfflineCount(offlineCount + 1);
+        }
         monitorDb.setIsOnline(ZeroOrOneConstants.ZERO);
         monitorDb.setUpdateTime(new Date());
         // 更新数据库

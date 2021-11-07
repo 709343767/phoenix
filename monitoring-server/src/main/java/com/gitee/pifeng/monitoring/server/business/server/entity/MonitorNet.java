@@ -55,7 +55,13 @@ public class MonitorNet {
      */
     @TableField("STATUS")
     private String status;
-    
+
+    /**
+     * 离线次数
+     */
+    @TableField("OFFLINE_COUNT")
+    private Integer offlineCount;
+
     /**
      * 新增时间
      */

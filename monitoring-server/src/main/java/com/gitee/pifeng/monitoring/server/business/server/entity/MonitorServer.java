@@ -57,6 +57,12 @@ public class MonitorServer {
     private String isOnline;
 
     /**
+     * 离线次数
+     */
+    @TableField("OFFLINE_COUNT")
+    private Integer offlineCount;
+
+    /**
      * 连接频率
      */
     @TableField("CONN_FREQUENCY")

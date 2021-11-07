@@ -161,6 +161,12 @@ public class ServerMonitorTask implements CommandLineRunner {
             } catch (Exception e) {
                 log.error("服务器告警异常！", e);
             }
+            // 原本是在线
+            if (StringUtils.equalsIgnoreCase(server.getIsOnline(), ZeroOrOneConstants.ONE)) {
+                // 离线次数 +1
+                int offlineCount = server.getOfflineCount() == null ? 0 : server.getOfflineCount();
+                server.setOfflineCount(offlineCount + 1);
+            }
             server.setIsOnline(ZeroOrOneConstants.ZERO);
             // 更新数据库
             this.serverService.updateById(server);

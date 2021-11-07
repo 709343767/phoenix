@@ -57,6 +57,9 @@ public class MonitorDbVo implements ISuperBean {
     @ApiModelProperty(value = "数据库状态（0：离线，1：在线）")
     private String isOnline;
 
+    @ApiModelProperty(value = "离线次数")
+    private Integer offlineCount;
+
     @ApiModelProperty(value = "插入时间")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date insertTime;

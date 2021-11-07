@@ -202,6 +202,7 @@ public class MonitorNetServiceImpl extends ServiceImpl<IMonitorNetDao, MonitorNe
         MonitorNet monitorNet = monitorNetVo.convertTo();
         monitorNet.setIpSource(NetUtils.getLocalIp());
         monitorNet.setInsertTime(new Date());
+        monitorNet.setOfflineCount(0);
         int result = this.monitorNetDao.insert(monitorNet);
         if (result == 1) {
             return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);

@@ -155,6 +155,12 @@ public class InstanceMonitorTask implements CommandLineRunner {
             } catch (Exception e) {
                 log.error("应用实例告警异常！", e);
             }
+            // 原本是在线
+            if (StringUtils.equalsIgnoreCase(instance.getIsOnline(), ZeroOrOneConstants.ONE)) {
+                // 离线次数 +1
+                int offlineCount = instance.getOfflineCount() == null ? 0 : instance.getOfflineCount();
+                instance.setOfflineCount(offlineCount + 1);
+            }
             instance.setIsOnline(ZeroOrOneConstants.ZERO);
             // 更新数据库
             this.instanceService.updateById(instance);

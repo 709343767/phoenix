@@ -64,8 +64,8 @@ public class MonitorDbServiceImpl extends ServiceImpl<IMonitorDbDao, MonitorDb> 
         LambdaQueryWrapper<MonitorDb> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         // 只查询部分字段
         lambdaQueryWrapper.select(MonitorDb::getId, MonitorDb::getConnName, MonitorDb::getUrl,
-                MonitorDb::getDbType, MonitorDb::getIsOnline, MonitorDb::getDbDesc,
-                MonitorDb::getInsertTime, MonitorDb::getUpdateTime);
+                MonitorDb::getDbType, MonitorDb::getIsOnline, MonitorDb::getOfflineCount,
+                MonitorDb::getDbDesc, MonitorDb::getInsertTime, MonitorDb::getUpdateTime);
         if (StringUtils.isNotBlank(connName)) {
             lambdaQueryWrapper.like(MonitorDb::getConnName, connName);
         }
@@ -174,6 +174,7 @@ public class MonitorDbServiceImpl extends ServiceImpl<IMonitorDbDao, MonitorDb> 
         if (StringUtils.equalsIgnoreCase(DbEnums.Redis.name(), dbType)) {
             monitorDb.setDriverClass(Jedis.class.getName());
         }
+        monitorDb.setOfflineCount(0);
         monitorDb.setInsertTime(new Date());
         int result = this.monitorDbDao.insert(monitorDb);
         if (result == 1) {

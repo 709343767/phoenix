@@ -45,6 +45,9 @@ public class MonitorServerVo implements ISuperBean {
     @ApiModelProperty(value = "服务器状态（0：离线，1：在线）")
     private String isOnline;
 
+    @ApiModelProperty(value = "离线次数")
+    private Integer offlineCount;
+
     @ApiModelProperty(value = "连接频率")
     private Integer connFrequency;
 

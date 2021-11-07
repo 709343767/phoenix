@@ -52,6 +52,10 @@ public class MonitorServer implements Serializable {
     @TableField("IS_ONLINE")
     private String isOnline;
 
+    @ApiModelProperty(value = "离线次数")
+    @TableField("OFFLINE_COUNT")
+    private Integer offlineCount;
+
     @ApiModelProperty(value = "连接频率")
     @TableField("CONN_FREQUENCY")
     private Integer connFrequency;

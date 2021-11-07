@@ -68,6 +68,10 @@ public class MonitorDb implements Serializable {
     @TableField("IS_ONLINE")
     private String isOnline;
 
+    @ApiModelProperty(value = "离线次数")
+    @TableField("OFFLINE_COUNT")
+    private Integer offlineCount;
+
     @ApiModelProperty(value = "插入时间")
     @TableField("INSERT_TIME")
     private Date insertTime;
