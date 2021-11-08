@@ -5,7 +5,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.gitee.pifeng.monitoring.common.domain.Result;
 import com.gitee.pifeng.monitoring.common.dto.BaseRequestPackage;
 import com.gitee.pifeng.monitoring.common.dto.BaseResponsePackage;
-import com.gitee.pifeng.monitoring.common.exception.NetException;
 import com.gitee.pifeng.monitoring.plug.core.Sender;
 import com.gitee.pifeng.monitoring.ui.business.web.dao.IMonitorDbDao;
 import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorDb;
@@ -43,7 +42,7 @@ public class DbInfo4RedisServiceImpl implements IDbInfo4RedisService {
      *
      * @param id 数据库ID
      * @return Redis信息
-     * @throws NetException   自定义获取网络信息异常
+     * @throws IOException    IO异常
      * @throws SigarException Sigar异常
      * @author 皮锋
      * @custom.date 2021/10/16 20:48

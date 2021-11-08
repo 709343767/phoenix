@@ -1,6 +1,5 @@
 package com.gitee.pifeng.monitoring.ui.business.web.controller;
 
-import com.gitee.pifeng.monitoring.common.exception.NetException;
 import com.gitee.pifeng.monitoring.ui.business.web.annotation.OperateLog;
 import com.gitee.pifeng.monitoring.ui.business.web.service.IDbInfo4RedisService;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.LayUiAdminResultVo;
@@ -44,7 +43,7 @@ public class DbInfo4RedisServiceController {
      *
      * @param id 数据库ID
      * @return layUiAdmin响应对象
-     * @throws NetException   自定义获取网络信息异常
+     * @throws IOException    IO异常
      * @throws SigarException Sigar异常
      * @author 皮锋
      * @custom.date 2021/10/16 20:50
