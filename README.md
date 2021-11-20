@@ -319,8 +319,8 @@ ScheduledExecutorService service = Monitor.buryingPoint(() -> {
 
 ## 联系
 
-邮箱：709343767@qq.com
-
+邮箱：709343767@qq.com  
+QQ群：773127639  
 
 
 
