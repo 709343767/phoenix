@@ -1,12 +1,10 @@
 package com.gitee.pifeng.monitoring.common.init;
 
 import cn.hutool.crypto.KeyUtil;
-import cn.hutool.setting.dialect.Props;
 import com.gitee.pifeng.monitoring.common.constant.SecurerEnums;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
-import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
 /**
@@ -18,33 +16,27 @@ import java.util.Base64;
  * @custom.date 2021/8/13 11:08
  */
 @Slf4j
-public class InitSecurer {
-
-    /**
-     * 读取“monitoring-bootstrap.properties”文件
-     */
-    private static final Props PROPS = new Props("monitoring-bootstrap.properties", StandardCharsets.UTF_8);
+public class InitSecurer extends InitBootstrapConfig {
 
     /**
      * 加解密类型
      */
-    public static final String SECRET_TYPE = PROPS.getStr("secret.type");
+    public static final String SECRET_TYPE = MONITORING_BOOTSTRAP_PROPERTIES.getSecretProperties().getSecretType();
 
     /**
      * DES密钥
      */
-    public static final String SECRET_KEY_DES = PROPS.getStr("secret.key.des");
+    public static final String SECRET_KEY_DES = MONITORING_BOOTSTRAP_PROPERTIES.getSecretProperties().getSecretKeyDes();
 
     /**
      * AES密钥
      */
-    public static final String SECRET_KEY_AES = PROPS.getStr("secret.key.aes");
-
+    public static final String SECRET_KEY_AES = MONITORING_BOOTSTRAP_PROPERTIES.getSecretProperties().getSecretKeyAes();
 
     /**
      * 国密SM4密钥
      */
-    public static final String SECRET_KEY_SM4 = PROPS.getStr("secret.key.sm4");
+    public static final String SECRET_KEY_SM4 = MONITORING_BOOTSTRAP_PROPERTIES.getSecretProperties().getSecretKeySm4();
 
     static {
         log.info("数据传输加解密算法：{}", StringUtils.isNotBlank(SECRET_TYPE) ? SECRET_TYPE : "不加密");
