@@ -3,6 +3,7 @@ package com.gitee.pifeng.monitoring.common.init;
 import cn.hutool.setting.dialect.Props;
 import com.gitee.pifeng.monitoring.common.property.bootstrap.MonitoringBootstrapProperties;
 import com.gitee.pifeng.monitoring.common.property.bootstrap.MonitoringSecretProperties;
+import lombok.extern.slf4j.Slf4j;
 
 import java.nio.charset.StandardCharsets;
 
@@ -14,22 +15,23 @@ import java.nio.charset.StandardCharsets;
  * @author 皮锋
  * @custom.date 2021/11/21 20:15
  */
+@Slf4j
 public class InitBootstrapConfig {
 
     /**
      * 监控引导配置属性
      */
-    public static final MonitoringBootstrapProperties MONITORING_BOOTSTRAP_PROPERTIES = load();
+    public static final MonitoringBootstrapProperties MONITORING_BOOTSTRAP_PROPERTIES = init();
 
     /**
      * <p>
-     * 加载监控引导配置信息
+     * 初始化监控引导配置信息
      * </p>
      *
      * @author 皮锋
      * @custom.date 2021/11/21 20:44
      */
-    private static MonitoringBootstrapProperties load() {
+    public static MonitoringBootstrapProperties init() {
         // 读取“monitoring-bootstrap.properties”文件
         Props props = new Props("monitoring-bootstrap.properties", StandardCharsets.UTF_8);
         // 加解密类型
@@ -49,6 +51,7 @@ public class InitBootstrapConfig {
         // 监控引导配置属性
         MonitoringBootstrapProperties monitoringBootstrapProperties = new MonitoringBootstrapProperties();
         monitoringBootstrapProperties.setSecretProperties(monitoringSecretProperties);
+        log.info("初始化监控引导配置成功！");
         return monitoringBootstrapProperties;
     }
 

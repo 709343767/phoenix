@@ -43,7 +43,7 @@ public class ConfigLoader {
 
     /**
      * <p>
-     * 加载配置信息
+     * 加载监控配置信息
      * </p>
      *
      * @param configPath 配置文件路径
@@ -74,7 +74,7 @@ public class ConfigLoader {
         }
         // 解析配置文件
         analysis(properties);
-        log.info("从监控配置文件中加载监控配置成功！");
+        log.info("加载监控配置成功！");
         // 返回监控属性
         return MONITORING_PROPERTIES;
     }
