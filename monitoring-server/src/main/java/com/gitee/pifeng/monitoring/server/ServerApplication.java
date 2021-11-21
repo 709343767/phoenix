@@ -2,6 +2,7 @@ package com.gitee.pifeng.monitoring.server;
 
 import com.gitee.pifeng.monitoring.common.web.toolkit.CustomizationBeanHandler;
 import com.gitee.pifeng.monitoring.common.web.toolkit.UniqueBeanNameGenerator;
+import com.gitee.pifeng.monitoring.starter.annotation.EnableMonitoring;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
@@ -19,6 +20,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @SpringBootApplication
 @ComponentScan(nameGenerator = UniqueBeanNameGenerator.class)
 @EnableTransactionManagement
+@EnableMonitoring
 public class ServerApplication extends CustomizationBeanHandler {
 
     public static void main(String[] args) {
