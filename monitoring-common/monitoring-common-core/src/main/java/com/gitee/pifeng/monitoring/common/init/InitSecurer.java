@@ -47,7 +47,7 @@ public class InitSecurer {
     public static final String SECRET_KEY_SM4 = PROPS.getStr("secret.key.sm4");
 
     static {
-        log.info("数据传输加解密算法：{}", SECRET_TYPE);
+        log.info("数据传输加解密算法：{}", StringUtils.isNotBlank(SECRET_TYPE) ? SECRET_TYPE : "不加密");
     }
 
     /**
