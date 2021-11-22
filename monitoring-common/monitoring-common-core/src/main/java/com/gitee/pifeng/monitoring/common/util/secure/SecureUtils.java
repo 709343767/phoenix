@@ -1,7 +1,8 @@
-package com.gitee.pifeng.monitoring.common.init;
+package com.gitee.pifeng.monitoring.common.util.secure;
 
 import cn.hutool.crypto.KeyUtil;
 import com.gitee.pifeng.monitoring.common.constant.SecurerEnums;
+import com.gitee.pifeng.monitoring.common.init.InitSecure;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
@@ -9,38 +10,14 @@ import java.util.Base64;
 
 /**
  * <p>
- * 初始化加解密工具
+ * 加解密工具类
  * </p>
  *
  * @author 皮锋
  * @custom.date 2021/8/13 11:08
  */
 @Slf4j
-public class InitSecurer extends InitBootstrapConfig {
-
-    /**
-     * 加解密类型
-     */
-    public static final String SECRET_TYPE = MONITORING_BOOTSTRAP_PROPERTIES.getSecretProperties().getSecretType();
-
-    /**
-     * DES密钥
-     */
-    public static final String SECRET_KEY_DES = MONITORING_BOOTSTRAP_PROPERTIES.getSecretProperties().getSecretKeyDes();
-
-    /**
-     * AES密钥
-     */
-    public static final String SECRET_KEY_AES = MONITORING_BOOTSTRAP_PROPERTIES.getSecretProperties().getSecretKeyAes();
-
-    /**
-     * 国密SM4密钥
-     */
-    public static final String SECRET_KEY_SM4 = MONITORING_BOOTSTRAP_PROPERTIES.getSecretProperties().getSecretKeySm4();
-
-    static {
-        log.info("数据传输加解密算法：{}", StringUtils.isNotBlank(SECRET_TYPE) ? SECRET_TYPE : "不加密");
-    }
+public class SecureUtils extends InitSecure {
 
     /**
      * <p>

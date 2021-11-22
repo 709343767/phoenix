@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.gitee.pifeng.monitoring.agent.business.server.service.IHttpService;
 import com.gitee.pifeng.monitoring.common.dto.BaseResponsePackage;
 import com.gitee.pifeng.monitoring.common.dto.CiphertextPackage;
-import com.gitee.pifeng.monitoring.common.init.InitSecurer;
+import com.gitee.pifeng.monitoring.common.util.secure.SecureUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -47,7 +47,7 @@ public class HttpServiceImpl implements IHttpService {
     @Override
     public BaseResponsePackage sendHttpPost(String json, String url) {
         // 加密告警数据包
-        String encrypt = InitSecurer.encrypt(json);
+        String encrypt = SecureUtils.encrypt(json);
         CiphertextPackage ciphertextPackage = new CiphertextPackage(encrypt);
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
@@ -56,7 +56,7 @@ public class HttpServiceImpl implements IHttpService {
                 HttpMethod.POST, entity, CiphertextPackage.class);
         String ciphertext = Objects.requireNonNull(responseEntity.getBody()).getCiphertext();
         // 解密告警响应数据包
-        String decrypt = InitSecurer.decrypt(ciphertext);
+        String decrypt = SecureUtils.decrypt(ciphertext);
         return JSON.parseObject(decrypt, BaseResponsePackage.class);
     }
 }

@@ -25,7 +25,7 @@ public class AesEncryptUtilsTest extends TestCase {
     public void testEncrypt() {
         String encrypt = AesEncryptUtils.encrypt("测试AES加解密工具类");
         log.info("加密结果：" + encrypt);
-        assertEquals(encrypt, "IfXkyDHOB9FGhgj9OLizOVBRwO9D7lir86BtkUNaxr8=");
+        assertEquals(encrypt, "9FUrFVEsBR3MjwVFv2gydNAKlnXM2fkBdkn1FhMHFro=");
     }
 
     /**
@@ -37,7 +37,7 @@ public class AesEncryptUtilsTest extends TestCase {
      * @custom.date 2021/8/13 18:13
      */
     public void testDecrypt() {
-        String decrypt = AesEncryptUtils.decrypt("IfXkyDHOB9FGhgj9OLizOVBRwO9D7lir86BtkUNaxr8=");
+        String decrypt = AesEncryptUtils.decrypt("9FUrFVEsBR3MjwVFv2gydNAKlnXM2fkBdkn1FhMHFro=");
         log.info("解密结果：" + decrypt);
         assertEquals(decrypt, "测试AES加解密工具类");
     }

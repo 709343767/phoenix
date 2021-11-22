@@ -2,7 +2,7 @@ package com.gitee.pifeng.monitoring.common.web.toolkit;
 
 import com.alibaba.fastjson.JSON;
 import com.gitee.pifeng.monitoring.common.dto.CiphertextPackage;
-import com.gitee.pifeng.monitoring.common.init.InitSecurer;
+import com.gitee.pifeng.monitoring.common.util.secure.SecureUtils;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -32,7 +32,7 @@ public class HttpInputMessagePackageEncrypt {
         // 打印日志
         log.debug("响应包：{}", jsonString);
         // 加密
-        String encrypt = InitSecurer.encrypt(jsonString);
+        String encrypt = SecureUtils.encrypt(jsonString);
         // 密文数据包
         return new CiphertextPackage(encrypt);
     }

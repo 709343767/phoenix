@@ -1,7 +1,7 @@
 package com.gitee.pifeng.monitoring.common.util.secure;
 
 import cn.hutool.crypto.SecureUtil;
-import com.gitee.pifeng.monitoring.common.init.InitSecurer;
+import com.gitee.pifeng.monitoring.common.init.InitSecure;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
@@ -14,12 +14,7 @@ import java.util.Base64;
  * @author 皮锋
  * @custom.date 2021/8/13 15:57
  */
-public class AesEncryptUtils extends InitSecurer {
-
-    /**
-     * AES秘钥
-     */
-    private static final String KEY = SECRET_KEY_AES;
+public class AesEncryptUtils extends InitSecure {
 
     /**
      * <p>
@@ -32,7 +27,7 @@ public class AesEncryptUtils extends InitSecurer {
      * @custom.date 2021/8/13 16:19
      */
     public static String encrypt(String str) {
-        byte[] key = Base64.getDecoder().decode(KEY);
+        byte[] key = Base64.getDecoder().decode(SECRET_KEY_AES);
         return SecureUtil.aes(key).encryptBase64(str, StandardCharsets.UTF_8);
     }
 
@@ -47,7 +42,7 @@ public class AesEncryptUtils extends InitSecurer {
      * @custom.date 2021/8/13 16:19
      */
     public static String decrypt(String str) {
-        byte[] key = Base64.getDecoder().decode(KEY);
+        byte[] key = Base64.getDecoder().decode(SECRET_KEY_AES);
         return SecureUtil.aes(key).decryptStr(str, StandardCharsets.UTF_8);
     }
 

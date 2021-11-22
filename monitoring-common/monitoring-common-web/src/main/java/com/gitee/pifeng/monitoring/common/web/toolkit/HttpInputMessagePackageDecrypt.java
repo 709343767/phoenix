@@ -3,7 +3,7 @@ package com.gitee.pifeng.monitoring.common.web.toolkit;
 import com.fasterxml.jackson.core.io.JsonStringEncoder;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gitee.pifeng.monitoring.common.dto.CiphertextPackage;
-import com.gitee.pifeng.monitoring.common.init.InitSecurer;
+import com.gitee.pifeng.monitoring.common.util.secure.SecureUtils;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
@@ -48,7 +48,7 @@ public class HttpInputMessagePackageDecrypt implements HttpInputMessage {
         byte[] fb = encoder.encodeAsUTF8(bodyStr);
         CiphertextPackage ciphertextPackage = new ObjectMapper().readValue(fb, CiphertextPackage.class);
         // 解密
-        String decryptStr = InitSecurer.decrypt(ciphertextPackage.getCiphertext());
+        String decryptStr = SecureUtils.decrypt(ciphertextPackage.getCiphertext());
         // 打印日志
         log.debug("请求包：{}", decryptStr);
         // 解密后的请求体

@@ -2,7 +2,7 @@ package com.gitee.pifeng.monitoring.common.constant;
 
 import com.gitee.pifeng.monitoring.common.inf.ISecurer;
 import com.gitee.pifeng.monitoring.common.util.secure.AesEncryptUtils;
-import com.gitee.pifeng.monitoring.common.util.secure.DesEncrypt2Utils;
+import com.gitee.pifeng.monitoring.common.util.secure.DesEncryptUtils;
 import com.gitee.pifeng.monitoring.common.util.secure.Sm4EncryptUtils;
 
 /**
@@ -21,12 +21,12 @@ public enum SecurerEnums implements ISecurer {
     DES {
         @Override
         public String encrypt(String str) {
-            return DesEncrypt2Utils.encrypt(str);
+            return DesEncryptUtils.encrypt(str);
         }
 
         @Override
         public String decrypt(String str) {
-            return DesEncrypt2Utils.decrypt(str);
+            return DesEncryptUtils.decrypt(str);
         }
     },
 

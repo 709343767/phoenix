@@ -224,11 +224,11 @@ monitoring.sql
   </web-app>
    ```
 
-### 引导配置（非必须）
+### 加解密配置（非必须）
 
-除了监控配置文件外，还可以在 **classpath:/** 下加入 **monitoring-bootstrap.properties** 引导配置文件，用来修改监控平台的引导参数。但是注意各监控端引导配置参数必须相同。这个配置不是必须的，没有此配置文件将使用默认引导配置，加入此配置文件则必须正确配置配置项。
+除了监控配置文件外，还可以在 **classpath:/** 下加入 **monitoring-secure.properties** 加解密配置文件，用来修改监控平台的加解密方式。但是注意各监控端加解密配置参数必须相同。这个配置不是必须的，没有此配置文件将使用默认加解密配置，加入此配置文件则必须正确配置配置项。
 
-> 引导配置项说明：
+> 加解密配置项说明：
 
   |配置项                 |含义                                        |必须项                         |默认值| 
   |----------------------|-------------------------------------------|------------------------------|-----|
@@ -237,7 +237,7 @@ monitoring.sql
   |secret.key.aes        |AES密钥                                     |否，secret.type=aes时，需要配置     |      |
   |secret.key.sm4        |国密SM4密钥                                  |否，secret.type=ms4时，需要配置      |      |
 
-秘钥可通过 **com.gitee.pifeng.monitoring.common.init.InitSecurerTest#testGenerateKey** 方法生成，然后填入配置文件。
+秘钥可通过 **com.gitee.pifeng.monitoring.common.util.secure.SecureUtilsTest#testGenerateKey** 方法生成，然后填入配置文件。
 
 ### 业务埋点
 
