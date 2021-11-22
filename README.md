@@ -140,6 +140,8 @@ monitoring.sql
 
 ### 配置
 
+#### 监控配置
+
 > 监控配置文件为： **monitoring.properties** ，放在 **classpath:/** 下会自动加载，UI端、服务端、代理端、客户端都需要有这个配置文件。如果是springboot项目也可以分环境配置，示例配置代码如下：
 
   ```java
@@ -185,7 +187,7 @@ monitoring.sql
 
 2. 监控服务端
 
-    除了监控配置外，还需要在 **application-{profile}.yml** 文件中进行数据库配置和邮箱配置。
+    需要在 **application-{profile}.yml** 文件中进行数据库配置和邮箱配置。
 
 3. 监控代理端
 
@@ -194,6 +196,21 @@ monitoring.sql
 4. 监控客户端
 
     只需监控配置。
+    
+#### 加解密配置（非必须）
+
+除了监控配置文件外，还可以在 **classpath:/** 下加入 **monitoring-secure.properties** 加解密配置文件，用来修改监控平台的加解密方式。但是注意各监控端加解密配置参数必须相同。这个配置不是必须的，没有此配置文件将使用默认加解密配置，加入此配置文件则必须正确配置配置项。
+
+> 加解密配置项说明：
+
+  |配置项                 |含义                                        |必须项                         |默认值| 
+  |----------------------|-------------------------------------------|------------------------------|-----|
+  |secret.type           |加解密类型，值只能是 des、aes、sm4 之一         |否，为空则不进行加解密           |      |
+  |secret.key.des        |DES密钥                                     |否，secret.type=des时，需要配置     |      |
+  |secret.key.aes        |AES密钥                                     |否，secret.type=aes时，需要配置     |      |
+  |secret.key.sm4        |国密SM4密钥                                  |否，secret.type=ms4时，需要配置      |      |
+
+秘钥可通过 **com.gitee.pifeng.monitoring.common.util.secure.SecureUtilsTest#testGenerateKey** 方法生成，然后填入配置文件。
 
 ### 客户端开启监控
 
@@ -223,21 +240,6 @@ monitoring.sql
     </listener>
   </web-app>
    ```
-
-### 加解密配置（非必须）
-
-除了监控配置文件外，还可以在 **classpath:/** 下加入 **monitoring-secure.properties** 加解密配置文件，用来修改监控平台的加解密方式。但是注意各监控端加解密配置参数必须相同。这个配置不是必须的，没有此配置文件将使用默认加解密配置，加入此配置文件则必须正确配置配置项。
-
-> 加解密配置项说明：
-
-  |配置项                 |含义                                        |必须项                         |默认值| 
-  |----------------------|-------------------------------------------|------------------------------|-----|
-  |secret.type           |加解密类型，值只能是 des、aes、sm4 之一         |否，为空则不进行加解密           |      |
-  |secret.key.des        |DES密钥                                     |否，secret.type=des时，需要配置     |      |
-  |secret.key.aes        |AES密钥                                     |否，secret.type=aes时，需要配置     |      |
-  |secret.key.sm4        |国密SM4密钥                                  |否，secret.type=ms4时，需要配置      |      |
-
-秘钥可通过 **com.gitee.pifeng.monitoring.common.util.secure.SecureUtilsTest#testGenerateKey** 方法生成，然后填入配置文件。
 
 ### 业务埋点
 
