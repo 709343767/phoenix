@@ -24,8 +24,13 @@ public class SecureUtilsTest extends TestCase {
      * @custom.date 2021/8/14 14:45
      */
     public void testGenerateKey() {
-        log.info(SecureUtils.SECRET_TYPE);
-        String key = SecureUtils.generateKey(StringUtils.upperCase(SecureUtils.SECRET_TYPE), 64);
+        String secretType = SecureUtils.SECRET_TYPE;
+        if (StringUtils.isBlank(secretType)) {
+            log.info("加解密类型为空！");
+            return;
+        }
+        log.info(secretType);
+        String key = SecureUtils.generateKey(StringUtils.upperCase(secretType), 64);
         log.info(key);
     }
 
