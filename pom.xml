@@ -29,6 +29,10 @@
     <properties>
         <!-- 监控框架版本，引用项目的version -->
         <revision>${project.version}</revision>
+        <!-- 项目根目录 -->
+        <myproject.root>${basedir}</myproject.root>
+        <!-- 根项目名称 -->
+        <myproject.name>monitoring</myproject.name>
         <!-- spring-boot-starter-parent版本 -->
         <spring-boot-starter-parent.version>2.3.0.RELEASE</spring-boot-starter-parent.version>
         <!-- 解决eclipse中maven报错的问题 -->
@@ -42,8 +46,6 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <!-- 编译时的编码 -->
         <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
-        <!-- 项目根目录 -->
-        <myproject.root>${basedir}</myproject.root>
         <!-- alibaba的fastjson版本 -->
         <fastjson.version>1.2.62</fastjson.version>
         <!-- guava基本工具版本 -->
@@ -114,6 +116,8 @@
         <maven-source-plugin.version>3.2.1</maven-source-plugin.version>
         <!-- gpg签名插件版本 -->
         <maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
+        <!-- docker插件版本 -->
+        <docker-maven-plugin.version>1.2.2</docker-maven-plugin.version>
     </properties>
 
     <!-- 依赖管理 -->
@@ -496,6 +500,46 @@
                     <groupId>org.sonatype.plugins</groupId>
                     <artifactId>nexus-staging-maven-plugin</artifactId>
                     <version>${nexus-staging-maven-plugin.version}</version>
+                </plugin>
+                <!-- docker插件 -->
+                <!-- https://www.cnblogs.com/jpfss/p/10945324.html -->
+                <plugin>
+                    <groupId>com.spotify</groupId>
+                    <artifactId>docker-maven-plugin</artifactId>
+                    <version>${docker-maven-plugin.version}</version>
+                    <configuration>
+                        <!-- 指定生成的镜像名，前面的那个名字你随便改，后面的引用，不能动 -->
+                        <imageName>${myproject.name}/${project.artifactId}</imageName>
+                        <!-- 指定 Dockerfile 路径 -->
+                        <dockerDirectory>${project.basedir}/src/main/docker</dockerDirectory>
+                        <!--指定docker镜像的版本号-->
+                        <imageTags>
+                            <!--使用maven项目的版本号-->
+                            <imageTag>${project.version}</imageTag>
+                        </imageTags>
+                        <resources>
+                            <resource>
+                                <targetPath>/</targetPath>
+                                <!-- jar包所在的路径 -->
+                                <directory>
+                                    ${session.executionRootDirectory}/target
+                                </directory>
+                                <!-- 需要包含的jar包，这里对应的是 Dockerfile 中添加的文件名　-->
+                                <include>${project.build.finalName}.jar</include>
+                            </resource>
+                        </resources>
+                    </configuration>
+                    <!-- 将插件绑定在某个phase执行 -->
+                    <executions>
+                        <execution>
+                            <id>build-image</id>
+                            <!--将插件绑定在package这个phase上。也就是说，用户只需执行mvn package，就会自动执行mvn docker:build-->
+                            <phase>package</phase>
+                            <goals>
+                                <goal>build</goal>
+                            </goals>
+                        </execution>
+                    </executions>
                 </plugin>
             </plugins>
         </pluginManagement>
