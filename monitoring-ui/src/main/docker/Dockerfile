@@ -7,7 +7,7 @@ MAINTAINER 皮锋 <709343767@qq.com>
 #添加项目
 ADD monitoring-ui.jar app.jar
 #修改这个文件的访问时间为当前时间
-RUN sh -c 'touch /app.jar'
+#RUN sh -c 'touch /app.jar'
 #暴露端口
 EXPOSE 443
 #指定执行启动项目
