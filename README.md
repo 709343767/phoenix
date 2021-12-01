@@ -83,7 +83,9 @@
 
 - 源码仓库地址
 
-  [https://gitee.com/monitoring-platform/monitoring](https://gitee.com/monitoring-platform/monitoring)
+  [https://gitee.com/monitoring-platform/monitoring](https://gitee.com/monitoring-platform/monitoring)  
+  
+  **注意：一定要下载最新发行版源码！**
 
 - 示例代码仓库地址
 
@@ -264,8 +266,37 @@ ScheduledExecutorService service = Monitor.buryingPoint(() -> {
 
 ### 打包部署运行
 
-**监控UI端、监控服务端、监控代理端** 直接打成可运行jar，打包后jar包在 **monitoring/target** 目录下，部署后通过脚本（命令）运行。启停脚本在源码中，具体位置在：**/monitoring/doc/bat脚本、/monitoring/doc/shell脚本** 。  
-**监控UI端** 访问URL：**https://localhost/monitoring-ui/index** ，初始账号/密码：**admin/admin123**，**guest/guest123**。
+#### Jar包部署
+
+**监控UI端、监控服务端、监控代理端** 直接打成可执行jar，打包后可执行jar包在 **monitoring/target** 目录下，部署后通过脚本（命令）运行。启停脚本位置在：**/monitoring/doc/脚本** 。  
+**监控UI端** 访问URL：**https://localhost/monitoring-ui/index** ，初始账号/密码：**admin/admin123**，**guest/guest123**。  
+
+#### Docker部署
+
+**注意：不推荐使用docker部署，因为在docker容器中运行隔离了物理服务器环境，将无法监控到物理服务器信息，监控到的服务器信息变成了容器环境信息。**
+
+- Maven打包远程部署
+
+1. 有一台已经安装好docker环境的服务器，并且允许远程连接（以centos7下的yum方式安装的docker且使用service方式运行为例开启远程连接）：  
+   vi /usr/lib/systemd/system/docker.service  
+   确保：ExecStart 的后面有： -H tcp://0.0.0.0:2375  
+   修改完成后保存退出，刷新并重启docker服务：  
+   systemctl daemon-reload  
+   systemctl restart docker  
+  
+2. 在系统环境变量中添DOCKER_HOST：DOCKER_HOST:tcp://ip:port，如下图所示：  
+
+![docker_host_config](https://gitee.com/monitoring-platform/monitoring/raw/master/doc/%E6%88%AA%E5%9B%BE/%E9%A6%96%E9%A1%B51.png "docker_host_config")
+
+3. 编译项目打包项目并打包镜像：  
+   mvn -Dmaven.test.skip=true clean package docker:build
+
+- 服务器本地构建docker镜像
+
+1. 打包可执行jar，并上传至服务器；  
+2. 上传**Dockerfile**文件，文件位置在：**monitoring/monitoring-agent/src/main/docker/Dockerfile、monitoring/monitoring-server/src/main/docker/Dockerfile、monitoring/monitoring-ui/src/main/docker/Dockerfile**，  
+   **Dockerfile**要与对应的jar包放在同一目录下；  
+3. 运行**Dockerfile**，构建docker镜像。
 
 ## 功能截图
 
