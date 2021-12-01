@@ -268,7 +268,7 @@ ScheduledExecutorService service = Monitor.buryingPoint(() -> {
 
 #### Jar包部署
 
-**监控UI端、监控服务端、监控代理端** 直接打成可执行jar，打包后可执行jar包在 **monitoring/target** 目录下，部署后通过脚本（命令）运行。启停脚本位置在：**/monitoring/doc/脚本** 。  
+**监控UI端、监控服务端、监控代理端** 直接打成可执行jar，打包后可执行jar包在 **monitoring/target** 目录下，部署后通过脚本（命令）运行。启停脚本位置在：**/monitoring/doc/脚本/** 。  
 **监控UI端** 访问URL：**https://localhost/monitoring-ui/index** ，初始账号/密码：**admin/admin123**，**guest/guest123**。  
 
 #### Docker部署
@@ -284,19 +284,21 @@ ScheduledExecutorService service = Monitor.buryingPoint(() -> {
    systemctl daemon-reload  
    systemctl restart docker  
   
-2. 在系统环境变量中添DOCKER_HOST：DOCKER_HOST:tcp://ip:port，如下图所示：  
+2. 在系统环境变量中添DOCKER_HOST，如下图所示：  
 
-![docker_host_config](https://gitee.com/monitoring-platform/monitoring/raw/master/doc/%E6%88%AA%E5%9B%BE/%E9%A6%96%E9%A1%B51.png "docker_host_config")
+![docker_host_config](https://gitee.com/monitoring-platform/monitoring/raw/master/doc/%E5%85%B6%E5%AE%83/docker_host_config.png "docker_host_config")
 
 3. 编译项目打包项目并打包镜像：  
-   mvn -Dmaven.test.skip=true clean package docker:build
+   mvn -Dmaven.test.skip=true clean package docker:build  
+4. 运行：脚本位置在**monitoring/doc/脚本/**，脚本名为：**docker_run.sh**，可以自己根据需要灵活修改。
 
 - 服务器本地构建docker镜像
 
 1. 打包可执行jar，并上传至服务器；  
 2. 上传**Dockerfile**文件，文件位置在：**monitoring/monitoring-agent/src/main/docker/Dockerfile、monitoring/monitoring-server/src/main/docker/Dockerfile、monitoring/monitoring-ui/src/main/docker/Dockerfile**，  
    **Dockerfile**要与对应的jar包放在同一目录下；  
-3. 运行**Dockerfile**，构建docker镜像。
+3. 运行**Dockerfile**，构建docker镜像；  
+4. 运行：脚本位置在**monitoring/doc/脚本/**，脚本名为：**docker_run.sh**，可以自己根据需要灵活修改。
 
 ## 功能截图
 
