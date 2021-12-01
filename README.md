@@ -275,7 +275,7 @@ ScheduledExecutorService service = Monitor.buryingPoint(() -> {
 
 **注意：不推荐使用docker部署，因为在docker容器中运行隔离了物理服务器环境，将无法监控到物理服务器信息，监控到的服务器信息变成了容器环境信息。**
 
-- Maven打包远程部署
+- Maven打包远程部署  
 
 1. 有一台已经安装好docker环境的服务器，并且允许远程连接（以centos7下的yum方式安装的docker且使用service方式运行为例开启远程连接）：  
    vi /usr/lib/systemd/system/docker.service  
@@ -285,14 +285,12 @@ ScheduledExecutorService service = Monitor.buryingPoint(() -> {
    systemctl restart docker  
   
 2. 在系统环境变量中添DOCKER_HOST，如下图所示：  
-
-![docker_host_config](https://gitee.com/monitoring-platform/monitoring/raw/master/doc/%E5%85%B6%E5%AE%83/docker_host_config.png "docker_host_config")
-
+![docker_host_config](https://gitee.com/monitoring-platform/monitoring/raw/master/doc/%E5%85%B6%E5%AE%83/docker_host_config.png "docker_host_config")  
 3. 编译项目打包项目并打包镜像：  
    mvn -Dmaven.test.skip=true clean package docker:build  
-4. 运行：脚本位置在**monitoring/doc/脚本/**，脚本名为：**docker_run.sh**，可以自己根据需要灵活修改。
+4. 运行：脚本位置在**monitoring/doc/脚本/**，脚本名为：**docker_run.sh**，可以自己根据需要灵活修改。  
 
-- 服务器本地构建docker镜像
+- 服务器本地构建docker镜像  
 
 1. 打包可执行jar，并上传至服务器；  
 2. 上传**Dockerfile**文件，文件位置在：**monitoring/monitoring-agent/src/main/docker/Dockerfile、monitoring/monitoring-server/src/main/docker/Dockerfile、monitoring/monitoring-ui/src/main/docker/Dockerfile**，  
