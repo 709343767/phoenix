@@ -293,7 +293,7 @@ ScheduledExecutorService service = Monitor.buryingPoint(() -> {
 - 服务器本地构建docker镜像  
 
 1. 打包可执行jar，并上传至服务器；  
-2. 上传**Dockerfile**文件，文件位置在：**monitoring/monitoring-agent/src/main/docker/Dockerfile、monitoring/monitoring-server/src/main/docker/Dockerfile、monitoring/monitoring-ui/src/main/docker/Dockerfile**，  
+2. 上传**Dockerfile**文件至服务器，文件位置在：**monitoring/monitoring-agent/src/main/docker/Dockerfile、monitoring/monitoring-server/src/main/docker/Dockerfile、monitoring/monitoring-ui/src/main/docker/Dockerfile**，  
    **Dockerfile**要与对应的jar包放在同一目录下；  
 3. 运行**Dockerfile**，构建docker镜像；  
 4. 运行：脚本位置在**monitoring/doc/脚本/**，脚本名为：**docker_run.sh**，可以自己根据需要灵活修改。
