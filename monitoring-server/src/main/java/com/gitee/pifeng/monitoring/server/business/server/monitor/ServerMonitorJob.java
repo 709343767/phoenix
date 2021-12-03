@@ -8,7 +8,6 @@ import com.gitee.pifeng.monitoring.common.constant.ZeroOrOneConstants;
 import com.gitee.pifeng.monitoring.common.domain.Alarm;
 import com.gitee.pifeng.monitoring.common.dto.AlarmPackage;
 import com.gitee.pifeng.monitoring.common.exception.NetException;
-import com.gitee.pifeng.monitoring.common.threadpool.ThreadPool;
 import com.gitee.pifeng.monitoring.common.util.DateTimeUtils;
 import com.gitee.pifeng.monitoring.common.util.Md5Utils;
 import com.gitee.pifeng.monitoring.server.business.server.core.MonitoringConfigPropertiesLoader;
@@ -20,14 +19,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.hyperic.sigar.SigarException;
 import org.joda.time.DateTime;
+import org.quartz.JobExecutionContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
+import org.springframework.scheduling.quartz.QuartzJobBean;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 /**
  * <p>
@@ -40,7 +40,7 @@ import java.util.concurrent.TimeUnit;
 @Component
 @Slf4j
 @Order(2)
-public class ServerMonitorTask implements CommandLineRunner {
+public class ServerMonitorJob extends QuartzJobBean implements CommandLineRunner {
 
     /**
      * 告警服务接口
@@ -55,8 +55,7 @@ public class ServerMonitorTask implements CommandLineRunner {
 
     /**
      * <p>
-     * 项目启动完成后延迟5秒钟启动定时任务，扫描“MONITOR_SERVER”表中的所有服务器，实时更新服务器状态，发送告警，
-     * 然后在一次执行结束和下一次执行开始之间延迟30秒。
+     * 项目启动后，先把之前为在线状态的服务器”更新时间“设置为当前时间，继续保证在线状态。
      * </p>
      *
      * @param args 传入的主方法参数
@@ -65,7 +64,6 @@ public class ServerMonitorTask implements CommandLineRunner {
      */
     @Override
     public void run(String... args) {
-        // 项目启动后，先把之前为在线状态的服务器”更新时间“设置为当前时间，继续保证在线状态，然后通过定时任务重新检测
         List<MonitorServer> initMonitorServers = this.serverService.list(new LambdaQueryWrapper<>());
         initMonitorServers.forEach(initMonitorServer -> {
             // 在线
@@ -74,40 +72,50 @@ public class ServerMonitorTask implements CommandLineRunner {
                 this.serverService.updateById(MonitorServer.builder().id(initMonitorServer.getId()).updateTime(new Date()).build());
             }
         });
-        // 定时任务检测
-        ThreadPool.COMMON_IO_INTENSIVE_SCHEDULED_THREAD_POOL.scheduleWithFixedDelay(() -> {
-            // 是否监控服务器
-            boolean isEnable = MonitoringConfigPropertiesLoader.getMonitoringProperties().getServerProperties().isEnable();
-            // 不需要监控服务器
-            if (!isEnable) {
-                return;
-            }
-            try {
-                // 查询数据库中的所有服务器
-                List<MonitorServer> monitorServers = this.serverService.list(new LambdaQueryWrapper<>());
-                // 循环所有服务器
-                for (MonitorServer monitorServer : monitorServers) {
-                    // 允许的误差时间
-                    int thresholdSecond = monitorServer.getConnFrequency() * MonitoringConfigPropertiesLoader.getMonitoringProperties().getThreshold();
-                    // 最后一次通过服务器信息包更新的时间
-                    Date dateTime = monitorServer.getUpdateTime() == null ? monitorServer.getInsertTime() : monitorServer.getUpdateTime();
-                    // 判决时间（在允许的误差时间内，再增加30秒误差）
-                    DateTime judgeDateTime = new DateTime(dateTime).plusSeconds(thresholdSecond).plusSeconds(30);
-                    // 注册上来的服务器失去响应
-                    if (judgeDateTime.isBeforeNow()) {
-                        // 离线
-                        this.offLine(monitorServer);
-                    }
-                    // 注册上来的服务器恢复响应
-                    else {
-                        // 恢复在线
-                        this.onLine(monitorServer);
-                    }
+    }
+
+    /**
+     * <p>
+     * 扫描“MONITOR_SERVER”表中的所有服务器，实时更新服务器状态，发送告警。
+     * </p>
+     *
+     * @param jobExecutionContext 作业执行上下文
+     * @author 皮锋
+     * @custom.date 2021/12/3 13:13
+     */
+    @Override
+    protected void executeInternal(JobExecutionContext jobExecutionContext) {
+        // 是否监控服务器
+        boolean isEnable = MonitoringConfigPropertiesLoader.getMonitoringProperties().getServerProperties().isEnable();
+        // 不需要监控服务器
+        if (!isEnable) {
+            return;
+        }
+        try {
+            // 查询数据库中的所有服务器
+            List<MonitorServer> monitorServers = this.serverService.list(new LambdaQueryWrapper<>());
+            // 循环所有服务器
+            for (MonitorServer monitorServer : monitorServers) {
+                // 允许的误差时间
+                int thresholdSecond = monitorServer.getConnFrequency() * MonitoringConfigPropertiesLoader.getMonitoringProperties().getThreshold();
+                // 最后一次通过服务器信息包更新的时间
+                Date dateTime = monitorServer.getUpdateTime() == null ? monitorServer.getInsertTime() : monitorServer.getUpdateTime();
+                // 判决时间（在允许的误差时间内，再增加30秒误差）
+                DateTime judgeDateTime = new DateTime(dateTime).plusSeconds(thresholdSecond).plusSeconds(30);
+                // 注册上来的服务器失去响应
+                if (judgeDateTime.isBeforeNow()) {
+                    // 离线
+                    this.offLine(monitorServer);
                 }
-            } catch (Exception e) {
-                log.error("定时扫描“MONITOR_SERVER”表中的所有服务器异常！", e);
+                // 注册上来的服务器恢复响应
+                else {
+                    // 恢复在线
+                    this.onLine(monitorServer);
+                }
             }
-        }, 5, 30, TimeUnit.SECONDS);
+        } catch (Exception e) {
+            log.error("定时扫描“MONITOR_SERVER”表中的所有服务器异常！", e);
+        }
     }
 
     /**
@@ -195,7 +203,7 @@ public class ServerMonitorTask implements CommandLineRunner {
         stringBuilder.append("，<br>时间：").append(DateTimeUtils.dateToString(new Date()));
         Alarm alarm = Alarm.builder()
                 // 保证code的唯一性
-                .code(Md5Utils.encrypt32(server.getIp() + server.getServerName() + ServerMonitorTask.class.getName()))
+                .code(Md5Utils.encrypt32(server.getIp() + server.getServerName() + ServerMonitorJob.class.getName()))
                 .title(title)
                 .msg(stringBuilder.toString())
                 .alarmLevel(alarmLevelEnum)

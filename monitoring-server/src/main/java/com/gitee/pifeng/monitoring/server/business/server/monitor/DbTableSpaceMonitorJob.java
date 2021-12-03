@@ -28,9 +28,10 @@ import lombok.Cleanup;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.hyperic.sigar.SigarException;
+import org.quartz.JobExecutionContext;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
+import org.springframework.scheduling.quartz.QuartzJobBean;
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
@@ -39,7 +40,6 @@ import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 /**
  * <p>
@@ -52,7 +52,7 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 @Component
 @Order(5)
-public class DbTableSpaceMonitorTask implements CommandLineRunner {
+public class DbTableSpaceMonitorJob extends QuartzJobBean {
 
     /**
      * 告警服务接口
@@ -68,50 +68,43 @@ public class DbTableSpaceMonitorTask implements CommandLineRunner {
 
     /**
      * <p>
-     * 项目启动后每天早上8点执行一次定时任务，扫描数据库“MONITOR_DB”表中所有数据库连接对应的数据库表空间信息，发送告警。
+     * 扫描数据库“MONITOR_DB”表中所有数据库连接对应的数据库表空间信息，发送告警。
      * </p>
      *
-     * @param args 传入的主方法参数
+     * @param jobExecutionContext 作业执行上下文
      * @author 皮锋
      * @custom.date 2021/1/8 10:49
      */
     @Override
-    public void run(String... args) {
-        // 执行周期
-        long period = 24 * 60 * 60 * 1000L;
-        // 初始化执行时间，每天早上8点
-        long initDelay = DateTimeUtils.getTimeMillis("08:00:00") - System.currentTimeMillis();
-        initDelay = initDelay >= 0 ? initDelay : period + initDelay;
-        ThreadPool.COMMON_IO_INTENSIVE_SCHEDULED_THREAD_POOL.scheduleAtFixedRate(() -> {
-            // 是否监控数据库
-            boolean isEnable = MonitoringConfigPropertiesLoader.getMonitoringProperties().getDbProperties().isEnable();
-            if (!isEnable) {
-                return;
-            }
-            try {
-                // 查询数据库中的所有数据库信息
-                List<MonitorDb> monitorDbs = this.dbService.list();
-                for (MonitorDb monitorDb : monitorDbs) {
-                    // 使用多线程，加快处理速度
-                    ThreadPoolExecutor threadPoolExecutor = ThreadPool.COMMON_IO_INTENSIVE_THREAD_POOL;
-                    threadPoolExecutor.execute(() -> {
-                        try {
-                            // 数据库是否在线（可连接）
-                            boolean isOnline = ZeroOrOneConstants.ONE.equals(monitorDb.getIsOnline());
-                            // 数据库在线（可连接）
-                            if (isOnline) {
-                                // 计算表空间，如果表空间不足，则发送告警
-                                this.calculateTableSpace(monitorDb);
-                            }
-                        } catch (Exception e) {
-                            log.error("执行数据库表空间监控异常！", e);
+    protected void executeInternal(JobExecutionContext jobExecutionContext) {
+        // 是否监控数据库
+        boolean isEnable = MonitoringConfigPropertiesLoader.getMonitoringProperties().getDbProperties().isEnable();
+        if (!isEnable) {
+            return;
+        }
+        try {
+            // 查询数据库中的所有数据库信息
+            List<MonitorDb> monitorDbs = this.dbService.list();
+            for (MonitorDb monitorDb : monitorDbs) {
+                // 使用多线程，加快处理速度
+                ThreadPoolExecutor threadPoolExecutor = ThreadPool.COMMON_IO_INTENSIVE_THREAD_POOL;
+                threadPoolExecutor.execute(() -> {
+                    try {
+                        // 数据库是否在线（可连接）
+                        boolean isOnline = ZeroOrOneConstants.ONE.equals(monitorDb.getIsOnline());
+                        // 数据库在线（可连接）
+                        if (isOnline) {
+                            // 计算表空间，如果表空间不足，则发送告警
+                            this.calculateTableSpace(monitorDb);
                         }
-                    });
-                }
-            } catch (Exception e) {
-                log.error("定时扫描数据库“MONITOR_DB”表中所有数据库连接对应的数据库表空间信息异常！", e);
+                    } catch (Exception e) {
+                        log.error("执行数据库表空间监控异常！", e);
+                    }
+                });
             }
-        }, initDelay, period, TimeUnit.MILLISECONDS);
+        } catch (Exception e) {
+            log.error("定时扫描数据库“MONITOR_DB”表中所有数据库连接对应的数据库表空间信息异常！", e);
+        }
     }
 
     /**

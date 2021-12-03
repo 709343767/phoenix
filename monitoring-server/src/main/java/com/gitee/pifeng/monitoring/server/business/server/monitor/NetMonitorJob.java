@@ -20,15 +20,15 @@ import com.gitee.pifeng.monitoring.server.business.server.service.INetService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.hyperic.sigar.SigarException;
+import org.quartz.JobExecutionContext;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
+import org.springframework.scheduling.quartz.QuartzJobBean;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 /**
  * <p>
@@ -41,7 +41,7 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 @Component
 @Order(3)
-public class NetMonitorTask implements CommandLineRunner {
+public class NetMonitorJob extends QuartzJobBean {
 
     /**
      * 告警服务接口
@@ -56,49 +56,46 @@ public class NetMonitorTask implements CommandLineRunner {
     private INetService netService;
 
     /**
-     * 项目启动完成后延迟10秒钟启动定时任务，扫描数据库“MONITOR_NET”表中的所有网络信息，实时更新网络状态，发送告警，
-     * 然后在一次执行结束和下一次执行开始之间延迟5分钟。
+     * 扫描数据库“MONITOR_NET”表中的所有网络信息，实时更新网络状态，发送告警。
      *
-     * @param args 传入的主方法参数
+     * @param jobExecutionContext 作业执行上下文
      * @author 皮锋
      * @custom.date 2020/11/23 22:00
      */
     @Override
-    public void run(String... args) {
-        ThreadPool.COMMON_IO_INTENSIVE_SCHEDULED_THREAD_POOL.scheduleWithFixedDelay(() -> {
-            // 是否监控网络
-            boolean isMonitoringEnable = MonitoringConfigPropertiesLoader.getMonitoringProperties().getNetworkProperties().isEnable();
-            if (!isMonitoringEnable) {
-                return;
+    protected void executeInternal(JobExecutionContext jobExecutionContext) {
+        // 是否监控网络
+        boolean isMonitoringEnable = MonitoringConfigPropertiesLoader.getMonitoringProperties().getNetworkProperties().isEnable();
+        if (!isMonitoringEnable) {
+            return;
+        }
+        try {
+            // 获取网络信息列表
+            List<MonitorNet> monitorNets = this.netService.list(new LambdaQueryWrapper<MonitorNet>().eq(MonitorNet::getIpSource, NetUtils.getLocalIp()));
+            // 循环处理每一个网络信息
+            for (MonitorNet monitorNet : monitorNets) {
+                // 目标IP地址
+                String ipTarget = monitorNet.getIpTarget();
+                // 使用多线程，加快处理速度
+                ThreadPoolExecutor threadPoolExecutor = ThreadPool.COMMON_IO_INTENSIVE_THREAD_POOL;
+                threadPoolExecutor.execute(() -> {
+                    // 测试IP地址能否ping通
+                    boolean isConnected = NetUtils.isConnect(ipTarget);
+                    // 网络正常
+                    if (isConnected) {
+                        // 处理网络正常
+                        this.connected(monitorNet);
+                    }
+                    // 网络异常
+                    else {
+                        // 处理网络异常
+                        this.disconnected(monitorNet);
+                    }
+                });
             }
-            try {
-                // 获取网络信息列表
-                List<MonitorNet> monitorNets = this.netService.list(new LambdaQueryWrapper<MonitorNet>().eq(MonitorNet::getIpSource, NetUtils.getLocalIp()));
-                // 循环处理每一个网络信息
-                for (MonitorNet monitorNet : monitorNets) {
-                    // 目标IP地址
-                    String ipTarget = monitorNet.getIpTarget();
-                    // 使用多线程，加快处理速度
-                    ThreadPoolExecutor threadPoolExecutor = ThreadPool.COMMON_IO_INTENSIVE_THREAD_POOL;
-                    threadPoolExecutor.execute(() -> {
-                        // 测试IP地址能否ping通
-                        boolean isConnected = NetUtils.isConnect(ipTarget);
-                        // 网络正常
-                        if (isConnected) {
-                            // 处理网络正常
-                            this.connected(monitorNet);
-                        }
-                        // 网络异常
-                        else {
-                            // 处理网络异常
-                            this.disconnected(monitorNet);
-                        }
-                    });
-                }
-            } catch (NetException e) {
-                log.error("定时扫描数据库“MONITOR_NET”表中的所有网络信息异常！", e);
-            }
-        }, 10, 300, TimeUnit.SECONDS);
+        } catch (NetException e) {
+            log.error("定时扫描数据库“MONITOR_NET”表中的所有网络信息异常！", e);
+        }
     }
 
     /**

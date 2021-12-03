@@ -53,6 +53,39 @@ spring:
     timeout-per-shutdown-phase: 30s
 
 
+  ###############################################quartz配置#################################################
+  quartz:
+    properties:
+      org:
+        quartz:
+          scheduler:
+            instanceName: monitoringClusteredScheduler
+            #默认主机名和时间戳生成实例ID，可以是任何字符串，但对于所有调度程序来说，必须是唯一的
+            instanceId: AUTO
+          jobStore:
+            #持久化方式
+            class: org.quartz.impl.jdbcjobstore.JobStoreTX
+            #持久化方式配置数据驱动
+            driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate
+            #quartz相关数据表前缀名
+            tablePrefix: QRTZ_
+            #开启分布式部署
+            isClustered: true
+            clusterCheckinInterval: 10000
+            useProperties: false
+          threadPool:
+            class: org.quartz.simpl.SimpleThreadPool
+            threadCount: 10
+            threadPriority: 5
+            threadsInheritContextClassLoaderOfInitializingThread: true
+    #数据库方式
+    job-store-type: jdbc
+    #初始化表结构
+    jdbc:
+      #初始化表结构
+      initialize-schema: always
+
+
   ############################################thymeleaf配置###############################################
   thymeleaf:
     cache: false

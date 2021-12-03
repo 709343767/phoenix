@@ -23,9 +23,10 @@ import com.gitee.pifeng.monitoring.server.business.server.service.IDbService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.hyperic.sigar.SigarException;
+import org.quartz.JobExecutionContext;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
+import org.springframework.scheduling.quartz.QuartzJobBean;
 import org.springframework.stereotype.Component;
 import redis.clients.jedis.Jedis;
 
@@ -35,7 +36,6 @@ import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 /**
  * <p>
@@ -48,7 +48,7 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 @Component
 @Order(4)
-public class DbMonitorTask implements CommandLineRunner {
+public class DbMonitorJob extends QuartzJobBean {
 
     /**
      * 告警服务接口
@@ -63,46 +63,43 @@ public class DbMonitorTask implements CommandLineRunner {
     private IDbService dbService;
 
     /**
-     * 项目启动完成后延迟10秒钟启动定时任务，扫描数据库“MONITOR_DB”表中的所有数据库信息，实时更新数据库状态，发送告警，
-     * 然后在一次执行结束和下一次执行开始之间延迟5分钟。
+     * 扫描数据库“MONITOR_DB”表中的所有数据库信息，实时更新数据库状态，发送告警。
      *
-     * @param args 传入的主方法参数
+     * @param jobExecutionContext 作业执行上下文
      * @author 皮锋
      * @custom.date 2020/11/23 22:00
      */
     @Override
-    public void run(String... args) {
-        ThreadPool.COMMON_IO_INTENSIVE_SCHEDULED_THREAD_POOL.scheduleWithFixedDelay(() -> {
-            // 是否监控数据库
-            boolean isEnable = MonitoringConfigPropertiesLoader.getMonitoringProperties().getDbProperties().isEnable();
-            if (!isEnable) {
-                return;
+    protected void executeInternal(JobExecutionContext jobExecutionContext) {
+        // 是否监控数据库
+        boolean isEnable = MonitoringConfigPropertiesLoader.getMonitoringProperties().getDbProperties().isEnable();
+        if (!isEnable) {
+            return;
+        }
+        try {
+            // 查询数据库中的所有数据库信息
+            List<MonitorDb> monitorDbs = this.dbService.list();
+            for (MonitorDb monitorDb : monitorDbs) {
+                // 使用多线程，加快处理速度
+                ThreadPoolExecutor threadPoolExecutor = ThreadPool.COMMON_IO_INTENSIVE_THREAD_POOL;
+                threadPoolExecutor.execute(() -> {
+                    String dbType = monitorDb.getDbType();
+                    // 关系型数据库
+                    if (StringUtils.equalsIgnoreCase(DbEnums.MySQL.name(), dbType)
+                            || StringUtils.equalsIgnoreCase(DbEnums.Oracle.name(), dbType)) {
+                        // 处理关系型数据库
+                        this.dealRelationalDb(monitorDb);
+                    }
+                    // Redis数据库
+                    if (StringUtils.equalsIgnoreCase(DbEnums.Redis.name(), dbType)) {
+                        // 处理Redis数据库
+                        this.dealRedisDb(monitorDb);
+                    }
+                });
             }
-            try {
-                // 查询数据库中的所有数据库信息
-                List<MonitorDb> monitorDbs = this.dbService.list();
-                for (MonitorDb monitorDb : monitorDbs) {
-                    // 使用多线程，加快处理速度
-                    ThreadPoolExecutor threadPoolExecutor = ThreadPool.COMMON_IO_INTENSIVE_THREAD_POOL;
-                    threadPoolExecutor.execute(() -> {
-                        String dbType = monitorDb.getDbType();
-                        // 关系型数据库
-                        if (StringUtils.equalsIgnoreCase(DbEnums.MySQL.name(), dbType)
-                                || StringUtils.equalsIgnoreCase(DbEnums.Oracle.name(), dbType)) {
-                            // 处理关系型数据库
-                            this.dealRelationalDb(monitorDb);
-                        }
-                        // Redis数据库
-                        if (StringUtils.equalsIgnoreCase(DbEnums.Redis.name(), dbType)) {
-                            // 处理Redis数据库
-                            this.dealRedisDb(monitorDb);
-                        }
-                    });
-                }
-            } catch (Exception e) {
-                log.error("定时扫描数据库“MONITOR_DB”表中的所有数据库信息异常！", e);
-            }
-        }, 10, 300, TimeUnit.SECONDS);
+        } catch (Exception e) {
+            log.error("定时扫描数据库“MONITOR_DB”表中的所有数据库信息异常！", e);
+        }
     }
 
     /**
