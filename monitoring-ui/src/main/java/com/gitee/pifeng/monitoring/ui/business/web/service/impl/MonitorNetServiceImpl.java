@@ -12,7 +12,6 @@ import com.gitee.pifeng.monitoring.common.domain.Result;
 import com.gitee.pifeng.monitoring.common.dto.BaseRequestPackage;
 import com.gitee.pifeng.monitoring.common.dto.BaseResponsePackage;
 import com.gitee.pifeng.monitoring.common.exception.NetException;
-import com.gitee.pifeng.monitoring.common.util.server.NetUtils;
 import com.gitee.pifeng.monitoring.plug.core.Sender;
 import com.gitee.pifeng.monitoring.ui.business.web.dao.IMonitorNetDao;
 import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorNet;
@@ -200,7 +199,7 @@ public class MonitorNetServiceImpl extends ServiceImpl<IMonitorNetDao, MonitorNe
             return LayUiAdminResultVo.ok(WebResponseConstants.EXIST);
         }
         MonitorNet monitorNet = monitorNetVo.convertTo();
-        monitorNet.setIpSource(NetUtils.getLocalIp());
+        monitorNet.setIpSource(this.getSourceIp());
         monitorNet.setInsertTime(new Date());
         monitorNet.setOfflineCount(0);
         int result = this.monitorNetDao.insert(monitorNet);
