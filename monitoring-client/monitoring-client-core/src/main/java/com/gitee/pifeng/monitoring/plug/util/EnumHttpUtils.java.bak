@@ -48,8 +48,10 @@ public class EnumHttpUtils {
     /**
      * 请求配置
      */
-    private final RequestConfig requestConfig = RequestConfig.copy(defaultRequestConfig).setSocketTimeout(15000)
-            .setConnectTimeout(15000).setConnectionRequestTimeout(15000)
+    private final RequestConfig requestConfig = RequestConfig.copy(defaultRequestConfig)
+            .setSocketTimeout(15000)
+            .setConnectTimeout(15000)
+            .setConnectionRequestTimeout(15000)
             // .setProxy(new HttpHost("myotherproxy", 8080))
             .build();
 

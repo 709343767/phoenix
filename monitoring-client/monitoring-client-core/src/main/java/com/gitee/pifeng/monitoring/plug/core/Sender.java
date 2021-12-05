@@ -3,7 +3,7 @@ package com.gitee.pifeng.monitoring.plug.core;
 import com.alibaba.fastjson.JSON;
 import com.gitee.pifeng.monitoring.common.dto.CiphertextPackage;
 import com.gitee.pifeng.monitoring.common.util.secure.SecureUtils;
-import com.gitee.pifeng.monitoring.plug.util.EnumHttpUtils;
+import com.gitee.pifeng.monitoring.plug.util.EnumPoolingHttpUtils;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
@@ -49,7 +49,7 @@ public class Sender {
         String encrypt = SecureUtils.encrypt(json);
         CiphertextPackage requestCiphertextPackage = new CiphertextPackage(encrypt);
         // 发送请求
-        EnumHttpUtils httpClient = EnumHttpUtils.getInstance();
+        EnumPoolingHttpUtils httpClient = EnumPoolingHttpUtils.getInstance();
         String result = httpClient.sendHttpPostByJson(url, requestCiphertextPackage.toJsonString());
         // 响应结果
         CiphertextPackage responseCiphertextPackage = JSON.parseObject(result, CiphertextPackage.class);
