@@ -129,7 +129,7 @@ public class MonitoringConfigPropertiesLoader {
         // 告警配置属性
         MonitoringAlarmProperties alarmProperties = new MonitoringAlarmProperties(false, AlarmLevelEnums.INFO, new AlarmWayEnums[]{AlarmWayEnums.MAIL, AlarmWayEnums.SMS}, alarmSmsProperties, alarmMailProperties);
         // 网络配置属性
-        MonitoringNetworkProperties networkProperties = new MonitoringNetworkProperties(false);
+        MonitoringNetworkProperties networkProperties = new MonitoringNetworkProperties(true);
         // 服务器CPU配置属性
         MonitoringServerCpuProperties serverCpuProperties = new MonitoringServerCpuProperties(90D, AlarmLevelEnums.INFO);
         // 服务器磁盘配置属性
@@ -137,11 +137,11 @@ public class MonitoringConfigPropertiesLoader {
         // 服务器内存配置属性
         MonitoringServerMemoryProperties serverMemoryProperties = new MonitoringServerMemoryProperties(90D, AlarmLevelEnums.INFO);
         // 服务器配置属性
-        MonitoringServerProperties serverProperties = new MonitoringServerProperties(false, serverCpuProperties, serverDiskProperties, serverMemoryProperties);
+        MonitoringServerProperties serverProperties = new MonitoringServerProperties(true, serverCpuProperties, serverDiskProperties, serverMemoryProperties);
         // 数据库表空间配置属性
         MonitoringDbTableSpaceProperties dbTableSpaceProperties = new MonitoringDbTableSpaceProperties(90D, AlarmLevelEnums.INFO);
         // 数据库配置
-        MonitoringDbProperties dbProperties = new MonitoringDbProperties(false, dbTableSpaceProperties);
+        MonitoringDbProperties dbProperties = new MonitoringDbProperties(true, dbTableSpaceProperties);
         // 监控配置属性
         MonitoringProperties properties = new MonitoringProperties(5, alarmProperties, networkProperties, serverProperties, dbProperties);
         // 查询数据库中是否有配置记录
