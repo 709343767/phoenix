@@ -38,6 +38,7 @@ import java.util.concurrent.TimeUnit;
  * <p>
  * HTTP线程池工具类
  * </p>
+ * 参考：https://blog.csdn.net/lovomap151/article/details/78879904
  *
  * @author 皮锋
  * @custom.date 2021/12/5 18:33
