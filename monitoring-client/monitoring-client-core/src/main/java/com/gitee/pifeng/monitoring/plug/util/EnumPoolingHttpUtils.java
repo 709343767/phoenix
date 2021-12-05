@@ -161,9 +161,10 @@ public class EnumPoolingHttpUtils {
                     log.info("HTTP连接关闭成功！");
                 }
             } catch (IOException e) {
-                log.error("关闭HTTP连接时发生错误：", e);
+                log.error("HTTP连接关闭时发生错误：", e);
             }
         }));
+        log.info("HTTP连接池初始化成功！");
     }
 
     /**
