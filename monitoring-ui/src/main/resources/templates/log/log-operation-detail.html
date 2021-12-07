@@ -27,63 +27,70 @@
                 <div class="layui-colla-item">
                     <h2 class="layui-colla-title">操作类型</h2>
                     <div class="layui-colla-content layui-show">
-                        <p style="word-wrap:break-word;" th:text="${monitorLogOperationInfo.operType}"></p>
+                        <p style="white-space:pre-wrap;word-wrap:break-word;"
+                           th:text="${monitorLogOperationInfo.operType}"></p>
                     </div>
                 </div>
                 <div class="layui-colla-item">
                     <h2 class="layui-colla-title">操作方法</h2>
                     <div class="layui-colla-content layui-show">
-                        <p style="word-wrap:break-word;" th:text="${monitorLogOperationInfo.operMethod}"></p>
+                        <p style="white-space:pre-wrap;word-wrap:break-word;"
+                           th:text="${monitorLogOperationInfo.operMethod}"></p>
                     </div>
                 </div>
                 <div class="layui-colla-item">
                     <h2 class="layui-colla-title">功能模块</h2>
                     <div class="layui-colla-content layui-show">
-                        <p style="word-wrap:break-word;" th:text="${monitorLogOperationInfo.operModule}"></p>
+                        <p style="white-space:pre-wrap;word-wrap:break-word;"
+                           th:text="${monitorLogOperationInfo.operModule}"></p>
                     </div>
                 </div>
                 <div class="layui-colla-item">
                     <h2 class="layui-colla-title">操作描述</h2>
                     <div class="layui-colla-content layui-show">
-                        <p style="word-wrap:break-word;" th:text="${monitorLogOperationInfo.operDesc}"></p>
+                        <p style="white-space:pre-wrap;word-wrap:break-word;"
+                           th:text="${monitorLogOperationInfo.operDesc}"></p>
                     </div>
                 </div>
                 <div class="layui-colla-item">
                     <h2 class="layui-colla-title">请求参数</h2>
                     <div class="layui-colla-content layui-show">
-                        <p style="word-wrap:break-word;"
+                        <p style="white-space:pre-wrap;word-wrap:break-word;"
                            th:utext="${#strings.replace(#strings.replace(#strings.replace(monitorLogOperationInfo.reqParam,'\r\n','<br>'),'\\n','<br>'),'\n','<br>')}"></p>
                     </div>
                 </div>
                 <div class="layui-colla-item">
                     <h2 class="layui-colla-title">返回参数</h2>
                     <div class="layui-colla-content layui-show">
-                        <p style="word-wrap:break-word;"
+                        <p style="white-space:pre-wrap;word-wrap:break-word;"
                            th:utext="${#strings.replace(#strings.replace(#strings.replace(monitorLogOperationInfo.respParam,'\r\n','<br>'),'\\n','<br>'),'\n','<br>')}"></p>
                     </div>
                 </div>
                 <div class="layui-colla-item">
                     <h2 class="layui-colla-title">URI</h2>
                     <div class="layui-colla-content layui-show">
-                        <p style="word-wrap:break-word;" th:text="${monitorLogOperationInfo.uri}"></p>
+                        <p style="white-space:pre-wrap;word-wrap:break-word;"
+                           th:text="${monitorLogOperationInfo.uri}"></p>
                     </div>
                 </div>
                 <div class="layui-colla-item">
                     <h2 class="layui-colla-title">请求IP</h2>
                     <div class="layui-colla-content layui-show">
-                        <p style="word-wrap:break-word;" th:text="${monitorLogOperationInfo.ip}"></p>
+                        <p style="white-space:pre-wrap;word-wrap:break-word;"
+                           th:text="${monitorLogOperationInfo.ip}"></p>
                     </div>
                 </div>
                 <div class="layui-colla-item">
                     <h2 class="layui-colla-title">操作用户</h2>
                     <div class="layui-colla-content layui-show">
-                        <p style="word-wrap:break-word;" th:text="${monitorLogOperationInfo.username}"></p>
+                        <p style="white-space:pre-wrap;word-wrap:break-word;"
+                           th:text="${monitorLogOperationInfo.username}"></p>
                     </div>
                 </div>
                 <div class="layui-colla-item">
                     <h2 class="layui-colla-title">时间</h2>
                     <div class="layui-colla-content layui-show">
-                        <p style="word-wrap:break-word;"
+                        <p style="white-space:pre-wrap;word-wrap:break-word;"
                            th:text="${#dates.format(monitorLogOperationInfo.insertTime,'yyyy/MM/dd HH:mm:ss')}"></p>
                     </div>
                 </div>
