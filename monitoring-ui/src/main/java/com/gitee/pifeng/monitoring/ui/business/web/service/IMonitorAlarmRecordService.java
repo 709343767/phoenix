@@ -35,18 +35,23 @@ public interface IMonitorAlarmRecordService extends IService<MonitorAlarmRecord>
      * 获取监控告警列表
      * </p>
      *
-     * @param current 当前页
-     * @param size    每页显示条数
-     * @param type    告警类型
-     * @param level   告警级别
-     * @param status  告警状态
-     * @param title   告警标题
-     * @param content 告警内容
+     * @param current    当前页
+     * @param size       每页显示条数
+     * @param type       告警类型
+     * @param level      告警级别
+     * @param status     告警状态
+     * @param title      告警标题
+     * @param content    告警内容
+     * @param number     被告警人号码
+     * @param insertDate 告警日期
+     * @param updateDate 完成日期
      * @return 分页Page对象
      * @author 皮锋
      * @custom.date 2020/8/3 11:07
      */
-    Page<MonitorAlarmRecordVo> getMonitorAlarmRecordList(Long current, Long size, String type, String level, String status, String title, String content);
+    Page<MonitorAlarmRecordVo> getMonitorAlarmRecordList(Long current, Long size, String type, String level,
+                                                         String status, String title, String content,
+                                                         String number, String insertDate, String updateDate);
 
     /**
      * <p>

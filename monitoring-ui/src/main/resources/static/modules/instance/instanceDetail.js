@@ -256,9 +256,9 @@
         // 发送ajax请求，获取内存图表数据
         function getJvmMemoryChartInfo(time, memoryType, title) {
             // 弹出loading框
-            var loadingIndex = layer.load(1, {
-                shade: [0.1, '#fff'] //0.1透明度的白色背景
-            });
+            // var loadingIndex = layer.load(1, {
+            //    shade: [0.1, '#fff'] //0.1透明度的白色背景
+            // });
             admin.req({
                 type: 'get',
                 url: layui.setter.base + 'monitor-jvm-memory-history/get-instance-detail-page-jvm-memory-chart-info',
@@ -444,11 +444,11 @@
                         getJvmMemoryPoolInfoChart.setOption(option);
                     }
                     // 关闭loading框
-                    layer.close(loadingIndex);
+                    // layer.close(loadingIndex);
                 },
                 error: function () {
                     // 关闭loading框
-                    layer.close(loadingIndex);
+                    // layer.close(loadingIndex);
                 }
             });
         }

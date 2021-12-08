@@ -54,9 +54,9 @@
         // 发送ajax请求，获取传感器图表数据
         function getServerSensorsChartInfo() {
             // 弹出loading框
-            var loadingIndex = layer.load(1, {
-                shade: [0.1, '#fff'] //0.1透明度的白色背景
-            });
+            // var loadingIndex = layer.load(1, {
+            //     shade: [0.1, '#fff'] //0.1透明度的白色背景
+            // });
             admin.req({
                 type: 'get',
                 url: layui.setter.base + 'monitor-server-sensors/get-server-detail-page-server-sensors-chart-info',
@@ -73,7 +73,7 @@
                     if (isNaN(cpuTemperature)) {
                         $('#get-server-sensors-info').text('未知');
                         // 关闭loading框
-                        layer.close(loadingIndex);
+                        // layer.close(loadingIndex);
                         return;
                     }
                     var TP_value = cpuTemperature;
@@ -340,11 +340,11 @@
                     };
                     getServerSensorsInfoChart.setOption(option);
                     // 关闭loading框
-                    layer.close(loadingIndex);
+                    // layer.close(loadingIndex);
                 },
                 error: function () {
                     // 关闭loading框
-                    layer.close(loadingIndex);
+                    // layer.close(loadingIndex);
                 }
             });
         }
@@ -352,9 +352,9 @@
         // 发送ajax请求，获取电池图表数据
         function getServerPowerSourcesChartInfo() {
             // 弹出loading框
-            var loadingIndex = layer.load(1, {
-                shade: [0.1, '#fff'] //0.1透明度的白色背景
-            });
+            // var loadingIndex = layer.load(1, {
+            //     shade: [0.1, '#fff'] //0.1透明度的白色背景
+            // });
             admin.req({
                 type: 'get',
                 url: layui.setter.base + 'monitor-server-power-sources/get-server-detail-page-server-power-sources-chart-info',
@@ -371,7 +371,7 @@
                     if (isNaN(rCapacityPercentAvg)) {
                         $('#get-server-power-source-info').text('未知');
                         // 关闭loading框
-                        layer.close(loadingIndex);
+                        // layer.close(loadingIndex);
                         return;
                     }
                     var option = {
@@ -481,11 +481,11 @@
                     };
                     getServerPowerSourceInfoChart.setOption(option);
                     // 关闭loading框
-                    layer.close(loadingIndex);
+                    // layer.close(loadingIndex);
                 },
                 error: function () {
                     // 关闭loading框
-                    layer.close(loadingIndex);
+                    // layer.close(loadingIndex);
                 }
             });
         }
@@ -493,9 +493,9 @@
         // 发送ajax请求，获取传感器数据
         function getServerSensorsInfo() {
             // 弹出loading框
-            var loadingIndex = layer.load(1, {
-                shade: [0.1, '#fff'] //0.1透明度的白色背景
-            });
+            // var loadingIndex = layer.load(1, {
+            //     shade: [0.1, '#fff'] //0.1透明度的白色背景
+            // });
             admin.req({
                 type: 'get',
                 url: layui.setter.base + 'monitor-server-sensors/get-server-detail-page-server-sensors-info',
@@ -523,11 +523,11 @@
                         '       </div>';
                     $('#sensors').empty().append(html);
                     // 关闭loading框
-                    layer.close(loadingIndex);
+                    // layer.close(loadingIndex);
                 },
                 error: function () {
                     // 关闭loading框
-                    layer.close(loadingIndex);
+                    // layer.close(loadingIndex);
                 }
             });
         }
@@ -535,9 +535,9 @@
         // 发送ajax请求，获取电池数据
         function getServerPowerSourcesInfo() {
             // 弹出loading框
-            var loadingIndex = layer.load(1, {
-                shade: [0.1, '#fff'] //0.1透明度的白色背景
-            });
+            // var loadingIndex = layer.load(1, {
+            //     shade: [0.1, '#fff'] //0.1透明度的白色背景
+            // });
             admin.req({
                 type: 'get',
                 url: layui.setter.base + 'monitor-server-power-sources/get-server-detail-page-server-power-sources-info',
@@ -622,11 +622,11 @@
                     }
                     $('#powerSources').empty().append(html);
                     // 关闭loading框
-                    layer.close(loadingIndex);
+                    // layer.close(loadingIndex);
                 },
                 error: function () {
                     // 关闭loading框
-                    layer.close(loadingIndex);
+                    // layer.close(loadingIndex);
                 }
             });
         }
@@ -634,9 +634,9 @@
         // 发送ajax请求，获取进程数据
         function getServerProcessInfo() {
             // 弹出loading框
-            var loadingIndex = layer.load(1, {
-                shade: [0.1, '#fff'] //0.1透明度的白色背景
-            });
+            // var loadingIndex = layer.load(1, {
+            //     shade: [0.1, '#fff'] //0.1透明度的白色背景
+            // });
             admin.req({
                 type: 'get',
                 url: layui.setter.base + 'monitor-server-process/get-server-detail-page-server-process-info',
@@ -720,11 +720,11 @@
                     }
                     $('#process').empty().append(html);
                     // 关闭loading框
-                    layer.close(loadingIndex);
+                    // layer.close(loadingIndex);
                 },
                 error: function () {
                     // 关闭loading框
-                    layer.close(loadingIndex);
+                    // layer.close(loadingIndex);
                 }
             });
         }
@@ -732,9 +732,9 @@
         // 发送ajax请求，获取CPU数据
         function getServerCpuInfo() {
             // 弹出loading框
-            var loadingIndex = layer.load(1, {
-                shade: [0.1, '#fff'] //0.1透明度的白色背景
-            });
+            // var loadingIndex = layer.load(1, {
+            //     shade: [0.1, '#fff'] //0.1透明度的白色背景
+            // });
             admin.req({
                 type: 'get',
                 url: layui.setter.base + 'monitor-server-cpu/get-server-detail-page-server-cpu-info',
@@ -793,11 +793,11 @@
                     }
                     $('#cpu').empty().append(html);
                     // 关闭loading框
-                    layer.close(loadingIndex);
+                    // layer.close(loadingIndex);
                 },
                 error: function () {
                     // 关闭loading框
-                    layer.close(loadingIndex);
+                    // layer.close(loadingIndex);
                 }
             });
         }
@@ -805,9 +805,9 @@
         // 发送ajax请求，获取网卡数据
         function getServerNetcardInfo() {
             // 弹出loading框
-            var loadingIndex = layer.load(1, {
-                shade: [0.1, '#fff'] //0.1透明度的白色背景
-            });
+            // var loadingIndex = layer.load(1, {
+            //     shade: [0.1, '#fff'] //0.1透明度的白色背景
+            // });
             admin.req({
                 type: 'get',
                 url: layui.setter.base + 'monitor-server-netcard/get-server-detail-page-server-netcard-info',
@@ -898,11 +898,11 @@
                     }
                     $('#netcard').empty().append(html);
                     // 关闭loading框
-                    layer.close(loadingIndex);
+                    // layer.close(loadingIndex);
                 },
                 error: function () {
                     // 关闭loading框
-                    layer.close(loadingIndex);
+                    // layer.close(loadingIndex);
                 }
             });
         }
@@ -910,9 +910,9 @@
         // 发送ajax请求，获取操作系统数据
         function getServerOsInfo() {
             // 弹出loading框
-            var loadingIndex = layer.load(1, {
-                shade: [0.1, '#fff'] //0.1透明度的白色背景
-            });
+            // var loadingIndex = layer.load(1, {
+            //     shade: [0.1, '#fff'] //0.1透明度的白色背景
+            // });
             admin.req({
                 type: 'get',
                 url: layui.setter.base + 'monitor-server-os/get-server-os-info',
@@ -960,11 +960,11 @@
                         '       </div>';
                     $('#os').empty().append(html);
                     // 关闭loading框
-                    layer.close(loadingIndex);
+                    // layer.close(loadingIndex);
                 },
                 error: function () {
                     // 关闭loading框
-                    layer.close(loadingIndex);
+                    // layer.close(loadingIndex);
                 }
             });
         }
@@ -972,9 +972,9 @@
         // 发送ajax请求，获取磁盘图表数据
         function getServerDiskChartInfo() {
             // 弹出loading框
-            var loadingIndex = layer.load(1, {
-                shade: [0.1, '#fff'] //0.1透明度的白色背景
-            });
+            // var loadingIndex = layer.load(1, {
+            //     shade: [0.1, '#fff'] //0.1透明度的白色背景
+            // });
             admin.req({
                 type: 'get',
                 url: layui.setter.base + 'monitor-server-disk/get-server-detail-page-server-disk-chart-info',
@@ -1014,11 +1014,11 @@
                     // 重新渲染进度条
                     element.render('progress');
                     // 关闭loading框
-                    layer.close(loadingIndex);
+                    // layer.close(loadingIndex);
                 },
                 error: function () {
                     // 关闭loading框
-                    layer.close(loadingIndex);
+                    // layer.close(loadingIndex);
                 }
             });
         }
@@ -1026,9 +1026,9 @@
         // 发送ajax请求，获取内存图表数据
         function getServerMemoryChartInfo(time) {
             // 弹出loading框
-            var loadingIndex = layer.load(1, {
-                shade: [0.1, '#fff'] //0.1透明度的白色背景
-            });
+            // var loadingIndex = layer.load(1, {
+            //     shade: [0.1, '#fff'] //0.1透明度的白色背景
+            // });
             admin.req({
                 type: 'get',
                 url: layui.setter.base + 'monitor-server-memory-history/get-server-detail-page-server-memory-chart-info',
@@ -1215,11 +1215,11 @@
                     };
                     getServerMemoryInfoChart.setOption(option);
                     // 关闭loading框
-                    layer.close(loadingIndex);
+                    // layer.close(loadingIndex);
                 },
                 error: function () {
                     // 关闭loading框
-                    layer.close(loadingIndex);
+                    // layer.close(loadingIndex);
                 }
             });
         }
@@ -1227,9 +1227,9 @@
         // 发送ajax请求，获取进程图表数据
         function getServerProcessChartInfo(time) {
             // 弹出loading框
-            var loadingIndex = layer.load(1, {
-                shade: [0.1, '#fff'] //0.1透明度的白色背景
-            });
+            // var loadingIndex = layer.load(1, {
+            //     shade: [0.1, '#fff'] //0.1透明度的白色背景
+            // });
             admin.req({
                 type: 'get',
                 url: layui.setter.base + 'monitor-server-process-history/get-server-detail-page-server-process-chart-info',
@@ -1359,11 +1359,11 @@
                     };
                     getServerProcessChartInfoChart.setOption(option);
                     // 关闭loading框
-                    layer.close(loadingIndex);
+                    // layer.close(loadingIndex);
                 },
                 error: function () {
                     // 关闭loading框
-                    layer.close(loadingIndex);
+                    // layer.close(loadingIndex);
                 }
             });
         }
@@ -1371,9 +1371,9 @@
         // 发送ajax请求，获取CPU图表数据
         function getServerCpuChartInfo(time) {
             // 弹出loading框
-            var loadingIndex = layer.load(1, {
-                shade: [0.1, '#fff'] //0.1透明度的白色背景
-            });
+            // var loadingIndex = layer.load(1, {
+            //     shade: [0.1, '#fff'] //0.1透明度的白色背景
+            // });
             admin.req({
                 type: 'get',
                 url: layui.setter.base + 'monitor-server-cpu-history/get-server-detail-page-server-cpu-chart-info',
@@ -1670,11 +1670,11 @@
                     };
                     getServerCpuInfoChart.setOption(option);
                     // 关闭loading框
-                    layer.close(loadingIndex);
+                    // layer.close(loadingIndex);
                 },
                 error: function () {
                     // 关闭loading框
-                    layer.close(loadingIndex);
+                    // layer.close(loadingIndex);
                 }
             });
         }
@@ -1682,9 +1682,9 @@
         // 发送ajax请求，获取网速图表数据
         function getServerNetworkSpeedChartInfo(time, chartAddress) {
             // 弹出loading框
-            var loadingIndex = layer.load(1, {
-                shade: [0.1, '#fff'] //0.1透明度的白色背景
-            });
+            // var loadingIndex = layer.load(1, {
+            //     shade: [0.1, '#fff'] //0.1透明度的白色背景
+            // });
             admin.req({
                 type: 'get',
                 url: layui.setter.base + 'monitor-server-netcard-history/get-server-detail-page-server-network-speed-chart-info',
@@ -1870,11 +1870,11 @@
                     };
                     getServerNetworkSpeedInfoChart.setOption(option);
                     // 关闭loading框
-                    layer.close(loadingIndex);
+                    // layer.close(loadingIndex);
                 },
                 error: function () {
                     // 关闭loading框
-                    layer.close(loadingIndex);
+                    // layer.close(loadingIndex);
                 }
             });
         }

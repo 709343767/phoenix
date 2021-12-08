@@ -72,13 +72,16 @@ public class MonitorAlarmRecordController {
      * 获取告警记录列表
      * </p>
      *
-     * @param current 当前页
-     * @param size    每页显示条数
-     * @param type    告警类型
-     * @param level   告警级别
-     * @param status  告警状态
-     * @param title   告警标题
-     * @param content 告警内容
+     * @param current    当前页
+     * @param size       每页显示条数
+     * @param type       告警类型
+     * @param level      告警级别
+     * @param status     告警状态
+     * @param title      告警标题
+     * @param content    告警内容
+     * @param number     被告警人号码
+     * @param insertDate 告警日期
+     * @param updateDate 完成日期
      * @return layUiAdmin响应对象
      * @author 皮锋
      * @custom.date 2020/8/7 16:12
@@ -91,12 +94,17 @@ public class MonitorAlarmRecordController {
             @ApiImplicitParam(name = "level", value = "告警级别", paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "status", value = "告警状态", paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "title", value = "告警标题", paramType = "query", dataType = "string"),
-            @ApiImplicitParam(name = "content", value = "告警内容", paramType = "query", dataType = "string")})
+            @ApiImplicitParam(name = "content", value = "告警内容", paramType = "query", dataType = "string"),
+            @ApiImplicitParam(name = "number", value = "被告警人号码", paramType = "query", dataType = "string"),
+            @ApiImplicitParam(name = "insertDate", value = "告警日期", paramType = "query", dataType = "string"),
+            @ApiImplicitParam(name = "updateDate", value = "完成日期", paramType = "query", dataType = "string")})
     @GetMapping("/get-monitor-alarm-record-list")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.ALARM + "#告警记录", operType = OperateTypeConstants.QUERY, operDesc = "获取告警记录列表")
-    public LayUiAdminResultVo getMonitorAlarmRecordList(Long current, Long size, String type, String level, String status, String title, String content) {
-        Page<MonitorAlarmRecordVo> page = this.monitorAlarmRecordService.getMonitorAlarmRecordList(current, size, type, level, status, title, content);
+    public LayUiAdminResultVo getMonitorAlarmRecordList(Long current, Long size, String type, String level,
+                                                        String status, String title, String content,
+                                                        String number, String insertDate, String updateDate) {
+        Page<MonitorAlarmRecordVo> page = this.monitorAlarmRecordService.getMonitorAlarmRecordList(current, size, type, level, status, title, content, number, insertDate, updateDate);
         return LayUiAdminResultVo.ok(page);
     }
 

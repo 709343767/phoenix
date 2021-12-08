@@ -1,5 +1,6 @@
 package com.gitee.pifeng.monitoring.ui.business.web.service.impl;
 
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -18,6 +19,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -73,7 +75,10 @@ public class MonitorLogOperationServiceImpl extends ServiceImpl<IMonitorLogOpera
         }
         if (StringUtils.isNotBlank(insertTime)) {
             String[] split = StringUtils.split(insertTime, "~");
-            lambdaQueryWrapper.between(MonitorLogOperation::getInsertTime, DateTimeUtils.string2Date(split[0].trim(), DateTimeStylesEnums.YYYY_MM_DD), DateTimeUtils.string2Date(split[1].trim(), DateTimeStylesEnums.YYYY_MM_DD));
+            Date startDateTime = DateTimeUtils.string2Date(split[0].trim(), DateTimeStylesEnums.YYYY_MM_DD);
+            Date endDateTime = DateTimeUtils.string2Date(split[1].trim(), DateTimeStylesEnums.YYYY_MM_DD);
+            endDateTime = DateUtil.endOfDay(endDateTime).toJdkDate();
+            lambdaQueryWrapper.between(MonitorLogOperation::getInsertTime, startDateTime, endDateTime);
         }
         // 时间倒序
         lambdaQueryWrapper.orderByDesc(MonitorLogOperation::getInsertTime);

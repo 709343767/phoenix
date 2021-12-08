@@ -53,11 +53,12 @@ public class MonitorAlarmRecordVo implements ISuperBean {
     @ApiModelProperty(value = "告警级别（INFO、WARM、ERROR、FATAL）")
     private String level;
 
+    @Excel(name = "告警时间", orderNum = "9", exportFormat = "yyyy-MM-dd HH:mm:ss")
     @ApiModelProperty(value = "告警时间")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date insertTime;
 
-    @Excel(name = "更新时间", orderNum = "9", exportFormat = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "完成时间", orderNum = "10", exportFormat = "yyyy-MM-dd HH:mm:ss")
     @ApiModelProperty(value = "告警结果获取时间")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date updateTime;

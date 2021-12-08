@@ -80,6 +80,26 @@
                     </div>
                 </div>
                 <div class="layui-inline">
+                    <label class="layui-form-label">号码</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="number" placeholder="请输入" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">告警日期</label>
+                    <div class="layui-input-inline">
+                        <input type="text" class="layui-input" id="insertDate" name="insertDate" autocomplete="off"
+                               placeholder="yyyy-MM-dd">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">完成日期</label>
+                    <div class="layui-input-inline">
+                        <input type="text" class="layui-input" id="updateDate" name="updateDate" autocomplete="off"
+                               placeholder="yyyy-MM-dd">
+                    </div>
+                </div>
+                <div class="layui-inline">
                     <button class="layui-btn layuiadmin-btn-useradmin" lay-submit
                             lay-filter="alarm-record-list-table-search">
                         <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
@@ -121,8 +141,19 @@
         base: ctxPath //静态资源所在路径
     }).extend({
         index: 'lib/index' //主入口模块
-    }).use(['index', 'table'], function () {
-        var $ = layui.$, admin = layui.admin, form = layui.form, table = layui.table, device = layui.device();
+    }).use(['index', 'table', 'laydate'], function () {
+        var $ = layui.$, admin = layui.admin, form = layui.form, table = layui.table, device = layui.device(),
+            laydate = layui.laydate;
+        //日期选择器
+        laydate.render({
+            elem: '#insertDate'
+            //,type: 'date' //type 默认为 date，所以可不填
+        });
+        //日期选择器
+        laydate.render({
+            elem: '#updateDate'
+            //,type: 'date' //type 默认为 date，所以可不填
+        });
         table.render({
             elem: '#alarm-record-list-table',
             url: ctxPath + 'monitor-alarm-record/get-monitor-alarm-record-list',
@@ -242,14 +273,14 @@
                     title: '号码',
                     sort: !0
                 }, {
-                    field: 'updateTime',
+                    field: 'insertTime',
                     minWidth: 170,
                     title: '告警时间',
                     sort: !0
                 }, {
                     field: 'updateTime',
                     minWidth: 170,
-                    title: '更新时间',
+                    title: '完成时间',
                     sort: !0
                 }, {
                     title: '操作',
