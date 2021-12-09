@@ -127,6 +127,7 @@ public class MonitorInstanceServiceImpl extends ServiceImpl<IMonitorInstanceDao,
         if (StringUtils.isNotBlank(isOnline)) {
             lambdaQueryWrapper.eq(MonitorInstance::getIsOnline, isOnline);
         }
+        lambdaQueryWrapper.orderByAsc(MonitorInstance::getInstanceName).orderByAsc(MonitorInstance::getId);
         IPage<MonitorInstance> monitorInstancePage = this.monitorInstanceDao.selectPage(ipage, lambdaQueryWrapper);
         List<MonitorInstance> monitorInstances = monitorInstancePage.getRecords();
         // 转换成应用程序信息表现层对象
