@@ -43,8 +43,8 @@ public interface IMonitorAlarmRecordService extends IService<MonitorAlarmRecord>
      * @param title      告警标题
      * @param content    告警内容
      * @param number     被告警人号码
-     * @param insertDate 告警日期
-     * @param updateDate 完成日期
+     * @param insertDate 记录日期
+     * @param updateDate 告警日期
      * @return 分页Page对象
      * @author 皮锋
      * @custom.date 2020/8/3 11:07

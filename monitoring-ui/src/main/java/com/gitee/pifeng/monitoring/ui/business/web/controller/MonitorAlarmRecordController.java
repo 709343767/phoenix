@@ -80,8 +80,8 @@ public class MonitorAlarmRecordController {
      * @param title      告警标题
      * @param content    告警内容
      * @param number     被告警人号码
-     * @param insertDate 告警日期
-     * @param updateDate 完成日期
+     * @param insertDate 记录日期
+     * @param updateDate 告警日期
      * @return layUiAdmin响应对象
      * @author 皮锋
      * @custom.date 2020/8/7 16:12
@@ -96,8 +96,8 @@ public class MonitorAlarmRecordController {
             @ApiImplicitParam(name = "title", value = "告警标题", paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "content", value = "告警内容", paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "number", value = "被告警人号码", paramType = "query", dataType = "string"),
-            @ApiImplicitParam(name = "insertDate", value = "告警日期", paramType = "query", dataType = "string"),
-            @ApiImplicitParam(name = "updateDate", value = "完成日期", paramType = "query", dataType = "string")})
+            @ApiImplicitParam(name = "insertDate", value = "记录日期", paramType = "query", dataType = "string"),
+            @ApiImplicitParam(name = "updateDate", value = "告警日期", paramType = "query", dataType = "string")})
     @GetMapping("/get-monitor-alarm-record-list")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.ALARM + "#告警记录", operType = OperateTypeConstants.QUERY, operDesc = "获取告警记录列表")
