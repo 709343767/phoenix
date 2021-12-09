@@ -226,4 +226,43 @@ public class QuartzConfig {
                 .build();
     }
     /////////////////////////////////////////////netMonitor end/////////////////////////////////////////////////////////
+
+    //////////////////////////////////////////ClearHistoryData start////////////////////////////////////////////////////
+
+    /**
+     * <p>
+     * 数据库历史记录表数据清理 JobDetail 配置
+     * </p>
+     *
+     * @return 传递给定作业实例的详细信息属性
+     * @author 皮锋
+     * @custom.date 2021/12/3 12:29
+     */
+    @Bean
+    public JobDetail clearHistoryDataJobDetail() {
+        return JobBuilder.newJob(ClearHistoryDataJob.class)
+                .withIdentity("clearHistoryDataJob", JOB_DETAIL_GROUP)
+                .storeDurably()
+                .build();
+    }
+
+    /**
+     * <p>
+     * 数据库历史记录表数据清理 Trigger 配置
+     * </p>
+     *
+     * @return 具有所有触发器通用属性的基本接口
+     * @author 皮锋
+     * @custom.date 2021/12/1 17:31
+     */
+    @Bean
+    public Trigger clearHistoryDataTrigger() {
+        return TriggerBuilder.newTrigger()
+                .forJob(this.clearHistoryDataJobDetail())
+                .withIdentity("clearHistoryDataTrigger", TRIGGER_GROUP)
+                // 每小时执行一次
+                .withSchedule(CronScheduleBuilder.cronSchedule("0 0 * * * ?"))
+                .build();
+    }
+    //////////////////////////////////////////ClearHistoryData end//////////////////////////////////////////////////////
 }

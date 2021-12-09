@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -348,4 +349,23 @@ public class JvmServiceImpl implements IJvmService {
             this.monitorJvmRuntimeDao.update(monitorJvmRuntime, lambdaUpdateWrapper);
         }
     }
+
+    /**
+     * <p>
+     * 清理JVM历史记录
+     * </p>
+     *
+     * @param historyTime 时间点，清理这个时间点以前的数据
+     * @return 清理记录数
+     * @author 皮锋
+     * @custom.date 2021/12/9 20:46
+     */
+    @Transactional(rollbackFor = Throwable.class)
+    @Override
+    public int clearHistoryData(Date historyTime) {
+        LambdaUpdateWrapper<MonitorJvmMemoryHistory> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+        lambdaUpdateWrapper.le(MonitorJvmMemoryHistory::getInsertTime, historyTime);
+        return this.monitorJvmMemoryHistoryDao.delete(lambdaUpdateWrapper);
+    }
+
 }

@@ -766,4 +766,35 @@ public class ServerServiceImpl extends ServiceImpl<IMonitorServerDao, MonitorSer
         }
     }
 
+    /**
+     * <p>
+     * 清理服务器历史记录
+     * </p>
+     *
+     * @param historyTime 时间点，清理这个时间点以前的数据
+     * @return 清理记录数
+     * @author 皮锋
+     * @custom.date 2021/12/9 20:59
+     */
+    @Transactional(rollbackFor = Throwable.class)
+    @Override
+    public int clearHistoryData(Date historyTime) {
+        LambdaUpdateWrapper<MonitorServerProcessHistory> serverProcessHistoryLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+        serverProcessHistoryLambdaUpdateWrapper.le(MonitorServerProcessHistory::getInsertTime, historyTime);
+        int deleteServerProcessHistoryNum = this.monitorServerProcessHistoryDao.delete(serverProcessHistoryLambdaUpdateWrapper);
+        LambdaUpdateWrapper<MonitorServerCpuHistory> serverCpuHistoryLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+        serverCpuHistoryLambdaUpdateWrapper.le(MonitorServerCpuHistory::getInsertTime, historyTime);
+        int deleteServerCpuHistoryNum = this.monitorServerCpuHistoryDao.delete(serverCpuHistoryLambdaUpdateWrapper);
+        LambdaUpdateWrapper<MonitorServerDiskHistory> serverDiskHistoryLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+        serverDiskHistoryLambdaUpdateWrapper.le(MonitorServerDiskHistory::getInsertTime, historyTime);
+        int deleteServerDiskHistoryNum = this.monitorServerDiskHistoryDao.delete(serverDiskHistoryLambdaUpdateWrapper);
+        LambdaUpdateWrapper<MonitorServerMemoryHistory> serverMemoryHistoryLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+        serverMemoryHistoryLambdaUpdateWrapper.le(MonitorServerMemoryHistory::getInsertTime, historyTime);
+        int deleteServerMemoryHistoryNum = this.monitorServerMemoryHistoryDao.delete(serverMemoryHistoryLambdaUpdateWrapper);
+        LambdaUpdateWrapper<MonitorServerNetcardHistory> serverNetcardHistoryLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+        serverNetcardHistoryLambdaUpdateWrapper.le(MonitorServerNetcardHistory::getInsertTime, historyTime);
+        int deleteServerNetcardHistoryNum = this.monitorServerNetcardHistoryDao.delete(serverNetcardHistoryLambdaUpdateWrapper);
+        return deleteServerProcessHistoryNum + deleteServerCpuHistoryNum + deleteServerDiskHistoryNum + deleteServerMemoryHistoryNum + deleteServerNetcardHistoryNum;
+    }
+
 }

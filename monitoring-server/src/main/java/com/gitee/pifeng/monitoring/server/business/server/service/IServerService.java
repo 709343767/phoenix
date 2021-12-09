@@ -5,6 +5,8 @@ import com.gitee.pifeng.monitoring.common.domain.Result;
 import com.gitee.pifeng.monitoring.common.dto.ServerPackage;
 import com.gitee.pifeng.monitoring.server.business.server.entity.MonitorServer;
 
+import java.util.Date;
+
 /**
  * <p>
  * 服务器信息服务层接口
@@ -27,4 +29,15 @@ public interface IServerService extends IService<MonitorServer> {
      */
     Result dealServerPackage(ServerPackage serverPackage);
 
+    /**
+     * <p>
+     * 清理服务器历史记录
+     * </p>
+     *
+     * @param historyTime 时间点，清理这个时间点以前的数据
+     * @return 清理记录数
+     * @author 皮锋
+     * @custom.date 2021/12/9 20:59
+     */
+    int clearHistoryData(Date historyTime);
 }
