@@ -264,6 +264,10 @@ ScheduledExecutorService service = Monitor.buryingPoint(() -> {
 }, 0, 1, TimeUnit.HOURS, ThreadTypeEnums.IO_INTENSIVE_THREAD);
 ```
 
+### 时钟同步
+
+部署监控程序（监控UI端、监控服务端、监控代理端、监控客户端）的服务器集群需要进行时钟同步（NTP），保证时间的一致性！。  
+
 ### 打包部署运行
 
 #### Jar包部署
