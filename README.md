@@ -302,6 +302,19 @@ ScheduledExecutorService service = Monitor.buryingPoint(() -> {
 3. 运行**Dockerfile**，构建docker镜像；  
 4. 运行：脚本位置在**monitoring/doc/脚本/**，脚本名为：**docker_run.sh**，可以自己根据需要灵活修改。
 
+### 集群部署
+
+**监控服务端、监控UI端**支持集群部署，提升系统的容灾和可用性。
+
+集群部署时，几点要求和建议：   
+1. DB配置保持一致；  
+2. 集群机器时钟保持一致（单机集群忽视）；  
+3. 建议：推荐通过nginx为集群做负载均衡，分配域名。监控服务端、监控UI端均通过该域名进行访问。  
+
+![集群部署架构-监控服务端](https://gitee.com/monitoring-platform/monitoring/raw/master/doc/%E9%9B%86%E7%BE%A4%E9%83%A8%E7%BD%B2%E6%9E%B6%E6%9E%84-%E7%9B%91%E6%8E%A7%E6%9C%8D%E5%8A%A1%E7%AB%AF.png "集群部署架构-监控服务端")
+
+![集群部署架构-监控UI端](https://gitee.com/monitoring-platform/monitoring/raw/master/doc/%E9%9B%86%E7%BE%A4%E9%83%A8%E7%BD%B2%E6%9E%B6%E6%9E%84-%E7%9B%91%E6%8E%A7UI%E7%AB%AF.png "集群部署架构-监控UI端")
+
 ## 功能截图
 
 ![首页1](https://gitee.com/monitoring-platform/monitoring/raw/master/doc/%E6%88%AA%E5%9B%BE/%E9%A6%96%E9%A1%B51.png "首页1")
