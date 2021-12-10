@@ -311,9 +311,7 @@ ScheduledExecutorService service = Monitor.buryingPoint(() -> {
 2. 集群机器时钟保持一致（单机集群忽视）；  
 3. 建议：推荐通过nginx为集群做负载均衡，分配域名。监控服务端、监控UI端均通过该域名进行访问。  
 
-![集群部署架构-监控服务端](https://gitee.com/monitoring-platform/monitoring/raw/master/doc/%E9%9B%86%E7%BE%A4%E9%83%A8%E7%BD%B2%E6%9E%B6%E6%9E%84-%E7%9B%91%E6%8E%A7%E6%9C%8D%E5%8A%A1%E7%AB%AF.png "集群部署架构-监控服务端")
-
-![集群部署架构-监控UI端](https://gitee.com/monitoring-platform/monitoring/raw/master/doc/%E9%9B%86%E7%BE%A4%E9%83%A8%E7%BD%B2%E6%9E%B6%E6%9E%84-%E7%9B%91%E6%8E%A7UI%E7%AB%AF.png "集群部署架构-监控UI端")
+![集群部署架构](https://gitee.com/monitoring-platform/monitoring/raw/master/doc/%E9%9B%86%E7%BE%A4%E9%83%A8%E7%BD%B2%E6%9E%B6%E6%9E%84.png "集群部署架构")
 
 ## 功能截图
 
