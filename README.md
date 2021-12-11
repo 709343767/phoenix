@@ -185,19 +185,19 @@ monitoring.sql
 
 1. 监控UI端
 
-    除了监控配置外，还需要在 **application-{profile}.yml** 文件中进行数据库配置。
+    除了在 **monitoring-{profile}.properties** 文件修改监控配置外，还需要在 **application-{profile}.yml** 文件修改数据库配置。
 
 2. 监控服务端
 
-    需要在 **application-{profile}.yml** 文件中进行数据库配置和邮箱配置。
+    需要在 **application-{profile}.yml** 文件修改数据库配置和邮箱配置。
 
 3. 监控代理端
 
-    只需监控配置。
+    只需在 **monitoring-{profile}.properties** 文件修改监控配置。
 
 4. 监控客户端
 
-    只需监控配置。
+    只需添加监控配置。
     
 #### 加解密配置
 
