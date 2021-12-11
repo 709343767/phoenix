@@ -7,7 +7,7 @@
     <!-- 项目基本信息 -->
     <groupId>com.gitee.pifeng</groupId>
     <artifactId>monitoring</artifactId>
-    <version>0.0.9.RELEASE</version>
+    <version>1.0.0.RELEASE</version>
     <modules>
         <!-- 监控公共模块父工程 -->
         <module>monitoring-common</module>
