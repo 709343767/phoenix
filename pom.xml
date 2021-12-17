@@ -6,24 +6,24 @@
 
     <!-- 项目基本信息 -->
     <groupId>com.gitee.pifeng</groupId>
-    <artifactId>monitoring</artifactId>
+    <artifactId>phoenix</artifactId>
     <version>1.0.0.RELEASE</version>
     <modules>
         <!-- 监控公共模块父工程 -->
-        <module>monitoring-common</module>
+        <module>phoenix-common</module>
         <!-- 监控UI端 -->
-        <module>monitoring-ui</module>
+        <module>phoenix-ui</module>
         <!-- 监控服务端 -->
-        <module>monitoring-server</module>
+        <module>phoenix-server</module>
         <!-- 监控代理端 -->
-        <module>monitoring-agent</module>
+        <module>phoenix-agent</module>
         <!-- 监控客户端父工程 -->
-        <module>monitoring-client</module>
+        <module>phoenix-client</module>
     </modules>
     <packaging>pom</packaging>
-    <name>monitoring</name>
+    <name>phoenix</name>
     <description>开源监控平台</description>
-    <url>https://gitee.com/monitoring-platform/monitoring</url>
+    <url>https://gitee.com/monitoring-platform/phoenix</url>
 
     <!-- 属性 -->
     <properties>
@@ -32,7 +32,7 @@
         <!-- 项目根目录 -->
         <myproject.root>${basedir}</myproject.root>
         <!-- 根项目名称 -->
-        <myproject.name>monitoring</myproject.name>
+        <myproject.name>phoenix</myproject.name>
         <!-- spring-boot-starter-parent版本 -->
         <spring-boot-starter-parent.version>2.3.0.RELEASE</spring-boot-starter-parent.version>
         <!-- 解决eclipse中maven报错的问题 -->
@@ -135,61 +135,61 @@
             <!-- 监控公共模块父项目 -->
             <dependency>
                 <groupId>com.gitee.pifeng</groupId>
-                <artifactId>monitoring-common</artifactId>
+                <artifactId>phoenix-common</artifactId>
                 <version>${revision}</version>
             </dependency>
             <!-- 监控公共模块 -->
             <dependency>
                 <groupId>com.gitee.pifeng</groupId>
-                <artifactId>monitoring-common-core</artifactId>
+                <artifactId>phoenix-common-core</artifactId>
                 <version>${revision}</version>
             </dependency>
             <!-- 监控WEB公共模块 -->
             <dependency>
                 <groupId>com.gitee.pifeng</groupId>
-                <artifactId>monitoring-common-web</artifactId>
+                <artifactId>phoenix-common-web</artifactId>
                 <version>${revision}</version>
             </dependency>
             <!-- 监控客户端父项目 -->
             <dependency>
                 <groupId>com.gitee.pifeng</groupId>
-                <artifactId>monitoring-client</artifactId>
+                <artifactId>phoenix-client</artifactId>
                 <version>${revision}</version>
             </dependency>
             <!-- 监控客户端基础模块 -->
             <dependency>
                 <groupId>com.gitee.pifeng</groupId>
-                <artifactId>monitoring-client-core</artifactId>
+                <artifactId>phoenix-client-core</artifactId>
                 <version>${revision}</version>
             </dependency>
             <!-- 监控客户端与springboot集成的starter -->
             <dependency>
                 <groupId>com.gitee.pifeng</groupId>
-                <artifactId>monitoring-client-spring-boot-starter</artifactId>
+                <artifactId>phoenix-client-spring-boot-starter</artifactId>
                 <version>${revision}</version>
             </dependency>
             <!-- 监控客户端与springmvc集成的integrator -->
             <dependency>
                 <groupId>com.gitee.pifeng</groupId>
-                <artifactId>monitoring-client-spring-mvc-integrator</artifactId>
+                <artifactId>phoenix-client-spring-mvc-integrator</artifactId>
                 <version>${revision}</version>
             </dependency>
             <!-- 监控代理端 -->
             <dependency>
                 <groupId>com.gitee.pifeng</groupId>
-                <artifactId>monitoring-agent</artifactId>
+                <artifactId>phoenix-agent</artifactId>
                 <version>${revision}</version>
             </dependency>
             <!-- 监控服务端 -->
             <dependency>
                 <groupId>com.gitee.pifeng</groupId>
-                <artifactId>monitoring-server</artifactId>
+                <artifactId>phoenix-server</artifactId>
                 <version>${revision}</version>
             </dependency>
             <!-- 监控UI端 -->
             <dependency>
                 <groupId>com.gitee.pifeng</groupId>
-                <artifactId>monitoring-ui</artifactId>
+                <artifactId>phoenix-ui</artifactId>
                 <version>${revision}</version>
             </dependency>
 
@@ -694,9 +694,9 @@
     </licenses>
     <!--托管仓库信息-->
     <scm>
-        <url>https://gitee.com/monitoring-platform/monitoring</url>
-        <connection>scm:git:https://gitee.com/monitoring-platform/monitoring.git</connection>
-        <developerConnection>scm:git:https://gitee.com/monitoring-platform/monitoring</developerConnection>
+        <url>https://gitee.com/monitoring-platform/phoenix</url>
+        <connection>scm:git:https://gitee.com/monitoring-platform/phoenix.git</connection>
+        <developerConnection>scm:git:https://gitee.com/monitoring-platform/phoenix</developerConnection>
     </scm>
     <!-- 开发者 -->
     <developers>

@@ -1,6 +1,6 @@
 ## 介绍
 
-**“monitoring”** 是一个灵活可配置的开源监控平台，主要用于监控应用程序、服务器、数据库和网络，通过实时收集、汇聚和分析监控信息，实现在发现异常时立刻推送告警信息，并且提供了可视化系统进行配置、管理、查看。持续更新中...
+**“phoenix”** 是一个灵活可配置的开源监控平台，主要用于监控应用程序、服务器、数据库和网络，通过实时收集、汇聚和分析监控信息，实现在发现异常时立刻推送告警信息，并且提供了可视化系统进行配置、管理、查看。持续更新中...
 
 - 应用程序
 
@@ -30,11 +30,11 @@
 
 - 功能架构
 
-  ![功能导图](https://gitee.com/monitoring-platform/monitoring/raw/master/doc/%E5%8A%9F%E8%83%BD%E5%AF%BC%E5%9B%BE.png "功能导图")
+  ![功能导图](https://gitee.com/monitoring-platform/phoenix/raw/master/doc/%E5%8A%9F%E8%83%BD%E5%AF%BC%E5%9B%BE.png "功能导图")
 
 - 逻辑架构
 
-  ![逻辑架构图](https://gitee.com/monitoring-platform/monitoring/raw/master/doc/%E9%80%BB%E8%BE%91%E6%9E%B6%E6%9E%84%E5%9B%BE.png "逻辑架构图")
+  ![逻辑架构图](https://gitee.com/monitoring-platform/phoenix/raw/master/doc/%E9%80%BB%E8%BE%91%E6%9E%B6%E6%9E%84%E5%9B%BE.png "逻辑架构图")
 
 - 运行环境
 
@@ -58,48 +58,48 @@
 
   平台使用Java+Layui+ECharts开发，数据库采用MySQL。
 
-  monitoring（监控平台父工程）  
-  ├── monitoring-common（监控公共模块父工程）  
-  │ ├── monitoring-common-core（监控核心公共模块）  
-  │ └── monitoring-common-web（监控WEB公共模块）  
-  ├── monitoring-client（监控客户端父工程）  
-  │ ├── monitoring-client-core（监控客户端）  
-  │ ├── monitoring-client-spring-boot-starter（监控客户端与springboot集成的starter）  
-  │ └── monitoring-client-spring-mvc-integrator（监控客户端与springmvc集成的integrator）  
-  ├── monitoring-agent（监控代理端）  
-  ├── monitoring-server（监控服务端）  
-  ├── monitoring-ui（监控UI端）  
+  phoenix（监控平台父工程）  
+  ├── phoenix-common（监控公共模块父工程）  
+  │ ├── phoenix-common-core（监控核心公共模块）  
+  │ └── phoenix-common-web（监控WEB公共模块）  
+  ├── phoenix-client（监控客户端父工程）  
+  │ ├── phoenix-client-core（监控客户端）  
+  │ ├── phoenix-client-spring-boot-starter（监控客户端与springboot集成的starter）  
+  │ └── phoenix-client-spring-mvc-integrator（监控客户端与springmvc集成的integrator）  
+  ├── phoenix-agent（监控代理端）  
+  ├── phoenix-server（监控服务端）  
+  ├── phoenix-ui（监控UI端）  
   └── doc（文档）
 
-  monitoring：监控平台父工程，管理平台的依赖、构建、插件等；  
-  monitoring-common：监控公共模块，提供平台所有的公共代码，包含一个监控核心公共模块（monitoring-common-core）和一个监控WEB公共模块（monitoring-common-web）；  
-  monitoring-client：监控客户端，用于集成到Java应用程序中实现业务埋点和Java应用程序监控信息收集，包含一个通用模块（monitoring-client-core）和与springboot集成的starter（monitoring-client-spring-boot-starter）、与springmvc集成的integrator（monitoring-client-spring-mvc-integrator）两个拓展模块；  
-  monitoring-agent：监控代理端，用于收集服务器信息和汇聚、转发来自监控客户端的信息；  
-  monitoring-server：监控服务端，是监控平台的核心模块，用于汇聚、分析监控信息，在发现异常时实时推送告警信息；  
-  monitoring-ui：监控可视化系统，用于平台配置、用户管理、监控信息查看、图表展示等；  
+  phoenix：监控平台父工程，管理平台的依赖、构建、插件等；  
+  phoenix-common：监控公共模块，提供平台所有的公共代码，包含一个监控核心公共模块（phoenix-common-core）和一个监控WEB公共模块（phoenix-common-web）；  
+  phoenix-client：监控客户端，用于集成到Java应用程序中实现业务埋点和Java应用程序监控信息收集，包含一个通用模块（phoenix-client-core）和与springboot集成的starter（phoenix-client-spring-boot-starter）、与springmvc集成的integrator（phoenix-client-spring-mvc-integrator）两个拓展模块；  
+  phoenix-agent：监控代理端，用于收集服务器信息和汇聚、转发来自监控客户端的信息；  
+  phoenix-server：监控服务端，是监控平台的核心模块，用于汇聚、分析监控信息，在发现异常时实时推送告警信息；  
+  phoenix-ui：监控可视化系统，用于平台配置、用户管理、监控信息查看、图表展示等；  
   doc：包含平台的设计文档、服务启停脚本、数据库脚本等。
 
 ## 下载
 
 - 源码仓库地址
 
-  [https://gitee.com/monitoring-platform/monitoring](https://gitee.com/monitoring-platform/monitoring)  
+  [https://gitee.com/monitoring-platform/phoenix](https://gitee.com/monitoring-platform/phoenix)  
   
   **注意：一定要下载最新发行版源码！**
 
 - 示例代码仓库地址
 
-  [https://gitee.com/monitoring-platform/monitoring-example](https://gitee.com/monitoring-platform/monitoring-example)
+  [https://gitee.com/monitoring-platform/phoenix-example](https://gitee.com/monitoring-platform/phoenix-example)
 
 - 中央仓库地址
 
 1. 客户端为普通Java程序
 
   ```xml
-  <!-- https://mvnrepository.com/artifact/com.gitee.pifeng/monitoring-client-core -->
+  <!-- https://mvnrepository.com/artifact/com.gitee.pifeng/phoenix-client-core -->
   <dependency>
       <groupId>com.gitee.pifeng</groupId>
-      <artifactId>monitoring-client-core</artifactId>
+      <artifactId>phoenix-client-core</artifactId>
       <version>${最新稳定版本}</version>
   </dependency>
   ```
@@ -107,10 +107,10 @@
 2. 客户端为springboot程序
 
   ```xml
-  <!-- https://mvnrepository.com/artifact/com.gitee.pifeng/monitoring-client-spring-boot-starter -->
+  <!-- https://mvnrepository.com/artifact/com.gitee.pifeng/phoenix-client-spring-boot-starter -->
   <dependency>
       <groupId>com.gitee.pifeng</groupId>
-      <artifactId>monitoring-client-spring-boot-starter</artifactId>
+      <artifactId>phoenix-client-spring-boot-starter</artifactId>
       <version>${最新稳定版本}</version>
   </dependency>
   ```
@@ -118,10 +118,10 @@
 3. 客户端为springmvc程序
 
   ```xml
-  <!-- https://mvnrepository.com/artifact/com.gitee.pifeng/monitoring-client-spring-mvc-integrator -->
+  <!-- https://mvnrepository.com/artifact/com.gitee.pifeng/phoenix-client-spring-mvc-integrator -->
   <dependency>
       <groupId>com.gitee.pifeng</groupId>
-      <artifactId>monitoring-client-spring-mvc-integrator</artifactId>
+      <artifactId>phoenix-client-spring-mvc-integrator</artifactId>
       <version>${最新稳定版本}</version>
   </dependency>
   ```
@@ -130,10 +130,10 @@
 
 ### 初始化“监控数据库”
 
-请下载项目源码并解压，进入目录：**/monitoring/doc/数据库设计/sql/mysql** ，找到SQL脚本并执行即可。
+请下载项目源码并解压，进入目录：**/phoenix/doc/数据库设计/sql/mysql** ，找到SQL脚本并执行即可。
 
 ```
-monitoring.sql
+phoenix.sql
 ```
 
 ### 编译源码
@@ -272,8 +272,8 @@ ScheduledExecutorService service = Monitor.buryingPoint(() -> {
 
 #### Jar包部署
 
-**监控UI端、监控服务端、监控代理端** 直接打成可执行jar，打包后可执行jar包在 **monitoring/target** 目录下，部署后通过脚本（命令）运行。启停脚本位置在：**/monitoring/doc/脚本/** 。  
-**监控UI端** 访问URL：**https://localhost/monitoring-ui/index** ，初始账号/密码：**admin/admin123**，**guest/guest123**。  
+**监控UI端、监控服务端、监控代理端** 直接打成可执行jar，打包后可执行jar包在 **phoenix/target** 目录下，部署后通过脚本（命令）运行。启停脚本位置在：**/phoenix/doc/脚本/** 。  
+**监控UI端** 访问URL：**https://localhost/phoenix-ui/index** ，初始账号/密码：**admin/admin123**，**guest/guest123**。  
 
 #### Docker部署
 
@@ -289,18 +289,18 @@ ScheduledExecutorService service = Monitor.buryingPoint(() -> {
    systemctl restart docker  
   
 2. 在系统环境变量中添DOCKER_HOST，如下图所示：  
-![docker_host_config](https://gitee.com/monitoring-platform/monitoring/raw/master/doc/%E5%85%B6%E5%AE%83/docker_host_config.png "docker_host_config")  
+![docker_host_config](https://gitee.com/monitoring-platform/phoenix/raw/master/doc/%E5%85%B6%E5%AE%83/docker_host_config.png "docker_host_config")  
 3. 编译项目打包项目并打包镜像：  
    mvn -Dmaven.test.skip=true clean package docker:build  
-4. 运行：脚本位置在**monitoring/doc/脚本/**，脚本名为：**docker_run.sh**，可以自己根据需要灵活修改。  
+4. 运行：脚本位置在**phoenix/doc/脚本/**，脚本名为：**docker_run.sh**，可以自己根据需要灵活修改。  
 
 - 方式二：服务器本地构建docker镜像  
 
 1. 打包可执行jar，并上传至服务器；  
-2. 上传**Dockerfile**文件至服务器，文件位置在：**monitoring/monitoring-agent/src/main/docker/Dockerfile、monitoring/monitoring-server/src/main/docker/Dockerfile、monitoring/monitoring-ui/src/main/docker/Dockerfile**，  
+2. 上传**Dockerfile**文件至服务器，文件位置在：**phoenix/phoenix-agent/src/main/docker/Dockerfile、phoenix/phoenix-server/src/main/docker/Dockerfile、phoenix/phoenix-ui/src/main/docker/Dockerfile**，  
    **Dockerfile**要与对应的jar包放在同一目录下；  
 3. 运行**Dockerfile**，构建docker镜像；  
-4. 运行：脚本位置在**monitoring/doc/脚本/**，脚本名为：**docker_run.sh**，可以自己根据需要灵活修改。
+4. 运行：脚本位置在**phoenix/doc/脚本/**，脚本名为：**docker_run.sh**，可以自己根据需要灵活修改。
 
 ### 集群部署
 
@@ -311,55 +311,55 @@ ScheduledExecutorService service = Monitor.buryingPoint(() -> {
 2. 集群机器时钟保持一致（单机集群忽视）；  
 3. 建议：推荐通过nginx为集群做负载均衡，分配域名。监控服务端、监控UI端均通过该域名进行访问。  
 
-![集群部署架构](https://gitee.com/monitoring-platform/monitoring/raw/master/doc/%E9%9B%86%E7%BE%A4%E9%83%A8%E7%BD%B2%E6%9E%B6%E6%9E%84.png "集群部署架构")
+![集群部署架构](https://gitee.com/monitoring-platform/phoenix/raw/master/doc/%E9%9B%86%E7%BE%A4%E9%83%A8%E7%BD%B2%E6%9E%B6%E6%9E%84.png "集群部署架构")
 
 ## 功能截图
 
-![首页1](https://gitee.com/monitoring-platform/monitoring/raw/master/doc/%E6%88%AA%E5%9B%BE/%E9%A6%96%E9%A1%B51.png "首页1")
+![首页1](https://gitee.com/monitoring-platform/phoenix/raw/master/doc/%E6%88%AA%E5%9B%BE/%E9%A6%96%E9%A1%B51.png "首页1")
   
-![首页2](https://gitee.com/monitoring-platform/monitoring/raw/master/doc/%E6%88%AA%E5%9B%BE/%E9%A6%96%E9%A1%B52.png "首页2")
+![首页2](https://gitee.com/monitoring-platform/phoenix/raw/master/doc/%E6%88%AA%E5%9B%BE/%E9%A6%96%E9%A1%B52.png "首页2")
   
-![服务器1](https://gitee.com/monitoring-platform/monitoring/raw/master/doc/%E6%88%AA%E5%9B%BE/%E6%9C%8D%E5%8A%A1%E5%99%A81.png "服务器1")
+![服务器1](https://gitee.com/monitoring-platform/phoenix/raw/master/doc/%E6%88%AA%E5%9B%BE/%E6%9C%8D%E5%8A%A1%E5%99%A81.png "服务器1")
 
-![服务器2](https://gitee.com/monitoring-platform/monitoring/raw/master/doc/%E6%88%AA%E5%9B%BE/%E6%9C%8D%E5%8A%A1%E5%99%A82.png "服务器2")
+![服务器2](https://gitee.com/monitoring-platform/phoenix/raw/master/doc/%E6%88%AA%E5%9B%BE/%E6%9C%8D%E5%8A%A1%E5%99%A82.png "服务器2")
   
-![应用程序1](https://gitee.com/monitoring-platform/monitoring/raw/master/doc/%E6%88%AA%E5%9B%BE/%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F1.png "应用程序1")
+![应用程序1](https://gitee.com/monitoring-platform/phoenix/raw/master/doc/%E6%88%AA%E5%9B%BE/%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F1.png "应用程序1")
   
-![应用程序2](https://gitee.com/monitoring-platform/monitoring/raw/master/doc/%E6%88%AA%E5%9B%BE/%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F2.png "应用程序2")
+![应用程序2](https://gitee.com/monitoring-platform/phoenix/raw/master/doc/%E6%88%AA%E5%9B%BE/%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F2.png "应用程序2")
 
-![数据库1](https://gitee.com/monitoring-platform/monitoring/raw/master/doc/%E6%88%AA%E5%9B%BE/%E6%95%B0%E6%8D%AE%E5%BA%931.png "数据库1")
+![数据库1](https://gitee.com/monitoring-platform/phoenix/raw/master/doc/%E6%88%AA%E5%9B%BE/%E6%95%B0%E6%8D%AE%E5%BA%931.png "数据库1")
 
-![数据库2](https://gitee.com/monitoring-platform/monitoring/raw/master/doc/%E6%88%AA%E5%9B%BE/%E6%95%B0%E6%8D%AE%E5%BA%932.png "数据库2")
+![数据库2](https://gitee.com/monitoring-platform/phoenix/raw/master/doc/%E6%88%AA%E5%9B%BE/%E6%95%B0%E6%8D%AE%E5%BA%932.png "数据库2")
 
-![数据库3](https://gitee.com/monitoring-platform/monitoring/raw/master/doc/%E6%88%AA%E5%9B%BE/%E6%95%B0%E6%8D%AE%E5%BA%933.png "数据库3")
+![数据库3](https://gitee.com/monitoring-platform/phoenix/raw/master/doc/%E6%88%AA%E5%9B%BE/%E6%95%B0%E6%8D%AE%E5%BA%933.png "数据库3")
 
-![数据库4](https://gitee.com/monitoring-platform/monitoring/raw/master/doc/%E6%88%AA%E5%9B%BE/%E6%95%B0%E6%8D%AE%E5%BA%934.png "数据库4")
+![数据库4](https://gitee.com/monitoring-platform/phoenix/raw/master/doc/%E6%88%AA%E5%9B%BE/%E6%95%B0%E6%8D%AE%E5%BA%934.png "数据库4")
 
-![网络](https://gitee.com/monitoring-platform/monitoring/raw/master/doc/%E6%88%AA%E5%9B%BE/%E7%BD%91%E7%BB%9C.png "网络")
+![网络](https://gitee.com/monitoring-platform/phoenix/raw/master/doc/%E6%88%AA%E5%9B%BE/%E7%BD%91%E7%BB%9C.png "网络")
 
-![告警定义](https://gitee.com/monitoring-platform/monitoring/raw/master/doc/%E6%88%AA%E5%9B%BE/%E5%91%8A%E8%AD%A6%E5%AE%9A%E4%B9%89.png "告警定义")
+![告警定义](https://gitee.com/monitoring-platform/phoenix/raw/master/doc/%E6%88%AA%E5%9B%BE/%E5%91%8A%E8%AD%A6%E5%AE%9A%E4%B9%89.png "告警定义")
 
-![告警记录](https://gitee.com/monitoring-platform/monitoring/raw/master/doc/%E6%88%AA%E5%9B%BE/%E5%91%8A%E8%AD%A6%E8%AE%B0%E5%BD%95.png "告警记录")
+![告警记录](https://gitee.com/monitoring-platform/phoenix/raw/master/doc/%E6%88%AA%E5%9B%BE/%E5%91%8A%E8%AD%A6%E8%AE%B0%E5%BD%95.png "告警记录")
 
-![用户管理](https://gitee.com/monitoring-platform/monitoring/raw/master/doc/%E6%88%AA%E5%9B%BE/%E7%94%A8%E6%88%B7%E7%AE%A1%E7%90%86.png "用户管理")
+![用户管理](https://gitee.com/monitoring-platform/phoenix/raw/master/doc/%E6%88%AA%E5%9B%BE/%E7%94%A8%E6%88%B7%E7%AE%A1%E7%90%86.png "用户管理")
 
-![操作日志1](https://gitee.com/monitoring-platform/monitoring/raw/master/doc/%E6%88%AA%E5%9B%BE/%E6%93%8D%E4%BD%9C%E6%97%A5%E5%BF%971.png "操作日志1")
+![操作日志1](https://gitee.com/monitoring-platform/phoenix/raw/master/doc/%E6%88%AA%E5%9B%BE/%E6%93%8D%E4%BD%9C%E6%97%A5%E5%BF%971.png "操作日志1")
 
-![操作日志2](https://gitee.com/monitoring-platform/monitoring/raw/master/doc/%E6%88%AA%E5%9B%BE/%E6%93%8D%E4%BD%9C%E6%97%A5%E5%BF%972.png "操作日志2")
+![操作日志2](https://gitee.com/monitoring-platform/phoenix/raw/master/doc/%E6%88%AA%E5%9B%BE/%E6%93%8D%E4%BD%9C%E6%97%A5%E5%BF%972.png "操作日志2")
 
-![异常日志1](https://gitee.com/monitoring-platform/monitoring/raw/master/doc/%E6%88%AA%E5%9B%BE/%E5%BC%82%E5%B8%B8%E6%97%A5%E5%BF%971.png "异常日志1")
+![异常日志1](https://gitee.com/monitoring-platform/phoenix/raw/master/doc/%E6%88%AA%E5%9B%BE/%E5%BC%82%E5%B8%B8%E6%97%A5%E5%BF%971.png "异常日志1")
 
-![异常日志2](https://gitee.com/monitoring-platform/monitoring/raw/master/doc/%E6%88%AA%E5%9B%BE/%E5%BC%82%E5%B8%B8%E6%97%A5%E5%BF%972.png "异常日志2")
+![异常日志2](https://gitee.com/monitoring-platform/phoenix/raw/master/doc/%E6%88%AA%E5%9B%BE/%E5%BC%82%E5%B8%B8%E6%97%A5%E5%BF%972.png "异常日志2")
 
-![监控设置](https://gitee.com/monitoring-platform/monitoring/raw/master/doc/%E6%88%AA%E5%9B%BE/%E7%9B%91%E6%8E%A7%E8%AE%BE%E7%BD%AE.png "监控设置")
+![监控设置](https://gitee.com/monitoring-platform/phoenix/raw/master/doc/%E6%88%AA%E5%9B%BE/%E7%9B%91%E6%8E%A7%E8%AE%BE%E7%BD%AE.png "监控设置")
 
 ## 常见问题
 
-[https://gitee.com/monitoring-platform/monitoring/wikis/pages?sort_id=4438763&doc_id=935794](https://gitee.com/monitoring-platform/monitoring/wikis/pages?sort_id=4438763&doc_id=935794)
+[https://gitee.com/monitoring-platform/phoenix/wikis/pages?sort_id=4438763&doc_id=935794](https://gitee.com/monitoring-platform/phoenix/wikis/pages?sort_id=4438763&doc_id=935794)
 
 ## 期望
 
-欢迎提出更好的意见，帮助完善 monitoring
+欢迎提出更好的意见，帮助完善 phoenix
 
 ## 版权
 

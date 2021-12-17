@@ -6,21 +6,21 @@
 
     <!-- 监控父项目 -->
     <parent>
-        <artifactId>monitoring</artifactId>
+        <artifactId>phoenix</artifactId>
         <groupId>com.gitee.pifeng</groupId>
         <version>1.0.0.RELEASE</version>
         <relativePath>..</relativePath>
     </parent>
 
     <!-- 项目基本信息 -->
-    <artifactId>monitoring-common</artifactId>
-    <name>monitoring-common</name>
+    <artifactId>phoenix-common</artifactId>
+    <name>phoenix-common</name>
     <packaging>pom</packaging>
     <modules>
         <!-- 监控公共模块 -->
-        <module>monitoring-common-core</module>
+        <module>phoenix-common-core</module>
         <!-- 监控WEB公共模块 -->
-        <module>monitoring-common-web</module>
+        <module>phoenix-common-web</module>
     </modules>
     <description>监控公共模块父工程</description>
 
@@ -30,13 +30,13 @@
             <!-- 监控公共模块 -->
             <dependency>
                 <groupId>com.gitee.pifeng</groupId>
-                <artifactId>monitoring-common-core</artifactId>
+                <artifactId>phoenix-common-core</artifactId>
                 <version>${revision}</version>
             </dependency>
             <!-- 监控WEB公共模块 -->
             <dependency>
                 <groupId>com.gitee.pifeng</groupId>
-                <artifactId>monitoring-common-web</artifactId>
+                <artifactId>phoenix-common-web</artifactId>
                 <version>${revision}</version>
             </dependency>
         </dependencies>

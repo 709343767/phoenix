@@ -6,15 +6,15 @@
 
     <!-- 监控父项目，为监控公共模父项目 -->
     <parent>
-        <artifactId>monitoring-common</artifactId>
+        <artifactId>phoenix-common</artifactId>
         <groupId>com.gitee.pifeng</groupId>
         <version>1.0.0.RELEASE</version>
         <relativePath>..</relativePath>
     </parent>
 
     <!-- 项目基本信息 -->
-    <artifactId>monitoring-common-web</artifactId>
-    <name>monitoring-common-web</name>
+    <artifactId>phoenix-common-web</artifactId>
+    <name>phoenix-common-web</name>
     <packaging>jar</packaging>
     <description>监控WEB公共模块</description>
 
@@ -23,7 +23,7 @@
         <!-- 项目公共模块依赖 -->
         <dependency>
             <groupId>com.gitee.pifeng</groupId>
-            <artifactId>monitoring-common-core</artifactId>
+            <artifactId>phoenix-common-core</artifactId>
         </dependency>
 
         <!--lombok依赖 -->

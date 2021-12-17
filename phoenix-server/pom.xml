@@ -6,17 +6,17 @@
 
     <!-- 监控父项目 -->
     <parent>
-        <artifactId>monitoring</artifactId>
+        <artifactId>phoenix</artifactId>
         <groupId>com.gitee.pifeng</groupId>
         <version>1.0.0.RELEASE</version>
         <relativePath>..</relativePath>
     </parent>
 
     <!-- 项目基本信息 -->
-    <artifactId>monitoring-ui</artifactId>
+    <artifactId>phoenix-server</artifactId>
     <packaging>jar</packaging>
-    <name>monitoring-ui</name>
-    <description>监控UI端</description>
+    <name>phoenix-server</name>
+    <description>监控服务端</description>
 
     <!-- 属性 -->
     <properties>
@@ -28,12 +28,12 @@
         <!-- 监控WEB公共模块依赖 -->
         <dependency>
             <groupId>com.gitee.pifeng</groupId>
-            <artifactId>monitoring-common-web</artifactId>
+            <artifactId>phoenix-common-web</artifactId>
         </dependency>
         <!-- springboot项目集成监控依赖，使之拥有监控功能 -->
         <dependency>
             <groupId>com.gitee.pifeng</groupId>
-            <artifactId>monitoring-client-spring-boot-starter</artifactId>
+            <artifactId>phoenix-client-spring-boot-starter</artifactId>
         </dependency>
 
         <!--lombok依赖 -->
@@ -47,11 +47,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
-        </dependency>
-        <!-- websocket依赖 -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-websocket</artifactId>
         </dependency>
         <!-- 配置文件处理器依赖，绑定配置文件，支持注解 -->
         <dependency>
@@ -71,25 +66,15 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
-        <!-- thymeleaf和springSecurity的扩展依赖 -->
-        <dependency>
-            <groupId>org.thymeleaf.extras</groupId>
-            <artifactId>thymeleaf-extras-springsecurity5</artifactId>
-        </dependency>
-        <!-- springboot集成springSecurity安全依赖 -->
+        <!-- springboot邮件支持依赖 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-security</artifactId>
+            <artifactId>spring-boot-starter-mail</artifactId>
         </dependency>
-        <!-- 数据库session管理依赖 -->
+        <!-- springboot集成quartz依赖 -->
         <dependency>
-            <groupId>org.springframework.session</groupId>
-            <artifactId>spring-session-jdbc</artifactId>
-        </dependency>
-        <!-- easypoi工具包依赖 -->
-        <dependency>
-            <groupId>cn.afterturn</groupId>
-            <artifactId>easypoi-spring-boot-starter</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-quartz</artifactId>
         </dependency>
         <!-- mybatis-plus依赖 -->
         <dependency>
@@ -132,7 +117,7 @@
 
     <!-- 构建 -->
     <build>
-        <finalName>monitoring-ui</finalName>
+        <finalName>phoenix-server</finalName>
         <defaultGoal>package</defaultGoal>
         <plugins>
             <plugin>
@@ -140,7 +125,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
                     <!-- 指定该Main Class为全局的唯一入口 -->
-                    <mainClass>com.gitee.pifeng.monitoring.ui.UiApplication</mainClass>
+                    <mainClass>com.gitee.pifeng.monitoring.server.ServerApplication</mainClass>
                 </configuration>
             </plugin>
             <!-- sonatype的staging插件 -->
@@ -151,7 +136,7 @@
                 <configuration>
                     <serverId>ossrh</serverId>
                     <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-                    <!-- 忽略这个模块，这个插件此处有一个bug：如果此模块是最后编译打包发布的模块，会导致所有的模块都不发布 -->
+                    <!-- 忽略这个模块 -->
                     <skipNexusStagingDeployMojo>true</skipNexusStagingDeployMojo>
                 </configuration>
             </plugin>

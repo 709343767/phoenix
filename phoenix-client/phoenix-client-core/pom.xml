@@ -6,24 +6,24 @@
 
     <!-- 监控父项目，为监控客户端父项目 -->
     <parent>
-        <artifactId>monitoring-client</artifactId>
+        <artifactId>phoenix-client</artifactId>
         <groupId>com.gitee.pifeng</groupId>
         <version>1.0.0.RELEASE</version>
         <relativePath>..</relativePath>
     </parent>
 
     <!-- 项目基本信息 -->
-    <artifactId>monitoring-client-spring-boot-starter</artifactId>
-    <name>monitoring-client-spring-boot-starter</name>
+    <artifactId>phoenix-client-core</artifactId>
+    <name>phoenix-client-core</name>
     <packaging>jar</packaging>
-    <description>监控客户端与springboot集成的starter</description>
+    <description>监控客户端</description>
 
     <!-- 依赖 -->
     <dependencies>
-        <!-- 监控客户端模块依赖 -->
+        <!-- 监控公共模块依赖 -->
         <dependency>
             <groupId>com.gitee.pifeng</groupId>
-            <artifactId>monitoring-client-core</artifactId>
+            <artifactId>phoenix-common-core</artifactId>
         </dependency>
 
         <!--lombok依赖 -->
@@ -44,21 +44,35 @@
             <artifactId>logback-classic</artifactId>
             <optional>true</optional>
         </dependency>
-        <!-- springboot依赖 -->
+        <!-- junit单元测试依赖 -->
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-autoconfigure</artifactId>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <!-- HTTP协议的客户端/服务器编程工具包依赖 -->
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-configuration-processor</artifactId>
-            <optional>true</optional>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpcore</artifactId>
         </dependency>
     </dependencies>
 
     <!-- 构建 -->
     <build>
         <defaultGoal>package</defaultGoal>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <excludes>
+                    <!-- 排除掉监控配置文件 -->
+                    <exclude>monitoring.properties</exclude>
+                </excludes>
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

@@ -6,16 +6,16 @@
 
     <!-- 监控父项目 -->
     <parent>
-        <artifactId>monitoring</artifactId>
+        <artifactId>phoenix</artifactId>
         <groupId>com.gitee.pifeng</groupId>
         <version>1.0.0.RELEASE</version>
         <relativePath>..</relativePath>
     </parent>
 
     <!-- 项目基本信息 -->
-    <artifactId>monitoring-agent</artifactId>
+    <artifactId>phoenix-agent</artifactId>
     <packaging>jar</packaging>
-    <name>monitoring-agent</name>
+    <name>phoenix-agent</name>
     <description>监控代理端</description>
 
     <!-- 属性 -->
@@ -28,12 +28,12 @@
         <!-- 监控WEB公共模块依赖 -->
         <dependency>
             <groupId>com.gitee.pifeng</groupId>
-            <artifactId>monitoring-common-web</artifactId>
+            <artifactId>phoenix-common-web</artifactId>
         </dependency>
         <!-- springboot项目集成监控依赖，使之拥有监控功能 -->
         <dependency>
             <groupId>com.gitee.pifeng</groupId>
-            <artifactId>monitoring-client-spring-boot-starter</artifactId>
+            <artifactId>phoenix-client-spring-boot-starter</artifactId>
         </dependency>
 
         <!--lombok依赖 -->
@@ -65,7 +65,7 @@
 
     <!-- 构建 -->
     <build>
-        <finalName>monitoring-agent</finalName>
+        <finalName>phoenix-agent</finalName>
         <defaultGoal>package</defaultGoal>
         <plugins>
             <plugin>
