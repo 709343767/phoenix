@@ -132,7 +132,7 @@
 
     <!-- 构建 -->
     <build>
-        <finalName>monitoring-ui</finalName>
+        <finalName>phoenix-ui</finalName>
         <defaultGoal>package</defaultGoal>
         <plugins>
             <plugin>
