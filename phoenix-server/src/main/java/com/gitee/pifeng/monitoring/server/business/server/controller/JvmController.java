@@ -1,5 +1,7 @@
 package com.gitee.pifeng.monitoring.server.business.server.controller;
 
+import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.date.TimeInterval;
 import com.gitee.pifeng.monitoring.common.domain.Result;
 import com.gitee.pifeng.monitoring.common.dto.BaseResponsePackage;
 import com.gitee.pifeng.monitoring.common.dto.JvmPackage;
@@ -7,6 +9,7 @@ import com.gitee.pifeng.monitoring.server.business.server.core.PackageConstructo
 import com.gitee.pifeng.monitoring.server.business.server.service.IJvmService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author 皮锋
  * @custom.date 2020/8/15 22:29
  */
+@Slf4j
 @RestController
 @RequestMapping("/jvm")
 @Api(tags = "信息包.Java虚拟机信息包")
@@ -45,8 +49,14 @@ public class JvmController {
     @ApiOperation(value = "接收和响应监控代理端程序或者监控客户端程序发的Java虚拟机信息包", notes = "接收Java虚拟机信息包")
     @PostMapping("/accept-jvm-package")
     public BaseResponsePackage acceptJvmPackage(@RequestBody JvmPackage jvmPackage) {
+        // 计时器
+        TimeInterval timer = DateUtil.timer();
         Result result = this.jvmService.dealJvmPackage(jvmPackage);
-        return new PackageConstructor().structureBaseResponsePackage(result);
+        BaseResponsePackage baseResponsePackage = new PackageConstructor().structureBaseResponsePackage(result);
+        // 时间差（毫秒）
+        String betweenDay = timer.intervalPretty();
+        log.info("处理JVM信息包耗时：{}", betweenDay);
+        return baseResponsePackage;
     }
 
 }

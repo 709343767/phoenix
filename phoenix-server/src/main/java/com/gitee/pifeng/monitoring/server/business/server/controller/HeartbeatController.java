@@ -1,5 +1,7 @@
 package com.gitee.pifeng.monitoring.server.business.server.controller;
 
+import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.date.TimeInterval;
 import com.gitee.pifeng.monitoring.common.domain.Result;
 import com.gitee.pifeng.monitoring.common.dto.BaseResponsePackage;
 import com.gitee.pifeng.monitoring.common.dto.HeartbeatPackage;
@@ -8,6 +10,7 @@ import com.gitee.pifeng.monitoring.server.business.server.core.PackageConstructo
 import com.gitee.pifeng.monitoring.server.business.server.service.IHeartbeatService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author 皮锋
  * @custom.date 2020年3月4日 下午12:16:06
  */
+@Slf4j
 @RestController
 @RequestMapping("/heartbeat")
 @Api(tags = "信息包.心跳包")
@@ -47,9 +51,15 @@ public class HeartbeatController {
     @ApiOperation(value = "接收和响应监控代理端程序或者监控客户端程序发的心跳包", notes = "接收心跳包")
     @PostMapping("/accept-heartbeat-package")
     public BaseResponsePackage acceptHeartbeatPackage(@RequestBody HeartbeatPackage heartbeatPackage) throws NetException {
+        // 计时器
+        TimeInterval timer = DateUtil.timer();
         // 返回结果
         Result result = this.heartbeatService.dealHeartbeatPackage(heartbeatPackage);
-        return new PackageConstructor().structureBaseResponsePackage(result);
+        BaseResponsePackage baseResponsePackage = new PackageConstructor().structureBaseResponsePackage(result);
+        // 时间差（毫秒）
+        String betweenDay = timer.intervalPretty();
+        log.debug("处理心跳包耗时：{}", betweenDay);
+        return baseResponsePackage;
     }
 
 }
