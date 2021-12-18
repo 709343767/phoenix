@@ -4,7 +4,7 @@
 
 - 应用程序
 
-  默认支持Java应用程序，监控内容包括：在线状态、业务埋点。其它应用程序需要自己开发客户端，来调用接口与服务端或者代理端通信（心跳接口、服务器信息接口、告警接口）；
+  默认支持Java应用程序，监控内容包括：在线状态、JVM、业务埋点。其它应用程序需要自己开发客户端，来调用接口与服务端或者代理端通信（心跳接口、服务器信息接口、告警接口）；
 
 - JVM
 
@@ -12,7 +12,8 @@
 
 - 服务器
 
-  支持Windows、Linux，监控内容包括：在线状态、操作系统、CPU、进程、磁盘、内存、网卡、电池、传感器；
+  支持主流服务器，如Linux、Windows、macOS、Unix等；    
+  监控内容包括：在线状态、操作系统、CPU、进程、磁盘、内存、网卡、电池、传感器；
 
 - 数据库
 
@@ -52,11 +53,11 @@
   数据库连接池：Alibaba Druid  
   日志管理：SLF4J、Logback  
   前端框架：Layui、ECharts  
-  监控框架：sigar、oshi
+  监控框架：Sigar、oshi
   
 - 模块结构
 
-  平台使用Java+Layui+ECharts开发，数据库采用MySQL。
+  平台使用Java + Layui + ECharts开发，数据库采用MySQL。
 
   phoenix（监控平台父工程）  
   ├── phoenix-common（监控公共模块父工程）  
@@ -130,7 +131,7 @@
 
 ### 初始化“监控数据库”
 
-请下载项目源码并解压，进入目录：**/phoenix/doc/数据库设计/sql/mysql** ，找到SQL脚本并执行即可。
+下载项目源码并解压，进入目录：**/phoenix/doc/数据库设计/sql/mysql** ，找到SQL脚本并执行即可。
 
 ```
 phoenix.sql
@@ -245,7 +246,7 @@ phoenix.sql
 
 ### 业务埋点
 
-Java应用程序只要集成了监控客户端，就具有业务埋点监控的能力，通过 **Monitor.buryingPoint()** 方法定时监控业务运行情况，通过 **Monitor.sendAlarm()** 发送告警。具体使用实例如下：
+Java应用程序只要集成了监控客户端，就具有业务埋点监控的能力，通过 **Monitor.buryingPoint()** 方法定时监控业务运行情况，通过 **Monitor.sendAlarm()** 发送告警。具体使用示例如下：
   
 ```
 // 业务埋点监控
@@ -292,24 +293,24 @@ ScheduledExecutorService service = Monitor.buryingPoint(() -> {
 ![docker_host_config](https://gitee.com/monitoring-platform/phoenix/raw/master/doc/%E5%85%B6%E5%AE%83/docker_host_config.png "docker_host_config")  
 3. 编译项目打包项目并打包镜像：  
    mvn -Dmaven.test.skip=true clean package docker:build  
-4. 运行：脚本位置在**phoenix/doc/脚本/**，脚本名为：**docker_run.sh**，可以自己根据需要灵活修改。  
+4. 运行：脚本位置在 **phoenix/doc/脚本/**，脚本名为：**docker_run.sh**，可以自己根据需要灵活修改。  
 
 - 方式二：服务器本地构建docker镜像  
 
 1. 打包可执行jar，并上传至服务器；  
-2. 上传**Dockerfile**文件至服务器，文件位置在：**phoenix/phoenix-agent/src/main/docker/Dockerfile、phoenix/phoenix-server/src/main/docker/Dockerfile、phoenix/phoenix-ui/src/main/docker/Dockerfile**，  
-   **Dockerfile**要与对应的jar包放在同一目录下；  
-3. 运行**Dockerfile**，构建docker镜像；  
-4. 运行：脚本位置在**phoenix/doc/脚本/**，脚本名为：**docker_run.sh**，可以自己根据需要灵活修改。
+2. 上传 **Dockerfile** 文件至服务器，文件位置在：**phoenix/phoenix-agent/src/main/docker/Dockerfile、phoenix/phoenix-server/src/main/docker/Dockerfile、phoenix/phoenix-ui/src/main/docker/Dockerfile**，  
+   **Dockerfile** 要与对应的jar包放在同一目录下；  
+3. 运行 **Dockerfile**，构建docker镜像；  
+4. 运行：脚本位置在 **phoenix/doc/脚本/**，脚本名为：**docker_run.sh**，可以自己根据需要灵活修改。
 
 ### 集群部署
 
 **监控服务端、监控UI端**支持集群部署，提升系统的容灾和可用性。
 
-集群部署时，几点要求和建议：   
+集群部署时的几点要求和建议：   
 1. DB配置保持一致；  
 2. 集群机器时钟保持一致（单机集群忽视）；  
-3. 建议：推荐通过nginx为集群做负载均衡，分配域名。监控服务端、监控UI端均通过该域名进行访问。  
+3. 建议：推荐通过nginx为集群做负载均衡。监控服务端、监控UI端均通过nginx进行访问。  
 
 ![集群部署架构](https://gitee.com/monitoring-platform/phoenix/raw/master/doc/%E9%9B%86%E7%BE%A4%E9%83%A8%E7%BD%B2%E6%9E%B6%E6%9E%84.png "集群部署架构")
 
@@ -369,7 +370,4 @@ ScheduledExecutorService service = Monitor.buryingPoint(() -> {
 
 邮箱：709343767@qq.com  
 QQ群：[773127639](https://qm.qq.com/cgi-bin/qm/qr?k=a0yY8EZMVTwvt8Tc1uWuk2hGpvhnyp3C&authKey=nvLNq0pw1yo32ZxbW8rxkYa6yyDn4Vc7f4R65CiifQ+RAgyWXuhszxIKSCB+eb5q&noverify=0)  
-
-
-
 
