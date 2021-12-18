@@ -1,5 +1,7 @@
 package com.gitee.pifeng.monitoring.server.business.server.controller;
 
+import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.date.TimeInterval;
 import com.alibaba.fastjson.JSONObject;
 import com.gitee.pifeng.monitoring.common.domain.Result;
 import com.gitee.pifeng.monitoring.common.dto.BaseRequestPackage;
@@ -9,6 +11,7 @@ import com.gitee.pifeng.monitoring.server.business.server.core.PackageConstructo
 import com.gitee.pifeng.monitoring.server.business.server.service.IDbInfo4RedisService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author 皮锋
  * @custom.date 2021/10/16 20:17
  */
+@Slf4j
 @RestController
 @Api(tags = "数据库信息.Redis")
 @RequestMapping("/db-info4redis")
@@ -48,12 +52,18 @@ public class DbInfo4RedisServiceController {
     @ApiOperation(value = "获取Redis信息")
     @PostMapping("/get-redis-info")
     public BaseResponsePackage getRedisInfo(@RequestBody BaseRequestPackage baseRequestPackage) throws DbException {
+        // 计时器
+        TimeInterval timer = DateUtil.timer();
         JSONObject extraMsg = baseRequestPackage.getExtraMsg();
         String host = extraMsg.getString("host");
         int port = extraMsg.getIntValue("port");
         String password = extraMsg.getString("password");
         String info = this.dbInfo4RedisService.getRedisInfo(host, port, password);
-        return new PackageConstructor().structureBaseResponsePackage(Result.builder().isSuccess(true).msg(info).build());
+        BaseResponsePackage baseResponsePackage = new PackageConstructor().structureBaseResponsePackage(Result.builder().isSuccess(true).msg(info).build());
+        // 时间差（毫秒）
+        String betweenDay = timer.intervalPretty();
+        log.info("获取Redis信息耗时：{}", betweenDay);
+        return baseResponsePackage;
     }
 
 }

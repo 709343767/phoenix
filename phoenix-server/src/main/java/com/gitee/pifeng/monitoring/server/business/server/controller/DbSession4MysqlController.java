@@ -1,5 +1,7 @@
 package com.gitee.pifeng.monitoring.server.business.server.controller;
 
+import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.date.TimeInterval;
 import cn.hutool.db.Entity;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -12,6 +14,7 @@ import com.gitee.pifeng.monitoring.server.business.server.core.PackageConstructo
 import com.gitee.pifeng.monitoring.server.business.server.service.IDbSession4MysqlService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,6 +32,7 @@ import java.util.List;
  * @author 皮锋
  * @custom.date 2020/12/22 14:36
  */
+@Slf4j
 @RestController
 @Api(tags = "数据库会话.MySQL")
 @RequestMapping("/db-session4mysql")
@@ -54,13 +58,19 @@ public class DbSession4MysqlController {
     @ApiOperation(value = "获取会话列表")
     @PostMapping("/get-session-list")
     public BaseResponsePackage getSessionList(@RequestBody BaseRequestPackage baseRequestPackage) throws SQLException {
+        // 计时器
+        TimeInterval timer = DateUtil.timer();
         JSONObject extraMsg = baseRequestPackage.getExtraMsg();
         String url = extraMsg.getString("url");
         String username = extraMsg.getString("username");
         String password = extraMsg.getString("password");
         List<Entity> entities = this.dbSession4MysqlService.getSessionList(url, username, password);
         String jsonString = JSON.toJSONString(entities);
-        return new PackageConstructor().structureBaseResponsePackage(Result.builder().isSuccess(true).msg(jsonString).build());
+        BaseResponsePackage baseResponsePackage = new PackageConstructor().structureBaseResponsePackage(Result.builder().isSuccess(true).msg(jsonString).build());
+        // 时间差（毫秒）
+        String betweenDay = timer.intervalPretty();
+        log.info("获取会话列表耗时：{}", betweenDay);
+        return baseResponsePackage;
     }
 
     /**
@@ -77,6 +87,8 @@ public class DbSession4MysqlController {
     @ApiOperation(value = "结束会话")
     @PostMapping("/destroy-session")
     public BaseResponsePackage destroySession(@RequestBody BaseRequestPackage baseRequestPackage) throws SQLException {
+        // 计时器
+        TimeInterval timer = DateUtil.timer();
         JSONObject extraMsg = baseRequestPackage.getExtraMsg();
         String url = extraMsg.getString("url");
         String username = extraMsg.getString("username");
@@ -84,7 +96,11 @@ public class DbSession4MysqlController {
         List<Long> sessionIds = extraMsg.getObject("sessionIds", new TypeReference<List<Long>>() {
         });
         this.dbSession4MysqlService.destroySession(url, username, password, sessionIds);
-        return new PackageConstructor().structureBaseResponsePackage(Result.builder().isSuccess(true).msg(ResultMsgConstants.SUCCESS).build());
+        BaseResponsePackage baseResponsePackage = new PackageConstructor().structureBaseResponsePackage(Result.builder().isSuccess(true).msg(ResultMsgConstants.SUCCESS).build());
+        // 时间差（毫秒）
+        String betweenDay = timer.intervalPretty();
+        log.info("结束会话耗时：{}", betweenDay);
+        return baseResponsePackage;
     }
 
 }

@@ -58,7 +58,7 @@ public class HeartbeatController {
         BaseResponsePackage baseResponsePackage = new PackageConstructor().structureBaseResponsePackage(result);
         // 时间差（毫秒）
         String betweenDay = timer.intervalPretty();
-        log.debug("处理心跳包耗时：{}", betweenDay);
+        log.info("处理心跳包耗时：{}", betweenDay);
         return baseResponsePackage;
     }
 
