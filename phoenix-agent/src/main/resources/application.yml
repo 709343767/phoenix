@@ -1,11 +1,11 @@
 ##############################################server配置#################################################
 server:
   servlet:
-    context-path: /monitoring-agent
+    context-path: /phoenix-agent
   undertow:
     accesslog:
       #Undertow日志存放目录
-      dir: persistent-monitoring/logs/monitoring-agent
+      dir: persistent-phoenix/logs/phoenix-agent
       #是否启动日志
       enabled: true
       #日志格式
@@ -39,7 +39,7 @@ spring:
   #支持名称相同的bean的覆盖
   #allow-bean-definition-overriding: true
   application:
-    name: monitoring-agent
+    name: phoenix-agent
   profiles:
     active:
       - dev

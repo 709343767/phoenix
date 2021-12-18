@@ -1,13 +1,13 @@
 ##############################################server配置#################################################
 server:
   servlet:
-    context-path: /monitoring-server
+    context-path: /phoenix-server
     session:
       timeout: 30m
   undertow:
     accesslog:
       #Undertow日志存放目录
-      dir: persistent-monitoring/logs/monitoring-server
+      dir: persistent-phoenix/logs/phoenix-server
       #是否启动日志
       enabled: true
       #日志格式
@@ -41,7 +41,7 @@ spring:
   #支持名称相同的bean的覆盖
   #allow-bean-definition-overriding: true
   application:
-    name: monitoring-server
+    name: phoenix-server
   profiles:
     active:
       - dev
@@ -59,7 +59,7 @@ spring:
       org:
         quartz:
           scheduler:
-            instanceName: monitoringClusteredScheduler
+            instanceName: phoenixClusteredScheduler
             #默认主机名和时间戳生成实例ID，可以是任何字符串，但对于所有调度程序来说，必须是唯一的
             instanceId: AUTO
           jobStore:

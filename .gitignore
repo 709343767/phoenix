@@ -6,5 +6,5 @@
 .git
 .idea
 .settings
-persistent-monitoring
+persistent-phoenix
 target

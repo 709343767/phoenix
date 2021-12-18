@@ -5,9 +5,9 @@
 
  Date: 04/12/2021 23:14:18
 */
-CREATE database if NOT EXISTS `monitoring` default character set utf8mb4 collate utf8mb4_general_ci;
+CREATE database if NOT EXISTS `phoenix` default character set utf8mb4 collate utf8mb4_general_ci;
 
-use `monitoring`;
+use `phoenix`;
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 

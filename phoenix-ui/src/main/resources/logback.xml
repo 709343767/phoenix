@@ -5,7 +5,7 @@
 <configuration scan="true" scanPeriod="60 hours"
                debug="false">
     <!--定义日志文件的存储地址，勿在LogBack的配置中使用相对路径 -->
-    <property name="LOG_HOME" value="persistent-monitoring/logs/monitoring-ui"/>
+    <property name="LOG_HOME" value="persistent-phoenix/logs/phoenix-ui"/>
 
     <!-- 控制台输出 -->
     <appender name="STDOUT"

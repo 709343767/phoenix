@@ -1,13 +1,13 @@
 ##############################################server配置#################################################
 server:
   servlet:
-    context-path: /monitoring-ui
+    context-path: /phoenix-ui
     session:
       timeout: 30m
   undertow:
     accesslog:
       #Undertow日志存放目录
-      dir: persistent-monitoring/logs/monitoring-ui
+      dir: persistent-phoenix/logs/phoenix-ui
       #是否启动日志
       enabled: true
       #日志格式
@@ -52,7 +52,7 @@ spring:
   #支持名称相同的bean的覆盖
   #allow-bean-definition-overriding: true
   application:
-    name: monitoring-ui
+    name: phoenix-ui
   profiles:
     active:
       - dev
