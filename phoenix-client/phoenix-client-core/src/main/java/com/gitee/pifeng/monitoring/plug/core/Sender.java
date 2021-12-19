@@ -1,5 +1,7 @@
 package com.gitee.pifeng.monitoring.plug.core;
 
+import cn.hutool.core.util.CharsetUtil;
+import cn.hutool.core.util.ZipUtil;
 import com.alibaba.fastjson.JSON;
 import com.gitee.pifeng.monitoring.common.dto.CiphertextPackage;
 import com.gitee.pifeng.monitoring.common.util.secure.SecureUtils;
@@ -45,8 +47,10 @@ public class Sender {
     public static String send(final String url, final String json) throws IOException {
         // 打印发送的数据包
         log.debug("发送数据包：{}", json);
+        // 压缩数据包
+        byte[] gzip = ZipUtil.gzip(json, CharsetUtil.UTF_8);
         // 加密请求数据
-        String encrypt = SecureUtils.encrypt(json);
+        String encrypt = SecureUtils.encrypt(gzip);
         CiphertextPackage requestCiphertextPackage = new CiphertextPackage(encrypt);
         // 发送请求
         EnumPoolingHttpUtils httpClient = EnumPoolingHttpUtils.getInstance();

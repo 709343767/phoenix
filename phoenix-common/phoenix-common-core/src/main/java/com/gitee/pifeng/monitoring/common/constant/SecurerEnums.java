@@ -25,6 +25,11 @@ public enum SecurerEnums implements ISecurer {
         }
 
         @Override
+        public String encrypt(byte[] arry) {
+            return DesEncryptUtils.encrypt(arry);
+        }
+
+        @Override
         public String decrypt(String str) {
             return DesEncryptUtils.decrypt(str);
         }
@@ -40,6 +45,11 @@ public enum SecurerEnums implements ISecurer {
         }
 
         @Override
+        public String encrypt(byte[] arry) {
+            return AesEncryptUtils.encrypt(arry);
+        }
+
+        @Override
         public String decrypt(String str) {
             return AesEncryptUtils.decrypt(str);
         }
@@ -52,6 +62,11 @@ public enum SecurerEnums implements ISecurer {
         @Override
         public String encrypt(String str) {
             return Sm4EncryptUtils.encrypt(str);
+        }
+
+        @Override
+        public String encrypt(byte[] arry) {
+            return Sm4EncryptUtils.encrypt(arry);
         }
 
         @Override

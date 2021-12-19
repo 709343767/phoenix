@@ -24,6 +24,18 @@ public interface ISecurer {
 
     /**
      * <p>
+     * 字节数组加密，返回字符串
+     * </p>
+     *
+     * @param arry 需要加密的字节数组
+     * @return 加密后的字符串
+     * @author 皮锋
+     * @custom.date 2021/12/19 22:39
+     */
+    String encrypt(byte[] arry);
+
+    /**
+     * <p>
      * 字符串解密
      * </p>
      *

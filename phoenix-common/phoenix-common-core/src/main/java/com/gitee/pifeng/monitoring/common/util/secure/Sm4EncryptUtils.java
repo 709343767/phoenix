@@ -3,6 +3,7 @@ package com.gitee.pifeng.monitoring.common.util.secure;
 import cn.hutool.crypto.SmUtil;
 import com.gitee.pifeng.monitoring.common.init.InitSecure;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
 /**
@@ -27,7 +28,22 @@ public class Sm4EncryptUtils extends InitSecure {
      */
     public static String encrypt(String str) {
         byte[] key = Base64.getDecoder().decode(SECRET_KEY_SM4);
-        return SmUtil.sm4(key).encryptBase64(str);
+        return SmUtil.sm4(key).encryptBase64(str, StandardCharsets.UTF_8);
+    }
+
+    /**
+     * <p>
+     * 字节数组SM4加密
+     * </p>
+     *
+     * @param arry 需要加密的字节数组
+     * @return 加密后的字符串
+     * @author 皮锋
+     * @custom.date 2021/8/14 9:01
+     */
+    public static String encrypt(byte[] arry) {
+        byte[] key = Base64.getDecoder().decode(SECRET_KEY_SM4);
+        return SmUtil.sm4(key).encryptBase64(arry);
     }
 
     /**
@@ -42,7 +58,7 @@ public class Sm4EncryptUtils extends InitSecure {
      */
     public static String decrypt(String str) {
         byte[] key = Base64.getDecoder().decode(SECRET_KEY_SM4);
-        return SmUtil.sm4(key).decryptStr(str);
+        return SmUtil.sm4(key).decryptStr(str, StandardCharsets.UTF_8);
     }
 
 }

@@ -33,6 +33,21 @@ public class AesEncryptUtils extends InitSecure {
 
     /**
      * <p>
+     * 字节数组AES加密
+     * </p>
+     *
+     * @param arry 需要加密的字字节数组
+     * @return 加密后的字符串
+     * @author 皮锋
+     * @custom.date 2021/12/19 22:45
+     */
+    public static String encrypt(byte[] arry) {
+        byte[] key = Base64.getDecoder().decode(SECRET_KEY_AES);
+        return SecureUtil.aes(key).encryptBase64(arry);
+    }
+
+    /**
+     * <p>
      * 字符串AES解密
      * </p>
      *

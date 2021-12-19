@@ -6,6 +6,7 @@ import com.gitee.pifeng.monitoring.common.init.InitSecure;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
 /**
@@ -35,6 +36,24 @@ public class SecureUtils extends InitSecure {
             return str;
         }
         return SecurerEnums.valueOf(StringUtils.upperCase(SECRET_TYPE)).encrypt(str);
+    }
+
+    /**
+     * <p>
+     * 字节数组加密
+     * </p>
+     *
+     * @param arry 需要加密的字字节数组
+     * @return 加密后的字符串
+     * @author 皮锋
+     * @custom.date 2021/12/19 22:51
+     */
+    public static String encrypt(byte[] arry) {
+        // 没选择加解密类型，则不加密
+        if (StringUtils.isBlank(SECRET_TYPE)) {
+            return new String(arry, StandardCharsets.UTF_8);
+        }
+        return SecurerEnums.valueOf(StringUtils.upperCase(SECRET_TYPE)).encrypt(arry);
     }
 
     /**
