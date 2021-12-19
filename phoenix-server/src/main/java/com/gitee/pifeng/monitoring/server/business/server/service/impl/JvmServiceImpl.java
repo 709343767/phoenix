@@ -31,6 +31,12 @@ import java.util.Map;
 public class JvmServiceImpl implements IJvmService {
 
     /**
+     * 应用实例数据访问对象
+     */
+    @Autowired
+    private IMonitorInstanceDao monitorInstanceDao;
+
+    /**
      * java虚拟机运行时信息数据访问对象
      */
     @Autowired
@@ -79,6 +85,13 @@ public class JvmServiceImpl implements IJvmService {
     @Transactional(rollbackFor = Throwable.class)
     @Override
     public Result dealJvmPackage(JvmPackage jvmPackage) {
+        // 先判断有没有此应用实例
+        LambdaQueryWrapper<MonitorInstance> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(MonitorInstance::getInstanceId, jvmPackage.getInstanceId());
+        Integer integer = this.monitorInstanceDao.selectCount(lambdaQueryWrapper);
+        if (null == integer || integer <= 0) {
+            return Result.builder().isSuccess(false).msg(ResultMsgConstants.FAILURE).build();
+        }
         // 把java虚拟机运行时信息添加或更新到数据库
         this.operateMonitorJvmRuntime(jvmPackage);
         // 把java虚拟机类加载信息添加或更新到数据库
