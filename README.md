@@ -293,15 +293,15 @@ ScheduledExecutorService service = Monitor.buryingPoint(() -> {
 ![docker_host_config](https://gitee.com/monitoring-platform/phoenix/raw/master/doc/%E5%85%B6%E5%AE%83/docker_host_config.png "docker_host_config")  
 3. 编译项目打包项目并打包镜像：  
    mvn -Dmaven.test.skip=true clean package docker:build  
-4. 运行：脚本位置在 **phoenix/doc/脚本/**，脚本名为：**docker_run.sh**，可以自己根据需要灵活修改。  
+4. 运行：脚本位置在 **phoenix/doc/脚本/**，脚本名为：**docker_run_ui.sh、docker_run_agent.sh、docker_run_server.sh**，可以自己根据需要灵活修改。
 
 - 方式二：服务器本地构建docker镜像  
 
 1. 打包可执行jar，并上传至服务器；  
-2. 上传 **Dockerfile** 文件至服务器，文件位置在：**phoenix/phoenix-agent/src/main/docker/Dockerfile、phoenix/phoenix-server/src/main/docker/Dockerfile、phoenix/phoenix-ui/src/main/docker/Dockerfile**，  
+2. 上传 **Dockerfile** 文件至服务器，文件位置在：**phoenix/phoenix-ui/src/main/docker/Dockerfile、phoenix/phoenix-agent/src/main/docker/Dockerfile、phoenix/phoenix-server/src/main/docker/Dockerfile**，
    **Dockerfile** 要与对应的jar包放在同一目录下；  
-3. 运行 **Dockerfile**，构建docker镜像；  
-4. 运行：脚本位置在 **phoenix/doc/脚本/**，脚本名为：**docker_run.sh**，可以自己根据需要灵活修改。
+3. 运行 **Dockerfile**，构建docker镜像，运行脚本位置在：**phoenix/doc/脚本/**，脚本名为：**docker_build_ui.sh、docker_build_agent.sh、docker_build_server.sh**；  
+4. 运行：脚本位置在 **phoenix/doc/脚本/**，脚本名为：**docker_run_ui.sh、docker_run_agent.sh、docker_run_server.sh**，可以自己根据需要灵活修改。
 
 ### 集群部署
 
