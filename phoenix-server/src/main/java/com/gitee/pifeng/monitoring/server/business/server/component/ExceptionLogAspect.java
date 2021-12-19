@@ -105,7 +105,7 @@ public class ExceptionLogAspect {
         builder.excName(excName);
         builder.excMessage(ExceptionUtils.stackTraceToString(excName, e.getMessage(), e.getStackTrace()));
         builder.userId(-1L);
-        builder.username("“monitoring-server”服务");
+        builder.username("“phoenix-server”服务");
         builder.operMethod(methodName);
         builder.uri(request != null ? request.getRequestURI() : null);
         builder.ip(request != null ? AccessObjectUtils.getClientAddress(request) : null);

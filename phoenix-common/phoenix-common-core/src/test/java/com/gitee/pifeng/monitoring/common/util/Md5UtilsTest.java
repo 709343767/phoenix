@@ -23,7 +23,7 @@ public class Md5UtilsTest extends TestCase {
      * @custom.date 2021/8/10 10:27
      */
     public void testEncrypt32() {
-        String encrypt32 = Md5Utils.encrypt32("http://localhost:12000/monitoring-agent");
+        String encrypt32 = Md5Utils.encrypt32("http://localhost:12000/phoenix-agent");
         log.info(encrypt32);
         assertEquals(encrypt32, "c366475a6c96f33a7eea8bc3126d1f4c");
     }
@@ -37,7 +37,7 @@ public class Md5UtilsTest extends TestCase {
      * @custom.date 2021/8/10 10:28
      */
     public void testEncrypt16() {
-        String encrypt16 = Md5Utils.encrypt16("http://localhost:12000/monitoring-agent");
+        String encrypt16 = Md5Utils.encrypt16("http://localhost:12000/phoenix-agent");
         log.info(encrypt16);
         assertEquals(encrypt16, "6c96f33a7eea8bc3");
     }

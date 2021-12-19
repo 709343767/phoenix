@@ -55,7 +55,7 @@ public class MyBatisPlusAutoGenerator {
 
         // 全局配置
         GlobalConfig gc = new GlobalConfig();
-        String projectPath = System.getProperty("user.dir") + File.separator + "monitoring-ui";
+        String projectPath = System.getProperty("user.dir") + File.separator + "phoenix-ui";
         gc.setOutputDir(projectPath + "/src/main/java");
         gc.setAuthor("皮锋");
         gc.setOpen(false);
@@ -72,7 +72,7 @@ public class MyBatisPlusAutoGenerator {
 
         // 数据源配置
         DataSourceConfig dsc = new DataSourceConfig();
-        dsc.setUrl("jdbc:mysql://localhost:3306/monitoring?useSSL=false&serverTimezone=GMT%2b8&useUnicode=true&characterEncoding=utf-8");
+        dsc.setUrl("jdbc:mysql://localhost:3306/phoenix?useSSL=false&serverTimezone=GMT%2b8&useUnicode=true&characterEncoding=utf-8");
         dsc.setDbType(DbType.MYSQL);
         dsc.setDriverName("com.mysql.cj.jdbc.Driver");
         dsc.setUsername("root");
