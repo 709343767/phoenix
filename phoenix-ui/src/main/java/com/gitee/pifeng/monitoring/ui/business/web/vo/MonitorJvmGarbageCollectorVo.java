@@ -82,7 +82,9 @@ public class MonitorJvmGarbageCollectorVo implements ISuperBean {
      * @custom.date 2020/9/3 9:22
      */
     public MonitorJvmGarbageCollectorVo convertFor(MonitorJvmGarbageCollector monitorJvmGarbageCollector) {
-        BeanUtils.copyProperties(monitorJvmGarbageCollector, this);
+        if (null != monitorJvmGarbageCollector) {
+            BeanUtils.copyProperties(monitorJvmGarbageCollector, this);
+        }
         return this;
     }
 

@@ -117,7 +117,9 @@ public class MonitorServerCpuHistoryVo implements ISuperBean {
      * @custom.date 2020/9/3 9:22
      */
     public MonitorServerCpuHistoryVo convertFor(MonitorServerCpuHistory monitorServerCpuHistory) {
-        BeanUtils.copyProperties(monitorServerCpuHistory, this);
+        if (null != monitorServerCpuHistory) {
+            BeanUtils.copyProperties(monitorServerCpuHistory, this);
+        }
         return this;
     }
 

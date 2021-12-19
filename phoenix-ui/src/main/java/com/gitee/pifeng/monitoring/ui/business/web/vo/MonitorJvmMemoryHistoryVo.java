@@ -97,7 +97,9 @@ public class MonitorJvmMemoryHistoryVo implements ISuperBean {
      * @custom.date 2020/9/3 9:22
      */
     public MonitorJvmMemoryHistoryVo convertFor(MonitorJvmMemoryHistory monitorJvmMemoryHistory) {
-        BeanUtils.copyProperties(monitorJvmMemoryHistory, this);
+        if (null != monitorJvmMemoryHistory) {
+            BeanUtils.copyProperties(monitorJvmMemoryHistory, this);
+        }
         return this;
     }
 

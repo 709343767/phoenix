@@ -100,7 +100,9 @@ public class MonitorInstanceVo implements ISuperBean {
      * @custom.date 2020/9/3 9:22
      */
     public MonitorInstanceVo convertFor(MonitorInstance monitorInstance) {
-        BeanUtils.copyProperties(monitorInstance, this);
+        if (null != monitorInstance) {
+            BeanUtils.copyProperties(monitorInstance, this);
+        }
         return this;
     }
 

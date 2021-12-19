@@ -88,7 +88,9 @@ public class MonitorUserVo implements ISuperBean {
      * @custom.date 2020/7/8 9:22
      */
     public MonitorUserVo convertFor(MonitorUser monitorUser) {
-        BeanUtils.copyProperties(monitorUser, this);
+        if (null != monitorUser) {
+            BeanUtils.copyProperties(monitorUser, this);
+        }
         return this;
     }
 

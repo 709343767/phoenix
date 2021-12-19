@@ -105,7 +105,9 @@ public class MonitorAlarmRecordVo implements ISuperBean {
      * @custom.date 2020/7/14 10:34
      */
     public MonitorAlarmRecordVo convertFor(MonitorAlarmRecord monitorAlarmRecord) {
-        BeanUtils.copyProperties(monitorAlarmRecord, this);
+        if (null != monitorAlarmRecord) {
+            BeanUtils.copyProperties(monitorAlarmRecord, this);
+        }
         return this;
     }
 

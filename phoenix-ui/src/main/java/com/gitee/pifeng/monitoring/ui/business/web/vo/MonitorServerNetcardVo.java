@@ -124,7 +124,9 @@ public class MonitorServerNetcardVo implements ISuperBean {
      * @custom.date 2020/9/3 9:22
      */
     public MonitorServerNetcardVo convertFor(MonitorServerNetcard monitorServerNetcard) {
-        BeanUtils.copyProperties(monitorServerNetcard, this);
+        if (null != monitorServerNetcard) {
+            BeanUtils.copyProperties(monitorServerNetcard, this);
+        }
         return this;
     }
 

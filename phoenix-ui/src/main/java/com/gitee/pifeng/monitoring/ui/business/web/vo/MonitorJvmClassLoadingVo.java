@@ -82,7 +82,9 @@ public class MonitorJvmClassLoadingVo implements ISuperBean {
      * @custom.date 2020/9/3 9:22
      */
     public MonitorJvmClassLoadingVo convertFor(MonitorJvmClassLoading monitorJvmClassLoading) {
-        BeanUtils.copyProperties(monitorJvmClassLoading, this);
+        if (null != monitorJvmClassLoading) {
+            BeanUtils.copyProperties(monitorJvmClassLoading, this);
+        }
         return this;
     }
 

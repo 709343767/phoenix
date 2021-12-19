@@ -110,7 +110,9 @@ public class MonitorServerProcessVo implements ISuperBean {
      * @custom.date 2021/9/15 14:16
      */
     public MonitorServerProcessVo convertFor(MonitorServerProcess monitorServerProcess) {
-        BeanUtils.copyProperties(monitorServerProcess, this);
+        if (null != monitorServerProcess) {
+            BeanUtils.copyProperties(monitorServerProcess, this);
+        }
         return this;
     }
 

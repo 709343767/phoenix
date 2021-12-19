@@ -87,7 +87,9 @@ public class MonitorLogExceptionVo implements ISuperBean {
      * @custom.date 2021/6/9 22:22
      */
     public MonitorLogExceptionVo convertFor(MonitorLogException monitorLogException) {
-        BeanUtils.copyProperties(monitorLogException, this);
+        if (null != monitorLogException) {
+            BeanUtils.copyProperties(monitorLogException, this);
+        }
         return this;
     }
 

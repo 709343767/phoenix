@@ -91,7 +91,9 @@ public class MonitorAlarmDefinitionVo implements ISuperBean {
      * @custom.date 2020/7/14 10:34
      */
     public MonitorAlarmDefinitionVo convertFor(MonitorAlarmDefinition monitorAlarmDefinition) {
-        BeanUtils.copyProperties(monitorAlarmDefinition, this);
+        if (null != monitorAlarmDefinition) {
+            BeanUtils.copyProperties(monitorAlarmDefinition, this);
+        }
         return this;
     }
 }

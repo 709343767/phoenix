@@ -100,7 +100,9 @@ public class MonitorServerDiskVo implements ISuperBean {
      * @custom.date 2020/9/3 9:22
      */
     public MonitorServerDiskVo convertFor(MonitorServerDisk monitorServerDisk) {
-        BeanUtils.copyProperties(monitorServerDisk, this);
+        if (null != monitorServerDisk) {
+            BeanUtils.copyProperties(monitorServerDisk, this);
+        }
         return this;
     }
 

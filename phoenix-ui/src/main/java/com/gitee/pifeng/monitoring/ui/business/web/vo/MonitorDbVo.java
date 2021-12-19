@@ -94,7 +94,9 @@ public class MonitorDbVo implements ISuperBean {
      * @custom.date 2020/12/20 9:22
      */
     public MonitorDbVo convertFor(MonitorDb monitorDb) {
-        BeanUtils.copyProperties(monitorDb, this);
+        if (null != monitorDb) {
+            BeanUtils.copyProperties(monitorDb, this);
+        }
         return this;
     }
 

@@ -116,7 +116,9 @@ public class MonitorJvmRuntimeVo implements ISuperBean {
      * @custom.date 2020/9/3 9:22
      */
     public MonitorJvmRuntimeVo convertFor(MonitorJvmRuntime monitorJvmRuntime) {
-        BeanUtils.copyProperties(monitorJvmRuntime, this);
+        if (null != monitorJvmRuntime) {
+            BeanUtils.copyProperties(monitorJvmRuntime, this);
+        }
         return this;
     }
 

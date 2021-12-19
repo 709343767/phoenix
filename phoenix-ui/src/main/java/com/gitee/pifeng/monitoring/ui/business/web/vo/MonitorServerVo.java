@@ -100,7 +100,9 @@ public class MonitorServerVo implements ISuperBean {
      * @custom.date 2020/9/3 9:22
      */
     public MonitorServerVo convertFor(MonitorServer monitorServer) {
-        BeanUtils.copyProperties(monitorServer, this);
+        if (null != monitorServer) {
+            BeanUtils.copyProperties(monitorServer, this);
+        }
         return this;
     }
 

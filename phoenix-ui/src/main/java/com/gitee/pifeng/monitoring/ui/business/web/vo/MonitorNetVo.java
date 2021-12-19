@@ -82,7 +82,9 @@ public class MonitorNetVo implements ISuperBean {
      * @custom.date 2020/9/3 9:22
      */
     public MonitorNetVo convertFor(MonitorNet monitorNet) {
-        BeanUtils.copyProperties(monitorNet, this);
+        if (null != monitorNet) {
+            BeanUtils.copyProperties(monitorNet, this);
+        }
         return this;
     }
 

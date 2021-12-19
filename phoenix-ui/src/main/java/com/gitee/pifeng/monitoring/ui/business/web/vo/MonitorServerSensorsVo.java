@@ -79,7 +79,9 @@ public class MonitorServerSensorsVo implements ISuperBean {
      * @custom.date 2020/9/3 9:22
      */
     public MonitorServerSensorsVo convertFor(MonitorServerSensors monitorServerSensors) {
-        BeanUtils.copyProperties(monitorServerSensors, this);
+        if (null != monitorServerSensors) {
+            BeanUtils.copyProperties(monitorServerSensors, this);
+        }
         return this;
     }
 

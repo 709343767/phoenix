@@ -70,7 +70,9 @@ public class MonitorRoleVo implements ISuperBean {
      * @custom.date 2020/7/14 10:34
      */
     public MonitorRoleVo convertFor(MonitorRole monitorRole) {
-        BeanUtils.copyProperties(monitorRole, this);
+        if (null != monitorRole) {
+            BeanUtils.copyProperties(monitorRole, this);
+        }
         return this;
     }
 

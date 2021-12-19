@@ -73,7 +73,9 @@ public class MonitorServerProcessHistoryVo implements ISuperBean {
      * @custom.date 2021/9/15 14:22
      */
     public MonitorServerProcessHistoryVo convertFor(MonitorServerProcessHistory monitorServerProcessHistory) {
-        BeanUtils.copyProperties(monitorServerProcessHistory, this);
+        if (null != monitorServerProcessHistory) {
+            BeanUtils.copyProperties(monitorServerProcessHistory, this);
+        }
         return this;
     }
 }

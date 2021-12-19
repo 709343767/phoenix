@@ -100,7 +100,9 @@ public class MonitorServerCpuVo implements ISuperBean {
      * @custom.date 2020/9/3 9:22
      */
     public MonitorServerCpuVo convertFor(MonitorServerCpu monitorServerCpu) {
-        BeanUtils.copyProperties(monitorServerCpu, this);
+        if (null != monitorServerCpu) {
+            BeanUtils.copyProperties(monitorServerCpu, this);
+        }
         return this;
     }
 

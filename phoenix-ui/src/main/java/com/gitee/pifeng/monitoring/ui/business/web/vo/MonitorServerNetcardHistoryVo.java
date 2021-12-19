@@ -122,7 +122,9 @@ public class MonitorServerNetcardHistoryVo implements ISuperBean {
      * @custom.date 2020/9/3 9:22
      */
     public MonitorServerNetcardHistoryVo convertFor(MonitorServerNetcardHistory monitorServerNetcardHistory) {
-        BeanUtils.copyProperties(monitorServerNetcardHistory, this);
+        if (null != monitorServerNetcardHistory) {
+            BeanUtils.copyProperties(monitorServerNetcardHistory, this);
+        }
         return this;
     }
 

@@ -109,7 +109,9 @@ public class MonitorServerMemoryVo implements ISuperBean {
      * @custom.date 2020/9/3 9:22
      */
     public MonitorServerMemoryVo convertFor(MonitorServerMemory monitorServerMemory) {
-        BeanUtils.copyProperties(monitorServerMemory, this);
+        if (null != monitorServerMemory) {
+            BeanUtils.copyProperties(monitorServerMemory, this);
+        }
         return this;
     }
 

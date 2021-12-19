@@ -93,7 +93,9 @@ public class MonitorLogOperationVo implements ISuperBean {
      * @custom.date 2021/6/9 22:25
      */
     public MonitorLogOperationVo convertFor(MonitorLogOperation monitorLogOperation) {
-        BeanUtils.copyProperties(monitorLogOperation, this);
+        if (null != monitorLogOperation) {
+            BeanUtils.copyProperties(monitorLogOperation, this);
+        }
         return this;
     }
 
