@@ -13,11 +13,6 @@ import org.apache.commons.lang3.StringUtils;
 public class ZipUtils {
 
     /**
-     * 1M = 1024k = 1048576字节
-     */
-    private final static int LENGTH = 1048576;
-
-    /**
      * <p>
      * 私有化构造方法
      * </p>
