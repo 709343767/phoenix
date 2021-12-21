@@ -3,6 +3,8 @@ package com.gitee.pifeng.monitoring.common.util.secure;
 import junit.framework.TestCase;
 import lombok.extern.slf4j.Slf4j;
 
+import java.nio.charset.StandardCharsets;
+
 /**
  * <p>
  * 测试DES加解密工具类
@@ -23,7 +25,7 @@ public class DesEncryptUtilsTest extends TestCase {
      * @custom.date 2021/8/12 17:14
      */
     public void testEncrypt() {
-        String encrypt = DesEncryptUtils.encrypt("测试DES加解密工具类");
+        String encrypt = DesEncryptUtils.encrypt("测试DES加解密工具类", StandardCharsets.UTF_8);
         log.info("加密结果：" + encrypt);
         assertEquals(encrypt, "9H9PtukuYEeFIMdraLd+3qWX1DLwDwl7ga7sVr5l6DU=");
     }
@@ -37,7 +39,7 @@ public class DesEncryptUtilsTest extends TestCase {
      * @custom.date 2021/8/12 17:15
      */
     public void testDecrypt() {
-        String decrypt = DesEncryptUtils.decrypt("9H9PtukuYEeFIMdraLd+3qWX1DLwDwl7ga7sVr5l6DU=");
+        String decrypt = DesEncryptUtils.decrypt("9H9PtukuYEeFIMdraLd+3qWX1DLwDwl7ga7sVr5l6DU=", StandardCharsets.UTF_8);
         log.info("解密结果：" + decrypt);
         assertEquals(decrypt, "测试DES加解密工具类");
     }

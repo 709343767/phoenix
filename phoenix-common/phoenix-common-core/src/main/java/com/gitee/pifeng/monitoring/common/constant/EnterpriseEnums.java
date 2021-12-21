@@ -19,10 +19,10 @@ public enum EnterpriseEnums {
 
     /**
      * <p>
-     * 企业名字字符串转企业名字枚举
+     * 企业名字符串转企业名字枚举
      * </p>
      *
-     * @param enterpriseStr 企业名字字符串
+     * @param enterpriseStr 企业名字符串
      * @return 企业名字枚举
      * @author 皮锋
      * @custom.date 2021/1/28 21:03

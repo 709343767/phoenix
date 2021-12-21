@@ -5,6 +5,8 @@ import com.gitee.pifeng.monitoring.common.util.secure.AesEncryptUtils;
 import com.gitee.pifeng.monitoring.common.util.secure.DesEncryptUtils;
 import com.gitee.pifeng.monitoring.common.util.secure.Sm4EncryptUtils;
 
+import java.nio.charset.Charset;
+
 /**
  * <p>
  * 加解密类型枚举
@@ -20,8 +22,8 @@ public enum SecurerEnums implements ISecurer {
      */
     DES {
         @Override
-        public String encrypt(String str) {
-            return DesEncryptUtils.encrypt(str);
+        public String encrypt(String str, Charset charset) {
+            return DesEncryptUtils.encrypt(str, charset);
         }
 
         @Override
@@ -30,7 +32,12 @@ public enum SecurerEnums implements ISecurer {
         }
 
         @Override
-        public String decrypt(String str) {
+        public String decrypt(String str, Charset charset) {
+            return DesEncryptUtils.decrypt(str, charset);
+        }
+
+        @Override
+        public byte[] decrypt(String str) {
             return DesEncryptUtils.decrypt(str);
         }
     },
@@ -40,8 +47,8 @@ public enum SecurerEnums implements ISecurer {
      */
     AES {
         @Override
-        public String encrypt(String str) {
-            return AesEncryptUtils.encrypt(str);
+        public String encrypt(String str, Charset charset) {
+            return AesEncryptUtils.encrypt(str, charset);
         }
 
         @Override
@@ -50,7 +57,12 @@ public enum SecurerEnums implements ISecurer {
         }
 
         @Override
-        public String decrypt(String str) {
+        public String decrypt(String str, Charset charset) {
+            return AesEncryptUtils.decrypt(str, charset);
+        }
+
+        @Override
+        public byte[] decrypt(String str) {
             return AesEncryptUtils.decrypt(str);
         }
     },
@@ -60,8 +72,8 @@ public enum SecurerEnums implements ISecurer {
      */
     SM4 {
         @Override
-        public String encrypt(String str) {
-            return Sm4EncryptUtils.encrypt(str);
+        public String encrypt(String str, Charset charset) {
+            return Sm4EncryptUtils.encrypt(str, charset);
         }
 
         @Override
@@ -70,7 +82,12 @@ public enum SecurerEnums implements ISecurer {
         }
 
         @Override
-        public String decrypt(String str) {
+        public String decrypt(String str, Charset charset) {
+            return Sm4EncryptUtils.decrypt(str, charset);
+        }
+
+        @Override
+        public byte[] decrypt(String str) {
             return Sm4EncryptUtils.decrypt(str);
         }
     }

@@ -1,5 +1,7 @@
 package com.gitee.pifeng.monitoring.common.web.toolkit;
 
+import cn.hutool.core.util.CharsetUtil;
+import cn.hutool.core.util.ZipUtil;
 import com.fasterxml.jackson.core.io.JsonStringEncoder;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gitee.pifeng.monitoring.common.dto.CiphertextPackage;
@@ -47,8 +49,19 @@ public class HttpInputMessagePackageDecrypt implements HttpInputMessage {
         JsonStringEncoder encoder = JsonStringEncoder.getInstance();
         byte[] fb = encoder.encodeAsUTF8(bodyStr);
         CiphertextPackage ciphertextPackage = new ObjectMapper().readValue(fb, CiphertextPackage.class);
-        // 解密
-        String decryptStr = SecureUtils.decrypt(ciphertextPackage.getCiphertext());
+        // 解密后的字符串
+        String decryptStr;
+        // 是否需要进行UnGzip
+        boolean gzipEnabled = ciphertextPackage.isUnGzipEnabled();
+        if (gzipEnabled) {
+            // 解密
+            byte[] decrypt = SecureUtils.decrypt(ciphertextPackage.getCiphertext(), CharsetUtil.UTF_8);
+            // 解压
+            decryptStr = ZipUtil.unGzip(decrypt, CharsetUtil.UTF_8);
+        } else {
+            // 解密
+            decryptStr = SecureUtils.decrypt(ciphertextPackage.getCiphertext(), StandardCharsets.UTF_8);
+        }
         // 打印日志
         log.debug("请求包：{}", decryptStr);
         // 解密后的请求体

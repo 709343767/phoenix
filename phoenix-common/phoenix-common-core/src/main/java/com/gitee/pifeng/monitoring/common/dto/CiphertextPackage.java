@@ -25,4 +25,9 @@ public class CiphertextPackage extends AbstractSuperBean {
      */
     private String ciphertext;
 
+    /**
+     * 是否需要进行UnGzip（先压缩再加密，先解密再解压）
+     */
+    private boolean isUnGzipEnabled;
+
 }

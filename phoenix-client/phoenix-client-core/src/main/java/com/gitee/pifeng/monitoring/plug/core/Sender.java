@@ -4,11 +4,13 @@ import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.core.util.ZipUtil;
 import com.alibaba.fastjson.JSON;
 import com.gitee.pifeng.monitoring.common.dto.CiphertextPackage;
+import com.gitee.pifeng.monitoring.common.util.ZipUtils;
 import com.gitee.pifeng.monitoring.common.util.secure.SecureUtils;
 import com.gitee.pifeng.monitoring.plug.util.EnumPoolingHttpUtils;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 /**
  * <p>
@@ -47,18 +49,38 @@ public class Sender {
     public static String send(final String url, final String json) throws IOException {
         // 打印发送的数据包
         log.debug("发送数据包：{}", json);
-        // 压缩数据包
-        byte[] gzip = ZipUtil.gzip(json, CharsetUtil.UTF_8);
-        // 加密请求数据
-        String encrypt = SecureUtils.encrypt(gzip);
-        CiphertextPackage requestCiphertextPackage = new CiphertextPackage(encrypt);
+        CiphertextPackage requestCiphertextPackage;
+        // 字符串是否需要进行gzip压缩
+        if (ZipUtils.isNeedGzip(json)) {
+            // 压缩字符串
+            byte[] gzip = ZipUtil.gzip(json, CharsetUtil.UTF_8);
+            // 加密请求数据
+            String encrypt = SecureUtils.encrypt(gzip, StandardCharsets.UTF_8);
+            requestCiphertextPackage = new CiphertextPackage(encrypt, true);
+        } else {
+            // 加密请求数据
+            String encrypt = SecureUtils.encrypt(json, StandardCharsets.UTF_8);
+            requestCiphertextPackage = new CiphertextPackage(encrypt, false);
+        }
         // 发送请求
         EnumPoolingHttpUtils httpClient = EnumPoolingHttpUtils.getInstance();
         String result = httpClient.sendHttpPostByJson(url, requestCiphertextPackage.toJsonString());
         // 响应结果
         CiphertextPackage responseCiphertextPackage = JSON.parseObject(result, CiphertextPackage.class);
         // 解密响应数据
-        return SecureUtils.decrypt(responseCiphertextPackage.getCiphertext());
+        String decryptStr;
+        // 是否需要进行UnGzip
+        boolean gzipEnabled = responseCiphertextPackage.isUnGzipEnabled();
+        if (gzipEnabled) {
+            // 解密
+            byte[] decrypt = SecureUtils.decrypt(responseCiphertextPackage.getCiphertext(), CharsetUtil.UTF_8);
+            // 解压
+            decryptStr = ZipUtil.unGzip(decrypt, CharsetUtil.UTF_8);
+        } else {
+            // 解密
+            decryptStr = SecureUtils.decrypt(responseCiphertextPackage.getCiphertext(), StandardCharsets.UTF_8);
+        }
+        return decryptStr;
     }
 
 }
