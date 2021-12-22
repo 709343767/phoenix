@@ -42,7 +42,7 @@ public class HttpInputMessagePackageEncrypt {
             // 压缩
             byte[] gzip = ZipUtil.gzip(jsonString, CharsetUtil.UTF_8);
             // 加密
-            String encrypt = SecureUtils.encrypt(gzip, StandardCharsets.UTF_8);
+            String encrypt = SecureUtils.encrypt(gzip);
             requestCiphertextPackage = new CiphertextPackage(encrypt, true);
         } else {
             // 加密

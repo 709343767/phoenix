@@ -58,7 +58,7 @@ public class HttpServiceImpl implements IHttpService {
             // 压缩
             byte[] gzip = ZipUtil.gzip(json, CharsetUtil.UTF_8);
             // 加密
-            String encrypt = SecureUtils.encrypt(gzip, StandardCharsets.UTF_8);
+            String encrypt = SecureUtils.encrypt(gzip);
             requestCiphertextPackage = new CiphertextPackage(encrypt, true);
         } else {
             // 加密
@@ -78,7 +78,7 @@ public class HttpServiceImpl implements IHttpService {
         boolean isUnGzipEnabled = responseciphertextPackage.isUnGzipEnabled();
         if (isUnGzipEnabled) {
             // 解密
-            byte[] decrypt = SecureUtils.decrypt(ciphertext, CharsetUtil.UTF_8);
+            byte[] decrypt = SecureUtils.decrypt(ciphertext);
             // 解压
             decryptStr = ZipUtil.unGzip(decrypt, CharsetUtil.UTF_8);
         } else {

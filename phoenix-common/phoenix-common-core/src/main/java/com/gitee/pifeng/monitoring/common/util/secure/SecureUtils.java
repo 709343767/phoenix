@@ -45,16 +45,15 @@ public class SecureUtils extends InitSecure {
      * 字节数组加密
      * </p>
      *
-     * @param arry    需要加密的字节数组
-     * @param charset 字符集
+     * @param arry 需要加密的字节数组
      * @return 加密后的字符串
      * @author 皮锋
      * @custom.date 2021/12/19 22:51
      */
-    public static String encrypt(byte[] arry, Charset charset) {
+    public static String encrypt(byte[] arry) {
         // 没选择加解密类型，则不加密
         if (StringUtils.isBlank(SECRET_TYPE)) {
-            return new String(arry, charset);
+            return Base64.getEncoder().encodeToString(arry);
         }
         return SecurerEnums.valueOf(StringUtils.upperCase(SECRET_TYPE)).encrypt(arry);
     }
@@ -89,10 +88,10 @@ public class SecureUtils extends InitSecure {
      * @custom.date 2021/12/21 13:08
      */
     @SneakyThrows
-    public static byte[] decrypt(String str, String charset) {
+    public static byte[] decrypt(String str) {
         // 没选择加解密类型，则不解密
         if (StringUtils.isBlank(SECRET_TYPE)) {
-            return str.getBytes(charset);
+            return Base64.getDecoder().decode(str);
         }
         return SecurerEnums.valueOf(StringUtils.upperCase(SECRET_TYPE)).decrypt(str);
     }

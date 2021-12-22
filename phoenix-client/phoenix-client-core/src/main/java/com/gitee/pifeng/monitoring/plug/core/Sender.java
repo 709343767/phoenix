@@ -55,7 +55,7 @@ public class Sender {
             // 压缩字符串
             byte[] gzip = ZipUtil.gzip(json, CharsetUtil.UTF_8);
             // 加密请求数据
-            String encrypt = SecureUtils.encrypt(gzip, StandardCharsets.UTF_8);
+            String encrypt = SecureUtils.encrypt(gzip);
             requestCiphertextPackage = new CiphertextPackage(encrypt, true);
         } else {
             // 加密请求数据
@@ -73,7 +73,7 @@ public class Sender {
         boolean isUnGzipEnabled = responseCiphertextPackage.isUnGzipEnabled();
         if (isUnGzipEnabled) {
             // 解密
-            byte[] decrypt = SecureUtils.decrypt(responseCiphertextPackage.getCiphertext(), CharsetUtil.UTF_8);
+            byte[] decrypt = SecureUtils.decrypt(responseCiphertextPackage.getCiphertext());
             // 解压
             decryptStr = ZipUtil.unGzip(decrypt, CharsetUtil.UTF_8);
         } else {
