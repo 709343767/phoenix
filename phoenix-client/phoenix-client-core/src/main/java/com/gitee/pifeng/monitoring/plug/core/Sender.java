@@ -70,8 +70,8 @@ public class Sender {
         // 解密响应数据
         String decryptStr;
         // 是否需要进行UnGzip
-        boolean gzipEnabled = responseCiphertextPackage.isUnGzipEnabled();
-        if (gzipEnabled) {
+        boolean isUnGzipEnabled = responseCiphertextPackage.isUnGzipEnabled();
+        if (isUnGzipEnabled) {
             // 解密
             byte[] decrypt = SecureUtils.decrypt(responseCiphertextPackage.getCiphertext(), CharsetUtil.UTF_8);
             // 解压

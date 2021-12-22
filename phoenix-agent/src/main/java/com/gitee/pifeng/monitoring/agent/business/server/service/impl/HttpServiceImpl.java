@@ -75,8 +75,8 @@ public class HttpServiceImpl implements IHttpService {
         // 解密后的字符串
         String decryptStr;
         // 是否需要进行UnGzip
-        boolean gzipEnabled = responseciphertextPackage.isUnGzipEnabled();
-        if (gzipEnabled) {
+        boolean isUnGzipEnabled = responseciphertextPackage.isUnGzipEnabled();
+        if (isUnGzipEnabled) {
             // 解密
             byte[] decrypt = SecureUtils.decrypt(ciphertext, CharsetUtil.UTF_8);
             // 解压

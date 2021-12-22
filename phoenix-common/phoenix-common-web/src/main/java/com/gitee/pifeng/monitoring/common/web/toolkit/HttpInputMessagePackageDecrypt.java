@@ -52,8 +52,8 @@ public class HttpInputMessagePackageDecrypt implements HttpInputMessage {
         // 解密后的字符串
         String decryptStr;
         // 是否需要进行UnGzip
-        boolean gzipEnabled = ciphertextPackage.isUnGzipEnabled();
-        if (gzipEnabled) {
+        boolean isUnGzipEnabled = ciphertextPackage.isUnGzipEnabled();
+        if (isUnGzipEnabled) {
             // 解密
             byte[] decrypt = SecureUtils.decrypt(ciphertextPackage.getCiphertext(), CharsetUtil.UTF_8);
             // 解压
