@@ -49,7 +49,7 @@ public class MonitorConfigController {
     @ApiOperation(value = "访问监控配置页")
     @GetMapping("/config")
     public ModelAndView config() {
-        ModelAndView mv = new ModelAndView("set/monitor-config");
+        ModelAndView mv = new ModelAndView("set/config");
         MonitorConfigPageFormVo monitorConfigPageForm = this.monitorConfigService.getMonitorConfigPageFormInfo();
         mv.addObject("monitorConfigPageForm", monitorConfigPageForm);
         return mv;
