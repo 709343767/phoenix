@@ -115,28 +115,28 @@
                             <cite>主页</cite>
                         </a>
                     </li>
-                    <li data-name="home" class="layui-nav-item">
+                    <li data-name="server" class="layui-nav-item">
                         <a href="javascript:;" lay-tips="服务器" lay-direction="2"
                            th:attr="lay-href=@{/monitor-server/list}">
                             <i class="layui-icon layui-icon-server"></i>
                             <cite>服务器</cite>
                         </a>
                     </li>
-                    <li data-name="home" class="layui-nav-item">
+                    <li data-name="instance" class="layui-nav-item">
                         <a href="javascript:;" lay-tips="应用程序" lay-direction="2"
                            th:attr="lay-href=@{/monitor-instance/list}">
                             <i class="layui-icon layui-icon-app"></i>
                             <cite>应用程序</cite>
                         </a>
                     </li>
-                    <li data-name="home" class="layui-nav-item">
+                    <li data-name="database" class="layui-nav-item">
                         <a href="javascript:;" lay-tips="数据库" lay-direction="2"
                            th:attr="lay-href=@{/monitor-db/list}">
                             <i class="layui-icon layui-icon-db"></i>
                             <cite>数据库</cite>
                         </a>
                     </li>
-                    <li data-name="home" class="layui-nav-item">
+                    <li data-name="network" class="layui-nav-item">
                         <a href="javascript:;" lay-tips="网络" lay-direction="2"
                            th:attr="lay-href=@{/monitor-network/list}">
                             <i class="layui-icon layui-icon-website"></i>
@@ -144,30 +144,57 @@
                         </a>
                     </li>
                     <li data-name="alarm" class="layui-nav-item">
-                        <a href="javascript:;" lay-tips="告警" lay-direction="2">
+                        <a href="javascript:;" lay-tips="告警" lay-direction="2"
+                           th:attr="lay-href=@{/monitor-alarm-record/list}">
                             <i class="layui-icon layui-icon-notice"></i>
                             <cite>告警</cite>
                         </a>
+                    </li>
+                    <li data-name="set" class="layui-nav-item" sec:authorize="hasAuthority('超级管理员')">
+                        <a href="javascript:;" lay-tips="监控管理" lay-direction="2">
+                            <i class="layui-icon layui-icon-set"></i>
+                            <cite>监控管理</cite>
+                        </a>
                         <dl class="layui-nav-child">
                             <dd>
-                                <a th:attr="lay-href=@{/monitor-alarm-definition/list}">告警定义</a>
+                                <a th:attr="lay-href=@{/monitor-env/list}">环境管理</a>
                             </dd>
                             <dd>
-                                <a th:attr="lay-href=@{/monitor-alarm-record/list}">告警记录</a>
+                                <a th:attr="lay-href=@{/monitor-group/list}">分组管理</a>
+                            </dd>
+                            <dd>
+                                <a th:attr="lay-href=@{/monitor-config/config}">监控配置</a>
+                            </dd>
+                            <dd>
+                                <a th:attr="lay-href=@{/monitor-alarm-definition/list}">告警定义</a>
                             </dd>
                         </dl>
                     </li>
                     <li data-name="user" class="layui-nav-item" sec:authorize="hasAuthority('超级管理员')">
                         <a href="javascript:;" lay-tips="用户" lay-direction="2">
                             <i class="layui-icon layui-icon-user"></i>
-                            <cite>用户</cite>
+                            <cite>用户管理</cite>
                         </a>
                         <dl class="layui-nav-child">
                             <dd>
-                                <a th:attr="lay-href=@{/user/list}">用户管理</a>
+                                <a th:attr="lay-href=@{/user/list}">用户</a>
                             </dd>
                             <dd>
-                                <a th:attr="lay-href=@{/role/list}">角色管理</a>
+                                <a th:attr="lay-href=@{/role/list}">角色</a>
+                            </dd>
+                        </dl>
+                    </li>
+                    <li data-name="myself" class="layui-nav-item">
+                        <a href="javascript:;" lay-tips="我的" lay-direction="2">
+                            <i class="layui-icon layui-icon-username"></i>
+                            <cite>我的</cite>
+                        </a>
+                        <dl class="layui-nav-child">
+                            <dd>
+                                <a th:attr="lay-href=@{/myself/info}">基本资料</a>
+                            </dd>
+                            <dd>
+                                <a th:attr="lay-href=@{/myself/password}">修改密码</a>
                             </dd>
                         </dl>
                     </li>
@@ -182,24 +209,6 @@
                             </dd>
                             <dd>
                                 <a th:attr="lay-href=@{/monitor-log-exception/list}">异常日志</a>
-                            </dd>
-                        </dl>
-                    </li>
-                    <li data-name="set" class="layui-nav-item">
-                        <a href="javascript:;" lay-tips="设置" lay-direction="2">
-                            <i class="layui-icon layui-icon-set"></i>
-                            <cite>设置</cite>
-                        </a>
-                        <dl class="layui-nav-child">
-                            <dd class="layui-nav-itemed" sec:authorize="hasAuthority('超级管理员')">
-                                <a th:attr="lay-href=@{/monitor-config/config}">监控设置</a>
-                            </dd>
-                            <dd class="layui-nav-itemed">
-                                <a href="javascript:;">我的设置</a>
-                                <dl class="layui-nav-child">
-                                    <dd><a th:attr="lay-href=@{/set/user/info}">基本资料</a></dd>
-                                    <dd><a th:attr="lay-href=@{/set/user/password}">修改密码</a></dd>
-                                </dl>
                             </dd>
                         </dl>
                     </li>

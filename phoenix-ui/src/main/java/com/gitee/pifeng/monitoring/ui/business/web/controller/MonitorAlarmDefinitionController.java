@@ -51,7 +51,7 @@ public class MonitorAlarmDefinitionController {
     @ApiOperation(value = "访问告警定义列表页面")
     @GetMapping("/list")
     public ModelAndView list() {
-        return new ModelAndView("alarm/alarm-definition");
+        return new ModelAndView("set/alarm-definition");
     }
 
     /**
@@ -98,7 +98,7 @@ public class MonitorAlarmDefinitionController {
     @ApiOperation(value = "访问新增告警定义表单页面")
     @GetMapping("/add-monitor-alarm-definition-form")
     public ModelAndView addMonitorAlarmDefinitionForm() {
-        return new ModelAndView("alarm/add-alarm-definition");
+        return new ModelAndView("set/add-alarm-definition");
     }
 
     /**
@@ -118,7 +118,7 @@ public class MonitorAlarmDefinitionController {
     public ModelAndView editMonitorAlarmDefinitionForm(@RequestParam(name = "id") Long id) {
         MonitorAlarmDefinition monitorAlarmDefinition = this.monitorAlarmDefinitionService.getById(id);
         MonitorAlarmDefinitionVo monitorAlarmDefinitionVo = MonitorAlarmDefinitionVo.builder().build().convertFor(monitorAlarmDefinition);
-        ModelAndView mv = new ModelAndView("alarm/edit-alarm-definition");
+        ModelAndView mv = new ModelAndView("set/edit-alarm-definition");
         mv.addObject("monitorAlarmDefinitionVo", monitorAlarmDefinitionVo);
         return mv;
     }

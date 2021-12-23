@@ -26,16 +26,16 @@ import java.util.List;
 
 /**
  * <p>
- * 我的设置
+ * 我的
  * </p>
  *
  * @author 皮锋
  * @custom.date 2020/7/7 17:40
  */
 @Controller
-@Api(tags = "我的设置")
-@RequestMapping("/set/user")
-public class SetUserController {
+@Api(tags = "我的")
+@RequestMapping("/myself")
+public class MyselfController {
 
     /**
      * 监控用户服务类
@@ -61,7 +61,7 @@ public class SetUserController {
     @ApiOperation(value = "访问用户基本资料页面")
     @GetMapping("/info")
     public ModelAndView userInfo() {
-        ModelAndView mv = new ModelAndView("set/user/info");
+        ModelAndView mv = new ModelAndView("myself/info");
         MonitorUserRealm userRealm = SpringSecurityUtils.getCurrentMonitorUserRealm();
         // 查询当前用户
         MonitorUser monitorUser = this.monitorUserService.getById(userRealm.getId());
@@ -92,7 +92,7 @@ public class SetUserController {
     @ApiOperation(value = "访问修改密码页面")
     @GetMapping("/password")
     public ModelAndView password() {
-        return new ModelAndView("set/user/password");
+        return new ModelAndView("myself/password");
     }
 
     /**
