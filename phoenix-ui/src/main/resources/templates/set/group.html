@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="utf-8">
+    <title>分组管理</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="../../static/layui/css/layui.css" th:href="@{/layui/css/layui.css}" media="all">
+    <link rel="stylesheet" href="../../static/style/admin.css" th:href="@{/style/admin.css}" media="all">
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+    <script src="../../static/js/html5.min.js" th:src="@{/js/html5.min.js}"></script>
+    <script src="../../static/js/respond.min.js" th:src="@{/js/respond.min.js}"></script>
+    <![endif]-->
+    <script type="text/javascript" charset="utf-8" th:inline="javascript">
+        var ctxPath = /*[[@{/}]]*/'';
+        var authority = [[${#authorization.expression('hasAuthority("超级管理员")')}]];
+    </script>
+</head>
+<body>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+            <form class="layui-form-item" onsubmit="return false;">
+                <div class="layui-inline">
+                    <label class="layui-form-label">分组名称</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="groupName" placeholder="请输入" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">分组描述</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="groupDesc" placeholder="请输入" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <button class="layui-btn layuiadmin-btn-useradmin" lay-submit
+                            lay-filter="monitor-group-list-table-search">
+                        <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                    </button>
+                    <button id="reset" type="reset" class="layui-btn">清空</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="layui-card-body">
+            <table id="monitor-group-list-table" lay-filter="monitor-group-list-table"></table>
+            <script type="text/html" id="imgTpl">
+                <img style="display: inline-block; width: 50%; height: 100%;" src={{ d.avatar }}>
+            </script>
+            <script type="text/html" id="list-table-toolbar">
+                <div class="layui-btn-container" sec:authorize="hasAuthority('超级管理员')">
+                    <button class="layui-btn layui-btn-sm layui-btn-danger" lay-event="batchdel">
+                        <i class="layui-icon layui-icon-delete"></i>删除
+                    </button>
+                    <button class="layui-btn layui-btn-sm layuiadmin-btn-useradmin" lay-event="add">
+                        <i class="layui-icon layui-icon-add-1"></i>添加
+                    </button>
+                </div>
+            </script>
+            <script type="text/html" id="monitor-group-list-table-toolbar">
+                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"
+                   sec:authorize="hasAuthority('超级管理员')">
+                    <i class="layui-icon layui-icon-edit"></i>编辑</a>
+                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"
+                   sec:authorize="hasAuthority('超级管理员')">
+                    <i class="layui-icon layui-icon-delete"></i>删除</a>
+            </script>
+        </div>
+    </div>
+</div>
+<script src="../../static/js/common.js" th:src="@{/js/common.js}" charset="utf-8"></script>
+<script src="../../static/layui/layui.js" th:src="@{/layui/layui.js}"></script>
+<script charset="utf-8" th:inline="javascript">
+    layui.config({
+        base: ctxPath //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'table'], function () {
+        var $ = layui.$, admin = layui.admin, form = layui.form, table = layui.table, device = layui.device();
+        table.render({
+            elem: '#monitor-group-list-table',
+            url: ctxPath + 'monitor-group/get-monitor-group-list',
+            toolbar: '#list-table-toolbar',
+            request: {
+                pageName: 'current',//页码的参数名称，默认：page
+                limitName: 'size' //每页数据量的参数名，默认：limit
+            },
+            response: {
+                statusName: 'code', //规定数据状态的字段名称，默认：code
+                statusCode: 200,//规定成功的状态码，默认：0
+                msgName: 'msg',//规定状态信息的字段名称，默认：msg
+                countName: 'count', //规定数据总数的字段名称，默认：count
+                dataName: 'data' //规定数据列表的字段名称，默认：data
+            },
+            parseData: function (res) { //res 即为原始返回的数据
+                return {
+                    'code': res.code, //解析接口状态
+                    'msg': res.msg, //解析提示文本
+                    'count': res.data.total, //解析数据长度
+                    'data': res.data.records //解析数据列表
+                };
+            },
+            cols: [
+                [{
+                    type: 'checkbox',
+                    hide: !authority
+                }, {
+                    field: 'id',
+                    title: 'ID',
+                    minWidth: 100,
+                    sort: !0,
+                    hide: true
+                }, {
+                    field: 'groupName',
+                    title: '分组名',
+                    minWidth: 80,
+                    sort: !0
+                }, {
+                    field: 'groupDesc',
+                    title: '分组描述',
+                    minWidth: 100,
+                    sort: !0
+                }, {
+                    field: 'createAccount',
+                    title: '创建人',
+                    minWidth: 80,
+                    sort: !0
+                }, {
+                    field: 'updateAccount',
+                    title: '修改人',
+                    minWidth: 80,
+                    sort: !0
+                }, {
+                    field: 'insertTime',
+                    minWidth: 170,
+                    title: '插入时间',
+                    sort: !0
+                }, {
+                    field: 'updateTime',
+                    minWidth: 170,
+                    title: '更新时间',
+                    sort: !0
+                }, {
+                    title: '操作',
+                    hide: !authority,
+                    width: 160,
+                    align: 'center',
+                    fixed: (device.ios || device.android) ? false : 'right',
+                    toolbar: '#monitor-group-list-table-toolbar'
+                }]
+            ],
+            page: !0,
+            limit: 15,
+            height: 'full-150'
+        });
+        //监听搜索
+        form.on('submit(monitor-group-list-table-search)', function (data) {
+            var field = data.field;
+            //执行重载
+            table.reload('monitor-group-list-table', {
+                where: field
+            });
+        });
+        // 点击表头排序
+        table.on('sort(monitor-group-list-table)', function (obj) {
+            table.reload('monitor-group-list-table', {
+                initSort: obj
+            });
+        });
+        //头工具栏事件
+        table.on('toolbar(monitor-group-list-table)', function (obj) {
+            switch (obj.event) {
+                case 'batchdel':
+                    var checkStatus = table.checkStatus('monitor-group-list-table'), checkData = checkStatus.data; //得到选中的数据
+                    if (checkData.length === 0) {
+                        return layer.msg('请选择数据');
+                    }
+                    layer.confirm('确定删除吗？', function (index) {
+                        admin.req({
+                            type: 'delete',
+                            url: ctxPath + 'monitor-group/delete-monitor-group',
+                            data: JSON.stringify(checkStatus.data),
+                            dataType: 'json',
+                            contentType: 'application/json;charset=utf-8',
+                            headers: {
+                                [[${_csrf.headerName}]]: [[${_csrf.token}]]
+                            },
+                            success: function (result) {
+                                var data = result.data;
+                                if (data === webConst.SUCCESS) {
+                                    table.reload('monitor-group-list-table'); //数据刷新
+                                    layer.msg('删除成功！', {icon: 6});
+                                } else {
+                                    layer.msg('删除失败！', {icon: 5, shift: 6});
+                                }
+                            },
+                            error: function () {
+                                layer.msg('系统错误！', {icon: 5, shift: 6});
+                            }
+                        });
+                    });
+                    break;
+                case 'add':
+                    // 宽度
+                    var width;
+                    // 高度
+                    var height;
+                    // 移动端
+                    if (device.ios || device.android) {
+                        // 宽度
+                        width = document.body.clientWidth * 0.8 + 'px';
+                        // 高度
+                        height = document.body.clientHeight * 0.5 + 'px';
+                    } else {
+                        // 宽度
+                        width = document.body.clientWidth * 0.4 + 'px';
+                        // 高度
+                        height = document.body.clientHeight * 0.35 + 'px';
+                    }
+                    layer.open({
+                        type: 2,
+                        title: '添加分组',
+                        content: ctxPath + 'monitor-group/add-monitor-group-form',
+                        maxmin: true,
+                        area: [width, height],
+                        btn: ['确定', '取消'],
+                        yes: function (index, layero) {
+                            var iframeWindow = window['layui-layer-iframe' + index],
+                                submitID = 'LAY-group-front-submit',
+                                submit = layero.find('iframe').contents().find('#' + submitID);
+                            //监听提交
+                            iframeWindow.layui.form.on('submit(' + submitID + ')', function (data) {
+                                var field = data.field; //获取提交的字段
+                                admin.req({
+                                    type: 'post',
+                                    url: ctxPath + 'monitor-group/save-monitor-group',
+                                    data: field,
+                                    dataType: 'json',
+                                    headers: {
+                                        [[${_csrf.headerName}]]: [[${_csrf.token}]]
+                                    },
+                                    success: function (result) {
+                                        var data = result.data;
+                                        if (data === webConst.SUCCESS) {
+                                            table.reload('monitor-group-list-table'); //数据刷新
+                                            layer.close(index); //关闭弹层
+                                            layer.msg('添加成功！', {icon: 6});
+                                        } else if (data === webConst.EXIST) {
+                                            layer.msg('分组已存在！', {icon: 5, shift: 6});
+                                        } else {
+                                            layer.msg('添加失败！', {icon: 5, shift: 6});
+                                        }
+                                    },
+                                    error: function () {
+                                        layer.msg('系统错误！', {icon: 5, shift: 6});
+                                    }
+                                });
+                            });
+                            submit.trigger('click');
+                        }
+                    });
+                    break;
+            }
+        });
+        //监听工具条
+        table.on('tool(monitor-group-list-table)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'del') {
+                layer.confirm('确定删除吗？', function (index) {
+                    admin.req({
+                        type: 'delete',
+                        url: ctxPath + 'monitor-group/delete-monitor-group',
+                        data: JSON.stringify([data]),
+                        dataType: 'json',
+                        contentType: 'application/json;charset=utf-8',
+                        headers: {
+                            [[${_csrf.headerName}]]: [[${_csrf.token}]]
+                        },
+                        success: function (result) {
+                            var data = result.data;
+                            if (data === webConst.SUCCESS) {
+                                obj.del();
+                                table.reload('monitor-group-list-table'); //数据刷新
+                                layer.msg('删除成功！', {icon: 6});
+                            } else {
+                                layer.msg('删除失败！', {icon: 5, shift: 6});
+                            }
+                        },
+                        error: function () {
+                            layer.msg('系统错误！', {icon: 5, shift: 6});
+                        }
+                    });
+                });
+            } else if (obj.event === 'edit') {
+                // 宽度
+                var width;
+                // 高度
+                var height;
+                // 移动端
+                if (device.ios || device.android) {
+                    // 宽度
+                    width = document.body.clientWidth * 0.8 + 'px';
+                    // 高度
+                    height = document.body.clientHeight * 0.5 + 'px';
+                } else {
+                    // 宽度
+                    width = document.body.clientWidth * 0.4 + 'px';
+                    // 高度
+                    height = document.body.clientHeight * 0.35 + 'px';
+                }
+                layer.open({
+                    type: 2,
+                    title: '编辑分组',
+                    content: ctxPath + 'monitor-group/edit-monitor-group-form?id=' + data.id,
+                    maxmin: true,
+                    area: [width, height],
+                    btn: ['确定', '取消'],
+                    yes: function (index, layero) {
+                        var iframeWindow = window['layui-layer-iframe' + index],
+                            submitID = 'LAY-group-front-submit',
+                            submit = layero.find('iframe').contents().find('#' + submitID);
+                        //监听提交
+                        iframeWindow.layui.form.on('submit(' + submitID + ')', function (data) {
+                            var field = data.field; //获取提交的字段
+                            admin.req({
+                                type: 'put',
+                                url: ctxPath + 'monitor-group/edit-monitor-group',
+                                data: field,
+                                dataType: 'json',
+                                headers: {
+                                    [[${_csrf.headerName}]]: [[${_csrf.token}]]
+                                },
+                                success: function (result) {
+                                    var data = result.data;
+                                    if (data === webConst.SUCCESS) {
+                                        table.reload('monitor-group-list-table'); //数据刷新
+                                        layer.close(index); //关闭弹层
+                                        layer.msg('编辑成功！', {icon: 6});
+                                    } else {
+                                        layer.msg('编辑失败！', {icon: 5, shift: 6});
+                                    }
+                                },
+                                error: function () {
+                                    layer.msg('系统错误！', {icon: 5, shift: 6});
+                                }
+                            });
+                        });
+                        submit.trigger('click');
+                    }
+                });
+            }
+        });
+    });
+</script>
+</body>
+</html>

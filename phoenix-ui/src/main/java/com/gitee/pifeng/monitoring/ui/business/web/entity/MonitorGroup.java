@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -22,6 +23,7 @@ import java.util.Date;
  * @custom.date 2021-12-23
  */
 @Data
+@Builder
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 @TableName("MONITOR_GROUP")
@@ -45,6 +47,10 @@ public class MonitorGroup implements Serializable {
     @ApiModelProperty(value = "创建人账号")
     @TableField("CREATE_ACCOUNT")
     private String createAccount;
+
+    @ApiModelProperty(value = "更新人账号")
+    @TableField("UPDATE_ACCOUNT")
+    private String updateAccount;
 
     @ApiModelProperty(value = "插入时间")
     @TableField("INSERT_TIME")
