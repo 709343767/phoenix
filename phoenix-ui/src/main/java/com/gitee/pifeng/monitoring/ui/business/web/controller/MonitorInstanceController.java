@@ -227,6 +227,12 @@ public class MonitorInstanceController {
         mv.addObject("instanceSummary", instanceSummary);
         String instanceDesc = monitorInstanceVo.getInstanceDesc();
         mv.addObject("instanceDesc", instanceDesc);
+        // 监控环境列表
+        List<String> monitorEnvs = this.monitorEnvService.list().stream().map(MonitorEnv::getEnvName).collect(Collectors.toList());
+        // 监控分组列表
+        List<String> monitorGroups = this.monitorGroupService.list().stream().map(MonitorGroup::getGroupName).collect(Collectors.toList());
+        mv.addObject("monitorEnvs", monitorEnvs);
+        mv.addObject("monitorGroups", monitorGroups);
         return mv;
     }
 
