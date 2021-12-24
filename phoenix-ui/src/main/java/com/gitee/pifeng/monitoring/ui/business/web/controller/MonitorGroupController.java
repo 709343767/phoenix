@@ -19,33 +19,33 @@ import org.springframework.web.servlet.ModelAndView;
 
 /**
  * <p>
- * 监控分组管理
+ * 分组管理
  * </p>
  *
  * @author 皮锋
  * @custom.date 2021-12-23
  */
-@Api(tags = "监控分组管理")
+@Api(tags = "配置管理.分组管理")
 @Controller
 @RequestMapping("/monitor-group")
 public class MonitorGroupController {
 
     /**
-     * 监控分组服务类
+     * 分组服务类
      */
     @Autowired
     private IMonitorGroupService monitorGroupService;
 
     /**
      * <p>
-     * 访问监控分组列表页面
+     * 访问分组列表页面
      * </p>
      *
-     * @return {@link ModelAndView} 监控分组列表页面
+     * @return {@link ModelAndView} 分组列表页面
      * @author 皮锋
      * @custom.date 2021/12/23 17:53
      */
-    @ApiOperation(value = "访问监控分组列表页面")
+    @ApiOperation(value = "访问分组列表页面")
     @GetMapping("/list")
     public ModelAndView list() {
         return new ModelAndView("set/group");
@@ -53,7 +53,7 @@ public class MonitorGroupController {
 
     /**
      * <p>
-     * 获取监控分组列表
+     * 获取分组列表
      * </p>
      *
      * @param current   当前页
@@ -64,7 +64,7 @@ public class MonitorGroupController {
      * @author 皮锋
      * @custom.date 2021/12/24 9:40
      */
-    @ApiOperation(value = "获取监控分组列表")
+    @ApiOperation(value = "获取分组列表")
     @ApiImplicitParams(value = {
             @ApiImplicitParam(name = "current", value = "当前页", required = true, paramType = "query", dataType = "long"),
             @ApiImplicitParam(name = "size", value = "每页显示条数", required = true, paramType = "query", dataType = "long"),
@@ -72,7 +72,7 @@ public class MonitorGroupController {
             @ApiImplicitParam(name = "groupDesc", value = "分组描述", paramType = "query", dataType = "string")})
     @GetMapping("get-monitor-group-list")
     @ResponseBody
-    @OperateLog(operModule = UiModuleConstants.MONITOR_MANAGE + "#分组管理", operType = OperateTypeConstants.QUERY, operDesc = "获取监控分组列表")
+    @OperateLog(operModule = UiModuleConstants.CONFIG_MANAGE + "#分组管理", operType = OperateTypeConstants.QUERY, operDesc = "获取分组列表")
     public LayUiAdminResultVo getMonitorGroupList(Long current, Long size, String groupName, String groupDesc) {
         Page<MonitorGroupVo> page = this.monitorGroupService.getMonitorGroupList(current, size, groupName, groupDesc);
         return LayUiAdminResultVo.ok(page);
@@ -98,7 +98,7 @@ public class MonitorGroupController {
      * 添加分组信息
      * </p>
      *
-     * @param monitorGroupVo 监控分组信息表现层对象
+     * @param monitorGroupVo 分组信息表现层对象
      * @return layUiAdmin响应对象：如果已经存在，LayUiAdminResultVo.data="exist"；
      * 如果添加成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
      * @author 皮锋
@@ -107,7 +107,7 @@ public class MonitorGroupController {
     @ApiOperation(value = "添加分组信息")
     @PostMapping("/save-monitor-group")
     @ResponseBody
-    @OperateLog(operModule = UiModuleConstants.MONITOR_MANAGE + "#分组管理", operType = OperateTypeConstants.ADD, operDesc = "添加分组信息")
+    @OperateLog(operModule = UiModuleConstants.CONFIG_MANAGE + "#分组管理", operType = OperateTypeConstants.ADD, operDesc = "添加分组信息")
     public LayUiAdminResultVo saveMonitorGroup(MonitorGroupVo monitorGroupVo) {
         return this.monitorGroupService.saveMonitorGroup(monitorGroupVo);
     }
@@ -139,7 +139,7 @@ public class MonitorGroupController {
      * 编辑分组信息
      * </p>
      *
-     * @param monitorGroupVo 监控分组信息表现层对象
+     * @param monitorGroupVo 分组信息表现层对象
      * @return layUiAdmin响应对象：如果编辑成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
      * @author 皮锋
      * @custom.date 2021/12/24 11:07
@@ -147,7 +147,7 @@ public class MonitorGroupController {
     @ApiOperation(value = "编辑分组信息")
     @PutMapping("/edit-monitor-group")
     @ResponseBody
-    @OperateLog(operModule = UiModuleConstants.MONITOR_MANAGE + "#分组管理", operType = OperateTypeConstants.UPDATE, operDesc = "编辑分组信息")
+    @OperateLog(operModule = UiModuleConstants.CONFIG_MANAGE + "#分组管理", operType = OperateTypeConstants.UPDATE, operDesc = "编辑分组信息")
     public LayUiAdminResultVo editMonitorGroup(MonitorGroupVo monitorGroupVo) {
         return this.monitorGroupService.editMonitorGroup(monitorGroupVo);
     }

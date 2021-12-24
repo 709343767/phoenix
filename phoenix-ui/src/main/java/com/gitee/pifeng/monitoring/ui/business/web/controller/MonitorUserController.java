@@ -33,7 +33,7 @@ import java.util.List;
  * @custom.date 2020/7/23 14:44
  */
 @Controller
-@Api(tags = "用户管理")
+@Api(tags = "用户管理.用户")
 @RequestMapping("/user")
 public class MonitorUserController {
 

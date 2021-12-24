@@ -30,7 +30,7 @@ import java.util.List;
  * @author 皮锋
  * @custom.date 2020/8/3 10:46
  */
-@Api(tags = "角色管理")
+@Api(tags = "用户管理.角色")
 @Controller
 @RequestMapping("/role")
 public class MonitorRoleController {

@@ -46,9 +46,9 @@ public final class UiModuleConstants {
     public static final String ALARM = "告警";
 
     /**
-     * 监控管理
+     * 配置管理
      */
-    public static final String MONITOR_MANAGE = "监控管理";
+    public static final String CONFIG_MANAGE = "配置管理";
 
     /**
      * 用户管理

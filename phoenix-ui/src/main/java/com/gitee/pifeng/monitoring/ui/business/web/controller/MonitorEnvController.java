@@ -20,33 +20,33 @@ import org.springframework.web.servlet.ModelAndView;
 
 /**
  * <p>
- * 监控环境管理
+ * 环境管理
  * </p>
  *
  * @author 皮锋
  * @custom.date 2021-12-23
  */
-@Api(tags = "监控环境管理")
+@Api(tags = "配置管理.环境管理")
 @Controller
 @RequestMapping("/monitor-env")
 public class MonitorEnvController {
 
     /**
-     * 监控环境服务类
+     * 环境服务类
      */
     @Autowired
     private IMonitorEnvService monitorEnvService;
 
     /**
      * <p>
-     * 访问监控环境列表页面
+     * 访问环境列表页面
      * </p>
      *
-     * @return {@link ModelAndView} 监控环境列表页面
+     * @return {@link ModelAndView} 环境列表页面
      * @author 皮锋
      * @custom.date 2021/12/23 17:53
      */
-    @ApiOperation(value = "访问监控环境列表页面")
+    @ApiOperation(value = "访问环境列表页面")
     @GetMapping("/list")
     public ModelAndView list() {
         return new ModelAndView("set/env");
@@ -54,7 +54,7 @@ public class MonitorEnvController {
 
     /**
      * <p>
-     * 获取监控环境列表
+     * 获取环境列表
      * </p>
      *
      * @param current 当前页
@@ -65,7 +65,7 @@ public class MonitorEnvController {
      * @author 皮锋
      * @custom.date 2021/12/24 9:40
      */
-    @ApiOperation(value = "获取监控环境列表")
+    @ApiOperation(value = "获取环境列表")
     @ApiImplicitParams(value = {
             @ApiImplicitParam(name = "current", value = "当前页", required = true, paramType = "query", dataType = "long"),
             @ApiImplicitParam(name = "size", value = "每页显示条数", required = true, paramType = "query", dataType = "long"),
@@ -73,7 +73,7 @@ public class MonitorEnvController {
             @ApiImplicitParam(name = "envDesc", value = "环境描述", paramType = "query", dataType = "string")})
     @GetMapping("get-monitor-env-list")
     @ResponseBody
-    @OperateLog(operModule = UiModuleConstants.MONITOR_MANAGE + "#环境管理", operType = OperateTypeConstants.QUERY, operDesc = "获取监控环境列表")
+    @OperateLog(operModule = UiModuleConstants.CONFIG_MANAGE + "#环境管理", operType = OperateTypeConstants.QUERY, operDesc = "获取环境列表")
     public LayUiAdminResultVo getMonitorEnvList(Long current, Long size, String envName, String envDesc) {
         Page<MonitorEnvVo> page = this.monitorEnvService.getMonitorEnvList(current, size, envName, envDesc);
         return LayUiAdminResultVo.ok(page);
@@ -99,7 +99,7 @@ public class MonitorEnvController {
      * 添加环境信息
      * </p>
      *
-     * @param monitorEnvVo 监控环境信息表现层对象
+     * @param monitorEnvVo 环境信息表现层对象
      * @return layUiAdmin响应对象：如果已经存在，LayUiAdminResultVo.data="exist"；
      * 如果添加成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
      * @author 皮锋
@@ -108,7 +108,7 @@ public class MonitorEnvController {
     @ApiOperation(value = "添加环境信息")
     @PostMapping("/save-monitor-env")
     @ResponseBody
-    @OperateLog(operModule = UiModuleConstants.MONITOR_MANAGE + "#环境管理", operType = OperateTypeConstants.ADD, operDesc = "添加环境信息")
+    @OperateLog(operModule = UiModuleConstants.CONFIG_MANAGE + "#环境管理", operType = OperateTypeConstants.ADD, operDesc = "添加环境信息")
     public LayUiAdminResultVo saveMonitorEnv(MonitorEnvVo monitorEnvVo) {
         return this.monitorEnvService.saveMonitorEnv(monitorEnvVo);
     }
@@ -140,7 +140,7 @@ public class MonitorEnvController {
      * 编辑环境信息
      * </p>
      *
-     * @param monitorEnvVo 监控环境信息表现层对象
+     * @param monitorEnvVo 环境信息表现层对象
      * @return layUiAdmin响应对象：如果编辑成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
      * @author 皮锋
      * @custom.date 2021/12/24 11:07
@@ -148,7 +148,7 @@ public class MonitorEnvController {
     @ApiOperation(value = "编辑环境信息")
     @PutMapping("/edit-monitor-env")
     @ResponseBody
-    @OperateLog(operModule = UiModuleConstants.MONITOR_MANAGE + "#环境管理", operType = OperateTypeConstants.UPDATE, operDesc = "编辑环境信息")
+    @OperateLog(operModule = UiModuleConstants.CONFIG_MANAGE + "#环境管理", operType = OperateTypeConstants.UPDATE, operDesc = "编辑环境信息")
     public LayUiAdminResultVo editMonitorEnv(MonitorEnvVo monitorEnvVo) {
         return this.monitorEnvService.editMonitorEnv(monitorEnvVo);
     }

@@ -28,7 +28,7 @@ import org.springframework.web.servlet.ModelAndView;
  */
 @Controller
 @RequestMapping("/monitor-config")
-@Api(tags = "配置.监控配置")
+@Api(tags = "配置管理.监控配置")
 public class MonitorConfigController {
 
     /**
@@ -72,7 +72,7 @@ public class MonitorConfigController {
     @ApiOperation(value = "更新监控配置")
     @ResponseBody
     @PutMapping("/update-monitor-config")
-    @OperateLog(operModule = UiModuleConstants.MONITOR_MANAGE + "#监控配置", operType = OperateTypeConstants.UPDATE, operDesc = "更新监控配置")
+    @OperateLog(operModule = UiModuleConstants.CONFIG_MANAGE + "#监控配置", operType = OperateTypeConstants.UPDATE, operDesc = "更新监控配置")
     public LayUiAdminResultVo updateMonitorConfig(MonitorConfigPageFormVo monitorConfigPageFormVo) throws NetException, SigarException {
         return this.monitorConfigService.update(monitorConfigPageFormVo);
     }

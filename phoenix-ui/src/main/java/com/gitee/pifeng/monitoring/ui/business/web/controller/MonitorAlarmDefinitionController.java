@@ -28,7 +28,7 @@ import java.util.List;
  * @custom.date 2020年3月7日 下午5:03:49
  */
 @Controller
-@Api(tags = "告警定义")
+@Api(tags = "配置管理.告警定义")
 @RequestMapping("/monitor-alarm-definition")
 public class MonitorAlarmDefinitionController {
 
@@ -79,7 +79,7 @@ public class MonitorAlarmDefinitionController {
             @ApiImplicitParam(name = "content", value = "告警内容", paramType = "query", dataType = "string")})
     @ResponseBody
     @GetMapping("/get-monitor-alarm-definition-list")
-    @OperateLog(operModule = UiModuleConstants.MONITOR_MANAGE + "#告警定义", operType = OperateTypeConstants.QUERY, operDesc = "获取告警定义列表")
+    @OperateLog(operModule = UiModuleConstants.CONFIG_MANAGE + "#告警定义", operType = OperateTypeConstants.QUERY, operDesc = "获取告警定义列表")
     public LayUiAdminResultVo getMonitorAlarmDefinitionList(Long current, Long size, String type, String grade, String title, String content) {
         Page<MonitorAlarmDefinitionVo> page = this.monitorAlarmDefinitionService.getMonitorAlarmDefinitionList(current, size, type, grade, title, content);
         return LayUiAdminResultVo.ok(page);
@@ -137,7 +137,7 @@ public class MonitorAlarmDefinitionController {
     @ApiOperation(value = "添加告警定义")
     @PostMapping("/save-monitor-alarm-definition")
     @ResponseBody
-    @OperateLog(operModule = UiModuleConstants.MONITOR_MANAGE + "#告警定义", operType = OperateTypeConstants.ADD, operDesc = "添加告警定义")
+    @OperateLog(operModule = UiModuleConstants.CONFIG_MANAGE + "#告警定义", operType = OperateTypeConstants.ADD, operDesc = "添加告警定义")
     public LayUiAdminResultVo saveMonitorAlarmDefinition(MonitorAlarmDefinitionVo monitorAlarmDefinitionVo) {
         return this.monitorAlarmDefinitionService.saveMonitorAlarmDefinition(monitorAlarmDefinitionVo);
     }
@@ -155,7 +155,7 @@ public class MonitorAlarmDefinitionController {
     @ApiOperation(value = "编辑告警定义")
     @PutMapping("/edit-monitor-alarm-definition")
     @ResponseBody
-    @OperateLog(operModule = UiModuleConstants.MONITOR_MANAGE + "#告警定义", operType = OperateTypeConstants.UPDATE, operDesc = "编辑告警定义")
+    @OperateLog(operModule = UiModuleConstants.CONFIG_MANAGE + "#告警定义", operType = OperateTypeConstants.UPDATE, operDesc = "编辑告警定义")
     public LayUiAdminResultVo editMonitorAlarmDefinition(MonitorAlarmDefinitionVo monitorAlarmDefinitionVo) {
         return this.monitorAlarmDefinitionService.editMonitorAlarmDefinition(monitorAlarmDefinitionVo);
     }
@@ -173,7 +173,7 @@ public class MonitorAlarmDefinitionController {
     @ApiOperation(value = "删除告警定义")
     @DeleteMapping("/delete-monitor-alarm-definition")
     @ResponseBody
-    @OperateLog(operModule = UiModuleConstants.MONITOR_MANAGE + "#告警定义", operType = OperateTypeConstants.DELETE, operDesc = "删除告警定义")
+    @OperateLog(operModule = UiModuleConstants.CONFIG_MANAGE + "#告警定义", operType = OperateTypeConstants.DELETE, operDesc = "删除告警定义")
     public LayUiAdminResultVo deleteMonitorAlarmDefinition(@RequestBody List<MonitorAlarmDefinitionVo> monitorAlarmDefinitionVos) {
         return this.monitorAlarmDefinitionService.deleteMonitorAlarmDefinition(monitorAlarmDefinitionVos);
     }
