@@ -87,7 +87,7 @@ public class MonitorUserController {
             @ApiImplicitParam(name = "email", value = "电子邮箱", paramType = "query", dataType = "string")})
     @GetMapping("/get-monitor-user-list")
     @ResponseBody
-    @OperateLog(operModule = UiModuleConstants.USER + "#用户管理", operType = OperateTypeConstants.QUERY, operDesc = "获取监控用户列表")
+    @OperateLog(operModule = UiModuleConstants.USER_MANAGE + "#用户", operType = OperateTypeConstants.QUERY, operDesc = "获取监控用户列表")
     public LayUiAdminResultVo getMonitorUserList(Long current, Long size, String account, String username, String email) {
         Page<MonitorUserVo> page = this.monitorUserService.getMonitorUserList(current, size, account, username, email);
         return LayUiAdminResultVo.ok(page);
@@ -165,7 +165,7 @@ public class MonitorUserController {
     @ApiOperation(value = "添加用户")
     @PostMapping("/save-user")
     @ResponseBody
-    @OperateLog(operModule = UiModuleConstants.USER + "#用户管理", operType = OperateTypeConstants.ADD, operDesc = "添加用户")
+    @OperateLog(operModule = UiModuleConstants.USER_MANAGE + "#用户", operType = OperateTypeConstants.ADD, operDesc = "添加用户")
     public LayUiAdminResultVo saveUser(MonitorUserVo monitorUserVo) {
         return this.monitorUserService.saveUser(monitorUserVo);
     }
@@ -183,7 +183,7 @@ public class MonitorUserController {
     @ApiOperation(value = "编辑用户")
     @PutMapping("/edit-user")
     @ResponseBody
-    @OperateLog(operModule = UiModuleConstants.USER + "#用户管理", operType = OperateTypeConstants.UPDATE, operDesc = "编辑用户")
+    @OperateLog(operModule = UiModuleConstants.USER_MANAGE + "#用户", operType = OperateTypeConstants.UPDATE, operDesc = "编辑用户")
     public LayUiAdminResultVo editUser(MonitorUserVo monitorUserVo) {
         return this.monitorUserService.editUser(monitorUserVo);
     }
@@ -202,7 +202,7 @@ public class MonitorUserController {
     @ApiOperation(value = "删除用户")
     @DeleteMapping("/delete-user")
     @ResponseBody
-    @OperateLog(operModule = UiModuleConstants.USER + "#用户管理", operType = OperateTypeConstants.DELETE, operDesc = "删除用户")
+    @OperateLog(operModule = UiModuleConstants.USER_MANAGE + "#用户", operType = OperateTypeConstants.DELETE, operDesc = "删除用户")
     public LayUiAdminResultVo deleteUser(@RequestBody List<MonitorUserVo> monitorUserVos) throws NotFoundUserException {
         return this.monitorUserService.deleteUser(monitorUserVos);
     }

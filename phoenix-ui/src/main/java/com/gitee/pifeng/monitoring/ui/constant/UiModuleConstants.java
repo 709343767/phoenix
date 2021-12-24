@@ -46,18 +46,23 @@ public final class UiModuleConstants {
     public static final String ALARM = "告警";
 
     /**
-     * 用户
+     * 监控管理
      */
-    public static final String USER = "用户";
+    public static final String MONITOR_MANAGE = "监控管理";
+
+    /**
+     * 用户管理
+     */
+    public static final String USER_MANAGE = "用户管理";
+
+    /**
+     * 我的
+     */
+    public static final String MYSELF = "我的";
 
     /**
      * 日志
      */
     public static final String LOG = "日志";
-
-    /**
-     * 设置
-     */
-    public static final String SET = "设置";
 
 }

@@ -85,7 +85,7 @@ public class MonitorRoleController {
             @ApiImplicitParam(name = "roleId", value = "角色ID", paramType = "query", dataType = "long")})
     @GetMapping("/get-monitor-role-list")
     @ResponseBody
-    @OperateLog(operModule = UiModuleConstants.USER + "#角色管理", operType = OperateTypeConstants.QUERY, operDesc = "获取监控角色列表")
+    @OperateLog(operModule = UiModuleConstants.USER_MANAGE + "#角色", operType = OperateTypeConstants.QUERY, operDesc = "获取监控角色列表")
     public LayUiAdminResultVo getMonitorRoleList(Long current, Long size, Long roleId) {
         Page<MonitorRoleVo> page = this.monitorRoleService.getMonitorRoleList(current, size, roleId);
         return LayUiAdminResultVo.ok(page);

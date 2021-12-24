@@ -114,7 +114,7 @@ public class MyselfController {
             @ApiImplicitParam(name = "password", value = "新密码", required = true, paramType = "query", dataType = "string")})
     @PutMapping("/update-password")
     @ResponseBody
-    @OperateLog(operModule = UiModuleConstants.SET + "#我的设置", operType = OperateTypeConstants.UPDATE, operDesc = "修改密码")
+    @OperateLog(operModule = UiModuleConstants.MYSELF + "#修改密码", operType = OperateTypeConstants.UPDATE, operDesc = "修改密码")
     public LayUiAdminResultVo updatePassword(@RequestParam(name = "oldPassword") String oldPassword,
                                              @RequestParam(name = "password") String password) {
         return this.monitorUserService.updatePassword(oldPassword, password);
@@ -133,7 +133,7 @@ public class MyselfController {
     @ApiOperation(value = "修改当前用户信息")
     @PutMapping("/update-user")
     @ResponseBody
-    @OperateLog(operModule = UiModuleConstants.SET + "#我的设置", operType = OperateTypeConstants.UPDATE, operDesc = "修改当前用户信息")
+    @OperateLog(operModule = UiModuleConstants.MYSELF + "#基本资料", operType = OperateTypeConstants.UPDATE, operDesc = "修改当前用户信息")
     public LayUiAdminResultVo updateUser(MonitorUserVo monitorUserVo) {
         return this.monitorUserService.updateUser(monitorUserVo);
     }

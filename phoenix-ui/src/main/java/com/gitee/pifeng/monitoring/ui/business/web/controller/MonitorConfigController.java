@@ -72,7 +72,7 @@ public class MonitorConfigController {
     @ApiOperation(value = "更新监控配置")
     @ResponseBody
     @PutMapping("/update-monitor-config")
-    @OperateLog(operModule = UiModuleConstants.SET + "#监控设置", operType = OperateTypeConstants.UPDATE, operDesc = "更新监控配置")
+    @OperateLog(operModule = UiModuleConstants.MONITOR_MANAGE + "#监控配置", operType = OperateTypeConstants.UPDATE, operDesc = "更新监控配置")
     public LayUiAdminResultVo updateMonitorConfig(MonitorConfigPageFormVo monitorConfigPageFormVo) throws NetException, SigarException {
         return this.monitorConfigService.update(monitorConfigPageFormVo);
     }

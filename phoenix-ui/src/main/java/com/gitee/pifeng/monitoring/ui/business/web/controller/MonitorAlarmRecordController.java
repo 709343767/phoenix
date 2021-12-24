@@ -100,7 +100,7 @@ public class MonitorAlarmRecordController {
             @ApiImplicitParam(name = "updateDate", value = "告警日期", paramType = "query", dataType = "string")})
     @GetMapping("/get-monitor-alarm-record-list")
     @ResponseBody
-    @OperateLog(operModule = UiModuleConstants.ALARM + "#告警记录", operType = OperateTypeConstants.QUERY, operDesc = "获取告警记录列表")
+    @OperateLog(operModule = UiModuleConstants.ALARM, operType = OperateTypeConstants.QUERY, operDesc = "获取告警记录列表")
     public LayUiAdminResultVo getMonitorAlarmRecordList(Long current, Long size, String type, String level,
                                                         String status, String title, String content,
                                                         String number, String insertDate, String updateDate) {
@@ -121,7 +121,7 @@ public class MonitorAlarmRecordController {
     @ApiOperation(value = "删除告警记录")
     @DeleteMapping("/delete-monitor-alarm-record")
     @ResponseBody
-    @OperateLog(operModule = UiModuleConstants.ALARM + "#告警记录", operType = OperateTypeConstants.DELETE, operDesc = "删除告警记录")
+    @OperateLog(operModule = UiModuleConstants.ALARM, operType = OperateTypeConstants.DELETE, operDesc = "删除告警记录")
     public LayUiAdminResultVo deleteMonitorAlarmRecord(@RequestBody List<MonitorAlarmRecordVo> monitorAlarmRecordVos) {
         return this.monitorAlarmRecordService.deleteMonitorAlarmRecord(monitorAlarmRecordVos);
     }
@@ -148,7 +148,7 @@ public class MonitorAlarmRecordController {
             @ApiImplicitParam(name = "content", value = "告警内容", paramType = "query", dataType = "string")})
     @GetMapping("/export-monitor-alarm-record-list")
     @ResponseBody
-    @OperateLog(operModule = UiModuleConstants.ALARM + "#告警记录", operType = OperateTypeConstants.EXPORT, operDesc = "导出告警记录列表")
+    @OperateLog(operModule = UiModuleConstants.ALARM, operType = OperateTypeConstants.EXPORT, operDesc = "导出告警记录列表")
     public void exportMonitorAlarmRecordList(String type, String level, String status, String title, String content) {
         String name = "告警记录";
         List<MonitorAlarmRecordVo> monitorAlarmRecordVos = this.monitorAlarmRecordService.getMonitorAlarmRecordList(type, level, status, title, content);

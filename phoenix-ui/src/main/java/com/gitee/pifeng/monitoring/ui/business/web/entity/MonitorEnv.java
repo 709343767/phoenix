@@ -48,6 +48,10 @@ public class MonitorEnv implements Serializable {
     @TableField("CREATE_ACCOUNT")
     private String createAccount;
 
+    @ApiModelProperty(value = "更新人账号")
+    @TableField("UPDATE_ACCOUNT")
+    private String updateAccount;
+
     @ApiModelProperty(value = "插入时间")
     @TableField("INSERT_TIME")
     private Date insertTime;
