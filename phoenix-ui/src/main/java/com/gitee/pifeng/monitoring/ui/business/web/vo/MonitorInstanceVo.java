@@ -74,6 +74,12 @@ public class MonitorInstanceVo implements ISuperBean {
     @ApiModelProperty(value = "应用服务器类型")
     private String appServerType;
 
+    @ApiModelProperty(value = "监控环境")
+    private String monitorEnv;
+
+    @ApiModelProperty(value = "监控分组")
+    private String monitorGroup;
+
     /**
      * <p>
      * MonitorInstanceVo转MonitorInstance

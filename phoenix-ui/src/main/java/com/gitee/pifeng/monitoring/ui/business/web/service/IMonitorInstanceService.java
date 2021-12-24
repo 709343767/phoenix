@@ -40,11 +40,13 @@ public interface IMonitorInstanceService extends IService<MonitorInstance> {
      * @param instanceName 应用实例名
      * @param endpoint     端点
      * @param isOnline     应用状态
+     * @param monitorEnv   监控环境
+     * @param monitorGroup 监控分组
      * @return 简单分页模型
      * @author 皮锋
      * @custom.date 2020/9/26 11:02
      */
-    Page<MonitorInstanceVo> getMonitorInstanceList(Long current, Long size, String instanceName, String endpoint, String isOnline);
+    Page<MonitorInstanceVo> getMonitorInstanceList(Long current, Long size, String instanceName, String endpoint, String isOnline, String monitorEnv, String monitorGroup);
 
     /**
      * <p>

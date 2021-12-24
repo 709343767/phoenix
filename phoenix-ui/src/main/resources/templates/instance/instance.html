@@ -33,7 +33,7 @@
                 </div>
                 <div class="layui-inline">
                     <label class="layui-form-label">端点</label>
-                    <div class="layui-input-block">
+                    <div class="layui-input-block" style="width: 120px;">
                         <select name="endpoint">
                             <option value="">所有</option>
                             <option value="client">客户端</option>
@@ -45,11 +45,31 @@
                 </div>
                 <div class="layui-inline">
                     <label class="layui-form-label">应用状态</label>
-                    <div class="layui-input-block">
+                    <div class="layui-input-block" style="width: 120px;">
                         <select name="isOnline">
                             <option value="">所有</option>
                             <option value="1">在线</option>
                             <option value="0">离线</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">环境</label>
+                    <div class="layui-input-block" style="width: 120px;">
+                        <select name="monitorEnv">
+                            <option value="">所有</option>
+                            <option th:each="monitorEnv:${monitorEnvs}" th:value="${monitorEnv}"
+                                    th:text="${monitorEnv}"></option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">分组</label>
+                    <div class="layui-input-block" style="width: 120px;">
+                        <select name="monitorGroup">
+                            <option value="">所有</option>
+                            <option th:each="monitorGroup:${monitorGroups}" th:value="${monitorGroup}"
+                                    th:text="${monitorGroup}"></option>
                         </select>
                     </div>
                 </div>
@@ -200,6 +220,21 @@
                     minWidth: 120,
                     sort: !0
                 }, {
+                    field: 'monitorEnv',
+                    title: '环境',
+                    minWidth: 120,
+                    sort: !0
+                }, {
+                    field: 'monitorGroup',
+                    title: '分组',
+                    minWidth: 120,
+                    sort: !0
+                }, {
+                    field: 'instanceDesc',
+                    title: '描述',
+                    minWidth: 250,
+                    sort: !0
+                }, {
                     field: 'insertTime',
                     title: '新增时间',
                     minWidth: 170,
@@ -208,11 +243,6 @@
                     field: 'updateTime',
                     title: '更新时间',
                     minWidth: 170,
-                    sort: !0
-                }, {
-                    field: 'instanceDesc',
-                    title: '描述',
-                    minWidth: 250,
                     sort: !0
                 }, {
                     title: '操作',

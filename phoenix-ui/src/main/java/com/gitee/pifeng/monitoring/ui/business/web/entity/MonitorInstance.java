@@ -88,4 +88,12 @@ public class MonitorInstance implements Serializable {
     @TableField("APP_SERVER_TYPE")
     private String appServerType;
 
+    @ApiModelProperty(value = "监控环境")
+    @TableField("MONITOR_ENV")
+    private String monitorEnv;
+
+    @ApiModelProperty(value = "监控分组")
+    @TableField("MONITOR_GROUP")
+    private String monitorGroup;
+
 }

@@ -109,12 +109,14 @@ public class MonitorInstanceServiceImpl extends ServiceImpl<IMonitorInstanceDao,
      * @param instanceName 应用实例名
      * @param endpoint     端点
      * @param isOnline     应用状态
+     * @param monitorEnv   监控环境
+     * @param monitorGroup 监控分组
      * @return 简单分页模型
      * @author 皮锋
      * @custom.date 2020/9/26 11:02
      */
     @Override
-    public Page<MonitorInstanceVo> getMonitorInstanceList(Long current, Long size, String instanceName, String endpoint, String isOnline) {
+    public Page<MonitorInstanceVo> getMonitorInstanceList(Long current, Long size, String instanceName, String endpoint, String isOnline, String monitorEnv, String monitorGroup) {
         // 查询数据库
         IPage<MonitorInstance> ipage = new Page<>(current, size);
         LambdaQueryWrapper<MonitorInstance> lambdaQueryWrapper = new LambdaQueryWrapper<>();
@@ -126,6 +128,12 @@ public class MonitorInstanceServiceImpl extends ServiceImpl<IMonitorInstanceDao,
         }
         if (StringUtils.isNotBlank(isOnline)) {
             lambdaQueryWrapper.eq(MonitorInstance::getIsOnline, isOnline);
+        }
+        if (StringUtils.isNotBlank(monitorEnv)) {
+            lambdaQueryWrapper.like(MonitorInstance::getMonitorEnv, monitorEnv);
+        }
+        if (StringUtils.isNotBlank(monitorGroup)) {
+            lambdaQueryWrapper.like(MonitorInstance::getMonitorGroup, monitorGroup);
         }
         lambdaQueryWrapper.orderByAsc(MonitorInstance::getInstanceName).orderByAsc(MonitorInstance::getId);
         IPage<MonitorInstance> monitorInstancePage = this.monitorInstanceDao.selectPage(ipage, lambdaQueryWrapper);

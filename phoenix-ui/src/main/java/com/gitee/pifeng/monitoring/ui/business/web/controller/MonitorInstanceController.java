@@ -2,6 +2,10 @@ package com.gitee.pifeng.monitoring.ui.business.web.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.gitee.pifeng.monitoring.ui.business.web.annotation.OperateLog;
+import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorEnv;
+import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorGroup;
+import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorEnvService;
+import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorGroupService;
 import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorInstanceService;
 import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorJvmMemoryService;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.LayUiAdminResultVo;
@@ -18,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -45,6 +50,18 @@ public class MonitorInstanceController {
     private IMonitorJvmMemoryService monitorJvmMemoryService;
 
     /**
+     * 监控环境服务类
+     */
+    @Autowired
+    private IMonitorEnvService monitorEnvService;
+
+    /**
+     * 监控分组服务类
+     */
+    @Autowired
+    private IMonitorGroupService monitorGroupService;
+
+    /**
      * <p>
      * 访问应用程序列表页面
      * </p>
@@ -56,7 +73,14 @@ public class MonitorInstanceController {
     @ApiOperation(value = "访问应用程序列表页面")
     @GetMapping("/list")
     public ModelAndView list() {
-        return new ModelAndView("instance/instance");
+        ModelAndView mv = new ModelAndView("instance/instance");
+        // 监控环境列表
+        List<String> monitorEnvs = this.monitorEnvService.list().stream().map(MonitorEnv::getEnvName).collect(Collectors.toList());
+        // 监控分组列表
+        List<String> monitorGroups = this.monitorGroupService.list().stream().map(MonitorGroup::getGroupName).collect(Collectors.toList());
+        mv.addObject("monitorEnvs", monitorEnvs);
+        mv.addObject("monitorGroups", monitorGroups);
+        return mv;
     }
 
     /**
@@ -69,6 +93,8 @@ public class MonitorInstanceController {
      * @param instanceName 应用实例名
      * @param endpoint     端点
      * @param isOnline     应用状态
+     * @param monitorEnv   监控环境
+     * @param monitorGroup 监控分组
      * @return layUiAdmin响应对象
      * @author 皮锋
      * @custom.date 2020/9/26 10:59
@@ -79,12 +105,15 @@ public class MonitorInstanceController {
             @ApiImplicitParam(name = "size", value = "每页显示条数", required = true, paramType = "query", dataType = "long"),
             @ApiImplicitParam(name = "instanceName", value = "应用实例名", paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "endpoint", value = "端点", paramType = "query", dataType = "string"),
-            @ApiImplicitParam(name = "isOnline", value = "应用状态", paramType = "query", dataType = "string")})
+            @ApiImplicitParam(name = "isOnline", value = "应用状态", paramType = "query", dataType = "string"),
+            @ApiImplicitParam(name = "monitorEnv", value = "监控环境", paramType = "query", dataType = "string"),
+            @ApiImplicitParam(name = "monitorGroup", value = "监控分组", paramType = "query", dataType = "string")})
     @GetMapping("/get-monitor-instance-list")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.INSTANCE, operType = OperateTypeConstants.QUERY, operDesc = "获取应用程序列表")
-    public LayUiAdminResultVo getMonitorInstanceList(Long current, Long size, String instanceName, String endpoint, String isOnline) {
-        Page<MonitorInstanceVo> page = this.monitorInstanceService.getMonitorInstanceList(current, size, instanceName, endpoint, isOnline);
+    public LayUiAdminResultVo getMonitorInstanceList(Long current, Long size, String instanceName, String endpoint,
+                                                     String isOnline, String monitorEnv, String monitorGroup) {
+        Page<MonitorInstanceVo> page = this.monitorInstanceService.getMonitorInstanceList(current, size, instanceName, endpoint, isOnline, monitorEnv, monitorGroup);
         return LayUiAdminResultVo.ok(page);
     }
 
