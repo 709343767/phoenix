@@ -30,6 +30,7 @@
         <label class="layui-form-label">环境</label>
         <div class="layui-input-block">
             <select name="monitorEnv">
+                <option value="">不设置</option>
                 <option th:each="monitorEnv:${monitorEnvs}" th:value="${monitorEnv}"
                         th:text="${monitorEnv}"></option>
             </select>
@@ -39,6 +40,7 @@
         <label class="layui-form-label">分组</label>
         <div class="layui-input-block">
             <select name="monitorGroup">
+                <option value="">不设置</option>
                 <option th:each="monitorGroup:${monitorGroups}" th:value="${monitorGroup}"
                         th:text="${monitorGroup}"></option>
             </select>
