@@ -43,11 +43,31 @@
                 </div>
                 <div class="layui-inline">
                     <label class="layui-form-label">状态</label>
-                    <div class="layui-input-block">
+                    <div class="layui-input-block" style="width: 120px;">
                         <select name="isOnline">
                             <option value="">所有</option>
                             <option value="1">在线</option>
                             <option value="0">离线</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">环境</label>
+                    <div class="layui-input-block" style="width: 120px;">
+                        <select name="monitorEnv">
+                            <option value="">所有</option>
+                            <option th:each="monitorEnv:${monitorEnvs}" th:value="${monitorEnv}"
+                                    th:text="${monitorEnv}"></option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">分组</label>
+                    <div class="layui-input-block" style="width: 120px;">
+                        <select name="monitorGroup">
+                            <option value="">所有</option>
+                            <option th:each="monitorGroup:${monitorGroups}" th:value="${monitorGroup}"
+                                    th:text="${monitorGroup}"></option>
                         </select>
                     </div>
                 </div>
@@ -197,6 +217,16 @@
                     field: 'uploadBps',
                     title: '上行带宽',
                     minWidth: 110,
+                    sort: !0
+                }, {
+                    field: 'monitorEnv',
+                    title: '环境',
+                    minWidth: 120,
+                    sort: !0
+                }, {
+                    field: 'monitorGroup',
+                    title: '分组',
+                    minWidth: 120,
                     sort: !0
                 }, {
                     field: 'serverSummary',
@@ -406,12 +436,12 @@
                     // 宽度
                     width = document.body.clientWidth * 0.68 + 'px';
                     // 高度
-                    height = document.body.clientHeight * 0.4 + 'px';
+                    height = document.body.clientHeight * 0.45 + 'px';
                 } else {
                     // 宽度
                     width = document.body.clientWidth * 0.3 + 'px';
                     // 高度
-                    height = document.body.clientHeight * 0.3 + 'px';
+                    height = document.body.clientHeight * 0.4 + 'px';
                 }
                 layer.open({
                     type: 2,

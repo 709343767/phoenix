@@ -268,6 +268,12 @@ public class MonitorInstanceServiceImpl extends ServiceImpl<IMonitorInstanceDao,
     @Override
     public LayUiAdminResultVo editMonitorInstance(MonitorInstanceVo monitorInstanceVo) {
         MonitorInstance monitorInstance = monitorInstanceVo.convertTo();
+        if (StringUtils.isBlank(monitorInstance.getMonitorEnv())) {
+            monitorInstance.setMonitorEnv(null);
+        }
+        if (StringUtils.isBlank(monitorInstance.getMonitorGroup())) {
+            monitorInstance.setMonitorGroup(null);
+        }
         LambdaUpdateWrapper<MonitorInstance> monitorInstanceLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
         monitorInstanceLambdaUpdateWrapper.eq(MonitorInstance::getInstanceId, monitorInstance.getInstanceId());
         this.monitorInstanceDao.update(monitorInstance, monitorInstanceLambdaUpdateWrapper);

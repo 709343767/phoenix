@@ -35,16 +35,18 @@ public interface IMonitorServerService extends IService<MonitorServer> {
      * 获取服务器列表
      * </p>
      *
-     * @param current    当前页
-     * @param size       每页显示条数
-     * @param ip         IP
-     * @param serverName 服务器名
-     * @param isOnline   状态
+     * @param current      当前页
+     * @param size         每页显示条数
+     * @param ip           IP
+     * @param serverName   服务器名
+     * @param isOnline     状态
+     * @param monitorEnv   监控环境
+     * @param monitorGroup 监控分组
      * @return 简单分页模型
      * @author 皮锋
      * @custom.date 2020/9/4 12:37
      */
-    Page<MonitorServerVo> getMonitorServerList(Long current, Long size, String ip, String serverName, String isOnline);
+    Page<MonitorServerVo> getMonitorServerList(Long current, Long size, String ip, String serverName, String isOnline, String monitorEnv, String monitorGroup);
 
     /**
      * <p>

@@ -68,4 +68,12 @@ public class MonitorServer implements Serializable {
     @TableField("UPDATE_TIME")
     private Date updateTime;
 
+    @ApiModelProperty(value = "监控环境")
+    @TableField("MONITOR_ENV")
+    private String monitorEnv;
+
+    @ApiModelProperty(value = "监控分组")
+    @TableField("MONITOR_GROUP")
+    private String monitorGroup;
+
 }

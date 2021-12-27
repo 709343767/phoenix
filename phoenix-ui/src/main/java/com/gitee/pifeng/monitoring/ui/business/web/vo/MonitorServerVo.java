@@ -74,6 +74,12 @@ public class MonitorServerVo implements ISuperBean {
     @ApiModelProperty(value = "上行带宽")
     private String uploadBps;
 
+    @ApiModelProperty(value = "监控环境")
+    private String monitorEnv;
+
+    @ApiModelProperty(value = "监控分组")
+    private String monitorGroup;
+
     /**
      * <p>
      * MonitorServerVo转MonitorServer

@@ -2,7 +2,11 @@ package com.gitee.pifeng.monitoring.ui.business.web.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.gitee.pifeng.monitoring.ui.business.web.annotation.OperateLog;
+import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorEnv;
+import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorGroup;
 import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorConfigService;
+import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorEnvService;
+import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorGroupService;
 import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorServerService;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.LayUiAdminResultVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.MonitorConfigPageFormVo;
@@ -19,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -46,6 +51,18 @@ public class MonitorServerController {
     private IMonitorConfigService monitorConfigService;
 
     /**
+     * 监控环境服务类
+     */
+    @Autowired
+    private IMonitorEnvService monitorEnvService;
+
+    /**
+     * 监控分组服务类
+     */
+    @Autowired
+    private IMonitorGroupService monitorGroupService;
+
+    /**
      * <p>
      * 访问服务器列表页面
      * </p>
@@ -58,8 +75,15 @@ public class MonitorServerController {
     @GetMapping("/list")
     public ModelAndView list() {
         ModelAndView mv = new ModelAndView("server/server");
+        // 监控配置
         MonitorConfigPageFormVo monitorConfigPageFormInfo = this.monitorConfigService.getMonitorConfigPageFormInfo();
         mv.addObject("monitorConfigPageFormInfo", monitorConfigPageFormInfo);
+        // 监控环境列表
+        List<String> monitorEnvs = this.monitorEnvService.list().stream().map(MonitorEnv::getEnvName).collect(Collectors.toList());
+        // 监控分组列表
+        List<String> monitorGroups = this.monitorGroupService.list().stream().map(MonitorGroup::getGroupName).collect(Collectors.toList());
+        mv.addObject("monitorEnvs", monitorEnvs);
+        mv.addObject("monitorGroups", monitorGroups);
         return mv;
     }
 
@@ -68,11 +92,13 @@ public class MonitorServerController {
      * 获取服务器列表
      * </p>
      *
-     * @param current    当前页
-     * @param size       每页显示条数
-     * @param ip         IP
-     * @param isOnline   状态
-     * @param serverName 服务器名
+     * @param current      当前页
+     * @param size         每页显示条数
+     * @param ip           IP
+     * @param isOnline     状态
+     * @param serverName   服务器名
+     * @param monitorEnv   监控环境
+     * @param monitorGroup 监控分组
      * @return layUiAdmin响应对象
      * @author 皮锋
      * @custom.date 2020/9/4 12:34
@@ -83,12 +109,14 @@ public class MonitorServerController {
             @ApiImplicitParam(name = "size", value = "每页显示条数", required = true, paramType = "query", dataType = "long"),
             @ApiImplicitParam(name = "ip", value = "IP", paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "serverName", value = "服务器名", paramType = "query", dataType = "string"),
-            @ApiImplicitParam(name = "isOnline", value = "状态", paramType = "query", dataType = "string")})
+            @ApiImplicitParam(name = "isOnline", value = "状态", paramType = "query", dataType = "string"),
+            @ApiImplicitParam(name = "monitorEnv", value = "监控环境", paramType = "query", dataType = "string"),
+            @ApiImplicitParam(name = "monitorGroup", value = "监控分组", paramType = "query", dataType = "string")})
     @GetMapping("/get-monitor-server-list")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.SERVER, operType = OperateTypeConstants.QUERY, operDesc = "获取服务器列表")
-    public LayUiAdminResultVo getMonitorServerList(Long current, Long size, String ip, String serverName, String isOnline) {
-        Page<MonitorServerVo> page = this.monitorServerService.getMonitorServerList(current, size, ip, serverName, isOnline);
+    public LayUiAdminResultVo getMonitorServerList(Long current, Long size, String ip, String serverName, String isOnline, String monitorEnv, String monitorGroup) {
+        Page<MonitorServerVo> page = this.monitorServerService.getMonitorServerList(current, size, ip, serverName, isOnline, monitorEnv, monitorGroup);
         return LayUiAdminResultVo.ok(page);
     }
 
@@ -199,6 +227,12 @@ public class MonitorServerController {
         ModelAndView mv = new ModelAndView("server/edit-server");
         mv.addObject("id", id);
         mv.addObject("ip", ip);
+        // 监控环境列表
+        List<String> monitorEnvs = this.monitorEnvService.list().stream().map(MonitorEnv::getEnvName).collect(Collectors.toList());
+        // 监控分组列表
+        List<String> monitorGroups = this.monitorGroupService.list().stream().map(MonitorGroup::getGroupName).collect(Collectors.toList());
+        mv.addObject("monitorEnvs", monitorEnvs);
+        mv.addObject("monitorGroups", monitorGroups);
         // 服务器信息
         MonitorServerVo monitorServerVo = this.monitorServerService.getMonitorServerInfo(id, ip);
         mv.addObject("serverSummary", monitorServerVo.getServerSummary());

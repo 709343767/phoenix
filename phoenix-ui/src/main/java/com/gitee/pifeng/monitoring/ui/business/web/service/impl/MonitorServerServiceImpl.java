@@ -154,17 +154,19 @@ public class MonitorServerServiceImpl extends ServiceImpl<IMonitorServerDao, Mon
      * 获取服务器列表
      * </p>
      *
-     * @param current    当前页
-     * @param size       每页显示条数
-     * @param ip         IP
-     * @param serverName 服务器名
-     * @param isOnline   状态
+     * @param current      当前页
+     * @param size         每页显示条数
+     * @param ip           IP
+     * @param serverName   服务器名
+     * @param isOnline     状态
+     * @param monitorEnv   监控环境
+     * @param monitorGroup 监控分组
      * @return 简单分页模型
      * @author 皮锋
      * @custom.date 2020/9/4 12:38
      */
     @Override
-    public Page<MonitorServerVo> getMonitorServerList(Long current, Long size, String ip, String serverName, String isOnline) {
+    public Page<MonitorServerVo> getMonitorServerList(Long current, Long size, String ip, String serverName, String isOnline, String monitorEnv, String monitorGroup) {
         // 查询数据库
         IPage<MonitorServer> ipage = new Page<>(current, size);
         // 查询条件
@@ -172,6 +174,8 @@ public class MonitorServerServiceImpl extends ServiceImpl<IMonitorServerDao, Mon
         criteria.put("ip", ip);
         criteria.put("serverName", serverName);
         criteria.put("isOnline", isOnline);
+        criteria.put("monitorEnv", monitorEnv);
+        criteria.put("monitorGroup", monitorGroup);
         IPage<MonitorServerVo> monitorServerPage = this.monitorServerDao.getMonitorServerList(ipage, criteria);
         List<MonitorServerVo> monitorServerVos = monitorServerPage.getRecords();
         for (MonitorServerVo monitorServerVo : monitorServerVos) {
@@ -352,6 +356,12 @@ public class MonitorServerServiceImpl extends ServiceImpl<IMonitorServerDao, Mon
     @Override
     public LayUiAdminResultVo editMonitorServer(MonitorServerVo monitorServerVo) {
         MonitorServer monitorServer = monitorServerVo.convertTo();
+        if (StringUtils.isBlank(monitorServer.getMonitorEnv())) {
+            monitorServer.setMonitorEnv(null);
+        }
+        if (StringUtils.isBlank(monitorServer.getMonitorGroup())) {
+            monitorServer.setMonitorGroup(null);
+        }
         LambdaUpdateWrapper<MonitorServer> serverLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
         serverLambdaUpdateWrapper.eq(MonitorServer::getId, monitorServer.getId());
         serverLambdaUpdateWrapper.eq(MonitorServer::getIp, monitorServer.getIp());

@@ -37,6 +37,12 @@
         <if test="criteria.isOnline!=null and criteria.isOnline!=''">
             AND S.IS_ONLINE=#{criteria.isOnline}
         </if>
+        <if test="criteria.monitorEnv!=null and criteria.monitorEnv!=''">
+            AND S.MONITOR_ENV like concat('%',#{criteria.monitorEnv},'%')
+        </if>
+        <if test="criteria.monitorGroup!=null and criteria.monitorGroup!=''">
+            AND S.MONITOR_GROUP like concat('%',#{criteria.monitorGroup},'%')
+        </if>
         GROUP BY S.ID,
         S.IP,
         S.SERVER_NAME,
