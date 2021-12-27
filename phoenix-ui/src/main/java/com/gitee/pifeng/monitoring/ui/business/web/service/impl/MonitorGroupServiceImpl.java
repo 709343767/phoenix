@@ -1,6 +1,7 @@
 package com.gitee.pifeng.monitoring.ui.business.web.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -14,6 +15,7 @@ import com.gitee.pifeng.monitoring.ui.util.SpringSecurityUtils;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -126,5 +128,32 @@ public class MonitorGroupServiceImpl extends ServiceImpl<IMonitorGroupDao, Monit
             return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);
         }
         return LayUiAdminResultVo.ok(WebResponseConstants.FAIL);
+    }
+
+    /**
+     * <p>
+     * 删除分组信息
+     * </p>
+     *
+     * @param monitorGroupVos 监控分组信息表现层对象
+     * @return layUiAdmin响应对象：如果删除成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @author 皮锋
+     * @custom.date 2021/12/27 12:28
+     */
+    @Override
+    public LayUiAdminResultVo deleteMonitorGroup(List<MonitorGroupVo> monitorGroupVos) {
+        List<Long> ids = Lists.newArrayList();
+        for (MonitorGroupVo monitorGroupVo : monitorGroupVos) {
+            ids.add(monitorGroupVo.getId());
+        }
+        LambdaUpdateWrapper<MonitorGroup> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+        lambdaUpdateWrapper.in(MonitorGroup::getId, ids);
+        try {
+            this.monitorGroupDao.delete(lambdaUpdateWrapper);
+        } catch (DataIntegrityViolationException e) {
+            // 违反数据完整性约束，因为数据被引用
+            return LayUiAdminResultVo.ok(WebResponseConstants.DATA_INTEGRITY_VIOLATION);
+        }
+        return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);
     }
 }

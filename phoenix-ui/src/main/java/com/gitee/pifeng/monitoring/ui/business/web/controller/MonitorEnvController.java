@@ -1,6 +1,5 @@
 package com.gitee.pifeng.monitoring.ui.business.web.controller;
 
-
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.gitee.pifeng.monitoring.ui.business.web.annotation.OperateLog;
 import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorEnv;
@@ -17,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.List;
 
 /**
  * <p>
@@ -151,6 +152,24 @@ public class MonitorEnvController {
     @OperateLog(operModule = UiModuleConstants.CONFIG_MANAGE + "#环境管理", operType = OperateTypeConstants.UPDATE, operDesc = "编辑环境信息")
     public LayUiAdminResultVo editMonitorEnv(MonitorEnvVo monitorEnvVo) {
         return this.monitorEnvService.editMonitorEnv(monitorEnvVo);
+    }
+
+    /**
+     * <p>
+     * 删除环境信息
+     * </p>
+     *
+     * @param monitorEnvVos 环境信息表现层对象
+     * @return layUiAdmin响应对象：如果删除成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @author 皮锋
+     * @custom.date 2021/12/27 10:09
+     */
+    @ApiOperation(value = "删除环境信息")
+    @DeleteMapping("/delete-monitor-env")
+    @ResponseBody
+    @OperateLog(operModule = UiModuleConstants.CONFIG_MANAGE + "#环境管理", operType = OperateTypeConstants.DELETE, operDesc = "删除环境信息")
+    public LayUiAdminResultVo deleteMonitorEnv(@RequestBody List<MonitorEnvVo> monitorEnvVos) {
+        return this.monitorEnvService.deleteMonitorEnv(monitorEnvVos);
     }
 
 }

@@ -1,6 +1,7 @@
 package com.gitee.pifeng.monitoring.ui.business.web.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -14,6 +15,7 @@ import com.gitee.pifeng.monitoring.ui.util.SpringSecurityUtils;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -126,5 +128,32 @@ public class MonitorEnvServiceImpl extends ServiceImpl<IMonitorEnvDao, MonitorEn
             return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);
         }
         return LayUiAdminResultVo.ok(WebResponseConstants.FAIL);
+    }
+
+    /**
+     * <p>
+     * 删除环境信息
+     * </p>
+     *
+     * @param monitorEnvVos 监控环境信息表现层对象
+     * @return layUiAdmin响应对象：如果删除成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @author 皮锋
+     * @custom.date 2021/12/27 10:11
+     */
+    @Override
+    public LayUiAdminResultVo deleteMonitorEnv(List<MonitorEnvVo> monitorEnvVos) {
+        List<Long> ids = Lists.newArrayList();
+        for (MonitorEnvVo monitorEnvVo : monitorEnvVos) {
+            ids.add(monitorEnvVo.getId());
+        }
+        LambdaUpdateWrapper<MonitorEnv> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+        lambdaUpdateWrapper.in(MonitorEnv::getId, ids);
+        try {
+            this.monitorEnvDao.delete(lambdaUpdateWrapper);
+        } catch (DataIntegrityViolationException e) {
+            // 违反数据完整性约束，因为数据被引用
+            return LayUiAdminResultVo.ok(WebResponseConstants.DATA_INTEGRITY_VIOLATION);
+        }
+        return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);
     }
 }

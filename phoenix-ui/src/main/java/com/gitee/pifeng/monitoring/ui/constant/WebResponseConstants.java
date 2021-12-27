@@ -51,4 +51,9 @@ public class WebResponseConstants {
      */
     public static final String REQUIRED_IS_NULL = "requiredIsNull";
 
+    /**
+     * 数据完整性冲突
+     */
+    public static final String DATA_INTEGRITY_VIOLATION = "dataIntegrityViolation";
+
 }

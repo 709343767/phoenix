@@ -17,6 +17,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.List;
+
 /**
  * <p>
  * 分组管理
@@ -150,6 +152,24 @@ public class MonitorGroupController {
     @OperateLog(operModule = UiModuleConstants.CONFIG_MANAGE + "#分组管理", operType = OperateTypeConstants.UPDATE, operDesc = "编辑分组信息")
     public LayUiAdminResultVo editMonitorGroup(MonitorGroupVo monitorGroupVo) {
         return this.monitorGroupService.editMonitorGroup(monitorGroupVo);
+    }
+
+    /**
+     * <p>
+     * 删除分组信息
+     * </p>
+     *
+     * @param monitorGroupVos 分组信息表现层对象
+     * @return layUiAdmin响应对象：如果删除成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @author 皮锋
+     * @custom.date 2021/12/27 12:25
+     */
+    @ApiOperation(value = "删除分组信息")
+    @DeleteMapping("/delete-monitor-group")
+    @ResponseBody
+    @OperateLog(operModule = UiModuleConstants.CONFIG_MANAGE + "#分组管理", operType = OperateTypeConstants.DELETE, operDesc = "删除分组信息")
+    public LayUiAdminResultVo deleteMonitorGroup(@RequestBody List<MonitorGroupVo> monitorGroupVos) {
+        return this.monitorGroupService.deleteMonitorGroup(monitorGroupVos);
     }
 
 }

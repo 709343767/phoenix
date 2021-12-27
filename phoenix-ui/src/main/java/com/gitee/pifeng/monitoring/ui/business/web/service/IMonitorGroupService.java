@@ -6,6 +6,8 @@ import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorGroup;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.LayUiAdminResultVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.MonitorGroupVo;
 
+import java.util.List;
+
 /**
  * <p>
  * 监控分组服务类
@@ -55,4 +57,16 @@ public interface IMonitorGroupService extends IService<MonitorGroup> {
      * @custom.date 2021/12/24 14:34
      */
     LayUiAdminResultVo editMonitorGroup(MonitorGroupVo monitorGroupVo);
+
+    /**
+     * <p>
+     * 删除分组信息
+     * </p>
+     *
+     * @param monitorGroupVos 监控分组信息表现层对象
+     * @return layUiAdmin响应对象：如果删除成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @author 皮锋
+     * @custom.date 2021/12/27 12:28
+     */
+    LayUiAdminResultVo deleteMonitorGroup(List<MonitorGroupVo> monitorGroupVos);
 }

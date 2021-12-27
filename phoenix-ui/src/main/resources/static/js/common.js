@@ -22,7 +22,11 @@ var webConst = {
     /**
      * 必选项（必填项）为空
      */
-    REQUIRED_IS_NULL: 'requiredIsNull'
+    REQUIRED_IS_NULL: 'requiredIsNull',
+    /**
+     * 数据完整性冲突
+     */
+    DATA_INTEGRITY_VIOLATION: 'dataIntegrityViolation'
 };
 
 /**
