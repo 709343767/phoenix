@@ -65,6 +65,7 @@
             ],
             page: false,
             limit: 15,
+            limits: [15, 25, 35, 45, 55, 65, 75, 85, 95],
             height: 'full'
         });
         // 点击表头排序
@@ -146,6 +147,7 @@
             ],
             page: false,
             limit: 15,
+            limits: [15, 25, 35, 45, 55, 65, 75, 85, 95],
             height: 'full'
         });
         // 点击表头排序
