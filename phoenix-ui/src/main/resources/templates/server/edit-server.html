@@ -36,7 +36,7 @@
             <select name="monitorEnv">
                 <option value="">不设置</option>
                 <option th:each="monitorEnv:${monitorEnvs}" th:value="${monitorEnv}"
-                        th:text="${monitorEnv}"></option>
+                        th:text="${monitorEnv}" th:selected="${monitorEnv==env}"></option>
             </select>
         </div>
     </div>
@@ -46,7 +46,7 @@
             <select name="monitorGroup">
                 <option value="">不设置</option>
                 <option th:each="monitorGroup:${monitorGroups}" th:value="${monitorGroup}"
-                        th:text="${monitorGroup}"></option>
+                        th:text="${monitorGroup}" th:selected="${monitorGroup==group}"></option>
             </select>
         </div>
     </div>

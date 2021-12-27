@@ -223,10 +223,10 @@ public class MonitorInstanceController {
         ModelAndView mv = new ModelAndView("instance/edit-instance");
         mv.addObject("instanceId", instanceId);
         MonitorInstanceVo monitorInstanceVo = this.monitorInstanceService.getMonitorInstanceInfo(instanceId);
-        String instanceSummary = monitorInstanceVo.getInstanceSummary();
-        mv.addObject("instanceSummary", instanceSummary);
-        String instanceDesc = monitorInstanceVo.getInstanceDesc();
-        mv.addObject("instanceDesc", instanceDesc);
+        mv.addObject("instanceSummary", monitorInstanceVo.getInstanceSummary());
+        mv.addObject("instanceDesc", monitorInstanceVo.getInstanceDesc());
+        mv.addObject("env", monitorInstanceVo.getMonitorEnv());
+        mv.addObject("group", monitorInstanceVo.getMonitorGroup());
         // 监控环境列表
         List<String> monitorEnvs = this.monitorEnvService.list().stream().map(MonitorEnv::getEnvName).collect(Collectors.toList());
         // 监控分组列表

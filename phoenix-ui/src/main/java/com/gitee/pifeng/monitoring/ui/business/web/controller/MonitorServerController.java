@@ -236,6 +236,8 @@ public class MonitorServerController {
         // 服务器信息
         MonitorServerVo monitorServerVo = this.monitorServerService.getMonitorServerInfo(id, ip);
         mv.addObject("serverSummary", monitorServerVo.getServerSummary());
+        mv.addObject("env", monitorServerVo.getMonitorEnv());
+        mv.addObject("group", monitorServerVo.getMonitorGroup());
         return mv;
     }
 
