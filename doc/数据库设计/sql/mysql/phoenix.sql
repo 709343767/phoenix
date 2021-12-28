@@ -102,6 +102,46 @@ CREATE TABLE `MONITOR_DB`
   ROW_FORMAT = Dynamic;
 
 -- ----------------------------
+-- Table structure for MONITOR_ENV
+-- ----------------------------
+DROP TABLE IF EXISTS `MONITOR_ENV`;
+CREATE TABLE `MONITOR_ENV`
+(
+    `ID`             bigint(20)                                                    NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `ENV_NAME`       varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT '环境名',
+    `ENV_DESC`       varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '环境描述',
+    `CREATE_ACCOUNT` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '创建人账号',
+    `UPDATE_ACCOUNT` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '更新人账号',
+    `INSERT_TIME`    datetime                                                      NOT NULL COMMENT '插入时间',
+    `UPDATE_TIME`    datetime                                                      NULL DEFAULT NULL COMMENT '更新时间',
+    PRIMARY KEY (`ID`) USING BTREE,
+    INDEX `NX_ENV_NAME` (`ENV_NAME`) USING BTREE
+) ENGINE = InnoDB
+  CHARACTER SET = utf8mb4
+  COLLATE = utf8mb4_general_ci COMMENT = '监控环境表'
+  ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for MONITOR_GROUP
+-- ----------------------------
+DROP TABLE IF EXISTS `MONITOR_GROUP`;
+CREATE TABLE `MONITOR_GROUP`
+(
+    `ID`             bigint(20)                                                    NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `GROUP_NAME`     varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT '分组名',
+    `GROUP_DESC`     varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '分组描述',
+    `CREATE_ACCOUNT` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '创建人账号',
+    `UPDATE_ACCOUNT` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '更新人账号',
+    `INSERT_TIME`    datetime                                                      NOT NULL COMMENT '插入时间',
+    `UPDATE_TIME`    datetime                                                      NULL DEFAULT NULL COMMENT '更新时间',
+    PRIMARY KEY (`ID`) USING BTREE,
+    INDEX `NX_GROUP_NAME` (`GROUP_NAME`) USING BTREE
+) ENGINE = InnoDB
+  CHARACTER SET = utf8mb4
+  COLLATE = utf8mb4_general_ci COMMENT = '监控分组表'
+  ROW_FORMAT = Dynamic;
+
+-- ----------------------------
 -- Table structure for MONITOR_INSTANCE
 -- ----------------------------
 DROP TABLE IF EXISTS `MONITOR_INSTANCE`;
@@ -119,14 +159,20 @@ CREATE TABLE `MONITOR_INSTANCE`
     `IS_ONLINE`        varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci   NULL DEFAULT NULL COMMENT '应用状态（0：离线，1：在线）',
     `OFFLINE_COUNT`    int(8)                                                        NULL DEFAULT NULL COMMENT '离线次数',
     `CONN_FREQUENCY`   int(8)                                                        NOT NULL COMMENT '连接频率',
+    `MONITOR_ENV`      varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '监控环境',
+    `MONITOR_GROUP`    varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '监控分组',
     `INSERT_TIME`      datetime                                                      NOT NULL COMMENT '新增时间',
     `UPDATE_TIME`      datetime                                                      NULL DEFAULT NULL COMMENT '更新时间',
     PRIMARY KEY (`ID`) USING BTREE,
-    INDEX `NX_INSTANCE_ID` (`INSTANCE_ID`) USING BTREE COMMENT '索引_应用实例ID'
+    INDEX `NX_INSTANCE_ID` (`INSTANCE_ID`) USING BTREE COMMENT '索引_应用实例ID',
+    INDEX `MONITOR_INSTANCE_ENV_FK` (`MONITOR_ENV`) USING BTREE,
+    INDEX `MONITOR_INSTANCE_GROUP_FK` (`MONITOR_GROUP`) USING BTREE,
+    CONSTRAINT `MONITOR_INSTANCE_ENV_FK` FOREIGN KEY (`MONITOR_ENV`) REFERENCES `MONITOR_ENV` (`ENV_NAME`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+    CONSTRAINT `MONITOR_INSTANCE_GROUP_FK` FOREIGN KEY (`MONITOR_GROUP`) REFERENCES `MONITOR_GROUP` (`GROUP_NAME`) ON DELETE RESTRICT ON UPDATE RESTRICT
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_general_ci COMMENT = '应用实例表'
-  ROW_FORMAT = Dynamic;
+  ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for MONITOR_JVM_CLASS_LOADING
@@ -393,14 +439,20 @@ CREATE TABLE `MONITOR_SERVER`
     `IS_ONLINE`      varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci   NULL DEFAULT NULL COMMENT '服务器状态（0：离线，1：在线）',
     `OFFLINE_COUNT`  int(8)                                                        NULL DEFAULT NULL COMMENT '离线次数',
     `CONN_FREQUENCY` int(8)                                                        NOT NULL COMMENT '连接频率',
+    `MONITOR_ENV`    varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '监控环境',
+    `MONITOR_GROUP`  varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '监控分组',
     `INSERT_TIME`    datetime                                                      NOT NULL COMMENT '新增时间',
     `UPDATE_TIME`    datetime                                                      NULL DEFAULT NULL COMMENT '更新时间',
     PRIMARY KEY (`ID`) USING BTREE,
-    INDEX `NX_IP` (`IP`) USING BTREE COMMENT '索引_IP'
+    INDEX `NX_IP` (`IP`) USING BTREE COMMENT '索引_IP',
+    INDEX `MONITOR_SERVER_ENV_FK` (`MONITOR_ENV`) USING BTREE,
+    INDEX `MONITOR_SERVER_GROUP_FK` (`MONITOR_GROUP`) USING BTREE,
+    CONSTRAINT `MONITOR_SERVER_ENV_FK` FOREIGN KEY (`MONITOR_ENV`) REFERENCES `MONITOR_ENV` (`ENV_NAME`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+    CONSTRAINT `MONITOR_SERVER_GROUP_FK` FOREIGN KEY (`MONITOR_GROUP`) REFERENCES `MONITOR_GROUP` (`GROUP_NAME`) ON DELETE RESTRICT ON UPDATE RESTRICT
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_general_ci COMMENT = '服务器表'
-  ROW_FORMAT = Dynamic;
+  ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for MONITOR_SERVER_CPU
