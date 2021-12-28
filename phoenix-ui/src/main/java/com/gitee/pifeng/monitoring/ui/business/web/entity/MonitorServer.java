@@ -1,9 +1,6 @@
 package com.gitee.pifeng.monitoring.ui.business.web.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
@@ -69,11 +66,11 @@ public class MonitorServer implements Serializable {
     private Date updateTime;
 
     @ApiModelProperty(value = "监控环境")
-    @TableField("MONITOR_ENV")
+    @TableField(value = "MONITOR_ENV", updateStrategy = FieldStrategy.IGNORED)
     private String monitorEnv;
 
     @ApiModelProperty(value = "监控分组")
-    @TableField("MONITOR_GROUP")
+    @TableField(value = "MONITOR_GROUP", updateStrategy = FieldStrategy.IGNORED)
     private String monitorGroup;
 
 }
