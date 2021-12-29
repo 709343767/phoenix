@@ -1,7 +1,7 @@
 #指定基镜像
 FROM openjdk:8-jdk-alpine
 #指定数据卷
-VOLUME ["/tmp","/persistent-phoenix"]
+VOLUME ["/tmp","/liblog4phoenix"]
 #作者
 MAINTAINER 皮锋 <709343767@qq.com>
 #添加项目

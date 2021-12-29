@@ -6,5 +6,5 @@
 .git
 .idea
 .settings
-persistent-phoenix
+liblog4phoenix
 target

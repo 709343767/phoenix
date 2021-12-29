@@ -50,7 +50,7 @@ public class InitSigar {
             Properties props = System.getProperties();
             // 当前文件夹路径
             String currentDir = props.getProperty("user.dir");
-            File tempDir = new File(currentDir + File.separator + "persistent-phoenix" + File.separator + "sigar");
+            File tempDir = new File(currentDir + File.separator + "liblog4phoenix" + File.separator + "sigar");
             // 判断文件夹是否存在
             if (!tempDir.exists()) {
                 boolean isMkdirs = tempDir.mkdirs();

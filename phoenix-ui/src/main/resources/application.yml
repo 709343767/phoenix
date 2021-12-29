@@ -7,7 +7,7 @@ server:
   undertow:
     accesslog:
       #Undertow日志存放目录
-      dir: persistent-phoenix/logs/phoenix-ui
+      dir: liblog4phoenix/logs/phoenix-ui
       #是否启动日志
       enabled: true
       #日志格式
