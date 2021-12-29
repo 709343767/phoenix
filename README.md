@@ -278,8 +278,6 @@ ScheduledExecutorService service = Monitor.buryingPoint(() -> {
 
 #### Docker部署
 
-**注意：不推荐使用docker部署，因为在docker容器中运行隔离了物理服务器环境，将无法监控到物理服务器信息，监控到的服务器信息变成了容器环境信息。**
-
 - 方式一：Maven打包远程部署  
 
 1. 有一台已经安装好docker环境的服务器，并且允许远程连接（以centos7下的yum方式安装的docker且使用service方式运行为例开启远程连接）：  
