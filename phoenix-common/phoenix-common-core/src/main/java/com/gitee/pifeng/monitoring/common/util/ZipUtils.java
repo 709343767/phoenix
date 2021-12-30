@@ -45,7 +45,9 @@ public class ZipUtils {
         if (str.getBytes().length <= minSize) {
             return false;
         }
-        log.info("字符串超过10KB，启用gzip！");
+        if (log.isDebugEnabled()) {
+            log.debug("字符串超过10KB，启用gzip！");
+        }
         return true;
     }
 
