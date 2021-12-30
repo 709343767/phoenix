@@ -40,13 +40,13 @@ public class ZipUtils {
         if (StringUtils.isBlank(str)) {
             return false;
         }
-        // 10KB
-        long minSize = DataSize.ofKilobytes(10).toBytes();
+        // 64KB
+        long minSize = DataSize.ofKilobytes(64).toBytes();
         if (str.getBytes().length <= minSize) {
             return false;
         }
         if (log.isDebugEnabled()) {
-            log.debug("字符串超过10KB，启用gzip！");
+            log.debug("字符串超过64KB，启用gzip！");
         }
         return true;
     }
