@@ -105,7 +105,7 @@
             ],
             page: false,
             limit: 15,
-            limits: [15, 25, 35, 45, 55, 65, 75, 85, 95],
+            limits: [10, 15, 20, 30, 40, 50, 60, 70, 80, 90, 100],
             height: (device.ios || device.android) ? $(document).width() : $(document).width() * 0.5
         });
         // 点击表头排序
