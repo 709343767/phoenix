@@ -1,5 +1,7 @@
 package com.gitee.pifeng.monitoring.common.util;
 
+import cn.hutool.core.io.unit.DataSize;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -10,6 +12,7 @@ import org.apache.commons.lang3.StringUtils;
  * @author 皮锋
  * @custom.date 2021/12/20 12:49
  */
+@Slf4j
 public class ZipUtils {
 
     /**
@@ -37,11 +40,12 @@ public class ZipUtils {
         if (StringUtils.isBlank(str)) {
             return false;
         }
-        // 1M = 1024k = 1048576字节
-        int length = 1048576;
-        if (str.length() <= length) {
+        // 10KB
+        long minSize = DataSize.ofKilobytes(10).toBytes();
+        if (str.getBytes().length <= minSize) {
             return false;
         }
+        log.info("字符串超过10KB，启用gzip！");
         return true;
     }
 
