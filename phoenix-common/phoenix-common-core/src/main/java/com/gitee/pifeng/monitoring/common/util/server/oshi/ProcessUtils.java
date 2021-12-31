@@ -62,8 +62,8 @@ public class ProcessUtils extends InitOshi {
             processInfoList = processInfoList.stream()
                     // 根据进程ID去重
                     .filter(distinctByKey(ProcessDomain.ProcessInfoDomain::getProcessId))
-                    // 根据CPU占用率降序排列
-                    .sorted(Comparator.comparing(ProcessDomain.ProcessInfoDomain::getCpuLoadCumulative).reversed())
+                    // 根据内存大小降序排列
+                    .sorted(Comparator.comparing(ProcessDomain.ProcessInfoDomain::getMemorySize).reversed())
                     .collect(Collectors.toList());
         }
         // 进程信息

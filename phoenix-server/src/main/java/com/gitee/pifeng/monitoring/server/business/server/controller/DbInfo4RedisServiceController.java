@@ -62,7 +62,9 @@ public class DbInfo4RedisServiceController {
         BaseResponsePackage baseResponsePackage = new PackageConstructor().structureBaseResponsePackage(Result.builder().isSuccess(true).msg(info).build());
         // 时间差（毫秒）
         String betweenDay = timer.intervalPretty();
-        log.info("获取Redis信息耗时：{}", betweenDay);
+        if (timer.intervalSecond() > 1) {
+            log.warn("获取Redis信息耗时：{}", betweenDay);
+        }
         return baseResponsePackage;
     }
 

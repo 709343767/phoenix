@@ -69,7 +69,9 @@ public class DbSession4OracleController {
         BaseResponsePackage baseResponsePackage = new PackageConstructor().structureBaseResponsePackage(Result.builder().isSuccess(true).msg(jsonString).build());
         // 时间差（毫秒）
         String betweenDay = timer.intervalPretty();
-        log.info("获取会话列表耗时：{}", betweenDay);
+        if (timer.intervalSecond() > 1) {
+            log.warn("获取会话列表耗时：{}", betweenDay);
+        }
         return baseResponsePackage;
     }
 
@@ -101,7 +103,9 @@ public class DbSession4OracleController {
         BaseResponsePackage baseResponsePackage = new PackageConstructor().structureBaseResponsePackage(Result.builder().isSuccess(true).msg(ResultMsgConstants.SUCCESS).build());
         // 时间差（毫秒）
         String betweenDay = timer.intervalPretty();
-        log.info("结束会话耗时：{}", betweenDay);
+        if (timer.intervalSecond() > 1) {
+            log.warn("结束会话耗时：{}", betweenDay);
+        }
         return baseResponsePackage;
     }
 

@@ -62,7 +62,9 @@ public class AlarmController {
         BaseResponsePackage baseResponsePackage = new PackageConstructor().structureBaseResponsePackage(result);
         // 时间差（毫秒）
         String betweenDay = timer.intervalPretty();
-        log.info("处理告警包耗时：{}", betweenDay);
+        if (timer.intervalSecond() > 1) {
+            log.warn("处理告警包耗时：{}", betweenDay);
+        }
         return baseResponsePackage;
     }
 

@@ -280,7 +280,9 @@ public class AlarmServiceImpl implements IAlarmService {
      * @custom.date 2020/9/13 21:35
      */
     private void wrapFailResult(Result result, String msg) {
-        log.warn(msg);
+        if (log.isDebugEnabled()) {
+            log.debug(msg);
+        }
         result.setSuccess(false);
         result.setMsg(msg);
     }

@@ -67,7 +67,9 @@ public class DbTableSpace4OracleController {
         BaseResponsePackage baseResponsePackage = new PackageConstructor().structureBaseResponsePackage(Result.builder().isSuccess(true).msg(jsonString).build());
         // 时间差（毫秒）
         String betweenDay = timer.intervalPretty();
-        log.info("获取表空间列表(按文件)耗时：{}", betweenDay);
+        if (timer.intervalSecond() > 1) {
+            log.warn("获取表空间列表(按文件)耗时：{}", betweenDay);
+        }
         return baseResponsePackage;
     }
 
@@ -96,7 +98,9 @@ public class DbTableSpace4OracleController {
         BaseResponsePackage baseResponsePackage = new PackageConstructor().structureBaseResponsePackage(Result.builder().isSuccess(true).msg(jsonString).build());
         // 时间差（毫秒）
         String betweenDay = timer.intervalPretty();
-        log.info("获取表空间列表耗时：{}", betweenDay);
+        if (timer.intervalSecond() > 1) {
+            log.warn("获取表空间列表耗时：{}", betweenDay);
+        }
         return baseResponsePackage;
     }
 

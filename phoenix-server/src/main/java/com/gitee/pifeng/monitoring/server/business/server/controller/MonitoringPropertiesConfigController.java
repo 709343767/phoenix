@@ -53,7 +53,9 @@ public class MonitoringPropertiesConfigController {
         BaseResponsePackage baseResponsePackage = new PackageConstructor().structureBaseResponsePackage(Result.builder().isSuccess(true).msg(ResultMsgConstants.SUCCESS).build());
         // 时间差（毫秒）
         String betweenDay = timer.intervalPretty();
-        log.info("刷新监控配置属性耗时：{}", betweenDay);
+        if (timer.intervalSecond() > 1) {
+            log.warn("刷新监控配置属性耗时：{}", betweenDay);
+        }
         return baseResponsePackage;
     }
 

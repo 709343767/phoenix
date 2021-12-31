@@ -55,7 +55,9 @@ public class ServerController {
         BaseResponsePackage baseResponsePackage = new PackageConstructor().structureBaseResponsePackage(result);
         // 时间差（毫秒）
         String betweenDay = timer.intervalPretty();
-        log.info("处理服务器信息包耗时：{}", betweenDay);
+        if (timer.intervalSecond() > 1) {
+            log.warn("处理服务器信息包耗时：{}", betweenDay);
+        }
         return baseResponsePackage;
     }
 

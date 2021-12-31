@@ -51,7 +51,15 @@ public class JvmThread implements Runnable {
         } finally {
             // 时间差（毫秒）
             String betweenDay = timer.intervalPretty();
-            log.debug("发送Java虚拟机信息包耗时：{}", betweenDay);
+            // 临界值
+            int criticalValue = 5;
+            if (timer.intervalSecond() > criticalValue) {
+                log.warn("发送Java虚拟机信息包耗时：{}", betweenDay);
+            } else {
+                if (log.isDebugEnabled()) {
+                    log.debug("发送Java虚拟机信息包耗时：{}", betweenDay);
+                }
+            }
         }
     }
 
