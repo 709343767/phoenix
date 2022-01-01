@@ -27,6 +27,16 @@
 
 - 告警：默认支持电子邮件。
 
+## 特点
+
+1. 分布式；  
+2. 跨平台；  
+3. 支持docker部署；
+4. 实时监测告警；  
+5. 数据加密传输；  
+6. 灵活可配置；  
+7. 用户界面支持PC端、移动端。
+
 ## 设计
 
 - 功能架构
@@ -355,6 +365,10 @@ ScheduledExecutorService service = Monitor.buryingPoint(() -> {
 ## 常见问题
 
 [https://gitee.com/monitoring-platform/phoenix/wikis/pages?sort_id=4438763&doc_id=935794](https://gitee.com/monitoring-platform/phoenix/wikis/pages?sort_id=4438763&doc_id=935794)
+
+## 升级日志
+
+[https://gitee.com/monitoring-platform/phoenix/wikis/pages?sort_id=4420016&doc_id=935794](https://gitee.com/monitoring-platform/phoenix/wikis/pages?sort_id=4420016&doc_id=935794)
 
 ## 期望
 
