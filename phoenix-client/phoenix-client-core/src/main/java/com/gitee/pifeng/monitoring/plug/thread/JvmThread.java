@@ -25,7 +25,7 @@ public class JvmThread implements Runnable {
 
     /**
      * <p>
-     * 发送Java虚拟机信息包
+     * 构建+发送Java虚拟机信息包
      * </p>
      *
      * @author 皮锋
@@ -54,10 +54,10 @@ public class JvmThread implements Runnable {
             // 临界值
             int criticalValue = 5;
             if (timer.intervalSecond() > criticalValue) {
-                log.warn("发送Java虚拟机信息包耗时：{}", betweenDay);
+                log.warn("构建+发送Java虚拟机信息包耗时：{}", betweenDay);
             } else {
                 if (log.isDebugEnabled()) {
-                    log.debug("发送Java虚拟机信息包耗时：{}", betweenDay);
+                    log.debug("构建+发送Java虚拟机信息包耗时：{}", betweenDay);
                 }
             }
         }
