@@ -11,4 +11,4 @@ ADD phoenix-server.jar app.jar
 #暴露端口
 EXPOSE 16000
 #指定执行启动项目
-ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-Dspring.profiles.active=prod","-jar","app.jar"]
+ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-Ddruid.mysql.usePingMethod=false","-Dspring.profiles.active=prod","-jar","app.jar"]
