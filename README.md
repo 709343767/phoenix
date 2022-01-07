@@ -239,7 +239,7 @@ phoenix.sql
 
   在 **web.xml** 文件中配置一个监听器，来开启监控功能：
 
-   ```xml
+  ```xml
   <!-- 开启监控功能 -->
   <web-app>
     <context-param>
@@ -252,7 +252,7 @@ phoenix.sql
       </listener-class>
     </listener>
   </web-app>
-   ```
+  ```
 
 ### 业务埋点
 
@@ -282,8 +282,90 @@ ScheduledExecutorService service = Monitor.buryingPoint(() -> {
 ### 打包部署运行
 
 #### Jar包部署
+1. 打包  
+**监控UI端、监控服务端、监控代理端** 直接打成可执行jar，打包后可执行jar包在 **phoenix/target** 目录下。
+```shell script
+mvn -Dmaven.test.skip=true clean package
+```
+2. 上传  
+3. 运行  
+运行脚本位置在：**/phoenix/doc/脚本/**。
 
-**监控UI端、监控服务端、监控代理端** 直接打成可执行jar，打包后可执行jar包在 **phoenix/target** 目录下，部署后通过脚本（命令）运行。启停脚本位置在：**/phoenix/doc/脚本/** 。  
+<table>
+    <thead>
+    <tr>
+        <th>服务</th>
+        <th>脚本</th>
+        <th>命令</th>
+        <th>含义</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td rowspan="3">监控UI端</td>
+        <td rowspan="3">phoenix_ui.sh</td>
+        <td>./phoenix_ui.sh start</td>
+        <td>启动</td>
+    </tr>
+    <tr>
+        <td>./phoenix_ui.sh stop</td>
+        <td>停止</td>
+    </tr>
+    <tr>
+        <td>./phoenix_ui.sh restart</td>
+        <td>重启</td>
+    </tr>
+    <tr>
+        <td>./phoenix_ui.sh status</td>
+        <td>检查状态</td>
+    </tr>
+    <tr>
+        <td rowspan="3">监控服务端</td>
+        <td rowspan="3">phoenix_server.sh</td>
+        <td>./phoenix_ui.sh start</td>
+        <td>启动</td>
+    </tr>
+    <tr>
+        <td>./phoenix_server.sh stop</td>
+        <td>停止</td>
+    </tr>
+    <tr>
+        <td>./phoenix_server.sh restart</td>
+        <td>重启</td>
+    </tr>
+    <tr>
+        <td>./phoenix_server.sh status</td>
+        <td>检查状态</td>
+    </tr>
+    <tr>
+        <td rowspan="3">监控代理端</td>
+        <td rowspan="3">phoenix_agent.sh</td>
+        <td>./phoenix_agent.sh start</td>
+        <td>启动</td>
+    </tr>
+    <tr>
+        <td>./phoenix_agent.sh stop</td>
+        <td>停止</td>
+    </tr>
+    <tr>
+        <td>./phoenix_agent.sh restart</td>
+        <td>重启</td>
+    </tr>
+    <tr>
+        <td>./phoenix_agent.sh status</td>
+        <td>检查状态</td>
+    </tr>
+    </tbody>
+</table>
+
+  |服务                  |脚本                                        |命令                          |含义| 
+  |----------------------|-------------------------------------------|------------------------------|-----|
+  |监控UI端               |phoenix_ui.sh                              |./phoenix_ui.sh start         |启动 |
+  |监控UI端               |phoenix_ui.sh                              |./phoenix_ui.sh stop          |停止 |
+  |监控UI端               |phoenix_ui.sh                              |./phoenix_ui.sh restart       |重启 |
+  |监控UI端               |phoenix_ui.sh                              |./phoenix_ui.sh status        |检查状态|
+
+4. 访问  
 **监控UI端** 访问URL：**https://localhost/phoenix-ui/index** ，初始账号/密码：**admin/admin123**，**guest/guest123**。  
 
 #### Docker部署
