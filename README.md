@@ -290,7 +290,7 @@ mvn -Dmaven.test.skip=true clean package
 ```
 
 2. 上传jar、脚本  
-   jar路径：**phoenix/target** 
+   jar路径：**phoenix/target**   
    脚本路径：**phoenix/doc/脚本/**
    
 3. 运行  
@@ -415,7 +415,7 @@ mvn -Dmaven.test.skip=true clean package
 ```
 
 2. 上传jar、Dockerfile  
-   jar路径：**phoenix/target** 
+   jar路径：**phoenix/target**   
    Dockerfile路径：**phoenix/phoenix-ui/src/main/docker/Dockerfile、  
                     phoenix/phoenix-agent/src/main/docker/Dockerfile、  
                     phoenix/phoenix-server/src/main/docker/Dockerfile**，  
