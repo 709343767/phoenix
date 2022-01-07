@@ -42,8 +42,8 @@ public class SmsServiceImpl implements ISmsService {
         // 短信接口商家
         EnterpriseEnums enterpriseEnum = MonitoringConfigPropertiesLoader.getMonitoringProperties().getAlarmProperties().getSmsProperties().getEnterpriseEnum();
         // 判断短信接口商家，不同的商家调用不同的接口
-        if (EnterpriseEnums.MONITORING == enterpriseEnum) {
-            // 调用Monitoring短信接口
+        if (EnterpriseEnums.PHOENIX == enterpriseEnum) {
+            // 调用phoenix短信接口
             return this.callMonitoringSmsApi(sms);
         }
         return false;

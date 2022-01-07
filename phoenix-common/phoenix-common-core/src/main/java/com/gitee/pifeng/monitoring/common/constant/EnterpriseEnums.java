@@ -13,9 +13,9 @@ import org.apache.commons.lang3.StringUtils;
 public enum EnterpriseEnums {
 
     /**
-     * monitoring
+     * phoenix
      */
-    MONITORING;
+    PHOENIX;
 
     /**
      * <p>
@@ -28,9 +28,9 @@ public enum EnterpriseEnums {
      * @custom.date 2021/1/28 21:03
      */
     public static EnterpriseEnums str2Enum(String enterpriseStr) {
-        // monitoring
-        if (StringUtils.equalsIgnoreCase(EnterpriseEnums.MONITORING.name(), enterpriseStr)) {
-            return EnterpriseEnums.MONITORING;
+        // phoenix
+        if (StringUtils.equalsIgnoreCase(EnterpriseEnums.PHOENIX.name(), enterpriseStr)) {
+            return EnterpriseEnums.PHOENIX;
         }
         return null;
     }
