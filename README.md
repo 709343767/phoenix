@@ -295,7 +295,7 @@ mvn -Dmaven.test.skip=true clean package
     
    b.脚本路径：**phoenix/doc/脚本/**
    
-3. 运行  
+3. 运行，脚本说明如下表：  
 
     <table>
     <thead>
