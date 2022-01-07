@@ -302,8 +302,8 @@ mvn -Dmaven.test.skip=true clean package
     </thead>
     <tbody>
     <tr>
-        <td rowspan="3">监控UI端</td>
-        <td rowspan="3">phoenix_ui.sh</td>
+        <td rowspan="4">监控UI端</td>
+        <td rowspan="4">phoenix_ui.sh</td>
         <td>./phoenix_ui.sh start</td>
         <td>启动</td>
     </tr>
@@ -320,8 +320,8 @@ mvn -Dmaven.test.skip=true clean package
         <td>检查状态</td>
     </tr>
     <tr>
-        <td rowspan="3">监控服务端</td>
-        <td rowspan="3">phoenix_server.sh</td>
+        <td rowspan="4">监控服务端</td>
+        <td rowspan="4">phoenix_server.sh</td>
         <td>./phoenix_ui.sh start</td>
         <td>启动</td>
     </tr>
@@ -338,8 +338,8 @@ mvn -Dmaven.test.skip=true clean package
         <td>检查状态</td>
     </tr>
     <tr>
-        <td rowspan="3">监控代理端</td>
-        <td rowspan="3">phoenix_agent.sh</td>
+        <td rowspan="4">监控代理端</td>
+        <td rowspan="4">phoenix_agent.sh</td>
         <td>./phoenix_agent.sh start</td>
         <td>启动</td>
     </tr>
