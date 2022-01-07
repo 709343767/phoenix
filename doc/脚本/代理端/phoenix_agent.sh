@@ -2,7 +2,7 @@
 
 #包名
 packageName="phoenix-agent.jar"
-#服务名
+#程序名
 programName="phoenix-agent"
 
 #检测状态

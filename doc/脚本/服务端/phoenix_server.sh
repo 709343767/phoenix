@@ -2,7 +2,7 @@
 
 #包名
 packageName="phoenix-server.jar"
-#服务名
+#程序名
 programName="phoenix-server"
 
 #检测状态

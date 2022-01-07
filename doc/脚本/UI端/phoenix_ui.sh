@@ -2,7 +2,7 @@
 
 #包名
 packageName="phoenix-ui.jar"
-#服务名
+#程序名
 programName="phoenix-ui"
 
 #检测状态
