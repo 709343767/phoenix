@@ -357,10 +357,7 @@ mvn -Dmaven.test.skip=true clean package
             <td>检查状态</td>
         </tr>
         </tbody>
-    </table>
-
-4. 访问  
-**监控UI端** 访问URL：**https://localhost/phoenix-ui/index** ，初始账号/密码：**admin/admin123**，**guest/guest123**。  
+    </table> 
 
 #### Docker部署
 
@@ -406,6 +403,9 @@ systemctl restart docker
 3. 建议：推荐通过nginx为集群做负载均衡。监控服务端、监控UI端均通过nginx进行访问。  
 
 ![集群部署架构](https://gitee.com/monitoring-platform/phoenix/raw/master/doc/%E9%9B%86%E7%BE%A4%E9%83%A8%E7%BD%B2%E6%9E%B6%E6%9E%84.png "集群部署架构")
+
+## 访问  
+**监控UI端** 访问URL：**https://localhost/phoenix-ui/index** ，初始账号/密码：**admin/admin123**，**guest/guest123**。 
 
 ## 功能截图
 
