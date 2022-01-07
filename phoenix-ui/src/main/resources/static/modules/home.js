@@ -223,7 +223,7 @@
                     for (var i = 0; i < data.length; i++) {
                         var obj = data[i];
                         var title = obj.title;
-                        var content = obj.content;
+                        var content = obj.content.length >= 500 ? obj.content.slice(0, 500) + '......' : obj.content;
                         var insertTime = obj.insertTime;
                         html += '<li>'
                             + '<h3>' + title + '</h3>'
