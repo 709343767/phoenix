@@ -283,80 +283,83 @@ ScheduledExecutorService service = Monitor.buryingPoint(() -> {
 
 #### Jar包部署
 1. 打包  
-**监控UI端、监控服务端、监控代理端** 直接打成可执行jar，打包后可执行jar包在 **phoenix/target** 目录下。
+   **监控UI端、监控服务端、监控代理端** 直接打成可执行jar。
 
 ```shell script
 mvn -Dmaven.test.skip=true clean package
 ```
-2. 上传  
+
+2. 上传jar、脚本  
+   jar路径：**phoenix/target** 
+   脚本路径：**phoenix/doc/脚本/**
+   
 3. 运行  
-运行脚本位置在：**/phoenix/doc/脚本/**。
 
     <table>
-        <thead>
-        <tr>
-            <th>服务</th>
-            <th>脚本</th>
-            <th>命令</th>
-            <th>含义</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-            <td rowspan="4">监控UI端</td>
-            <td rowspan="4">phoenix_ui.sh</td>
-            <td>./phoenix_ui.sh start</td>
-            <td>启动</td>
-        </tr>
-        <tr>
-            <td>./phoenix_ui.sh stop</td>
-            <td>停止</td>
-        </tr>
-        <tr>
-            <td>./phoenix_ui.sh restart</td>
-            <td>重启</td>
-        </tr>
-        <tr>
-            <td>./phoenix_ui.sh status</td>
-            <td>检查状态</td>
-        </tr>
-        <tr>
-            <td rowspan="4">监控服务端</td>
-            <td rowspan="4">phoenix_server.sh</td>
-            <td>./phoenix_ui.sh start</td>
-            <td>启动</td>
-        </tr>
-        <tr>
-            <td>./phoenix_server.sh stop</td>
-            <td>停止</td>
-        </tr>
-        <tr>
-            <td>./phoenix_server.sh restart</td>
-            <td>重启</td>
-        </tr>
-        <tr>
-            <td>./phoenix_server.sh status</td>
-            <td>检查状态</td>
-        </tr>
-        <tr>
-            <td rowspan="4">监控代理端</td>
-            <td rowspan="4">phoenix_agent.sh</td>
-            <td>./phoenix_agent.sh start</td>
-            <td>启动</td>
-        </tr>
-        <tr>
-            <td>./phoenix_agent.sh stop</td>
-            <td>停止</td>
-        </tr>
-        <tr>
-            <td>./phoenix_agent.sh restart</td>
-            <td>重启</td>
-        </tr>
-        <tr>
-            <td>./phoenix_agent.sh status</td>
-            <td>检查状态</td>
-        </tr>
-        </tbody>
+    <thead>
+    <tr>
+        <th>程序</th>
+        <th>脚本</th>
+        <th>命令</th>
+        <th>含义</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td rowspan="4">监控UI端</td>
+        <td rowspan="4">phoenix_ui.sh</td>
+        <td>./phoenix_ui.sh start</td>
+        <td>启动</td>
+    </tr>
+    <tr>
+        <td>./phoenix_ui.sh stop</td>
+        <td>停止</td>
+    </tr>
+    <tr>
+        <td>./phoenix_ui.sh restart</td>
+        <td>重启</td>
+    </tr>
+    <tr>
+        <td>./phoenix_ui.sh status</td>
+        <td>检查状态</td>
+    </tr>
+    <tr>
+        <td rowspan="4">监控服务端</td>
+        <td rowspan="4">phoenix_server.sh</td>
+        <td>./phoenix_ui.sh start</td>
+        <td>启动</td>
+    </tr>
+    <tr>
+        <td>./phoenix_server.sh stop</td>
+        <td>停止</td>
+    </tr>
+    <tr>
+        <td>./phoenix_server.sh restart</td>
+        <td>重启</td>
+    </tr>
+    <tr>
+        <td>./phoenix_server.sh status</td>
+        <td>检查状态</td>
+    </tr>
+    <tr>
+        <td rowspan="4">监控代理端</td>
+        <td rowspan="4">phoenix_agent.sh</td>
+        <td>./phoenix_agent.sh start</td>
+        <td>启动</td>
+    </tr>
+    <tr>
+        <td>./phoenix_agent.sh stop</td>
+        <td>停止</td>
+    </tr>
+    <tr>
+        <td>./phoenix_agent.sh restart</td>
+        <td>重启</td>
+    </tr>
+    <tr>
+        <td>./phoenix_agent.sh status</td>
+        <td>检查状态</td>
+    </tr>
+    </tbody>
     </table> 
 
 #### Docker部署
@@ -372,26 +375,89 @@ vi /usr/lib/systemd/system/docker.service
 systemctl daemon-reload  
 systemctl restart docker  
 ```  
-   
+
 2. 在系统环境变量中添DOCKER_HOST，如下图所示：  
 
 ![docker_host_config](https://gitee.com/monitoring-platform/phoenix/raw/master/doc/%E5%85%B6%E5%AE%83/docker_host_config.png "docker_host_config")  
 
-3. 编译项目打包项目并打包镜像：  
+3. 编译项目打包项目并构建镜像
 
 ```shell script
  mvn -Dmaven.test.skip=true clean package docker:build  
 ```
 
-4. 运行：脚本位置在 **phoenix/doc/脚本/**，脚本名为：**docker_run_ui.sh、docker_run_agent.sh、docker_run_server.sh**，可以自己根据需要灵活修改。
+4. 运行  
+>监控UI端：
+   
+```shell script
+docker run -itd -v /tmp:/tmp -v /liblog4phoenix:/liblog4phoenix -v /etc/localtime:/etc/localtime:ro -p 443:443 --pid host --net host --name phoenix-ui phoenix/phoenix-ui /bin/bash
+```
+
+>监控服务端：
+
+```shell script
+docker run -itd -v /tmp:/tmp -v /liblog4phoenix:/liblog4phoenix -v /etc/localtime:/etc/localtime:ro -p 16000:16000 --pid host --net host --name phoenix-server phoenix/phoenix-server /bin/bash
+```
+
+>监控代理端：
+
+```shell script
+docker run -itd -v /tmp:/tmp -v /liblog4phoenix:/liblog4phoenix -v /etc/localtime:/etc/localtime:ro -p 12000:12000 --pid host --net host --name phoenix-agent phoenix/phoenix-agent /bin/bash
+```
 
 - 方式二：服务器本地构建docker镜像  
 
-1. 打包可执行jar，并上传至服务器；  
-2. 上传 **Dockerfile** 文件至服务器，文件位置在：**phoenix/phoenix-ui/src/main/docker/Dockerfile、phoenix/phoenix-agent/src/main/docker/Dockerfile、phoenix/phoenix-server/src/main/docker/Dockerfile**，
-   **Dockerfile** 要与对应的jar包放在同一目录下；  
-3. 运行 **Dockerfile**，构建docker镜像，运行脚本位置在：**phoenix/doc/脚本/**，脚本名为：**docker_build_ui.sh、docker_build_agent.sh、docker_build_server.sh**；  
-4. 运行：脚本位置在 **phoenix/doc/脚本/**，脚本名为：**docker_run_ui.sh、docker_run_agent.sh、docker_run_server.sh**，可以自己根据需要灵活修改。
+1. 打包  
+   **监控UI端、监控服务端、监控代理端** 直接打成可执行jar。
+
+```shell script
+mvn -Dmaven.test.skip=true clean package
+```
+
+2. 上传jar、Dockerfile  
+   jar路径：**phoenix/target** 
+   Dockerfile路径：**phoenix/phoenix-ui/src/main/docker/Dockerfile、  
+                    phoenix/phoenix-agent/src/main/docker/Dockerfile、  
+                    phoenix/phoenix-server/src/main/docker/Dockerfile**，  
+   **Dockerfile** 要与对应的jar包放在同一目录下； 
+    
+3. 构建docker镜像
+>监控UI端：
+
+```shell script
+docker build -t phoenix/phoenix-ui .
+```
+
+>监控服务端：
+
+```shell script
+docker build -t phoenix/phoenix-server .
+```
+
+>监控代理端：
+
+```shell script
+docker build -t phoenix/phoenix-agent .
+```
+ 
+4. 运行
+>监控UI端：
+   
+```shell script
+docker run -itd -v /tmp:/tmp -v /liblog4phoenix:/liblog4phoenix -v /etc/localtime:/etc/localtime:ro -p 443:443 --pid host --net host --name phoenix-ui phoenix/phoenix-ui /bin/bash
+```
+
+>监控服务端：
+
+```shell script
+docker run -itd -v /tmp:/tmp -v /liblog4phoenix:/liblog4phoenix -v /etc/localtime:/etc/localtime:ro -p 16000:16000 --pid host --net host --name phoenix-server phoenix/phoenix-server /bin/bash
+```
+
+>监控代理端：
+
+```shell script
+docker run -itd -v /tmp:/tmp -v /liblog4phoenix:/liblog4phoenix -v /etc/localtime:/etc/localtime:ro -p 12000:12000 --pid host --net host --name phoenix-agent phoenix/phoenix-agent /bin/bash
+```
 
 ### 集群部署
 
