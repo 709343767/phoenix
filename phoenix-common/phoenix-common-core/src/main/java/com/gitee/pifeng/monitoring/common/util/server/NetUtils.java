@@ -4,6 +4,7 @@ import cn.hutool.core.net.NetUtil;
 import com.gitee.pifeng.monitoring.common.domain.server.NetDomain;
 import com.gitee.pifeng.monitoring.common.exception.NetException;
 import com.gitee.pifeng.monitoring.common.util.server.sigar.NetInterfaceUtils;
+import com.google.common.collect.Maps;
 import lombok.Cleanup;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -15,6 +16,7 @@ import java.net.*;
 import java.nio.charset.Charset;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -205,12 +207,20 @@ public class NetUtils {
      * </p>
      *
      * @param ip ip地址
-     * @return 返回是否ping通
+     * @return 返回Map，key解释：<br>
+     * 1.isConnect：是否能ping通；<br>
+     * 2.avgTime：平均时间（毫秒）<br>
      * @author 皮锋
      * @custom.date 2020/12/15 10:58
      */
-    public static boolean isConnect(String ip) {
-        return NetUtil.ping(ip, 3000) && ping(ip);
+    public static Map<String, Object> isConnect(String ip) {
+        // 返回值
+        Map<String, Object> result = ping(ip);
+        String isConnect = "isConnect";
+        String avgTime = "avgTime";
+        result.put(isConnect, NetUtil.ping(ip, 3000) && Boolean.parseBoolean(String.valueOf(result.get(isConnect))));
+        result.put(avgTime, result.get(avgTime));
+        return result;
     }
 
     /**
@@ -219,12 +229,17 @@ public class NetUtils {
      * </p>
      *
      * @param ip IP地址
-     * @return 返回是否ping通
+     * @return 返回Map，key解释：<br>
+     * 1.isConnect：是否能ping通；<br>
+     * 2.avgTime：平均时间（毫秒）<br>
      * @author 皮锋
      * @custom.date 2020/3/18 22:22
      */
-    private static boolean ping(String ip) {
-        boolean result;
+    private static Map<String, Object> ping(String ip) {
+        // 是否能ping通
+        boolean isConnect;
+        // ping平均时间
+        String avgTime;
         ProcessBuilder processBuilder = new ProcessBuilder();
         // Windows系统
         if (OsUtils.isWindowsOs()) {
@@ -241,21 +256,32 @@ public class NetUtils {
             BufferedReader buf = new BufferedReader(new InputStreamReader(process.getInputStream(), Charset.forName("GBK")));
             // 返回值
             String line;
+            // 全部返回数据
+            StringBuilder lineResultBuilder = new StringBuilder();
             // ping正常的次数
             int connectedCount = 0;
             while ((line = buf.readLine()) != null) {
+                lineResultBuilder.append(line);
                 log.info(line);
                 connectedCount += getCheckResult(line);
             }
-            // 有收到数据包
-            result = connectedCount >= 1;
             // 等待命令子线程执行完成
             process.waitFor();
             // 销毁子线程
             process.destroy();
+            // 有收到数据包
+            isConnect = connectedCount >= 1;
+            // 获取平均时间
+            avgTime = getPingAvgTime(lineResultBuilder.toString());
         } catch (Exception e) {
-            result = false;
+            isConnect = false;
+            avgTime = "未知";
         }
+        // 封装返回结果
+        // 返回值
+        Map<String, Object> result = Maps.newHashMap();
+        result.put("isConnect", isConnect);
+        result.put("avgTime", avgTime);
         return result;
     }
 
@@ -282,6 +308,43 @@ public class NetUtils {
             return 1;
         }
         return 0;
+    }
+
+    /**
+     * <p>
+     * 获取ping平均时间
+     * </p>
+     *
+     * @param pingResultStr ping命令返回字符串
+     * @return ping平均时间（毫秒）
+     * @author 皮锋
+     * @custom.date 2022/1/10 11:29
+     */
+    private static String getPingAvgTime(String pingResultStr) {
+        // 字符串为空
+        if (StringUtils.isBlank(pingResultStr)) {
+            return "未知";
+        }
+        // 全部转小写
+        String lineResult = pingResultStr.toLowerCase();
+        // 平均时间
+        String avgTime;
+        if (StringUtils.contains(lineResult, "average")) {
+            lineResult = StringUtils.substringBetween(lineResult, "average", "ms");
+            lineResult = StringUtils.remove(lineResult, "=");
+            avgTime = StringUtils.trim(lineResult);
+        } else if (StringUtils.contains(lineResult, "平均")) {
+            lineResult = StringUtils.substringBetween(lineResult, "平均", "ms");
+            lineResult = StringUtils.remove(lineResult, "=");
+            avgTime = StringUtils.trim(lineResult);
+        } else if (StringUtils.contains(lineResult, "min/avg/max/mdev")) {
+            lineResult = StringUtils.substringBetween(lineResult, "min/avg/max/mdev", "ms");
+            lineResult = StringUtils.trim(lineResult);
+            avgTime = lineResult.split("/")[1];
+        } else {
+            avgTime = "未知";
+        }
+        return avgTime;
     }
 
     /**

@@ -53,6 +53,9 @@ public class MonitorNetVo implements ISuperBean {
     @ApiModelProperty(value = "状态（0：网络不通，1：网络正常）")
     private String status;
 
+    @ApiModelProperty(value = "平均响应时间（毫秒）")
+    private String avgTime;
+
     @ApiModelProperty(value = "离线次数")
     private Integer offlineCount;
 

@@ -28,6 +28,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ThreadPoolExecutor;
 
 /**
@@ -79,17 +80,20 @@ public class NetMonitorJob extends QuartzJobBean {
                 // 使用多线程，加快处理速度
                 ThreadPoolExecutor threadPoolExecutor = ThreadPool.COMMON_IO_INTENSIVE_THREAD_POOL;
                 threadPoolExecutor.execute(() -> {
+                    Map<String, Object> objectMap = NetUtils.isConnect(ipTarget);
                     // 测试IP地址能否ping通
-                    boolean isConnected = NetUtils.isConnect(ipTarget);
+                    boolean isConnected = Boolean.parseBoolean(String.valueOf(objectMap.get("isConnect")));
+                    // 平均响应时间
+                    String avgTime = String.valueOf(objectMap.get("avgTime"));
                     // 网络正常
                     if (isConnected) {
                         // 处理网络正常
-                        this.connected(monitorNet);
+                        this.connected(monitorNet, avgTime);
                     }
                     // 网络异常
                     else {
                         // 处理网络异常
-                        this.disconnected(monitorNet);
+                        this.disconnected(monitorNet, avgTime);
                     }
                 });
             }
@@ -104,10 +108,11 @@ public class NetMonitorJob extends QuartzJobBean {
      * </p>
      *
      * @param monitorNet 网络信息表
+     * @param avgTime    平均响应时间
      * @author 皮锋
      * @custom.date 2020/11/23 11:19
      */
-    private void disconnected(MonitorNet monitorNet) {
+    private void disconnected(MonitorNet monitorNet, String avgTime) {
         try {
             this.sendAlarmInfo("网络中断", AlarmLevelEnums.FATAL, AlarmReasonEnums.NORMAL_2_ABNORMAL, monitorNet);
         } catch (Exception e) {
@@ -121,6 +126,7 @@ public class NetMonitorJob extends QuartzJobBean {
             monitorNet.setOfflineCount(offlineCount + 1);
         }
         monitorNet.setStatus(ZeroOrOneConstants.ZERO);
+        monitorNet.setAvgTime(avgTime);
         monitorNet.setUpdateTime(new Date());
         // 更新数据库
         this.netService.updateById(monitorNet);
@@ -132,10 +138,11 @@ public class NetMonitorJob extends QuartzJobBean {
      * </p>
      *
      * @param monitorNet 网络信息
+     * @param avgTime    平均响应时间
      * @author 皮锋
      * @custom.date 2020/11/23 11:12
      */
-    private void connected(MonitorNet monitorNet) {
+    private void connected(MonitorNet monitorNet, String avgTime) {
         try {
             if (StringUtils.isNotBlank(monitorNet.getStatus())) {
                 this.sendAlarmInfo("网络恢复", AlarmLevelEnums.INFO, AlarmReasonEnums.ABNORMAL_2_NORMAL, monitorNet);
@@ -144,6 +151,7 @@ public class NetMonitorJob extends QuartzJobBean {
             log.error("网络告警异常！", e);
         }
         monitorNet.setStatus(ZeroOrOneConstants.ONE);
+        monitorNet.setAvgTime(avgTime);
         monitorNet.setUpdateTime(new Date());
         // 更新数据库
         this.netService.updateById(monitorNet);

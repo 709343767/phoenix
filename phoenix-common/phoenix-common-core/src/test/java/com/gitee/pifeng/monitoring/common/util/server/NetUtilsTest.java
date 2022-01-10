@@ -5,6 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.hyperic.sigar.SigarException;
 import org.junit.Test;
 
+import java.util.Map;
+
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -59,8 +61,12 @@ public class NetUtilsTest {
      */
     @Test
     public void testIsConnect() throws NetException {
-        boolean isConnect = NetUtils.isConnect(NetUtils.getLocalIp());
-        assertTrue(isConnect);
+        Map<String, Object> objectMap = NetUtils.isConnect(NetUtils.getLocalIp());
+        Object isConnect = objectMap.get("isConnect");
+        Object avgTime = objectMap.get("avgTime");
+        assertTrue(Boolean.parseBoolean(String.valueOf(isConnect)));
+        log.info("isConnect：{}", isConnect);
+        log.info("avgTime：{}", avgTime);
     }
 
 }

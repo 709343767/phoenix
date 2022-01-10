@@ -60,6 +60,10 @@ public class MonitorNet implements Serializable {
     @TableField("STATUS")
     private String status;
 
+    @ApiModelProperty(value = "平均响应时间（毫秒）")
+    @TableField("AVG_TIME")
+    private String avgTime;
+
     @ApiModelProperty(value = "离线次数")
     @TableField("OFFLINE_COUNT")
     private Integer offlineCount;
