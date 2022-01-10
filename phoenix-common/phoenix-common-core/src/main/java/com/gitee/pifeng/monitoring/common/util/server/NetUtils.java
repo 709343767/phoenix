@@ -11,10 +11,7 @@ import org.hyperic.sigar.SigarException;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.SocketException;
-import java.net.UnknownHostException;
+import java.net.*;
 import java.nio.charset.Charset;
 import java.util.Enumeration;
 import java.util.List;
@@ -285,6 +282,32 @@ public class NetUtils {
             return 1;
         }
         return 0;
+    }
+
+    /**
+     * <p>
+     * 检测telnet状态
+     * </p>
+     *
+     * @param hostname 主机名
+     * @param port     端口号
+     * @return boolean 返回是否telnet通
+     * @author 皮锋
+     * @custom.date 2022/1/10 9:37
+     */
+    public static boolean telnet(String hostname, int port) {
+        boolean isConnected;
+        try {
+            @Cleanup
+            Socket socket = new Socket();
+            // 建立连接
+            socket.connect(new InetSocketAddress(hostname, port), 3000);
+            // 通过现有方法查看连通状态
+            isConnected = socket.isConnected();
+        } catch (Exception e) {
+            isConnected = false;
+        }
+        return isConnected;
     }
 
 }
