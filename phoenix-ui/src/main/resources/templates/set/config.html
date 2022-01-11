@@ -148,6 +148,19 @@
                                     </div>
                                 </div>
                                 <div class="layui-card">
+                                    <div class="layui-card-header div-font-weight">TCP</div>
+                                    <div class="layui-card-body" pad20>
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label" style="text-align: left;">是否监控</label>
+                                            <div class="layui-input-inline">
+                                                <input type="checkbox" name="tcpEnable" lay-text="是|否"
+                                                       th:value=1 lay-skin="switch"
+                                                       th:checked="${monitorConfigPageForm.tcpEnable==1}? true : false">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-card">
                                     <div class="layui-card-header div-font-weight">数据库</div>
                                     <div class="layui-card-body" pad20>
                                         <div class="layui-form-item">
