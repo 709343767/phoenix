@@ -41,6 +41,11 @@ public final class UiModuleConstants {
     public static final String NET = "网络";
 
     /**
+     * TCP
+     */
+    public static final String TCP = "TCP";
+
+    /**
      * 告警
      */
     public static final String ALARM = "告警";
