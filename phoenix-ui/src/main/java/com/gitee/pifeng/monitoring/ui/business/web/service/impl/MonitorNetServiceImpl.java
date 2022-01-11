@@ -133,15 +133,12 @@ public class MonitorNetServiceImpl extends ServiceImpl<IMonitorNetDao, MonitorNe
     @Transactional(rollbackFor = Throwable.class)
     @Override
     public LayUiAdminResultVo deleteMonitorNet(List<MonitorNetVo> monitorNetVos) {
-        List<String> ipSources = Lists.newArrayList();
-        List<String> ipTargets = Lists.newArrayList();
+        List<Long> ids = Lists.newArrayList();
         for (MonitorNetVo monitorNetVo : monitorNetVos) {
-            ipSources.add(monitorNetVo.getIpSource());
-            ipTargets.add(monitorNetVo.getIpTarget());
+            ids.add(monitorNetVo.getId());
         }
         LambdaUpdateWrapper<MonitorNet> monitorNetLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
-        monitorNetLambdaUpdateWrapper.in(MonitorNet::getIpSource, ipSources);
-        monitorNetLambdaUpdateWrapper.in(MonitorNet::getIpTarget, ipTargets);
+        monitorNetLambdaUpdateWrapper.in(MonitorNet::getId, ids);
         this.monitorNetDao.delete(monitorNetLambdaUpdateWrapper);
         return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);
     }
