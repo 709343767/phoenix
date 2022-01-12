@@ -87,7 +87,7 @@ public class MonitorTcpController {
             @ApiImplicitParam(name = "status", value = "状态（0：不通，1：正常）", paramType = "query", dataType = "string")})
     @GetMapping("/get-monitor-tcp-list")
     @ResponseBody
-    @OperateLog(operModule = UiModuleConstants.TCP, operType = OperateTypeConstants.QUERY, operDesc = "获取TCP列表")
+    @OperateLog(operModule = UiModuleConstants.TCP4SERVICE, operType = OperateTypeConstants.QUERY, operDesc = "获取TCP列表")
     public LayUiAdminResultVo getMonitorTcpList(Long current, Long size, String ipSource, String ipTarget, String status) {
         Page<MonitorTcpVo> page = this.monitorTcpService.getMonitorTcpList(current, size, ipSource, ipTarget, status);
         return LayUiAdminResultVo.ok(page);
@@ -106,7 +106,7 @@ public class MonitorTcpController {
     @ApiOperation(value = "删除TCP")
     @DeleteMapping("/delete-monitor-tcp")
     @ResponseBody
-    @OperateLog(operModule = UiModuleConstants.TCP, operType = OperateTypeConstants.DELETE, operDesc = "删除TCP")
+    @OperateLog(operModule = UiModuleConstants.TCP4SERVICE, operType = OperateTypeConstants.DELETE, operDesc = "删除TCP")
     public LayUiAdminResultVo deleteMonitorTcp(@RequestBody List<MonitorTcpVo> monitorTcpVos) {
         return this.monitorTcpService.deleteMonitorTcp(monitorTcpVos);
     }
@@ -140,7 +140,7 @@ public class MonitorTcpController {
     @ApiOperation(value = "添加TCP信息")
     @PostMapping("/add-monitor-tcp")
     @ResponseBody
-    @OperateLog(operModule = UiModuleConstants.TCP, operType = OperateTypeConstants.ADD, operDesc = "添加TCP信息")
+    @OperateLog(operModule = UiModuleConstants.TCP4SERVICE, operType = OperateTypeConstants.ADD, operDesc = "添加TCP信息")
     public LayUiAdminResultVo addMonitorTcp(MonitorTcpVo monitorTcpVo) throws NetException {
         // 获取被监控TCP源IP地址，获取失败则返回null
         String sourceIp = this.monitorNetService.getSourceIp();
@@ -184,7 +184,7 @@ public class MonitorTcpController {
     @ApiOperation(value = "编辑TCP信息")
     @PutMapping("/edit-monitor-tcp")
     @ResponseBody
-    @OperateLog(operModule = UiModuleConstants.TCP, operType = OperateTypeConstants.UPDATE, operDesc = "编辑TCP信息")
+    @OperateLog(operModule = UiModuleConstants.TCP4SERVICE, operType = OperateTypeConstants.UPDATE, operDesc = "编辑TCP信息")
     public LayUiAdminResultVo editMonitorTcp(MonitorTcpVo monitorTcpVo) {
         return this.monitorTcpService.editMonitorTcp(monitorTcpVo);
     }

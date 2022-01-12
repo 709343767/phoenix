@@ -28,12 +28,12 @@ public enum MonitorTypeEnums {
     /**
      * TCP服务
      */
-    TCP_SERVICE,
+    TCP4SERVICE,
 
     /**
      * HTTP服务
      */
-    HTTP_SERVICE,
+    HTTP4SERVICE,
 
     /**
      * docker

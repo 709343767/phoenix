@@ -183,7 +183,7 @@ public class TcpMonitorJob extends QuartzJobBean {
                 .msg(builder.toString())
                 .alarmLevel(alarmLevelEnum)
                 .alarmReason(alarmReasonEnum)
-                .monitorType(MonitorTypeEnums.TCP_SERVICE)
+                .monitorType(MonitorTypeEnums.TCP4SERVICE)
                 .build();
         AlarmPackage alarmPackage = new PackageConstructor().structureAlarmPackage(alarm);
         this.alarmService.dealAlarmPackage(alarmPackage);

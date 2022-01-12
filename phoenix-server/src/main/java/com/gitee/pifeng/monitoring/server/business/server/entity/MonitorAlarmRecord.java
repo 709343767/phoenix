@@ -45,7 +45,7 @@ public class MonitorAlarmRecord {
     private String alarmDefCode;
 
     /**
-     * 告警类型（SERVER、NET、TCP_SERVICE、HTTP_SERVICE、DOCKER、INSTANCE、DATABASE、CUSTOM）
+     * 告警类型（SERVER、NET、TCP4SERVICE、HTTP4SERVICE、DOCKER、INSTANCE、DATABASE、CUSTOM）
      */
     @TableField("TYPE")
     private String type;
