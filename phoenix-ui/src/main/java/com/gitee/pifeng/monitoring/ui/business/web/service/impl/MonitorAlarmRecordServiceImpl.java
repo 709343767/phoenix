@@ -271,7 +271,7 @@ public class MonitorAlarmRecordServiceImpl extends ServiceImpl<IMonitorAlarmReco
     public MonitorAlarmRecordVo monitorAlarmRecordDetail(Long id) {
         MonitorAlarmRecord monitorAlarmRecord = this.monitorAlarmRecordDao.selectById(id);
         MonitorAlarmRecordVo monitorAlarmRecordVo = MonitorAlarmRecordVo.builder().build().convertFor(monitorAlarmRecord);
-        // 告警类型（SERVER、NET、INSTANCE、DATABASE、CUSTOM）
+        // 告警类型（SERVER、NET、TCP_SERVICE、HTTP_SERVICE、DOCKER、INSTANCE、DATABASE、CUSTOM）
         String type = monitorAlarmRecordVo.getType();
         if (StringUtils.equals(MonitorTypeEnums.SERVER.name(), type)) {
             monitorAlarmRecordVo.setType("服务器");

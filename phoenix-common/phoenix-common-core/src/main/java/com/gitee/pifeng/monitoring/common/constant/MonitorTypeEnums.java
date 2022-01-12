@@ -26,6 +26,21 @@ public enum MonitorTypeEnums {
     NET,
 
     /**
+     * TCP服务
+     */
+    TCP_SERVICE,
+
+    /**
+     * HTTP服务
+     */
+    HTTP_SERVICE,
+
+    /**
+     * docker
+     */
+    DOCKER,
+
+    /**
      * 应用实例
      */
     INSTANCE,

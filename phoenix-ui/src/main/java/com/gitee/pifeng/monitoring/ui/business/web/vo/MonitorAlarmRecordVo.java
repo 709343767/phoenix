@@ -41,8 +41,9 @@ public class MonitorAlarmRecordVo implements ISuperBean {
     @ApiModelProperty(value = "告警定义编码")
     private String alarmDefCode;
 
-    @Excel(name = "告警类型", orderNum = "2", replace = {"服务器_SERVER", "网络_NET", "应用_INSTANCE", "数据库_DATABASE", "自定义_CUSTOM"})
-    @ApiModelProperty(value = "告警类型（SERVER、NET、INSTANCE、DATABASE、CUSTOM）")
+    @Excel(name = "告警类型", orderNum = "2",
+            replace = {"服务器_SERVER", "网络_NET", "TCP服务_TCP_SERVICE", "HTTP服务_HTTP_SERVICE", "docker_DOCKER", "应用_INSTANCE", "数据库_DATABASE", "自定义_CUSTOM"})
+    @ApiModelProperty(value = "告警类型（SERVER、NET、TCP_SERVICE、HTTP_SERVICE、DOCKER、INSTANCE、DATABASE、CUSTOM）")
     private String type;
 
     @Excel(name = "告警方式", orderNum = "3", replace = {"短信_SMS", "邮件_MAIL"})

@@ -36,7 +36,7 @@ public class MonitorAlarmDefinition implements Serializable {
     @TableId(value = "ID", type = IdType.AUTO)
     private Long id;
 
-    @ApiModelProperty(value = "告警类型（SERVER、NET、INSTANCE、CUSTOM）")
+    @ApiModelProperty(value = "告警类型（SERVER、NET、TCP_SERVICE、HTTP_SERVICE、DOCKER、INSTANCE、DATABASE、CUSTOM）")
     @TableField("TYPE")
     private String type;
 

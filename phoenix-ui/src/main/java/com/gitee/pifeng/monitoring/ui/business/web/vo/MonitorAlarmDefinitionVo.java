@@ -33,7 +33,7 @@ public class MonitorAlarmDefinitionVo implements ISuperBean {
     @ApiModelProperty(value = "主键ID")
     private Long id;
 
-    @ApiModelProperty(value = "告警类型（SERVER、NET、INSTANCE、CUSTOM）")
+    @ApiModelProperty(value = "告警类型（SERVER、NET、TCP_SERVICE、HTTP_SERVICE、DOCKER、INSTANCE、DATABASE、CUSTOM）")
     private String type;
 
     @ApiModelProperty(value = "一级分类")
