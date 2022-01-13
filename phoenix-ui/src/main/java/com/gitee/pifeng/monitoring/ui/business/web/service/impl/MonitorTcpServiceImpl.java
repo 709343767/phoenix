@@ -43,17 +43,18 @@ public class MonitorTcpServiceImpl extends ServiceImpl<IMonitorTcpDao, MonitorTc
      * 获取TCP列表
      * </p>
      *
-     * @param current  当前页
-     * @param size     每页显示条数
-     * @param ipSource IP地址（来源）
-     * @param ipTarget IP地址（目的地）
-     * @param status   状态（0：网络不通，1：网络正常）
+     * @param current    当前页
+     * @param size       每页显示条数
+     * @param ipSource   IP地址（来源）
+     * @param ipTarget   IP地址（目的地）
+     * @param portTarget 目标端口
+     * @param status     状态（0：网络不通，1：网络正常）
      * @return 简单分页模型
      * @author 皮锋
      * @custom.date 2022/1/11 9:33
      */
     @Override
-    public Page<MonitorTcpVo> getMonitorTcpList(Long current, Long size, String ipSource, String ipTarget, String status) {
+    public Page<MonitorTcpVo> getMonitorTcpList(Long current, Long size, String ipSource, String ipTarget, Integer portTarget, String status) {
         // 查询数据库
         IPage<MonitorTcp> ipage = new Page<>(current, size);
         LambdaQueryWrapper<MonitorTcp> lambdaQueryWrapper = new LambdaQueryWrapper<>();
@@ -62,6 +63,9 @@ public class MonitorTcpServiceImpl extends ServiceImpl<IMonitorTcpDao, MonitorTc
         }
         if (StringUtils.isNotBlank(ipTarget)) {
             lambdaQueryWrapper.like(MonitorTcp::getIpTarget, ipTarget);
+        }
+        if (portTarget != null) {
+            lambdaQueryWrapper.eq(MonitorTcp::getPortTarget, portTarget);
         }
         if (StringUtils.isNotBlank(status)) {
             // -1 用来表示状态未知

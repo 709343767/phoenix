@@ -69,11 +69,12 @@ public class MonitorTcpController {
      * 获取TCP列表
      * </p>
      *
-     * @param current  当前页
-     * @param size     每页显示条数
-     * @param ipSource IP地址（来源）
-     * @param ipTarget IP地址（目的地）
-     * @param status   状态（0：不通，1：正常）
+     * @param current    当前页
+     * @param size       每页显示条数
+     * @param ipSource   IP地址（来源）
+     * @param ipTarget   IP地址（目的地）
+     * @param portTarget 目标端口
+     * @param status     状态（0：不通，1：正常）
      * @return layUiAdmin响应对象
      * @author 皮锋
      * @custom.date 2022/1/11 9:31
@@ -84,12 +85,13 @@ public class MonitorTcpController {
             @ApiImplicitParam(name = "size", value = "每页显示条数", required = true, paramType = "query", dataType = "long"),
             @ApiImplicitParam(name = "ipSource", value = "IP地址（来源）", paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "ipTarget", value = "IP地址（目的地）", paramType = "query", dataType = "string"),
+            @ApiImplicitParam(name = "portTarget", value = "目标端口", paramType = "query", dataType = "int"),
             @ApiImplicitParam(name = "status", value = "状态（0：不通，1：正常）", paramType = "query", dataType = "string")})
     @GetMapping("/get-monitor-tcp-list")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.TCP4SERVICE, operType = OperateTypeConstants.QUERY, operDesc = "获取TCP列表")
-    public LayUiAdminResultVo getMonitorTcpList(Long current, Long size, String ipSource, String ipTarget, String status) {
-        Page<MonitorTcpVo> page = this.monitorTcpService.getMonitorTcpList(current, size, ipSource, ipTarget, status);
+    public LayUiAdminResultVo getMonitorTcpList(Long current, Long size, String ipSource, String ipTarget, Integer portTarget, String status) {
+        Page<MonitorTcpVo> page = this.monitorTcpService.getMonitorTcpList(current, size, ipSource, ipTarget, portTarget, status);
         return LayUiAdminResultVo.ok(page);
     }
 
