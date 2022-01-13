@@ -166,6 +166,7 @@ public class MonitorNetServiceImpl extends ServiceImpl<IMonitorNetDao, MonitorNe
             return LayUiAdminResultVo.ok(WebResponseConstants.EXIST);
         }
         MonitorNet monitorNet = monitorNetVo.convertTo();
+        monitorNet.setIpSource(this.getSourceIp());
         monitorNet.setUpdateTime(new Date());
         int result = this.monitorNetDao.updateById(monitorNet);
         if (result == 1) {

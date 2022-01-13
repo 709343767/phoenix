@@ -837,6 +837,29 @@ CREATE TABLE `MONITOR_SERVER_SENSORS`
   ROW_FORMAT = Dynamic;
 
 -- ----------------------------
+-- Table structure for MONITOR_TCP
+-- ----------------------------
+DROP TABLE IF EXISTS `MONITOR_TCP`;
+CREATE TABLE `MONITOR_TCP`
+(
+    `ID`            bigint(20)                                                    NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `IP_SOURCE`     varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT 'IP地址（来源）',
+    `IP_TARGET`     varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT 'IP地址（目的地）',
+    `PORT_TARGET`   int(8)                                                        NOT NULL COMMENT '端口号',
+    `TCP_DESC`      varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'TCP描述',
+    `STATUS`        varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci   NULL DEFAULT NULL COMMENT '状态（0：不通，1：正常）',
+    `OFFLINE_COUNT` int(8)                                                        NULL DEFAULT NULL COMMENT '离线次数',
+    `INSERT_TIME`   datetime                                                      NOT NULL COMMENT '新增时间',
+    `UPDATE_TIME`   datetime                                                      NULL DEFAULT NULL COMMENT '更新时间',
+    PRIMARY KEY (`ID`) USING BTREE,
+    INDEX `NX_IP_SOURCE` (`IP_SOURCE`) USING BTREE COMMENT '索引_IP地址（来源）',
+    INDEX `NX_IP_TARGET` (`IP_TARGET`) USING BTREE COMMENT '索引_IP地址（目的地）'
+) ENGINE = InnoDB
+  CHARACTER SET = utf8mb4
+  COLLATE = utf8mb4_general_ci COMMENT = 'TCP信息表'
+  ROW_FORMAT = Dynamic;
+
+-- ----------------------------
 -- Table structure for MONITOR_USER
 -- ----------------------------
 DROP TABLE IF EXISTS `MONITOR_USER`;

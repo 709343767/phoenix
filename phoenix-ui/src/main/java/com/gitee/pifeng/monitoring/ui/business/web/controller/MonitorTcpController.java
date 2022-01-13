@@ -186,6 +186,9 @@ public class MonitorTcpController {
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.TCP4SERVICE, operType = OperateTypeConstants.UPDATE, operDesc = "编辑TCP信息")
     public LayUiAdminResultVo editMonitorTcp(MonitorTcpVo monitorTcpVo) {
+        // 获取被监控TCP源IP地址，获取失败则返回null
+        String sourceIp = this.monitorNetService.getSourceIp();
+        monitorTcpVo.setIpSource(sourceIp);
         return this.monitorTcpService.editMonitorTcp(monitorTcpVo);
     }
 
