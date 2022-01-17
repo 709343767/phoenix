@@ -97,6 +97,8 @@
         <ojdbc6.version>11.2.0.3</ojdbc6.version>
         <!-- redis驱动版本 -->
         <jedis.version>3.7.0</jedis.version>
+        <!-- mongodb驱动版本 -->
+        <mongodb-driver.version>3.2.2</mongodb-driver.version>
 
         <!-- 编译插件版本 -->
         <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
@@ -392,6 +394,12 @@
                 <groupId>redis.clients</groupId>
                 <artifactId>jedis</artifactId>
                 <version>${jedis.version}</version>
+            </dependency>
+            <!-- mongodb驱动 -->
+            <dependency>
+                <groupId>org.mongodb</groupId>
+                <artifactId>mongodb-driver</artifactId>
+                <version>${mongodb-driver.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

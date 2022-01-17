@@ -4,7 +4,7 @@ import cn.hutool.db.Entity;
 import cn.hutool.db.handler.EntityListHandler;
 import cn.hutool.db.sql.SqlExecutor;
 import com.gitee.pifeng.monitoring.common.constant.sql.Oracle;
-import com.gitee.pifeng.monitoring.common.web.util.db.DbUtils;
+import com.gitee.pifeng.monitoring.server.util.db.DbUtils;
 import com.gitee.pifeng.monitoring.server.business.server.service.IDbTableSpace4OracleService;
 import lombok.Cleanup;
 import org.springframework.stereotype.Service;

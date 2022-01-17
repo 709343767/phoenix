@@ -14,12 +14,12 @@ import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorDbService;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.HomeDbVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.LayUiAdminResultVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.MonitorDbVo;
+import com.gitee.pifeng.monitoring.ui.constant.DbDriverClassConstants;
 import com.gitee.pifeng.monitoring.ui.constant.WebResponseConstants;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import redis.clients.jedis.Jedis;
 
 import java.util.Date;
 import java.util.List;
@@ -129,7 +129,7 @@ public class MonitorDbServiceImpl extends ServiceImpl<IMonitorDbDao, MonitorDb> 
         monitorDb.setDriverClass(DriverUtil.identifyDriver(dbType));
         // Redis数据库
         if (StringUtils.equalsIgnoreCase(DbEnums.Redis.name(), dbType)) {
-            monitorDb.setDriverClass(Jedis.class.getName());
+            monitorDb.setDriverClass(DbDriverClassConstants.REDIS_DRIVER_CLASS);
         }
         if (StringUtils.isBlank(monitorDb.getPassword())) {
             // mybatis-plus不会更新值为null字段
@@ -172,7 +172,7 @@ public class MonitorDbServiceImpl extends ServiceImpl<IMonitorDbDao, MonitorDb> 
         monitorDb.setDriverClass(DriverUtil.identifyDriver(dbType));
         // Redis数据库
         if (StringUtils.equalsIgnoreCase(DbEnums.Redis.name(), dbType)) {
-            monitorDb.setDriverClass(Jedis.class.getName());
+            monitorDb.setDriverClass(DbDriverClassConstants.REDIS_DRIVER_CLASS);
         }
         monitorDb.setOfflineCount(0);
         monitorDb.setInsertTime(new Date());

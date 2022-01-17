@@ -1,4 +1,4 @@
-package com.gitee.pifeng.monitoring.common.web.util.db;
+package com.gitee.pifeng.monitoring.server.util.db;
 
 import cn.hutool.db.ds.simple.SimpleDataSource;
 import lombok.Cleanup;

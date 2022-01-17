@@ -1,7 +1,7 @@
 package com.gitee.pifeng.monitoring.server.business.server.service.impl;
 
 import com.gitee.pifeng.monitoring.common.exception.DbException;
-import com.gitee.pifeng.monitoring.common.web.util.db.RedisUtils;
+import com.gitee.pifeng.monitoring.server.util.db.RedisUtils;
 import com.gitee.pifeng.monitoring.server.business.server.service.IDbInfo4RedisService;
 import lombok.Cleanup;
 import org.springframework.stereotype.Service;
