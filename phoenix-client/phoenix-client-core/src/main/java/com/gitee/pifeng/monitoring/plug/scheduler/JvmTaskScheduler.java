@@ -51,7 +51,7 @@ public class JvmTaskScheduler {
                     (int) (ProcessorsUtils.getAvailableProcessors() / (1 - 0.8)),
                     new BasicThreadFactory.Builder()
                             // 设置线程名s
-                            .namingPattern("monitoring-jvm-pool-thread-%d")
+                            .namingPattern("phoenix-jvm-pool-thread-%d")
                             // 设置为守护线程
                             .daemon(true)
                             .build());
@@ -59,7 +59,7 @@ public class JvmTaskScheduler {
             long rate = ConfigLoader.MONITORING_PROPERTIES.getJvmInfoProperties().getRate();
             seService.scheduleAtFixedRate(new JvmThread(), 45, rate, TimeUnit.SECONDS);
             // 关闭钩子
-            Runtime.getRuntime().addShutdownHook(new Thread(() -> new ThreadShutdownHook().shutdownGracefully(seService, "monitoring-jvm-pool-thread")));
+            Runtime.getRuntime().addShutdownHook(new Thread(() -> new ThreadShutdownHook().shutdownGracefully(seService, "phoenix-jvm-pool-thread")));
         }
     }
 

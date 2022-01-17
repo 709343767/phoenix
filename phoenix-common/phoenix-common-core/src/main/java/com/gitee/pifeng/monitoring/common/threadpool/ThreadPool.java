@@ -82,7 +82,7 @@ public class ThreadPool {
             new LinkedBlockingQueue<>(1024),
             new BasicThreadFactory.Builder()
                     // 设置线程名
-                    .namingPattern("monitoring-common-cpu-intensive-thread-%d")
+                    .namingPattern("phoenix-common-cpu-intensive-thread-%d")
                     // 设置为守护线程
                     .daemon(true)
                     .build(),
@@ -107,7 +107,7 @@ public class ThreadPool {
             new LinkedBlockingQueue<>(1024),
             new BasicThreadFactory.Builder()
                     // 设置线程名
-                    .namingPattern("monitoring-common-io-intensive-thread-%d")
+                    .namingPattern("phoenix-common-io-intensive-thread-%d")
                     // 设置为守护线程
                     .daemon(true)
                     .build(),
@@ -121,7 +121,7 @@ public class ThreadPool {
             (int) (ProcessorsUtils.getAvailableProcessors() / (1 - 0.2)),
             new BasicThreadFactory.Builder()
                     // 设置线程名
-                    .namingPattern("monitoring-common-cpu-intensive-scheduled-%d")
+                    .namingPattern("phoenix-common-cpu-intensive-scheduled-%d")
                     // 设置为守护线程
                     .daemon(true)
                     .build());
@@ -134,7 +134,7 @@ public class ThreadPool {
             (int) (ProcessorsUtils.getAvailableProcessors() / (1 - 0.8)),
             new BasicThreadFactory.Builder()
                     // 设置线程名
-                    .namingPattern("monitoring-common-io-intensive-scheduled-%d")
+                    .namingPattern("phoenix-common-io-intensive-scheduled-%d")
                     // 设置为守护线程
                     .daemon(true)
                     .build());

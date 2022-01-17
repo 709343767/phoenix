@@ -30,16 +30,16 @@ public class ThreadShutdownHook {
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             // CPU密集型的线程池
             ThreadPoolExecutor commonCpuIntensiveThreadPool = ThreadPool.COMMON_CPU_INTENSIVE_THREAD_POOL;
-            this.shutdownGracefully(commonCpuIntensiveThreadPool, "monitoring-common-cpu-intensive-thread");
+            this.shutdownGracefully(commonCpuIntensiveThreadPool, "phoenix-common-cpu-intensive-thread");
             // IO密集型的线程池
             ThreadPoolExecutor commonIoIntensiveThreadPool = ThreadPool.COMMON_IO_INTENSIVE_THREAD_POOL;
-            this.shutdownGracefully(commonIoIntensiveThreadPool, "monitoring-common-io-intensive-thread");
+            this.shutdownGracefully(commonIoIntensiveThreadPool, "phoenix-common-io-intensive-thread");
             // 延迟/周期执行线程池（CPU密集型）
             ScheduledExecutorService commonCpuIntensiveScheduledThreadPool = ThreadPool.COMMON_CPU_INTENSIVE_SCHEDULED_THREAD_POOL;
-            this.shutdownGracefully(commonCpuIntensiveScheduledThreadPool, "monitoring-common-cpu-intensive-scheduled");
+            this.shutdownGracefully(commonCpuIntensiveScheduledThreadPool, "phoenix-common-cpu-intensive-scheduled");
             // 延迟/周期执行线程池（IO密集型）
             ScheduledExecutorService commonIoIntensiveScheduledThreadPool = ThreadPool.COMMON_IO_INTENSIVE_SCHEDULED_THREAD_POOL;
-            this.shutdownGracefully(commonIoIntensiveScheduledThreadPool, "monitoring-common-io-intensive-scheduled");
+            this.shutdownGracefully(commonIoIntensiveScheduledThreadPool, "phoenix-common-io-intensive-scheduled");
         }));
     }
 

@@ -51,7 +51,7 @@ public class ServerTaskScheduler {
                     (int) (ProcessorsUtils.getAvailableProcessors() / (1 - 0.8)),
                     new BasicThreadFactory.Builder()
                             // 设置线程名
-                            .namingPattern("monitoring-server-pool-thread-%d")
+                            .namingPattern("phoenix-server-pool-thread-%d")
                             // 设置为守护线程
                             .daemon(true)
                             .build());
@@ -59,7 +59,7 @@ public class ServerTaskScheduler {
             long rate = ConfigLoader.MONITORING_PROPERTIES.getServerInfoProperties().getRate();
             seService.scheduleAtFixedRate(new ServerThread(), 40, rate, TimeUnit.SECONDS);
             // 关闭钩子
-            Runtime.getRuntime().addShutdownHook(new Thread(() -> new ThreadShutdownHook().shutdownGracefully(seService, "monitoring-server-pool-thread")));
+            Runtime.getRuntime().addShutdownHook(new Thread(() -> new ThreadShutdownHook().shutdownGracefully(seService, "phoenix-server-pool-thread")));
         }
     }
 

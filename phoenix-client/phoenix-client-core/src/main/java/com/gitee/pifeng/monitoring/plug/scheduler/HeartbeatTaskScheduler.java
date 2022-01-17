@@ -47,7 +47,7 @@ public class HeartbeatTaskScheduler {
                 (int) (ProcessorsUtils.getAvailableProcessors() / (1 - 0.8)),
                 new BasicThreadFactory.Builder()
                         // 设置线程名
-                        .namingPattern("monitoring-heartbeat-pool-thread-%d")
+                        .namingPattern("phoenix-heartbeat-pool-thread-%d")
                         // 设置为守护线程
                         .daemon(true)
                         .build());
@@ -55,7 +55,7 @@ public class HeartbeatTaskScheduler {
         long rate = ConfigLoader.MONITORING_PROPERTIES.getHeartbeatProperties().getRate();
         seService.scheduleAtFixedRate(new HeartbeatThread(), 35, rate, TimeUnit.SECONDS);
         // 关闭钩子
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> new ThreadShutdownHook().shutdownGracefully(seService, "monitoring-heartbeat-pool-thread")));
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> new ThreadShutdownHook().shutdownGracefully(seService, "phoenix-heartbeat-pool-thread")));
     }
 
 }
