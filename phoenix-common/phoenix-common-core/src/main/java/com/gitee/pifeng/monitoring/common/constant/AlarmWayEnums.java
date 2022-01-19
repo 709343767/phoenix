@@ -59,6 +59,9 @@ public enum AlarmWayEnums {
      */
     public static AlarmWayEnums[] strs2Enums(String... alarmWayStrs) {
         List<AlarmWayEnums> alarmWayEnumsList = Lists.newArrayList();
+        if (alarmWayStrs == null) {
+            return new AlarmWayEnums[0];
+        }
         for (String alarmStr : alarmWayStrs) {
             AlarmWayEnums alarmLevelEnum = str2Enum(alarmStr);
             alarmWayEnumsList.add(alarmLevelEnum);
