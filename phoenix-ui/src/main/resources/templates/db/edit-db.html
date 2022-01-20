@@ -27,6 +27,7 @@
                 <option value="MySQL" th:selected="${monitorDbVo.dbType=='MySQL'}">MySQL</option>
                 <option value="Oracle" th:selected="${monitorDbVo.dbType=='Oracle'}">Oracle</option>
                 <option value="Redis" th:selected="${monitorDbVo.dbType=='Redis'}">Redis</option>
+                <option value="Mongo" th:selected="${monitorDbVo.dbType=='Mongo'}">Mongo</option>
             </select>
         </div>
     </div>
@@ -52,14 +53,15 @@
                       lay-verType="tips"></textarea>
         </div>
     </div>
-    <div class="layui-form-item" id="usernameDiv" th:style="${monitorDbVo.dbType=='Redis'?'display: none;':''}">
+    <div class="layui-form-item" id="usernameDiv"
+         th:style="${monitorDbVo.dbType=='Redis' || monitorDbVo.dbType=='Mongo' ?'display: none;':''}">
         <label class="layui-form-label">用户名</label>
         <div class="layui-input-block">
             <input type="text" name="username" autocomplete="off" placeholder="请输入用户名" lay-verify="username"
                    class="layui-input" th:value="${monitorDbVo.username}" lay-verType="tips">
         </div>
     </div>
-    <div class="layui-form-item">
+    <div class="layui-form-item" id="passwordDiv" th:style="${monitorDbVo.dbType=='Mongo' ?'display: none;':''}">
         <label class="layui-form-label">密码</label>
         <div class="layui-input-block">
             <input type="password" name="password" autocomplete="off" placeholder="密码不填则不修改" class="layui-input">
@@ -87,6 +89,8 @@
         var form = layui.form;
         // Redis数据库
         var redis = 'Redis';
+        // mongo数据库
+        var mongo = 'Mongo';
         // 监听数据库类型下拉选择
         form.on('select(dbType)', function (data) {
             var dbType = data.value;
@@ -95,17 +99,26 @@
                 $('#urlLabel').text('地址');
                 $('#url').attr('placeholder', '例如：127.0.0.1:6379');
                 $('#usernameDiv').hide();
+                $('#passwordDiv').show();
+            }
+            // mongo数据库
+            else if (dbType === mongo) {
+                $('#urlLabel').text('URL');
+                $('#url').attr('placeholder', '请输入URL');
+                $('#usernameDiv').hide();
+                $('#passwordDiv').hide();
             } else {
                 $('#urlLabel').text('URL');
                 $('#url').attr('placeholder', '请输入URL');
                 $('#usernameDiv').show();
+                $('#passwordDiv').show();
             }
         });
         form.verify({
             // 用户名
             username: function (value) {
                 var dbType = $('select[name="dbType"]').val();
-                if (dbType !== redis && value.length === 0) {
+                if (dbType !== redis && dbType !== mongo && value.length === 0) {
                     return '必填项不能为空';
                 }
             }

@@ -27,6 +27,7 @@
                 <option value="MySQL">MySQL</option>
                 <option value="Oracle">Oracle</option>
                 <option value="Redis">Redis</option>
+                <option value="Mongo">Mongo</option>
             </select>
         </div>
     </div>
@@ -51,7 +52,7 @@
                    lay-verify="username" lay-verType="tips">
         </div>
     </div>
-    <div class="layui-form-item">
+    <div class="layui-form-item" id="passwordDiv">
         <label class="layui-form-label">密码</label>
         <div class="layui-input-block">
             <input type="password" name="password" autocomplete="off" class="layui-input" placeholder="请输入密码"
@@ -80,6 +81,8 @@
         var form = layui.form;
         // Redis数据库
         var redis = 'Redis';
+        // mongo数据库
+        var mongo = 'Mongo';
         // 监听数据库类型下拉选择
         form.on('select(dbType)', function (data) {
             var dbType = data.value;
@@ -88,23 +91,32 @@
                 $('#urlLabel').text('地址');
                 $('#url').attr('placeholder', '例如：127.0.0.1:6379');
                 $('#usernameDiv').hide();
+                $('#passwordDiv').show();
+            }
+            // mongo数据库
+            else if (dbType === mongo) {
+                $('#urlLabel').text('URL');
+                $('#url').attr('placeholder', '请输入URL');
+                $('#usernameDiv').hide();
+                $('#passwordDiv').hide();
             } else {
                 $('#urlLabel').text('URL');
                 $('#url').attr('placeholder', '请输入URL');
                 $('#usernameDiv').show();
+                $('#passwordDiv').show();
             }
         });
         form.verify({
             // 用户名
             username: function (value) {
                 var dbType = $('select[name="dbType"]').val();
-                if (dbType !== redis && value.length === 0) {
+                if (dbType !== redis && dbType !== mongo && value.length === 0) {
                     return '必填项不能为空';
                 }
             },
             password: function (value) {
                 var dbType = $('select[name="dbType"]').val();
-                if (dbType !== redis && value.length === 0) {
+                if (dbType !== redis && dbType !== mongo && value.length === 0) {
                     return '必填项不能为空';
                 }
             }
