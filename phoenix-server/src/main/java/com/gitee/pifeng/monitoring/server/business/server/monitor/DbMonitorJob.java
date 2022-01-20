@@ -137,6 +137,8 @@ public class DbMonitorJob extends QuartzJobBean {
                 this.disconnected(monitorDb);
             }
         } catch (Exception e) {
+            // 处理数据库异常
+            this.disconnected(monitorDb);
             log.error("执行数据库监控异常！", e);
         } finally {
             MongoUtils.close(mongoClient);
@@ -178,6 +180,8 @@ public class DbMonitorJob extends QuartzJobBean {
                 this.disconnected(monitorDb);
             }
         } catch (Exception e) {
+            // 处理数据库异常
+            this.disconnected(monitorDb);
             log.error("执行数据库监控异常！", e);
         } finally {
             RedisUtils.close(jedis);
@@ -210,6 +214,8 @@ public class DbMonitorJob extends QuartzJobBean {
                 this.disconnected(monitorDb);
             }
         } catch (Exception e) {
+            // 处理数据库异常
+            this.disconnected(monitorDb);
             log.error("执行数据库监控异常！", e);
         } finally {
             DbUtil.close(connection);

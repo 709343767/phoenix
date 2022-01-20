@@ -18,5 +18,5 @@ public class DbDriverClassConstants {
     /**
      * mongo驱动类
      */
-    public static final String MONGO_DRIVER_CLASS = "";
+    public static final String MONGO_DRIVER_CLASS = "com.mongodb.MongoClient";
 }

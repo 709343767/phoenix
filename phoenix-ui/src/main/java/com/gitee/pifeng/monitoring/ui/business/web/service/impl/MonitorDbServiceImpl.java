@@ -131,6 +131,10 @@ public class MonitorDbServiceImpl extends ServiceImpl<IMonitorDbDao, MonitorDb> 
         if (StringUtils.equalsIgnoreCase(DbEnums.Redis.name(), dbType)) {
             monitorDb.setDriverClass(DbDriverClassConstants.REDIS_DRIVER_CLASS);
         }
+        // mongo数据库
+        if (StringUtils.equalsIgnoreCase(DbEnums.Mongo.name(), dbType)) {
+            monitorDb.setDriverClass(DbDriverClassConstants.MONGO_DRIVER_CLASS);
+        }
         if (StringUtils.isBlank(monitorDb.getPassword())) {
             // mybatis-plus不会更新值为null字段
             monitorDb.setPassword(null);
@@ -173,6 +177,10 @@ public class MonitorDbServiceImpl extends ServiceImpl<IMonitorDbDao, MonitorDb> 
         // Redis数据库
         if (StringUtils.equalsIgnoreCase(DbEnums.Redis.name(), dbType)) {
             monitorDb.setDriverClass(DbDriverClassConstants.REDIS_DRIVER_CLASS);
+        }
+        // mongo数据库
+        if (StringUtils.equalsIgnoreCase(DbEnums.Mongo.name(), dbType)) {
+            monitorDb.setDriverClass(DbDriverClassConstants.MONGO_DRIVER_CLASS);
         }
         monitorDb.setOfflineCount(0);
         monitorDb.setInsertTime(new Date());
