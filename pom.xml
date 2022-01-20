@@ -98,7 +98,7 @@
         <!-- redis驱动版本 -->
         <jedis.version>3.7.0</jedis.version>
         <!-- mongodb驱动版本 -->
-        <mongodb-driver.version>3.2.2</mongodb-driver.version>
+        <mongo-java-driver.version>3.12.10</mongo-java-driver.version>
 
         <!-- 编译插件版本 -->
         <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
@@ -398,8 +398,8 @@
             <!-- mongodb驱动 -->
             <dependency>
                 <groupId>org.mongodb</groupId>
-                <artifactId>mongodb-driver</artifactId>
-                <version>${mongodb-driver.version}</version>
+                <artifactId>mongo-java-driver</artifactId>
+                <version>${mongo-java-driver.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

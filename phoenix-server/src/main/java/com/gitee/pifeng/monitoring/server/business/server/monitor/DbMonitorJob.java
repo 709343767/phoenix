@@ -14,12 +14,14 @@ import com.gitee.pifeng.monitoring.common.exception.NetException;
 import com.gitee.pifeng.monitoring.common.threadpool.ThreadPool;
 import com.gitee.pifeng.monitoring.common.util.DateTimeUtils;
 import com.gitee.pifeng.monitoring.common.util.Md5Utils;
-import com.gitee.pifeng.monitoring.server.util.db.RedisUtils;
 import com.gitee.pifeng.monitoring.server.business.server.core.MonitoringConfigPropertiesLoader;
 import com.gitee.pifeng.monitoring.server.business.server.core.PackageConstructor;
 import com.gitee.pifeng.monitoring.server.business.server.entity.MonitorDb;
 import com.gitee.pifeng.monitoring.server.business.server.service.IAlarmService;
 import com.gitee.pifeng.monitoring.server.business.server.service.IDbService;
+import com.gitee.pifeng.monitoring.server.util.db.MongoUtils;
+import com.gitee.pifeng.monitoring.server.util.db.RedisUtils;
+import com.mongodb.MongoClient;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.hyperic.sigar.SigarException;
@@ -95,10 +97,49 @@ public class DbMonitorJob extends QuartzJobBean {
                         // 处理Redis数据库
                         this.dealRedisDb(monitorDb);
                     }
+                    // mongo数据库
+                    if (StringUtils.equalsIgnoreCase(DbEnums.Mongo.name(), dbType)) {
+                        // 处理MongoDB
+                        this.dealMongoDb(monitorDb);
+                    }
                 });
             }
         } catch (Exception e) {
             log.error("定时扫描数据库“MONITOR_DB”表中的所有数据库信息异常！", e);
+        }
+    }
+
+    /**
+     * <p>
+     * 处理MongoDB
+     * </p>
+     *
+     * @param monitorDb 数据库信息
+     * @author 皮锋
+     * @custom.date 2022/1/19 16:27
+     */
+    private void dealMongoDb(MonitorDb monitorDb) {
+        MongoClient mongoClient = null;
+        try {
+            String url = monitorDb.getUrl();
+            // 获取 MongoClient
+            mongoClient = MongoUtils.getClient(url);
+            // Mongo数据库是否可连接
+            boolean isConnect = MongoUtils.isConnect(mongoClient);
+            // 连接正常
+            if (isConnect) {
+                // 处理数据库正常
+                this.connected(monitorDb);
+            }
+            // 连接异常
+            else {
+                // 处理数据库异常
+                this.disconnected(monitorDb);
+            }
+        } catch (Exception e) {
+            log.error("执行数据库监控异常！", e);
+        } finally {
+            MongoUtils.close(mongoClient);
         }
     }
 

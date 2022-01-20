@@ -23,6 +23,11 @@ public enum DbEnums {
     /**
      * Redis
      */
-    Redis
+    Redis,
+
+    /**
+     * Mongo
+     */
+    Mongo
 
 }

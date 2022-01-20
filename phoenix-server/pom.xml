@@ -121,7 +121,7 @@
         <!-- mongodb驱动 -->
         <dependency>
             <groupId>org.mongodb</groupId>
-            <artifactId>mongodb-driver</artifactId>
+            <artifactId>mongo-java-driver</artifactId>
         </dependency>
     </dependencies>
 
