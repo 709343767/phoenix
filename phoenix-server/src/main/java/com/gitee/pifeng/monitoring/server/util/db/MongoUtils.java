@@ -67,6 +67,8 @@ public class MongoUtils {
             if (it.hasNext()) {
                 it.next();
             }
+            // 关闭
+            it.close();
             return true;
         } catch (Exception e) {
             log.error("检查连接异常！", e);
