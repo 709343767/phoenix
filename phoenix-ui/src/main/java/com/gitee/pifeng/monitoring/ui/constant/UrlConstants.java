@@ -73,4 +73,9 @@ public class UrlConstants {
      */
     public static final String REDIS_GET_REDIS_INFO = ROOT_URI + "/db-info4redis/get-redis-info";
 
+    /**
+     * Mongo数据库：获取Mongo信息列表
+     */
+    public static final String MONGO_GET_MONGO_INFO_LIST = ROOT_URI + "/db-info4mongo/get-mongo-info-list";
+
 }
