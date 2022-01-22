@@ -54,8 +54,4 @@ public class DbInfo4MongoServiceImpl implements IDbInfo4MongoService {
         return jsonObjects;
     }
 
-    public static void main(String[] args) {
-        DbInfo4MongoServiceImpl dbInfo4MongoService = new DbInfo4MongoServiceImpl();
-        dbInfo4MongoService.getMongoInfoList("mongodb://127.0.0.1:27017");
-    }
 }
