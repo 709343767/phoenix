@@ -35,6 +35,7 @@
                 </li>
                 <li th:if="${#strings.toLowerCase(monitorDbVo.dbType)} eq 'oracle'">表空间</li>
                 <li class="layui-this" th:if="${#strings.toLowerCase(monitorDbVo.dbType)} eq 'redis'">信息</li>
+                <li class="layui-this" th:if="${#strings.toLowerCase(monitorDbVo.dbType)} eq 'mongo'">信息</li>
                 <li>概要</li>
             </ul>
             <div class="layui-tab-content">
@@ -96,6 +97,22 @@
                         </div>
                     </div>
                 </div>
+                <div class="layui-tab-item layui-show" th:if="${#strings.toLowerCase(monitorDbVo.dbType)} eq 'mongo'">
+                    <div class="layui-fluid">
+                        <table id="list-table-mongo-info" lay-filter="list-table-mongo-info"></table>
+                        <script type="text/html" id="imgTpl-mongo-info">
+                            <img style="display: inline-block; width: 50%; height: 100%;" src={{ d.avatar }}>
+                        </script>
+                        <script type="text/html" id="list-table-mongo-info-toolbar">
+                            <div class="layui-btn-container">
+                                <button class="layui-btn layui-btn-sm layuiadmin-btn-useradmin"
+                                        lay-event="batchRefresh">
+                                    <i class="layui-icon layui-icon-refresh"></i>刷新
+                                </button>
+                            </div>
+                        </script>
+                    </div>
+                </div>
                 <div class="layui-tab-item">
                     <form class="layui-form layui-form-pane" id="layuiadmin-form-useradmin"
                           style="padding: 20px 20px 0 0;" action="javascript:;">
@@ -120,7 +137,8 @@
                                 </textarea>
                             </div>
                         </div>
-                        <div class="layui-form-item" th:style="${monitorDbVo.dbType=='Redis'?'display: none;':''}">
+                        <div class="layui-form-item"
+                             th:style="${monitorDbVo.dbType=='Redis'||monitorDbVo.dbType=='Mongo'?'display: none;':''}">
                             <label class="layui-form-label">用户名</label>
                             <div class="layui-input-block">
                                 <input type="text" name="username" disabled class="layui-input"
@@ -197,6 +215,9 @@
     } else if ([[${monitorDbVo.dbType}]].toLowerCase() === 'redis') {
         extend.dbInfo4redis = 'db/dbInfo4redis';
         use.push('dbInfo4redis');
+    } else if ([[${monitorDbVo.dbType}]].toLowerCase() === 'mongo') {
+        extend.dbInfo4mongo = 'db/dbInfo4mongo';
+        use.push('dbInfo4mongo');
     }
     layui.config({
         base: ctxPath //静态资源所在路径

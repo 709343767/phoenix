@@ -6,7 +6,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.gitee.pifeng.monitoring.common.domain.Result;
 import com.gitee.pifeng.monitoring.common.dto.BaseRequestPackage;
 import com.gitee.pifeng.monitoring.common.dto.BaseResponsePackage;
-import com.gitee.pifeng.monitoring.common.exception.NetException;
 import com.gitee.pifeng.monitoring.common.util.DataSizeUtil;
 import com.gitee.pifeng.monitoring.plug.core.Sender;
 import com.gitee.pifeng.monitoring.ui.business.web.dao.IMonitorDbDao;
@@ -50,7 +49,7 @@ public class DbInfo4MongoServiceImpl implements IDbInfo4MongoService {
      * @param size    每页显示条数
      * @param id      数据库ID
      * @return 简单分页模型
-     * @throws NetException   自定义获取网络信息异常
+     * @throws IOException    IO异常
      * @throws SigarException Sigar异常
      * @author 皮锋
      * @custom.date 2022/1/20 14:33

@@ -1,7 +1,6 @@
 package com.gitee.pifeng.monitoring.ui.business.web.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.gitee.pifeng.monitoring.common.exception.NetException;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.DbInfo4MongoVo;
 import org.hyperic.sigar.SigarException;
 
@@ -26,7 +25,7 @@ public interface IDbInfo4MongoService {
      * @param size    每页显示条数
      * @param id      数据库ID
      * @return 简单分页模型
-     * @throws NetException   自定义获取网络信息异常
+     * @throws IOException    IO异常
      * @throws SigarException Sigar异常
      * @author 皮锋
      * @custom.date 2022/1/20 14:33

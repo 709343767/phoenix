@@ -1,7 +1,6 @@
 package com.gitee.pifeng.monitoring.ui.business.web.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.gitee.pifeng.monitoring.common.exception.NetException;
 import com.gitee.pifeng.monitoring.ui.business.web.annotation.OperateLog;
 import com.gitee.pifeng.monitoring.ui.business.web.service.IDbInfo4MongoService;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.DbInfo4MongoVo;
@@ -44,9 +43,11 @@ public class DbInfo4MongoServiceController {
      * 获取Mongo信息列表
      * </p>
      *
-     * @param id 数据库ID
+     * @param current 当前页
+     * @param size    每页显示条数
+     * @param id      数据库ID
      * @return layUiAdmin响应对象
-     * @throws NetException   自定义获取网络信息异常
+     * @throws IOException    IO异常
      * @throws SigarException Sigar异常
      * @author 皮锋
      * @custom.date 2022/1/20 14:28
