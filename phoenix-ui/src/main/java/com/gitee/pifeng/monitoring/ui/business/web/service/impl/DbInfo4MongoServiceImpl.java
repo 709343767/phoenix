@@ -74,19 +74,26 @@ public class DbInfo4MongoServiceImpl implements IDbInfo4MongoService {
         // 解析数据
         List<DbInfo4MongoVo> dbInfo4MongoVos = Lists.newArrayList();
         for (JSONObject object : jsonObjects) {
-            String avgObjSize = DataSizeUtil.format(object.getBigDecimal("avgObjSize").doubleValue());
+            BigDecimal avgObjSizeBigDecimal = object.getBigDecimal("avgObjSize");
+            String avgObjSize = avgObjSizeBigDecimal == null ? null : DataSizeUtil.format(avgObjSizeBigDecimal.doubleValue());
             Integer collections = object.getInteger("collections");
-            String dataSize = DataSizeUtil.format(object.getBigDecimal("dataSize").doubleValue());
+            BigDecimal dataSizeBigDecimal = object.getBigDecimal("dataSize");
+            String dataSize = dataSizeBigDecimal == null ? null : DataSizeUtil.format(dataSizeBigDecimal.doubleValue());
             String db = object.getString("db");
-            String fsTotalSize = DataSizeUtil.format(object.getBigDecimal("fsTotalSize").doubleValue());
-            String fsUsedSize = DataSizeUtil.format(object.getBigDecimal("fsUsedSize").doubleValue());
-            String indexSize = DataSizeUtil.format(object.getBigDecimal("indexSize").doubleValue());
+            BigDecimal fsTotalSizeBigDecimal = object.getBigDecimal("fsTotalSize");
+            String fsTotalSize = fsTotalSizeBigDecimal == null ? null : DataSizeUtil.format(fsTotalSizeBigDecimal.doubleValue());
+            BigDecimal fsUsedSizeBigDecimal = object.getBigDecimal("fsUsedSize");
+            String fsUsedSize = fsUsedSizeBigDecimal == null ? null : DataSizeUtil.format(fsUsedSizeBigDecimal.doubleValue());
+            BigDecimal indexSizeBigDecimal = object.getBigDecimal("indexSize");
+            String indexSize = indexSizeBigDecimal == null ? null : DataSizeUtil.format(indexSizeBigDecimal.doubleValue());
             Integer indexes = object.getInteger("indexes");
             Integer objects = object.getInteger("objects");
             BigDecimal ok = object.getBigDecimal("ok");
             BigDecimal scaleFactor = object.getBigDecimal("scaleFactor");
-            String storageSize = DataSizeUtil.format(object.getBigDecimal("storageSize").doubleValue());
-            String totalSize = DataSizeUtil.format(object.getBigDecimal("totalSize").doubleValue());
+            BigDecimal storageSizeBigDecimal = object.getBigDecimal("storageSize");
+            String storageSize = storageSizeBigDecimal == null ? null : DataSizeUtil.format(storageSizeBigDecimal.doubleValue());
+            BigDecimal totalSizeBigDecimal = object.getBigDecimal("totalSize");
+            String totalSize = totalSizeBigDecimal == null ? null : DataSizeUtil.format(totalSizeBigDecimal.doubleValue());
             Integer views = object.getInteger("views");
             DbInfo4MongoVo dbInfo4MongoVo = DbInfo4MongoVo.builder().build();
             dbInfo4MongoVo.setAvgObjSize(avgObjSize);

@@ -37,7 +37,7 @@
                 }, {
                     field: 'collections',
                     title: 'collections',
-                    minWidth: 120,
+                    minWidth: 115,
                     sort: !0
                 }, {
                     field: 'objects',
@@ -47,7 +47,7 @@
                 }, {
                     field: 'indexes',
                     title: 'indexes',
-                    minWidth: 90,
+                    minWidth: 100,
                     sort: !0
                 }, {
                     field: 'views',
