@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 /**
  * <p>
  * Mongo数据库信息表现层对象
+ * https://docs.mongodb.com/manual/reference/command/dbStats/#std-label-dbstats-output
  * </p>
  *
  * @author 皮锋
