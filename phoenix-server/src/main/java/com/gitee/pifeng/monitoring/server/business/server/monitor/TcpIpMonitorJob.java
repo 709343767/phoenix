@@ -64,7 +64,7 @@ public class TcpIpMonitorJob extends QuartzJobBean {
     @Override
     protected void executeInternal(JobExecutionContext jobExecutionContext) {
         // 是否监控TCP/IP服务
-        boolean isMonitoringEnable = MonitoringConfigPropertiesLoader.getMonitoringProperties().getTcpProperties().isEnable();
+        boolean isMonitoringEnable = MonitoringConfigPropertiesLoader.getMonitoringProperties().getTcpIpProperties().isEnable();
         if (!isMonitoringEnable) {
             return;
         }

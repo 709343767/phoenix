@@ -34,9 +34,9 @@ public class MonitoringProperties implements ISuperBean {
     private MonitoringNetworkProperties networkProperties;
 
     /**
-     * TCP属性
+     * TCP/IP属性
      */
-    private MonitoringTcpProperties tcpProperties;
+    private MonitoringTcpIpProperties tcpIpProperties;
 
     /**
      * 服务器属性

@@ -4,7 +4,7 @@ import lombok.*;
 
 /**
  * <p>
- * TCP配置属性
+ * TCP/IP配置属性
  * </p>
  *
  * @author 皮锋
@@ -15,7 +15,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
-public class MonitoringTcpProperties {
+public class MonitoringTcpIpProperties {
 
     /**
      * 是否监控网络
