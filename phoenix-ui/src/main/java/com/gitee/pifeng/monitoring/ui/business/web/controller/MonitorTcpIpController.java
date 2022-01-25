@@ -3,11 +3,11 @@ package com.gitee.pifeng.monitoring.ui.business.web.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.gitee.pifeng.monitoring.common.exception.NetException;
 import com.gitee.pifeng.monitoring.ui.business.web.annotation.OperateLog;
-import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorTcp;
+import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorTcpIp;
 import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorNetService;
-import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorTcpService;
+import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorTcpIpService;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.LayUiAdminResultVo;
-import com.gitee.pifeng.monitoring.ui.business.web.vo.MonitorTcpVo;
+import com.gitee.pifeng.monitoring.ui.business.web.vo.MonitorTcpIpVo;
 import com.gitee.pifeng.monitoring.ui.constant.OperateTypeConstants;
 import com.gitee.pifeng.monitoring.ui.constant.UiModuleConstants;
 import io.swagger.annotations.Api;
@@ -23,16 +23,16 @@ import java.util.List;
 
 /**
  * <p>
- * TCP信息
+ * TCP/IP信息
  * </p>
  *
  * @author 皮锋
  * @custom.date 2022-01-10
  */
 @Controller
-@RequestMapping("/monitor-tcp")
-@Api(tags = "TCP")
-public class MonitorTcpController {
+@RequestMapping("/monitor-tcpip")
+@Api(tags = "TCP/IP")
+public class MonitorTcpIpController {
 
     /**
      * 网络信息服务类
@@ -41,24 +41,24 @@ public class MonitorTcpController {
     private IMonitorNetService monitorNetService;
 
     /**
-     * TCP信息服务类
+     * TCP/IP信息服务类
      */
     @Autowired
-    private IMonitorTcpService monitorTcpService;
+    private IMonitorTcpIpService monitorTcpIpService;
 
     /**
      * <p>
-     * 访问TCP列表页面
+     * 访问TCP/IP列表页面
      * </p>
      *
-     * @return {@link ModelAndView} TCP列表页面
+     * @return {@link ModelAndView} TCP/IP列表页面
      * @author 皮锋
      * @custom.date 2022/1/11 9:27
      */
-    @ApiOperation(value = "访问TCP列表页面")
+    @ApiOperation(value = "访问TCP/IP列表页面")
     @GetMapping("/list")
     public ModelAndView list() {
-        ModelAndView mv = new ModelAndView("tcp/tcp");
+        ModelAndView mv = new ModelAndView("tcpip/tcpip");
         // 源IP
         mv.addObject("ipSource", this.monitorNetService.getSourceIp());
         return mv;
@@ -66,7 +66,7 @@ public class MonitorTcpController {
 
     /**
      * <p>
-     * 获取TCP列表
+     * 获取TCP/IP列表
      * </p>
      *
      * @param current    当前页
@@ -74,125 +74,126 @@ public class MonitorTcpController {
      * @param ipSource   IP地址（来源）
      * @param ipTarget   IP地址（目的地）
      * @param portTarget 目标端口
+     * @param protocol   协议
      * @param status     状态（0：不通，1：正常）
      * @return layUiAdmin响应对象
      * @author 皮锋
      * @custom.date 2022/1/11 9:31
      */
-    @ApiOperation(value = "获取TCP列表")
+    @ApiOperation(value = "获取TCP/IP列表")
     @ApiImplicitParams(value = {
             @ApiImplicitParam(name = "current", value = "当前页", required = true, paramType = "query", dataType = "long"),
             @ApiImplicitParam(name = "size", value = "每页显示条数", required = true, paramType = "query", dataType = "long"),
             @ApiImplicitParam(name = "ipSource", value = "IP地址（来源）", paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "ipTarget", value = "IP地址（目的地）", paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "portTarget", value = "目标端口", paramType = "query", dataType = "int"),
+            @ApiImplicitParam(name = "protocol", value = "协议", paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "status", value = "状态（0：不通，1：正常）", paramType = "query", dataType = "string")})
-    @GetMapping("/get-monitor-tcp-list")
+    @GetMapping("/get-monitor-tcpip-list")
     @ResponseBody
-    @OperateLog(operModule = UiModuleConstants.TCP4SERVICE, operType = OperateTypeConstants.QUERY, operDesc = "获取TCP列表")
-    public LayUiAdminResultVo getMonitorTcpList(Long current, Long size, String ipSource, String ipTarget, Integer portTarget, String status) {
-        Page<MonitorTcpVo> page = this.monitorTcpService.getMonitorTcpList(current, size, ipSource, ipTarget, portTarget, status);
+    @OperateLog(operModule = UiModuleConstants.TCPIP4SERVICE, operType = OperateTypeConstants.QUERY, operDesc = "获取TCP/IP列表")
+    public LayUiAdminResultVo getMonitorTcpIpList(Long current, Long size, String ipSource, String ipTarget, Integer portTarget, String protocol, String status) {
+        Page<MonitorTcpIpVo> page = this.monitorTcpIpService.getMonitorTcpIpList(current, size, ipSource, ipTarget, portTarget, protocol, status);
         return LayUiAdminResultVo.ok(page);
     }
 
     /**
      * <p>
-     * 删除TCP
+     * 删除TCP/IP
      * </p>
      *
-     * @param monitorTcpVos TCP信息
+     * @param monitorTcpIpVos TCP/IP信息
      * @return layUiAdmin响应对象：如果删除成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
      * @author 皮锋
      * @custom.date 2022/1/11 9:44
      */
-    @ApiOperation(value = "删除TCP")
-    @DeleteMapping("/delete-monitor-tcp")
+    @ApiOperation(value = "删除TCP/IP")
+    @DeleteMapping("/delete-monitor-tcpip")
     @ResponseBody
-    @OperateLog(operModule = UiModuleConstants.TCP4SERVICE, operType = OperateTypeConstants.DELETE, operDesc = "删除TCP")
-    public LayUiAdminResultVo deleteMonitorTcp(@RequestBody List<MonitorTcpVo> monitorTcpVos) {
-        return this.monitorTcpService.deleteMonitorTcp(monitorTcpVos);
+    @OperateLog(operModule = UiModuleConstants.TCPIP4SERVICE, operType = OperateTypeConstants.DELETE, operDesc = "删除TCP/IP")
+    public LayUiAdminResultVo deleteMonitorTcpIp(@RequestBody List<MonitorTcpIpVo> monitorTcpIpVos) {
+        return this.monitorTcpIpService.deleteMonitorTcpIp(monitorTcpIpVos);
     }
 
     /**
      * <p>
-     * 访问新增TCP信息表单页面
+     * 访问新增TCP/IP信息表单页面
      * </p>
      *
-     * @return {@link ModelAndView} 新增TCP信息表单页面
+     * @return {@link ModelAndView} 新增TCP/IP信息表单页面
      * @author 皮锋
      * @custom.date 2022/1/11 10:52
      */
-    @ApiOperation(value = "访问新增TCP信息表单页面")
-    @GetMapping("/add-monitor-tcp-form")
-    public ModelAndView addMonitorTcpForm() {
-        return new ModelAndView("tcp/add-tcp");
+    @ApiOperation(value = "访问新增TCP/IP信息表单页面")
+    @GetMapping("/add-monitor-tcpip-form")
+    public ModelAndView addMonitorTcpIpForm() {
+        return new ModelAndView("tcpip/add-tcpip");
     }
 
     /**
      * <p>
-     * 添加TCP信息
+     * 添加TCP/IP信息
      * </p>
      *
-     * @param monitorTcpVo TCP信息
+     * @param monitorTcpIpVo TCP/IP信息
      * @return layUiAdmin响应对象：如果数据库中已经存在，LayUiAdminResultVo.data="exist"；
      * 如果添加成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
      * @author 皮锋
      * @custom.date 2022/1/11 10:16
      */
-    @ApiOperation(value = "添加TCP信息")
-    @PostMapping("/add-monitor-tcp")
+    @ApiOperation(value = "添加TCP/IP信息")
+    @PostMapping("/add-monitor-tcpip")
     @ResponseBody
-    @OperateLog(operModule = UiModuleConstants.TCP4SERVICE, operType = OperateTypeConstants.ADD, operDesc = "添加TCP信息")
-    public LayUiAdminResultVo addMonitorTcp(MonitorTcpVo monitorTcpVo) throws NetException {
-        // 获取被监控TCP源IP地址，获取失败则返回null
+    @OperateLog(operModule = UiModuleConstants.TCPIP4SERVICE, operType = OperateTypeConstants.ADD, operDesc = "添加TCP/IP信息")
+    public LayUiAdminResultVo addMonitorTcpIp(MonitorTcpIpVo monitorTcpIpVo) throws NetException {
+        // 获取被监控TCP/IP源IP地址，获取失败则返回null
         String sourceIp = this.monitorNetService.getSourceIp();
-        monitorTcpVo.setIpSource(sourceIp);
-        return this.monitorTcpService.addMonitorTcp(monitorTcpVo);
+        monitorTcpIpVo.setIpSource(sourceIp);
+        return this.monitorTcpIpService.addMonitorTcpIp(monitorTcpIpVo);
     }
 
     /**
      * <p>
-     * 访问编辑TCP信息表单页面
+     * 访问编辑TCP/IP信息表单页面
      * </p>
      *
-     * @param id TCP ID
-     * @return {@link ModelAndView} 编辑TCP信息表单页面
+     * @param id TCP/IP ID
+     * @return {@link ModelAndView} 编辑TCP/IP信息表单页面
      * @author 皮锋
      * @custom.date 2022/1/11 11:20
      */
-    @ApiOperation(value = "访问编辑TCP信息表单页面")
+    @ApiOperation(value = "访问编辑TCP/IP信息表单页面")
     @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "id", value = "TCP ID", required = true, paramType = "query", dataType = "long")})
-    @GetMapping("/edit-monitor-tcp-form")
-    public ModelAndView editMonitorTcpForm(@RequestParam(name = "id") Long id) {
-        MonitorTcp monitorTcp = this.monitorTcpService.getById(id);
-        MonitorTcpVo monitorTcpVo = MonitorTcpVo.builder().build().convertFor(monitorTcp);
-        ModelAndView mv = new ModelAndView("tcp/edit-tcp");
-        mv.addObject(monitorTcpVo);
+            @ApiImplicitParam(name = "id", value = "TCP/IP ID", required = true, paramType = "query", dataType = "long")})
+    @GetMapping("/edit-monitor-tcpip-form")
+    public ModelAndView editMonitorTcpIpForm(@RequestParam(name = "id") Long id) {
+        MonitorTcpIp monitorTcpIp = this.monitorTcpIpService.getById(id);
+        MonitorTcpIpVo monitorTcpIpVo = MonitorTcpIpVo.builder().build().convertFor(monitorTcpIp);
+        ModelAndView mv = new ModelAndView("tcpip/edit-tcpip");
+        mv.addObject(monitorTcpIpVo);
         return mv;
     }
 
     /**
      * <p>
-     * 编辑TCP信息
+     * 编辑TCP/IP信息
      * </p>
      *
-     * @param monitorTcpVo TCP信息
+     * @param monitorTcpIpVo TCP/IP信息
      * @return layUiAdmin响应对象：如果数据库中已经存在，LayUiAdminResultVo.data="exist"；
      * 如果编辑成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
      * @author 皮锋
      * @custom.date 2022/1/11 12:26
      */
-    @ApiOperation(value = "编辑TCP信息")
-    @PutMapping("/edit-monitor-tcp")
+    @ApiOperation(value = "编辑TCP/IP信息")
+    @PutMapping("/edit-monitor-tcpip")
     @ResponseBody
-    @OperateLog(operModule = UiModuleConstants.TCP4SERVICE, operType = OperateTypeConstants.UPDATE, operDesc = "编辑TCP信息")
-    public LayUiAdminResultVo editMonitorTcp(MonitorTcpVo monitorTcpVo) {
-        // 获取被监控TCP源IP地址，获取失败则返回null
+    @OperateLog(operModule = UiModuleConstants.TCPIP4SERVICE, operType = OperateTypeConstants.UPDATE, operDesc = "编辑TCP/IP信息")
+    public LayUiAdminResultVo editMonitorTcpIp(MonitorTcpIpVo monitorTcpIpVo) {
+        // 获取被监控TCP/IP源IP地址，获取失败则返回null
         String sourceIp = this.monitorNetService.getSourceIp();
-        monitorTcpVo.setIpSource(sourceIp);
-        return this.monitorTcpService.editMonitorTcp(monitorTcpVo);
+        monitorTcpIpVo.setIpSource(sourceIp);
+        return this.monitorTcpIpService.editMonitorTcpIp(monitorTcpIpVo);
     }
 
 }
-

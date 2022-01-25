@@ -2,7 +2,7 @@ package com.gitee.pifeng.monitoring.ui.business.web.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.gitee.pifeng.monitoring.common.inf.ISuperBean;
-import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorTcp;
+import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorTcpIp;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
@@ -13,7 +13,7 @@ import java.util.Date;
 
 /**
  * <p>
- * TCP信息表现层对象
+ * TCP/IP信息表现层对象
  * </p>
  *
  * @author 皮锋
@@ -27,8 +27,8 @@ import java.util.Date;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel(value = "TCP信息表现层对象")
-public class MonitorTcpVo implements ISuperBean {
+@ApiModel(value = "TCP/IP信息表现层对象")
+public class MonitorTcpIpVo implements ISuperBean {
 
     @ApiModelProperty(value = "主键ID")
     private Long id;
@@ -42,8 +42,11 @@ public class MonitorTcpVo implements ISuperBean {
     @ApiModelProperty(value = "端口号")
     private Integer portTarget;
 
-    @ApiModelProperty(value = "TCP描述")
-    private String tcpDesc;
+    @ApiModelProperty(value = "描述")
+    private String descr;
+
+    @ApiModelProperty(value = "协议")
+    private String protocol;
 
     @ApiModelProperty(value = "状态（0：不通，1：正常）")
     private String status;
@@ -61,32 +64,32 @@ public class MonitorTcpVo implements ISuperBean {
 
     /**
      * <p>
-     * MonitorTcpVo转MonitorTcp
+     * MonitorTcpIpVo转MonitorTcpIp
      * </p>
      *
-     * @return {@link MonitorTcp}
+     * @return {@link MonitorTcpIp}
      * @author 皮锋
      * @custom.date 2022/1/10 17:21
      */
-    public MonitorTcp convertTo() {
-        MonitorTcp monitorTcp = MonitorTcp.builder().build();
-        BeanUtils.copyProperties(this, monitorTcp);
-        return monitorTcp;
+    public MonitorTcpIp convertTo() {
+        MonitorTcpIp monitorTcpIp = MonitorTcpIp.builder().build();
+        BeanUtils.copyProperties(this, monitorTcpIp);
+        return monitorTcpIp;
     }
 
     /**
      * <p>
-     * MonitorTcp转MonitorTcpVo
+     * MonitorTcpIp转MonitorTcpIpVo
      * </p>
      *
-     * @param monitorTcp {@link MonitorTcp}
-     * @return {@link MonitorTcpVo}
+     * @param monitorTcpIp {@link MonitorTcpIp}
+     * @return {@link MonitorTcpIpVo}
      * @author 皮锋
      * @custom.date 2022/1/10 17:21
      */
-    public MonitorTcpVo convertFor(MonitorTcp monitorTcp) {
-        if (null != monitorTcp) {
-            BeanUtils.copyProperties(monitorTcp, this);
+    public MonitorTcpIpVo convertFor(MonitorTcpIp monitorTcpIp) {
+        if (null != monitorTcpIp) {
+            BeanUtils.copyProperties(monitorTcpIp, this);
         }
         return this;
     }

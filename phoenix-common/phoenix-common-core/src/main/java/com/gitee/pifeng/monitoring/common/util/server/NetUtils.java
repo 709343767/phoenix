@@ -1,6 +1,7 @@
 package com.gitee.pifeng.monitoring.common.util.server;
 
 import cn.hutool.core.net.NetUtil;
+import com.gitee.pifeng.monitoring.common.constant.TcpIpEnums;
 import com.gitee.pifeng.monitoring.common.domain.server.NetDomain;
 import com.gitee.pifeng.monitoring.common.exception.NetException;
 import com.gitee.pifeng.monitoring.common.util.server.sigar.NetInterfaceUtils;
@@ -352,21 +353,34 @@ public class NetUtils {
      * 检测telnet状态
      * </p>
      *
-     * @param hostname 主机名
-     * @param port     端口号
+     * @param hostname   主机名
+     * @param port       端口号
+     * @param tcpIpEnums TCP/IP协议簇枚举
      * @return boolean 返回是否telnet通
      * @author 皮锋
      * @custom.date 2022/1/10 9:37
      */
-    public static boolean telnet(String hostname, int port) {
-        boolean isConnected;
+    public static boolean telnet(String hostname, int port, TcpIpEnums tcpIpEnums) {
+        boolean isConnected = false;
         try {
-            @Cleanup
-            Socket socket = new Socket();
-            // 建立连接
-            socket.connect(new InetSocketAddress(hostname, port), 3000);
-            // 通过现有方法查看连通状态
-            isConnected = socket.isConnected();
+            // TCP协议
+            if (tcpIpEnums == TcpIpEnums.TCP) {
+                @Cleanup
+                Socket socket = new Socket();
+                // 建立连接
+                socket.connect(new InetSocketAddress(hostname, port), 3000);
+                // 查看连通状态
+                isConnected = socket.isConnected();
+            }
+            // UDP协议
+            else if (tcpIpEnums == TcpIpEnums.UDP) {
+                @Cleanup
+                DatagramSocket socket = new DatagramSocket();
+                // 建立连接
+                socket.connect(new InetSocketAddress(hostname, port));
+                // 查看连通状态
+                isConnected = socket.isConnected();
+            }
         } catch (Exception e) {
             isConnected = false;
         }

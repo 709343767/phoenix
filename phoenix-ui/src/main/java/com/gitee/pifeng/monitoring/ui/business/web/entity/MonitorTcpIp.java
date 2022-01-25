@@ -15,7 +15,7 @@ import java.util.Date;
 
 /**
  * <p>
- * TCP信息表
+ * TCP/IP信息表
  * </p>
  *
  * @author 皮锋
@@ -25,9 +25,9 @@ import java.util.Date;
 @Builder
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("MONITOR_TCP")
-@ApiModel(value = "MonitorTcp对象", description = "TCP信息表")
-public class MonitorTcp implements Serializable {
+@TableName("MONITOR_TCPIP")
+@ApiModel(value = "MonitorTcpIp对象", description = "TCP/IP信息表")
+public class MonitorTcpIp implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -47,9 +47,13 @@ public class MonitorTcp implements Serializable {
     @TableField("PORT_TARGET")
     private Integer portTarget;
 
-    @ApiModelProperty(value = "TCP描述")
-    @TableField("TCP_DESC")
-    private String tcpDesc;
+    @ApiModelProperty(value = "描述")
+    @TableField("DESCR")
+    private String descr;
+
+    @ApiModelProperty(value = "协议")
+    @TableField("PROTOCOL")
+    private String protocol;
 
     @ApiModelProperty(value = "状态（0：不通，1：正常）")
     @TableField("STATUS")

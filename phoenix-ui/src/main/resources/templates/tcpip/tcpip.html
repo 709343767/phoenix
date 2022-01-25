@@ -3,7 +3,7 @@
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <meta charset="utf-8">
-    <title>TCP</title>
+    <title>TCP/IP</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport"
@@ -45,8 +45,18 @@
                     </div>
                 </div>
                 <div class="layui-inline">
+                    <label class="layui-form-label">协议</label>
+                    <div class="layui-input-block" style="width: 100px;">
+                        <select name="protocol">
+                            <option value="">所有</option>
+                            <option value="TCP">TCP</option>
+                            <option value="UDP">UDP</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
                     <label class="layui-form-label">状态</label>
-                    <div class="layui-input-block">
+                    <div class="layui-input-block" style="width: 100px;">
                         <select name="status">
                             <option value="">所有</option>
                             <option value="1">正常</option>
@@ -101,7 +111,7 @@
         var $ = layui.$, admin = layui.admin, form = layui.form, table = layui.table, device = layui.device();
         table.render({
             elem: '#list-table',
-            url: ctxPath + 'monitor-tcp/get-monitor-tcp-list',
+            url: ctxPath + 'monitor-tcpip/get-monitor-tcpip-list',
             toolbar: '#list-table-toolbar',
             request: {
                 pageName: 'current',//页码的参数名称，默认：page
@@ -168,6 +178,11 @@
                     minWidth: 80,
                     sort: !0
                 }, {
+                    field: 'protocol',
+                    title: '协议',
+                    minWidth: 80,
+                    sort: !0
+                }, {
                     field: 'status',
                     title: '状态',
                     minWidth: 80,
@@ -231,7 +246,7 @@
                     layer.confirm('确定删除吗？', function (index) {
                         admin.req({
                             type: 'delete',
-                            url: ctxPath + 'monitor-tcp/delete-monitor-tcp',
+                            url: ctxPath + 'monitor-tcpip/delete-monitor-tcpip',
                             data: JSON.stringify(checkStatus.data),
                             dataType: 'json',
                             contentType: 'application/json;charset=utf-8',
@@ -268,12 +283,12 @@
                         // 宽度
                         width = document.body.clientWidth * 0.3 + 'px';
                         // 高度
-                        height = document.body.clientHeight * 0.4 + 'px';
+                        height = document.body.clientHeight * 0.5 + 'px';
                     }
                     layer.open({
                         type: 2,
-                        title: '添加TCP信息',
-                        content: ctxPath + 'monitor-tcp/add-monitor-tcp-form',
+                        title: '添加TCP/IP信息',
+                        content: ctxPath + 'monitor-tcpip/add-monitor-tcpip-form',
                         maxmin: true,
                         area: [width, height],
                         btn: ['确定', '取消'],
@@ -286,7 +301,7 @@
                                 var field = data.field; //获取提交的字段
                                 admin.req({
                                     type: 'post',
-                                    url: ctxPath + 'monitor-tcp/add-monitor-tcp',
+                                    url: ctxPath + 'monitor-tcpip/add-monitor-tcpip',
                                     data: field,
                                     dataType: 'json',
                                     headers: {
@@ -299,7 +314,7 @@
                                             layer.close(index); //关闭弹层
                                             layer.msg('添加成功！', {icon: 6});
                                         } else if (data === webConst.EXIST) {
-                                            layer.msg('TCP信息已经存在！', {icon: 5, shift: 6});
+                                            layer.msg('TCP/IP信息已经存在！', {icon: 5, shift: 6});
                                         } else {
                                             layer.msg('添加失败！', {icon: 5, shift: 6});
                                         }
@@ -322,7 +337,7 @@
                 layer.confirm('确定删除吗？', function (index) {
                     admin.req({
                         type: 'delete',
-                        url: ctxPath + 'monitor-tcp/delete-monitor-tcp',
+                        url: ctxPath + 'monitor-tcpip/delete-monitor-tcpip',
                         data: JSON.stringify([data]),
                         dataType: 'json',
                         contentType: 'application/json;charset=utf-8',
@@ -359,12 +374,12 @@
                     // 宽度
                     width = document.body.clientWidth * 0.3 + 'px';
                     // 高度
-                    height = document.body.clientHeight * 0.4 + 'px';
+                    height = document.body.clientHeight * 0.5 + 'px';
                 }
                 layer.open({
                     type: 2,
-                    title: '编辑TCP信息',
-                    content: ctxPath + 'monitor-tcp/edit-monitor-tcp-form?id=' + data.id,
+                    title: '编辑TCP/IP信息',
+                    content: ctxPath + 'monitor-tcpip/edit-monitor-tcpip-form?id=' + data.id,
                     maxmin: true,
                     area: [width, height],
                     btn: ['确定', '取消'],
@@ -377,7 +392,7 @@
                             var field = data.field; //获取提交的字段
                             admin.req({
                                 type: 'put',
-                                url: ctxPath + 'monitor-tcp/edit-monitor-tcp',
+                                url: ctxPath + 'monitor-tcpip/edit-monitor-tcpip',
                                 data: field,
                                 dataType: 'json',
                                 headers: {
@@ -390,7 +405,7 @@
                                         layer.close(index); //关闭弹层
                                         layer.msg('编辑成功！', {icon: 6});
                                     } else if (data === webConst.EXIST) {
-                                        layer.msg('TCP信息已经存在！', {icon: 5, shift: 6});
+                                        layer.msg('TCP/IP信息已经存在！', {icon: 5, shift: 6});
                                     } else {
                                         layer.msg('编辑失败！', {icon: 5, shift: 6});
                                     }

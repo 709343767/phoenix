@@ -3275,7 +3275,7 @@ LABL 0 新宋体,8,N</a:FontList>
 <a:Creator>lenovo</a:Creator>
 <a:ModificationDate>1640676861</a:ModificationDate>
 <a:Modifier>lenovo</a:Modifier>
-<a:Comment>告警类型（SERVER、NET、TCP4SERVICE、HTTP4SERVICE、DOCKER、INSTANCE、DATABASE、CUSTOM）</a:Comment>
+<a:Comment>告警类型（SERVER、NET、TCPIP4SERVICE、HTTP4SERVICE、DOCKER、INSTANCE、DATABASE、CUSTOM）</a:Comment>
 <a:DataType>varchar(8)</a:DataType>
 <a:Length>8</a:Length>
 <a:Column.Mandatory>1</a:Column.Mandatory>
@@ -3496,7 +3496,7 @@ LABL 0 新宋体,8,N</a:FontList>
 <a:Creator>lenovo</a:Creator>
 <a:ModificationDate>1640676861</a:ModificationDate>
 <a:Modifier>lenovo</a:Modifier>
-<a:Comment>告警类型（SERVER、NET、TCP4SERVICE、HTTP4SERVICE、DOCKER、INSTANCE、DATABASE、CUSTOM）</a:Comment>
+<a:Comment>告警类型（SERVER、NET、TCPIP4SERVICE、HTTP4SERVICE、DOCKER、INSTANCE、DATABASE、CUSTOM）</a:Comment>
 <a:DataType>varchar(8)</a:DataType>
 <a:Length>8</a:Length>
 <a:Column.Mandatory>1</a:Column.Mandatory>

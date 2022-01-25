@@ -271,7 +271,7 @@ public class MonitorAlarmRecordServiceImpl extends ServiceImpl<IMonitorAlarmReco
     public MonitorAlarmRecordVo monitorAlarmRecordDetail(Long id) {
         MonitorAlarmRecord monitorAlarmRecord = this.monitorAlarmRecordDao.selectById(id);
         MonitorAlarmRecordVo monitorAlarmRecordVo = MonitorAlarmRecordVo.builder().build().convertFor(monitorAlarmRecord);
-        // 告警类型（SERVER、NET、TCP4SERVICE、HTTP4SERVICE、DOCKER、INSTANCE、DATABASE、CUSTOM）
+        // 告警类型（SERVER、NET、TCPIP4SERVICE、HTTP4SERVICE、DOCKER、INSTANCE、DATABASE、CUSTOM）
         String type = monitorAlarmRecordVo.getType();
         if (StringUtils.equals(MonitorTypeEnums.SERVER.name(), type)) {
             monitorAlarmRecordVo.setType("服务器");
@@ -279,8 +279,8 @@ public class MonitorAlarmRecordServiceImpl extends ServiceImpl<IMonitorAlarmReco
         if (StringUtils.equals(MonitorTypeEnums.NET.name(), type)) {
             monitorAlarmRecordVo.setType("网络");
         }
-        if (StringUtils.equals(MonitorTypeEnums.TCP4SERVICE.name(), type)) {
-            monitorAlarmRecordVo.setType("TCP服务");
+        if (StringUtils.equals(MonitorTypeEnums.TCPIP4SERVICE.name(), type)) {
+            monitorAlarmRecordVo.setType("TCP/IP服务");
         }
         if (StringUtils.equals(MonitorTypeEnums.HTTP4SERVICE.name(), type)) {
             monitorAlarmRecordVo.setType("HTTP服务");

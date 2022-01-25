@@ -227,11 +227,11 @@ public class QuartzConfig {
     }
     /////////////////////////////////////////////netMonitor end/////////////////////////////////////////////////////////
 
-    /////////////////////////////////////////////tcpMonitor start///////////////////////////////////////////////////////
+    /////////////////////////////////////////////tcpIpMonitor start///////////////////////////////////////////////////////
 
     /**
      * <p>
-     * TCP状态监控 JobDetail 配置
+     * TCP/IP状态监控 JobDetail 配置
      * </p>
      *
      * @return 传递给定作业实例的详细信息属性
@@ -239,9 +239,9 @@ public class QuartzConfig {
      * @custom.date 2022/1/11 15:58
      */
     @Bean
-    public JobDetail tcpMonitorJobDetail() {
-        return JobBuilder.newJob(TcpMonitorJob.class)
-                .withIdentity("tcpMonitorJob", JOB_DETAIL_GROUP)
+    public JobDetail tcpIpMonitorJobDetail() {
+        return JobBuilder.newJob(TcpIpMonitorJob.class)
+                .withIdentity("tcpIpMonitorJob", JOB_DETAIL_GROUP)
                 .storeDurably()
                 .build();
     }
@@ -256,16 +256,16 @@ public class QuartzConfig {
      * @custom.date 2022/1/11 15:59
      */
     @Bean
-    public Trigger tcpMonitorTrigger() {
+    public Trigger tcpIpMonitorTrigger() {
         return TriggerBuilder.newTrigger()
-                .forJob(this.tcpMonitorJobDetail())
-                .withIdentity("tcpMonitorTrigger", TRIGGER_GROUP)
+                .forJob(this.tcpIpMonitorJobDetail())
+                .withIdentity("tcpIpMonitorTrigger", TRIGGER_GROUP)
                 // 项目启动完成后延迟10秒钟启动定时任务，然后每5分钟执行一次
                 .startAt(new DateTime().plusSeconds(10).toDate())
                 .withSchedule(SimpleScheduleBuilder.simpleSchedule().withIntervalInMinutes(5).repeatForever())
                 .build();
     }
-    /////////////////////////////////////////////tcpMonitor end/////////////////////////////////////////////////////////
+    /////////////////////////////////////////////tcpIpMonitor end/////////////////////////////////////////////////////////
 
     //////////////////////////////////////////ClearHistoryData start////////////////////////////////////////////////////
 

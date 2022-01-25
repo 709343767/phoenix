@@ -10,7 +10,7 @@ import java.util.Date;
 
 /**
  * <p>
- * TCP信息表
+ * TCP/IP信息表
  * </p>
  *
  * @author 皮锋
@@ -22,8 +22,8 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@TableName("MONITOR_TCP")
-public class MonitorTcp {
+@TableName("MONITOR_TCPIP")
+public class MonitorTcpIp {
 
     /**
      * 主键ID
@@ -50,10 +50,16 @@ public class MonitorTcp {
     private Integer portTarget;
 
     /**
-     * TCP描述
+     * 描述
      */
-    @TableField("TCP_DESC")
-    private String tcpDesc;
+    @TableField("DESCR")
+    private String descr;
+
+    /**
+     * 协议
+     */
+    @TableField("PROTOCOL")
+    private String protocol;
 
     /**
      * 状态（0：不通，1：正常）
