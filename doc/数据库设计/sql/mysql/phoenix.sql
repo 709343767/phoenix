@@ -18,7 +18,7 @@ DROP TABLE IF EXISTS `MONITOR_ALARM_DEFINITION`;
 CREATE TABLE `MONITOR_ALARM_DEFINITION`
 (
     `ID`           bigint(20)                                                    NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-    `TYPE`         varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT '告警类型（SERVER、NET、TCPIP4SERVICE、HTTP4SERVICE、DOCKER、INSTANCE、DATABASE、CUSTOM）',
+    `TYPE`         varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT '告警类型（SERVER、NET、TCPIP4SERVICE、HTTP4SERVICE、DOCKER、INSTANCE、DATABASE、CUSTOM）',
     `FIRST_CLASS`  varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '一级分类',
     `SECOND_CLASS` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '二级分类',
     `THIRD_CLASS`  varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '三级分类',
@@ -44,7 +44,7 @@ CREATE TABLE `MONITOR_ALARM_RECORD`
     `ID`             bigint(20)                                                    NOT NULL AUTO_INCREMENT COMMENT '主键ID',
     `CODE`           varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT '告警代码，使用UUID',
     `ALARM_DEF_CODE` varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NULL DEFAULT NULL COMMENT '告警定义编码',
-    `TYPE`           varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT '告警类型（SERVER、NET、TCPIP4SERVICE、HTTP4SERVICE、DOCKER、INSTANCE、DATABASE、CUSTOM）',
+    `TYPE`           varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT '告警类型（SERVER、NET、TCPIP4SERVICE、HTTP4SERVICE、DOCKER、INSTANCE、DATABASE、CUSTOM）',
     `WAY`            varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT '告警方式（SMS、MAIL、...）',
     `LEVEL`          varchar(5) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci   NOT NULL COMMENT '告警级别（INFO、WARM、ERROR、FATAL）',
     `TITLE`          varchar(125) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '告警标题',
@@ -399,7 +399,7 @@ DROP TABLE IF EXISTS `MONITOR_REALTIME_MONITORING`;
 CREATE TABLE `MONITOR_REALTIME_MONITORING`
 (
     `ID`            bigint(20)                                                   NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-    `TYPE`          varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '监控类型（SERVER、NET、TCPIP4SERVICE、HTTP4SERVICE、DOCKER、INSTANCE、DATABASE、CUSTOM）',
+    `TYPE`          varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '监控类型（SERVER、NET、TCPIP4SERVICE、HTTP4SERVICE、DOCKER、INSTANCE、DATABASE、CUSTOM）',
     `CODE`          varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '监控编号',
     `IS_SENT_ALARM` varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT '是否已经发送了告警（1：是，0：否）',
     `INSERT_TIME`   datetime                                                     NOT NULL COMMENT '插入时间',
