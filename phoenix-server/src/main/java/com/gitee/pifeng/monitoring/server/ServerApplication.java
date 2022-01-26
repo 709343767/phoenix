@@ -5,6 +5,8 @@ import com.gitee.pifeng.monitoring.common.web.toolkit.UniqueBeanNameGenerator;
 import com.gitee.pifeng.monitoring.starter.annotation.EnableMonitoring;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.data.mongo.MongoDataAutoConfiguration;
+import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
@@ -17,7 +19,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  * @author 皮锋
  * @custom.date 2020年1月20日 上午8:45:29
  */
-@SpringBootApplication
+@SpringBootApplication(exclude = {MongoAutoConfiguration.class, MongoDataAutoConfiguration.class})
 @ComponentScan(nameGenerator = UniqueBeanNameGenerator.class)
 @EnableTransactionManagement
 @EnableMonitoring
