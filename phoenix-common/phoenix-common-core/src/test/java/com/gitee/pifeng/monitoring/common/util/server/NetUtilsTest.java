@@ -1,5 +1,6 @@
 package com.gitee.pifeng.monitoring.common.util.server;
 
+import com.gitee.pifeng.monitoring.common.constant.TcpIpEnums;
 import com.gitee.pifeng.monitoring.common.exception.NetException;
 import lombok.extern.slf4j.Slf4j;
 import org.hyperic.sigar.SigarException;
@@ -53,7 +54,7 @@ public class NetUtilsTest {
 
     /**
      * <p>
-     * 检测IP地址是否能ping通
+     * 测试检测IP地址是否能ping通
      * </p>
      *
      * @author 皮锋
@@ -67,6 +68,20 @@ public class NetUtilsTest {
         assertTrue(Boolean.parseBoolean(String.valueOf(isConnect)));
         log.info("isConnect：{}", isConnect);
         log.info("avgTime：{}", avgTime);
+    }
+
+    /**
+     * <p>
+     * 检测telnet状态
+     * </p>
+     *
+     * @author 皮锋
+     * @custom.date 2022/1/26 15:00
+     */
+    @Test
+    public void testTelnet() {
+        boolean telnet = NetUtils.telnet("127.0.0.1", 8000, TcpIpEnums.TCP);
+        assertTrue(telnet);
     }
 
 }

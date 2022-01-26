@@ -372,15 +372,6 @@ public class NetUtils {
                 // 查看连通状态
                 isConnected = socket.isConnected();
             }
-            // UDP协议
-            else if (tcpIpEnums == TcpIpEnums.UDP) {
-                @Cleanup
-                DatagramSocket socket = new DatagramSocket();
-                // 建立连接
-                socket.connect(new InetSocketAddress(hostname, port));
-                // 查看连通状态
-                isConnected = socket.isConnected();
-            }
         } catch (Exception e) {
             isConnected = false;
         }

@@ -15,12 +15,7 @@ public enum TcpIpEnums {
     /**
      * TCP
      */
-    TCP,
-
-    /**
-     * UDP
-     */
-    UDP;
+    TCP;
 
     /**
      * <p>
@@ -36,10 +31,6 @@ public enum TcpIpEnums {
         // TCP
         if (StringUtils.equalsIgnoreCase(TcpIpEnums.TCP.name(), tcpIpStr)) {
             return TcpIpEnums.TCP;
-        }
-        // UDP
-        if (StringUtils.equalsIgnoreCase(TcpIpEnums.UDP.name(), tcpIpStr)) {
-            return TcpIpEnums.UDP;
         }
         return null;
     }
