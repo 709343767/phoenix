@@ -45,7 +45,7 @@ CREATE TABLE `MONITOR_ALARM_RECORD`
     `CODE`           varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT '告警代码，使用UUID',
     `ALARM_DEF_CODE` varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NULL DEFAULT NULL COMMENT '告警定义编码',
     `TYPE`           varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT '告警类型（SERVER、NET、TCPIP4SERVICE、HTTP4SERVICE、DOCKER、INSTANCE、DATABASE、CUSTOM）',
-    `WAY`            varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT '告警方式（SMS、MAIL、...）',
+    `WAY`            varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NULL DEFAULT NULL COMMENT '告警方式（SMS、MAIL、...）',
     `LEVEL`          varchar(5) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci   NOT NULL COMMENT '告警级别（INFO、WARM、ERROR、FATAL）',
     `TITLE`          varchar(125) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '告警标题',
     `CONTENT`        longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci     NULL COMMENT '告警内容',
