@@ -3,6 +3,7 @@ package com.gitee.pifeng.monitoring.ui.business.web.service;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorTcpIp;
+import com.gitee.pifeng.monitoring.ui.business.web.vo.HomeTcpIpVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.LayUiAdminResultVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.MonitorTcpIpVo;
 
@@ -73,4 +74,15 @@ public interface IMonitorTcpIpService extends IService<MonitorTcpIp> {
      * @custom.date 2022/1/11 14:10
      */
     LayUiAdminResultVo editMonitorTcpIp(MonitorTcpIpVo monitorTcpIpVo);
+
+    /**
+     * <p>
+     * 获取home页的TCP/IP信息
+     * </p>
+     *
+     * @return home页的TCP/IP信息表现层对象
+     * @author 皮锋
+     * @custom.date 2022/1/27 10:41
+     */
+    HomeTcpIpVo getHomeTcpIpInfo();
 }

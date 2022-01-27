@@ -1,5 +1,6 @@
 package com.gitee.pifeng.monitoring.ui.business.web.service.impl;
 
+import cn.hutool.core.util.NumberUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -9,6 +10,7 @@ import com.gitee.pifeng.monitoring.common.constant.ZeroOrOneConstants;
 import com.gitee.pifeng.monitoring.ui.business.web.dao.IMonitorTcpIpDao;
 import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorTcpIp;
 import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorTcpIpService;
+import com.gitee.pifeng.monitoring.ui.business.web.vo.HomeTcpIpVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.LayUiAdminResultVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.MonitorTcpIpVo;
 import com.gitee.pifeng.monitoring.ui.constant.WebResponseConstants;
@@ -20,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -179,6 +182,28 @@ public class MonitorTcpIpServiceImpl extends ServiceImpl<IMonitorTcpIpDao, Monit
             return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);
         }
         return LayUiAdminResultVo.ok(WebResponseConstants.FAIL);
+    }
+
+    /**
+     * <p>
+     * 获取home页的TCP/IP信息
+     * </p>
+     *
+     * @return home页的TCP/IP信息表现层对象
+     * @author 皮锋
+     * @custom.date 2022/1/27 10:41
+     */
+    @Override
+    public HomeTcpIpVo getHomeTcpIpInfo() {
+        // TCP/IP正常率统计
+        Map<String, Object> map = this.monitorTcpIpDao.getTcpIpNormalRateStatistics();
+        return HomeTcpIpVo.builder()
+                .tcpIpSum(NumberUtil.parseInt(map.get("tcpIpSum").toString()))
+                .tcpIpConnectSum(NumberUtil.parseInt(map.get("tcpIpConnectSum").toString()))
+                .tcpIpDisconnectSum(NumberUtil.parseInt(map.get("tcpIpDisconnectSum").toString()))
+                .tcpIpUnsentSum(NumberUtil.parseInt(map.get("tcpIpUnsentSum").toString()))
+                .tcpIpConnectRate(NumberUtil.round(map.get("tcpIpConnectRate").toString(), 2).toString())
+                .build();
     }
 
 }

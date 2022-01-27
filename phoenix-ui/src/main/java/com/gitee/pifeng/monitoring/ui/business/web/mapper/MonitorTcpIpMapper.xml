@@ -2,4 +2,20 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.gitee.pifeng.monitoring.ui.business.web.dao.IMonitorTcpIpDao">
 
+    <!-- TCP/IP正常率统计 -->
+    <select id="getTcpIpNormalRateStatistics" resultType="java.util.Map">
+        SELECT tmp.tcpIpSum                                                         AS tcpIpSum,
+               tmp.tcpIpConnectSum                                                  AS tcpIpConnectSum,
+               tmp.tcpIpDisconnectSum                                               AS tcpIpDisconnectSum,
+               tmp.tcpIpUnsentSum                                                   AS tcpIpUnsentSum,
+               IFNULL(round(tmp.tcpIpConnectSum * 100 / tmp.tcpIpSum, 2), '100.00') AS tcpIpConnectRate
+        FROM (
+                 SELECT COUNT(ID)                                                      AS tcpIpSum,
+                        IFNULL(SUM(CASE WHEN mar.`STATUS` = '1' THEN 1 ELSE 0 END), 0) AS tcpIpConnectSum,
+                        IFNULL(SUM(CASE WHEN mar.`STATUS` = '0' THEN 1 ELSE 0 END), 0) AS tcpIpDisconnectSum,
+                        IFNULL(SUM(CASE WHEN mar.`STATUS` is null OR mar.`STATUS` = '' THEN 1 ELSE 0 END),
+                               0)                                                      AS tcpIpUnsentSum
+                 FROM MONITOR_TCPIP mar) tmp
+    </select>
+
 </mapper>

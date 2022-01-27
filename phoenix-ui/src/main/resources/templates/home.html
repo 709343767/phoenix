@@ -25,7 +25,7 @@
     <div class="layui-row layui-col-space15">
         <div class="layui-col-sm8">
             <div class=" layui-row layui-col-space10">
-                <div class="layui-col-sm6 layui-col-md2">
+                <!--<div class="layui-col-sm6 layui-col-md2">
                     <div class="layui-card">
                         <div class="layui-card-header">
                             服务器
@@ -57,7 +57,7 @@
                             </p>
                         </div>
                     </div>
-                </div>
+                </div>-->
                 <div class="layui-col-sm6 layui-col-md2">
                     <div class="layui-card">
                         <div class="layui-card-header">
@@ -184,6 +184,42 @@
                                     [[${homeNetVo.netUnsentSum}]]
                                     <i class="layui-inline layui-icon"><img
                                             th:src="@{/images/icon16/net-unkown-16.png}"></i></span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-col-sm6 layui-col-md2">
+                    <div class="layui-card">
+                        <div class="layui-card-header">
+                            TCP/IP
+                            <span class="layui-badge layui-bg-black layuiadmin-badge">个</span>
+                        </div>
+                        <div class="layui-card-body layuiadmin-card-list" id="tcpip-card-list">
+                            <p class="layuiadmin-big-font layuiadmin-big-font-my">
+                                [[${homeTcpIpVo.tcpIpSum}]]
+                                <i class="home-i">[[${homeTcpIpVo.tcpIpConnectRate}]]
+                                    <img th:src="@{/images/icon16/percentage-16.png}"></i>
+                            </p>
+                            <p>
+                                正常
+                                <span class="layuiadmin-span-color">
+                                    [[${homeTcpIpVo.tcpIpConnectSum}]]
+                                    <i class="layui-inline layui-icon"><img
+                                            th:src="@{/images/icon16/tcpip-connect-16.png}"></i></span>
+                            </p>
+                            <p>
+                                异常
+                                <span class="layuiadmin-span-color">
+                                    [[${homeTcpIpVo.tcpIpDisconnectSum}]]
+                                    <i class="layui-inline layui-icon"><img
+                                            th:src="@{/images/icon16/tcpip-disconnect-16.png}"></i></span>
+                            </p>
+                            <p>
+                                未知
+                                <span class="layuiadmin-span-color">
+                                    [[${homeTcpIpVo.tcpIpUnsentSum}]]
+                                    <i class="layui-inline layui-icon"><img
+                                            th:src="@{/images/icon16/tcpip-unkown-16.png}"></i></span>
                             </p>
                         </div>
                     </div>
