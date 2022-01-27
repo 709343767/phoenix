@@ -17,7 +17,7 @@
 
 - 数据库
 
-  支持MySQL、Oracle、Redis；  
+  支持MySQL、Oracle、Redis、Mongo；  
   监控内容：  
       &emsp;&emsp;MySQL：会话；  
       &emsp;&emsp;Oracle：会话、表空间；  
