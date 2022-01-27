@@ -22,7 +22,7 @@
       &emsp;&emsp;MySQL：会话；  
       &emsp;&emsp;Oracle：会话、表空间；  
       &emsp;&emsp;Redis：Redis信息全集；   
-      &emsp;&emsp;Redis：Mongo信息全集；
+      &emsp;&emsp;Mongo：Mongo信息全集；
 
 - 网络：支持监控网络状态；
 
