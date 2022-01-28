@@ -73,10 +73,6 @@ spring:
           enabled: true
         commons-log:
           enabled: true
-        log4j:
-          enabled: true
-        log4j2:
-          enabled: true
         slf4j:
           enabled: true
       #Spring监控配置

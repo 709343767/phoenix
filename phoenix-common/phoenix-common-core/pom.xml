@@ -58,13 +58,13 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <optional>true</optional>
+            <!--<optional>true</optional>-->
         </dependency>
         <!-- 日志实现依赖 -->
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <optional>true</optional>
+            <!--<optional>true</optional>-->
         </dependency>
         <dependency>
             <groupId>commons-logging</groupId>
@@ -80,6 +80,12 @@
         <dependency>
             <groupId>org.fusesource</groupId>
             <artifactId>sigar</artifactId>
+            <exclusions>
+                <exclusion>
+                    <artifactId>log4j</artifactId>
+                    <groupId>log4j</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <!-- oshi依赖 -->
         <dependency>
