@@ -26,7 +26,7 @@ logging:
   #监控相关的日志级别设置成info
   level:
     com.gitee.pifeng.monitoring: info
-    oshi.util: error
+    oshi: error
 
 
 ###############################################spring配置#################################################
