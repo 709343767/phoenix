@@ -683,8 +683,8 @@
     <!--许可证信息-->
     <licenses>
         <license>
-            <name>The Apache Software License, Version2.0</name>
-            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <name>GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007</name>
+            <url>https://www.gnu.org/licenses/gpl-3.0.txt</url>
             <distribution>repo</distribution>
         </license>
     </licenses>
