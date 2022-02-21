@@ -26,7 +26,18 @@ var webConst = {
     /**
      * 数据完整性冲突
      */
-    DATA_INTEGRITY_VIOLATION: 'dataIntegrityViolation'
+    DATA_INTEGRITY_VIOLATION: 'dataIntegrityViolation',
+    /**
+     * 未获取
+     */
+    NOT_OBTAINED: 'notObtained'
+};
+
+var webConstCn = {
+    /**
+     * 未获取
+     */
+    NOT_OBTAINED_CN: '未获取'
 };
 
 /**

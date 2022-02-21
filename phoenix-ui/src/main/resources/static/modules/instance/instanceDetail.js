@@ -55,13 +55,13 @@
                 success: function (result) {
                     var data = result.data;
                     // 当前活动线程数
-                    var threadCount = data.threadCount;
+                    var threadCount = isEmpty(data.threadCount) ? webConstCn.NOT_OBTAINED_CN : data.threadCount;
                     // 线程峰值
-                    var peakThreadCount = data.peakThreadCount;
+                    var peakThreadCount = isEmpty(data.peakThreadCount) ? webConstCn.NOT_OBTAINED_CN : data.peakThreadCount;
                     // 已创建并已启动的线程总数
-                    var totalStartedThreadCount = data.totalStartedThreadCount;
+                    var totalStartedThreadCount = isEmpty(data.totalStartedThreadCount) ? webConstCn.NOT_OBTAINED_CN : data.totalStartedThreadCount;
                     // 当前活动守护线程数
-                    var daemonThreadCount = data.daemonThreadCount;
+                    var daemonThreadCount = isEmpty(data.daemonThreadCount) ? webConstCn.NOT_OBTAINED_CN : data.daemonThreadCount;
                     var html = '<div class="layui-col-md3">' +
                         '           <label class="label-font-weight">活动线程数：</label>' + threadCount +
                         '       </div>' +
@@ -98,11 +98,11 @@
                     for (var i = 0; i < data.length; i++) {
                         var obj = data[i];
                         // 内存管理器名称
-                        var garbageCollectorName = obj.garbageCollectorName;
+                        var garbageCollectorName = isEmpty(obj.garbageCollectorName) ? webConstCn.NOT_OBTAINED_CN : obj.garbageCollectorName;
                         // GC总次数
-                        var collectionCount = obj.collectionCount;
+                        var collectionCount = isEmpty(obj.collectionCount) ? webConstCn.NOT_OBTAINED_CN : obj.collectionCount;
                         // GC总时间（毫秒）
-                        var collectionTime = obj.collectionTime;
+                        var collectionTime = isEmpty(obj.collectionTime) ? webConstCn.NOT_OBTAINED_CN : obj.collectionTime;
                         html += '<div class="layui-col-md4">' +
                             '        <label class="label-font-weight">名称：</label>' + garbageCollectorName +
                             '    </div>' +
@@ -134,13 +134,13 @@
                 success: function (result) {
                     var data = result.data;
                     // 加载的类的总数
-                    var totalLoadedClassCount = data.totalLoadedClassCount;
+                    var totalLoadedClassCount = isEmpty(data.totalLoadedClassCount) ? webConstCn.NOT_OBTAINED_CN : data.totalLoadedClassCount;
                     // 当前加载的类的总数
-                    var loadedClassCount = data.loadedClassCount;
+                    var loadedClassCount = isEmpty(data.loadedClassCount) ? webConstCn.NOT_OBTAINED_CN : data.loadedClassCount;
                     // 卸载的类总数
-                    var unloadedClassCount = data.unloadedClassCount;
+                    var unloadedClassCount = isEmpty(data.unloadedClassCount) ? webConstCn.NOT_OBTAINED_CN : data.unloadedClassCount;
                     // 是否启用了类加载系统的详细输出
-                    var isVerbose = data.isVerbose === '0' ? '否' : '是';
+                    var isVerbose = isEmpty(data.isVerbose) ? webConstCn.NOT_OBTAINED_CN : (data.isVerbose === '0' ? '否' : '是');
                     var html = '<div class="layui-col-md3">' +
                         '           <label class="label-font-weight">已加载当前类：</label>' + loadedClassCount +
                         '       </div>' +
@@ -174,35 +174,35 @@
                 success: function (result) {
                     var data = result.data;
                     // 正在运行的Java虚拟机名称
-                    var name = data.name;
+                    var name = isEmpty(data.name) ? webConstCn.NOT_OBTAINED_CN : data.name;
                     // Java虚拟机实现名称
-                    var vmName = data.vmName;
+                    var vmName = isEmpty(data.vmName) ? webConstCn.NOT_OBTAINED_CN : data.vmName;
                     // Java虚拟机实现供应商
-                    var vmVendor = data.vmVendor;
+                    var vmVendor = isEmpty(data.vmVendor) ? webConstCn.NOT_OBTAINED_CN : data.vmVendor;
                     // Java虚拟机实现版本
-                    var vmVersion = data.vmVersion;
+                    var vmVersion = isEmpty(data.vmVersion) ? webConstCn.NOT_OBTAINED_CN : data.vmVersion;
                     // Java虚拟机规范名称
-                    var specName = data.specName;
+                    var specName = isEmpty(data.specName) ? webConstCn.NOT_OBTAINED_CN : data.specName;
                     // Java虚拟机规范供应商
-                    var specVendor = data.specVendor;
+                    var specVendor = isEmpty(data.specVendor) ? webConstCn.NOT_OBTAINED_CN : data.specVendor;
                     // Java虚拟机规范版本
-                    var specVersion = data.specVersion;
+                    var specVersion = isEmpty(data.specVersion) ? webConstCn.NOT_OBTAINED_CN : data.specVersion;
                     // 管理接口规范版本
-                    var managementSpecVersion = data.managementSpecVersion;
+                    var managementSpecVersion = isEmpty(data.managementSpecVersion) ? webConstCn.NOT_OBTAINED_CN : data.managementSpecVersion;
                     // Java类路径
-                    var classPath = data.classPath;
+                    var classPath = isEmpty(data.classPath) ? webConstCn.NOT_OBTAINED_CN : data.classPath;
                     // Java库路径
-                    var libraryPath = data.libraryPath;
+                    var libraryPath = isEmpty(data.libraryPath) ? webConstCn.NOT_OBTAINED_CN : data.libraryPath;
                     // Java虚拟机是否支持引导类路径
-                    var isBootClassPathSupported = data.isBootClassPathSupported === '0' ? '否' : '是';
+                    var isBootClassPathSupported = isEmpty(data.isBootClassPathSupported) ? webConstCn.NOT_OBTAINED_CN : (data.isBootClassPathSupported === '0' ? '否' : '是');
                     // 引导类路径
-                    var bootClassPath = data.bootClassPath;
+                    var bootClassPath = isEmpty(data.bootClassPath) ? webConstCn.NOT_OBTAINED_CN : data.bootClassPath;
                     // Java虚拟机入参
-                    var inputArguments = data.inputArguments;
+                    var inputArguments = isEmpty(data.inputArguments) ? webConstCn.NOT_OBTAINED_CN : data.inputArguments;
                     // Java虚拟机的正常运行时间（毫秒）
-                    var uptime = data.uptime;
+                    var uptime = isEmpty(data.uptime) ? webConstCn.NOT_OBTAINED_CN : data.uptime;
                     // Java虚拟机的开始时间
-                    var startTime = data.startTime;
+                    var startTime = isEmpty(data.startTime) ? webConstCn.NOT_OBTAINED_CN : data.startTime;
                     var html = '<div class="layui-col-md12">' +
                         '            <label class="label-font-weight">Java虚拟机的开始时间：</label>' + startTime +
                         '       </div>' +
