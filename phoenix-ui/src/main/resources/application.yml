@@ -18,15 +18,6 @@ server:
       #suffix: log
   #开启优雅停机
   shutdown: graceful
-  ssl:
-    enabled: false
-    #你生成的证书名字
-    #key-store: classpath:monitoring.p12
-    #密钥库密码
-    #key-store-password: 19920720
-    #key-store-type: PKCS12
-    #别名
-    #key-alias: selfsigned_localhost_sslserver
 
 
 ###############################################日志配置####################################################

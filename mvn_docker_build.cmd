@@ -1,1 +1,1 @@
-mvn -Dmaven.test.skip=true clean package docker:build
+mvnw -Dmaven.test.skip=true clean package docker:build

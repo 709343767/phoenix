@@ -57,7 +57,7 @@
         <!-- commons工具包版本 -->
         <commons-io.version>2.6</commons-io.version>
         <commons-collections.version>3.2.2</commons-collections.version>
-        <commons-logging.version>1.2</commons-logging.version>
+        <!--<commons-logging.version>1.2</commons-logging.version>-->
         <!-- sigar版本 -->
         <sigar.version>1.6.4</sigar.version>
         <!-- oshi版本 -->
@@ -228,11 +228,11 @@
                 <artifactId>commons-collections</artifactId>
                 <version>${commons-collections.version}</version>
             </dependency>
-            <dependency>
-                <groupId>commons-logging</groupId>
-                <artifactId>commons-logging</artifactId>
-                <version>${commons-logging.version}</version>
-            </dependency>
+            <!--<dependency>-->
+            <!--<groupId>commons-logging</groupId>-->
+            <!--<artifactId>commons-logging</artifactId>-->
+            <!--<version>${commons-logging.version}</version>-->
+            <!--</dependency>-->
             <!-- sigar依赖 -->
             <dependency>
                 <groupId>org.fusesource</groupId>
