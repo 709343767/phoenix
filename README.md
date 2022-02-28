@@ -182,20 +182,23 @@ public class MonitoringUiProdConfig {
 
 > 监控配置项说明：
 
-  |配置项                           |含义                                                               |必须项       |默认值| 
-  |--------------------------------|------------------------------------------------------------------|-------------|-----|
-  |monitoring.server.url           |监控服务端（代理端）url                                              |是           |      |
-  |monitoring.own.instance.order   |实例次序（整数），用于在集群中区分应用实例，配置“1”就代表集群中的第一个应用实例 |否           |1     |
-  |monitoring.own.instance.endpoint|实例端点类型（server、agent、client、ui）                             |否           |client|
-  |monitoring.own.instance.name    |实例名称，一般为项目名                                                |是           |      |
-  |monitoring.own.instance.desc    |实例描述                                                           |否           |      |
-  |monitoring.own.instance.language|程序语言                                                           |否           |Java  |
-  |monitoring.heartbeat.rate       |与服务端或者代理端发心跳包的频率（秒），最小不能小于30秒                    |否           |30    |
-  |monitoring.server-info.enable   |是否采集服务器信息                                                   |否           |false |
-  |monitoring.server-info.rate     |与服务端或者代理端发服务器信息包的频率（秒），最小不能小于30秒               |否           |60    |
-  |monitoring.server-info.ip       |被监控服务器本机ip地址                                                    |否（自动获取） |      |
-  |monitoring.jvm-info.enable      |是否采集Java虚拟机信息                                               |否           |false |
-  |monitoring.jvm-info.rate        |与服务端或者代理端发送Java虚拟机信息的频率（秒），最小不能小于30秒           |否           |60    |
+  |配置项                                          |含义                                                                   |必须项       |默认值| 
+  |-----------------------------------------------|-----------------------------------------------------------------------|-------------|-----|
+  |monitoring.server.url                          |监控服务端（代理端）url                                                  |是           |      |
+  |monitoring.server.connect-timeout              |连接超时时间（毫秒）                                                     |否           |15000 |
+  |monitoring.server.socket-timeout               |等待数据超时时间（毫秒）                                                  |否           |15000|
+  |monitoring.server.connection-request-timeout   |从连接池获取连接的等待超时时间（毫秒）                                      |否           |15000|
+  |monitoring.own.instance.order                  |实例次序（整数），用于在集群中区分应用实例，配置“1”就代表集群中的第一个应用实例  |否           |1     |
+  |monitoring.own.instance.endpoint               |实例端点类型（server、agent、client、ui）                                 |否           |client|
+  |monitoring.own.instance.name                   |实例名称，一般为项目名                                                    |是           |      |
+  |monitoring.own.instance.desc                   |实例描述                                                                |否           |      |
+  |monitoring.own.instance.language               |程序语言                                                                |否           |Java  |
+  |monitoring.heartbeat.rate                      |与服务端或者代理端发心跳包的频率（秒），最小不能小于30秒                      |否           |30    |
+  |monitoring.server-info.enable                  |是否采集服务器信息                                                        |否           |false |
+  |monitoring.server-info.rate                    |与服务端或者代理端发服务器信息包的频率（秒），最小不能小于30秒                 |否           |60    |
+  |monitoring.server-info.ip                      |被监控服务器本机ip地址                                                    |否（自动获取） |      |
+  |monitoring.jvm-info.enable                     |是否采集Java虚拟机信息                                                    |否           |false |
+  |monitoring.jvm-info.rate                       |与服务端或者代理端发送Java虚拟机信息的频率（秒），最小不能小于30秒             |否           |60    |
 
 1. 监控UI端
 

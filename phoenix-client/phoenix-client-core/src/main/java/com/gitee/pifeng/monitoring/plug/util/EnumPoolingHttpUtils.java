@@ -1,6 +1,7 @@
 package com.gitee.pifeng.monitoring.plug.util;
 
 import cn.hutool.core.util.CharsetUtil;
+import com.gitee.pifeng.monitoring.plug.core.ConfigLoader;
 import lombok.Cleanup;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpStatus;
@@ -128,11 +129,11 @@ public class EnumPoolingHttpUtils {
         //默认请求配置
         RequestConfig defaultRequestConfig = RequestConfig.custom()
                 // 设置连接超时时间，15s
-                .setConnectTimeout(15000)
+                .setConnectTimeout(ConfigLoader.MONITORING_PROPERTIES.getServerProperties().getConnectTimeout())
                 // 设置等待数据超时时间，15s
-                .setSocketTimeout(15000)
+                .setSocketTimeout(ConfigLoader.MONITORING_PROPERTIES.getServerProperties().getSocketTimeout())
                 // 设置从连接池获取连接的等待超时时间,15s
-                .setConnectionRequestTimeout(15000)
+                .setConnectionRequestTimeout(ConfigLoader.MONITORING_PROPERTIES.getServerProperties().getConnectionRequestTimeout())
                 .build();
         // 创建HttpClient
         httpClient = HttpClients.custom()

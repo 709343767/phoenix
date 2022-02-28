@@ -1,5 +1,6 @@
 package com.gitee.pifeng.monitoring.agent.config;
 
+import com.gitee.pifeng.monitoring.common.property.client.MonitoringProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.config.Registry;
@@ -22,6 +23,7 @@ import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.impl.conn.SystemDefaultDnsResolver;
 import org.apache.http.impl.io.DefaultHttpRequestWriterFactory;
 import org.apache.http.impl.io.DefaultHttpResponseParserFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.ClientHttpRequestFactory;
@@ -42,6 +44,9 @@ import java.util.concurrent.TimeUnit;
 @Configuration
 @Slf4j
 public class RestTemplateConfig {
+
+    @Autowired
+    private MonitoringProperties monitoringProperties;
 
     /**
      * <p>
@@ -111,11 +116,11 @@ public class RestTemplateConfig {
         //默认请求配置
         RequestConfig defaultRequestConfig = RequestConfig.custom()
                 // 设置连接超时时间，15s
-                .setConnectTimeout(15000)
+                .setConnectTimeout(this.monitoringProperties.getServerProperties().getConnectTimeout())
                 // 设置等待数据超时时间，15s
-                .setSocketTimeout(15000)
+                .setSocketTimeout(this.monitoringProperties.getServerProperties().getSocketTimeout())
                 // 设置从连接池获取连接的等待超时时间,15s
-                .setConnectionRequestTimeout(15000)
+                .setConnectionRequestTimeout(this.monitoringProperties.getServerProperties().getConnectionRequestTimeout())
                 .build();
         // 创建HttpClient
         CloseableHttpClient httpClient = HttpClients.custom()
