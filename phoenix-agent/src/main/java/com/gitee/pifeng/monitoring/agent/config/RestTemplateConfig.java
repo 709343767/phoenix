@@ -113,15 +113,21 @@ public class RestTemplateConfig {
         manager.setDefaultMaxPerRoute(200);
         // 在从连接池获取连接时，连接不活跃多长时间后需要进行一次验证，默认为2s
         manager.setValidateAfterInactivity(30 * 1000);
+        int connectTimeout = this.monitoringProperties.getServerProperties().getConnectTimeout();
+        int socketTimeout = this.monitoringProperties.getServerProperties().getSocketTimeout();
+        int connectionRequestTimeout = this.monitoringProperties.getServerProperties().getConnectionRequestTimeout();
         //默认请求配置
         RequestConfig defaultRequestConfig = RequestConfig.custom()
                 // 设置连接超时时间，15s
-                .setConnectTimeout(this.monitoringProperties.getServerProperties().getConnectTimeout())
+                .setConnectTimeout(connectTimeout)
                 // 设置等待数据超时时间，15s
-                .setSocketTimeout(this.monitoringProperties.getServerProperties().getSocketTimeout())
+                .setSocketTimeout(socketTimeout)
                 // 设置从连接池获取连接的等待超时时间,15s
-                .setConnectionRequestTimeout(this.monitoringProperties.getServerProperties().getConnectionRequestTimeout())
+                .setConnectionRequestTimeout(connectionRequestTimeout)
                 .build();
+        log.info("http connect timeout:{}ms", connectTimeout);
+        log.info("http socket timeout:{}ms", socketTimeout);
+        log.info("http connection request timeout:{}ms", connectionRequestTimeout);
         // 创建HttpClient
         CloseableHttpClient httpClient = HttpClients.custom()
                 .setConnectionManager(manager)
@@ -147,10 +153,10 @@ public class RestTemplateConfig {
             try {
                 if (httpClient != null) {
                     httpClient.close();
-                    log.info("HTTP连接关闭成功！");
+                    log.info("HTTP连接池关闭成功！");
                 }
             } catch (IOException e) {
-                log.error("HTTP连接关闭时发生错误：", e);
+                log.error("HTTP连接池关闭时发生错误：", e);
             }
         }));
         log.info("HTTP连接池初始化成功！");
