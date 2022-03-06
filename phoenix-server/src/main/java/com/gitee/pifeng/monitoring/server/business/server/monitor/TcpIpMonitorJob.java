@@ -25,6 +25,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ThreadPoolExecutor;
 
 /**
@@ -84,7 +85,8 @@ public class TcpIpMonitorJob extends QuartzJobBean {
                 ThreadPoolExecutor threadPoolExecutor = ThreadPool.COMMON_IO_INTENSIVE_THREAD_POOL;
                 threadPoolExecutor.execute(() -> {
                     // 测试telnet能否成功
-                    boolean isConnected = NetUtils.telnet(ipTarget, portTarget, protocolEnum);
+                    Map<String, Object> telnet = NetUtils.telnetVT200(ipTarget, portTarget, protocolEnum);
+                    boolean isConnected = Boolean.parseBoolean(String.valueOf(telnet.get("isConnect")));
                     // TCP/IP服务正常
                     if (isConnected) {
                         // 处理TCP/IP服务正常

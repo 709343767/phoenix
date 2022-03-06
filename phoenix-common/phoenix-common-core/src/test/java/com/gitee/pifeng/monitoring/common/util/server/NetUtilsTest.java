@@ -84,4 +84,22 @@ public class NetUtilsTest {
         assertTrue(telnet);
     }
 
+    /**
+     * <p>
+     * 检测telnet状态
+     * </p>
+     *
+     * @author 皮锋
+     * @custom.date 2022/3/6 15:00
+     */
+    @Test
+    public void telnetVT200() {
+        Map<String, Object> telnet = NetUtils.telnetVT200("127.0.0.1", 12000, TcpIpEnums.TCP);
+        Object isConnect = telnet.get("isConnect");
+        Object avgTime = telnet.get("avgTime");
+        assertTrue(Boolean.parseBoolean(String.valueOf(isConnect)));
+        log.info("isConnect：{}", isConnect);
+        log.info("avgTime：{}", avgTime);
+    }
+
 }

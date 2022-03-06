@@ -1,5 +1,7 @@
 package com.gitee.pifeng.monitoring.common.util.server;
 
+import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.date.TimeInterval;
 import cn.hutool.core.net.NetUtil;
 import com.gitee.pifeng.monitoring.common.constant.TcpIpEnums;
 import com.gitee.pifeng.monitoring.common.domain.server.NetDomain;
@@ -9,9 +11,11 @@ import com.google.common.collect.Maps;
 import lombok.Cleanup;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.net.telnet.TelnetClient;
 import org.hyperic.sigar.SigarException;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.*;
 import java.nio.charset.Charset;
@@ -360,6 +364,7 @@ public class NetUtils {
      * @author 皮锋
      * @custom.date 2022/1/10 9:37
      */
+    @Deprecated
     public static boolean telnet(String hostname, int port, TcpIpEnums tcpIpEnums) {
         boolean isConnected = false;
         try {
@@ -376,6 +381,52 @@ public class NetUtils {
             isConnected = false;
         }
         return isConnected;
+    }
+
+    /**
+     * <p>
+     * 检测telnet状态
+     * </p>
+     *
+     * @param hostname   主机名
+     * @param port       端口号
+     * @param tcpIpEnums TCP/IP协议簇枚举
+     * @return 返回Map，key解释：<br>
+     * 1.isConnect：是否能telnet通；<br>
+     * 2.avgTime：平均时间（毫秒）<br>
+     * @author 皮锋
+     * @custom.date 2022/3/6 9:37
+     */
+    public static Map<String, Object> telnetVT200(String hostname, int port, TcpIpEnums tcpIpEnums) {
+        // 连通状态
+        boolean isConnect = false;
+        // 计时器
+        TimeInterval timer = DateUtil.timer();
+        try {
+            // TCP协议
+            if (tcpIpEnums == TcpIpEnums.TCP) {
+                // 指明Telnet终端类型，否则会返回来的数据中文会乱码
+                @Cleanup("disconnect")
+                TelnetClient telnetClient = new TelnetClient("vt200");
+                telnetClient.setConnectTimeout(3000);
+                telnetClient.connect(hostname, port);
+                // 查看连通状态
+                isConnect = telnetClient.isConnected();
+            }
+        } catch (ConnectException connectException) {
+            log.debug("对端拒绝连接，服务未启动端口监听或防火墙：{}", connectException.getMessage());
+            isConnect = false;
+        } catch (IOException ioException) {
+            log.debug("对端连接失败：{}", ioException.getMessage());
+            isConnect = false;
+        }
+        // 时间差（毫秒）
+        long avgTime = timer.interval();
+        // 返回值
+        Map<String, Object> result = Maps.newHashMap();
+        result.put("isConnect", isConnect);
+        result.put("avgTime", avgTime);
+        return result;
     }
 
 }
