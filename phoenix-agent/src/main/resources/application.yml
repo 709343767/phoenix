@@ -66,9 +66,11 @@ management:
     address: 127.0.0.1
 
 
-##############################################swagger端点配置##############################################
-swagger:
-  #production: true
+##############################################knife4j配置#################################################
+knife4j:
+  enable: true
+  setting:
+    language: zh-CN
   basic:
     enable: true
     username: admin

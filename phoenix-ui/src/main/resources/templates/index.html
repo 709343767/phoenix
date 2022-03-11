@@ -209,22 +209,12 @@
                             <cite>Druid</cite>
                         </a>
                     </li>
-                    <li data-name="swagger" class="layui-nav-item" sec:authorize="hasAuthority('超级管理员')">
-                        <a href="javascript:;" lay-tips="Swagger" lay-direction="2">
+                    <li data-name="Knife4j" class="layui-nav-item" sec:authorize="hasAuthority('超级管理员')">
+                        <a href="javascript:;" lay-tips="Knife4j" lay-direction="2"
+                           th:attr="lay-href=@{/doc.html}">
                             <i class="layui-icon layui-icon-component"></i>
-                            <cite>Swagger</cite>
+                            <cite>Knife4j</cite>
                         </a>
-                        <dl class="layui-nav-child">
-                            <dd>
-                                <a th:attr="lay-href=@{/swagger-ui.html}">swagger-ui</a>
-                            </dd>
-                            <dd>
-                                <a th:attr="lay-href=@{/docs.html}">swagger-layer-ui</a>
-                            </dd>
-                            <dd>
-                                <a th:attr="lay-href=@{/doc.html}">swagger-bootstrap-ui</a>
-                            </dd>
-                        </dl>
                     </li>
                     <li data-name="myself" class="layui-nav-item">
                         <a href="javascript:;" lay-tips="我的" lay-direction="2">

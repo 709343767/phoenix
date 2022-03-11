@@ -75,13 +75,8 @@
         <cglib.version>3.3.0</cglib.version>
         <!-- servlet-api版本 -->
         <servlet-api.version>2.5</servlet-api.version>
-        <!--swagger版本 -->
-        <swagger.version>2.9.2</swagger.version>
-        <swagger-ui.version>2.9.2</swagger-ui.version>
-        <swagger-annotations.version>1.5.21</swagger-annotations.version>
-        <swagger-models.version>1.5.21</swagger-models.version>
-        <swagger-ui-layer.version>1.1.3</swagger-ui-layer.version>
-        <swagger-bootstrap-ui.version>1.9.6</swagger-bootstrap-ui.version>
+        <!-- knife4j文档依赖 -->
+        <knife4j.version>3.0.3</knife4j.version>
         <!-- mybatis-plus-boot-starter版本 -->
         <mybatis-plus-boot-starter.version>3.1.2</mybatis-plus-boot-starter.version>
         <!-- mybatis-plus代码生成器版本 -->
@@ -234,11 +229,6 @@
                 <artifactId>commons-net</artifactId>
                 <version>${commons-net.version}</version>
             </dependency>
-            <!--<dependency>-->
-            <!--<groupId>commons-logging</groupId>-->
-            <!--<artifactId>commons-logging</artifactId>-->
-            <!--<version>${commons-logging.version}</version>-->
-            <!--</dependency>-->
             <!-- sigar依赖 -->
             <dependency>
                 <groupId>org.fusesource</groupId>
@@ -288,70 +278,12 @@
                 <version>${servlet-api.version}</version>
                 <scope>provided</scope>
             </dependency>
-            <!-- swagger依赖 -->
-            <dependency>
-                <groupId>io.springfox</groupId>
-                <artifactId>springfox-swagger2</artifactId>
-                <exclusions>
-                    <exclusion>
-                        <groupId>io.swagger</groupId>
-                        <artifactId>swagger-annotations</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>io.swagger</groupId>
-                        <artifactId>swagger-models</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.slf4j</groupId>
-                        <artifactId>slf4j-api</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.springframework</groupId>
-                        <artifactId>spring-aop</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.springframework</groupId>
-                        <artifactId>spring-beans</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.springframework</groupId>
-                        <artifactId>spring-context</artifactId>
-                    </exclusion>
-                </exclusions>
-                <version>${swagger.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.swagger</groupId>
-                <artifactId>swagger-annotations</artifactId>
-                <version>${swagger-annotations.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.swagger</groupId>
-                <artifactId>swagger-models</artifactId>
-                <version>${swagger-models.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.slf4j</groupId>
-                        <artifactId>slf4j-api</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>io.springfox</groupId>
-                <artifactId>springfox-swagger-ui</artifactId>
-                <version>${swagger-ui.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.github.caspar-chen</groupId>
-                <artifactId>swagger-ui-layer</artifactId>
-                <version>${swagger-ui-layer.version}</version>
-            </dependency>
+            <!-- knife4j文档依赖 -->
             <dependency>
                 <groupId>com.github.xiaoymin</groupId>
-                <artifactId>swagger-bootstrap-ui</artifactId>
-                <version>${swagger-bootstrap-ui.version}</version>
+                <artifactId>knife4j-spring-boot-starter</artifactId>
+                <version>${knife4j.version}</version>
             </dependency>
-
             <!-- mybatis-plus依赖 -->
             <dependency>
                 <groupId>com.baomidou</groupId>
@@ -635,8 +567,8 @@
     <repositories>
         <!-- 私有仓库 -->
         <repository>
-            <id>aliyun</id>
-            <url>http://maven.aliyun.com/nexus/content/groups/public</url>
+            <id>huaweiCloud</id>
+            <url>https://mirrors.huaweicloud.com/repository/maven/</url>
             <releases>
                 <!-- 是否激活 -->
                 <enabled>true</enabled>
@@ -657,8 +589,8 @@
     <!-- 仓库插件 -->
     <pluginRepositories>
         <pluginRepository>
-            <id>aliyun</id>
-            <url>http://maven.aliyun.com/nexus/content/groups/public</url>
+            <id>huaweiCloud</id>
+            <url>https://mirrors.huaweicloud.com/repository/maven/</url>
             <releases>
                 <enabled>true</enabled>
                 <updatePolicy>always</updatePolicy>

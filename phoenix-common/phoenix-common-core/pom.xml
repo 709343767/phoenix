@@ -62,23 +62,20 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <!--<optional>true</optional>-->
+            <optional>true</optional>
         </dependency>
         <!-- 日志实现依赖 -->
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <!--<optional>true</optional>-->
+            <optional>true</optional>
         </dependency>
-        <!--<dependency>-->
-        <!--<groupId>commons-logging</groupId>-->
-        <!--<artifactId>commons-logging</artifactId>-->
-        <!--</dependency>-->
         <!-- junit单元测试依赖 -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>test</scope>
+            <optional>true</optional>
         </dependency>
         <!-- sigar依赖 -->
         <dependency>
