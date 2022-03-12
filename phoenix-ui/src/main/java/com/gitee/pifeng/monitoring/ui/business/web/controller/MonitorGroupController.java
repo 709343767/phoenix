@@ -68,10 +68,10 @@ public class MonitorGroupController {
      */
     @ApiOperation(value = "获取分组列表")
     @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "current", value = "当前页", required = true, paramType = "query", dataType = "long"),
-            @ApiImplicitParam(name = "size", value = "每页显示条数", required = true, paramType = "query", dataType = "long"),
-            @ApiImplicitParam(name = "groupName", value = "分组名称", paramType = "query", dataType = "string"),
-            @ApiImplicitParam(name = "groupDesc", value = "分组描述", paramType = "query", dataType = "string")})
+            @ApiImplicitParam(name = "current", value = "当前页", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class),
+            @ApiImplicitParam(name = "size", value = "每页显示条数", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class),
+            @ApiImplicitParam(name = "groupName", value = "分组名称", paramType = "query", dataType = "string", dataTypeClass = String.class),
+            @ApiImplicitParam(name = "groupDesc", value = "分组描述", paramType = "query", dataType = "string", dataTypeClass = String.class)})
     @GetMapping("get-monitor-group-list")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.CONFIG_MANAGE + "#分组管理", operType = OperateTypeConstants.QUERY, operDesc = "获取分组列表")
@@ -126,7 +126,7 @@ public class MonitorGroupController {
      */
     @ApiOperation(value = "访问编辑分组信息表单页面")
     @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "id", value = "分组ID", required = true, paramType = "query", dataType = "long")})
+            @ApiImplicitParam(name = "id", value = "分组ID", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class)})
     @GetMapping("/edit-monitor-group-form")
     public ModelAndView editMonitorGroupForm(@RequestParam(name = "id") Long id) {
         MonitorGroup monitorGroup = this.monitorGroupService.getById(id);

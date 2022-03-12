@@ -65,11 +65,11 @@ public class MonitorLogExceptionController {
      */
     @ApiOperation(value = "获取异常日志列表")
     @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "current", value = "当前页", required = true, paramType = "query", dataType = "long"),
-            @ApiImplicitParam(name = "size", value = "每页显示条数", required = true, paramType = "query", dataType = "long"),
-            @ApiImplicitParam(name = "excName", value = "异常名称", paramType = "query", dataType = "string"),
-            @ApiImplicitParam(name = "excMessage", value = "异常信息", paramType = "query", dataType = "string"),
-            @ApiImplicitParam(name = "insertTime", value = "插入时间", paramType = "query", dataType = "string")
+            @ApiImplicitParam(name = "current", value = "当前页", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class),
+            @ApiImplicitParam(name = "size", value = "每页显示条数", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class),
+            @ApiImplicitParam(name = "excName", value = "异常名称", paramType = "query", dataType = "string", dataTypeClass = String.class),
+            @ApiImplicitParam(name = "excMessage", value = "异常信息", paramType = "query", dataType = "string", dataTypeClass = String.class),
+            @ApiImplicitParam(name = "insertTime", value = "插入时间", paramType = "query", dataType = "string", dataTypeClass = String.class)
     })
     @GetMapping("/get-monitor-log-exception-list")
     @ResponseBody
@@ -110,7 +110,7 @@ public class MonitorLogExceptionController {
     @ApiOperation(value = "访问异常日志详情页面")
     @GetMapping("/monitor-log-exception-detail")
     @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "id", value = "异常日志ID", required = true, paramType = "query", dataType = "long")})
+            @ApiImplicitParam(name = "id", value = "异常日志ID", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class)})
     public ModelAndView monitorLogExceptionDetail(Long id) {
         ModelAndView mv = new ModelAndView("log/log-exception-detail");
         MonitorLogExceptionVo monitorLogExceptionInfo = this.monitorLogExceptionService.getMonitorLogExceptionInfo(id);

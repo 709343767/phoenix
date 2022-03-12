@@ -44,7 +44,7 @@ public class MonitorJvmThreadController {
     @ResponseBody
     @GetMapping("/get-jvm-thread-info")
     @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "instanceId", value = "应用实例ID", required = true, paramType = "query", dataType = "string")})
+            @ApiImplicitParam(name = "instanceId", value = "应用实例ID", required = true, paramType = "query", dataType = "string", dataTypeClass = String.class)})
     public LayUiAdminResultVo getJvmThreadInfo(@RequestParam(name = "instanceId") String instanceId) {
         MonitorJvmThreadVo monitorJvmThreadVo = this.monitorJvmThreadService.getJvmThreadInfo(instanceId);
         return LayUiAdminResultVo.ok(monitorJvmThreadVo);

@@ -50,7 +50,7 @@ public class DbInfo4RedisServiceController {
      */
     @ApiOperation(value = "获取Redis信息")
     @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "id", value = "数据库ID", required = true, paramType = "query", dataType = "long")})
+            @ApiImplicitParam(name = "id", value = "数据库ID", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class)})
     @GetMapping("/get-redis-info")
     @OperateLog(operModule = UiModuleConstants.DATABASE + "#信息", operType = OperateTypeConstants.QUERY, operDesc = "获取Redis信息")
     public LayUiAdminResultVo getRedisInfo(Long id) throws IOException, SigarException {

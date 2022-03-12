@@ -80,11 +80,11 @@ public class MonitorUserController {
      */
     @ApiOperation(value = "获取监控用户列表")
     @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "current", value = "当前页", required = true, paramType = "query", dataType = "long"),
-            @ApiImplicitParam(name = "size", value = "每页显示条数", required = true, paramType = "query", dataType = "long"),
-            @ApiImplicitParam(name = "account", value = "账号", paramType = "query", dataType = "string"),
-            @ApiImplicitParam(name = "username", value = "用户名", paramType = "query", dataType = "string"),
-            @ApiImplicitParam(name = "email", value = "电子邮箱", paramType = "query", dataType = "string")})
+            @ApiImplicitParam(name = "current", value = "当前页", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class),
+            @ApiImplicitParam(name = "size", value = "每页显示条数", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class),
+            @ApiImplicitParam(name = "account", value = "账号", paramType = "query", dataType = "string", dataTypeClass = String.class),
+            @ApiImplicitParam(name = "username", value = "用户名", paramType = "query", dataType = "string", dataTypeClass = String.class),
+            @ApiImplicitParam(name = "email", value = "电子邮箱", paramType = "query", dataType = "string", dataTypeClass = String.class)})
     @GetMapping("/get-monitor-user-list")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.USER_MANAGE + "#用户", operType = OperateTypeConstants.QUERY, operDesc = "获取监控用户列表")
@@ -130,7 +130,7 @@ public class MonitorUserController {
      */
     @ApiOperation(value = "访问编辑用户表单页面")
     @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "userId", value = "用户ID", required = true, paramType = "query", dataType = "long")})
+            @ApiImplicitParam(name = "userId", value = "用户ID", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class)})
     @GetMapping("/edit-user-form")
     public ModelAndView editUserForm(@RequestParam(name = "userId") Long userId) {
         ModelAndView mv = new ModelAndView("user/edit-user");

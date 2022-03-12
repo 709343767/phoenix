@@ -45,7 +45,7 @@ public class MonitorServerNetcardController {
     @ResponseBody
     @GetMapping("/get-server-detail-page-server-netcard-info")
     @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "ip", value = "服务器IP地址", required = true, paramType = "query", dataType = "string")})
+            @ApiImplicitParam(name = "ip", value = "服务器IP地址", required = true, paramType = "query", dataType = "string", dataTypeClass = String.class)})
     public LayUiAdminResultVo getServerDetailPageServerNetcardInfo(@RequestParam(name = "ip") String ip) {
         List<ServerDetailPageServerNetcardVo> serverDetailPageServerNetcardVos = this.monitorServerNetcardService.getServerDetailPageServerNetcardInfo(ip);
         return LayUiAdminResultVo.ok(serverDetailPageServerNetcardVos);

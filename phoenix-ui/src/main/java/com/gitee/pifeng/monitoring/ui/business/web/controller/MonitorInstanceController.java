@@ -101,13 +101,13 @@ public class MonitorInstanceController {
      */
     @ApiOperation(value = "获取应用程序列表")
     @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "current", value = "当前页", required = true, paramType = "query", dataType = "long"),
-            @ApiImplicitParam(name = "size", value = "每页显示条数", required = true, paramType = "query", dataType = "long"),
-            @ApiImplicitParam(name = "instanceName", value = "应用实例名", paramType = "query", dataType = "string"),
-            @ApiImplicitParam(name = "endpoint", value = "端点", paramType = "query", dataType = "string"),
-            @ApiImplicitParam(name = "isOnline", value = "应用状态", paramType = "query", dataType = "string"),
-            @ApiImplicitParam(name = "monitorEnv", value = "监控环境", paramType = "query", dataType = "string"),
-            @ApiImplicitParam(name = "monitorGroup", value = "监控分组", paramType = "query", dataType = "string")})
+            @ApiImplicitParam(name = "current", value = "当前页", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class),
+            @ApiImplicitParam(name = "size", value = "每页显示条数", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class),
+            @ApiImplicitParam(name = "instanceName", value = "应用实例名", paramType = "query", dataType = "string", dataTypeClass = String.class),
+            @ApiImplicitParam(name = "endpoint", value = "端点", paramType = "query", dataType = "string", dataTypeClass = String.class),
+            @ApiImplicitParam(name = "isOnline", value = "应用状态", paramType = "query", dataType = "string", dataTypeClass = String.class),
+            @ApiImplicitParam(name = "monitorEnv", value = "监控环境", paramType = "query", dataType = "string", dataTypeClass = String.class),
+            @ApiImplicitParam(name = "monitorGroup", value = "监控分组", paramType = "query", dataType = "string", dataTypeClass = String.class)})
     @GetMapping("/get-monitor-instance-list")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.INSTANCE, operType = OperateTypeConstants.QUERY, operDesc = "获取应用程序列表")
@@ -148,8 +148,8 @@ public class MonitorInstanceController {
      */
     @ApiOperation(value = "清理应用程序监控历史数据")
     @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "instanceId", value = "应用实例ID", required = true, paramType = "query", dataType = "string"),
-            @ApiImplicitParam(name = "time", value = "时间", required = true, paramType = "query", dataType = "string")})
+            @ApiImplicitParam(name = "instanceId", value = "应用实例ID", required = true, paramType = "query", dataType = "string", dataTypeClass = String.class),
+            @ApiImplicitParam(name = "time", value = "时间", required = true, paramType = "query", dataType = "string", dataTypeClass = String.class)})
     @DeleteMapping("/clear-monitor-instance-history")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.INSTANCE, operType = OperateTypeConstants.DELETE, operDesc = "清理应用程序监控历史数据")
@@ -170,8 +170,8 @@ public class MonitorInstanceController {
      */
     @ApiOperation(value = "访问应用程序详情页面")
     @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "id", value = "应用实例主键ID", required = true, paramType = "query", dataType = "long"),
-            @ApiImplicitParam(name = "instanceId", value = "应用实例ID", required = true, paramType = "query", dataType = "string")})
+            @ApiImplicitParam(name = "id", value = "应用实例主键ID", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class),
+            @ApiImplicitParam(name = "instanceId", value = "应用实例ID", required = true, paramType = "query", dataType = "string", dataTypeClass = String.class)})
     @GetMapping("/instance-detail")
     public ModelAndView instanceDetail(Long id, String instanceId) {
         ModelAndView mv = new ModelAndView("instance/instance-detail");
@@ -197,7 +197,7 @@ public class MonitorInstanceController {
      */
     @ApiOperation(value = "访问清理应用程序监控历史数据表单页面")
     @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "instanceId", value = "应用实例ID", required = true, paramType = "query", dataType = "string")})
+            @ApiImplicitParam(name = "instanceId", value = "应用实例ID", required = true, paramType = "query", dataType = "string", dataTypeClass = String.class)})
     @GetMapping("instance-clear")
     public ModelAndView instanceClear(String instanceId) {
         ModelAndView mv = new ModelAndView("instance/instance-clear-form");
@@ -217,7 +217,7 @@ public class MonitorInstanceController {
      */
     @ApiOperation(value = "访问应用程序编辑页面")
     @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "instanceId", value = "应用实例ID", required = true, paramType = "query", dataType = "string")})
+            @ApiImplicitParam(name = "instanceId", value = "应用实例ID", required = true, paramType = "query", dataType = "string", dataTypeClass = String.class)})
     @GetMapping("edit-monitor-instance-form")
     public ModelAndView editMonitorInstanceForm(String instanceId) {
         ModelAndView mv = new ModelAndView("instance/edit-instance");

@@ -47,7 +47,7 @@ public class MonitorServerOsController {
     @ResponseBody
     @GetMapping("/get-server-os-info")
     @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "ip", value = "服务器IP地址", required = true, paramType = "query", dataType = "string")})
+            @ApiImplicitParam(name = "ip", value = "服务器IP地址", required = true, paramType = "query", dataType = "string", dataTypeClass = String.class)})
     public LayUiAdminResultVo getMonitorServerOsInfo(@RequestParam(name = "ip") String ip) {
         MonitorServerOsVo monitorServerOsVo = this.monitorServerOsService.getMonitorServerOsInfo(ip);
         return LayUiAdminResultVo.ok(monitorServerOsVo);

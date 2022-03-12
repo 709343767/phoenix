@@ -51,9 +51,9 @@ public class MonitorServerNetcardHistoryController {
     @ResponseBody
     @GetMapping("/get-server-detail-page-server-network-speed-chart-info")
     @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "ip", value = "服务器IP地址", required = true, paramType = "query", dataType = "string"),
-            @ApiImplicitParam(name = "address", value = "服务器网卡地址", required = true, paramType = "query", dataType = "string"),
-            @ApiImplicitParam(name = "time", value = "时间", paramType = "query", dataType = "string")})
+            @ApiImplicitParam(name = "ip", value = "服务器IP地址", required = true, paramType = "query", dataType = "string", dataTypeClass = String.class),
+            @ApiImplicitParam(name = "address", value = "服务器网卡地址", required = true, paramType = "query", dataType = "string", dataTypeClass = String.class),
+            @ApiImplicitParam(name = "time", value = "时间", paramType = "query", dataType = "string", dataTypeClass = String.class)})
     public LayUiAdminResultVo getServerDetailPageServerNetworkSpeedChartInfo(@RequestParam(name = "ip") String ip,
                                                                              @RequestParam(name = "address") String address,
                                                                              @RequestParam(name = "time", required = false) String time) {

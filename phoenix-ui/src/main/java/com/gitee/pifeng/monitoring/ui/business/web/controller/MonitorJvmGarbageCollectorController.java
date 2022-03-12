@@ -46,7 +46,7 @@ public class MonitorJvmGarbageCollectorController {
     @ResponseBody
     @GetMapping("/get-jvm-gc-info")
     @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "instanceId", value = "应用实例ID", required = true, paramType = "query", dataType = "string")})
+            @ApiImplicitParam(name = "instanceId", value = "应用实例ID", required = true, paramType = "query", dataType = "string", dataTypeClass = String.class)})
     public LayUiAdminResultVo getJvmGcInfo(@RequestParam(name = "instanceId") String instanceId) {
         List<MonitorJvmGarbageCollectorVo> monitorJvmGarbageCollectorVos = this.monitorJvmGarbageCollectorService.getJvmGcInfo(instanceId);
         return LayUiAdminResultVo.ok(monitorJvmGarbageCollectorVos);

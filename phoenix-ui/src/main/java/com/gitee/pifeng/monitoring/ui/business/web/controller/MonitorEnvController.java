@@ -68,10 +68,10 @@ public class MonitorEnvController {
      */
     @ApiOperation(value = "获取环境列表")
     @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "current", value = "当前页", required = true, paramType = "query", dataType = "long"),
-            @ApiImplicitParam(name = "size", value = "每页显示条数", required = true, paramType = "query", dataType = "long"),
-            @ApiImplicitParam(name = "envName", value = "环境名称", paramType = "query", dataType = "string"),
-            @ApiImplicitParam(name = "envDesc", value = "环境描述", paramType = "query", dataType = "string")})
+            @ApiImplicitParam(name = "current", value = "当前页", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class),
+            @ApiImplicitParam(name = "size", value = "每页显示条数", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class),
+            @ApiImplicitParam(name = "envName", value = "环境名称", paramType = "query", dataType = "string", dataTypeClass = String.class),
+            @ApiImplicitParam(name = "envDesc", value = "环境描述", paramType = "query", dataType = "string", dataTypeClass = String.class)})
     @GetMapping("get-monitor-env-list")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.CONFIG_MANAGE + "#环境管理", operType = OperateTypeConstants.QUERY, operDesc = "获取环境列表")
@@ -126,7 +126,7 @@ public class MonitorEnvController {
      */
     @ApiOperation(value = "访问编辑环境信息表单页面")
     @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "id", value = "环境ID", required = true, paramType = "query", dataType = "long")})
+            @ApiImplicitParam(name = "id", value = "环境ID", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class)})
     @GetMapping("/edit-monitor-env-form")
     public ModelAndView editMonitorEnvForm(@RequestParam(name = "id") Long id) {
         MonitorEnv monitorEnv = this.monitorEnvService.getById(id);

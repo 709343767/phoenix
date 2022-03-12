@@ -80,9 +80,9 @@ public class MonitorRoleController {
      */
     @ApiOperation(value = "获取监控角色列表")
     @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "current", value = "当前页", required = true, paramType = "query", dataType = "long"),
-            @ApiImplicitParam(name = "size", value = "每页显示条数", required = true, paramType = "query", dataType = "long"),
-            @ApiImplicitParam(name = "roleId", value = "角色ID", paramType = "query", dataType = "long")})
+            @ApiImplicitParam(name = "current", value = "当前页", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class),
+            @ApiImplicitParam(name = "size", value = "每页显示条数", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class),
+            @ApiImplicitParam(name = "roleId", value = "角色ID", paramType = "query", dataType = "long", dataTypeClass = Long.class)})
     @GetMapping("/get-monitor-role-list")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.USER_MANAGE + "#角色", operType = OperateTypeConstants.QUERY, operDesc = "获取监控角色列表")

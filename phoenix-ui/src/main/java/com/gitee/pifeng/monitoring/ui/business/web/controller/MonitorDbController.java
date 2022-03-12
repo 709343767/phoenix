@@ -72,12 +72,12 @@ public class MonitorDbController {
      */
     @ApiOperation(value = "获取数据库列表")
     @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "current", value = "当前页", required = true, paramType = "query", dataType = "long"),
-            @ApiImplicitParam(name = "size", value = "每页显示条数", required = true, paramType = "query", dataType = "long"),
-            @ApiImplicitParam(name = "connName", value = "数据库连接名", paramType = "query", dataType = "string"),
-            @ApiImplicitParam(name = "url", value = "数据库URL", paramType = "query", dataType = "string"),
-            @ApiImplicitParam(name = "dbType", value = "数据库类型", paramType = "query", dataType = "string"),
-            @ApiImplicitParam(name = "isOnline", value = "数据库状态", paramType = "query", dataType = "string")})
+            @ApiImplicitParam(name = "current", value = "当前页", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class),
+            @ApiImplicitParam(name = "size", value = "每页显示条数", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class),
+            @ApiImplicitParam(name = "connName", value = "数据库连接名", paramType = "query", dataType = "string", dataTypeClass = String.class),
+            @ApiImplicitParam(name = "url", value = "数据库URL", paramType = "query", dataType = "string", dataTypeClass = String.class),
+            @ApiImplicitParam(name = "dbType", value = "数据库类型", paramType = "query", dataType = "string", dataTypeClass = String.class),
+            @ApiImplicitParam(name = "isOnline", value = "数据库状态", paramType = "query", dataType = "string", dataTypeClass = String.class)})
     @GetMapping("get-monitor-db-list")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.DATABASE, operType = OperateTypeConstants.QUERY, operDesc = "获取数据库列表")
@@ -98,7 +98,7 @@ public class MonitorDbController {
      */
     @ApiOperation(value = "访问编辑数据库信息表单页面")
     @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "id", value = "数据库ID", required = true, paramType = "query", dataType = "long")})
+            @ApiImplicitParam(name = "id", value = "数据库ID", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class)})
     @GetMapping("/edit-monitor-db-form")
     public ModelAndView editMonitorDbForm(@RequestParam(name = "id") Long id) {
         MonitorDb monitorDb = this.monitorDbService.getById(id);
@@ -193,7 +193,7 @@ public class MonitorDbController {
      */
     @ApiOperation(value = "访问数据库详情页面")
     @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "id", value = "数据库ID", required = true, paramType = "query", dataType = "long")})
+            @ApiImplicitParam(name = "id", value = "数据库ID", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class)})
     @GetMapping("/db-detail")
     public ModelAndView dbDetail(Long id) {
         ModelAndView mv = new ModelAndView("db/db-detail");

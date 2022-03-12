@@ -49,6 +49,7 @@
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>test</scope>
+            <optional>true</optional>
         </dependency>
         <!-- HTTP协议的客户端/服务器编程工具包依赖 -->
         <dependency>

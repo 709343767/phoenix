@@ -45,7 +45,7 @@ public class MonitorServerCpuController {
     @ResponseBody
     @GetMapping("/get-server-detail-page-server-cpu-info")
     @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "ip", value = "服务器IP地址", required = true, paramType = "query", dataType = "string")})
+            @ApiImplicitParam(name = "ip", value = "服务器IP地址", required = true, paramType = "query", dataType = "string", dataTypeClass = String.class)})
     public LayUiAdminResultVo getServerDetailPageServerCpuInfo(@RequestParam(name = "ip") String ip) {
         List<MonitorServerCpuVo> monitorServerCpuVos = this.monitorServerCpuService.getServerDetailPageServerCpuInfo(ip);
         return LayUiAdminResultVo.ok(monitorServerCpuVos);

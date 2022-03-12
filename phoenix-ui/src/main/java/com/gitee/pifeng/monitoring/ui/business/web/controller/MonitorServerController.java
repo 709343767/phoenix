@@ -105,13 +105,13 @@ public class MonitorServerController {
      */
     @ApiOperation(value = "获取服务器列表")
     @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "current", value = "当前页", required = true, paramType = "query", dataType = "long"),
-            @ApiImplicitParam(name = "size", value = "每页显示条数", required = true, paramType = "query", dataType = "long"),
-            @ApiImplicitParam(name = "ip", value = "IP", paramType = "query", dataType = "string"),
-            @ApiImplicitParam(name = "serverName", value = "服务器名", paramType = "query", dataType = "string"),
-            @ApiImplicitParam(name = "isOnline", value = "状态", paramType = "query", dataType = "string"),
-            @ApiImplicitParam(name = "monitorEnv", value = "监控环境", paramType = "query", dataType = "string"),
-            @ApiImplicitParam(name = "monitorGroup", value = "监控分组", paramType = "query", dataType = "string")})
+            @ApiImplicitParam(name = "current", value = "当前页", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class),
+            @ApiImplicitParam(name = "size", value = "每页显示条数", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class),
+            @ApiImplicitParam(name = "ip", value = "IP", paramType = "query", dataType = "string", dataTypeClass = String.class),
+            @ApiImplicitParam(name = "serverName", value = "服务器名", paramType = "query", dataType = "string", dataTypeClass = String.class),
+            @ApiImplicitParam(name = "isOnline", value = "状态", paramType = "query", dataType = "string", dataTypeClass = String.class),
+            @ApiImplicitParam(name = "monitorEnv", value = "监控环境", paramType = "query", dataType = "string", dataTypeClass = String.class),
+            @ApiImplicitParam(name = "monitorGroup", value = "监控分组", paramType = "query", dataType = "string", dataTypeClass = String.class)})
     @GetMapping("/get-monitor-server-list")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.SERVER, operType = OperateTypeConstants.QUERY, operDesc = "获取服务器列表")
@@ -151,8 +151,8 @@ public class MonitorServerController {
      */
     @ApiOperation(value = "清理服务器监控历史数据")
     @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "ip", value = "服务器IP", required = true, paramType = "query", dataType = "string"),
-            @ApiImplicitParam(name = "time", value = "时间", required = true, paramType = "query", dataType = "string")})
+            @ApiImplicitParam(name = "ip", value = "服务器IP", required = true, paramType = "query", dataType = "string", dataTypeClass = String.class),
+            @ApiImplicitParam(name = "time", value = "时间", required = true, paramType = "query", dataType = "string", dataTypeClass = String.class)})
     @DeleteMapping("/clear-monitor-server-history")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.SERVER, operType = OperateTypeConstants.DELETE, operDesc = "清理服务器监控历史数据")
@@ -173,8 +173,8 @@ public class MonitorServerController {
      */
     @ApiOperation(value = "访问服务器详情页面")
     @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "id", value = "服务器主键ID", required = true, paramType = "query", dataType = "long"),
-            @ApiImplicitParam(name = "ip", value = "服务器IP", required = true, paramType = "query", dataType = "string")})
+            @ApiImplicitParam(name = "id", value = "服务器主键ID", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class),
+            @ApiImplicitParam(name = "ip", value = "服务器IP", required = true, paramType = "query", dataType = "string", dataTypeClass = String.class)})
     @GetMapping("/server-detail")
     public ModelAndView serverDetail(Long id, String ip) {
         ModelAndView mv = new ModelAndView("server/server-detail");
@@ -199,7 +199,7 @@ public class MonitorServerController {
      */
     @ApiOperation(value = "访问清理服务器监控历史数据表单页面")
     @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "ip", value = "服务器IP", required = true, paramType = "query", dataType = "string")})
+            @ApiImplicitParam(name = "ip", value = "服务器IP", required = true, paramType = "query", dataType = "string", dataTypeClass = String.class)})
     @GetMapping("/server-clear")
     public ModelAndView serverClear(String ip) {
         ModelAndView mv = new ModelAndView("server/server-clear-form");
@@ -220,8 +220,8 @@ public class MonitorServerController {
      */
     @ApiOperation(value = "访问服务器编辑页面")
     @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "id", value = "服务器主键ID", required = true, paramType = "query", dataType = "long"),
-            @ApiImplicitParam(name = "ip", value = "服务器IP", required = true, paramType = "query", dataType = "string")})
+            @ApiImplicitParam(name = "id", value = "服务器主键ID", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class),
+            @ApiImplicitParam(name = "ip", value = "服务器IP", required = true, paramType = "query", dataType = "string", dataTypeClass = String.class)})
     @GetMapping("/edit-monitor-server-form")
     public ModelAndView editMonitorServerForm(Long id, String ip) {
         ModelAndView mv = new ModelAndView("server/edit-server");

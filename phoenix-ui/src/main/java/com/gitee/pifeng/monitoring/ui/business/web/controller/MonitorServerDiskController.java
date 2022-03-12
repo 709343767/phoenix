@@ -45,7 +45,7 @@ public class MonitorServerDiskController {
     @ResponseBody
     @GetMapping("/get-server-detail-page-server-disk-chart-info")
     @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "ip", value = "服务器IP地址", required = true, paramType = "query", dataType = "string")})
+            @ApiImplicitParam(name = "ip", value = "服务器IP地址", required = true, paramType = "query", dataType = "string", dataTypeClass = String.class)})
     public LayUiAdminResultVo getServerDetailPageServerDiskChartInfo(@RequestParam(name = "ip") String ip) {
         List<ServerDetailPageServerDiskChartVo> serverDetailPageServerDiskChartVos = this.monitorServerDiskService.getServerDetailPageServerDiskChartInfo(ip);
         return LayUiAdminResultVo.ok(serverDetailPageServerDiskChartVos);

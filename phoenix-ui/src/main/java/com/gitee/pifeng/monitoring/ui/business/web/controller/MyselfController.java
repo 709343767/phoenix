@@ -110,8 +110,8 @@ public class MyselfController {
      */
     @ApiOperation(value = "修改密码")
     @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "oldPassword", value = "原始密码", required = true, paramType = "query", dataType = "string"),
-            @ApiImplicitParam(name = "password", value = "新密码", required = true, paramType = "query", dataType = "string")})
+            @ApiImplicitParam(name = "oldPassword", value = "原始密码", required = true, paramType = "query", dataType = "string", dataTypeClass = String.class),
+            @ApiImplicitParam(name = "password", value = "新密码", required = true, paramType = "query", dataType = "string", dataTypeClass = String.class)})
     @PutMapping("/update-password")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.MYSELF + "#修改密码", operType = OperateTypeConstants.UPDATE, operDesc = "修改密码")

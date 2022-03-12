@@ -44,7 +44,7 @@ public class MonitorJvmRuntimeController {
     @ResponseBody
     @GetMapping("/get-jvm-runtime-info")
     @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "instanceId", value = "应用实例ID", required = true, paramType = "query", dataType = "string")})
+            @ApiImplicitParam(name = "instanceId", value = "应用实例ID", required = true, paramType = "query", dataType = "string", dataTypeClass = String.class)})
     public LayUiAdminResultVo getJvmRuntimeInfo(@RequestParam(name = "instanceId") String instanceId) {
         MonitorJvmRuntimeVo monitorJvmRuntimeVo = this.monitorJvmRuntimeService.getJvmRuntimeInfo(instanceId);
         return LayUiAdminResultVo.ok(monitorJvmRuntimeVo);

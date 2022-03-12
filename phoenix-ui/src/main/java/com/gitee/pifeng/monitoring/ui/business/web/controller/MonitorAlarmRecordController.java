@@ -88,16 +88,16 @@ public class MonitorAlarmRecordController {
      */
     @ApiOperation(value = "获取告警记录列表")
     @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "current", value = "当前页", required = true, paramType = "query", dataType = "long"),
-            @ApiImplicitParam(name = "size", value = "每页显示条数", required = true, paramType = "query", dataType = "long"),
-            @ApiImplicitParam(name = "type", value = "告警类型", paramType = "query", dataType = "string"),
-            @ApiImplicitParam(name = "level", value = "告警级别", paramType = "query", dataType = "string"),
-            @ApiImplicitParam(name = "status", value = "告警状态", paramType = "query", dataType = "string"),
-            @ApiImplicitParam(name = "title", value = "告警标题", paramType = "query", dataType = "string"),
-            @ApiImplicitParam(name = "content", value = "告警内容", paramType = "query", dataType = "string"),
-            @ApiImplicitParam(name = "number", value = "被告警人号码", paramType = "query", dataType = "string"),
-            @ApiImplicitParam(name = "insertDate", value = "记录日期", paramType = "query", dataType = "string"),
-            @ApiImplicitParam(name = "updateDate", value = "告警日期", paramType = "query", dataType = "string")})
+            @ApiImplicitParam(name = "current", value = "当前页", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class),
+            @ApiImplicitParam(name = "size", value = "每页显示条数", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class),
+            @ApiImplicitParam(name = "type", value = "告警类型", paramType = "query", dataType = "string", dataTypeClass = String.class),
+            @ApiImplicitParam(name = "level", value = "告警级别", paramType = "query", dataType = "string", dataTypeClass = String.class),
+            @ApiImplicitParam(name = "status", value = "告警状态", paramType = "query", dataType = "string", dataTypeClass = String.class),
+            @ApiImplicitParam(name = "title", value = "告警标题", paramType = "query", dataType = "string", dataTypeClass = String.class),
+            @ApiImplicitParam(name = "content", value = "告警内容", paramType = "query", dataType = "string", dataTypeClass = String.class),
+            @ApiImplicitParam(name = "number", value = "被告警人号码", paramType = "query", dataType = "string", dataTypeClass = String.class),
+            @ApiImplicitParam(name = "insertDate", value = "记录日期", paramType = "query", dataType = "string", dataTypeClass = String.class),
+            @ApiImplicitParam(name = "updateDate", value = "告警日期", paramType = "query", dataType = "string", dataTypeClass = String.class)})
     @GetMapping("/get-monitor-alarm-record-list")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.ALARM, operType = OperateTypeConstants.QUERY, operDesc = "获取告警记录列表")
@@ -141,11 +141,11 @@ public class MonitorAlarmRecordController {
      */
     @ApiOperation(value = "导出告警记录列表")
     @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "type", value = "告警类型", paramType = "query", dataType = "string"),
-            @ApiImplicitParam(name = "level", value = "告警级别", paramType = "query", dataType = "string"),
-            @ApiImplicitParam(name = "status", value = "告警状态", paramType = "query", dataType = "string"),
-            @ApiImplicitParam(name = "title", value = "告警标题", paramType = "query", dataType = "string"),
-            @ApiImplicitParam(name = "content", value = "告警内容", paramType = "query", dataType = "string")})
+            @ApiImplicitParam(name = "type", value = "告警类型", paramType = "query", dataType = "string", dataTypeClass = String.class),
+            @ApiImplicitParam(name = "level", value = "告警级别", paramType = "query", dataType = "string", dataTypeClass = String.class),
+            @ApiImplicitParam(name = "status", value = "告警状态", paramType = "query", dataType = "string", dataTypeClass = String.class),
+            @ApiImplicitParam(name = "title", value = "告警标题", paramType = "query", dataType = "string", dataTypeClass = String.class),
+            @ApiImplicitParam(name = "content", value = "告警内容", paramType = "query", dataType = "string", dataTypeClass = String.class)})
     @GetMapping("/export-monitor-alarm-record-list")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.ALARM, operType = OperateTypeConstants.EXPORT, operDesc = "导出告警记录列表")
@@ -192,7 +192,7 @@ public class MonitorAlarmRecordController {
     @ApiOperation(value = "访问告警记录详情页面")
     @GetMapping("/monitor-alarm-record-detail")
     @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "id", value = "告警记录ID", required = true, paramType = "query", dataType = "long")})
+            @ApiImplicitParam(name = "id", value = "告警记录ID", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class)})
     public ModelAndView monitorAlarmRecordDetail(Long id) {
         ModelAndView mv = new ModelAndView("alarm/alarm-record-detail");
         MonitorAlarmRecordVo monitorAlarmRecordInfo = this.monitorAlarmRecordService.monitorAlarmRecordDetail(id);

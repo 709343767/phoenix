@@ -47,8 +47,8 @@ public class MonitorServerProcessHistoryController {
     @ResponseBody
     @GetMapping("/get-server-detail-page-server-process-chart-info")
     @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "ip", value = "服务器IP地址", required = true, paramType = "query", dataType = "string"),
-            @ApiImplicitParam(name = "time", value = "时间", paramType = "query", dataType = "string")})
+            @ApiImplicitParam(name = "ip", value = "服务器IP地址", required = true, paramType = "query", dataType = "string", dataTypeClass = String.class),
+            @ApiImplicitParam(name = "time", value = "时间", paramType = "query", dataType = "string", dataTypeClass = String.class)})
     public LayUiAdminResultVo getServerDetailPageServerProcessChartInfo(@RequestParam(name = "ip") String ip,
                                                                         @RequestParam(name = "time", required = false) String time) {
         List<ServerDetailPageServerProcessChartVo> monitorServerProcessChartVos = this.monitorServerProcessHistoryService.getServerDetailPageServerProcessChartInfo(ip, time);

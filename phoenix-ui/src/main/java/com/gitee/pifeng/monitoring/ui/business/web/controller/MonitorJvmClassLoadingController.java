@@ -44,7 +44,7 @@ public class MonitorJvmClassLoadingController {
     @ResponseBody
     @GetMapping("/get-jvm-class-loading-info")
     @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "instanceId", value = "应用实例ID", required = true, paramType = "query", dataType = "string")})
+            @ApiImplicitParam(name = "instanceId", value = "应用实例ID", required = true, paramType = "query", dataType = "string", dataTypeClass = String.class)})
     public LayUiAdminResultVo getJvmClassLoadingInfo(@RequestParam(name = "instanceId") String instanceId) {
         MonitorJvmClassLoadingVo monitorJvmClassLoadingVo = this.monitorJvmClassLoadingService.getJvmClassLoadingInfo(instanceId);
         return LayUiAdminResultVo.ok(monitorJvmClassLoadingVo);

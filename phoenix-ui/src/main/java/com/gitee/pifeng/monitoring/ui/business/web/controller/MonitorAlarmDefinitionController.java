@@ -71,12 +71,12 @@ public class MonitorAlarmDefinitionController {
      */
     @ApiOperation(value = "获取告警定义列表")
     @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "current", value = "当前页", required = true, paramType = "query", dataType = "long"),
-            @ApiImplicitParam(name = "size", value = "每页显示条数", required = true, paramType = "query", dataType = "long"),
-            @ApiImplicitParam(name = "type", value = "告警类型", paramType = "query", dataType = "string"),
-            @ApiImplicitParam(name = "grade", value = "告警级别", paramType = "query", dataType = "string"),
-            @ApiImplicitParam(name = "title", value = "告警标题", paramType = "query", dataType = "string"),
-            @ApiImplicitParam(name = "content", value = "告警内容", paramType = "query", dataType = "string")})
+            @ApiImplicitParam(name = "current", value = "当前页", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class),
+            @ApiImplicitParam(name = "size", value = "每页显示条数", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class),
+            @ApiImplicitParam(name = "type", value = "告警类型", paramType = "query", dataType = "string", dataTypeClass = String.class),
+            @ApiImplicitParam(name = "grade", value = "告警级别", paramType = "query", dataType = "string", dataTypeClass = String.class),
+            @ApiImplicitParam(name = "title", value = "告警标题", paramType = "query", dataType = "string", dataTypeClass = String.class),
+            @ApiImplicitParam(name = "content", value = "告警内容", paramType = "query", dataType = "string", dataTypeClass = String.class)})
     @ResponseBody
     @GetMapping("/get-monitor-alarm-definition-list")
     @OperateLog(operModule = UiModuleConstants.CONFIG_MANAGE + "#告警定义", operType = OperateTypeConstants.QUERY, operDesc = "获取告警定义列表")
@@ -113,7 +113,7 @@ public class MonitorAlarmDefinitionController {
      */
     @ApiOperation(value = "访问编辑告警定义表单页面")
     @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "id", value = "告警ID", required = true, paramType = "query", dataType = "long")})
+            @ApiImplicitParam(name = "id", value = "告警ID", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class)})
     @GetMapping("/edit-monitor-alarm-definition-form")
     public ModelAndView editMonitorAlarmDefinitionForm(@RequestParam(name = "id") Long id) {
         MonitorAlarmDefinition monitorAlarmDefinition = this.monitorAlarmDefinitionService.getById(id);

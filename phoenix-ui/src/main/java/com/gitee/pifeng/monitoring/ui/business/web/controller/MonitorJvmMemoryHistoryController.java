@@ -52,9 +52,9 @@ public class MonitorJvmMemoryHistoryController {
     @ResponseBody
     @GetMapping("/get-instance-detail-page-jvm-memory-chart-info")
     @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "instanceId", value = "应用实例ID", required = true, paramType = "query", dataType = "string"),
-            @ApiImplicitParam(name = "memoryType", value = "内存类型", paramType = "query", dataType = "string"),
-            @ApiImplicitParam(name = "time", value = "时间", paramType = "query", dataType = "string")})
+            @ApiImplicitParam(name = "instanceId", value = "应用实例ID", required = true, paramType = "query", dataType = "string", dataTypeClass = String.class),
+            @ApiImplicitParam(name = "memoryType", value = "内存类型", paramType = "query", dataType = "string", dataTypeClass = String.class),
+            @ApiImplicitParam(name = "time", value = "时间", paramType = "query", dataType = "string", dataTypeClass = String.class)})
     public LayUiAdminResultVo getInstanceDetailPageJvmMemoryChartInfo(@RequestParam(name = "instanceId") String instanceId,
                                                                       @RequestParam(name = "memoryType", required = false) String memoryType,
                                                                       @RequestParam(name = "time", required = false) String time) {

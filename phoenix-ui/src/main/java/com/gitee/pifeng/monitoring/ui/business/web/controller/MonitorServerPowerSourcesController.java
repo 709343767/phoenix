@@ -49,7 +49,7 @@ public class MonitorServerPowerSourcesController {
     @ResponseBody
     @GetMapping("/get-server-detail-page-server-power-sources-info")
     @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "ip", value = "服务器IP地址", required = true, paramType = "query", dataType = "string")})
+            @ApiImplicitParam(name = "ip", value = "服务器IP地址", required = true, paramType = "query", dataType = "string", dataTypeClass = String.class)})
     public LayUiAdminResultVo getServerDetailPageServerPowerSourcesInfo(@RequestParam(name = "ip") String ip) {
         List<MonitorServerPowerSourcesVo> serverPowerSourcesVos = this.monitorServerPowerSourcesService.getServerDetailPageServerPowerSourcesInfo(ip);
         return LayUiAdminResultVo.ok(serverPowerSourcesVos);
@@ -69,7 +69,7 @@ public class MonitorServerPowerSourcesController {
     @ResponseBody
     @GetMapping("/get-server-detail-page-server-power-sources-chart-info")
     @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "ip", value = "服务器IP地址", required = true, paramType = "query", dataType = "string")})
+            @ApiImplicitParam(name = "ip", value = "服务器IP地址", required = true, paramType = "query", dataType = "string", dataTypeClass = String.class)})
     public LayUiAdminResultVo getServerDetailPageServerPowerSourcesChartInfo(@RequestParam(name = "ip") String ip) {
         Double rCapacityPercentAvg = this.monitorServerPowerSourcesService.getRemainingCapacityPercentAvg(ip);
         return LayUiAdminResultVo.ok(rCapacityPercentAvg);

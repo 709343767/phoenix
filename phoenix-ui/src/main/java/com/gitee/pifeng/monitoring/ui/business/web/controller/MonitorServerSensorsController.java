@@ -47,7 +47,7 @@ public class MonitorServerSensorsController {
     @ResponseBody
     @GetMapping("/get-server-detail-page-server-sensors-info")
     @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "ip", value = "服务器IP地址", required = true, paramType = "query", dataType = "string")})
+            @ApiImplicitParam(name = "ip", value = "服务器IP地址", required = true, paramType = "query", dataType = "string", dataTypeClass = String.class)})
     public LayUiAdminResultVo getServerDetailPageServerSensorsInfo(@RequestParam(name = "ip") String ip) {
         MonitorServerSensorsVo serverSensorsVo = this.monitorServerSensorsService.getServerDetailPageServerSensorsInfo(ip);
         return LayUiAdminResultVo.ok(serverSensorsVo);
@@ -67,7 +67,7 @@ public class MonitorServerSensorsController {
     @ResponseBody
     @GetMapping("/get-server-detail-page-server-sensors-chart-info")
     @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "ip", value = "服务器IP地址", required = true, paramType = "query", dataType = "string")})
+            @ApiImplicitParam(name = "ip", value = "服务器IP地址", required = true, paramType = "query", dataType = "string", dataTypeClass = String.class)})
     public LayUiAdminResultVo getServerDetailPageServerSensorsChartInfo(@RequestParam(name = "ip") String ip) {
         Double cpuTemperature = this.monitorServerSensorsService.getCpuTemperatureInfo(ip);
         return LayUiAdminResultVo.ok(cpuTemperature);

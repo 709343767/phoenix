@@ -56,9 +56,9 @@ public class DbSession4OracleController {
      */
     @ApiOperation(value = "获取会话列表")
     @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "current", value = "当前页", required = true, paramType = "query", dataType = "long"),
-            @ApiImplicitParam(name = "size", value = "每页显示条数", required = true, paramType = "query", dataType = "long"),
-            @ApiImplicitParam(name = "id", value = "数据库ID", required = true, paramType = "query", dataType = "long")})
+            @ApiImplicitParam(name = "current", value = "当前页", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class),
+            @ApiImplicitParam(name = "size", value = "每页显示条数", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class),
+            @ApiImplicitParam(name = "id", value = "数据库ID", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class)})
     @GetMapping("/get-session-list")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.DATABASE + "#会话", operType = OperateTypeConstants.QUERY, operDesc = "获取会话列表")
@@ -84,7 +84,7 @@ public class DbSession4OracleController {
     @ApiOperation(value = "结束会话")
     @DeleteMapping("/destroy-session")
     @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "id", value = "数据库ID", required = true, paramType = "query", dataType = "long")})
+            @ApiImplicitParam(name = "id", value = "数据库ID", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class)})
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.DATABASE + "#会话", operType = OperateTypeConstants.DELETE, operDesc = "结束会话")
     public LayUiAdminResultVo destroySession(@RequestBody List<DbSession4OracleVo> dbSession4OracleVos, Long id) throws NetException, IOException, SigarException {

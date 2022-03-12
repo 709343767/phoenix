@@ -69,12 +69,12 @@ public class MonitorLogOperationController {
      */
     @ApiOperation(value = "获取操作日志列表")
     @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "current", value = "当前页", required = true, paramType = "query", dataType = "long"),
-            @ApiImplicitParam(name = "size", value = "每页显示条数", required = true, paramType = "query", dataType = "long"),
-            @ApiImplicitParam(name = "operModule", value = "功能模块", paramType = "query", dataType = "string"),
-            @ApiImplicitParam(name = "operDesc", value = "操作描述", paramType = "query", dataType = "string"),
-            @ApiImplicitParam(name = "operType", value = "操作类型", paramType = "query", dataType = "string"),
-            @ApiImplicitParam(name = "insertTime", value = "插入时间", paramType = "query", dataType = "string")
+            @ApiImplicitParam(name = "current", value = "当前页", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class),
+            @ApiImplicitParam(name = "size", value = "每页显示条数", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class),
+            @ApiImplicitParam(name = "operModule", value = "功能模块", paramType = "query", dataType = "string", dataTypeClass = String.class),
+            @ApiImplicitParam(name = "operDesc", value = "操作描述", paramType = "query", dataType = "string", dataTypeClass = String.class),
+            @ApiImplicitParam(name = "operType", value = "操作类型", paramType = "query", dataType = "string", dataTypeClass = String.class),
+            @ApiImplicitParam(name = "insertTime", value = "插入时间", paramType = "query", dataType = "string", dataTypeClass = String.class)
     })
     @GetMapping("/get-monitor-log-operation-list")
     @ResponseBody
@@ -115,7 +115,7 @@ public class MonitorLogOperationController {
     @ApiOperation(value = "访问操作日志详情页面")
     @GetMapping("/monitor-log-operation-detail")
     @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "id", value = "操作日志ID", required = true, paramType = "query", dataType = "long")})
+            @ApiImplicitParam(name = "id", value = "操作日志ID", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class)})
     public ModelAndView monitorLogOperationDetail(Long id) {
         ModelAndView mv = new ModelAndView("log/log-operation-detail");
         MonitorLogOperationVo monitorLogOperationInfo = this.monitorLogOperationService.getMonitorLogOperationInfo(id);

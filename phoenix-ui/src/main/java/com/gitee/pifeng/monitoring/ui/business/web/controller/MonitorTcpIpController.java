@@ -82,13 +82,13 @@ public class MonitorTcpIpController {
      */
     @ApiOperation(value = "获取TCP/IP列表")
     @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "current", value = "当前页", required = true, paramType = "query", dataType = "long"),
-            @ApiImplicitParam(name = "size", value = "每页显示条数", required = true, paramType = "query", dataType = "long"),
-            @ApiImplicitParam(name = "ipSource", value = "IP地址（来源）", paramType = "query", dataType = "string"),
-            @ApiImplicitParam(name = "ipTarget", value = "IP地址（目的地）", paramType = "query", dataType = "string"),
-            @ApiImplicitParam(name = "portTarget", value = "目标端口", paramType = "query", dataType = "int"),
-            @ApiImplicitParam(name = "protocol", value = "协议", paramType = "query", dataType = "string"),
-            @ApiImplicitParam(name = "status", value = "状态（0：不通，1：正常）", paramType = "query", dataType = "string")})
+            @ApiImplicitParam(name = "current", value = "当前页", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class),
+            @ApiImplicitParam(name = "size", value = "每页显示条数", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class),
+            @ApiImplicitParam(name = "ipSource", value = "IP地址（来源）", paramType = "query", dataType = "string", dataTypeClass = String.class),
+            @ApiImplicitParam(name = "ipTarget", value = "IP地址（目的地）", paramType = "query", dataType = "string", dataTypeClass = String.class),
+            @ApiImplicitParam(name = "portTarget", value = "目标端口", paramType = "query", dataType = "int", dataTypeClass = Integer.class),
+            @ApiImplicitParam(name = "protocol", value = "协议", paramType = "query", dataType = "string", dataTypeClass = String.class),
+            @ApiImplicitParam(name = "status", value = "状态（0：不通，1：正常）", paramType = "query", dataType = "string", dataTypeClass = String.class)})
     @GetMapping("/get-monitor-tcpip-list")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.TCPIP4SERVICE, operType = OperateTypeConstants.QUERY, operDesc = "获取TCP/IP列表")
@@ -164,7 +164,7 @@ public class MonitorTcpIpController {
      */
     @ApiOperation(value = "访问编辑TCP/IP信息表单页面")
     @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "id", value = "TCP/IP ID", required = true, paramType = "query", dataType = "long")})
+            @ApiImplicitParam(name = "id", value = "TCP/IP ID", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class)})
     @GetMapping("/edit-monitor-tcpip-form")
     public ModelAndView editMonitorTcpIpForm(@RequestParam(name = "id") Long id) {
         MonitorTcpIp monitorTcpIp = this.monitorTcpIpService.getById(id);
