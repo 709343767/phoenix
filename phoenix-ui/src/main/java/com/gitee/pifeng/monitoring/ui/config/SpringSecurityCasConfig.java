@@ -14,5 +14,5 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 // 开启了第三方认证，而且第三方认证为cas
 @ConditionalOnExpression("${third-auth.enable:false}&&'cas'.equalsIgnoreCase('${third-auth.type}')")
-public class CasSecurityConfig {
+public class SpringSecurityCasConfig {
 }

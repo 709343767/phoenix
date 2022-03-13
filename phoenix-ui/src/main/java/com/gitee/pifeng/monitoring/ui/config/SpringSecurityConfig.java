@@ -36,7 +36,7 @@ import javax.sql.DataSource;
 // 未开启第三方认证
 @ConditionalOnExpression("!${third-auth.enable:false}")
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private FindByIndexNameSessionRepository<? extends Session> sessionRepository;
