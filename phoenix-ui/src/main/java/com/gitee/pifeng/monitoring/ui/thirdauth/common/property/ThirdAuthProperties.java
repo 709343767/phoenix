@@ -1,7 +1,7 @@
-package com.gitee.pifeng.monitoring.ui.thirdauth.property;
+package com.gitee.pifeng.monitoring.ui.thirdauth.common.property;
 
 import com.gitee.pifeng.monitoring.ui.thirdauth.cas.CasConfigurationProperties;
-import com.gitee.pifeng.monitoring.ui.thirdauth.constant.ThirdAuthTypeEnums;
+import com.gitee.pifeng.monitoring.ui.thirdauth.common.constant.ThirdAuthTypeEnums;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

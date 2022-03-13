@@ -2,9 +2,9 @@
   "hints": [],
   "groups": [
     {
-      "sourceType": "com.gitee.pifeng.monitoring.ui.thirdauth.property.ThirdAuthProperties",
+      "sourceType": "com.gitee.pifeng.monitoring.ui.thirdauth.common.property.ThirdAuthProperties",
       "name": "third-auth",
-      "type": "com.gitee.pifeng.monitoring.ui.thirdauth.property.ThirdAuthProperties"
+      "type": "com.gitee.pifeng.monitoring.ui.thirdauth.common.property.ThirdAuthProperties"
     },
     {
       "sourceType": "com.gitee.pifeng.monitoring.ui.thirdauth.cas.CasConfigurationProperties",
@@ -14,16 +14,16 @@
   ],
   "properties": [
     {
-      "sourceType": "com.gitee.pifeng.monitoring.ui.thirdauth.property.ThirdAuthProperties",
+      "sourceType": "com.gitee.pifeng.monitoring.ui.thirdauth.common.property.ThirdAuthProperties",
       "name": "third-auth.enable",
       "description": "是否开启第三方认证",
       "type": "java.lang.Boolean"
     },
     {
-      "sourceType": "com.gitee.pifeng.monitoring.ui.thirdauth.property.ThirdAuthProperties",
+      "sourceType": "com.gitee.pifeng.monitoring.ui.thirdauth.common.property.ThirdAuthProperties",
       "name": "third-auth.type",
       "description": "第三方认证类型",
-      "type": "com.gitee.pifeng.monitoring.ui.thirdauth.constant.ThirdAuthTypeEnums"
+      "type": "com.gitee.pifeng.monitoring.ui.thirdauth.common.constant.ThirdAuthTypeEnums"
     },
     {
       "sourceType": "com.gitee.pifeng.monitoring.ui.thirdauth.cas.CasConfigurationProperties",

@@ -1,4 +1,4 @@
-package com.gitee.pifeng.monitoring.ui.thirdauth.constant;
+package com.gitee.pifeng.monitoring.ui.thirdauth.common.constant;
 
 /**
  * <p>

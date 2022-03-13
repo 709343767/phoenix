@@ -2,7 +2,7 @@ package com.gitee.pifeng.monitoring.ui;
 
 import com.gitee.pifeng.monitoring.common.web.toolkit.CustomizationBeanHandler;
 import com.gitee.pifeng.monitoring.common.web.toolkit.UniqueBeanNameGenerator;
-import com.gitee.pifeng.monitoring.ui.thirdauth.property.ThirdAuthProperties;
+import com.gitee.pifeng.monitoring.ui.thirdauth.common.property.ThirdAuthProperties;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
