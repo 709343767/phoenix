@@ -121,3 +121,14 @@ knife4j:
     enable: true
     username: admin
     password: admin
+
+
+##############################################第三方认证配置#################################################
+third-auth:
+  enable: false
+  type: cas
+cas:
+  server-url-prefix:
+  server-login-url:
+  client-host-url:
+  validation-type: cas3

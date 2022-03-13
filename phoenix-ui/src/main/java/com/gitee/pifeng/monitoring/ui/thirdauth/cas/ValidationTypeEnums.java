@@ -8,7 +8,8 @@ package com.gitee.pifeng.monitoring.ui.thirdauth.cas;
  * @author 皮锋
  * @custom.date 2022/3/11 17:08
  */
-public enum ValidationTypeEnum {
+public enum ValidationTypeEnums {
+
     /**
      * CAS
      */

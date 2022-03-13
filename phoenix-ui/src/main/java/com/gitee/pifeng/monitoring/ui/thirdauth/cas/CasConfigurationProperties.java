@@ -13,9 +13,9 @@ import javax.validation.constraints.NotNull;
  * @author 皮锋
  * @custom.date 2022/3/11 16:51
  */
-@ConfigurationProperties(prefix = "cas", ignoreUnknownFields = false)
 @Data
-public class CasClientConfigurationProperties {
+@ConfigurationProperties(prefix = "cas", ignoreUnknownFields = false)
+public class CasConfigurationProperties {
 
     /**
      * cas服务端地址
@@ -38,5 +38,5 @@ public class CasClientConfigurationProperties {
     /**
      * CAS协议验证类型
      */
-    private ValidationTypeEnum validationType;
+    private ValidationTypeEnums validationType;
 }

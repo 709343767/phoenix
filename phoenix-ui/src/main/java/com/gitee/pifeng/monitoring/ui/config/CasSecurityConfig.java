@@ -1,7 +1,6 @@
 package com.gitee.pifeng.monitoring.ui.config;
 
-import com.gitee.pifeng.monitoring.ui.thirdauth.cas.CasClientConfigurationProperties;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.context.annotation.Configuration;
 
 /**
@@ -13,6 +12,7 @@ import org.springframework.context.annotation.Configuration;
  * @custom.date 2022/3/11 17:28
  */
 @Configuration
-@EnableConfigurationProperties(CasClientConfigurationProperties.class)
+// 开启了第三方认证，而且第三方认证为cas
+@ConditionalOnExpression("${third-auth.enable:false}&&'cas'.equalsIgnoreCase('${third-auth.type}')")
 public class CasSecurityConfig {
 }

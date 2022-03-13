@@ -1,0 +1,53 @@
+{
+  "hints": [],
+  "groups": [
+    {
+      "sourceType": "com.gitee.pifeng.monitoring.ui.thirdauth.property.ThirdAuthProperties",
+      "name": "third-auth",
+      "type": "com.gitee.pifeng.monitoring.ui.thirdauth.property.ThirdAuthProperties"
+    },
+    {
+      "sourceType": "com.gitee.pifeng.monitoring.ui.thirdauth.cas.CasConfigurationProperties",
+      "name": "cas",
+      "type": "com.gitee.pifeng.monitoring.ui.thirdauth.cas.CasConfigurationProperties"
+    }
+  ],
+  "properties": [
+    {
+      "sourceType": "com.gitee.pifeng.monitoring.ui.thirdauth.property.ThirdAuthProperties",
+      "name": "third-auth.enable",
+      "description": "是否开启第三方认证",
+      "type": "java.lang.Boolean"
+    },
+    {
+      "sourceType": "com.gitee.pifeng.monitoring.ui.thirdauth.property.ThirdAuthProperties",
+      "name": "third-auth.type",
+      "description": "第三方认证类型",
+      "type": "com.gitee.pifeng.monitoring.ui.thirdauth.constant.ThirdAuthTypeEnums"
+    },
+    {
+      "sourceType": "com.gitee.pifeng.monitoring.ui.thirdauth.cas.CasConfigurationProperties",
+      "name": "cas.server-url-prefix",
+      "description": "cas服务端地址",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.gitee.pifeng.monitoring.ui.thirdauth.cas.CasConfigurationProperties",
+      "name": "cas.server-login-url",
+      "description": "cas登录地址",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.gitee.pifeng.monitoring.ui.thirdauth.cas.CasConfigurationProperties",
+      "name": "cas.client-host-url",
+      "description": "cas客户端地址",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.gitee.pifeng.monitoring.ui.thirdauth.cas.CasConfigurationProperties",
+      "name": "cas.validation-type",
+      "description": "CAS协议验证类型",
+      "type": "com.gitee.pifeng.monitoring.ui.thirdauth.cas.ValidationTypeEnums"
+    }
+  ]
+}
