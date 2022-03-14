@@ -125,10 +125,12 @@ knife4j:
 
 ##############################################第三方认证配置#################################################
 third-auth:
-  enable: false
+  enable: true
   type: cas
 cas:
-  server-url-prefix:
-  server-login-url:
-  client-host-url:
+  key: phoenix
+  server-url-prefix: https://highway.com:8443/cas
+  server-login-url: ${cas.server-url-prefix}/login
+  server-logout-url: ${cas.server-url-prefix}/logout?service=${cas.client-host-url}/logout
+  client-host-url: http://127.0.0.1:${server.port}${server.servlet.context-path}
   validation-type: cas3

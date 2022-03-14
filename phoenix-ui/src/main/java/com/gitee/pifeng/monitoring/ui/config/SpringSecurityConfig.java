@@ -10,7 +10,6 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.RememberMeServices;
@@ -18,6 +17,7 @@ import org.springframework.security.web.authentication.rememberme.JdbcTokenRepos
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.session.FindByIndexNameSessionRepository;
 import org.springframework.session.Session;
+import org.springframework.session.jdbc.config.annotation.web.http.EnableJdbcHttpSession;
 import org.springframework.session.security.SpringSessionBackedSessionRegistry;
 import org.springframework.session.security.web.authentication.SpringSessionRememberMeServices;
 
@@ -33,48 +33,20 @@ import javax.sql.DataSource;
  */
 @Configuration
 @EnableWebSecurity
+@EnableJdbcHttpSession
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 // 未开启第三方认证
 @ConditionalOnExpression("!${third-auth.enable:false}")
-@EnableGlobalMethodSecurity(prePostEnabled = true)
-public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
-
-    @Autowired
-    private FindByIndexNameSessionRepository<? extends Session> sessionRepository;
-
-    /**
-     * 忽略URL
-     */
-    private static final String[] URLS = {
-            // 关闭端点
-            "/actuator/shutdown"
-    };
-
-    /**
-     * 忽略静态资源
-     */
-    private static final String[] RESOURCES = {
-            "/images/**",
-            "/js/**",
-            "/layui/**",
-            "/lib/**",
-            "/modules/**",
-            "/style/**",
-            "/tpl/**",
-            "/config.js",
-            //"/webjars/**",
-            //"/v2/**",
-            //"/swagger-resources/**",
-            //"/swagger-ui.html",
-            //"/docs.html",
-            //"/doc.html",
-            "/druid/**"
-    };
+public class SpringSecurityConfig extends BaseWebSecurityConfigurerAdapter {
 
     /**
      * 监控用户服务类
      */
     @Autowired
     private IMonitorUserService monitorUserService;
+
+    @Autowired
+    private FindByIndexNameSessionRepository<? extends Session> sessionRepository;
 
     /**
      * 数据源
@@ -96,6 +68,21 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
         // web.ignoring直接绕开spring security的所有filter，直接跳过验证
         web.ignoring().antMatchers(RESOURCES);
         web.ignoring().antMatchers(URLS);
+    }
+
+    /**
+     * <p>
+     * 设置认证提供者
+     * </p>
+     *
+     * @param builder 身份验证管理器生成器 {@link AuthenticationManagerBuilder}
+     * @author 皮锋
+     * @custom.date 2020/7/5 14:01
+     */
+    @Override
+    protected void configure(AuthenticationManagerBuilder builder) throws Exception {
+        super.configure(builder);
+        builder.userDetailsService(this.monitorUserService).passwordEncoder(this.passwordEncoder());
     }
 
     /**
@@ -160,6 +147,38 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
     /**
      * <p>
+     * 密码加密
+     * </p>
+     *
+     * @return {@link BCryptPasswordEncoder}
+     * @author 皮锋
+     * @custom.date 2020/7/5 14:00
+     */
+    @Bean
+    public BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    /**
+     * <p>
+     * 记住我
+     * </p>
+     *
+     * @return {@link RememberMeServices}
+     * @author 皮锋
+     * @custom.date 2021/10/1 17:55
+     */
+    @Bean
+    public RememberMeServices rememberMeServices() {
+        SpringSessionRememberMeServices rememberMeServices = new SpringSessionRememberMeServices();
+        // 60 * 60 * 24 * 30 = 一个月
+        rememberMeServices.setValiditySeconds(2592000);
+        rememberMeServices.setRememberMeParameterName("remember-me");
+        return rememberMeServices;
+    }
+
+    /**
+     * <p>
      * 持久化token
      * </p>
      * spring Security中，默认是使用PersistentTokenRepository的子类InMemoryTokenRepositoryImpl，将token放在内存中，<br>
@@ -191,52 +210,6 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public SessionRegistry sessionRegistry() {
         return new SpringSessionBackedSessionRegistry<>(this.sessionRepository);
-    }
-
-    /**
-     * <p>
-     * 自定义认证数据源
-     * </p>
-     *
-     * @param builder {@link AuthenticationManagerBuilder}
-     * @author 皮锋
-     * @custom.date 2020/7/5 14:01
-     */
-    @Override
-    protected void configure(AuthenticationManagerBuilder builder) throws Exception {
-        builder.userDetailsService(this.monitorUserService).passwordEncoder(this.passwordEncoder());
-    }
-
-    /**
-     * <p>
-     * 密码加密
-     * </p>
-     *
-     * @return {@link BCryptPasswordEncoder}
-     * @author 皮锋
-     * @custom.date 2020/7/5 14:00
-     */
-    @Bean
-    public BCryptPasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
-    /**
-     * <p>
-     * 记住我
-     * </p>
-     *
-     * @return {@link RememberMeServices}
-     * @author 皮锋
-     * @custom.date 2021/10/1 17:55
-     */
-    @Bean
-    public RememberMeServices rememberMeServices() {
-        SpringSessionRememberMeServices rememberMeServices = new SpringSessionRememberMeServices();
-        // 60 * 60 * 24 * 30 = 一个月
-        rememberMeServices.setValiditySeconds(2592000);
-        rememberMeServices.setRememberMeParameterName("remember-me");
-        return rememberMeServices;
     }
 
 }

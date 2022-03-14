@@ -7,7 +7,7 @@ import javax.validation.constraints.NotNull;
 
 /**
  * <p>
- * CAS客户端配置属性
+ * CAS配置属性
  * </p>
  *
  * @author 皮锋
@@ -16,6 +16,12 @@ import javax.validation.constraints.NotNull;
 @Data
 @ConfigurationProperties(prefix = "cas", ignoreUnknownFields = false)
 public class CasConfigurationProperties {
+
+    /**
+     * 秘钥
+     */
+    @NotNull
+    private String key;
 
     /**
      * cas服务端地址
@@ -28,6 +34,12 @@ public class CasConfigurationProperties {
      */
     @NotNull
     private String serverLoginUrl;
+
+    /**
+     * cas登出地址
+     */
+    @NotNull
+    private String serverLogoutUrl;
 
     /**
      * cas客户端地址

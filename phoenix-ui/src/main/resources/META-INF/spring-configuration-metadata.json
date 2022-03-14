@@ -27,6 +27,12 @@
     },
     {
       "sourceType": "com.gitee.pifeng.monitoring.ui.thirdauth.cas.CasConfigurationProperties",
+      "name": "cas.key",
+      "description": "秘钥",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.gitee.pifeng.monitoring.ui.thirdauth.cas.CasConfigurationProperties",
       "name": "cas.server-url-prefix",
       "description": "cas服务端地址",
       "type": "java.lang.String"
@@ -35,6 +41,12 @@
       "sourceType": "com.gitee.pifeng.monitoring.ui.thirdauth.cas.CasConfigurationProperties",
       "name": "cas.server-login-url",
       "description": "cas登录地址",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.gitee.pifeng.monitoring.ui.thirdauth.cas.CasConfigurationProperties",
+      "name": "cas.server-logout-url",
+      "description": "cas登出地址",
       "type": "java.lang.String"
     },
     {

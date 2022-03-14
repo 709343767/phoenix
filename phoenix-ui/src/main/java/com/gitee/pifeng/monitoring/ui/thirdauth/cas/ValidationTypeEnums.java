@@ -17,9 +17,5 @@ public enum ValidationTypeEnums {
     /**
      * CAS3
      */
-    CAS3,
-    /**
-     * SAML
-     */
-    SAML
+    CAS3
 }

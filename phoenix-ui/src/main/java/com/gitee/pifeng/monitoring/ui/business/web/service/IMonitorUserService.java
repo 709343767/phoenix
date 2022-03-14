@@ -7,7 +7,9 @@ import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorUser;
 import com.gitee.pifeng.monitoring.ui.business.web.realm.MonitorUserRealm;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.LayUiAdminResultVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.MonitorUserVo;
+import org.springframework.security.cas.authentication.CasAssertionAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.AuthenticationUserDetailsService;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
@@ -20,7 +22,7 @@ import java.util.List;
  * @author 皮锋
  * @custom.date 2020/7/1 17:39
  */
-public interface IMonitorUserService extends IService<MonitorUser>, UserDetailsService {
+public interface IMonitorUserService extends IService<MonitorUser>, AuthenticationUserDetailsService<CasAssertionAuthenticationToken>, UserDetailsService {
 
     /**
      * <p>

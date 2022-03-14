@@ -20,6 +20,7 @@ import com.google.common.collect.Lists;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.cas.authentication.CasAssertionAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.session.SessionRegistry;
@@ -112,6 +113,29 @@ public class MonitorUserServiceImpl extends ServiceImpl<IMonitorUserDao, Monitor
         return new MonitorUserRealm(monitorUser.getId(), monitorUser.getUsername(), account, monitorUser.getPassword(),
                 monitorUser.getRoleId(), monitorUser.getRegisterTime(), monitorUser.getUpdateTime(), monitorUser.getEmail(),
                 monitorUser.getRemarks(), grantedAuthorityList);
+    }
+
+    /**
+     * <p>
+     * 根据cas认证token获取用户
+     * </p>
+     *
+     * @param token {@link CasAssertionAuthenticationToken}
+     * @return {@link UserDetails}
+     * @author 皮锋
+     * @custom.date 2022/3/14 10:53
+     */
+    @Override
+    public UserDetails loadUserDetails(CasAssertionAuthenticationToken token) throws UsernameNotFoundException {
+        String account = token.getName();
+        UserDetails userDetails;
+        try {
+            userDetails = this.loadUserByUsername(account);
+        } catch (UsernameNotFoundException e) {
+            // 第三方认证没找到用户，用默认用户 guest 登录
+            userDetails = this.loadUserByUsername("guest");
+        }
+        return userDetails;
     }
 
     /**

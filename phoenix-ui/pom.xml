@@ -56,6 +56,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
+        <!-- spring security与CAS集成依赖 -->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-cas</artifactId>
+        </dependency>
         <!-- 数据库session管理依赖 -->
         <dependency>
             <groupId>org.springframework.session</groupId>
