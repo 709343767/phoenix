@@ -68,6 +68,12 @@ public class MonitorTcpIp {
     private String status;
 
     /**
+     * 平均响应时间（毫秒）
+     */
+    @TableField("AVG_TIME")
+    private String avgTime;
+
+    /**
      * 离线次数
      */
     @TableField("OFFLINE_COUNT")

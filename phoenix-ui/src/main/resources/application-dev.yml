@@ -25,7 +25,7 @@ spring:
 
 ##############################################第三方认证配置#################################################
 third-auth:
-  enable: true
+  enable: false
   type: cas
 cas:
   key: phoenix

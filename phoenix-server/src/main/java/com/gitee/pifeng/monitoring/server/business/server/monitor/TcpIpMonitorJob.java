@@ -86,16 +86,19 @@ public class TcpIpMonitorJob extends QuartzJobBean {
                 threadPoolExecutor.execute(() -> {
                     // 测试telnet能否成功
                     Map<String, Object> telnet = NetUtils.telnetVT200(ipTarget, portTarget, protocolEnum);
+                    // 是否能telnet通
                     boolean isConnected = Boolean.parseBoolean(String.valueOf(telnet.get("isConnect")));
+                    // 平均时间（毫秒）
+                    String avgTime = String.valueOf(telnet.get("avgTime"));
                     // TCP/IP服务正常
                     if (isConnected) {
                         // 处理TCP/IP服务正常
-                        this.connected(monitorTcpIp);
+                        this.connected(monitorTcpIp, avgTime);
                     }
                     // TCP/IP服务异常
                     else {
                         // 处理TCP/IP服务异常
-                        this.disconnected(monitorTcpIp);
+                        this.disconnected(monitorTcpIp, avgTime);
                     }
                 });
             }
@@ -110,10 +113,11 @@ public class TcpIpMonitorJob extends QuartzJobBean {
      * </p>
      *
      * @param monitorTcpIp TCP/IP信息表
+     * @param avgTime      平均时间（毫秒）
      * @author 皮锋
      * @custom.date 2022/1/12 11:30
      */
-    private void disconnected(MonitorTcpIp monitorTcpIp) {
+    private void disconnected(MonitorTcpIp monitorTcpIp, String avgTime) {
         try {
             this.sendAlarmInfo("TCP/IP服务中断", AlarmLevelEnums.FATAL, AlarmReasonEnums.NORMAL_2_ABNORMAL, monitorTcpIp);
         } catch (Exception e) {
@@ -127,6 +131,7 @@ public class TcpIpMonitorJob extends QuartzJobBean {
             monitorTcpIp.setOfflineCount(offlineCount + 1);
         }
         monitorTcpIp.setStatus(ZeroOrOneConstants.ZERO);
+        monitorTcpIp.setAvgTime(avgTime);
         monitorTcpIp.setUpdateTime(new Date());
         // 更新数据库
         this.tcpIpService.updateById(monitorTcpIp);
@@ -138,10 +143,11 @@ public class TcpIpMonitorJob extends QuartzJobBean {
      * </p>
      *
      * @param monitorTcpIp TCP/IP信息表
+     * @param avgTime      平均时间（毫秒）
      * @author 皮锋
      * @custom.date 2022/1/12 11:27
      */
-    private void connected(MonitorTcpIp monitorTcpIp) {
+    private void connected(MonitorTcpIp monitorTcpIp, String avgTime) {
         try {
             if (StringUtils.isNotBlank(monitorTcpIp.getStatus())) {
                 this.sendAlarmInfo("TCP/IP服务恢复", AlarmLevelEnums.INFO, AlarmReasonEnums.ABNORMAL_2_NORMAL, monitorTcpIp);
@@ -150,6 +156,7 @@ public class TcpIpMonitorJob extends QuartzJobBean {
             log.error("TCP/IP服务告警异常！", e);
         }
         monitorTcpIp.setStatus(ZeroOrOneConstants.ONE);
+        monitorTcpIp.setAvgTime(avgTime);
         monitorTcpIp.setUpdateTime(new Date());
         // 更新数据库
         this.tcpIpService.updateById(monitorTcpIp);
