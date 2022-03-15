@@ -280,6 +280,7 @@
                         return layer.msg('请选择数据');
                     }
                     layer.confirm('确定删除吗？', function (index) {
+                        var loading = layer.load();
                         admin.req({
                             type: 'delete',
                             url: ctxPath + 'monitor-instance/delete-monitor-instance',
@@ -297,9 +298,14 @@
                                 } else {
                                     layer.msg('删除失败！', {icon: 5, shift: 6});
                                 }
+                                layer.close(loading);
                             },
                             error: function () {
                                 layer.msg('系统错误！', {icon: 5, shift: 6});
+                                layer.close(loading);
+                            },
+                            complete: function () {
+                                layer.close(loading);
                             }
                         });
                     });
@@ -311,6 +317,7 @@
             var data = obj.data;
             if (obj.event === 'del') {
                 layer.confirm('确定删除吗？', function (index) {
+                    var loading = layer.load();
                     admin.req({
                         type: 'delete',
                         url: ctxPath + 'monitor-instance/delete-monitor-instance',
@@ -329,9 +336,14 @@
                             } else {
                                 layer.msg('删除失败！', {icon: 5, shift: 6});
                             }
+                            layer.close(loading);
                         },
                         error: function () {
                             layer.msg('系统错误！', {icon: 5, shift: 6});
+                            layer.close(loading);
+                        },
+                        complete: function () {
+                            layer.close(loading);
                         }
                     });
                 });
@@ -399,6 +411,7 @@
                         //监听提交
                         iframeWindow.layui.form.on('submit(' + submitID + ')', function (data) {
                             var field = data.field; //获取提交的字段
+                            var loading = layer.load();
                             admin.req({
                                 type: 'delete',
                                 url: ctxPath + 'monitor-instance/clear-monitor-instance-history',
@@ -417,9 +430,14 @@
                                     } else {
                                         layer.msg('清理失败！', {icon: 5, shift: 6});
                                     }
+                                    layer.close(loading);
                                 },
                                 error: function () {
                                     layer.msg('系统错误！', {icon: 5, shift: 6});
+                                    layer.close(loading);
+                                },
+                                complete: function () {
+                                    layer.close(loading);
                                 }
                             });
                         });
