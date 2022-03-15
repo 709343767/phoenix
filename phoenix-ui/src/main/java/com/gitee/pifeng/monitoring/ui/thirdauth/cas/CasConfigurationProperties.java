@@ -20,8 +20,7 @@ public class CasConfigurationProperties {
     /**
      * 秘钥
      */
-    @NotNull
-    private String key;
+    private String key = "phoenix";
 
     /**
      * cas服务端地址
@@ -50,5 +49,5 @@ public class CasConfigurationProperties {
     /**
      * CAS协议验证类型
      */
-    private ValidationTypeEnums validationType;
+    private ValidationTypeEnums validationType = ValidationTypeEnums.CAS3;
 }

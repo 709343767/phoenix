@@ -53,7 +53,7 @@
 - 运行环境
 
   Maven3+  
-  Jdk1.8  
+  Jdk1.8(1.8.0_131到1.8.0_241)
   Lombok  
   Mysql5.7+
   
@@ -231,6 +231,30 @@ public class MonitoringUiProdConfig {
 
 秘钥可通过 **com.gitee.pifeng.monitoring.common.util.secure.SecureUtilsTest#testGenerateKey** 方法生成，然后填入配置文件。
 
+#### 第三方登录认证配置
+
+监控UI端除了支持直接登录认证外，还支持第三方登录认证，只需在application.yml（application-{profile}.yml）配置文件中增加对应配置项即可使用。
+
+> 第三方登录认证配置说明：
+
+  |配置项                 |含义                                        |必须项                         |默认值| 
+  |----------------------|--------------------------------------------|-------------------------------|-----|
+  |third-auth.enable     |是否开启第三方认证                            |否                             |false |
+  |third-auth.type       |第三方认证类型（CAS）                         |否                             |      |
+ 
+> apereo cas登录认证配置说明：
+ 
+  如果 third-auth.enable=true && third-auth.type=cas ，则需要进行cas配置。
+
+  |配置项                     |含义                                        |必须项                         |默认值 | 
+  |--------------------------|--------------------------------------------|------------------------------|-------|
+  |cas.key                   |秘钥                                        |否                             |phoenix|
+  |cas.server-url-prefix     |cas服务端地址                                |是                             |       |
+  |cas.server-login-url      |cas登录地址                                  |是                             |      |
+  |cas.server-logout-url     |cas登出地址                                  |是                             |      |
+  |cas.client-host-url       |cas客户端地址                                |是                             |      |
+  |cas.validation-type       |CAS协议验证类型（CAS、CAS3）                  |否                             |CAS3  |
+  
 ### 客户端开启监控
 
 - 普通Java程序
