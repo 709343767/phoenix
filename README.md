@@ -233,7 +233,7 @@ public class MonitoringUiProdConfig {
 
 #### 第三方登录认证配置
 
-监控UI端除了支持直接登录认证外，还支持第三方登录认证，只需在application.yml（application-{profile}.yml）配置文件中增加对应配置项即可使用。
+监控UI端除了支持直接登录认证外，还支持第三方登录认证，只需在application.yml（或者application-{profile}.yml）配置文件中增加对应配置项即可使用。
 
 > 第三方登录认证配置说明：
 
