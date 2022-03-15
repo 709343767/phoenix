@@ -11,7 +11,6 @@ import com.gitee.pifeng.monitoring.common.util.server.IpAddressUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
-import java.io.IOException;
 import java.util.Properties;
 
 /**
@@ -69,8 +68,8 @@ public class ConfigLoader {
         try {
             properties = PropertiesUtils.loadProperties(configPath + configName);
             log.info("监控配置项：{}", properties.toString());
-        } catch (IOException e) {
-            throw new NotFoundConfigFileException("监控程序找不到配置文件！");
+        } catch (Exception e) {
+            throw new NotFoundConfigFileException("监控程序找不到监控配置文件！");
         }
         // 解析配置文件
         analysis(properties);

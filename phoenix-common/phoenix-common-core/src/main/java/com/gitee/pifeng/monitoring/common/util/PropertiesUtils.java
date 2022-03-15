@@ -4,7 +4,6 @@ import lombok.Cleanup;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
@@ -39,11 +38,11 @@ public final class PropertiesUtils {
      *
      * @param filePath 文件路径
      * @return {@link Properties}
-     * @throws IOException IO异常
+     * @throws Exception 异常
      * @author 皮锋
      * @custom.date 2020年3月5日 上午11:41:13
      */
-    public static Properties loadProperties(final String filePath) throws IOException {
+    public static Properties loadProperties(final String filePath) throws Exception {
         try {
             // 属性集合对象
             Properties properties = new Properties();
@@ -58,9 +57,9 @@ public final class PropertiesUtils {
             // 将属性文件流装载到Properties对象中
             properties.load(bf);
             return properties;
-        } catch (IOException e) {
+        } catch (Exception e) {
             log.error("读properties属性文件异常！", e);
-            throw new IOException(e);
+            throw new Exception(e);
         }
     }
 
