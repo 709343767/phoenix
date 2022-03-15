@@ -185,6 +185,7 @@ public class SpringSecurityCasConfig extends BaseWebSecurityConfigurerAdapter {
      * </p>
      *
      * @return {@link CasAuthenticationFilter}
+     * @throws Exception 异常
      * @author 皮锋
      * @custom.date 2022/3/14 9:54
      */
