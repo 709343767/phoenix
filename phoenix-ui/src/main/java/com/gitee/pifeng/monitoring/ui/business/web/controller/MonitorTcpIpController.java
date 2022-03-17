@@ -31,7 +31,7 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/monitor-tcpip")
-@Api(tags = "TCP/IP")
+@Api(tags = "TCPIP")
 public class MonitorTcpIpController {
 
     /**
@@ -194,6 +194,28 @@ public class MonitorTcpIpController {
         String sourceIp = this.monitorNetService.getSourceIp();
         monitorTcpIpVo.setIpSource(sourceIp);
         return this.monitorTcpIpService.editMonitorTcpIp(monitorTcpIpVo);
+    }
+
+    /**
+     * <p>
+     * 访问平均时间页面
+     * </p>
+     *
+     * @param id TCP/IP ID
+     * @return {@link ModelAndView} 平均时间页面
+     * @author 皮锋
+     * @custom.date 2022/3/17 11:13
+     */
+    @ApiOperation(value = "访问平均时间页面")
+    @ApiImplicitParams(value = {
+            @ApiImplicitParam(name = "id", value = "TCP/IP ID", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class)})
+    @GetMapping("/avg-time")
+    public ModelAndView avgTime(Long id) {
+        MonitorTcpIp monitorTcpIp = this.monitorTcpIpService.getById(id);
+        MonitorTcpIpVo monitorTcpIpVo = MonitorTcpIpVo.builder().build().convertFor(monitorTcpIp);
+        ModelAndView mv = new ModelAndView("tcpip/avg-time");
+        mv.addObject(monitorTcpIpVo);
+        return mv;
     }
 
 }

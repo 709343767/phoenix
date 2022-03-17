@@ -12,7 +12,9 @@ import com.gitee.pifeng.monitoring.common.util.server.NetUtils;
 import com.gitee.pifeng.monitoring.server.business.server.core.MonitoringConfigPropertiesLoader;
 import com.gitee.pifeng.monitoring.server.business.server.core.PackageConstructor;
 import com.gitee.pifeng.monitoring.server.business.server.entity.MonitorTcpIp;
+import com.gitee.pifeng.monitoring.server.business.server.entity.MonitorTcpIpHistory;
 import com.gitee.pifeng.monitoring.server.business.server.service.IAlarmService;
+import com.gitee.pifeng.monitoring.server.business.server.service.ITcpIpHistoryService;
 import com.gitee.pifeng.monitoring.server.business.server.service.ITcpIpService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -52,6 +54,12 @@ public class TcpIpMonitorJob extends QuartzJobBean {
      */
     @Autowired
     private ITcpIpService tcpIpService;
+
+    /**
+     * TCP/IP信息历史记录服务类
+     */
+    @Autowired
+    private ITcpIpHistoryService tcpIpHistoryService;
 
     /**
      * <p>
@@ -130,11 +138,26 @@ public class TcpIpMonitorJob extends QuartzJobBean {
             int offlineCount = monitorTcpIp.getOfflineCount() == null ? 0 : monitorTcpIp.getOfflineCount();
             monitorTcpIp.setOfflineCount(offlineCount + 1);
         }
+        Date date = new Date();
         monitorTcpIp.setStatus(ZeroOrOneConstants.ZERO);
         monitorTcpIp.setAvgTime(avgTime);
-        monitorTcpIp.setUpdateTime(new Date());
+        monitorTcpIp.setUpdateTime(date);
         // 更新数据库
         this.tcpIpService.updateById(monitorTcpIp);
+        // 添加历史记录
+        MonitorTcpIpHistory monitorTcpIpHistory = new MonitorTcpIpHistory();
+        monitorTcpIpHistory.setTcpipId(monitorTcpIp.getId());
+        monitorTcpIpHistory.setIpSource(monitorTcpIp.getIpSource());
+        monitorTcpIpHistory.setIpTarget(monitorTcpIp.getIpTarget());
+        monitorTcpIpHistory.setPortTarget(monitorTcpIp.getPortTarget());
+        monitorTcpIpHistory.setDescr(monitorTcpIp.getDescr());
+        monitorTcpIpHistory.setProtocol(monitorTcpIp.getProtocol());
+        monitorTcpIpHistory.setStatus(monitorTcpIp.getStatus());
+        monitorTcpIpHistory.setAvgTime(monitorTcpIp.getAvgTime());
+        monitorTcpIpHistory.setOfflineCount(monitorTcpIp.getOfflineCount());
+        monitorTcpIpHistory.setInsertTime(date);
+        monitorTcpIpHistory.setUpdateTime(date);
+        this.tcpIpHistoryService.save(monitorTcpIpHistory);
     }
 
     /**
@@ -155,11 +178,26 @@ public class TcpIpMonitorJob extends QuartzJobBean {
         } catch (Exception e) {
             log.error("TCP/IP服务告警异常！", e);
         }
+        Date date = new Date();
         monitorTcpIp.setStatus(ZeroOrOneConstants.ONE);
         monitorTcpIp.setAvgTime(avgTime);
-        monitorTcpIp.setUpdateTime(new Date());
+        monitorTcpIp.setUpdateTime(date);
         // 更新数据库
         this.tcpIpService.updateById(monitorTcpIp);
+        // 添加历史记录
+        MonitorTcpIpHistory monitorTcpIpHistory = new MonitorTcpIpHistory();
+        monitorTcpIpHistory.setTcpipId(monitorTcpIp.getId());
+        monitorTcpIpHistory.setIpSource(monitorTcpIp.getIpSource());
+        monitorTcpIpHistory.setIpTarget(monitorTcpIp.getIpTarget());
+        monitorTcpIpHistory.setPortTarget(monitorTcpIp.getPortTarget());
+        monitorTcpIpHistory.setDescr(monitorTcpIp.getDescr());
+        monitorTcpIpHistory.setProtocol(monitorTcpIp.getProtocol());
+        monitorTcpIpHistory.setStatus(monitorTcpIp.getStatus());
+        monitorTcpIpHistory.setAvgTime(monitorTcpIp.getAvgTime());
+        monitorTcpIpHistory.setOfflineCount(monitorTcpIp.getOfflineCount());
+        monitorTcpIpHistory.setInsertTime(date);
+        monitorTcpIpHistory.setUpdateTime(date);
+        this.tcpIpHistoryService.save(monitorTcpIpHistory);
     }
 
     /**

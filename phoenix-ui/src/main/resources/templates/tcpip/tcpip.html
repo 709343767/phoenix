@@ -96,6 +96,16 @@
                    sec:authorize="hasAuthority('超级管理员')">
                     <i class="layui-icon layui-icon-delete"></i>删除</a>
             </script>
+            <!-- TCPIP平均响应时间 -->
+            <script type="text/html" id="avgTimeTpl">
+                {{#  if(d.avgTime <= 30){ }}
+                <i class="layui-btn layui-btn-normal layui-btn-xs layui-btn-radius" lay-event="avgTimeHistory">{{d.avgTime}}</i>
+                {{#  }if(d.avgTime >30 && d.avgTime <= 60){ }}
+                <i class="layui-btn layui-btn-warm layui-btn-xs layui-btn-radius" lay-event="avgTimeHistory">{{d.avgTime}}</i>
+                {{#  }if(d.avgTime > 60){ }}
+                <i class="layui-btn layui-btn-danger layui-btn-xs layui-btn-radius" lay-event="avgTimeHistory">{{d.avgTime}}</i>
+                {{#  } }}
+            </script>
         </div>
     </div>
 </div>
@@ -190,6 +200,7 @@
                     field: 'avgTime',
                     title: '响应时间(ms)',
                     minWidth: 130,
+                    toolbar: '#avgTimeTpl',
                     sort: !0
                 }, {
                     field: 'offlineCount',
@@ -248,6 +259,7 @@
                         return layer.msg('请选择数据');
                     }
                     layer.confirm('确定删除吗？', function (index) {
+                        var loading = layer.load();
                         admin.req({
                             type: 'delete',
                             url: ctxPath + 'monitor-tcpip/delete-monitor-tcpip',
@@ -265,9 +277,14 @@
                                 } else {
                                     layer.msg('删除失败！', {icon: 5, shift: 6});
                                 }
+                                layer.close(loading);
                             },
                             error: function () {
                                 layer.msg('系统错误！', {icon: 5, shift: 6});
+                                layer.close(loading);
+                            },
+                            complete: function () {
+                                layer.close(loading);
                             }
                         });
                     });
@@ -339,6 +356,7 @@
             var data = obj.data;
             if (obj.event === 'del') {
                 layer.confirm('确定删除吗？', function (index) {
+                    var loading = layer.load();
                     admin.req({
                         type: 'delete',
                         url: ctxPath + 'monitor-tcpip/delete-monitor-tcpip',
@@ -357,9 +375,14 @@
                             } else {
                                 layer.msg('删除失败！', {icon: 5, shift: 6});
                             }
+                            layer.close(loading);
                         },
                         error: function () {
                             layer.msg('系统错误！', {icon: 5, shift: 6});
+                            layer.close(loading);
+                        },
+                        complete: function () {
+                            layer.close(loading);
                         }
                     });
                 });
@@ -420,6 +443,37 @@
                             });
                         });
                         submit.trigger('click');
+                    }
+                });
+            } else if (obj.event === 'avgTimeHistory') {
+                // 宽度
+                var width;
+                // 高度
+                var height;
+                // 移动端
+                if (device.ios || device.android) {
+                    // 宽度
+                    width = document.body.clientWidth * 0.8 + 'px';
+                    // 高度
+                    height = document.body.clientHeight * 0.55 + 'px';
+                } else {
+                    // 宽度
+                    width = document.body.clientWidth * 0.8 + 'px';
+                    // 高度
+                    height = document.body.clientHeight * 0.8 + 'px';
+                }
+                layer.open({
+                    type: 2,
+                    title: 'TCP/IP响应时间',
+                    content: ctxPath + 'monitor-tcpip/avg-time?id=' + data.id,
+                    maxmin: true,
+                    shade: 0,
+                    moveOut: true,
+                    area: [width, height],
+                    success: function (layero, index) {
+                        // 在回调方法中的第2个参数“index”表示的是当前弹窗的索引
+                        // 通过layer.full方法将窗口放大
+                        layer.full(index);
                     }
                 });
             }

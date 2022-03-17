@@ -11,11 +11,11 @@ import java.util.Date;
 
 /**
  * <p>
- * 服务器详情页面服务器进程图表信息表现层对象
+ * TCPIP连接耗时图表信息表现层对象
  * </p>
  *
  * @author 皮锋
- * @custom.date 2021/9/18 12:53
+ * @custom.date 2022/3/17 21:42
  */
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = false)
@@ -25,11 +25,11 @@ import java.util.Date;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel(value = "服务器详情页面服务器进程图表信息表现层对象")
-public class ServerDetailPageServerProcessChartVo implements ISuperBean {
+@ApiModel(value = "TCPIP连接耗时图表信息表现层对象")
+public class TcpIpAvgTimeChartVo implements ISuperBean {
 
-    @ApiModelProperty(value = "正在运行的进程数")
-    private Integer processNum;
+    @ApiModelProperty(value = "平均响应时间（毫秒）")
+    private Long avgTime;
 
     @JsonFormat(pattern = "yyyy/MM/dd HH:mm:ss", timezone = "GMT+8")
     @ApiModelProperty(value = "新增时间")

@@ -8,7 +8,9 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gitee.pifeng.monitoring.common.constant.ZeroOrOneConstants;
 import com.gitee.pifeng.monitoring.ui.business.web.dao.IMonitorTcpIpDao;
+import com.gitee.pifeng.monitoring.ui.business.web.dao.IMonitorTcpIpHistoryDao;
 import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorTcpIp;
+import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorTcpIpHistory;
 import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorTcpIpService;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.HomeTcpIpVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.LayUiAdminResultVo;
@@ -40,6 +42,12 @@ public class MonitorTcpIpServiceImpl extends ServiceImpl<IMonitorTcpIpDao, Monit
      */
     @Autowired
     private IMonitorTcpIpDao monitorTcpIpDao;
+
+    /**
+     * TCP/IP信息历史记录数据访问对象
+     */
+    @Autowired
+    private IMonitorTcpIpHistoryDao monitorTcpIpHistoryDao;
 
     /**
      * <p>
@@ -115,6 +123,11 @@ public class MonitorTcpIpServiceImpl extends ServiceImpl<IMonitorTcpIpDao, Monit
         for (MonitorTcpIpVo monitorTcpIpVo : monitorTcpIpVos) {
             ids.add(monitorTcpIpVo.getId());
         }
+        // 删除TCPIP历史记录表
+        LambdaUpdateWrapper<MonitorTcpIpHistory> monitorTcpIpHistoryLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+        monitorTcpIpHistoryLambdaUpdateWrapper.in(MonitorTcpIpHistory::getTcpipId, ids);
+        this.monitorTcpIpHistoryDao.delete(monitorTcpIpHistoryLambdaUpdateWrapper);
+        // 删除TCPIP信息表
         LambdaUpdateWrapper<MonitorTcpIp> monitorTcpIpLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
         monitorTcpIpLambdaUpdateWrapper.in(MonitorTcpIp::getId, ids);
         this.monitorTcpIpDao.delete(monitorTcpIpLambdaUpdateWrapper);
