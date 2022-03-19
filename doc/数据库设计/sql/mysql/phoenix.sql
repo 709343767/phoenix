@@ -862,6 +862,33 @@ CREATE TABLE `MONITOR_TCPIP`
   ROW_FORMAT = Dynamic;
 
 -- ----------------------------
+-- Table structure for MONITOR_TCPIP_HISTORY
+-- ----------------------------
+DROP TABLE IF EXISTS `MONITOR_TCPIP_HISTORY`;
+CREATE TABLE `MONITOR_TCPIP_HISTORY`
+(
+    `ID`            bigint(20)                                                    NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `TCPIP_ID`      bigint(20)                                                    NOT NULL COMMENT 'TCPIP主表ID',
+    `IP_SOURCE`     varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT 'IP地址（来源）',
+    `IP_TARGET`     varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT 'IP地址（目的地）',
+    `PORT_TARGET`   int(8)                                                        NOT NULL COMMENT '端口号',
+    `DESCR`         varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '描述',
+    `PROTOCOL`      varchar(8) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci   NULL DEFAULT NULL COMMENT '协议',
+    `AVG_TIME`      bigint(20)                                                    NULL DEFAULT NULL COMMENT '平均响应时间（毫秒）',
+    `STATUS`        varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci   NULL DEFAULT NULL COMMENT '状态（0：不通，1：正常）',
+    `OFFLINE_COUNT` int(8)                                                        NULL DEFAULT NULL COMMENT '离线次数',
+    `INSERT_TIME`   datetime                                                      NOT NULL COMMENT '新增时间',
+    `UPDATE_TIME`   datetime                                                      NULL DEFAULT NULL COMMENT '更新时间',
+    PRIMARY KEY (`ID`) USING BTREE,
+    INDEX `NX_TCPIP_ID` (`TCPIP_ID`) USING BTREE COMMENT '索引_TCPIP主表ID',
+    INDEX `NX_INSERT_TIME` (`INSERT_TIME`) USING BTREE COMMENT '索引_插入时间',
+    CONSTRAINT `MONITOR_TCPIP_HISTORY_TCPIP_FK` FOREIGN KEY (`TCPIP_ID`) REFERENCES `MONITOR_TCPIP` (`ID`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB
+  CHARACTER SET = utf8mb4
+  COLLATE = utf8mb4_general_ci COMMENT = 'TCP/IP信息历史记录表'
+  ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
 -- Table structure for MONITOR_USER
 -- ----------------------------
 DROP TABLE IF EXISTS `MONITOR_USER`;
