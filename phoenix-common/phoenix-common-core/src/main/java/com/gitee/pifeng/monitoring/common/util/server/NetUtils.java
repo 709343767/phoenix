@@ -425,7 +425,7 @@ public class NetUtils {
         // 返回值
         Map<String, Object> result = Maps.newHashMap();
         result.put("isConnect", isConnect);
-        result.put("avgTime", isConnect ? avgTime : "未知");
+        result.put("avgTime", avgTime);
         return result;
     }
 

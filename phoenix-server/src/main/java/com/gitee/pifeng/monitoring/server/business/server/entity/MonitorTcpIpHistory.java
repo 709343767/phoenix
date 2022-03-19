@@ -77,7 +77,7 @@ public class MonitorTcpIpHistory {
      * 平均响应时间（毫秒）
      */
     @TableField("AVG_TIME")
-    private String avgTime;
+    private Long avgTime;
 
     /**
      * 离线次数

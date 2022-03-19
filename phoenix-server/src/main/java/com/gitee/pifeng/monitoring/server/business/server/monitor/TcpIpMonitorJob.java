@@ -97,7 +97,7 @@ public class TcpIpMonitorJob extends QuartzJobBean {
                     // 是否能telnet通
                     boolean isConnected = Boolean.parseBoolean(String.valueOf(telnet.get("isConnect")));
                     // 平均时间（毫秒）
-                    String avgTime = String.valueOf(telnet.get("avgTime"));
+                    Long avgTime = Long.valueOf(String.valueOf(telnet.get("avgTime")));
                     // TCP/IP服务正常
                     if (isConnected) {
                         // 处理TCP/IP服务正常
@@ -125,7 +125,7 @@ public class TcpIpMonitorJob extends QuartzJobBean {
      * @author 皮锋
      * @custom.date 2022/1/12 11:30
      */
-    private void disconnected(MonitorTcpIp monitorTcpIp, String avgTime) {
+    private void disconnected(MonitorTcpIp monitorTcpIp, Long avgTime) {
         try {
             this.sendAlarmInfo("TCP/IP服务中断", AlarmLevelEnums.FATAL, AlarmReasonEnums.NORMAL_2_ABNORMAL, monitorTcpIp);
         } catch (Exception e) {
@@ -170,7 +170,7 @@ public class TcpIpMonitorJob extends QuartzJobBean {
      * @author 皮锋
      * @custom.date 2022/1/12 11:27
      */
-    private void connected(MonitorTcpIp monitorTcpIp, String avgTime) {
+    private void connected(MonitorTcpIp monitorTcpIp, Long avgTime) {
         try {
             if (StringUtils.isNotBlank(monitorTcpIp.getStatus())) {
                 this.sendAlarmInfo("TCP/IP服务恢复", AlarmLevelEnums.INFO, AlarmReasonEnums.ABNORMAL_2_NORMAL, monitorTcpIp);

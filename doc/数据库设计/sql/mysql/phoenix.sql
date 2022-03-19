@@ -848,7 +848,7 @@ CREATE TABLE `MONITOR_TCPIP`
     `PORT_TARGET`   int(8)                                                        NOT NULL COMMENT '端口号',
     `DESCR`         varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '描述',
     `PROTOCOL`      varchar(8) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci   NULL DEFAULT NULL COMMENT '协议',
-    `AVG_TIME`      varchar(8) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci   NULL DEFAULT NULL COMMENT '平均响应时间（毫秒）',
+    `AVG_TIME`      bigint(20)                                                    NULL DEFAULT NULL COMMENT '平均响应时间（毫秒）',
     `STATUS`        varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci   NULL DEFAULT NULL COMMENT '状态（0：不通，1：正常）',
     `OFFLINE_COUNT` int(8)                                                        NULL DEFAULT NULL COMMENT '离线次数',
     `INSERT_TIME`   datetime                                                      NOT NULL COMMENT '新增时间',

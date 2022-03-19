@@ -33,6 +33,7 @@
             }
         });
 
+        // 发送ajax请求，获取TCPIP平均时间
         function getAvgTimeChartInfo(id, ipSource, ipTarget, portTarget, protocol, startTime, endTime) {
             admin.req({
                 type: 'get',
@@ -53,22 +54,42 @@
                 },
                 success: function (result) {
                     var data = result.data;
-                    debugger;
-                    // 耗时
-                    var avgTime = data.map(function (item) {
+                    // 所有
+                    var allList = data.allList;
+                    // 离线
+                    var offLineList = data.offLineList;
+                    // 所有耗时
+                    var avgTime = allList.map(function (item) {
                         return item.avgTime;
                     });
                     // 新增时间
-                    var insertTime = data.map(function (item) {
+                    var insertTime = allList.map(function (item) {
                         return item.insertTime.replace(' ', '\n');
                     });
+                    // 标记点
+                    var markPointData = [];
+                    for (var i = 0; i < offLineList.length; i++) {
+                        var offLine = offLineList[i];
+                        markPointData.push({
+                            yAxis: offLine.avgTime,
+                            xAxis: offLine.insertTime.replace(' ', '\n'),
+                            value: '离线',
+                            itemStyle: {
+                                color: '#E13C00'
+                            }
+                        });
+                    }
                     var option = {
                         title: {
                             text: 'TCP/IP耗时',
                             left: 'center',
                             textStyle: {
                                 color: '#696969',
-                                fontSize: 14
+                                fontSize: 18
+                            },
+                            subtext: 'IP地址（来源）：' + ipSource + '，IP地址（目的地）：' + ipTarget + '，端口号：' + portTarget + '，协议：' + protocol,
+                            subtextStyle: {
+                                color: '#BEBEBE'
                             }
                         },
                         // 鼠标移到折线上展示数据
@@ -87,8 +108,8 @@
                         },
                         legend: {
                             data: ['耗时'],
-                            x: 'center',
-                            y: '5%',
+                            x: '60%',
+                            y: '4',
                             orient: 'horizontal'
                         },
                         /*dataZoom: [{
@@ -117,8 +138,8 @@
                             showTitle: false,
                         },
                         grid: {
-                            left: '2%',
-                            right: '50'
+                            left: '80',
+                            right: '80'
                         },
                         xAxis: {
                             type: 'category',
@@ -126,14 +147,25 @@
                             boundaryGap: false,
                             data: insertTime,
                             axisLabel: {
-                                rotate: 0 //调整数值改变倾斜的幅度（范围-90到90）
+                                rotate: 0, //调整数值改变倾斜的幅度（范围-90到90）
+                                textStyle: {
+                                    // color: '#c3dbff',  //更改坐标轴文字颜色
+                                    fontSize: 14      //更改坐标轴文字大小
+                                }
                             }
                         },
                         yAxis: [{
                             type: 'value',
                             name: 'ms',
+                            nameTextStyle: {
+                                fontSize: 18      //更改坐标轴文字大小
+                            },
                             axisLabel: {
-                                formatter: '{value}'
+                                formatter: '{value}',
+                                textStyle: {
+                                    // color: '#c3dbff',  //更改坐标轴文字颜色
+                                    fontSize: 14      //更改坐标轴文字大小
+                                }
                             }
                         }],
                         // 数据
@@ -143,6 +175,29 @@
                             data: avgTime,
                             type: 'line',
                             smooth: true,
+                            markPoint: {
+                                data: markPointData
+                            },
+                            markLine: {
+                                data: [
+                                    {
+                                        type: 'average',//平均线
+                                        name: '平均线',
+                                        itemStyle: {
+                                            color: '#5FB878'
+                                        }
+                                    }, {
+                                        yAxis: 30,
+                                        itemStyle: {
+                                            color: '#2E90D1'
+                                        }
+                                    }, {
+                                        yAxis: 60,
+                                        itemStyle: {
+                                            color: '#E13C00'
+                                        }
+                                    }]
+                            },
                             areaStyle: {
                                 type: 'default',
                                 // 渐变色实现

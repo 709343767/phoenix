@@ -4,8 +4,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorTcpIpHistory;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.TcpIpAvgTimeChartVo;
 
-import java.util.List;
-
 /**
  * <p>
  * TCP/IP信息历史记录服务类
@@ -32,5 +30,5 @@ public interface IMonitorTcpIpHistoryService extends IService<MonitorTcpIpHistor
      * @author 皮锋
      * @custom.date 2022/3/17 21:37
      */
-    List<TcpIpAvgTimeChartVo> getAvgTimeChartInfo(Long id, String ipSource, String ipTarget, Integer portTarget, String protocol, String startTime, String endTime);
+    TcpIpAvgTimeChartVo getAvgTimeChartInfo(Long id, String ipSource, String ipTarget, Integer portTarget, String protocol, String startTime, String endTime);
 }

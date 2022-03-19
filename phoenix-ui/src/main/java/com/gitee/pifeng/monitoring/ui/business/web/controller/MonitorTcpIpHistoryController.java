@@ -2,7 +2,6 @@ package com.gitee.pifeng.monitoring.ui.business.web.controller;
 
 import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorTcpIpHistoryService;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.LayUiAdminResultVo;
-import com.gitee.pifeng.monitoring.ui.business.web.vo.ServerDetailPageServerCpuChartVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.TcpIpAvgTimeChartVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -14,8 +13,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import java.util.List;
 
 /**
  * <p>
@@ -70,9 +67,9 @@ public class MonitorTcpIpHistoryController {
                                                   @RequestParam(name = "protocol") String protocol,
                                                   @RequestParam(name = "startTime") String startTime,
                                                   @RequestParam(name = "endTime") String endTime) {
-        List<TcpIpAvgTimeChartVo> monitorServerCpuChartVos = this.monitorTcpIpHistoryService
+        TcpIpAvgTimeChartVo monitorServerCpuChartVo = this.monitorTcpIpHistoryService
                 .getAvgTimeChartInfo(id, ipSource, ipTarget, portTarget, protocol, startTime, endTime);
-        return LayUiAdminResultVo.ok(monitorServerCpuChartVos);
+        return LayUiAdminResultVo.ok(monitorServerCpuChartVo);
     }
 
 }
