@@ -36,22 +36,22 @@ public class MonitorTcpIpHistoryServiceImpl extends ServiceImpl<IMonitorTcpIpHis
      * @param ipTarget   IP地址（目的地）
      * @param portTarget 端口号
      * @param protocol   协议
-     * @param startTime  开始时间
-     * @param endTime    结束时间
+     * @param dateValue  时间
      * @return layUiAdmin响应对象
      * @author 皮锋
      * @custom.date 2022/3/17 21:37
      */
     @Override
-    public TcpIpAvgTimeChartVo getAvgTimeChartInfo(Long id, String ipSource, String ipTarget, Integer portTarget, String protocol, String startTime, String endTime) {
+    public TcpIpAvgTimeChartVo getAvgTimeChartInfo(Long id, String ipSource, String ipTarget, Integer portTarget, String protocol, String dateValue) {
         LambdaQueryWrapper<MonitorTcpIpHistory> monitorTcpIpHistoryLambdaQueryWrapper = new LambdaQueryWrapper<>();
         monitorTcpIpHistoryLambdaQueryWrapper.eq(MonitorTcpIpHistory::getTcpipId, id);
         monitorTcpIpHistoryLambdaQueryWrapper.eq(MonitorTcpIpHistory::getIpSource, ipSource);
         monitorTcpIpHistoryLambdaQueryWrapper.eq(MonitorTcpIpHistory::getIpTarget, ipTarget);
         monitorTcpIpHistoryLambdaQueryWrapper.eq(MonitorTcpIpHistory::getPortTarget, portTarget);
         monitorTcpIpHistoryLambdaQueryWrapper.eq(MonitorTcpIpHistory::getProtocol, protocol);
-        monitorTcpIpHistoryLambdaQueryWrapper.between(MonitorTcpIpHistory::getInsertTime, DateTimeUtils.string2Date(startTime, DateTimeStylesEnums.YYYY_MM_DD),
-                DateUtil.offsetDay(DateTimeUtils.string2Date(endTime, DateTimeStylesEnums.YYYY_MM_DD), 1));
+        monitorTcpIpHistoryLambdaQueryWrapper.between(MonitorTcpIpHistory::getInsertTime,
+                DateTimeUtils.string2Date(dateValue, DateTimeStylesEnums.YYYY_MM_DD),
+                DateUtil.offsetDay(DateTimeUtils.string2Date(dateValue, DateTimeStylesEnums.YYYY_MM_DD), 1));
         List<MonitorTcpIpHistory> monitorTcpIpHistories = this.baseMapper.selectList(monitorTcpIpHistoryLambdaQueryWrapper);
         // 返回值
         TcpIpAvgTimeChartVo tcpIpAvgTimeChartVo = new TcpIpAvgTimeChartVo();

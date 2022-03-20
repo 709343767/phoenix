@@ -12,29 +12,23 @@
         var autoRefresh = true;
         // 默认时间
         var dateValue = util.toDateString(new Date(), 'yyyy-MM-dd');
-        // 开始时间
-        var startTime = dateValue;
-        // 结束时间
-        var endTime = dateValue;
         // 日期选择器
         laydate.render({
             elem: '#insertTime',
             type: 'date',
-            range: '~',
-            value: dateValue + ' ~ ' + dateValue,
+            value: dateValue,
+            max: dateValue,
             isInitValue: true,
             done: function (value) {
                 if (!isEmpty(value)) {
-                    var times = value.split('~');
-                    startTime = times[0].trim();
-                    endTime = times[1].trim();
-                    getAvgTimeChartInfo(id, ipSource, ipTarget, portTarget, protocol, startTime, endTime);
+                    dateValue = value;
+                    getAvgTimeChartInfo(id, ipSource, ipTarget, portTarget, protocol, dateValue);
                 }
             }
         });
 
         // 发送ajax请求，获取TCPIP平均时间
-        function getAvgTimeChartInfo(id, ipSource, ipTarget, portTarget, protocol, startTime, endTime) {
+        function getAvgTimeChartInfo(id, ipSource, ipTarget, portTarget, protocol, dateValue) {
             admin.req({
                 type: 'get',
                 url: layui.setter.base + 'monitor-tcpip-history/get-avg-time-chart-info',
@@ -49,8 +43,7 @@
                     ipTarget: ipTarget,
                     portTarget: portTarget,
                     protocol: protocol,
-                    startTime: startTime,
-                    endTime: endTime
+                    dateValue: dateValue
                 },
                 success: function (result) {
                     var data = result.data;
@@ -243,7 +236,7 @@
         function execute() {
             if (autoRefresh) {
                 // 发送ajax请求，获取TCPIP平均时间
-                getAvgTimeChartInfo(id, ipSource, ipTarget, portTarget, protocol, startTime, endTime);
+                getAvgTimeChartInfo(id, ipSource, ipTarget, portTarget, protocol, dateValue);
             }
         }
 

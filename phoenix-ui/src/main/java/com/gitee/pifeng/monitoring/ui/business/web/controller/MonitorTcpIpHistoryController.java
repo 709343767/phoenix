@@ -1,8 +1,11 @@
 package com.gitee.pifeng.monitoring.ui.business.web.controller;
 
+import com.gitee.pifeng.monitoring.ui.business.web.annotation.OperateLog;
 import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorTcpIpHistoryService;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.LayUiAdminResultVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.TcpIpAvgTimeChartVo;
+import com.gitee.pifeng.monitoring.ui.constant.OperateTypeConstants;
+import com.gitee.pifeng.monitoring.ui.constant.UiModuleConstants;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -43,8 +46,7 @@ public class MonitorTcpIpHistoryController {
      * @param ipTarget   IP地址（目的地）
      * @param portTarget 端口号
      * @param protocol   协议
-     * @param startTime  开始时间
-     * @param endTime    结束时间
+     * @param dateValue  时间
      * @return layUiAdmin响应对象
      * @author 皮锋
      * @custom.date 2022/3/17 21:37
@@ -58,17 +60,16 @@ public class MonitorTcpIpHistoryController {
             @ApiImplicitParam(name = "ipTarget", value = "IP地址（目的地）", paramType = "query", dataType = "string", dataTypeClass = String.class),
             @ApiImplicitParam(name = "portTarget", value = "端口号", paramType = "query", dataType = "int", dataTypeClass = Integer.class),
             @ApiImplicitParam(name = "protocol", value = "协议", paramType = "query", dataType = "string", dataTypeClass = String.class),
-            @ApiImplicitParam(name = "startTime", value = "开始时间", paramType = "query", dataType = "string", dataTypeClass = String.class),
-            @ApiImplicitParam(name = "endTime", value = "结束时间", paramType = "query", dataType = "string", dataTypeClass = String.class)})
+            @ApiImplicitParam(name = "dateValue", value = "时间", paramType = "query", dataType = "string", dataTypeClass = String.class)})
+    @OperateLog(operModule = UiModuleConstants.TCPIP4SERVICE, operType = OperateTypeConstants.QUERY, operDesc = "获取TCPIP连接耗时图表信息")
     public LayUiAdminResultVo getAvgTimeChartInfo(@RequestParam(name = "id") Long id,
                                                   @RequestParam(name = "ipSource") String ipSource,
                                                   @RequestParam(name = "ipTarget") String ipTarget,
                                                   @RequestParam(name = "portTarget") Integer portTarget,
                                                   @RequestParam(name = "protocol") String protocol,
-                                                  @RequestParam(name = "startTime") String startTime,
-                                                  @RequestParam(name = "endTime") String endTime) {
+                                                  @RequestParam(name = "dateValue") String dateValue) {
         TcpIpAvgTimeChartVo monitorServerCpuChartVo = this.monitorTcpIpHistoryService
-                .getAvgTimeChartInfo(id, ipSource, ipTarget, portTarget, protocol, startTime, endTime);
+                .getAvgTimeChartInfo(id, ipSource, ipTarget, portTarget, protocol, dateValue);
         return LayUiAdminResultVo.ok(monitorServerCpuChartVo);
     }
 

@@ -286,7 +286,7 @@ public class NetUtils {
         // 返回值
         Map<String, Object> result = Maps.newHashMap();
         result.put("isConnect", isConnect);
-        result.put("avgTime", avgTime);
+        result.put("avgTime", StringUtils.equals(avgTime, "未知") ? "3000" : avgTime);
         return result;
     }
 
