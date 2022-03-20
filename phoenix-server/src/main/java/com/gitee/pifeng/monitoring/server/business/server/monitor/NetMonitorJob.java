@@ -92,7 +92,7 @@ public class NetMonitorJob extends QuartzJobBean {
                     // 测试IP地址能否ping通
                     boolean isConnected = Boolean.parseBoolean(String.valueOf(objectMap.get("isConnect")));
                     // 平均响应时间
-                    Long avgTime = Long.parseLong(String.valueOf(objectMap.get("avgTime")));
+                    Double avgTime = Double.valueOf(String.valueOf(objectMap.get("avgTime")));
                     // 网络正常
                     if (isConnected) {
                         // 处理网络正常
@@ -120,7 +120,7 @@ public class NetMonitorJob extends QuartzJobBean {
      * @author 皮锋
      * @custom.date 2020/11/23 11:19
      */
-    private void disconnected(MonitorNet monitorNet, Long avgTime) {
+    private void disconnected(MonitorNet monitorNet, Double avgTime) {
         try {
             this.sendAlarmInfo("网络中断", AlarmLevelEnums.FATAL, AlarmReasonEnums.NORMAL_2_ABNORMAL, monitorNet);
         } catch (Exception e) {
@@ -163,7 +163,7 @@ public class NetMonitorJob extends QuartzJobBean {
      * @author 皮锋
      * @custom.date 2020/11/23 11:12
      */
-    private void connected(MonitorNet monitorNet, Long avgTime) {
+    private void connected(MonitorNet monitorNet, Double avgTime) {
         try {
             if (StringUtils.isNotBlank(monitorNet.getStatus())) {
                 this.sendAlarmInfo("网络恢复", AlarmLevelEnums.INFO, AlarmReasonEnums.ABNORMAL_2_NORMAL, monitorNet);

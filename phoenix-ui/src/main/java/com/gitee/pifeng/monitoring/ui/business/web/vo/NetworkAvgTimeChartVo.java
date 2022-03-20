@@ -48,7 +48,7 @@ public class NetworkAvgTimeChartVo implements ISuperBean {
     public static class All {
 
         @ApiModelProperty(value = "平均响应时间（毫秒）")
-        private Long avgTime;
+        private Double avgTime;
 
         @JsonFormat(pattern = "yyyy/MM/dd HH:mm:ss", timezone = "GMT+8")
         @ApiModelProperty(value = "新增时间")
@@ -68,7 +68,7 @@ public class NetworkAvgTimeChartVo implements ISuperBean {
     public static class OffLine {
 
         @ApiModelProperty(value = "平均响应时间（毫秒）")
-        private Long avgTime;
+        private Double avgTime;
 
         @JsonFormat(pattern = "yyyy/MM/dd HH:mm:ss", timezone = "GMT+8")
         @ApiModelProperty(value = "新增时间")

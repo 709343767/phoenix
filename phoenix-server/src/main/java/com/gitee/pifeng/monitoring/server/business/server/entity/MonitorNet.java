@@ -60,7 +60,7 @@ public class MonitorNet {
      * 平均响应时间（毫秒）
      */
     @TableField("AVG_TIME")
-    private Long avgTime;
+    private Double avgTime;
 
     /**
      * 离线次数
