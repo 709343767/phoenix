@@ -11,11 +11,11 @@ import java.util.Date;
 
 /**
  * <p>
- * 网络信息表
+ * 网络信息历史记录表
  * </p>
  *
  * @author 皮锋
- * @custom.date 2020/8/31 16:32
+ * @custom.date 2022-03-20
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -23,14 +23,20 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@TableName("MONITOR_NET")
-public class MonitorNet {
+@TableName("MONITOR_NET_HISTORY")
+public class MonitorNetHistory {
 
     /**
      * 主键ID
      */
     @TableId(value = "ID", type = IdType.AUTO)
     private Long id;
+
+    /**
+     * 网络主表ID
+     */
+    @TableField("NET_ID")
+    private Long netId;
 
     /**
      * IP地址（来源）

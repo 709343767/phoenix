@@ -15,7 +15,9 @@ import com.gitee.pifeng.monitoring.common.util.server.NetUtils;
 import com.gitee.pifeng.monitoring.server.business.server.core.MonitoringConfigPropertiesLoader;
 import com.gitee.pifeng.monitoring.server.business.server.core.PackageConstructor;
 import com.gitee.pifeng.monitoring.server.business.server.entity.MonitorNet;
+import com.gitee.pifeng.monitoring.server.business.server.entity.MonitorNetHistory;
 import com.gitee.pifeng.monitoring.server.business.server.service.IAlarmService;
+import com.gitee.pifeng.monitoring.server.business.server.service.INetHistoryService;
 import com.gitee.pifeng.monitoring.server.business.server.service.INetService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -55,6 +57,12 @@ public class NetMonitorJob extends QuartzJobBean {
      */
     @Autowired
     private INetService netService;
+
+    /**
+     * 网络信息历史记录服务接口
+     */
+    @Autowired
+    private INetHistoryService netHistoryService;
 
     /**
      * 扫描数据库“MONITOR_NET”表中的所有网络信息，实时更新网络状态，发送告警。
@@ -125,11 +133,24 @@ public class NetMonitorJob extends QuartzJobBean {
             int offlineCount = monitorNet.getOfflineCount() == null ? 0 : monitorNet.getOfflineCount();
             monitorNet.setOfflineCount(offlineCount + 1);
         }
+        Date date = new Date();
         monitorNet.setStatus(ZeroOrOneConstants.ZERO);
         monitorNet.setAvgTime(avgTime);
-        monitorNet.setUpdateTime(new Date());
+        monitorNet.setUpdateTime(date);
         // 更新数据库
         this.netService.updateById(monitorNet);
+        // 添加及时记录
+        MonitorNetHistory monitorNetHistory = new MonitorNetHistory();
+        monitorNetHistory.setNetId(monitorNet.getId());
+        monitorNetHistory.setIpSource(monitorNet.getIpSource());
+        monitorNetHistory.setIpTarget(monitorNet.getIpTarget());
+        monitorNetHistory.setIpDesc(monitorNet.getIpDesc());
+        monitorNetHistory.setStatus(monitorNet.getStatus());
+        monitorNetHistory.setAvgTime(monitorNet.getAvgTime());
+        monitorNetHistory.setOfflineCount(monitorNet.getOfflineCount());
+        monitorNetHistory.setInsertTime(date);
+        monitorNetHistory.setUpdateTime(date);
+        this.netHistoryService.save(monitorNetHistory);
     }
 
     /**
@@ -150,11 +171,24 @@ public class NetMonitorJob extends QuartzJobBean {
         } catch (Exception e) {
             log.error("网络告警异常！", e);
         }
+        Date date = new Date();
         monitorNet.setStatus(ZeroOrOneConstants.ONE);
         monitorNet.setAvgTime(avgTime);
-        monitorNet.setUpdateTime(new Date());
+        monitorNet.setUpdateTime(date);
         // 更新数据库
         this.netService.updateById(monitorNet);
+        // 添加及时记录
+        MonitorNetHistory monitorNetHistory = new MonitorNetHistory();
+        monitorNetHistory.setNetId(monitorNet.getId());
+        monitorNetHistory.setIpSource(monitorNet.getIpSource());
+        monitorNetHistory.setIpTarget(monitorNet.getIpTarget());
+        monitorNetHistory.setIpDesc(monitorNet.getIpDesc());
+        monitorNetHistory.setStatus(monitorNet.getStatus());
+        monitorNetHistory.setAvgTime(monitorNet.getAvgTime());
+        monitorNetHistory.setOfflineCount(monitorNet.getOfflineCount());
+        monitorNetHistory.setInsertTime(date);
+        monitorNetHistory.setUpdateTime(date);
+        this.netHistoryService.save(monitorNetHistory);
     }
 
     /**

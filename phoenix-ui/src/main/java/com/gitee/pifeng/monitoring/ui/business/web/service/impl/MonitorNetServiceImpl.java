@@ -14,7 +14,9 @@ import com.gitee.pifeng.monitoring.common.dto.BaseResponsePackage;
 import com.gitee.pifeng.monitoring.common.exception.NetException;
 import com.gitee.pifeng.monitoring.plug.core.Sender;
 import com.gitee.pifeng.monitoring.ui.business.web.dao.IMonitorNetDao;
+import com.gitee.pifeng.monitoring.ui.business.web.dao.IMonitorNetHistoryDao;
 import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorNet;
+import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorNetHistory;
 import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorNetService;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.HomeNetVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.LayUiAdminResultVo;
@@ -48,6 +50,12 @@ public class MonitorNetServiceImpl extends ServiceImpl<IMonitorNetDao, MonitorNe
      */
     @Autowired
     private IMonitorNetDao monitorNetDao;
+
+    /**
+     * 网络信息历史记录数据访问对象
+     */
+    @Autowired
+    private IMonitorNetHistoryDao monitorNetHistoryDao;
 
     /**
      * <p>
@@ -137,6 +145,11 @@ public class MonitorNetServiceImpl extends ServiceImpl<IMonitorNetDao, MonitorNe
         for (MonitorNetVo monitorNetVo : monitorNetVos) {
             ids.add(monitorNetVo.getId());
         }
+        // 删除历史记录
+        LambdaUpdateWrapper<MonitorNetHistory> monitorNetHistoryLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+        monitorNetHistoryLambdaUpdateWrapper.in(MonitorNetHistory::getNetId, ids);
+        this.monitorNetHistoryDao.delete(monitorNetHistoryLambdaUpdateWrapper);
+        // 删除网络信息
         LambdaUpdateWrapper<MonitorNet> monitorNetLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
         monitorNetLambdaUpdateWrapper.in(MonitorNet::getId, ids);
         this.monitorNetDao.delete(monitorNetLambdaUpdateWrapper);

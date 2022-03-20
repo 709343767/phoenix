@@ -180,4 +180,26 @@ public class MonitorNetworkController {
         return this.monitorNetService.addMonitorNetwork(monitorNetVo);
     }
 
+    /**
+     * <p>
+     * 访问平均时间页面
+     * </p>
+     *
+     * @param id TCP/IP ID
+     * @return {@link ModelAndView} 平均时间页面
+     * @author 皮锋
+     * @custom.date 2022/3/17 11:13
+     */
+    @ApiOperation(value = "访问平均时间页面")
+    @ApiImplicitParams(value = {
+            @ApiImplicitParam(name = "id", value = "网络ID", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class)})
+    @GetMapping("/avg-time")
+    public ModelAndView avgTime(Long id) {
+        MonitorNet monitorNet = this.monitorNetService.getById(id);
+        MonitorNetVo monitorNetVo = MonitorNetVo.builder().build().convertFor(monitorNet);
+        ModelAndView mv = new ModelAndView("network/avg-time");
+        mv.addObject(monitorNetVo);
+        return mv;
+    }
+
 }
