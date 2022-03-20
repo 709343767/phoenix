@@ -380,7 +380,7 @@ CREATE TABLE `MONITOR_NET`
     `IP_TARGET`     varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT 'IP地址（目的地）',
     `IP_DESC`       varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'IP地址描述',
     `STATUS`        varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci   NULL DEFAULT NULL COMMENT '状态（0：网络不通，1：网络正常）',
-    `AVG_TIME`      varchar(8) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci   NULL DEFAULT NULL COMMENT '平均响应时间（毫秒）',
+    `AVG_TIME`      bigint(20)                                                    NULL DEFAULT NULL COMMENT '平均响应时间（毫秒）',
     `OFFLINE_COUNT` int(8)                                                        NULL DEFAULT NULL COMMENT '离线次数',
     `INSERT_TIME`   datetime                                                      NOT NULL COMMENT '新增时间',
     `UPDATE_TIME`   datetime                                                      NULL DEFAULT NULL COMMENT '更新时间',
@@ -391,6 +391,33 @@ CREATE TABLE `MONITOR_NET`
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_general_ci COMMENT = '网络信息表'
   ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for MONITOR_NET_HISTORY
+-- ----------------------------
+DROP TABLE IF EXISTS `MONITOR_NET_HISTORY`;
+CREATE TABLE `MONITOR_NET_HISTORY`
+(
+    `ID`            bigint(20)                                                    NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `NET_ID`        bigint(20)                                                    NOT NULL COMMENT '网络主表ID',
+    `IP_SOURCE`     varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT 'IP地址（来源）',
+    `IP_TARGET`     varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT 'IP地址（目的地）',
+    `IP_DESC`       varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'IP地址描述',
+    `STATUS`        varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci   NULL DEFAULT NULL COMMENT '状态（0：网络不通，1：网络正常）',
+    `AVG_TIME`      bigint(20)                                                    NULL DEFAULT NULL COMMENT '平均响应时间（毫秒）',
+    `OFFLINE_COUNT` int(8)                                                        NULL DEFAULT NULL COMMENT '离线次数',
+    `INSERT_TIME`   datetime                                                      NOT NULL COMMENT '新增时间',
+    `UPDATE_TIME`   datetime                                                      NULL DEFAULT NULL COMMENT '更新时间',
+    PRIMARY KEY (`ID`) USING BTREE,
+    INDEX `NX_IP_SOURCE` (`IP_SOURCE`) USING BTREE COMMENT '索引_IP地址（来源）',
+    INDEX `NX_IP_TARGET` (`IP_TARGET`) USING BTREE COMMENT '索引_IP地址（目的地）',
+    INDEX `NX_NET_ID` (`NET_ID`) USING BTREE COMMENT '索引_网络主表ID',
+    INDEX `NX_INSERT_TIME` (`INSERT_TIME`) USING BTREE COMMENT '索引_插入时间',
+    CONSTRAINT `MONITOR_NET_HISTORY_NET_FK` FOREIGN KEY (`NET_ID`) REFERENCES `MONITOR_NET` (`ID`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB
+  CHARACTER SET = utf8mb4
+  COLLATE = utf8mb4_general_ci COMMENT = '网络信息表'
+  ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for MONITOR_REALTIME_MONITORING
@@ -855,7 +882,9 @@ CREATE TABLE `MONITOR_TCPIP`
     `UPDATE_TIME`   datetime                                                      NULL DEFAULT NULL COMMENT '更新时间',
     PRIMARY KEY (`ID`) USING BTREE,
     INDEX `NX_IP_SOURCE` (`IP_SOURCE`) USING BTREE COMMENT '索引_IP地址（来源）',
-    INDEX `NX_IP_TARGET` (`IP_TARGET`) USING BTREE COMMENT '索引_IP地址（目的地）'
+    INDEX `NX_IP_TARGET` (`IP_TARGET`) USING BTREE COMMENT '索引_IP地址（目的地）',
+    INDEX `NX_PORT_TARGET` (`PORT_TARGET`) USING BTREE COMMENT '索引_端口号',
+    INDEX `NX_PROTOCOL` (`PROTOCOL`) USING BTREE COMMENT '索引_协议'
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_general_ci COMMENT = 'TCP/IP信息表'
@@ -882,6 +911,10 @@ CREATE TABLE `MONITOR_TCPIP_HISTORY`
     PRIMARY KEY (`ID`) USING BTREE,
     INDEX `NX_TCPIP_ID` (`TCPIP_ID`) USING BTREE COMMENT '索引_TCPIP主表ID',
     INDEX `NX_INSERT_TIME` (`INSERT_TIME`) USING BTREE COMMENT '索引_插入时间',
+    INDEX `NX_IP_SOURCE` (`IP_SOURCE`) USING BTREE COMMENT '索引_IP地址（来源）',
+    INDEX `NX_IP_TARGET` (`IP_TARGET`) USING BTREE COMMENT '索引_IP地址（目的地）',
+    INDEX `NX_PORT_TARGET` (`PORT_TARGET`) USING BTREE COMMENT '索引_端口号',
+    INDEX `NX_PROTOCOL` (`PROTOCOL`) USING BTREE COMMENT '索引_协议',
     CONSTRAINT `MONITOR_TCPIP_HISTORY_TCPIP_FK` FOREIGN KEY (`TCPIP_ID`) REFERENCES `MONITOR_TCPIP` (`ID`) ON DELETE RESTRICT ON UPDATE RESTRICT
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
