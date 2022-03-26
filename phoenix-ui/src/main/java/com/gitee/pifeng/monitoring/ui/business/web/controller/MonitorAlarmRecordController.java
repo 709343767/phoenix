@@ -195,7 +195,7 @@ public class MonitorAlarmRecordController {
             @ApiImplicitParam(name = "id", value = "告警记录ID", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class)})
     public ModelAndView monitorAlarmRecordDetail(Long id) {
         ModelAndView mv = new ModelAndView("alarm/alarm-record-detail");
-        MonitorAlarmRecordVo monitorAlarmRecordInfo = this.monitorAlarmRecordService.monitorAlarmRecordDetail(id);
+        MonitorAlarmRecordVo monitorAlarmRecordInfo = this.monitorAlarmRecordService.getMonitorAlarmRecordDetail(id);
         mv.addObject("monitorAlarmRecordInfo", monitorAlarmRecordInfo);
         return mv;
     }

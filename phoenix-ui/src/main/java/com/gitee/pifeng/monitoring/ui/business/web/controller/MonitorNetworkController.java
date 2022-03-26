@@ -185,7 +185,7 @@ public class MonitorNetworkController {
      * 访问平均时间页面
      * </p>
      *
-     * @param id TCP/IP ID
+     * @param id 网络ID
      * @return {@link ModelAndView} 平均时间页面
      * @author 皮锋
      * @custom.date 2022/3/17 11:13

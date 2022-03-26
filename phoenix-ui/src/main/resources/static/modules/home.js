@@ -256,7 +256,7 @@
                     var homeNetVo = data.homeNetVo;
                     var homeAlarmRecordVo = data.homeAlarmRecordVo;
                     var homeDbVo = data.homeDbVo;
-                    var homeTcpIpVo = data.homeTcpIpVo;
+                    var homeTcpVo = data.homeTcpVo;
                     // 服务器类型
                     //var htmlServer1 = '<p class="layuiadmin-big-font layuiadmin-big-font-my">' + homeServerVo.serverSum + '</p>' +
                     //    '             <p>Windows' +
@@ -345,26 +345,26 @@
                         '               </span>' +
                         '         </p>';
                     $('#ip-card-list').empty().append(htmlIp);
-                    // TCP/IP
-                    var htmlTcpIp = '<p class="layuiadmin-big-font layuiadmin-big-font-my">' + homeTcpIpVo.tcpIpSum +
-                        '               <i class="home-i">' + homeTcpIpVo.tcpIpConnectRate + '<img src="' + ctxPath + 'images/icon16/percentage-16.png"></i>' +
+                    // TCP
+                    var htmlTcp = '<p class="layuiadmin-big-font layuiadmin-big-font-my">' + homeTcpVo.tcpSum +
+                        '               <i class="home-i">' + homeTcpVo.tcpConnectRate + '<img src="' + ctxPath + 'images/icon16/percentage-16.png"></i>' +
                         '         </p>' +
                         '         <p>正常' +
-                        '               <span class="layuiadmin-span-color">' + homeTcpIpVo.tcpIpConnectSum +
-                        '                      <i class="layui-inline layui-icon"><img src="' + ctxPath + 'images/icon16/tcpip-connect-16.png"></i>' +
+                        '               <span class="layuiadmin-span-color">' + homeTcpVo.tcpConnectSum +
+                        '                      <i class="layui-inline layui-icon"><img src="' + ctxPath + 'images/icon16/tcp-connect-16.png"></i>' +
                         '               </span>' +
                         '         </p>' +
                         '         <p>异常' +
-                        '               <span class="layuiadmin-span-color">' + homeTcpIpVo.tcpIpDisconnectSum +
-                        '                      <i class="layui-inline layui-icon"><img src="' + ctxPath + 'images/icon16/tcpip-disconnect-16.png"></i>' +
+                        '               <span class="layuiadmin-span-color">' + homeTcpVo.tcpDisconnectSum +
+                        '                      <i class="layui-inline layui-icon"><img src="' + ctxPath + 'images/icon16/tcp-disconnect-16.png"></i>' +
                         '               </span>' +
                         '         </p>' +
                         '         <p>未知' +
-                        '               <span class="layuiadmin-span-color">' + homeTcpIpVo.tcpIpUnsentSum +
-                        '                      <i class="layui-inline layui-icon"><img src="' + ctxPath + 'images/icon16/tcpip-unkown-16.png"></i>' +
+                        '               <span class="layuiadmin-span-color">' + homeTcpVo.tcpUnsentSum +
+                        '                      <i class="layui-inline layui-icon"><img src="' + ctxPath + 'images/icon16/tcp-unkown-16.png"></i>' +
                         '               </span>' +
                         '         </p>';
-                    $('#tcpip-card-list').empty().append(htmlTcpIp);
+                    $('#tcp-card-list').empty().append(htmlTcp);
                     // 告警
                     var htmlAlarm = '<p class="layuiadmin-big-font layuiadmin-big-font-my">' + homeAlarmRecordVo.alarmRecordSum +
                         '                   <i class="home-i">' + homeAlarmRecordVo.alarmSucRate + '<img src="' + ctxPath + 'images/icon16/percentage-16.png"></i>' +

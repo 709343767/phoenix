@@ -38,10 +38,10 @@ public class MonitorNetworkHistoryController {
 
     /**
      * <p>
-     * 获取PING耗时图表信息
+     * 获取Ping耗时图表信息
      * </p>
      *
-     * @param id        TCP/IP ID
+     * @param id        网络ID
      * @param ipSource  IP地址（来源）
      * @param ipTarget  IP地址（目的地）
      * @param dateValue 时间
@@ -49,7 +49,7 @@ public class MonitorNetworkHistoryController {
      * @author 皮锋
      * @custom.date 2022/3/17 21:37
      */
-    @ApiOperation(value = "获取PING耗时图表信息")
+    @ApiOperation(value = "获取Ping耗时图表信息")
     @ResponseBody
     @GetMapping("/get-avg-time-chart-info")
     @ApiImplicitParams(value = {
@@ -57,7 +57,7 @@ public class MonitorNetworkHistoryController {
             @ApiImplicitParam(name = "ipSource", value = "IP地址（来源）", paramType = "query", dataType = "string", dataTypeClass = String.class),
             @ApiImplicitParam(name = "ipTarget", value = "IP地址（目的地）", paramType = "query", dataType = "string", dataTypeClass = String.class),
             @ApiImplicitParam(name = "dateValue", value = "时间", paramType = "query", dataType = "string", dataTypeClass = String.class)})
-    @OperateLog(operModule = UiModuleConstants.NET, operType = OperateTypeConstants.QUERY, operDesc = "获取PING耗时图表信息")
+    @OperateLog(operModule = UiModuleConstants.NET, operType = OperateTypeConstants.QUERY, operDesc = "获取Ping耗时图表信息")
     public LayUiAdminResultVo getAvgTimeChartInfo(@RequestParam(name = "id") Long id,
                                                   @RequestParam(name = "ipSource") String ipSource,
                                                   @RequestParam(name = "ipTarget") String ipTarget,

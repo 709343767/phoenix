@@ -41,9 +41,9 @@ public final class UiModuleConstants {
     public static final String NET = "网络";
 
     /**
-     * TCP/IP服务
+     * TCP服务
      */
-    public static final String TCPIP4SERVICE = "TCP/IP服务";
+    public static final String TCP4SERVICE = "TCP服务";
 
     /**
      * 告警

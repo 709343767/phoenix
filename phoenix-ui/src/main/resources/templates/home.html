@@ -191,35 +191,35 @@
                 <div class="layui-col-sm6 layui-col-md2">
                     <div class="layui-card">
                         <div class="layui-card-header">
-                            TCP/IP
+                            TCP服务
                             <span class="layui-badge layui-bg-black layuiadmin-badge">个</span>
                         </div>
-                        <div class="layui-card-body layuiadmin-card-list" id="tcpip-card-list">
+                        <div class="layui-card-body layuiadmin-card-list" id="tcp-card-list">
                             <p class="layuiadmin-big-font layuiadmin-big-font-my">
-                                [[${homeTcpIpVo.tcpIpSum}]]
-                                <i class="home-i">[[${homeTcpIpVo.tcpIpConnectRate}]]
+                                [[${homeTcpVo.tcpSum}]]
+                                <i class="home-i">[[${homeTcpVo.tcpConnectRate}]]
                                     <img th:src="@{/images/icon16/percentage-16.png}"></i>
                             </p>
                             <p>
                                 正常
                                 <span class="layuiadmin-span-color">
-                                    [[${homeTcpIpVo.tcpIpConnectSum}]]
+                                    [[${homeTcpVo.tcpConnectSum}]]
                                     <i class="layui-inline layui-icon"><img
-                                            th:src="@{/images/icon16/tcpip-connect-16.png}"></i></span>
+                                            th:src="@{/images/icon16/tcp-connect-16.png}"></i></span>
                             </p>
                             <p>
                                 异常
                                 <span class="layuiadmin-span-color">
-                                    [[${homeTcpIpVo.tcpIpDisconnectSum}]]
+                                    [[${homeTcpVo.tcpDisconnectSum}]]
                                     <i class="layui-inline layui-icon"><img
-                                            th:src="@{/images/icon16/tcpip-disconnect-16.png}"></i></span>
+                                            th:src="@{/images/icon16/tcp-disconnect-16.png}"></i></span>
                             </p>
                             <p>
                                 未知
                                 <span class="layuiadmin-span-color">
-                                    [[${homeTcpIpVo.tcpIpUnsentSum}]]
+                                    [[${homeTcpVo.tcpUnsentSum}]]
                                     <i class="layui-inline layui-icon"><img
-                                            th:src="@{/images/icon16/tcpip-unkown-16.png}"></i></span>
+                                            th:src="@{/images/icon16/tcp-unkown-16.png}"></i></span>
                             </p>
                         </div>
                     </div>

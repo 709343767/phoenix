@@ -38,10 +38,10 @@ public class MonitorConfigPageFormVo implements ISuperBean {
     private int netEnable;
 
     /**
-     * 是否监控TCP/IP
+     * 是否监控TCP
      */
-    @ApiModelProperty(value = "是否监控TCP/IP")
-    private int tcpIpEnable;
+    @ApiModelProperty(value = "是否监控TCP")
+    private int tcpEnable;
 
     /**
      * 监控告警是否打开

@@ -3519,7 +3519,7 @@ LABL 0 新宋体,8,N</a:FontList>
 <a:Creator>lenovo</a:Creator>
 <a:ModificationDate>1643179848</a:ModificationDate>
 <a:Modifier>lenovo</a:Modifier>
-<a:Comment>告警类型（SERVER、NET、TCPIP4SERVICE、HTTP4SERVICE、DOCKER、INSTANCE、DATABASE、CUSTOM）</a:Comment>
+<a:Comment>告警类型（SERVER、NET、TCP4SERVICE、HTTP4SERVICE、DOCKER、INSTANCE、DATABASE、CUSTOM）</a:Comment>
 <a:DataType>varchar(20)</a:DataType>
 <a:Length>20</a:Length>
 <a:Column.Mandatory>1</a:Column.Mandatory>
@@ -9935,8 +9935,8 @@ LABL 0 新宋体,8,N</a:FontList>
 </o:Table>
 <o:Table Id="o139">
 <a:ObjectID>4992B26E-D57A-421A-891C-E16DDEB107F7</a:ObjectID>
-<a:Name>MONITOR_TCPIP</a:Name>
-<a:Code>MONITOR_TCPIP</a:Code>
+<a:Name>MONITOR_TCP</a:Name>
+<a:Code>MONITOR_TCP</a:Code>
 <a:CreationDate>1643179848</a:CreationDate>
 <a:Creator>lenovo</a:Creator>
 <a:ModificationDate>1643179848</a:ModificationDate>
@@ -10072,13 +10072,13 @@ LABL 0 新宋体,8,N</a:FontList>
 <c:Keys>
 <o:Key Id="o660">
 <a:ObjectID>26DE680B-29D5-4F6B-A244-BA443E379D98</a:ObjectID>
-<a:Name>PK_monitor_tcpip</a:Name>
-<a:Code>PK_monitor_tcpip</a:Code>
+<a:Name>PK_monitor_tcp</a:Name>
+<a:Code>PK_monitor_tcp</a:Code>
 <a:CreationDate>1643179848</a:CreationDate>
 <a:Creator>lenovo</a:Creator>
 <a:ModificationDate>1643179848</a:ModificationDate>
 <a:Modifier>lenovo</a:Modifier>
-<a:ConstraintName>PK_monitor_tcpip</a:ConstraintName>
+<a:ConstraintName>PK_monitor_tcp</a:ConstraintName>
 <c:Key.Columns>
 <o:Column Ref="o650"/>
 </c:Key.Columns>

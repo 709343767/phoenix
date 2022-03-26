@@ -5,9 +5,10 @@
 
  Date: 04/12/2021 23:14:18
 */
-CREATE database if NOT EXISTS `phoenix` default character set utf8mb4 collate utf8mb4_general_ci;
+DROP DATABASE IF EXISTS `phoenix`;
+CREATE DATABASE IF NOT EXISTS `phoenix` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
-use `phoenix`;
+USE `phoenix`;
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
@@ -18,7 +19,7 @@ DROP TABLE IF EXISTS `MONITOR_ALARM_DEFINITION`;
 CREATE TABLE `MONITOR_ALARM_DEFINITION`
 (
     `ID`           bigint(20)                                                    NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-    `TYPE`         varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT '告警类型（SERVER、NET、TCPIP4SERVICE、HTTP4SERVICE、DOCKER、INSTANCE、DATABASE、CUSTOM）',
+    `TYPE`         varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT '告警类型（SERVER、NET、TCP4SERVICE、HTTP4SERVICE、DOCKER、INSTANCE、DATABASE、CUSTOM）',
     `FIRST_CLASS`  varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '一级分类',
     `SECOND_CLASS` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '二级分类',
     `THIRD_CLASS`  varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '三级分类',
@@ -44,7 +45,7 @@ CREATE TABLE `MONITOR_ALARM_RECORD`
     `ID`             bigint(20)                                                    NOT NULL AUTO_INCREMENT COMMENT '主键ID',
     `CODE`           varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT '告警代码，使用UUID',
     `ALARM_DEF_CODE` varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NULL DEFAULT NULL COMMENT '告警定义编码',
-    `TYPE`           varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT '告警类型（SERVER、NET、TCPIP4SERVICE、HTTP4SERVICE、DOCKER、INSTANCE、DATABASE、CUSTOM）',
+    `TYPE`           varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT '告警类型（SERVER、NET、TCP4SERVICE、HTTP4SERVICE、DOCKER、INSTANCE、DATABASE、CUSTOM）',
     `WAY`            varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NULL DEFAULT NULL COMMENT '告警方式（SMS、MAIL、...）',
     `LEVEL`          varchar(5) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci   NOT NULL COMMENT '告警级别（INFO、WARM、ERROR、FATAL）',
     `TITLE`          varchar(125) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '告警标题',
@@ -426,7 +427,7 @@ DROP TABLE IF EXISTS `MONITOR_REALTIME_MONITORING`;
 CREATE TABLE `MONITOR_REALTIME_MONITORING`
 (
     `ID`            bigint(20)                                                   NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-    `TYPE`          varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '监控类型（SERVER、NET、TCPIP4SERVICE、HTTP4SERVICE、DOCKER、INSTANCE、DATABASE、CUSTOM）',
+    `TYPE`          varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '监控类型（SERVER、NET、TCP4SERVICE、HTTP4SERVICE、DOCKER、INSTANCE、DATABASE、CUSTOM）',
     `CODE`          varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '监控编号',
     `IS_SENT_ALARM` varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT '是否已经发送了告警（1：是，0：否）',
     `INSERT_TIME`   datetime                                                     NOT NULL COMMENT '插入时间',
@@ -864,61 +865,57 @@ CREATE TABLE `MONITOR_SERVER_SENSORS`
   ROW_FORMAT = Dynamic;
 
 -- ----------------------------
--- Table structure for MONITOR_TCPIP
+-- Table structure for MONITOR_TCP
 -- ----------------------------
-DROP TABLE IF EXISTS `MONITOR_TCPIP`;
-CREATE TABLE `MONITOR_TCPIP`
+DROP TABLE IF EXISTS `MONITOR_TCP`;
+CREATE TABLE `MONITOR_TCP`
 (
-    `ID`            bigint(20)                                                    NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-    `IP_SOURCE`     varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT 'IP地址（来源）',
-    `IP_TARGET`     varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT 'IP地址（目的地）',
-    `PORT_TARGET`   int(8)                                                        NOT NULL COMMENT '端口号',
-    `DESCR`         varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '描述',
-    `PROTOCOL`      varchar(8) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci   NULL DEFAULT NULL COMMENT '协议',
-    `AVG_TIME`      bigint(20)                                                    NULL DEFAULT NULL COMMENT '平均响应时间（毫秒）',
-    `STATUS`        varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci   NULL DEFAULT NULL COMMENT '状态（0：不通，1：正常）',
-    `OFFLINE_COUNT` int(8)                                                        NULL DEFAULT NULL COMMENT '离线次数',
-    `INSERT_TIME`   datetime                                                      NOT NULL COMMENT '新增时间',
-    `UPDATE_TIME`   datetime                                                      NULL DEFAULT NULL COMMENT '更新时间',
+    `ID`              bigint(20)                                                    NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `HOSTNAME_SOURCE` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT '主机名（来源）',
+    `HOSTNAME_TARGET` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT '主机名（目的地）',
+    `PORT_TARGET`     int(8)                                                        NOT NULL COMMENT '端口号',
+    `DESCR`           varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '描述',
+    `AVG_TIME`        bigint(20)                                                    NULL DEFAULT NULL COMMENT '平均响应时间（毫秒）',
+    `STATUS`          varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci   NULL DEFAULT NULL COMMENT '状态（0：不通，1：正常）',
+    `OFFLINE_COUNT`   int(8)                                                        NULL DEFAULT NULL COMMENT '离线次数',
+    `INSERT_TIME`     datetime                                                      NOT NULL COMMENT '新增时间',
+    `UPDATE_TIME`     datetime                                                      NULL DEFAULT NULL COMMENT '更新时间',
     PRIMARY KEY (`ID`) USING BTREE,
-    INDEX `NX_IP_SOURCE` (`IP_SOURCE`) USING BTREE COMMENT '索引_IP地址（来源）',
-    INDEX `NX_IP_TARGET` (`IP_TARGET`) USING BTREE COMMENT '索引_IP地址（目的地）',
-    INDEX `NX_PORT_TARGET` (`PORT_TARGET`) USING BTREE COMMENT '索引_端口号',
-    INDEX `NX_PROTOCOL` (`PROTOCOL`) USING BTREE COMMENT '索引_协议'
+    INDEX `NX_HOSTNAME_SOURCE` (`HOSTNAME_SOURCE`) USING BTREE COMMENT '索引_主机名（来源）',
+    INDEX `NX_HOSTNAME_TARGET` (`HOSTNAME_TARGET`) USING BTREE COMMENT '索引_主机名（目的地）',
+    INDEX `NX_PORT_TARGET` (`PORT_TARGET`) USING BTREE COMMENT '索引_端口号'
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
-  COLLATE = utf8mb4_general_ci COMMENT = 'TCP/IP信息表'
+  COLLATE = utf8mb4_general_ci COMMENT = 'TCP信息表'
   ROW_FORMAT = Dynamic;
 
 -- ----------------------------
--- Table structure for MONITOR_TCPIP_HISTORY
+-- Table structure for MONITOR_TCP_HISTORY
 -- ----------------------------
-DROP TABLE IF EXISTS `MONITOR_TCPIP_HISTORY`;
-CREATE TABLE `MONITOR_TCPIP_HISTORY`
+DROP TABLE IF EXISTS `MONITOR_TCP_HISTORY`;
+CREATE TABLE `MONITOR_TCP_HISTORY`
 (
-    `ID`            bigint(20)                                                    NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-    `TCPIP_ID`      bigint(20)                                                    NOT NULL COMMENT 'TCPIP主表ID',
-    `IP_SOURCE`     varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT 'IP地址（来源）',
-    `IP_TARGET`     varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT 'IP地址（目的地）',
-    `PORT_TARGET`   int(8)                                                        NOT NULL COMMENT '端口号',
-    `DESCR`         varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '描述',
-    `PROTOCOL`      varchar(8) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci   NULL DEFAULT NULL COMMENT '协议',
-    `AVG_TIME`      bigint(20)                                                    NULL DEFAULT NULL COMMENT '平均响应时间（毫秒）',
-    `STATUS`        varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci   NULL DEFAULT NULL COMMENT '状态（0：不通，1：正常）',
-    `OFFLINE_COUNT` int(8)                                                        NULL DEFAULT NULL COMMENT '离线次数',
-    `INSERT_TIME`   datetime                                                      NOT NULL COMMENT '新增时间',
-    `UPDATE_TIME`   datetime                                                      NULL DEFAULT NULL COMMENT '更新时间',
+    `ID`              bigint(20)                                                    NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `TCP_ID`          bigint(20)                                                    NOT NULL COMMENT 'TCP主表ID',
+    `HOSTNAME_SOURCE` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT '主机名（来源）',
+    `HOSTNAME_TARGET` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT '主机名（目的地）',
+    `PORT_TARGET`     int(8)                                                        NOT NULL COMMENT '端口号',
+    `DESCR`           varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '描述',
+    `AVG_TIME`        bigint(20)                                                    NULL DEFAULT NULL COMMENT '平均响应时间（毫秒）',
+    `STATUS`          varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci   NULL DEFAULT NULL COMMENT '状态（0：不通，1：正常）',
+    `OFFLINE_COUNT`   int(8)                                                        NULL DEFAULT NULL COMMENT '离线次数',
+    `INSERT_TIME`     datetime                                                      NOT NULL COMMENT '新增时间',
+    `UPDATE_TIME`     datetime                                                      NULL DEFAULT NULL COMMENT '更新时间',
     PRIMARY KEY (`ID`) USING BTREE,
-    INDEX `NX_TCPIP_ID` (`TCPIP_ID`) USING BTREE COMMENT '索引_TCPIP主表ID',
+    INDEX `NX_TCP_ID` (`TCP_ID`) USING BTREE COMMENT '索引_TCP主表ID',
     INDEX `NX_INSERT_TIME` (`INSERT_TIME`) USING BTREE COMMENT '索引_插入时间',
-    INDEX `NX_IP_SOURCE` (`IP_SOURCE`) USING BTREE COMMENT '索引_IP地址（来源）',
-    INDEX `NX_IP_TARGET` (`IP_TARGET`) USING BTREE COMMENT '索引_IP地址（目的地）',
+    INDEX `NX_HOSTNAME_SOURCE` (`HOSTNAME_SOURCE`) USING BTREE COMMENT '索引_主机名（来源）',
+    INDEX `NX_HOSTNAME_TARGET` (`HOSTNAME_TARGET`) USING BTREE COMMENT '索引_主机名（目的地）',
     INDEX `NX_PORT_TARGET` (`PORT_TARGET`) USING BTREE COMMENT '索引_端口号',
-    INDEX `NX_PROTOCOL` (`PROTOCOL`) USING BTREE COMMENT '索引_协议',
-    CONSTRAINT `MONITOR_TCPIP_HISTORY_TCPIP_FK` FOREIGN KEY (`TCPIP_ID`) REFERENCES `MONITOR_TCPIP` (`ID`) ON DELETE RESTRICT ON UPDATE RESTRICT
+    CONSTRAINT `MONITOR_TCP_HISTORY_TCP_FK` FOREIGN KEY (`TCP_ID`) REFERENCES `MONITOR_TCP` (`ID`) ON DELETE RESTRICT ON UPDATE RESTRICT
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
-  COLLATE = utf8mb4_general_ci COMMENT = 'TCP/IP信息历史记录表'
+  COLLATE = utf8mb4_general_ci COMMENT = 'TCP信息历史记录表'
   ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------

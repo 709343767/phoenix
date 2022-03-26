@@ -19,7 +19,7 @@ public interface IMonitorNetHistoryService extends IService<MonitorNetHistory> {
      * 获取PING耗时图表信息
      * </p>
      *
-     * @param id        TCP/IP ID
+     * @param id        网络ID
      * @param ipSource  IP地址（来源）
      * @param ipTarget  IP地址（目的地）
      * @param dateValue 时间

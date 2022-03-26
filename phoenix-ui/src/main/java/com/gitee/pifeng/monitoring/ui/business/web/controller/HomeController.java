@@ -60,10 +60,10 @@ public class HomeController {
     private IMonitorDbService monitorDbService;
 
     /**
-     * TCP/IP信息服务类
+     * TCP信息服务类
      */
     @Autowired
-    private IMonitorTcpIpService monitorTcpIpService;
+    private IMonitorTcpService monitorTcpService;
 
     /**
      * <p>
@@ -89,8 +89,8 @@ public class HomeController {
         mv.addObject("homeAlarmRecordVo", homeAlarmRecordVo);
         HomeDbVo homeDbVo = this.monitorDbService.getHomeDbInfo();
         mv.addObject("homeDbVo", homeDbVo);
-        HomeTcpIpVo homeTcpIpVo = this.monitorTcpIpService.getHomeTcpIpInfo();
-        mv.addObject("homeTcpIpVo", homeTcpIpVo);
+        HomeTcpVo homeTcpVo = this.monitorTcpService.getHomeTcpInfo();
+        mv.addObject("homeTcpVo", homeTcpVo);
         return mv;
     }
 
@@ -112,14 +112,14 @@ public class HomeController {
         HomeServerVo homeServerVo = this.monitorServerService.getHomeServerInfo();
         HomeAlarmRecordVo homeAlarmRecordVo = this.monitorAlarmRecordService.getHomeAlarmRecordInfo();
         HomeDbVo homeDbVo = this.monitorDbService.getHomeDbInfo();
-        HomeTcpIpVo homeTcpIpVo = this.monitorTcpIpService.getHomeTcpIpInfo();
+        HomeTcpVo homeTcpVo = this.monitorTcpService.getHomeTcpInfo();
         Map<String, Object> map = new HashMap<>(16);
         map.put("homeInstanceVo", homeInstanceVo);
         map.put("homeNetVo", homeNetVo);
         map.put("homeServerVo", homeServerVo);
         map.put("homeAlarmRecordVo", homeAlarmRecordVo);
         map.put("homeDbVo", homeDbVo);
-        map.put("homeTcpIpVo", homeTcpIpVo);
+        map.put("homeTcpVo", homeTcpVo);
         return LayUiAdminResultVo.ok(map);
     }
 

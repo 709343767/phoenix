@@ -72,7 +72,7 @@
                     }
                     var option = {
                         title: {
-                            text: 'PING耗时',
+                            text: 'Ping 耗时',
                             left: 'center',
                             textStyle: {
                                 color: '#696969',

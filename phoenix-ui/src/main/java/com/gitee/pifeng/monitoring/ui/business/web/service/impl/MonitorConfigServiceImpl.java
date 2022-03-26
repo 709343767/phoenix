@@ -66,7 +66,7 @@ public class MonitorConfigServiceImpl extends ServiceImpl<IMonitorConfigDao, Mon
         MonitorConfigPageFormVo monitorConfigPageFormVo = new MonitorConfigPageFormVo();
         monitorConfigPageFormVo.setThreshold(properties.getThreshold());
         monitorConfigPageFormVo.setNetEnable(properties.getNetworkProperties().isEnable() ? 1 : 0);
-        monitorConfigPageFormVo.setTcpIpEnable(properties.getTcpIpProperties().isEnable() ? 1 : 0);
+        monitorConfigPageFormVo.setTcpEnable(properties.getTcpProperties().isEnable() ? 1 : 0);
         monitorConfigPageFormVo.setAlarmEnable(properties.getAlarmProperties().isEnable() ? 1 : 0);
         monitorConfigPageFormVo.setAlarmLevel(properties.getAlarmProperties().getLevelEnum().name());
         monitorConfigPageFormVo.setAlarmWay(AlarmWayEnums.enums2Strs(properties.getAlarmProperties().getWayEnums()));
@@ -124,9 +124,9 @@ public class MonitorConfigServiceImpl extends ServiceImpl<IMonitorConfigDao, Mon
         // 网络配置属性
         MonitoringNetworkProperties monitoringNetworkProperties = new MonitoringNetworkProperties();
         monitoringNetworkProperties.setEnable(monitorConfigPageFormVo.getNetEnable() == 1);
-        // TCP/IP配置属性
-        MonitoringTcpIpProperties monitoringTcpIpProperties = new MonitoringTcpIpProperties();
-        monitoringTcpIpProperties.setEnable(monitorConfigPageFormVo.getTcpIpEnable() == 1);
+        // TCP配置属性
+        MonitoringTcpProperties monitoringTcpProperties = new MonitoringTcpProperties();
+        monitoringTcpProperties.setEnable(monitorConfigPageFormVo.getTcpEnable() == 1);
         // 服务器CPU配置属性
         MonitoringServerCpuProperties monitoringServerCpuProperties = new MonitoringServerCpuProperties();
         monitoringServerCpuProperties.setOverloadThreshold(monitorConfigPageFormVo.getServerCpuOverloadThreshold());
@@ -158,7 +158,7 @@ public class MonitorConfigServiceImpl extends ServiceImpl<IMonitorConfigDao, Mon
         properties.setThreshold(monitorConfigPageFormVo.getThreshold());
         properties.setAlarmProperties(monitoringAlarmProperties);
         properties.setNetworkProperties(monitoringNetworkProperties);
-        properties.setTcpIpProperties(monitoringTcpIpProperties);
+        properties.setTcpProperties(monitoringTcpProperties);
         properties.setServerProperties(monitoringServerProperties);
         properties.setDbProperties(monitoringDbProperties);
         // 监控属性转json字符串

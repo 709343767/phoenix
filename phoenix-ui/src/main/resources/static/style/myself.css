@@ -27,8 +27,8 @@
     width: 14px;
 }
 
-.layui-icon-tcpip {
-    background-image: url("../images/icon16/tcpip-16.png");
+.layui-icon-tcp {
+    background-image: url("../images/icon16/tcp-16.png");
     background-position: center center;
     background-repeat: no-repeat;
     height: 40px;

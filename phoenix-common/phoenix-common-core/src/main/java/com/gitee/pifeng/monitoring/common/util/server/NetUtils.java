@@ -3,7 +3,6 @@ package com.gitee.pifeng.monitoring.common.util.server;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.date.TimeInterval;
 import cn.hutool.core.net.NetUtil;
-import com.gitee.pifeng.monitoring.common.constant.TcpIpEnums;
 import com.gitee.pifeng.monitoring.common.domain.server.NetDomain;
 import com.gitee.pifeng.monitoring.common.exception.NetException;
 import com.gitee.pifeng.monitoring.common.util.server.sigar.NetInterfaceUtils;
@@ -357,26 +356,22 @@ public class NetUtils {
      * 检测telnet状态
      * </p>
      *
-     * @param hostname   主机名
-     * @param port       端口号
-     * @param tcpIpEnums TCP/IP协议簇枚举
+     * @param hostname 主机名
+     * @param port     端口号
      * @return boolean 返回是否telnet通
      * @author 皮锋
      * @custom.date 2022/1/10 9:37
      */
     @Deprecated
-    public static boolean telnet(String hostname, int port, TcpIpEnums tcpIpEnums) {
-        boolean isConnected = false;
+    public static boolean telnet(String hostname, int port) {
+        boolean isConnected;
         try {
-            // TCP协议
-            if (tcpIpEnums == TcpIpEnums.TCP) {
-                @Cleanup
-                Socket socket = new Socket();
-                // 建立连接
-                socket.connect(new InetSocketAddress(hostname, port), 3000);
-                // 查看连通状态
-                isConnected = socket.isConnected();
-            }
+            @Cleanup
+            Socket socket = new Socket();
+            // 建立连接
+            socket.connect(new InetSocketAddress(hostname, port), 3000);
+            // 查看连通状态
+            isConnected = socket.isConnected();
         } catch (Exception e) {
             isConnected = false;
         }
@@ -388,31 +383,27 @@ public class NetUtils {
      * 检测telnet状态
      * </p>
      *
-     * @param hostname   主机名
-     * @param port       端口号
-     * @param tcpIpEnums TCP/IP协议簇枚举
+     * @param hostname 主机名
+     * @param port     端口号
      * @return 返回Map，key解释：<br>
      * 1.isConnect：是否能telnet通；<br>
      * 2.avgTime：平均时间（毫秒）<br>
      * @author 皮锋
      * @custom.date 2022/3/6 9:37
      */
-    public static Map<String, Object> telnetVT200(String hostname, int port, TcpIpEnums tcpIpEnums) {
+    public static Map<String, Object> telnetVT200(String hostname, int port) {
         // 连通状态
-        boolean isConnect = false;
+        boolean isConnect;
         // 计时器
         TimeInterval timer = DateUtil.timer();
         try {
-            // TCP协议
-            if (tcpIpEnums == TcpIpEnums.TCP) {
-                // 指明Telnet终端类型，否则会返回来的数据中文会乱码
-                @Cleanup("disconnect")
-                TelnetClient telnetClient = new TelnetClient("vt200");
-                telnetClient.setConnectTimeout(3000);
-                telnetClient.connect(hostname, port);
-                // 查看连通状态
-                isConnect = telnetClient.isConnected();
-            }
+            // 指明Telnet终端类型，否则会返回来的数据中文会乱码
+            @Cleanup("disconnect")
+            TelnetClient telnetClient = new TelnetClient("vt200");
+            telnetClient.setConnectTimeout(3000);
+            telnetClient.connect(hostname, port);
+            // 查看连通状态
+            isConnect = telnetClient.isConnected();
         } catch (ConnectException connectException) {
             log.debug("对端拒绝连接，服务未启动端口监听或防火墙：{}", connectException.getMessage());
             isConnect = false;

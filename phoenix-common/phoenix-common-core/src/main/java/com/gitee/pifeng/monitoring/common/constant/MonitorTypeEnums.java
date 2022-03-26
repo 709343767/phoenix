@@ -26,9 +26,9 @@ public enum MonitorTypeEnums {
     NET,
 
     /**
-     * TCP/IP服务
+     * TCP服务
      */
-    TCPIP4SERVICE,
+    TCP4SERVICE,
 
     /**
      * HTTP服务

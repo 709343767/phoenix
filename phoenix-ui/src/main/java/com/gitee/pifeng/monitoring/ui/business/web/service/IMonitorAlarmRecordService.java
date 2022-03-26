@@ -113,7 +113,7 @@ public interface IMonitorAlarmRecordService extends IService<MonitorAlarmRecord>
      * @author 皮锋
      * @custom.date 2021/6/18 22:15
      */
-    MonitorAlarmRecordVo monitorAlarmRecordDetail(Long id);
+    MonitorAlarmRecordVo getMonitorAlarmRecordDetail(Long id);
 
     /**
      * <p>

@@ -1,6 +1,5 @@
 package com.gitee.pifeng.monitoring.common.util.server;
 
-import com.gitee.pifeng.monitoring.common.constant.TcpIpEnums;
 import com.gitee.pifeng.monitoring.common.exception.NetException;
 import lombok.extern.slf4j.Slf4j;
 import org.hyperic.sigar.SigarException;
@@ -80,7 +79,7 @@ public class NetUtilsTest {
      */
     @Test
     public void testTelnet() {
-        boolean telnet = NetUtils.telnet("127.0.0.1", 8000, TcpIpEnums.TCP);
+        boolean telnet = NetUtils.telnet("127.0.0.1", 8000);
         assertTrue(telnet);
     }
 
@@ -94,7 +93,7 @@ public class NetUtilsTest {
      */
     @Test
     public void telnetVT200() {
-        Map<String, Object> telnet = NetUtils.telnetVT200("127.0.0.1", 12000, TcpIpEnums.TCP);
+        Map<String, Object> telnet = NetUtils.telnetVT200("127.0.0.1", 12000);
         Object isConnect = telnet.get("isConnect");
         Object avgTime = telnet.get("avgTime");
         assertTrue(Boolean.parseBoolean(String.valueOf(isConnect)));
