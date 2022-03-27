@@ -249,7 +249,9 @@
                         return layer.msg('请选择数据');
                     }
                     layer.confirm('确定删除吗？', function (index) {
-                        var loading = layer.load();
+                        var loading = layer.load(1, {
+                            shade: [0.1, '#fff'] //0.1透明度的白色背景
+                        });
                         admin.req({
                             type: 'delete',
                             url: ctxPath + 'monitor-tcp/delete-monitor-tcp',
@@ -346,7 +348,9 @@
             var data = obj.data;
             if (obj.event === 'del') {
                 layer.confirm('确定删除吗？', function (index) {
-                    var loading = layer.load();
+                    var loading = layer.load(1, {
+                        shade: [0.1, '#fff'] //0.1透明度的白色背景
+                    });
                     admin.req({
                         type: 'delete',
                         url: ctxPath + 'monitor-tcp/delete-monitor-tcp',
