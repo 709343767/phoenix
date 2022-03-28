@@ -12,10 +12,7 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * <p>
@@ -65,6 +62,28 @@ public class MonitorNetworkHistoryController {
         NetworkAvgTimeChartVo networkAvgTimeChartVo = this.monitorNetHistoryService
                 .getAvgTimeChartInfo(id, ipSource, ipTarget, dateValue);
         return LayUiAdminResultVo.ok(networkAvgTimeChartVo);
+    }
+
+    /**
+     * <p>
+     * 清理网络监控历史数据
+     * </p>
+     *
+     * @param id   网络ID
+     * @param time 时间
+     * @return layUiAdmin响应对象：如果清理成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @author 皮锋
+     * @custom.date 2021/7/20 20:52
+     */
+    @ApiOperation(value = "清理网络监控历史数据")
+    @ApiImplicitParams(value = {
+            @ApiImplicitParam(name = "id", value = "网络ID", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class),
+            @ApiImplicitParam(name = "time", value = "时间", required = true, paramType = "query", dataType = "string", dataTypeClass = String.class)})
+    @DeleteMapping("/clear-monitor-network-history")
+    @ResponseBody
+    @OperateLog(operModule = UiModuleConstants.NET, operType = OperateTypeConstants.DELETE, operDesc = "清理网络监控历史数据")
+    public LayUiAdminResultVo clearMonitorNetworkHistory(String id, String time) {
+        return this.monitorNetHistoryService.clearMonitorNetworkHistory(id, time);
     }
 
 }

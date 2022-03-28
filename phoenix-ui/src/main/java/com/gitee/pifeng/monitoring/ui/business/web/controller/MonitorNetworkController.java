@@ -202,4 +202,24 @@ public class MonitorNetworkController {
         return mv;
     }
 
+    /**
+     * <p>
+     * 访问清理网络监控历史数据表单页面
+     * </p>
+     *
+     * @param id 网络ID
+     * @return {@link ModelAndView} 清理网络监控历史数据表单页面
+     * @author 皮锋
+     * @custom.date 2021/7/20 20:56
+     */
+    @ApiOperation(value = "访问清理网络监控历史数据表单页面")
+    @ApiImplicitParams(value = {
+            @ApiImplicitParam(name = "id", value = "网络ID", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class)})
+    @GetMapping("/network-clear")
+    public ModelAndView networkClear(String id) {
+        ModelAndView mv = new ModelAndView("network/network-clear-form");
+        mv.addObject("id", id);
+        return mv;
+    }
+
 }

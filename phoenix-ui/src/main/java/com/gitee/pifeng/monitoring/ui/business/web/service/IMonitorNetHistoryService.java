@@ -2,6 +2,7 @@ package com.gitee.pifeng.monitoring.ui.business.web.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorNetHistory;
+import com.gitee.pifeng.monitoring.ui.business.web.vo.LayUiAdminResultVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.NetworkAvgTimeChartVo;
 
 /**
@@ -28,4 +29,17 @@ public interface IMonitorNetHistoryService extends IService<MonitorNetHistory> {
      * @custom.date 2022/3/17 21:37
      */
     NetworkAvgTimeChartVo getAvgTimeChartInfo(Long id, String ipSource, String ipTarget, String dateValue);
+
+    /**
+     * <p>
+     * 清理网络监控历史数据
+     * </p>
+     *
+     * @param id   网络ID
+     * @param time 时间
+     * @return layUiAdmin响应对象：如果清理成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @author 皮锋
+     * @custom.date 2022/3/28 14:03
+     */
+    LayUiAdminResultVo clearMonitorNetworkHistory(String id, String time);
 }

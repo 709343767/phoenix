@@ -198,7 +198,7 @@ public class MonitorInstanceController {
     @ApiOperation(value = "访问清理应用程序监控历史数据表单页面")
     @ApiImplicitParams(value = {
             @ApiImplicitParam(name = "instanceId", value = "应用实例ID", required = true, paramType = "query", dataType = "string", dataTypeClass = String.class)})
-    @GetMapping("instance-clear")
+    @GetMapping("/instance-clear")
     public ModelAndView instanceClear(String instanceId) {
         ModelAndView mv = new ModelAndView("instance/instance-clear-form");
         mv.addObject("instanceId", instanceId);
@@ -218,7 +218,7 @@ public class MonitorInstanceController {
     @ApiOperation(value = "访问应用程序编辑页面")
     @ApiImplicitParams(value = {
             @ApiImplicitParam(name = "instanceId", value = "应用实例ID", required = true, paramType = "query", dataType = "string", dataTypeClass = String.class)})
-    @GetMapping("edit-monitor-instance-form")
+    @GetMapping("/edit-monitor-instance-form")
     public ModelAndView editMonitorInstanceForm(String instanceId) {
         ModelAndView mv = new ModelAndView("instance/edit-instance");
         mv.addObject("instanceId", instanceId);
