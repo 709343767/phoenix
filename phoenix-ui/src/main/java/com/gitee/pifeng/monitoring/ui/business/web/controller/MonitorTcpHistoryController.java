@@ -12,10 +12,7 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * <p>
@@ -68,6 +65,28 @@ public class MonitorTcpHistoryController {
         TcpAvgTimeChartVo tcpAvgTimeChartVo = this.monitorTcpHistoryService
                 .getAvgTimeChartInfo(id, hostnameSource, hostnameTarget, portTarget, dateValue);
         return LayUiAdminResultVo.ok(tcpAvgTimeChartVo);
+    }
+
+    /**
+     * <p>
+     * 清理TCP监控历史数据
+     * </p>
+     *
+     * @param id   TCP ID
+     * @param time 时间
+     * @return layUiAdmin响应对象：如果清理成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @author 皮锋
+     * @custom.date 2021/7/20 20:52
+     */
+    @ApiOperation(value = "清理TCP监控历史数据")
+    @ApiImplicitParams(value = {
+            @ApiImplicitParam(name = "id", value = "TCP ID", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class),
+            @ApiImplicitParam(name = "time", value = "时间", required = true, paramType = "query", dataType = "string", dataTypeClass = String.class)})
+    @DeleteMapping("/clear-monitor-tcp-history")
+    @ResponseBody
+    @OperateLog(operModule = UiModuleConstants.TCP4SERVICE, operType = OperateTypeConstants.DELETE, operDesc = "清理TCP监控历史数据")
+    public LayUiAdminResultVo clearMonitorTcpHistory(String id, String time) {
+        return this.monitorTcpHistoryService.clearMonitorTcpHistory(id, time);
     }
 
 }
