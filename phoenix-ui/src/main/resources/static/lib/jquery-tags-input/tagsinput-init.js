@@ -5,7 +5,7 @@ $(function () {
         width: 'auto',
         'delimiter': ';',
         onChange: function (elem, elem_tags) {
-            $('.tag').css('background-color', '#D2D2D2');
+            $('.tag').css({'background-color': '#D2D2D2', 'border-color': '#D2D2D2'});
         }
     });
     // 收件人号码
@@ -13,7 +13,7 @@ $(function () {
         width: 'auto',
         'delimiter': ';',
         onChange: function (elem, elem_tags) {
-            $('.tag').css('background-color', '#D2D2D2');
+            $('.tag').css({'background-color': '#D2D2D2', 'border-color': '#D2D2D2'});
         }
     });
 });
