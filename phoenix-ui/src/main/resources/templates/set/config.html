@@ -10,6 +10,8 @@
     <link rel="stylesheet" href="../../static/layui/css/layui.css" th:href="@{/layui/css/layui.css}" media="all">
     <link rel="stylesheet" href="../../static/style/admin.css" th:href="@{/style/admin.css}" media="all">
     <link rel="stylesheet" href="../../static/style/myself.css" th:href="@{/style/myself.css}" media="all">
+    <link rel="stylesheet" href="../../static/lib/jquery-tags-input/jquery.tagsinput.css"
+          th:href="@{/lib/jquery-tags-input/jquery.tagsinput.css}" media="all">
     <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
     <!--[if lt IE 9]>
     <script src="../../static/js/html5.min.js" th:src="@{/js/html5.min.js}"></script>
@@ -80,10 +82,12 @@
                                                     <label class="layui-form-label"
                                                            style="text-align: left;">收件人邮箱</label>
                                                     <div class="layui-input-block">
-                                                        <textarea name="alarmMailEmills" class="layui-textarea"
+                                                        <textarea name="alarmMailEmills" class="layui-textarea tag"
                                                                   lay-verType="tips"
-                                                                  th:text="${monitorConfigPageForm.alarmMailEmills}"></textarea>
-                                                        <div class="layui-form-mid layui-word-aux">收件人邮箱地址，多个邮箱地址用英文分号隔开
+                                                                  th:text="${monitorConfigPageForm.alarmMailEmills}">
+                                                        </textarea>
+                                                        <div class="layui-form-mid layui-word-aux">
+                                                            收件人邮箱地址，可输入多个，每输入完一个按下回车
                                                         </div>
                                                     </div>
                                                 </div>
@@ -96,10 +100,12 @@
                                                     <label class="layui-form-label"
                                                            style="text-align: left;">收信人号码</label>
                                                     <div class="layui-input-block">
-                                                        <textarea name="alarmSmsPhoneNumbers" class="layui-textarea"
+                                                        <textarea name="alarmSmsPhoneNumbers" class="layui-textarea tag"
                                                                   lay-verType="tips"
-                                                                  th:text="${monitorConfigPageForm.alarmSmsPhoneNumbers}"></textarea>
-                                                        <div class="layui-form-mid layui-word-aux">收信人手机号码，多个手机号码用英文分号隔开
+                                                                  th:text="${monitorConfigPageForm.alarmSmsPhoneNumbers}">
+                                                        </textarea>
+                                                        <div class="layui-form-mid layui-word-aux">
+                                                            收信人手机号码，可输入多个，每输入完一个按下回车
                                                         </div>
                                                     </div>
                                                 </div>
@@ -330,7 +336,12 @@
     </div>
 </div>
 <script src="../../static/js/common.js" th:src="@{/js/common.js}" charset="utf-8"></script>
+<script src="../../static/js/jquery.min.js" th:src="@{/js/jquery.min.js}" charset="utf-8"></script>
 <script src="../../static/layui/layui.js" th:src="@{/layui/layui.js}"></script>
+<script src="../../static/lib/jquery-tags-input/jquery.tagsinput.js"
+        th:src="@{/lib/jquery-tags-input/jquery.tagsinput.js}"></script>
+<script src="../../static/lib/jquery-tags-input/tagsinput-init.js"
+        th:src="@{/lib/jquery-tags-input/tagsinput-init.js}"></script>
 <script charset="utf-8" th:inline="javascript">
     layui.config({
         base: ctxPath //静态资源所在路径
@@ -379,6 +390,9 @@
                 error: function () {
                     layer.msg('系统错误！', {icon: 5, shift: 6});
                     // 关闭loading框
+                    layer.close(loadingIndex);
+                },
+                complete: function () {
                     layer.close(loadingIndex);
                 }
             });
