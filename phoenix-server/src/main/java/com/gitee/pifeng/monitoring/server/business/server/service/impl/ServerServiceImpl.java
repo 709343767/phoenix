@@ -13,6 +13,7 @@ import com.gitee.pifeng.monitoring.server.business.server.entity.*;
 import com.gitee.pifeng.monitoring.server.business.server.service.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -152,6 +153,7 @@ public class ServerServiceImpl extends ServiceImpl<IMonitorServerDao, MonitorSer
      */
     //@Transactional(rollbackFor = Throwable.class)
     @Override
+    @Retryable
     public Result dealServerPackage(ServerPackage serverPackage) {
         // 把服务器信息添加或更新到数据库
         this.operateServer(serverPackage);

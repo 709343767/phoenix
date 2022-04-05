@@ -12,6 +12,7 @@ import com.gitee.pifeng.monitoring.server.business.server.dao.*;
 import com.gitee.pifeng.monitoring.server.business.server.entity.*;
 import com.gitee.pifeng.monitoring.server.business.server.service.IJvmService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -84,6 +85,7 @@ public class JvmServiceImpl implements IJvmService {
      */
     //@Transactional(rollbackFor = Throwable.class)
     @Override
+    @Retryable
     public Result dealJvmPackage(JvmPackage jvmPackage) {
         // 先判断有没有此应用实例
         LambdaQueryWrapper<MonitorInstance> lambdaQueryWrapper = new LambdaQueryWrapper<>();

@@ -5,6 +5,7 @@ import com.gitee.pifeng.monitoring.common.web.toolkit.UniqueBeanNameGenerator;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.retry.annotation.EnableRetry;
 
 /**
  * <p>
@@ -15,6 +16,7 @@ import org.springframework.context.annotation.ComponentScan;
  * @author 皮锋
  * @custom.date 2020年1月20日 上午8:45:29
  */
+@EnableRetry
 @SpringBootApplication
 @ComponentScan(nameGenerator = UniqueBeanNameGenerator.class)
 public class AgentApplication extends CustomizationBeanHandler {

@@ -10,6 +10,7 @@ import com.gitee.pifeng.monitoring.common.util.ZipUtils;
 import com.gitee.pifeng.monitoring.common.util.secure.SecureUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -51,6 +52,7 @@ public class HttpServiceImpl implements IHttpService {
      * @custom.date 2020/4/30 16:34
      */
     @Override
+    @Retryable
     public BaseResponsePackage sendHttpPost(String json, String url) {
         CiphertextPackage requestCiphertextPackage;
         // 字符串是否需要进行gzip压缩

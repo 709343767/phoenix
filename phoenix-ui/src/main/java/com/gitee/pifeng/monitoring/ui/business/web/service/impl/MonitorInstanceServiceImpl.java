@@ -18,7 +18,9 @@ import com.gitee.pifeng.monitoring.ui.core.CalculateDateTime;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
@@ -166,8 +168,9 @@ public class MonitorInstanceServiceImpl extends ServiceImpl<IMonitorInstanceDao,
      * @author 皮锋
      * @custom.date 2020/9/26 12:25
      */
-    @Transactional(rollbackFor = Throwable.class)
+    @Transactional(rollbackFor = Throwable.class, isolation = Isolation.SERIALIZABLE)
     @Override
+    @Retryable
     public LayUiAdminResultVo deleteMonitorInstance(List<MonitorInstanceVo> monitorInstanceVos) {
         List<String> instances = Lists.newArrayList();
         for (MonitorInstanceVo monitorInstanceVo : monitorInstanceVos) {

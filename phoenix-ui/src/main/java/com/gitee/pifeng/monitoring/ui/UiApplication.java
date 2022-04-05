@@ -7,6 +7,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.retry.annotation.EnableRetry;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
@@ -22,6 +23,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableConfigurationProperties(ThirdAuthProperties.class)
 @ComponentScan(nameGenerator = UniqueBeanNameGenerator.class)
 @EnableTransactionManagement
+@EnableRetry
 public class UiApplication extends CustomizationBeanHandler {
 
     public static void main(String[] args) {
