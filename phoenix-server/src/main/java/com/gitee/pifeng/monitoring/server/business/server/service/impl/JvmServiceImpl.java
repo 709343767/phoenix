@@ -82,7 +82,7 @@ public class JvmServiceImpl implements IJvmService {
      * @author 皮锋
      * @custom.date 2020/8/27 17:45
      */
-    @Transactional(rollbackFor = Throwable.class)
+    //@Transactional(rollbackFor = Throwable.class)
     @Override
     public Result dealJvmPackage(JvmPackage jvmPackage) {
         // 先判断有没有此应用实例
