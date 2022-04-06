@@ -18,7 +18,7 @@ spring:
     druid:
       #数据源配置
       driver-class-name: com.mysql.cj.jdbc.Driver
-      url: jdbc:mysql://ip:3306/phoenix?useSSL=false&serverTimezone=GMT%2b8&useUnicode=true&characterEncoding=utf-8&autoReconnect=true&failOverReadOnly=false
+      url: jdbc:mysql://ip:3306/phoenix?useSSL=false&serverTimezone=GMT%2b8&useUnicode=true&characterEncoding=utf-8&autoReconnect=true&failOverReadOnly=false&rewriteBatchedStatements=true
       username:
       password:
 
