@@ -19,7 +19,9 @@ import com.gitee.pifeng.monitoring.ui.constant.WebResponseConstants;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
@@ -112,8 +114,9 @@ public class MonitorTcpServiceImpl extends ServiceImpl<IMonitorTcpDao, MonitorTc
      * @author 皮锋
      * @custom.date 2022/1/11 9:45
      */
-    @Transactional(rollbackFor = Throwable.class)
+    @Transactional(rollbackFor = Throwable.class, isolation = Isolation.SERIALIZABLE)
     @Override
+    @Retryable
     public LayUiAdminResultVo deleteMonitorTcp(List<MonitorTcpVo> monitorTcpVos) {
         List<Long> ids = Lists.newArrayList();
         for (MonitorTcpVo monitorTcpVo : monitorTcpVos) {

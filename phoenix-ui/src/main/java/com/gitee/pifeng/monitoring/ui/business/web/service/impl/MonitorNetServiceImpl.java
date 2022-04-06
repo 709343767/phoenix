@@ -27,7 +27,9 @@ import com.gitee.pifeng.monitoring.ui.core.PackageConstructor;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
@@ -138,8 +140,9 @@ public class MonitorNetServiceImpl extends ServiceImpl<IMonitorNetDao, MonitorNe
      * @author 皮锋
      * @custom.date 2020/9/26 14:02
      */
-    @Transactional(rollbackFor = Throwable.class)
+    @Transactional(rollbackFor = Throwable.class, isolation = Isolation.SERIALIZABLE)
     @Override
+    @Retryable
     public LayUiAdminResultVo deleteMonitorNet(List<MonitorNetVo> monitorNetVos) {
         List<Long> ids = Lists.newArrayList();
         for (MonitorNetVo monitorNetVo : monitorNetVos) {
