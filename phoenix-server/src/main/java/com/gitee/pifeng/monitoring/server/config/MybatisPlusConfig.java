@@ -78,6 +78,22 @@ public class MybatisPlusConfig {
 
     /**
      * <p>
+     * 配置自定义SQL注入器
+     * </p>
+     *
+     * @return {@link EasySqlInjector}
+     * @author 皮锋
+     * @custom.date 2022/4/6 9:07
+     */
+    @Bean
+    public EasySqlInjector easySqlInjector() {
+        EasySqlInjector easySqlInjector = new EasySqlInjector();
+        log.info("自定义SQL注入器配置成功！");
+        return easySqlInjector;
+    }
+
+    /**
+     * <p>
      * 配置MybatisPlus SQL执行效率插件
      * </p>
      *
