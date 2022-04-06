@@ -10,12 +10,14 @@ import com.gitee.pifeng.monitoring.common.domain.jvm.*;
 import com.gitee.pifeng.monitoring.common.dto.JvmPackage;
 import com.gitee.pifeng.monitoring.server.business.server.dao.*;
 import com.gitee.pifeng.monitoring.server.business.server.entity.*;
+import com.gitee.pifeng.monitoring.server.business.server.service.IJvmMemoryHistoryService;
 import com.gitee.pifeng.monitoring.server.business.server.service.IJvmService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -30,6 +32,12 @@ import java.util.Map;
  */
 @Service
 public class JvmServiceImpl implements IJvmService {
+
+    /**
+     * java虚拟机内存历史记录服务接口
+     */
+    @Autowired
+    private IJvmMemoryHistoryService jvmMemoryHistoryService;
 
     /**
      * 应用实例数据访问对象
@@ -259,6 +267,8 @@ public class JvmServiceImpl implements IJvmService {
         String instanceId = jvmPackage.getInstanceId();
         // 内存信息
         Map<String, MemoryDomain.MemoryUsageDomain> memoryUsageDomainMap = jvmPackage.getJvm().getMemoryDomain().getMemoryUsageDomainMap();
+        // 要添加的内存信息
+        List<MonitorJvmMemoryHistory> saveMonitorJvmMemoryHistory = new ArrayList<>();
         for (Map.Entry<String, MemoryDomain.MemoryUsageDomain> entry : memoryUsageDomainMap.entrySet()) {
             // 内存类型
             String memoryType = entry.getKey();
@@ -274,8 +284,9 @@ public class JvmServiceImpl implements IJvmService {
             monitorJvmMemoryHistory.setMax(memoryPoolDomain.getMax());
             monitorJvmMemoryHistory.setInsertTime(jvmPackage.getDateTime());
             monitorJvmMemoryHistory.setUpdateTime(jvmPackage.getDateTime());
-            this.monitorJvmMemoryHistoryDao.insert(monitorJvmMemoryHistory);
+            saveMonitorJvmMemoryHistory.add(monitorJvmMemoryHistory);
         }
+        this.jvmMemoryHistoryService.saveBatch(saveMonitorJvmMemoryHistory);
     }
 
     /**
