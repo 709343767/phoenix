@@ -20,10 +20,25 @@
         l.render('progress');
     }), layui.use(['admin', 'carousel', 'jquery', 'element'], function () {
         var admin = layui.admin, $ = layui.$, element = layui.element;
+        var $Last7DaysAlarmRecordStatistics = $('#last-7-days-alarm-record-statistics');
+        var $AlarmRecordResultStatistics = $('#alarm-record-result-statistics');
+        var $LayadminDataViewMy = $('#layadmin-dataview-my');
+        $Last7DaysAlarmRecordStatistics.width($LayadminDataViewMy.width());
+        $Last7DaysAlarmRecordStatistics.height($LayadminDataViewMy.height());
+        $AlarmRecordResultStatistics.width($LayadminDataViewMy.width());
+        $AlarmRecordResultStatistics.height($LayadminDataViewMy.height());
         // 基于准备好的dom，初始化echarts实例
-        var myChart = (layui.carousel, echarts.init(document.getElementById('last-7-days-alarm-record-statistics'), 'infographic'));
+        var myLast7DaysAlarmRecordStatisticsChart = (layui.carousel, echarts.init(document.getElementById('last-7-days-alarm-record-statistics'), 'infographic'));
+        var myAlarmRecordResultStatisticsChart = (layui.carousel, echarts.init(document.getElementById('alarm-record-result-statistics'), 'infographic'));
         // 浏览器窗口大小发生改变时
-        window.onresize = myChart.resize;
+        window.addEventListener("resize", function () {
+            $Last7DaysAlarmRecordStatistics.width($LayadminDataViewMy.width());
+            $Last7DaysAlarmRecordStatistics.height($LayadminDataViewMy.height());
+            $AlarmRecordResultStatistics.width($LayadminDataViewMy.width());
+            $AlarmRecordResultStatistics.height($LayadminDataViewMy.height());
+            myLast7DaysAlarmRecordStatisticsChart.resize();
+            myAlarmRecordResultStatisticsChart.resize();
+        });
 
         // 发送ajax请求，获取最近7天告警统计数据
         function getLast7DaysAlarmRecordStatistics() {
@@ -162,7 +177,7 @@
                             }
                         }]
                     };
-                    myChart.setOption(option);
+                    myLast7DaysAlarmRecordStatisticsChart.setOption(option);
                 },
                 error: function () {
                     layer.msg('系统错误！', {icon: 5, shift: 6});
@@ -200,6 +215,61 @@
                     $('#alarm-record-type-statistics').empty().append(html);
                     // 重新渲染进度条
                     element.render('progress');
+                },
+                error: function () {
+                    layer.msg('系统错误！', {icon: 5, shift: 6});
+                }
+            });
+        }
+
+        // 发送ajax，获取告警结果统计信息
+        function getAlarmRecordResultStatistics() {
+            admin.req({
+                type: 'post',
+                url: layui.setter.base + 'home/get-alarm-record-result-statistics',
+                dataType: 'json',
+                contentType: 'application/json;charset=utf-8',
+                headers: {
+                    "X-CSRF-TOKEN": tokenValue
+                },
+                success: function (result) {
+                    var data = result.data;
+                    // 告警成功次数
+                    var alarmRecordSuccessSum = data.alarmRecordSuccessSum;
+                    // 告警失败次数
+                    var alarmRecordFailSum = data.alarmRecordFailSum;
+                    // 未发送告警次数
+                    var alarmRecordUnsentSum = data.alarmRecordUnsentSum;
+                    var option = {
+                        tooltip: {
+                            trigger: 'item'
+                        },
+                        legend: {
+                            top: 'bottom'
+                        },
+                        series: [
+                            {
+                                // name: '告警结果统计',
+                                type: 'pie',
+                                radius: '50%',
+                                //设置对应块的数据
+                                color: ['#00A65A', '#C23632', '#F39C12'],
+                                data: [
+                                    {value: alarmRecordSuccessSum, name: '成功'},
+                                    {value: alarmRecordFailSum, name: '失败'},
+                                    {value: alarmRecordUnsentSum, name: '不提醒'}
+                                ],
+                                emphasis: {
+                                    itemStyle: {
+                                        shadowBlur: 10,
+                                        shadowOffsetX: 0,
+                                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                                    }
+                                }
+                            }
+                        ]
+                    };
+                    myAlarmRecordResultStatisticsChart.setOption(option);
                 },
                 error: function () {
                     layer.msg('系统错误！', {icon: 5, shift: 6});
@@ -396,6 +466,8 @@
         getLast7DaysAlarmRecordStatistics();
         // 发送ajax请求，获取告警类型统计信息
         getAlarmRecordTypeStatistics();
+        // 发送ajax，获取告警结果统计信息
+        getAlarmRecordResultStatistics();
         // 发送ajax请求，获取最新的5条告警记录
         getLast5AlarmRecord();
         // 每30秒刷新一次
@@ -404,6 +476,8 @@
             getLast7DaysAlarmRecordStatistics();
             // 发送ajax请求，获取告警类型统计信息
             getAlarmRecordTypeStatistics();
+            // 发送ajax，获取告警结果统计信息
+            getAlarmRecordResultStatistics();
             // 发送ajax请求，获取最新的5条告警记录
             getLast5AlarmRecord();
             // 发送ajax请求，获取home页的摘要信息（不需要页面加载时发送ajax）

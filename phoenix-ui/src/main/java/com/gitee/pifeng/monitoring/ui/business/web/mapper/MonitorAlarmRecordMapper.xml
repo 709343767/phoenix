@@ -94,6 +94,7 @@
                           left join MONITOR_ALARM_RECORD mar on (mar.`TYPE` = t.types)
                  group by t.types
              ) d
+        order by d.totals desc
     </select>
 
 </mapper>

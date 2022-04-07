@@ -157,6 +157,23 @@ public class HomeController {
 
     /**
      * <p>
+     * 获取告警结果统计信息
+     * </p>
+     *
+     * @return layUiAdmin响应对象
+     * @author 皮锋
+     * @custom.date 2022/4/7 10:46
+     */
+    @ApiOperation(value = "获取告警结果统计信息")
+    @ResponseBody
+    @PostMapping("/home/get-alarm-record-result-statistics")
+    public LayUiAdminResultVo getAlarmRecordResultStatistics() {
+        HomeAlarmRecordVo homeAlarmRecordVo = this.monitorAlarmRecordService.getHomeAlarmRecordInfo();
+        return LayUiAdminResultVo.ok(homeAlarmRecordVo);
+    }
+
+    /**
+     * <p>
      * 获取最新的5条告警记录
      * </p>
      *
