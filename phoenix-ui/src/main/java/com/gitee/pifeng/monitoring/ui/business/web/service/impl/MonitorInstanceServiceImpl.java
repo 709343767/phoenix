@@ -168,7 +168,7 @@ public class MonitorInstanceServiceImpl extends ServiceImpl<IMonitorInstanceDao,
      * @author 皮锋
      * @custom.date 2020/9/26 12:25
      */
-    @Transactional(rollbackFor = Throwable.class, isolation = Isolation.SERIALIZABLE)
+    @Transactional(rollbackFor = Throwable.class, isolation = Isolation.READ_COMMITTED)
     @Override
     @Retryable
     public LayUiAdminResultVo deleteMonitorInstance(List<MonitorInstanceVo> monitorInstanceVos) {

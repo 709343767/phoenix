@@ -114,7 +114,7 @@ public class MonitorTcpServiceImpl extends ServiceImpl<IMonitorTcpDao, MonitorTc
      * @author 皮锋
      * @custom.date 2022/1/11 9:45
      */
-    @Transactional(rollbackFor = Throwable.class, isolation = Isolation.SERIALIZABLE)
+    @Transactional(rollbackFor = Throwable.class, isolation = Isolation.READ_COMMITTED)
     @Override
     @Retryable
     public LayUiAdminResultVo deleteMonitorTcp(List<MonitorTcpVo> monitorTcpVos) {

@@ -140,7 +140,7 @@ public class MonitorNetServiceImpl extends ServiceImpl<IMonitorNetDao, MonitorNe
      * @author 皮锋
      * @custom.date 2020/9/26 14:02
      */
-    @Transactional(rollbackFor = Throwable.class, isolation = Isolation.SERIALIZABLE)
+    @Transactional(rollbackFor = Throwable.class, isolation = Isolation.READ_COMMITTED)
     @Override
     @Retryable
     public LayUiAdminResultVo deleteMonitorNet(List<MonitorNetVo> monitorNetVos) {
