@@ -46,6 +46,11 @@ public final class UiModuleConstants {
     public static final String TCP4SERVICE = "TCP服务";
 
     /**
+     * HTTP服务
+     */
+    public static final String HTTP4SERVICE = "HTTP服务";
+
+    /**
      * 告警
      */
     public static final String ALARM = "告警";

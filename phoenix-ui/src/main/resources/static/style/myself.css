@@ -35,6 +35,14 @@
     width: 14px;
 }
 
+.layui-icon-http {
+    background-image: url("../images/icon16/http2-16.png");
+    background-position: center center;
+    background-repeat: no-repeat;
+    height: 40px;
+    width: 14px;
+}
+
 .layuiadmin-big-font-my {
     line-height: 12px !important;
     font-size: 25px !important;

@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="utf-8">
+    <title>HTTP服务</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="./layui/css/layui.css" th:href="@{/layui/css/layui.css}" media="all">
+    <link rel="stylesheet" href="./style/admin.css" th:href="@{/style/admin.css}" media="all">
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+    <script src="./js/html5.min.js" th:src="@{/js/html5.min.js}"></script>
+    <script src="./js/respond.min.js" th:src="@{/js/respond.min.js}"></script>
+    <![endif]-->
+    <script type="text/javascript" charset="utf-8" th:inline="javascript">
+        var ctxPath = /*[[@{/}]]*/'';
+        var ipSource = [[${ipSource}]];// 源IP
+        var authority = [[${#authorization.expression('hasAuthority("超级管理员")')}]];
+    </script>
+</head>
+<body>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+            <form class="layui-form-item" onsubmit="return false;">
+                <div class="layui-inline">
+                    <label class="layui-form-label">源主机</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="hostnameSource" placeholder="请输入" autocomplete="off"
+                               class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">目标URL</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="urlTarget" placeholder="请输入" autocomplete="off"
+                               class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">请求方法</label>
+                    <div class="layui-input-block" style="width: 100px;">
+                        <select name="method">
+                            <option value="">所有</option>
+                            <option value="GET">GET</option>
+                            <option value="POST">POST</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">状态</label>
+                    <div class="layui-input-block" style="width: 100px;">
+                        <select name="status">
+                            <option value="">所有</option>
+                            <option value="200">200</option>
+                            <option value="500">500</option>
+                            <option value="404">404</option>
+                            <option value="403">403</option>
+                            <option value="400">400</option>
+                            <option value="-2">其它</option>
+                            <option value="-1">未知</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="list-table-search">
+                        <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                    </button>
+                    <button id="reset" type="reset" class="layui-btn">清空</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="layui-card-body">
+            <table id="list-table" lay-filter="list-table"></table>
+            <script type="text/html" id="imgTpl">
+                <img style="display: inline-block; width: 50%; height: 100%;" src={{ d.avatar }}>
+            </script>
+            <script type="text/html" id="list-table-toolbar">
+                <div class="layui-btn-container" sec:authorize="hasAuthority('超级管理员')">
+                    <button class="layui-btn layui-btn-sm layui-btn-danger" lay-event="batchdel">
+                        <i class="layui-icon layui-icon-delete"></i>删除
+                    </button>
+                    <button class="layui-btn layui-btn-sm layuiadmin-btn-useradmin" lay-event="add">
+                        <i class="layui-icon layui-icon-add-1"></i>添加
+                    </button>
+                </div>
+            </script>
+            <script type="text/html" id="list-table-toolbar-detail">
+                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"
+                   sec:authorize="hasAuthority('超级管理员')">
+                    <i class="layui-icon layui-icon-edit"></i>编辑</a>
+                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"
+                   sec:authorize="hasAuthority('超级管理员')">
+                    <i class="layui-icon layui-icon-delete"></i>删除</a>
+                <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="clear"
+                   sec:authorize="hasAuthority('超级管理员')">
+                    <i class="layui-icon layui-icon-reduce-circle"></i>清理</a>
+            </script>
+            <!-- TCP平均响应时间 -->
+            <script type="text/html" id="avgTimeTpl">
+                {{#  if(d.avgTime == null){ }}
+                <i class="layui-btn layui-btn-sm layui-btn-xs layui-btn-radius" lay-event="avgTimeHistory">未知</i>
+                {{#  }else if(d.avgTime <= 30){ }}
+                <i class="layui-btn layui-btn-normal layui-btn-xs layui-btn-radius" lay-event="avgTimeHistory">{{d.avgTime}}</i>
+                {{#  }else if(d.avgTime >30 && d.avgTime <= 60){ }}
+                <i class="layui-btn layui-btn-warm layui-btn-xs layui-btn-radius" lay-event="avgTimeHistory">{{d.avgTime}}</i>
+                {{#  }else if(d.avgTime > 60){ }}
+                <i class="layui-btn layui-btn-danger layui-btn-xs layui-btn-radius" lay-event="avgTimeHistory">{{d.avgTime}}</i>
+                {{#  } }}
+            </script>
+        </div>
+    </div>
+</div>
+<script src="./js/common.js" th:src="@{/js/common.js}" charset="utf-8"></script>
+<script src="./layui/layui.js" th:src="@{/layui/layui.js}"></script>
+<script charset="utf-8" th:inline="javascript">
+    layui.config({
+        base: ctxPath //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'table'], function () {
+        var $ = layui.$, admin = layui.admin, form = layui.form, table = layui.table, device = layui.device();
+        table.render({
+            elem: '#list-table',
+            url: ctxPath + 'monitor-http/get-monitor-http-list',
+            toolbar: '#list-table-toolbar',
+            request: {
+                pageName: 'current',//页码的参数名称，默认：page
+                limitName: 'size' //每页数据量的参数名，默认：limit
+            },
+            response: {
+                statusName: 'code', //规定数据状态的字段名称，默认：code
+                statusCode: 200,//规定成功的状态码，默认：0
+                msgName: 'msg',//规定状态信息的字段名称，默认：msg
+                countName: 'count', //规定数据总数的字段名称，默认：count
+                dataName: 'data' //规定数据列表的字段名称，默认：data
+            },
+            parseData: function (res) { //res 即为原始返回的数据
+                return {
+                    'code': res.code, //解析接口状态
+                    'msg': res.msg, //解析提示文本
+                    'count': res.data.total, //解析数据长度
+                    'data': res.data.records //解析数据列表
+                };
+            },
+            done: function (res) {
+                $('[data-field="urlTarget"]').children().each(function () {
+                    var url = $(this).text();
+                    if (!isEmpty(url) && url !== '目标URL') {
+                        $(this).html('<a id="aUrlTarget" target="_blank" href="' + url + '" style="cursor: pointer;text-decoration:underline;">' + url + '</a>');
+                    }
+                });
+                $('[data-field="status"]').children().each(function () {
+                    var status = $(this).text();
+                    if (status !== '200' && status !== '状态') {
+                        $(this).html('<span style="color: #FF4500;font-weight: bold;">' + status + '</span>');
+                    } else {
+                        $(this).text(status);
+                    }
+                });
+                for (var i in res.data) {		//遍历整个表格数据
+                    var item = res.data[i];		//获取当前行数据
+                    // 源IP与当前监控服务端所在的服务器IP不同，把这条记录标红
+                    if (item.hostnameSource !== ipSource && ipSource != null && ipSource !== 'null') {
+                        $('tr[data-index=' + i + ']').css('color', '#FF4500');
+                    }
+                }
+            },
+            cols: [
+                [{
+                    type: 'checkbox',
+                    hide: !authority
+                }, {
+                    field: 'id',
+                    width: 80,
+                    title: 'ID',
+                    sort: !0,
+                    hide: true
+                }, {
+                    field: 'hostnameSource',
+                    title: '源主机',
+                    minWidth: 140,
+                    sort: !0
+                }, {
+                    field: 'urlTarget',
+                    title: '目标URL',
+                    minWidth: 400,
+                    sort: !0
+                }, {
+                    field: 'method',
+                    title: '请求方法',
+                    minWidth: 80,
+                    sort: !0
+                }, {
+                    field: 'status',
+                    title: '状态',
+                    minWidth: 80,
+                    sort: !0
+                }, {
+                    field: 'avgTime',
+                    title: 'Telnet耗时(ms)',
+                    minWidth: 140,
+                    toolbar: '#avgTimeTpl',
+                    sort: !0
+                }, {
+                    field: 'offlineCount',
+                    title: '异常次数',
+                    minWidth: 110,
+                    sort: !0
+                }, {
+                    field: 'descr',
+                    title: '描述',
+                    minWidth: 210,
+                    sort: !0
+                }, {
+                    field: 'insertTime',
+                    title: '新增时间',
+                    minWidth: 170,
+                    sort: !0
+                }, {
+                    field: 'updateTime',
+                    title: '更新时间',
+                    minWidth: 170,
+                    sort: !0
+                }, {
+                    title: '操作',
+                    hide: !authority,
+                    width: 250,
+                    align: 'center',
+                    fixed: (device.ios || device.android) ? false : 'right',
+                    toolbar: '#list-table-toolbar-detail'
+                }]
+            ],
+            page: !0,
+            limit: 15,
+            limits: [10, 15, 20, 30, 40, 50, 60, 70, 80, 90, 100],
+            height: 'full-150'
+        });
+        //监听搜索
+        form.on('submit(list-table-search)', function (data) {
+            var field = data.field;
+            //执行重载
+            table.reload('list-table', {
+                where: field
+            });
+        });
+        // 点击表头排序
+        table.on('sort(list-table)', function (obj) {
+            table.reload('list-table', {
+                initSort: obj
+            });
+        });
+        //头工具栏事件
+        table.on('toolbar(list-table)', function (obj) {
+            switch (obj.event) {
+                case 'batchdel':
+                    var checkStatus = table.checkStatus('list-table'), checkData = checkStatus.data; //得到选中的数据
+                    if (checkData.length === 0) {
+                        return layer.msg('请选择数据');
+                    }
+                    layer.confirm('确定删除吗？', function (index) {
+                        var loading = layer.load(1, {
+                            shade: [0.1, '#fff'] //0.1透明度的白色背景
+                        });
+                        admin.req({
+                            type: 'delete',
+                            url: ctxPath + 'monitor-http/delete-monitor-http',
+                            data: JSON.stringify(checkStatus.data),
+                            dataType: 'json',
+                            contentType: 'application/json;charset=utf-8',
+                            headers: {
+                                [[${_csrf.headerName}]]: [[${_csrf.token}]]
+                            },
+                            success: function (result) {
+                                var data = result.data;
+                                if (data === webConst.SUCCESS) {
+                                    table.reload('list-table'); //数据刷新
+                                    layer.msg('删除成功！', {icon: 6});
+                                } else {
+                                    layer.msg('删除失败！', {icon: 5, shift: 6});
+                                }
+                                layer.close(loading);
+                            },
+                            error: function () {
+                                layer.msg('系统错误！', {icon: 5, shift: 6});
+                                layer.close(loading);
+                            },
+                            complete: function () {
+                                layer.close(loading);
+                            }
+                        });
+                    });
+                    break;
+                case 'add':
+                    // 宽度
+                    var width;
+                    // 高度
+                    var height;
+                    // 移动端
+                    if (device.ios || device.android) {
+                        // 宽度
+                        width = document.body.clientWidth * 0.8 + 'px';
+                        // 高度
+                        height = document.body.clientHeight * 0.6 + 'px';
+                    } else {
+                        // 宽度
+                        width = document.body.clientWidth * 0.3 + 'px';
+                        // 高度
+                        height = document.body.clientHeight * 0.5 + 'px';
+                    }
+                    layer.open({
+                        type: 2,
+                        title: '添加TCP信息',
+                        content: ctxPath + 'monitor-http/add-monitor-http-form',
+                        maxmin: true,
+                        area: [width, height],
+                        btn: ['确定', '取消'],
+                        yes: function (index, layero) {
+                            var iframeWindow = window['layui-layer-iframe' + index],
+                                submitID = 'LAY-front-submit',
+                                submit = layero.find('iframe').contents().find('#' + submitID);
+                            //监听提交
+                            iframeWindow.layui.form.on('submit(' + submitID + ')', function (data) {
+                                var field = data.field; //获取提交的字段
+                                admin.req({
+                                    type: 'post',
+                                    url: ctxPath + 'monitor-http/add-monitor-http',
+                                    data: field,
+                                    dataType: 'json',
+                                    headers: {
+                                        [[${_csrf.headerName}]]: [[${_csrf.token}]]
+                                    },
+                                    success: function (result) {
+                                        var data = result.data;
+                                        if (data === webConst.SUCCESS) {
+                                            table.reload('list-table'); //数据刷新
+                                            layer.close(index); //关闭弹层
+                                            layer.msg('添加成功！', {icon: 6});
+                                        } else if (data === webConst.EXIST) {
+                                            layer.msg('TCP信息已经存在！', {icon: 5, shift: 6});
+                                        } else {
+                                            layer.msg('添加失败！', {icon: 5, shift: 6});
+                                        }
+                                    },
+                                    error: function () {
+                                        layer.msg('系统错误！', {icon: 5, shift: 6});
+                                    }
+                                });
+                            });
+                            submit.trigger('click');
+                        }
+                    });
+                    break;
+            }
+        });
+        //监听工具条
+        table.on('tool(list-table)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'del') {
+                layer.confirm('确定删除吗？', function (index) {
+                    var loading = layer.load(1, {
+                        shade: [0.1, '#fff'] //0.1透明度的白色背景
+                    });
+                    admin.req({
+                        type: 'delete',
+                        url: ctxPath + 'monitor-http/delete-monitor-http',
+                        data: JSON.stringify([data]),
+                        dataType: 'json',
+                        contentType: 'application/json;charset=utf-8',
+                        headers: {
+                            [[${_csrf.headerName}]]: [[${_csrf.token}]]
+                        },
+                        success: function (result) {
+                            var data = result.data;
+                            if (data === webConst.SUCCESS) {
+                                obj.del();
+                                table.reload('list-table'); //数据刷新
+                                layer.msg('删除成功！', {icon: 6});
+                            } else {
+                                layer.msg('删除失败！', {icon: 5, shift: 6});
+                            }
+                            layer.close(loading);
+                        },
+                        error: function () {
+                            layer.msg('系统错误！', {icon: 5, shift: 6});
+                            layer.close(loading);
+                        },
+                        complete: function () {
+                            layer.close(loading);
+                        }
+                    });
+                });
+            } else if (obj.event === 'edit') {
+                // 宽度
+                var width;
+                // 高度
+                var height;
+                // 移动端
+                if (device.ios || device.android) {
+                    // 宽度
+                    width = document.body.clientWidth * 0.8 + 'px';
+                    // 高度
+                    height = document.body.clientHeight * 0.6 + 'px';
+                } else {
+                    // 宽度
+                    width = document.body.clientWidth * 0.3 + 'px';
+                    // 高度
+                    height = document.body.clientHeight * 0.5 + 'px';
+                }
+                layer.open({
+                    type: 2,
+                    title: '编辑TCP信息',
+                    content: ctxPath + 'monitor-http/edit-monitor-http-form?id=' + data.id,
+                    maxmin: true,
+                    area: [width, height],
+                    btn: ['确定', '取消'],
+                    yes: function (index, layero) {
+                        var iframeWindow = window['layui-layer-iframe' + index],
+                            submitID = 'LAY-front-submit',
+                            submit = layero.find('iframe').contents().find('#' + submitID);
+                        //监听提交
+                        iframeWindow.layui.form.on('submit(' + submitID + ')', function (data) {
+                            var field = data.field; //获取提交的字段
+                            admin.req({
+                                type: 'put',
+                                url: ctxPath + 'monitor-http/edit-monitor-http',
+                                data: field,
+                                dataType: 'json',
+                                headers: {
+                                    [[${_csrf.headerName}]]: [[${_csrf.token}]]
+                                },
+                                success: function (result) {
+                                    var data = result.data;
+                                    if (data === webConst.SUCCESS) {
+                                        table.reload('list-table'); //数据刷新
+                                        layer.close(index); //关闭弹层
+                                        layer.msg('编辑成功！', {icon: 6});
+                                    } else if (data === webConst.EXIST) {
+                                        layer.msg('TCP信息已经存在！', {icon: 5, shift: 6});
+                                    } else {
+                                        layer.msg('编辑失败！', {icon: 5, shift: 6});
+                                    }
+                                },
+                                error: function () {
+                                    layer.msg('系统错误！', {icon: 5, shift: 6});
+                                }
+                            });
+                        });
+                        submit.trigger('click');
+                    }
+                });
+            } else if (obj.event === 'avgTimeHistory') {
+                // 宽度
+                var width;
+                // 高度
+                var height;
+                // 移动端
+                if (device.ios || device.android) {
+                    // 宽度
+                    width = document.body.clientWidth * 0.8 + 'px';
+                    // 高度
+                    height = document.body.clientHeight * 0.55 + 'px';
+                } else {
+                    // 宽度
+                    width = document.body.clientWidth * 0.8 + 'px';
+                    // 高度
+                    height = document.body.clientHeight * 0.8 + 'px';
+                }
+                layer.open({
+                    type: 2,
+                    title: 'TCP耗时',
+                    content: ctxPath + 'monitor-http/avg-time?id=' + data.id,
+                    maxmin: true,
+                    shade: 0,
+                    moveOut: true,
+                    area: [width, height],
+                    success: function (layero, index) {
+                        // 在回调方法中的第2个参数“index”表示的是当前弹窗的索引
+                        // 通过layer.full方法将窗口放大
+                        layer.full(index);
+                    }
+                });
+            } else if (obj.event === 'clear') {
+                // 宽度
+                var width;
+                // 高度
+                var height;
+                // 移动端
+                if (device.ios || device.android) {
+                    // 宽度
+                    width = document.body.clientWidth * 0.68 + 'px';
+                    // 高度
+                    height = document.body.clientHeight * 0.4 + 'px';
+                } else {
+                    // 宽度
+                    width = document.body.clientWidth * 0.25 + 'px';
+                    // 高度
+                    height = document.body.clientHeight * 0.45 + 'px';
+                }
+                layer.open({
+                    type: 2,
+                    title: '请选择要清理的历史数据',
+                    content: ctxPath + 'monitor-http/http-clear?id=' + data.id,
+                    maxmin: true,
+                    area: [width, height],
+                    btn: ['确定', '取消'],
+                    yes: function (index, layero) {
+                        var iframeWindow = window['layui-layer-iframe' + index],
+                            submitID = 'LAY-front-submit',
+                            submit = layero.find('iframe').contents().find('#' + submitID);
+                        //监听提交
+                        iframeWindow.layui.form.on('submit(' + submitID + ')', function (data) {
+                            var field = data.field; //获取提交的字段
+                            var loading = layer.load(1, {
+                                shade: [0.1, '#fff'] //0.1透明度的白色背景
+                            });
+                            admin.req({
+                                type: 'delete',
+                                url: ctxPath + 'monitor-http-history/clear-monitor-http-history',
+                                data: field,
+                                dataType: 'json',
+                                headers: {
+                                    [[${_csrf.headerName}]]: [[${_csrf.token}]]
+                                },
+                                success: function (result) {
+                                    var data = result.data;
+                                    if (data === webConst.SUCCESS) {
+                                        layer.close(index); //关闭弹层
+                                        layer.msg('清理成功！', {icon: 6});
+                                    } else if (data === webConst.REQUIRED_IS_NULL) {
+                                        layer.msg('必选项不能为空！', {icon: 5, shift: 6});
+                                    } else {
+                                        layer.msg('清理失败！', {icon: 5, shift: 6});
+                                    }
+                                    layer.close(loading);
+                                },
+                                error: function () {
+                                    layer.msg('系统错误！', {icon: 5, shift: 6});
+                                    layer.close(loading);
+                                },
+                                complete: function () {
+                                    layer.close(loading);
+                                }
+                            });
+                        });
+                        submit.trigger('click');
+                    }
+                });
+            }
+        });
+    });
+</script>
+</body>
+</html>
