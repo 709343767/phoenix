@@ -153,4 +153,35 @@ public class MonitorHttpServiceImpl extends ServiceImpl<IMonitorHttpDao, Monitor
         }
         return LayUiAdminResultVo.ok(WebResponseConstants.FAIL);
     }
+
+    /**
+     * <p>
+     * 编辑HTTP信息
+     * </p>
+     *
+     * @param monitorHttpVo HTTP信息
+     * @return layUiAdmin响应对象：如果数据库中已经存在，LayUiAdminResultVo.data="exist"；
+     * 如果编辑成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @author 皮锋
+     * @custom.date 2022/1/11 12:26
+     */
+    @Override
+    public LayUiAdminResultVo editMonitorHttp(MonitorHttpVo monitorHttpVo) {
+        // 根据目标目标url，查询数据库中是否已经存在此目标url的记录
+        LambdaQueryWrapper<MonitorHttp> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        // 去掉它自己这条记录
+        lambdaQueryWrapper.ne(MonitorHttp::getId, monitorHttpVo.getId());
+        lambdaQueryWrapper.eq(MonitorHttp::getUrlTarget, monitorHttpVo.getUrlTarget());
+        MonitorHttp dbMonitorHttp = this.baseMapper.selectOne(lambdaQueryWrapper);
+        if (dbMonitorHttp != null) {
+            return LayUiAdminResultVo.ok(WebResponseConstants.EXIST);
+        }
+        MonitorHttp monitorHttp = monitorHttpVo.convertTo();
+        monitorHttp.setUpdateTime(new Date());
+        int result = this.baseMapper.updateById(monitorHttp);
+        if (result == 1) {
+            return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);
+        }
+        return LayUiAdminResultVo.ok(WebResponseConstants.FAIL);
+    }
 }

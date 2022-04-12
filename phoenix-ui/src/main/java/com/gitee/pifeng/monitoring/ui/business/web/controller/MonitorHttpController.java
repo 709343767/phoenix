@@ -3,6 +3,7 @@ package com.gitee.pifeng.monitoring.ui.business.web.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.gitee.pifeng.monitoring.common.exception.NetException;
 import com.gitee.pifeng.monitoring.ui.business.web.annotation.OperateLog;
+import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorHttp;
 import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorHttpService;
 import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorNetService;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.LayUiAdminResultVo;
@@ -147,6 +148,50 @@ public class MonitorHttpController {
         String sourceIp = this.monitorNetService.getSourceIp();
         monitorHttpVo.setHostnameSource(sourceIp);
         return this.monitorHttpService.addMonitorHttp(monitorHttpVo);
+    }
+
+    /**
+     * <p>
+     * 访问编辑HTTP信息表单页面
+     * </p>
+     *
+     * @param id HTTP ID
+     * @return {@link ModelAndView} 编辑HTTP信息表单页面
+     * @author 皮锋
+     * @custom.date 2022/1/11 11:20
+     */
+    @ApiOperation(value = "访问编辑HTTP信息表单页面")
+    @ApiImplicitParams(value = {
+            @ApiImplicitParam(name = "id", value = "HTTP ID", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class)})
+    @GetMapping("/edit-monitor-http-form")
+    public ModelAndView editMonitorHttpForm(@RequestParam(name = "id") Long id) {
+        MonitorHttp monitorHttp = this.monitorHttpService.getById(id);
+        MonitorHttpVo monitorHttpVo = MonitorHttpVo.builder().build().convertFor(monitorHttp);
+        ModelAndView mv = new ModelAndView("http/edit-http");
+        mv.addObject(monitorHttpVo);
+        return mv;
+    }
+
+    /**
+     * <p>
+     * 编辑HTTP信息
+     * </p>
+     *
+     * @param monitorHttpVo HTTP信息
+     * @return layUiAdmin响应对象：如果数据库中已经存在，LayUiAdminResultVo.data="exist"；
+     * 如果编辑成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @author 皮锋
+     * @custom.date 2022/1/11 12:26
+     */
+    @ApiOperation(value = "编辑HTTP信息")
+    @PutMapping("/edit-monitor-http")
+    @ResponseBody
+    @OperateLog(operModule = UiModuleConstants.HTTP4SERVICE, operType = OperateTypeConstants.UPDATE, operDesc = "编辑HTTP信息")
+    public LayUiAdminResultVo editMonitorHttp(MonitorHttpVo monitorHttpVo) {
+        // 获取被监控HTTP源IP地址，获取失败则返回null
+        String sourceIp = this.monitorNetService.getSourceIp();
+        monitorHttpVo.setHostnameSource(sourceIp);
+        return this.monitorHttpService.editMonitorHttp(monitorHttpVo);
     }
 
 }

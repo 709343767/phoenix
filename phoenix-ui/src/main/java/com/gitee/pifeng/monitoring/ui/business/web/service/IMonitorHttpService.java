@@ -59,4 +59,17 @@ public interface IMonitorHttpService extends IService<MonitorHttp> {
      * @custom.date 2022/1/11 10:16
      */
     LayUiAdminResultVo addMonitorHttp(MonitorHttpVo monitorHttpVo);
+
+    /**
+     * <p>
+     * 编辑HTTP信息
+     * </p>
+     *
+     * @param monitorHttpVo HTTP信息
+     * @return layUiAdmin响应对象：如果数据库中已经存在，LayUiAdminResultVo.data="exist"；
+     * 如果编辑成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @author 皮锋
+     * @custom.date 2022/1/11 12:26
+     */
+    LayUiAdminResultVo editMonitorHttp(MonitorHttpVo monitorHttpVo);
 }
