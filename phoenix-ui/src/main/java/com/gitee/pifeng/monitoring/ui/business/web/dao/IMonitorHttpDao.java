@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * </p>
  *
  * @author 皮锋
- * @since 2022-04-11
+ * @custom.date 2022-04-11
  */
 public interface IMonitorHttpDao extends BaseMapper<MonitorHttp> {
 

@@ -6,7 +6,6 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -16,25 +15,28 @@ import java.util.Date;
 
 /**
  * <p>
- * HTTP信息表
+ * HTTP信息历史记录表
  * </p>
  *
  * @author 皮锋
- * @custom.date 2022-04-11
+ * @custom.date 2022-04-12
  */
 @Data
-@Builder
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("MONITOR_HTTP")
-@ApiModel(value = "MonitorHttp对象", description = "HTTP信息表")
-public class MonitorHttp implements Serializable {
+@TableName("MONITOR_HTTP_HISTORY")
+@ApiModel(value = "MonitorHttpHistory对象", description = "HTTP信息历史记录表")
+public class MonitorHttpHistory implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "主键ID")
     @TableId(value = "ID", type = IdType.AUTO)
     private Long id;
+
+    @ApiModelProperty(value = "HTTP主表ID")
+    @TableField("HTTP_ID")
+    private Long httpId;
 
     @ApiModelProperty(value = "主机名（来源）")
     @TableField("HOSTNAME_SOURCE")

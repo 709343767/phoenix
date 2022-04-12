@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 /**
  * <p>
- * TCP信息历史记录 前端控制器
+ * TCP信息历史记录
  * </p>
  *
  * @author 皮锋
