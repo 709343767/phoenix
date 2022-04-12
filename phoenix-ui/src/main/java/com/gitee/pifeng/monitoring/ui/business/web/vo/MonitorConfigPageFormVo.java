@@ -44,6 +44,12 @@ public class MonitorConfigPageFormVo implements ISuperBean {
     private int tcpEnable;
 
     /**
+     * 是否监控HTTP
+     */
+    @ApiModelProperty(value = "是否监控HTTP")
+    private int httpEnable;
+
+    /**
      * 监控告警是否打开
      */
     @ApiModelProperty(value = "监控告警是否打开")

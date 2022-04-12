@@ -4,7 +4,7 @@ import lombok.*;
 
 /**
  * <p>
- * TCP配置属性
+ * HTTP配置属性
  * </p>
  *
  * @author 皮锋
@@ -15,10 +15,10 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
-public class MonitoringTcpProperties {
+public class MonitoringHttpProperties {
 
     /**
-     * 是否监控TCP服务
+     * 是否监控HTTP服务
      */
     private boolean enable;
 

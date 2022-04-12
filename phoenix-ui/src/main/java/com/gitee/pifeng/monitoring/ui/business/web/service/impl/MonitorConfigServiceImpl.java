@@ -67,6 +67,7 @@ public class MonitorConfigServiceImpl extends ServiceImpl<IMonitorConfigDao, Mon
         monitorConfigPageFormVo.setThreshold(properties.getThreshold());
         monitorConfigPageFormVo.setNetEnable(properties.getNetworkProperties().isEnable() ? 1 : 0);
         monitorConfigPageFormVo.setTcpEnable(properties.getTcpProperties().isEnable() ? 1 : 0);
+        monitorConfigPageFormVo.setHttpEnable(properties.getHttpProperties().isEnable() ? 1 : 0);
         monitorConfigPageFormVo.setAlarmEnable(properties.getAlarmProperties().isEnable() ? 1 : 0);
         monitorConfigPageFormVo.setAlarmLevel(properties.getAlarmProperties().getLevelEnum().name());
         monitorConfigPageFormVo.setAlarmWay(AlarmWayEnums.enums2Strs(properties.getAlarmProperties().getWayEnums()));
@@ -127,6 +128,9 @@ public class MonitorConfigServiceImpl extends ServiceImpl<IMonitorConfigDao, Mon
         // TCP配置属性
         MonitoringTcpProperties monitoringTcpProperties = new MonitoringTcpProperties();
         monitoringTcpProperties.setEnable(monitorConfigPageFormVo.getTcpEnable() == 1);
+        // HTTP配置属性
+        MonitoringHttpProperties monitoringHttpProperties = new MonitoringHttpProperties();
+        monitoringHttpProperties.setEnable(monitorConfigPageFormVo.getHttpEnable() == 1);
         // 服务器CPU配置属性
         MonitoringServerCpuProperties monitoringServerCpuProperties = new MonitoringServerCpuProperties();
         monitoringServerCpuProperties.setOverloadThreshold(monitorConfigPageFormVo.getServerCpuOverloadThreshold());
@@ -159,6 +163,7 @@ public class MonitorConfigServiceImpl extends ServiceImpl<IMonitorConfigDao, Mon
         properties.setAlarmProperties(monitoringAlarmProperties);
         properties.setNetworkProperties(monitoringNetworkProperties);
         properties.setTcpProperties(monitoringTcpProperties);
+        properties.setHttpProperties(monitoringHttpProperties);
         properties.setServerProperties(monitoringServerProperties);
         properties.setDbProperties(monitoringDbProperties);
         // 监控属性转json字符串

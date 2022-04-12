@@ -132,6 +132,8 @@ public class MonitoringConfigPropertiesLoader {
         MonitoringNetworkProperties networkProperties = new MonitoringNetworkProperties(true);
         // TCP配置属性
         MonitoringTcpProperties tcpProperties = new MonitoringTcpProperties(true);
+        // HTTP配置属性
+        MonitoringHttpProperties httpProperties = new MonitoringHttpProperties(true);
         // 服务器CPU配置属性
         MonitoringServerCpuProperties serverCpuProperties = new MonitoringServerCpuProperties(90D, AlarmLevelEnums.INFO);
         // 服务器磁盘配置属性
@@ -145,7 +147,7 @@ public class MonitoringConfigPropertiesLoader {
         // 数据库配置
         MonitoringDbProperties dbProperties = new MonitoringDbProperties(true, dbTableSpaceProperties);
         // 监控配置属性
-        MonitoringProperties properties = new MonitoringProperties(5, alarmProperties, networkProperties, tcpProperties, serverProperties, dbProperties);
+        MonitoringProperties properties = new MonitoringProperties(5, alarmProperties, networkProperties, tcpProperties, httpProperties, serverProperties, dbProperties);
         // 查询数据库中是否有配置记录
         MonitorConfig monitorConfig = this.configService.getOne(new LambdaQueryWrapper<>());
         if (monitorConfig == null) {
