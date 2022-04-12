@@ -6,13 +6,16 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gitee.pifeng.monitoring.ui.business.web.dao.IMonitorHttpDao;
+import com.gitee.pifeng.monitoring.ui.business.web.dao.IMonitorHttpHistoryDao;
 import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorHttp;
+import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorHttpHistory;
 import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorHttpService;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.LayUiAdminResultVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.MonitorHttpVo;
 import com.gitee.pifeng.monitoring.ui.constant.WebResponseConstants;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -31,6 +34,12 @@ import java.util.List;
  */
 @Service
 public class MonitorHttpServiceImpl extends ServiceImpl<IMonitorHttpDao, MonitorHttp> implements IMonitorHttpService {
+
+    /**
+     * HTTP信息历史记录数据访问对象
+     */
+    @Autowired
+    private IMonitorHttpHistoryDao monitorHttpHistoryDao;
 
     /**
      * <p>
@@ -114,9 +123,9 @@ public class MonitorHttpServiceImpl extends ServiceImpl<IMonitorHttpDao, Monitor
             ids.add(monitorHttpVo.getId());
         }
         // 删除HTTP历史记录表
-        //LambdaUpdateWrapper<MonitorHttpHistory> monitorHttpHistoryLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
-        //monitorHttpHistoryLambdaUpdateWrapper.in(MonitorHttpHistory::getHttpId, ids);
-        //this.monitorHttpHistoryDao.delete(monitorHttpHistoryLambdaUpdateWrapper);
+        LambdaUpdateWrapper<MonitorHttpHistory> monitorHttpHistoryLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+        monitorHttpHistoryLambdaUpdateWrapper.in(MonitorHttpHistory::getHttpId, ids);
+        this.monitorHttpHistoryDao.delete(monitorHttpHistoryLambdaUpdateWrapper);
         // 删除HTTP信息表
         LambdaUpdateWrapper<MonitorHttp> monitorHttpLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
         monitorHttpLambdaUpdateWrapper.in(MonitorHttp::getId, ids);
