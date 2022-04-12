@@ -143,6 +143,59 @@ CREATE TABLE `MONITOR_GROUP`
   ROW_FORMAT = Dynamic;
 
 -- ----------------------------
+-- Table structure for MONITOR_HTTP
+-- ----------------------------
+DROP TABLE IF EXISTS `MONITOR_HTTP`;
+CREATE TABLE `MONITOR_HTTP`
+(
+    `ID`              bigint(20)                                                    NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `HOSTNAME_SOURCE` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT '主机名（来源）',
+    `URL_TARGET`      varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'URL地址（目的地）',
+    `METHOD`          varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NULL DEFAULT NULL COMMENT '请求方法',
+    `PARAMETER`       varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '请求参数',
+    `DESCR`           varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '描述',
+    `AVG_TIME`        bigint(20)                                                    NULL DEFAULT NULL COMMENT '平均响应时间（毫秒）',
+    `STATUS`          int(8)                                                        NULL DEFAULT NULL COMMENT '状态',
+    `OFFLINE_COUNT`   int(8)                                                        NULL DEFAULT NULL COMMENT '离线次数',
+    `INSERT_TIME`     datetime                                                      NOT NULL COMMENT '新增时间',
+    `UPDATE_TIME`     datetime                                                      NULL DEFAULT NULL COMMENT '更新时间',
+    PRIMARY KEY (`ID`) USING BTREE,
+    INDEX `NX_HOSTNAME_SOURCE` (`HOSTNAME_SOURCE`) USING BTREE COMMENT '索引_主机名（来源）',
+    INDEX `NX_URL_TARGET` (`URL_TARGET`) USING BTREE COMMENT '索引_URL（目的地）'
+) ENGINE = InnoDB
+  CHARACTER SET = utf8mb4
+  COLLATE = utf8mb4_general_ci COMMENT = 'HTTP信息表'
+  ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for MONITOR_HTTP_HISTORY
+-- ----------------------------
+DROP TABLE IF EXISTS `MONITOR_HTTP_HISTORY`;
+CREATE TABLE `MONITOR_HTTP_HISTORY`
+(
+    `ID`              bigint(20)                                                    NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `HTTP_ID`         bigint(20)                                                    NOT NULL COMMENT 'HTTP主表ID',
+    `HOSTNAME_SOURCE` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT '主机名（来源）',
+    `URL_TARGET`      varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'URL地址（目的地）',
+    `METHOD`          varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NULL DEFAULT NULL COMMENT '请求方法',
+    `PARAMETER`       varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '请求参数',
+    `DESCR`           varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '描述',
+    `AVG_TIME`        bigint(20)                                                    NULL DEFAULT NULL COMMENT '平均响应时间（毫秒）',
+    `STATUS`          int(8)                                                        NULL DEFAULT NULL COMMENT '状态',
+    `OFFLINE_COUNT`   int(8)                                                        NULL DEFAULT NULL COMMENT '离线次数',
+    `INSERT_TIME`     datetime                                                      NOT NULL COMMENT '新增时间',
+    `UPDATE_TIME`     datetime                                                      NULL DEFAULT NULL COMMENT '更新时间',
+    PRIMARY KEY (`ID`) USING BTREE,
+    INDEX `NX_HOSTNAME_SOURCE` (`HOSTNAME_SOURCE`) USING BTREE COMMENT '索引_主机名（来源）',
+    INDEX `NX_URL_TARGET` (`URL_TARGET`) USING BTREE COMMENT '索引_URL（目的地）',
+    INDEX `NX_HTTP_ID` (`HTTP_ID`) USING BTREE COMMENT '索引_HTTP主表ID',
+    INDEX `NX_INSERT_TIME` (`INSERT_TIME`) USING BTREE COMMENT '索引_插入时间'
+) ENGINE = InnoDB
+  CHARACTER SET = utf8mb4
+  COLLATE = utf8mb4_general_ci COMMENT = 'HTTP信息历史记录表'
+  ROW_FORMAT = Dynamic;
+
+-- ----------------------------
 -- Table structure for MONITOR_INSTANCE
 -- ----------------------------
 DROP TABLE IF EXISTS `MONITOR_INSTANCE`;
