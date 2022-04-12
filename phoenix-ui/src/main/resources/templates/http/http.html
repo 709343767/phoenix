@@ -100,7 +100,7 @@
                    sec:authorize="hasAuthority('超级管理员')">
                     <i class="layui-icon layui-icon-reduce-circle"></i>清理</a>
             </script>
-            <!-- TCP平均响应时间 -->
+            <!-- HTTP平均响应时间 -->
             <script type="text/html" id="avgTimeTpl">
                 {{#  if(d.avgTime == null){ }}
                 <i class="layui-btn layui-btn-sm layui-btn-xs layui-btn-radius" lay-event="avgTimeHistory">未知</i>
@@ -308,17 +308,22 @@
                         height = document.body.clientHeight * 0.6 + 'px';
                     } else {
                         // 宽度
-                        width = document.body.clientWidth * 0.3 + 'px';
+                        width = document.body.clientWidth * 0.4 + 'px';
                         // 高度
-                        height = document.body.clientHeight * 0.5 + 'px';
+                        height = document.body.clientHeight * 0.65 + 'px';
                     }
                     layer.open({
                         type: 2,
-                        title: '添加TCP信息',
+                        title: '添加HTTP信息',
                         content: ctxPath + 'monitor-http/add-monitor-http-form',
                         maxmin: true,
                         area: [width, height],
                         btn: ['确定', '取消'],
+                        success: function (layero, index) {
+                            // 在回调方法中的第2个参数“index”表示的是当前弹窗的索引
+                            // 通过layer.full方法将窗口放大
+                            // layer.full(index);
+                        },
                         yes: function (index, layero) {
                             var iframeWindow = window['layui-layer-iframe' + index],
                                 submitID = 'LAY-front-submit',
@@ -341,7 +346,7 @@
                                             layer.close(index); //关闭弹层
                                             layer.msg('添加成功！', {icon: 6});
                                         } else if (data === webConst.EXIST) {
-                                            layer.msg('TCP信息已经存在！', {icon: 5, shift: 6});
+                                            layer.msg('HTTP信息已经存在！', {icon: 5, shift: 6});
                                         } else {
                                             layer.msg('添加失败！', {icon: 5, shift: 6});
                                         }
@@ -413,7 +418,7 @@
                 }
                 layer.open({
                     type: 2,
-                    title: '编辑TCP信息',
+                    title: '编辑HTTP信息',
                     content: ctxPath + 'monitor-http/edit-monitor-http-form?id=' + data.id,
                     maxmin: true,
                     area: [width, height],
@@ -440,7 +445,7 @@
                                         layer.close(index); //关闭弹层
                                         layer.msg('编辑成功！', {icon: 6});
                                     } else if (data === webConst.EXIST) {
-                                        layer.msg('TCP信息已经存在！', {icon: 5, shift: 6});
+                                        layer.msg('HTTP信息已经存在！', {icon: 5, shift: 6});
                                     } else {
                                         layer.msg('编辑失败！', {icon: 5, shift: 6});
                                     }
@@ -472,7 +477,7 @@
                 }
                 layer.open({
                     type: 2,
-                    title: 'TCP耗时',
+                    title: 'HTTP耗时',
                     content: ctxPath + 'monitor-http/avg-time?id=' + data.id,
                     maxmin: true,
                     shade: 0,

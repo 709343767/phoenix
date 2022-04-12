@@ -146,7 +146,7 @@ public class MonitorTcpServiceImpl extends ServiceImpl<IMonitorTcpDao, MonitorTc
      */
     @Override
     public LayUiAdminResultVo addMonitorTcp(MonitorTcpVo monitorTcpVo) {
-        // 根据目标主机和目标端口号，查询数据库中是否已经存在此目主机P和目标端口号的记录
+        // 根据目标主机和目标端口号，查询数据库中是否已经存在此目标主机和目标端口号的记录
         LambdaQueryWrapper<MonitorTcp> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         lambdaQueryWrapper.eq(MonitorTcp::getHostnameTarget, monitorTcpVo.getHostnameTarget());
         lambdaQueryWrapper.eq(MonitorTcp::getPortTarget, monitorTcpVo.getPortTarget());

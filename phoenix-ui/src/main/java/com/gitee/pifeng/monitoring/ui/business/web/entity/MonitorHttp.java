@@ -48,6 +48,10 @@ public class MonitorHttp implements Serializable {
     @TableField("METHOD")
     private String method;
 
+    @ApiModelProperty(value = "请求参数")
+    @TableField("PARAMETER")
+    private String parameter;
+
     @ApiModelProperty(value = "描述")
     @TableField("DESCR")
     private String descr;

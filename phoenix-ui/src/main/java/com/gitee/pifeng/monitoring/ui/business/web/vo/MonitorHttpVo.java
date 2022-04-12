@@ -42,6 +42,9 @@ public class MonitorHttpVo implements ISuperBean {
     @ApiModelProperty(value = "请求方法")
     private String method;
 
+    @ApiModelProperty(value = "请求参数")
+    private String parameter;
+
     @ApiModelProperty(value = "描述")
     private String descr;
 

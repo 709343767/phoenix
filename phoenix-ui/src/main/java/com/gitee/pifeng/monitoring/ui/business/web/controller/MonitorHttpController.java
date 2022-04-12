@@ -1,6 +1,7 @@
 package com.gitee.pifeng.monitoring.ui.business.web.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.gitee.pifeng.monitoring.common.exception.NetException;
 import com.gitee.pifeng.monitoring.ui.business.web.annotation.OperateLog;
 import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorHttpService;
 import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorNetService;
@@ -14,10 +15,10 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.List;
 
 /**
  * <p>
@@ -91,6 +92,61 @@ public class MonitorHttpController {
     public LayUiAdminResultVo getMonitorHttpList(Long current, Long size, String hostnameSource, String urlTarget, String method, Integer status) {
         Page<MonitorHttpVo> page = this.monitorHttpService.getMonitorHttpList(current, size, hostnameSource, urlTarget, method, status);
         return LayUiAdminResultVo.ok(page);
+    }
+
+    /**
+     * <p>
+     * 删除HTTP
+     * </p>
+     *
+     * @param monitorHttpVos HTTP信息
+     * @return layUiAdmin响应对象：如果删除成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @author 皮锋
+     * @custom.date 2022/1/11 9:44
+     */
+    @ApiOperation(value = "删除HTTP")
+    @DeleteMapping("/delete-monitor-http")
+    @ResponseBody
+    @OperateLog(operModule = UiModuleConstants.HTTP4SERVICE, operType = OperateTypeConstants.DELETE, operDesc = "删除HTTP")
+    public LayUiAdminResultVo deleteMonitorHttp(@RequestBody List<MonitorHttpVo> monitorHttpVos) {
+        return this.monitorHttpService.deleteMonitorHttp(monitorHttpVos);
+    }
+
+    /**
+     * <p>
+     * 访问新增HTTP信息表单页面
+     * </p>
+     *
+     * @return {@link ModelAndView} 新增HTTP信息表单页面
+     * @author 皮锋
+     * @custom.date 2022/1/11 10:52
+     */
+    @ApiOperation(value = "访问新增HTTP信息表单页面")
+    @GetMapping("/add-monitor-http-form")
+    public ModelAndView addMonitorHttpForm() {
+        return new ModelAndView("http/add-http");
+    }
+
+    /**
+     * <p>
+     * 添加HTTP信息
+     * </p>
+     *
+     * @param monitorHttpVo HTTP信息
+     * @return layUiAdmin响应对象：如果数据库中已经存在，LayUiAdminResultVo.data="exist"；
+     * 如果添加成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @author 皮锋
+     * @custom.date 2022/1/11 10:16
+     */
+    @ApiOperation(value = "添加HTTP信息")
+    @PostMapping("/add-monitor-http")
+    @ResponseBody
+    @OperateLog(operModule = UiModuleConstants.HTTP4SERVICE, operType = OperateTypeConstants.ADD, operDesc = "添加HTTP信息")
+    public LayUiAdminResultVo addMonitorHttp(MonitorHttpVo monitorHttpVo) throws NetException {
+        // 获取被监控HTTP源IP地址，获取失败则返回null
+        String sourceIp = this.monitorNetService.getSourceIp();
+        monitorHttpVo.setHostnameSource(sourceIp);
+        return this.monitorHttpService.addMonitorHttp(monitorHttpVo);
     }
 
 }

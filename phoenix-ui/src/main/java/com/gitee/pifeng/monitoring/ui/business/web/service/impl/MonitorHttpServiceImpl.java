@@ -1,17 +1,24 @@
 package com.gitee.pifeng.monitoring.ui.business.web.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gitee.pifeng.monitoring.ui.business.web.dao.IMonitorHttpDao;
 import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorHttp;
 import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorHttpService;
+import com.gitee.pifeng.monitoring.ui.business.web.vo.LayUiAdminResultVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.MonitorHttpVo;
+import com.gitee.pifeng.monitoring.ui.constant.WebResponseConstants;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -86,5 +93,64 @@ public class MonitorHttpServiceImpl extends ServiceImpl<IMonitorHttpDao, Monitor
         monitorHttpVoPage.setRecords(monitorHttpVos);
         monitorHttpVoPage.setTotal(monitorHttpPage.getTotal());
         return monitorHttpVoPage;
+    }
+
+    /**
+     * <p>
+     * 删除HTTP
+     * </p>
+     *
+     * @param monitorHttpVos HTTP信息
+     * @return layUiAdmin响应对象：如果删除成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @author 皮锋
+     * @custom.date 2022/1/11 9:44
+     */
+    @Transactional(rollbackFor = Throwable.class, isolation = Isolation.READ_COMMITTED)
+    @Override
+    @Retryable
+    public LayUiAdminResultVo deleteMonitorHttp(List<MonitorHttpVo> monitorHttpVos) {
+        List<Long> ids = Lists.newArrayList();
+        for (MonitorHttpVo monitorHttpVo : monitorHttpVos) {
+            ids.add(monitorHttpVo.getId());
+        }
+        // 删除HTTP历史记录表
+        //LambdaUpdateWrapper<MonitorHttpHistory> monitorHttpHistoryLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+        //monitorHttpHistoryLambdaUpdateWrapper.in(MonitorHttpHistory::getHttpId, ids);
+        //this.monitorHttpHistoryDao.delete(monitorHttpHistoryLambdaUpdateWrapper);
+        // 删除HTTP信息表
+        LambdaUpdateWrapper<MonitorHttp> monitorHttpLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+        monitorHttpLambdaUpdateWrapper.in(MonitorHttp::getId, ids);
+        this.baseMapper.delete(monitorHttpLambdaUpdateWrapper);
+        return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);
+    }
+
+    /**
+     * <p>
+     * 添加HTTP信息
+     * </p>
+     *
+     * @param monitorHttpVo HTTP信息
+     * @return layUiAdmin响应对象：如果数据库中已经存在，LayUiAdminResultVo.data="exist"；
+     * 如果添加成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @author 皮锋
+     * @custom.date 2022/1/11 10:16
+     */
+    @Override
+    public LayUiAdminResultVo addMonitorHttp(MonitorHttpVo monitorHttpVo) {
+        // 根据目标url，查询数据库中是否已经存在此目标url的记录
+        LambdaQueryWrapper<MonitorHttp> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(MonitorHttp::getUrlTarget, monitorHttpVo.getUrlTarget());
+        MonitorHttp dbMonitorHttp = this.baseMapper.selectOne(lambdaQueryWrapper);
+        if (dbMonitorHttp != null) {
+            return LayUiAdminResultVo.ok(WebResponseConstants.EXIST);
+        }
+        MonitorHttp monitorHttp = monitorHttpVo.convertTo();
+        monitorHttp.setInsertTime(new Date());
+        monitorHttp.setOfflineCount(0);
+        int result = this.baseMapper.insert(monitorHttp);
+        if (result == 1) {
+            return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);
+        }
+        return LayUiAdminResultVo.ok(WebResponseConstants.FAIL);
     }
 }

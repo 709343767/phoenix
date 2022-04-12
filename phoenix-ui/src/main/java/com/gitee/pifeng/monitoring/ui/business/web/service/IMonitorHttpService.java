@@ -3,7 +3,10 @@ package com.gitee.pifeng.monitoring.ui.business.web.service;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorHttp;
+import com.gitee.pifeng.monitoring.ui.business.web.vo.LayUiAdminResultVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.MonitorHttpVo;
+
+import java.util.List;
 
 /**
  * <p>
@@ -31,4 +34,29 @@ public interface IMonitorHttpService extends IService<MonitorHttp> {
      * @custom.date 2022/4/11 10:51
      */
     Page<MonitorHttpVo> getMonitorHttpList(Long current, Long size, String hostnameSource, String urlTarget, String method, Integer status);
+
+    /**
+     * <p>
+     * 删除HTTP
+     * </p>
+     *
+     * @param monitorHttpVos HTTP信息
+     * @return layUiAdmin响应对象：如果删除成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @author 皮锋
+     * @custom.date 2022/1/11 9:44
+     */
+    LayUiAdminResultVo deleteMonitorHttp(List<MonitorHttpVo> monitorHttpVos);
+
+    /**
+     * <p>
+     * 添加HTTP信息
+     * </p>
+     *
+     * @param monitorHttpVo HTTP信息
+     * @return layUiAdmin响应对象：如果数据库中已经存在，LayUiAdminResultVo.data="exist"；
+     * 如果添加成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @author 皮锋
+     * @custom.date 2022/1/11 10:16
+     */
+    LayUiAdminResultVo addMonitorHttp(MonitorHttpVo monitorHttpVo);
 }
