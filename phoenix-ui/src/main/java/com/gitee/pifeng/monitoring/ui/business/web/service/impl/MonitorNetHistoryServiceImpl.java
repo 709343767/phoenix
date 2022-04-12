@@ -91,7 +91,7 @@ public class MonitorNetHistoryServiceImpl extends ServiceImpl<IMonitorNetHistory
      * @custom.date 2022/3/28 14:03
      */
     @Override
-    public LayUiAdminResultVo clearMonitorNetworkHistory(String id, String time) {
+    public LayUiAdminResultVo clearMonitorNetworkHistory(Long id, String time) {
         // 时间为空
         if (StringUtils.isBlank(time)) {
             return LayUiAdminResultVo.ok(WebResponseConstants.REQUIRED_IS_NULL);

@@ -85,7 +85,7 @@ public class MonitorTcpHistoryController {
     @DeleteMapping("/clear-monitor-tcp-history")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.TCP4SERVICE, operType = OperateTypeConstants.DELETE, operDesc = "清理TCP监控历史数据")
-    public LayUiAdminResultVo clearMonitorTcpHistory(String id, String time) {
+    public LayUiAdminResultVo clearMonitorTcpHistory(Long id, String time) {
         return this.monitorTcpHistoryService.clearMonitorTcpHistory(id, time);
     }
 

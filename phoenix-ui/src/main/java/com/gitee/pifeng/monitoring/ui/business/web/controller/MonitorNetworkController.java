@@ -216,7 +216,7 @@ public class MonitorNetworkController {
     @ApiImplicitParams(value = {
             @ApiImplicitParam(name = "id", value = "网络ID", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class)})
     @GetMapping("/network-clear")
-    public ModelAndView networkClear(String id) {
+    public ModelAndView networkClear(Long id) {
         ModelAndView mv = new ModelAndView("network/network-clear-form");
         mv.addObject("id", id);
         return mv;

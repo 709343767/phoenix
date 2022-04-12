@@ -42,5 +42,5 @@ public interface IMonitorTcpHistoryService extends IService<MonitorTcpHistory> {
      * @author 皮锋
      * @custom.date 2022/3/30 12:51
      */
-    LayUiAdminResultVo clearMonitorTcpHistory(String id, String time);
+    LayUiAdminResultVo clearMonitorTcpHistory(Long id, String time);
 }

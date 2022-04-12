@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>访问响应时间</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="./layui/css/layui.css" th:href="@{/layui/css/layui.css}" media="all">
+    <link rel="stylesheet" href="./style/admin.css" th:href="@{/style/admin.css}" media="all">
+    <link rel="stylesheet" href="./style/myself.css" th:href="@{/style/myself.css}" media="all">
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+    <script src="./js/html5.min.js" th:src="@{/js/html5.min.js}"></script>
+    <script src="./js/respond.min.js" th:src="@{/js/respond.min.js}"></script>
+    <![endif]-->
+    <script type="text/javascript" charset="utf-8" th:inline="javascript">
+        var ctxPath = /*[[@{/}]]*/'';
+        var tokenValue = /*[[${_csrf.token}]]*/'';
+        var id =/*[[${monitorHttpVo.id}]]*/'';
+        var hostnameSource =/*[[${monitorHttpVo.hostnameSource}]]*/'';
+        var urlTarget =/*[[${monitorHttpVo.urlTarget}]]*/'';
+        var method =/*[[${monitorHttpVo.method}]]*/'';
+    </script>
+</head>
+<body>
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <form class="layui-form layuiadmin-card-header-auto" lay-filter=""
+                      style="padding-top: 20px;"
+                      onsubmit="return false;">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">日期</label>
+                        <div class="layui-input-block">
+                            <input type="text" class="layui-input" id="insertTime" name="insertTime"
+                                   autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">自动刷新</label>
+                        <div class="layui-input-block">
+                            <input type="checkbox" name="autoRefresh" lay-filter="autoRefresh" checked
+                                   lay-skin="switch" lay-text="开启|关闭">
+                        </div>
+                    </div>
+                </form>
+                <hr>
+                <div class="layui-card-body" pad15>
+                    <div class="layui-row layui-col-space5">
+                        <div class="layadmin-dataview-my-650px" id="get-avg-time-info"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="./js/common.js" th:src="@{/js/common.js}" charset="utf-8"></script>
+<script src="./js/echarts.min.js" th:src="@{/js/echarts.min.js}"></script>
+<script src="./js/echarts.theme.infographic.js" th:src="@{/js/echarts.theme.infographic.js}"></script>
+<script src="./layui/layui.js" th:src="@{/layui/layui.js}"></script>
+<script>
+    layui.config({
+        base: ctxPath //静态资源所在路径
+    }).extend({
+        index: 'lib/index', //主入口模块
+        avgTime: 'http/avgTime' // 应用实例详情模块
+    }).use(['index', 'element', 'form', 'avgTime']);
+</script>
+</body>
+</html>

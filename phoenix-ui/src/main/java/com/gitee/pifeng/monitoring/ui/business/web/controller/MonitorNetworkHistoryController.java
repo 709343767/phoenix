@@ -82,7 +82,7 @@ public class MonitorNetworkHistoryController {
     @DeleteMapping("/clear-monitor-network-history")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.NET, operType = OperateTypeConstants.DELETE, operDesc = "清理网络监控历史数据")
-    public LayUiAdminResultVo clearMonitorNetworkHistory(String id, String time) {
+    public LayUiAdminResultVo clearMonitorNetworkHistory(Long id, String time) {
         return this.monitorNetHistoryService.clearMonitorNetworkHistory(id, time);
     }
 

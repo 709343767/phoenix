@@ -194,4 +194,46 @@ public class MonitorHttpController {
         return this.monitorHttpService.editMonitorHttp(monitorHttpVo);
     }
 
+    /**
+     * <p>
+     * 访问平均时间页面
+     * </p>
+     *
+     * @param id HTTP ID
+     * @return {@link ModelAndView} 平均时间页面
+     * @author 皮锋
+     * @custom.date 2022/3/17 11:13
+     */
+    @ApiOperation(value = "访问平均时间页面")
+    @ApiImplicitParams(value = {
+            @ApiImplicitParam(name = "id", value = "HTTP ID", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class)})
+    @GetMapping("/avg-time")
+    public ModelAndView avgTime(Long id) {
+        MonitorHttp monitorHttp = this.monitorHttpService.getById(id);
+        MonitorHttpVo monitorHttpVo = MonitorHttpVo.builder().build().convertFor(monitorHttp);
+        ModelAndView mv = new ModelAndView("http/avg-time");
+        mv.addObject(monitorHttpVo);
+        return mv;
+    }
+
+    /**
+     * <p>
+     * 访问清理HTTP服务监控历史数据表单页面
+     * </p>
+     *
+     * @param id 主键ID
+     * @return {@link ModelAndView} 清理HTTP服务监控历史数据表单页面
+     * @author 皮锋
+     * @custom.date 2021/7/20 20:56
+     */
+    @ApiOperation(value = "访问清理HTTP服务监控历史数据表单页面")
+    @ApiImplicitParams(value = {
+            @ApiImplicitParam(name = "id", value = "主键ID", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class)})
+    @GetMapping("/http-clear")
+    public ModelAndView httpClear(Long id) {
+        ModelAndView mv = new ModelAndView("http/http-clear-form");
+        mv.addObject("id", id);
+        return mv;
+    }
+
 }

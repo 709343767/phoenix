@@ -93,7 +93,7 @@ public class MonitorTcpHistoryServiceImpl extends ServiceImpl<IMonitorTcpHistory
      * @custom.date 2022/3/30 12:51
      */
     @Override
-    public LayUiAdminResultVo clearMonitorTcpHistory(String id, String time) {
+    public LayUiAdminResultVo clearMonitorTcpHistory(Long id, String time) {
         // 时间为空
         if (StringUtils.isBlank(time)) {
             return LayUiAdminResultVo.ok(WebResponseConstants.REQUIRED_IS_NULL);

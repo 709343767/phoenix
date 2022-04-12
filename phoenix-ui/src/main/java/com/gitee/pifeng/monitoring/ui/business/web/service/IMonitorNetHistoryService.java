@@ -41,5 +41,5 @@ public interface IMonitorNetHistoryService extends IService<MonitorNetHistory> {
      * @author 皮锋
      * @custom.date 2022/3/28 14:03
      */
-    LayUiAdminResultVo clearMonitorNetworkHistory(String id, String time);
+    LayUiAdminResultVo clearMonitorNetworkHistory(Long id, String time);
 }
