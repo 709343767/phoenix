@@ -267,6 +267,46 @@ public class QuartzConfig {
     }
     /////////////////////////////////////////////tcpMonitor end/////////////////////////////////////////////////////////
 
+    /////////////////////////////////////////////httpMonitor start///////////////////////////////////////////////////////
+
+    /**
+     * <p>
+     * HTTP状态监控 JobDetail 配置
+     * </p>
+     *
+     * @return 传递给定作业实例的详细信息属性
+     * @author 皮锋
+     * @custom.date 2022/1/11 15:58
+     */
+    @Bean
+    public JobDetail httpMonitorJobDetail() {
+        return JobBuilder.newJob(HttpMonitorJob.class)
+                .withIdentity("httpMonitorJob", JOB_DETAIL_GROUP)
+                .storeDurably()
+                .build();
+    }
+
+    /**
+     * <p>
+     * HTTP状态监控 Trigger 配置
+     * </p>
+     *
+     * @return 具有所有触发器通用属性的基本接口
+     * @author 皮锋
+     * @custom.date 2022/1/11 15:59
+     */
+    @Bean
+    public Trigger httpMonitorTrigger() {
+        return TriggerBuilder.newTrigger()
+                .forJob(this.httpMonitorJobDetail())
+                .withIdentity("httpMonitorTrigger", TRIGGER_GROUP)
+                // 项目启动完成后延迟10秒钟启动定时任务，然后每5分钟执行一次
+                .startAt(new DateTime().plusSeconds(10).toDate())
+                .withSchedule(SimpleScheduleBuilder.simpleSchedule().withIntervalInMinutes(5).repeatForever())
+                .build();
+    }
+    /////////////////////////////////////////////httpMonitor end/////////////////////////////////////////////////////////
+
     //////////////////////////////////////////clearHistoryData start////////////////////////////////////////////////////
 
     /**

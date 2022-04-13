@@ -1,5 +1,7 @@
 package com.gitee.pifeng.monitoring.plug.util;
 
+import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.date.TimeInterval;
 import cn.hutool.core.util.CharsetUtil;
 import com.gitee.pifeng.monitoring.plug.core.ConfigLoader;
 import lombok.Cleanup;
@@ -7,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.config.Registry;
 import org.apache.http.config.RegistryBuilder;
@@ -33,6 +36,8 @@ import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -208,6 +213,50 @@ public class EnumPoolingHttpUtils {
         // 释放连接
         httpPost.releaseConnection();
         return result;
+    }
+
+    /**
+     * <p>
+     * 发送get请求
+     * </p>
+     *
+     * @param url 请求URL
+     * @return 返回Map，key解释：<br>
+     * 1.statusCode：状态码；<br>
+     * 2.avgTime：平均时间（毫秒）；<br>
+     * 3.result：结果<br>
+     * @author 皮锋
+     * @custom.date 2022/4/13 12:38
+     */
+    public Map<String, Object> sendHttpGet(String url) {
+        // http状态码
+        int statusCode = 500;
+        // get请求返回结果
+        String result = null;
+        // 计时器
+        TimeInterval timer = DateUtil.timer();
+        try {
+            HttpGet httpget = new HttpGet(url);
+            @Cleanup
+            CloseableHttpResponse response = httpClient.execute(httpget);
+            statusCode = response.getStatusLine().getStatusCode();
+            // 成功
+            if (statusCode == HttpStatus.SC_OK) {
+                result = EntityUtils.toString(response.getEntity(), CharsetUtil.UTF_8);
+            }
+            // 释放连接
+            httpget.releaseConnection();
+        } catch (Exception e) {
+            log.debug("发送get请求异常：{}", e.getMessage());
+        }
+        // 时间差（毫秒）
+        long avgTime = timer.interval();
+        // 返回结果
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("statusCode", statusCode);
+        resultMap.put("avgTime", avgTime);
+        resultMap.put("result", result);
+        return resultMap;
     }
 
 }
