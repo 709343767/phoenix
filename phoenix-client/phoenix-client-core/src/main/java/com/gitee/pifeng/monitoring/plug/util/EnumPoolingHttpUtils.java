@@ -6,6 +6,7 @@ import cn.hutool.core.util.CharsetUtil;
 import com.gitee.pifeng.monitoring.plug.core.ConfigLoader;
 import lombok.Cleanup;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -193,26 +194,85 @@ public class EnumPoolingHttpUtils {
      * @custom.date 2020年3月5日 下午5:33:56
      */
     public String sendHttpPostByJson(String url, String json) throws IOException {
+        // 创建httpPost请求对象
         HttpPost httpPost = new HttpPost(url);
-        if (null != json) {
-            // 解决中文乱码问题
-            StringEntity entity = new StringEntity(json, StandardCharsets.UTF_8);
-            entity.setContentEncoding(CharsetUtil.UTF_8);
-            entity.setContentType("application/json");
-            httpPost.setEntity(entity);
+        try {
+            if (StringUtils.isNotBlank(json)) {
+                // 解决中文乱码问题
+                StringEntity entity = new StringEntity(json, StandardCharsets.UTF_8);
+                entity.setContentEncoding(CharsetUtil.UTF_8);
+                entity.setContentType("application/json");
+                httpPost.setEntity(entity);
+            }
+            @Cleanup
+            CloseableHttpResponse response = httpClient.execute(httpPost);
+            // post请求返回结果
+            String result = null;
+            // 成功
+            if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+                // 读取服务器返回过来的json字符串数据
+                result = EntityUtils.toString(response.getEntity(), CharsetUtil.UTF_8);
+            }
+            return result;
+        } finally {
+            // 释放连接
+            httpPost.releaseConnection();
         }
-        @Cleanup
-        CloseableHttpResponse response = httpClient.execute(httpPost);
-        // post请求返回结果
+    }
+
+    /**
+     * <p>
+     * 发送post请求
+     * </p>
+     *
+     * @param url  请求URL
+     * @param json JSON字符串格式的数据
+     * @return 返回Map，key解释：<br>
+     * 1.statusCode：状态码；<br>
+     * 2.avgTime：平均时间（毫秒）；<br>
+     * 3.result：结果<br>
+     * @author 皮锋
+     * @custom.date 2022/4/15 13:03
+     */
+    public Map<String, Object> sendHttpPost(String url, String json) {
+        // http状态码
+        int statusCode = 500;
+        // get请求返回结果
         String result = null;
-        // 成功
-        if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
-            // 读取服务器返回过来的json字符串数据
-            result = EntityUtils.toString(response.getEntity(), CharsetUtil.UTF_8);
+        // 创建httpPost请求对象
+        HttpPost httpPost = new HttpPost(url);
+        // 计时器
+        TimeInterval timer = DateUtil.timer();
+        try {
+            if (StringUtils.isNotBlank(json)) {
+                // 解决中文乱码问题
+                StringEntity entity = new StringEntity(json, StandardCharsets.UTF_8);
+                entity.setContentEncoding(CharsetUtil.UTF_8);
+                entity.setContentType("application/json");
+                httpPost.setEntity(entity);
+            }
+            @Cleanup
+            CloseableHttpResponse response = httpClient.execute(httpPost);
+            statusCode = response.getStatusLine().getStatusCode();
+            // 成功
+            if (statusCode == HttpStatus.SC_OK) {
+                // 读取服务器返回过来的json字符串数据
+                result = EntityUtils.toString(response.getEntity(), CharsetUtil.UTF_8);
+            }
+        } catch (Exception e) {
+            log.debug("发送post请求异常：{}", e.getMessage());
+        } finally {
+            // 释放连接
+            httpPost.releaseConnection();
         }
-        // 释放连接
-        httpPost.releaseConnection();
-        return result;
+        // 时间差（毫秒）
+        long avgTime = timer.interval();
+        // 返回结果
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("statusCode", statusCode);
+        resultMap.put("avgTime", avgTime);
+        resultMap.put("result", result);
+        return resultMap;
     }
 
     /**
@@ -233,10 +293,11 @@ public class EnumPoolingHttpUtils {
         int statusCode = 500;
         // get请求返回结果
         String result = null;
+        // 创建httpGet请求对象
+        HttpGet httpget = new HttpGet(url);
         // 计时器
         TimeInterval timer = DateUtil.timer();
         try {
-            HttpGet httpget = new HttpGet(url);
             @Cleanup
             CloseableHttpResponse response = httpClient.execute(httpget);
             statusCode = response.getStatusLine().getStatusCode();
@@ -244,10 +305,11 @@ public class EnumPoolingHttpUtils {
             if (statusCode == HttpStatus.SC_OK) {
                 result = EntityUtils.toString(response.getEntity(), CharsetUtil.UTF_8);
             }
-            // 释放连接
-            httpget.releaseConnection();
         } catch (Exception e) {
             log.debug("发送get请求异常：{}", e.getMessage());
+        } finally {
+            // 释放连接
+            httpget.releaseConnection();
         }
         // 时间差（毫秒）
         long avgTime = timer.interval();

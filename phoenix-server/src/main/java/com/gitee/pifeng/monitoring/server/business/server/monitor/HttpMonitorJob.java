@@ -23,7 +23,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpStatus;
 import org.hyperic.sigar.SigarException;
 import org.quartz.JobExecutionContext;
-import org.quartz.JobExecutionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
@@ -67,12 +66,6 @@ public class HttpMonitorJob extends QuartzJobBean {
     private IHttpHistoryService httpHistoryService;
 
     /**
-     * HTTP线程池工具类
-     */
-    private EnumPoolingHttpUtils httpClient = EnumPoolingHttpUtils.getInstance();
-
-
-    /**
      * <p>
      * 扫描数据库“MONITOR_HTTP”表中的所有HTTP信息，实时更新HTTP服务状态，发送告警。
      * </p>
@@ -82,7 +75,7 @@ public class HttpMonitorJob extends QuartzJobBean {
      * @custom.date 2022/1/11 16:31
      */
     @Override
-    protected void executeInternal(JobExecutionContext jobExecutionContext) throws JobExecutionException {
+    protected void executeInternal(JobExecutionContext jobExecutionContext) {
         // 是否监控HTTP服务
         boolean isMonitoringEnable = MonitoringConfigPropertiesLoader.getMonitoringProperties().getHttpProperties().isEnable();
         if (!isMonitoringEnable) {
@@ -93,33 +86,144 @@ public class HttpMonitorJob extends QuartzJobBean {
             List<MonitorHttp> monitorHttps = this.httpService.list(new LambdaQueryWrapper<MonitorHttp>().eq(MonitorHttp::getHostnameSource, NetUtils.getLocalIp()));
             // 循环处理每一个HTTP信息
             for (MonitorHttp monitorHttp : monitorHttps) {
-                // URL地址（目的地）
-                String urlTarget = monitorHttp.getUrlTarget();
-                // 请求方法
-                String method = monitorHttp.getMethod();
                 // 使用多线程，加快处理速度
                 ThreadPoolExecutor threadPoolExecutor = ThreadPool.COMMON_IO_INTENSIVE_THREAD_POOL;
                 threadPoolExecutor.execute(() -> {
+                    // 请求方法
+                    String method = monitorHttp.getMethod();
                     // GET请求
                     if (StringUtils.equalsIgnoreCase(HttpMethod.GET.name(), method)) {
-                        try {
-                            Map<String, Object> stringObjectMap = this.httpClient.sendHttpGet(urlTarget);
-                            int statusCode = Integer.parseInt(String.valueOf(stringObjectMap.get("statusCode")));
-                            long avgTime = Long.parseLong(String.valueOf(stringObjectMap.get("avgTime")));
-                            // 成功
-                            if (statusCode == HttpStatus.SC_OK) {
-                                // 处理HTTP服务正常
-                                this.connected(monitorHttp, statusCode, avgTime);
-                            }
-                        } catch (Exception e) {
-
-                        }
+                        // 检测HTTP GET请求
+                        this.checkGet(monitorHttp);
+                    }
+                    // POST请求
+                    if (StringUtils.equalsIgnoreCase(HttpMethod.POST.name(), method)) {
+                        // 检测HTTP POST请求
+                        this.checkPost(monitorHttp);
                     }
                 });
             }
         } catch (Exception e) {
             log.error("定时扫描数据库“MONITOR_HTTP”表中的所有HTTP信息异常！", e);
         }
+    }
+
+    /**
+     * <p>
+     * 检测HTTP POST请求
+     * </p>
+     *
+     * @param monitorHttp HTTP信息
+     * @author 皮锋
+     * @custom.date 2022/4/15 13:09
+     */
+    private void checkPost(MonitorHttp monitorHttp) {
+        try {
+            //HTTP线程池工具类
+            EnumPoolingHttpUtils httpClient = EnumPoolingHttpUtils.getInstance();
+            // URL地址（目的地）
+            String urlTarget = monitorHttp.getUrlTarget();
+            // 请求参数
+            String parameter = monitorHttp.getParameter();
+            Map<String, Object> stringObjectMap = httpClient.sendHttpPost(urlTarget, parameter);
+            // 状态码
+            int statusCode = Integer.parseInt(String.valueOf(stringObjectMap.get("statusCode")));
+            // 响应时间
+            long avgTime = Long.parseLong(String.valueOf(stringObjectMap.get("avgTime")));
+            // 成功
+            if (statusCode == HttpStatus.SC_OK) {
+                // 处理HTTP服务正常
+                this.connected(monitorHttp, statusCode, avgTime);
+            } else {
+                // 处理HTTP服务异常
+                this.disconnected(monitorHttp, statusCode, avgTime);
+            }
+        } catch (Exception e) {
+            log.error("检测HTTP POST请求异常！", e);
+            // 处理HTTP服务异常
+            this.disconnected(monitorHttp, 500, 30000);
+        }
+    }
+
+    /**
+     * <p>
+     * 检测HTTP GET请求
+     * </p>
+     *
+     * @param monitorHttp HTTP信息
+     * @author 皮锋
+     * @custom.date 2022/4/15 12:44
+     */
+    private void checkGet(MonitorHttp monitorHttp) {
+        try {
+            //HTTP线程池工具类
+            EnumPoolingHttpUtils httpClient = EnumPoolingHttpUtils.getInstance();
+            // URL地址（目的地）
+            String urlTarget = monitorHttp.getUrlTarget();
+            Map<String, Object> stringObjectMap = httpClient.sendHttpGet(urlTarget);
+            // 状态码
+            int statusCode = Integer.parseInt(String.valueOf(stringObjectMap.get("statusCode")));
+            // 响应时间
+            long avgTime = Long.parseLong(String.valueOf(stringObjectMap.get("avgTime")));
+            // 成功
+            if (statusCode == HttpStatus.SC_OK) {
+                // 处理HTTP服务正常
+                this.connected(monitorHttp, statusCode, avgTime);
+            } else {
+                // 处理HTTP服务异常
+                this.disconnected(monitorHttp, statusCode, avgTime);
+            }
+        } catch (Exception e) {
+            log.error("检测HTTP GET请求异常！", e);
+            // 处理HTTP服务异常
+            this.disconnected(monitorHttp, 500, 30000);
+        }
+    }
+
+    /**
+     * <p>
+     * 处理HTTP服务异常
+     * </p>
+     *
+     * @param monitorHttp HTTP信息表
+     * @param statusCode  http状态码
+     * @param avgTime     平均时间（毫秒）
+     * @author 皮锋
+     * @custom.date 2022/4/13 14:05
+     */
+    private void disconnected(MonitorHttp monitorHttp, int statusCode, long avgTime) {
+        try {
+            this.sendAlarmInfo("HTTP服务中断", AlarmLevelEnums.FATAL, AlarmReasonEnums.NORMAL_2_ABNORMAL, monitorHttp);
+        } catch (Exception e) {
+            log.error("HTTP服务告警异常！", e);
+        }
+        // 原本是未知或者200
+        Integer status = monitorHttp.getStatus();
+        if (null == status || status == HttpStatus.SC_OK) {
+            // 离线次数 +1
+            int offlineCount = monitorHttp.getOfflineCount() == null ? 0 : monitorHttp.getOfflineCount();
+            monitorHttp.setOfflineCount(offlineCount + 1);
+        }
+        Date date = new Date();
+        monitorHttp.setStatus(statusCode);
+        monitorHttp.setAvgTime(avgTime);
+        monitorHttp.setUpdateTime(date);
+        // 更新数据库
+        this.httpService.updateById(monitorHttp);
+        // 添加历史记录
+        MonitorHttpHistory monitorHttpHistory = new MonitorHttpHistory();
+        monitorHttpHistory.setHttpId(monitorHttp.getId());
+        monitorHttpHistory.setHostnameSource(monitorHttp.getHostnameSource());
+        monitorHttpHistory.setUrlTarget(monitorHttp.getUrlTarget());
+        monitorHttpHistory.setMethod(monitorHttp.getMethod());
+        monitorHttpHistory.setParameter(monitorHttp.getParameter());
+        monitorHttpHistory.setDescr(monitorHttp.getDescr());
+        monitorHttpHistory.setAvgTime(monitorHttp.getAvgTime());
+        monitorHttpHistory.setStatus(monitorHttp.getStatus());
+        monitorHttpHistory.setOfflineCount(monitorHttp.getOfflineCount());
+        monitorHttpHistory.setInsertTime(date);
+        monitorHttpHistory.setUpdateTime(date);
+        this.httpHistoryService.save(monitorHttpHistory);
     }
 
     /**

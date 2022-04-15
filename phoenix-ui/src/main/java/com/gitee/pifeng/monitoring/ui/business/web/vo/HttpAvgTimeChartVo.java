@@ -32,8 +32,8 @@ public class HttpAvgTimeChartVo implements ISuperBean {
     @ApiModelProperty(value = "所有列表")
     private List<All> allList;
 
-    @ApiModelProperty(value = "离线列表")
-    private List<OffLine> offLineList;
+    @ApiModelProperty(value = "异常列表")
+    private List<Exc> excList;
 
     /**
      * <p>
@@ -50,6 +50,9 @@ public class HttpAvgTimeChartVo implements ISuperBean {
         @ApiModelProperty(value = "平均响应时间（毫秒）")
         private Long avgTime;
 
+        @ApiModelProperty(value = "状态码")
+        private Integer status;
+
         @JsonFormat(pattern = "yyyy/MM/dd HH:mm:ss", timezone = "GMT+8")
         @ApiModelProperty(value = "新增时间")
         private Date insertTime;
@@ -57,18 +60,21 @@ public class HttpAvgTimeChartVo implements ISuperBean {
 
     /**
      * <p>
-     * 离线
+     * 异常
      * </p>
      *
      * @author 皮锋
      * @custom.date 2022/3/19 15:46
      */
-    @ApiModel(value = "离线")
+    @ApiModel(value = "异常")
     @Data
-    public static class OffLine {
+    public static class Exc {
 
         @ApiModelProperty(value = "平均响应时间（毫秒）")
         private Long avgTime;
+
+        @ApiModelProperty(value = "状态码")
+        private Integer status;
 
         @JsonFormat(pattern = "yyyy/MM/dd HH:mm:ss", timezone = "GMT+8")
         @ApiModelProperty(value = "新增时间")

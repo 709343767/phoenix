@@ -104,11 +104,11 @@
             <script type="text/html" id="avgTimeTpl">
                 {{#  if(d.avgTime == null){ }}
                 <i class="layui-btn layui-btn-sm layui-btn-xs layui-btn-radius" lay-event="avgTimeHistory">未知</i>
-                {{#  }else if(d.avgTime <= 30){ }}
+                {{#  }else if(d.avgTime <= 500){ }}
                 <i class="layui-btn layui-btn-normal layui-btn-xs layui-btn-radius" lay-event="avgTimeHistory">{{d.avgTime}}</i>
-                {{#  }else if(d.avgTime >30 && d.avgTime <= 60){ }}
+                {{#  }else if(d.avgTime >500 && d.avgTime <= 1000){ }}
                 <i class="layui-btn layui-btn-warm layui-btn-xs layui-btn-radius" lay-event="avgTimeHistory">{{d.avgTime}}</i>
-                {{#  }else if(d.avgTime > 60){ }}
+                {{#  }else if(d.avgTime > 1000){ }}
                 <i class="layui-btn layui-btn-danger layui-btn-xs layui-btn-radius" lay-event="avgTimeHistory">{{d.avgTime}}</i>
                 {{#  } }}
             </script>

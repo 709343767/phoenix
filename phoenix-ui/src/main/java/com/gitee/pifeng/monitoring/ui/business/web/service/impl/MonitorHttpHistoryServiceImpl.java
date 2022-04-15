@@ -60,23 +60,25 @@ public class MonitorHttpHistoryServiceImpl extends ServiceImpl<IMonitorHttpHisto
         // 返回值
         HttpAvgTimeChartVo httpAvgTimeChartVo = new HttpAvgTimeChartVo();
         List<HttpAvgTimeChartVo.All> allList = Lists.newArrayList();
-        List<HttpAvgTimeChartVo.OffLine> offLineList = Lists.newArrayList();
+        List<HttpAvgTimeChartVo.Exc> excList = Lists.newArrayList();
         for (MonitorHttpHistory monitorHttpHistory : monitorHttpHistories) {
             // 所有
             HttpAvgTimeChartVo.All all = new HttpAvgTimeChartVo.All();
             all.setAvgTime(monitorHttpHistory.getAvgTime());
+            all.setStatus(monitorHttpHistory.getStatus());
             all.setInsertTime(monitorHttpHistory.getInsertTime());
             allList.add(all);
-            // 离线
+            // 异常
             if (200 != monitorHttpHistory.getStatus()) {
-                HttpAvgTimeChartVo.OffLine offLine = new HttpAvgTimeChartVo.OffLine();
-                offLine.setAvgTime(monitorHttpHistory.getAvgTime());
-                offLine.setInsertTime(monitorHttpHistory.getInsertTime());
-                offLineList.add(offLine);
+                HttpAvgTimeChartVo.Exc exc = new HttpAvgTimeChartVo.Exc();
+                exc.setAvgTime(monitorHttpHistory.getAvgTime());
+                exc.setStatus(monitorHttpHistory.getStatus());
+                exc.setInsertTime(monitorHttpHistory.getInsertTime());
+                excList.add(exc);
             }
         }
         httpAvgTimeChartVo.setAllList(allList);
-        httpAvgTimeChartVo.setOffLineList(offLineList);
+        httpAvgTimeChartVo.setExcList(excList);
         return httpAvgTimeChartVo;
     }
 

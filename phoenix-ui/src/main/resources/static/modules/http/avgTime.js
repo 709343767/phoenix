@@ -48,8 +48,8 @@
                     var data = result.data;
                     // 所有
                     var allList = data.allList;
-                    // 离线
-                    var offLineList = data.offLineList;
+                    // 异常
+                    var excList = data.excList;
                     // 所有耗时
                     var avgTime = allList.map(function (item) {
                         return item.avgTime;
@@ -60,12 +60,12 @@
                     });
                     // 标记点
                     var markPointData = [];
-                    for (var i = 0; i < offLineList.length; i++) {
-                        var offLine = offLineList[i];
+                    for (var i = 0; i < excList.length; i++) {
+                        var exc = excList[i];
                         markPointData.push({
-                            yAxis: offLine.avgTime,
-                            xAxis: offLine.insertTime.replace(' ', '\n'),
-                            value: '离线',
+                            yAxis: exc.avgTime,
+                            xAxis: exc.insertTime.replace(' ', '\n'),
+                            value: exc.status,
                             itemStyle: {
                                 color: '#E13C00'
                             }
@@ -179,12 +179,12 @@
                                             color: '#5FB878'
                                         }
                                     }, {
-                                        yAxis: 30,
+                                        yAxis: 500,
                                         itemStyle: {
                                             color: '#2E90D1'
                                         }
                                     }, {
-                                        yAxis: 60,
+                                        yAxis: 1000,
                                         itemStyle: {
                                             color: '#E13C00'
                                         }
