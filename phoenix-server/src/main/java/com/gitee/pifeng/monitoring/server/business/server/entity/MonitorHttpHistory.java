@@ -70,6 +70,11 @@ public class MonitorHttpHistory {
     @TableField("STATUS")
     private Integer status;
     /**
+     * 异常信息
+     */
+    @TableField("EXC_MESSAGE")
+    private String excMessage;
+    /**
      * 离线次数
      */
     @TableField("OFFLINE_COUNT")

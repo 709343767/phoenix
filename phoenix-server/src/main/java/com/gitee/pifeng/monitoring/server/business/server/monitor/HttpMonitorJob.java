@@ -135,13 +135,15 @@ public class HttpMonitorJob extends QuartzJobBean {
                 // 处理HTTP服务正常
                 this.connected(monitorHttp, statusCode, avgTime);
             } else {
+                // 异常信息
+                String excMessage = stringObjectMap.get("excMessage") != null ? String.valueOf(stringObjectMap.get("excMessage")) : null;
                 // 处理HTTP服务异常
-                this.disconnected(monitorHttp, statusCode, avgTime);
+                this.disconnected(monitorHttp, statusCode, excMessage, avgTime);
             }
         } catch (Exception e) {
             log.error("检测HTTP POST请求异常！", e);
             // 处理HTTP服务异常
-            this.disconnected(monitorHttp, 500, 30000);
+            this.disconnected(monitorHttp, 500, e.getMessage(), 30000);
         }
     }
 
@@ -170,13 +172,15 @@ public class HttpMonitorJob extends QuartzJobBean {
                 // 处理HTTP服务正常
                 this.connected(monitorHttp, statusCode, avgTime);
             } else {
+                // 异常信息
+                String excMessage = stringObjectMap.get("excMessage") != null ? String.valueOf(stringObjectMap.get("excMessage")) : null;
                 // 处理HTTP服务异常
-                this.disconnected(monitorHttp, statusCode, avgTime);
+                this.disconnected(monitorHttp, statusCode, excMessage, avgTime);
             }
         } catch (Exception e) {
             log.error("检测HTTP GET请求异常！", e);
             // 处理HTTP服务异常
-            this.disconnected(monitorHttp, 500, 30000);
+            this.disconnected(monitorHttp, 500, e.getMessage(), 30000);
         }
     }
 
@@ -187,11 +191,12 @@ public class HttpMonitorJob extends QuartzJobBean {
      *
      * @param monitorHttp HTTP信息表
      * @param statusCode  http状态码
+     * @param excMessage  异常信息
      * @param avgTime     平均时间（毫秒）
      * @author 皮锋
      * @custom.date 2022/4/13 14:05
      */
-    private void disconnected(MonitorHttp monitorHttp, int statusCode, long avgTime) {
+    private void disconnected(MonitorHttp monitorHttp, int statusCode, String excMessage, long avgTime) {
         try {
             this.sendAlarmInfo("HTTP服务中断", AlarmLevelEnums.FATAL, AlarmReasonEnums.NORMAL_2_ABNORMAL, monitorHttp);
         } catch (Exception e) {
@@ -206,6 +211,7 @@ public class HttpMonitorJob extends QuartzJobBean {
         }
         Date date = new Date();
         monitorHttp.setStatus(statusCode);
+        monitorHttp.setExcMessage(excMessage);
         monitorHttp.setAvgTime(avgTime);
         monitorHttp.setUpdateTime(date);
         // 更新数据库
@@ -220,6 +226,7 @@ public class HttpMonitorJob extends QuartzJobBean {
         monitorHttpHistory.setDescr(monitorHttp.getDescr());
         monitorHttpHistory.setAvgTime(monitorHttp.getAvgTime());
         monitorHttpHistory.setStatus(monitorHttp.getStatus());
+        monitorHttpHistory.setExcMessage(monitorHttp.getExcMessage());
         monitorHttpHistory.setOfflineCount(monitorHttp.getOfflineCount());
         monitorHttpHistory.setInsertTime(date);
         monitorHttpHistory.setUpdateTime(date);

@@ -230,13 +230,16 @@ public class EnumPoolingHttpUtils {
      * @return 返回Map，key解释：<br>
      * 1.statusCode：状态码；<br>
      * 2.avgTime：平均时间（毫秒）；<br>
-     * 3.result：结果<br>
+     * 3.excMessage：异常信息；<br>
+     * 4.result：结果<br>
      * @author 皮锋
      * @custom.date 2022/4/15 13:03
      */
     public Map<String, Object> sendHttpPost(String url, String json) {
         // http状态码
         int statusCode = 500;
+        // 异常信息
+        String excMessage = null;
         // get请求返回结果
         String result = null;
         // 创建httpPost请求对象
@@ -261,6 +264,7 @@ public class EnumPoolingHttpUtils {
             }
         } catch (Exception e) {
             log.debug("发送post请求异常：{}", e.getMessage());
+            excMessage = e.getMessage();
         } finally {
             // 释放连接
             httpPost.releaseConnection();
@@ -271,6 +275,7 @@ public class EnumPoolingHttpUtils {
         Map<String, Object> resultMap = new HashMap<>();
         resultMap.put("statusCode", statusCode);
         resultMap.put("avgTime", avgTime);
+        resultMap.put("excMessage", excMessage);
         resultMap.put("result", result);
         return resultMap;
     }
@@ -284,13 +289,16 @@ public class EnumPoolingHttpUtils {
      * @return 返回Map，key解释：<br>
      * 1.statusCode：状态码；<br>
      * 2.avgTime：平均时间（毫秒）；<br>
-     * 3.result：结果<br>
+     * 3.excMessage：异常信息；<br>
+     * 4.result：结果<br>
      * @author 皮锋
      * @custom.date 2022/4/13 12:38
      */
     public Map<String, Object> sendHttpGet(String url) {
         // http状态码
         int statusCode = 500;
+        // 异常信息
+        String excMessage = null;
         // get请求返回结果
         String result = null;
         // 创建httpGet请求对象
@@ -307,6 +315,7 @@ public class EnumPoolingHttpUtils {
             }
         } catch (Exception e) {
             log.debug("发送get请求异常：{}", e.getMessage());
+            excMessage = e.getMessage();
         } finally {
             // 释放连接
             httpget.releaseConnection();
@@ -317,6 +326,7 @@ public class EnumPoolingHttpUtils {
         Map<String, Object> resultMap = new HashMap<>();
         resultMap.put("statusCode", statusCode);
         resultMap.put("avgTime", avgTime);
+        resultMap.put("excMessage", excMessage);
         resultMap.put("result", result);
         return resultMap;
     }
