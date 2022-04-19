@@ -68,6 +68,7 @@
                    when 'DATABASE' then '数据库'
                    when 'CUSTOM' then '自定义'
                    when 'TCP4SERVICE' then 'TCP'
+                   when 'HTTP4SERVICE' then 'HTTP'
                    end  as types
         from (
                  select t.types,
@@ -89,6 +90,9 @@
                           from DUAL
                           union
                           select 'TCP4SERVICE' types
+                          from DUAL
+                          union
+                          select 'HTTP4SERVICE' types
                           from DUAL
                       ) t
                           left join MONITOR_ALARM_RECORD mar on (mar.`TYPE` = t.types)
