@@ -66,6 +66,12 @@ public class HomeController {
     private IMonitorTcpService monitorTcpService;
 
     /**
+     * HTTP信息服务类
+     */
+    @Autowired
+    private IMonitorHttpService monitorHttpService;
+
+    /**
      * <p>
      * 访问主页
      * </p>
@@ -91,6 +97,8 @@ public class HomeController {
         mv.addObject("homeDbVo", homeDbVo);
         HomeTcpVo homeTcpVo = this.monitorTcpService.getHomeTcpInfo();
         mv.addObject("homeTcpVo", homeTcpVo);
+        HomeHttpVo homeHttpVo = this.monitorHttpService.getHomeHttpInfo();
+        mv.addObject("homeHttpVo", homeHttpVo);
         return mv;
     }
 
@@ -113,6 +121,7 @@ public class HomeController {
         HomeAlarmRecordVo homeAlarmRecordVo = this.monitorAlarmRecordService.getHomeAlarmRecordInfo();
         HomeDbVo homeDbVo = this.monitorDbService.getHomeDbInfo();
         HomeTcpVo homeTcpVo = this.monitorTcpService.getHomeTcpInfo();
+        HomeHttpVo homeHttpVo = this.monitorHttpService.getHomeHttpInfo();
         Map<String, Object> map = new HashMap<>(16);
         map.put("homeInstanceVo", homeInstanceVo);
         map.put("homeNetVo", homeNetVo);
@@ -120,6 +129,7 @@ public class HomeController {
         map.put("homeAlarmRecordVo", homeAlarmRecordVo);
         map.put("homeDbVo", homeDbVo);
         map.put("homeTcpVo", homeTcpVo);
+        map.put("homeHttpVo", homeHttpVo);
         return LayUiAdminResultVo.ok(map);
     }
 

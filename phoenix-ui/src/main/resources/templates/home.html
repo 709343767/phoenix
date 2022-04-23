@@ -227,6 +227,42 @@
                 <div class="layui-col-sm6 layui-col-md2">
                     <div class="layui-card">
                         <div class="layui-card-header">
+                            HTTP服务
+                            <span class="layui-badge layui-bg-skyblue-my layuiadmin-badge">个</span>
+                        </div>
+                        <div class="layui-card-body layuiadmin-card-list" id="http-card-list">
+                            <p class="layuiadmin-big-font layuiadmin-big-font-my">
+                                [[${homeHttpVo.httpSum}]]
+                                <i class="home-i">[[${homeHttpVo.httpConnectRate}]]
+                                    <img th:src="@{/images/icon16/percentage-16.png}"></i>
+                            </p>
+                            <p>
+                                正常
+                                <span class="layuiadmin-span-color">
+                                    [[${homeHttpVo.httpConnectSum}]]
+                                    <i class="layui-inline layui-icon"><img
+                                            th:src="@{/images/icon16/http-connect-16.png}"></i></span>
+                            </p>
+                            <p>
+                                异常
+                                <span class="layuiadmin-span-color">
+                                    [[${homeHttpVo.httpDisconnectSum}]]
+                                    <i class="layui-inline layui-icon"><img
+                                            th:src="@{/images/icon16/http-disconnect-16.png}"></i></span>
+                            </p>
+                            <p>
+                                未知
+                                <span class="layuiadmin-span-color">
+                                    [[${homeHttpVo.httpUnsentSum}]]
+                                    <i class="layui-inline layui-icon"><img
+                                            th:src="@{/images/icon16/http-unkown-16.png}"></i></span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-col-sm6 layui-col-md2" style="display:none;">
+                    <div class="layui-card">
+                        <div class="layui-card-header">
                             告警通知
                             <span class="layui-badge layui-bg-red layuiadmin-badge">次</span>
                         </div>

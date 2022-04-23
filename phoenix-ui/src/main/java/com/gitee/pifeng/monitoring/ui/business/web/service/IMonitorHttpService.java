@@ -3,6 +3,7 @@ package com.gitee.pifeng.monitoring.ui.business.web.service;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorHttp;
+import com.gitee.pifeng.monitoring.ui.business.web.vo.HomeHttpVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.LayUiAdminResultVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.MonitorHttpVo;
 
@@ -72,4 +73,15 @@ public interface IMonitorHttpService extends IService<MonitorHttp> {
      * @custom.date 2022/1/11 12:26
      */
     LayUiAdminResultVo editMonitorHttp(MonitorHttpVo monitorHttpVo);
+
+    /**
+     * <p>
+     * 获取home页的HTTP信息
+     * </p>
+     *
+     * @return home页的HTTP信息表现层对象
+     * @author 皮锋
+     * @custom.date 2022/4/23 13:23
+     */
+    HomeHttpVo getHomeHttpInfo();
 }

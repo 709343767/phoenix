@@ -2,4 +2,20 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.gitee.pifeng.monitoring.ui.business.web.dao.IMonitorHttpDao">
 
+    <!-- HTTP正常率统计 -->
+    <select id="getHttpNormalRateStatistics" resultType="java.util.Map">
+        SELECT tmp.httpSum                                                        AS httpSum,
+               tmp.httpConnectSum                                                 AS httpConnectSum,
+               tmp.httpDisconnectSum                                              AS httpDisconnectSum,
+               tmp.httpUnsentSum                                                  AS httpUnsentSum,
+               IFNULL(round(tmp.httpConnectSum * 100 / tmp.httpSum, 2), '100.00') AS httpConnectRate
+        FROM (
+                 SELECT COUNT(ID)                                                       AS httpSum,
+                        IFNULL(SUM(CASE WHEN mar.`STATUS` = 200 THEN 1 ELSE 0 END), 0)  AS httpConnectSum,
+                        IFNULL(SUM(CASE WHEN mar.`STATUS` != 200 THEN 1 ELSE 0 END), 0) AS httpDisconnectSum,
+                        IFNULL(SUM(CASE WHEN mar.`STATUS` is null OR mar.`STATUS` = '' THEN 1 ELSE 0 END),
+                               0)                                                       AS httpUnsentSum
+                 FROM MONITOR_HTTP mar) tmp
+    </select>
+
 </mapper>

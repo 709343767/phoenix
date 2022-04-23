@@ -327,6 +327,7 @@
                     var homeAlarmRecordVo = data.homeAlarmRecordVo;
                     var homeDbVo = data.homeDbVo;
                     var homeTcpVo = data.homeTcpVo;
+                    var homeHttpVo = data.homeHttpVo;
                     // 服务器类型
                     //var htmlServer1 = '<p class="layuiadmin-big-font layuiadmin-big-font-my">' + homeServerVo.serverSum + '</p>' +
                     //    '             <p>Windows' +
@@ -435,6 +436,26 @@
                         '               </span>' +
                         '         </p>';
                     $('#tcp-card-list').empty().append(htmlTcp);
+                    // HTTP
+                    var htmlHttp = '<p class="layuiadmin-big-font layuiadmin-big-font-my">' + homeHttpVo.httpSum +
+                        '               <i class="home-i">' + homeHttpVo.httpConnectRate + '<img src="' + ctxPath + 'images/icon16/percentage-16.png"></i>' +
+                        '         </p>' +
+                        '         <p>正常' +
+                        '               <span class="layuiadmin-span-color">' + homeHttpVo.httpConnectSum +
+                        '                      <i class="layui-inline layui-icon"><img src="' + ctxPath + 'images/icon16/http-connect-16.png"></i>' +
+                        '               </span>' +
+                        '         </p>' +
+                        '         <p>异常' +
+                        '               <span class="layuiadmin-span-color">' + homeHttpVo.httpDisconnectSum +
+                        '                      <i class="layui-inline layui-icon"><img src="' + ctxPath + 'images/icon16/http-disconnect-16.png"></i>' +
+                        '               </span>' +
+                        '         </p>' +
+                        '         <p>未知' +
+                        '               <span class="layuiadmin-span-color">' + homeHttpVo.httpUnsentSum +
+                        '                      <i class="layui-inline layui-icon"><img src="' + ctxPath + 'images/icon16/http-unkown-16.png"></i>' +
+                        '               </span>' +
+                        '         </p>';
+                    $('#http-card-list').empty().append(htmlHttp);
                     // 告警
                     var htmlAlarm = '<p class="layuiadmin-big-font layuiadmin-big-font-my">' + homeAlarmRecordVo.alarmRecordSum +
                         '                   <i class="home-i">' + homeAlarmRecordVo.alarmSucRate + '<img src="' + ctxPath + 'images/icon16/percentage-16.png"></i>' +

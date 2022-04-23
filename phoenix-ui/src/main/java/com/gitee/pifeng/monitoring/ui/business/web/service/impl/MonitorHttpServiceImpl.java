@@ -1,5 +1,6 @@
 package com.gitee.pifeng.monitoring.ui.business.web.service.impl;
 
+import cn.hutool.core.util.NumberUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -10,6 +11,7 @@ import com.gitee.pifeng.monitoring.ui.business.web.dao.IMonitorHttpHistoryDao;
 import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorHttp;
 import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorHttpHistory;
 import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorHttpService;
+import com.gitee.pifeng.monitoring.ui.business.web.vo.HomeHttpVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.LayUiAdminResultVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.MonitorHttpVo;
 import com.gitee.pifeng.monitoring.ui.constant.WebResponseConstants;
@@ -23,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -193,4 +196,27 @@ public class MonitorHttpServiceImpl extends ServiceImpl<IMonitorHttpDao, Monitor
         }
         return LayUiAdminResultVo.ok(WebResponseConstants.FAIL);
     }
+
+    /**
+     * <p>
+     * 获取home页的HTTP信息
+     * </p>
+     *
+     * @return home页的HTTP信息表现层对象
+     * @author 皮锋
+     * @custom.date 2022/4/23 13:23
+     */
+    @Override
+    public HomeHttpVo getHomeHttpInfo() {
+        // HTTP正常率统计
+        Map<String, Object> map = this.baseMapper.getHttpNormalRateStatistics();
+        return HomeHttpVo.builder()
+                .httpSum(NumberUtil.parseInt(map.get("httpSum").toString()))
+                .httpConnectSum(NumberUtil.parseInt(map.get("httpConnectSum").toString()))
+                .httpDisconnectSum(NumberUtil.parseInt(map.get("httpDisconnectSum").toString()))
+                .httpUnsentSum(NumberUtil.parseInt(map.get("httpUnsentSum").toString()))
+                .httpConnectRate(NumberUtil.round(map.get("httpConnectRate").toString(), 2).toString())
+                .build();
+    }
+
 }
