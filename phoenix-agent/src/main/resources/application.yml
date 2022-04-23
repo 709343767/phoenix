@@ -23,7 +23,7 @@ logging:
   config: classpath:logback-spring.xml
   #监控相关的日志级别设置成info
   level:
-    org.springframework.retry.support.RetryTemplate: trace
+    org.springframework.retry.support.RetryTemplate: info
     com.gitee.pifeng.monitoring: info
     oshi: error
 
