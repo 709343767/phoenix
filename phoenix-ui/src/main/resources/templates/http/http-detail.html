@@ -25,6 +25,13 @@
         <div class="layui-card-body">
             <div class="layui-collapse" lay-filter="component-panel">
                 <div class="layui-colla-item">
+                    <h2 class="layui-colla-title">ID</h2>
+                    <div class="layui-colla-content layui-show">
+                        <p style="white-space:pre-wrap;word-wrap:break-word;"
+                           th:text="${monitorHttpVo.id}"></p>
+                    </div>
+                </div>
+                <div class="layui-colla-item">
                     <h2 class="layui-colla-title">主机名（来源）</h2>
                     <div class="layui-colla-content layui-show">
                         <p style="white-space:pre-wrap;word-wrap:break-word;"
