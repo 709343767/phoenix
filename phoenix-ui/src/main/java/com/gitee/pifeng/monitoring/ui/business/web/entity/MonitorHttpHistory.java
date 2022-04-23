@@ -66,6 +66,10 @@ public class MonitorHttpHistory implements Serializable {
     @TableField("STATUS")
     private Integer status;
 
+    @ApiModelProperty(value = "异常信息")
+    @TableField("EXC_MESSAGE")
+    private String excMessage;
+
     @ApiModelProperty(value = "离线次数")
     @TableField("OFFLINE_COUNT")
     private Integer offlineCount;

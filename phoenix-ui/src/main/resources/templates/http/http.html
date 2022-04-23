@@ -90,6 +90,8 @@
                 </div>
             </script>
             <script type="text/html" id="list-table-toolbar-detail">
+                <a class="layui-btn layui-btn-sm layui-btn-xs" lay-event="info"><i
+                        class="layui-icon layui-icon-about"></i>详情</a>
                 <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"
                    sec:authorize="hasAuthority('超级管理员')">
                     <i class="layui-icon layui-icon-edit"></i>编辑</a>
@@ -229,7 +231,7 @@
                 }, {
                     title: '操作',
                     hide: !authority,
-                    width: 250,
+                    width: authority ? 280 : 100,
                     align: 'center',
                     fixed: (device.ios || device.android) ? false : 'right',
                     toolbar: '#list-table-toolbar-detail'
@@ -365,7 +367,38 @@
         //监听工具条
         table.on('tool(list-table)', function (obj) {
             var data = obj.data;
-            if (obj.event === 'del') {
+            if (obj.event === 'info') {
+                // 宽度
+                var width;
+                // 高度
+                var height;
+                // 移动端
+                if (device.ios || device.android) {
+                    // 宽度
+                    width = document.body.clientWidth * 0.8 + 'px';
+                    // 高度
+                    height = document.body.clientHeight * 0.55 + 'px';
+                } else {
+                    // 宽度
+                    width = document.body.clientWidth * 0.8 + 'px';
+                    // 高度
+                    height = document.body.clientHeight * 0.8 + 'px';
+                }
+                layer.open({
+                    type: 2,
+                    title: 'HTTP服务详情（' + data.urlTarget + '）',
+                    content: ctxPath + 'monitor-http/http-detail?id=' + data.id,
+                    maxmin: true,
+                    shade: 0,
+                    moveOut: true,
+                    area: [width, height],
+                    success: function (layero, index) {
+                        // 在回调方法中的第2个参数“index”表示的是当前弹窗的索引
+                        // 通过layer.full方法将窗口放大
+                        layer.full(index);
+                    }
+                });
+            } else if (obj.event === 'del') {
                 layer.confirm('确定删除吗？', function (index) {
                     var loading = layer.load(1, {
                         shade: [0.1, '#fff'] //0.1透明度的白色背景

@@ -236,4 +236,26 @@ public class MonitorHttpController {
         return mv;
     }
 
+    /**
+     * <p>
+     * 访问HTTP服务详情页面
+     * </p>
+     *
+     * @param id HTTP ID
+     * @return {@link ModelAndView} HTTP服务详情页面
+     * @author 皮锋
+     * @custom.date 2022/4/23 11:52
+     */
+    @ApiOperation(value = "访问HTTP服务详情页面")
+    @ApiImplicitParams(value = {
+            @ApiImplicitParam(name = "id", value = "HTTP ID", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class)})
+    @GetMapping("/http-detail")
+    public ModelAndView httpDetail(Long id) {
+        ModelAndView mv = new ModelAndView("http/http-detail");
+        MonitorHttp monitorHttp = this.monitorHttpService.getById(id);
+        MonitorHttpVo monitorHttpVo = MonitorHttpVo.builder().build().convertFor(monitorHttp);
+        mv.addObject("monitorHttpVo", monitorHttpVo);
+        return mv;
+    }
+
 }

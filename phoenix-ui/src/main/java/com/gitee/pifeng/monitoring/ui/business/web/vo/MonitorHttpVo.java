@@ -54,6 +54,9 @@ public class MonitorHttpVo implements ISuperBean {
     @ApiModelProperty(value = "状态")
     private Integer status;
 
+    @ApiModelProperty(value = "异常信息")
+    private String excMessage;
+
     @ApiModelProperty(value = "离线次数")
     private Integer offlineCount;
 

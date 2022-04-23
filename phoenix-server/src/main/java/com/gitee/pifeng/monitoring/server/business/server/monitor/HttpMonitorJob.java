@@ -292,8 +292,12 @@ public class HttpMonitorJob extends QuartzJobBean {
         String method = monitorHttp.getMethod();
         // 请求参数
         String parameter = monitorHttp.getParameter();
-        builder.append("源主机：").append(monitorHttp.getHostnameSource())
-                .append("，<br>目标URL：").append(monitorHttp.getUrlTarget())
+        // 主机名（来源）
+        String hostnameSource = monitorHttp.getHostnameSource();
+        // URL地址（目的地）
+        String urlTarget = monitorHttp.getUrlTarget();
+        builder.append("源主机：").append(hostnameSource)
+                .append("，<br>目标URL：").append(urlTarget)
                 .append("，<br>请求方法：").append(method);
         // POST请求
         if (StringUtils.equalsIgnoreCase(HttpMethod.POST.name(), method) && StringUtils.isNotBlank(parameter)) {
@@ -305,7 +309,7 @@ public class HttpMonitorJob extends QuartzJobBean {
         builder.append("，<br>时间：").append(DateTimeUtils.dateToString(new Date()));
         Alarm alarm = Alarm.builder()
                 // 保证code的唯一性
-                .code(Md5Utils.encrypt32(MonitorTypeEnums.HTTP4SERVICE.name() + monitorHttp.getHostnameSource() + monitorHttp.getUrlTarget()))
+                .code(Md5Utils.encrypt32(MonitorTypeEnums.HTTP4SERVICE.name() + hostnameSource + urlTarget + method))
                 .title(title)
                 .msg(builder.toString())
                 .alarmLevel(alarmLevelEnum)
