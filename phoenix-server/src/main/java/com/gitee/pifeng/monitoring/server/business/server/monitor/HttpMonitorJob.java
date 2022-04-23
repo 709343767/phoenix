@@ -283,6 +283,7 @@ public class HttpMonitorJob extends QuartzJobBean {
      * @param alarmLevelEnum  告警级别
      * @param alarmReasonEnum 告警原因
      * @param monitorHttp     HTTP信息
+     * @throws SigarException Sigar异常
      * @author 皮锋
      * @custom.date 2022/4/13 13:14
      */
