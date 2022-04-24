@@ -537,7 +537,17 @@ docker run -itd -v /tmp:/tmp -v /liblog4phoenix:/liblog4phoenix -v /etc/localtim
 
 ![数据库4](https://gitee.com/monitoring-platform/phoenix/raw/master/doc/%E6%88%AA%E5%9B%BE/%E6%95%B0%E6%8D%AE%E5%BA%934.png "数据库4")
 
-![网络](https://gitee.com/monitoring-platform/phoenix/raw/master/doc/%E6%88%AA%E5%9B%BE/%E7%BD%91%E7%BB%9C.png "网络")
+![网络1](https://gitee.com/monitoring-platform/phoenix/raw/master/doc/%E6%88%AA%E5%9B%BE/%E7%BD%91%E7%BB%9C1.png "网络1")
+
+![网络2](https://gitee.com/monitoring-platform/phoenix/raw/master/doc/%E6%88%AA%E5%9B%BE/%E7%BD%91%E7%BB%9C2.png "网络2")
+
+![TCP1](https://gitee.com/monitoring-platform/phoenix/raw/master/doc/%E6%88%AA%E5%9B%BE/TCP1.png "TCP1")
+
+![TCP2](https://gitee.com/monitoring-platform/phoenix/raw/master/doc/%E6%88%AA%E5%9B%BE/TCP2.png "TCP2")
+
+![HTTP1](https://gitee.com/monitoring-platform/phoenix/raw/master/doc/%E6%88%AA%E5%9B%BE/HTTP1.png "HTTP1")
+
+![HTTP2](https://gitee.com/monitoring-platform/phoenix/raw/master/doc/%E6%88%AA%E5%9B%BE/HTTP2.png "HTTP2")
 
 ![告警定义](https://gitee.com/monitoring-platform/phoenix/raw/master/doc/%E6%88%AA%E5%9B%BE/%E5%91%8A%E8%AD%A6%E5%AE%9A%E4%B9%89.png "告警定义")
 
