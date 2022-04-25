@@ -15,6 +15,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
@@ -837,7 +838,7 @@ public class ServerServiceImpl extends ServiceImpl<IMonitorServerDao, MonitorSer
      * @author 皮锋
      * @custom.date 2021/12/9 20:59
      */
-    @Transactional(rollbackFor = Throwable.class)
+    @Transactional(rollbackFor = Throwable.class, isolation = Isolation.READ_COMMITTED)
     @Override
     public int clearHistoryData(Date historyTime) {
         LambdaUpdateWrapper<MonitorServerProcessHistory> serverProcessHistoryLambdaUpdateWrapper = new LambdaUpdateWrapper<>();

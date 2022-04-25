@@ -15,7 +15,6 @@ import com.gitee.pifeng.monitoring.server.business.server.service.IJvmService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -386,7 +385,6 @@ public class JvmServiceImpl implements IJvmService {
      * @author 皮锋
      * @custom.date 2021/12/9 20:46
      */
-    @Transactional(rollbackFor = Throwable.class)
     @Override
     public int clearHistoryData(Date historyTime) {
         LambdaUpdateWrapper<MonitorJvmMemoryHistory> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();
