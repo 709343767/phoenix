@@ -52,14 +52,14 @@
                            th:text="${monitorLogOperationInfo.operDesc}"></p>
                     </div>
                 </div>
-                <div class="layui-colla-item">
+                <div class="layui-colla-item" th:unless="${#strings.isEmpty(monitorLogOperationInfo.reqParam)}">
                     <h2 class="layui-colla-title">请求参数</h2>
                     <div class="layui-colla-content layui-show">
                         <p style="white-space:pre-wrap;word-wrap:break-word;"
                            th:utext="${#strings.replace(#strings.replace(#strings.replace(monitorLogOperationInfo.reqParam,'\r\n','<br>'),'\\n','<br>'),'\n','<br>')}"></p>
                     </div>
                 </div>
-                <div class="layui-colla-item">
+                <div class="layui-colla-item" th:unless="${#strings.isEmpty(monitorLogOperationInfo.respParam)}">
                     <h2 class="layui-colla-title">返回参数</h2>
                     <div class="layui-colla-content layui-show">
                         <p style="white-space:pre-wrap;word-wrap:break-word;"

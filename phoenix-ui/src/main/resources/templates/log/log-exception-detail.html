@@ -45,7 +45,7 @@
                            th:text="${monitorLogExceptionInfo.excMessage}"></p>
                     </div>
                 </div>
-                <div class="layui-colla-item">
+                <div class="layui-colla-item" th:unless="${#strings.isEmpty(monitorLogExceptionInfo.reqParam)}">
                     <h2 class="layui-colla-title">请求参数</h2>
                     <div class="layui-colla-content layui-show">
                         <p style="white-space:pre-wrap;word-wrap:break-word;"
