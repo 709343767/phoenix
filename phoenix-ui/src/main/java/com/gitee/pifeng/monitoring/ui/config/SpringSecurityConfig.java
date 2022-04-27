@@ -39,14 +39,14 @@ import javax.sql.DataSource;
 @ConditionalOnExpression("!${third-auth.enable:false}")
 public class SpringSecurityConfig extends BaseWebSecurityConfigurerAdapter {
 
+    @Autowired
+    private FindByIndexNameSessionRepository<? extends Session> sessionRepository;
+
     /**
      * 监控用户服务类
      */
     @Autowired
     private IMonitorUserService monitorUserService;
-
-    @Autowired
-    private FindByIndexNameSessionRepository<? extends Session> sessionRepository;
 
     /**
      * 数据源

@@ -52,14 +52,14 @@
                            th:text="${monitorHttpVo.method}"></p>
                     </div>
                 </div>
-                <div class="layui-colla-item">
+                <div class="layui-colla-item" th:unless="${#strings.isEmpty(monitorHttpVo.parameter)}">
                     <h2 class="layui-colla-title">请求参数</h2>
                     <div class="layui-colla-content layui-show">
                         <p style="white-space:pre-wrap;word-wrap:break-word;"
                            th:text="${monitorHttpVo.parameter}"></p>
                     </div>
                 </div>
-                <div class="layui-colla-item">
+                <div class="layui-colla-item" th:unless="${#strings.isEmpty(monitorHttpVo.descr)}">
                     <h2 class="layui-colla-title">描述</h2>
                     <div class="layui-colla-content layui-show">
                         <p style="white-space:pre-wrap;word-wrap:break-word;"
@@ -80,7 +80,7 @@
                            th:text="${monitorHttpVo.status}"></p>
                     </div>
                 </div>
-                <div class="layui-colla-item">
+                <div class="layui-colla-item" th:unless="${#strings.isEmpty(monitorHttpVo.excMessage)}">
                     <h2 class="layui-colla-title">异常信息</h2>
                     <div class="layui-colla-content layui-show">
                         <p style="white-space:pre-wrap;word-wrap:break-word;"
