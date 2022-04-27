@@ -551,6 +551,12 @@
                 },
                 success: function (result) {
                     var data = result.data;
+                    // 没有电池信息
+                    if (data.length === 0) {
+                        $('#powerSourcesDiv').hide();
+                    } else {
+                        $('#powerSourcesDiv').show();
+                    }
                     var html = '';
                     for (var i = 0; i < data.length; i++) {
                         var obj = data[i];
@@ -704,16 +710,22 @@
                             '    </div>' +
                             '    <div class="layui-col-md4">' +
                             '       <label class="label-font-weight">用户名：</label>' + user +
-                            '    </div>' +
-                            '    <div class="layui-col-md12">' +
-                            '       <label class="label-font-weight">命令行：</label>' + commandLine +
-                            '    </div>' +
-                            '    <div class="layui-col-md12">' +
-                            '       <label class="label-font-weight">路径：</label>' + path +
-                            '    </div>' +
-                            '    <div class="layui-col-md12">' +
-                            '       <label class="label-font-weight">工作目录：</label>' + currentWorkingDirectory +
                             '    </div>';
+                        if (!isEmpty(commandLine)) {
+                            html += '<div class="layui-col-md12">' +
+                                '       <label class="label-font-weight">命令行：</label>' + commandLine +
+                                '    </div>';
+                        }
+                        if (!isEmpty(path)) {
+                            html += '<div class="layui-col-md12">' +
+                                '       <label class="label-font-weight">路径：</label>' + path +
+                                '    </div>';
+                        }
+                        if (!isEmpty(currentWorkingDirectory)) {
+                            html += '<div class="layui-col-md12">' +
+                                '       <label class="label-font-weight">工作目录：</label>' + currentWorkingDirectory +
+                                '    </div>';
+                        }
                         if (i !== data.length - 1) {
                             html += '<hr class="layui-bg-gray hr-padding">';
                         }
