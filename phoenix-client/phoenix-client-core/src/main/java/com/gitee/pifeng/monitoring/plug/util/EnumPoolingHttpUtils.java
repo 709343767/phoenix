@@ -21,6 +21,7 @@ import org.apache.http.conn.ManagedHttpClientConnection;
 import org.apache.http.conn.routing.HttpRoute;
 import org.apache.http.conn.socket.ConnectionSocketFactory;
 import org.apache.http.conn.socket.PlainConnectionSocketFactory;
+import org.apache.http.conn.ssl.NoopHostnameVerifier;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.DefaultConnectionReuseStrategy;
@@ -33,10 +34,14 @@ import org.apache.http.impl.conn.ManagedHttpClientConnectionFactory;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.impl.conn.SystemDefaultDnsResolver;
 import org.apache.http.impl.io.DefaultHttpRequestWriterFactory;
+import org.apache.http.ssl.SSLContexts;
 import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -108,11 +113,20 @@ public class EnumPoolingHttpUtils {
     private static CloseableHttpClient httpClient;
 
     static {
+        SSLConnectionSocketFactory sslConnectionSocketFactory;
+        try {
+            sslConnectionSocketFactory = new SSLConnectionSocketFactory(
+                    SSLContexts.custom().loadTrustMaterial(null, (chain, authType) -> true).build(), NoopHostnameVerifier.INSTANCE);
+        } catch (NoSuchAlgorithmException | KeyManagementException | KeyStoreException e) {
+            // 拿到默认的SSLConnectionSocketFactory
+            sslConnectionSocketFactory = SSLConnectionSocketFactory.getSystemSocketFactory();
+        }
         // 注册访问协议相关的Socket工厂
         Registry<ConnectionSocketFactory> socketFactoryRegistry = RegistryBuilder.<ConnectionSocketFactory>create()
                 // 配置同时支持 HTTP 和 HTPPS
                 .register("http", PlainConnectionSocketFactory.INSTANCE)
-                .register("https", SSLConnectionSocketFactory.getSystemSocketFactory())
+                // 参考：https://blog.csdn.net/u011537073/article/details/81216229
+                .register("https", sslConnectionSocketFactory)
                 .build();
         // HttpConnection工厂：配置写请求/解析响应处理器
         HttpConnectionFactory<HttpRoute, ManagedHttpClientConnection> connectionFactory
