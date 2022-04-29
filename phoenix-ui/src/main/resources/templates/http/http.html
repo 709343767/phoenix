@@ -160,8 +160,8 @@
                     var status = $(this).text();
                     if (status !== '200' && status !== '状态') {
                         $(this).html('<span style="color: #FF4500;font-weight: bold;">' + status + '</span>');
-                    } else {
-                        $(this).text(status);
+                    } else if (status === '200') {
+                        $(this).html('<span style="color: #439D6F;font-weight: bold;">' + status + '</span>');
                     }
                 });
                 for (var i in res.data) {		//遍历整个表格数据
