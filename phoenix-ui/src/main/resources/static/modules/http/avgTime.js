@@ -179,12 +179,12 @@
                                             color: '#5FB878'
                                         }
                                     }, {
-                                        yAxis: 500,
+                                        yAxis: 1000,
                                         itemStyle: {
                                             color: '#2E90D1'
                                         }
                                     }, {
-                                        yAxis: 1000,
+                                        yAxis: 5000,
                                         itemStyle: {
                                             color: '#E13C00'
                                         }
