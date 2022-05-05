@@ -234,13 +234,32 @@
                 },
                 success: function (result) {
                     var data = result.data;
+                    // 告警总次数
+                    var alarmRecordSum = data.alarmRecordSum;
                     // 告警成功次数
                     var alarmRecordSuccessSum = data.alarmRecordSuccessSum;
                     // 告警失败次数
                     var alarmRecordFailSum = data.alarmRecordFailSum;
                     // 未发送告警次数
                     var alarmRecordUnsentSum = data.alarmRecordUnsentSum;
+                    // 告警成功率
+                    var alarmSucRate = data.alarmSucRate;
                     var option = {
+                        title: {
+                            text: '总数：' + alarmRecordSum + '次',
+                            left: 'center',
+                            textStyle: {
+                                color: '#696969',
+                                fontSize: 14
+                            },
+                            subtext: '成功：' + alarmRecordSuccessSum + '次'
+                                + '，失败：' + alarmRecordFailSum + '次'
+                                + '，不提醒：' + alarmRecordUnsentSum + '次'
+                                + '，成功率：' + alarmSucRate + '%',
+                            subtextStyle: {
+                                color: '#8B8989'
+                            }
+                        },
                         tooltip: {
                             trigger: 'item'
                         },
