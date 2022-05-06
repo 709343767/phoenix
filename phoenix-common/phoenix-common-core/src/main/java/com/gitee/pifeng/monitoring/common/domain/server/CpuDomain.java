@@ -25,7 +25,7 @@ public class CpuDomain extends AbstractSuperBean {
     /**
      * cpu总数
      */
-    private int cpuNum;
+    private Integer cpuNum;
     /**
      * cpu信息
      */
@@ -41,7 +41,7 @@ public class CpuDomain extends AbstractSuperBean {
         /**
          * CPU频率（MHz）
          */
-        int cpuMhz;
+        Integer cpuMhz;
 
         /**
          * CPU卖主
@@ -56,32 +56,32 @@ public class CpuDomain extends AbstractSuperBean {
         /**
          * CPU用户使用率
          */
-        double cpuUser;
+        Double cpuUser;
 
         /**
          * CPU系统使用率
          */
-        double cpuSys;
+        Double cpuSys;
 
         /**
          * CPU等待率
          */
-        double cpuWait;
+        Double cpuWait;
 
         /**
          * CPU错误率
          */
-        double cpuNice;
+        Double cpuNice;
 
         /**
          * CPU剩余率
          */
-        double cpuIdle;
+        Double cpuIdle;
 
         /**
          * CPU使用率
          */
-        double cpuCombined;
+        Double cpuCombined;
 
     }
 
