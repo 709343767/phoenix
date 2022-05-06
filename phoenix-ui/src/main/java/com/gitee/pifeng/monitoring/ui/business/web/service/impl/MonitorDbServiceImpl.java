@@ -161,6 +161,8 @@ public class MonitorDbServiceImpl extends ServiceImpl<IMonitorDbDao, MonitorDb> 
      */
     @Override
     public LayUiAdminResultVo addMonitorDb(MonitorDbVo monitorDbVo) {
+        // 去掉无用的空格
+        monitorDbVo.setUrl(StringUtils.trim(monitorDbVo.getUrl()));
         // 根据url，查询数据库中是否已经存在此url的记录
         LambdaQueryWrapper<MonitorDb> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         lambdaQueryWrapper.eq(MonitorDb::getUrl, monitorDbVo.getUrl());
