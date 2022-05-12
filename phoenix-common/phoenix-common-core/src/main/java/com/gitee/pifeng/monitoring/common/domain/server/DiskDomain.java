@@ -62,27 +62,27 @@ public class DiskDomain extends AbstractSuperBean {
         /**
          * 文件系统总大小（单位：byte）
          */
-        long total;
+        Long total;
 
         /**
          * 文件系统剩余大小（单位：byte）
          */
-        long free;
+        Long free;
 
         /**
          * 文件系统已使用大小（单位：byte）
          */
-        long used;
+        Long used;
 
         /**
          * 文件系统可用大小（单位：byte）
          */
-        long avail;
+        Long avail;
 
         /**
          * 文件系统资源的利用率
          */
-        double usePercent;
+        Double usePercent;
 
     }
 

@@ -47,17 +47,17 @@ public class CpuUtils extends InitOshi {
             // 获得CPU的卖主，如：Intel
             cpuInfoDomain.setCpuVendor(vendor);
             // 用户使用率
-            //cpuInfoDomain.setCpuUser(cpuPerc.getUser());
+            // cpuInfoDomain.setCpuUser(cpuPerc.getUser());
             // 系统使用率
-            cpuInfoDomain.setCpuSys(processorCpuLoadBetweenTicks[i]);
+            // cpuInfoDomain.setCpuSys(cpuPerc.getSys());
             // 当前等待率
-            //cpuInfoDomain.setCpuWait(cpuPerc.getWait());
+            // cpuInfoDomain.setCpuWait(cpuPerc.getWait());
             // 当前错误率
-            //cpuInfoDomain.setCpuNice(cpuPerc.getNice());
+            // cpuInfoDomain.setCpuNice(cpuPerc.getNice());
             // 当前空闲率
-            //cpuInfoDomain.setCpuIdle(cpuPerc.getIdle());
+            // cpuInfoDomain.setCpuIdle(cpuPerc.getIdle());
             // 总的使用率
-            //cpuInfoDomain.setCpuCombined(cpuPerc.getCombined());
+            cpuInfoDomain.setCpuCombined(processorCpuLoadBetweenTicks[i]);
 
             cpuInfoDomains.add(cpuInfoDomain);
         }
