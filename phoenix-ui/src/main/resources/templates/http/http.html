@@ -383,7 +383,7 @@
                     // 高度
                     height = document.body.clientHeight * 0.8 + 'px';
                 }
-                layer.open({
+                var infoLayerIndex = layer.open({
                     type: 2,
                     title: 'HTTP服务详情（' + data.urlTarget + '）',
                     content: ctxPath + 'monitor-http/http-detail?id=' + data.id,
@@ -394,9 +394,10 @@
                     success: function (layero, index) {
                         // 在回调方法中的第2个参数“index”表示的是当前弹窗的索引
                         // 通过layer.full方法将窗口放大
-                        layer.full(index);
+                        // layer.full(index);
                     }
                 });
+                layer.full(infoLayerIndex);
             } else if (obj.event === 'del') {
                 layer.confirm('确定删除吗？', function (index) {
                     var loading = layer.load(1, {
@@ -507,7 +508,7 @@
                     // 高度
                     height = document.body.clientHeight * 0.8 + 'px';
                 }
-                layer.open({
+                var avgTimeHistoryLayerIndex = layer.open({
                     type: 2,
                     title: '访问耗时',
                     content: ctxPath + 'monitor-http/avg-time?id=' + data.id,
@@ -518,9 +519,10 @@
                     success: function (layero, index) {
                         // 在回调方法中的第2个参数“index”表示的是当前弹窗的索引
                         // 通过layer.full方法将窗口放大
-                        layer.full(index);
+                        // layer.full(index);
                     }
                 });
+                layer.full(avgTimeHistoryLayerIndex);
             } else if (obj.event === 'clear') {
                 // 宽度
                 var width;

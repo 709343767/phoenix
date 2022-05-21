@@ -459,7 +459,7 @@
                     // 高度
                     height = document.body.clientHeight * 0.8 + 'px';
                 }
-                layer.open({
+                var avgTimeHistoryLayerIndex = layer.open({
                     type: 2,
                     title: 'Telnet耗时',
                     content: ctxPath + 'monitor-tcp/avg-time?id=' + data.id,
@@ -470,9 +470,10 @@
                     success: function (layero, index) {
                         // 在回调方法中的第2个参数“index”表示的是当前弹窗的索引
                         // 通过layer.full方法将窗口放大
-                        layer.full(index);
+                        // layer.full(index);
                     }
                 });
+                layer.full(avgTimeHistoryLayerIndex);
             } else if (obj.event === 'clear') {
                 // 宽度
                 var width;
