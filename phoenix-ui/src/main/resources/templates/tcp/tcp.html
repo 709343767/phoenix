@@ -82,15 +82,17 @@
                 </div>
             </script>
             <script type="text/html" id="list-table-toolbar-detail">
-                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"
-                   sec:authorize="hasAuthority('超级管理员')">
-                    <i class="layui-icon layui-icon-edit"></i>编辑</a>
-                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"
-                   sec:authorize="hasAuthority('超级管理员')">
-                    <i class="layui-icon layui-icon-delete"></i>删除</a>
-                <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="clear"
-                   sec:authorize="hasAuthority('超级管理员')">
-                    <i class="layui-icon layui-icon-reduce-circle"></i>清理</a>
+                <div class="layui-btn-group">
+                    <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"
+                       sec:authorize="hasAuthority('超级管理员')">
+                        <i class="layui-icon layui-icon-edit"></i>编辑</a>
+                    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"
+                       sec:authorize="hasAuthority('超级管理员')">
+                        <i class="layui-icon layui-icon-delete"></i>删除</a>
+                    <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="clear"
+                       sec:authorize="hasAuthority('超级管理员')">
+                        <i class="layui-icon layui-icon-reduce-circle"></i>清理</a>
+                </div>
             </script>
             <!-- TCP平均响应时间 -->
             <script type="text/html" id="avgTimeTpl">
@@ -218,7 +220,7 @@
                 }, {
                     title: '操作',
                     hide: !authority,
-                    width: 250,
+                    width: 200,
                     align: 'center',
                     fixed: (device.ios || device.android) ? false : 'right',
                     toolbar: '#list-table-toolbar-detail'

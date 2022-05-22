@@ -85,14 +85,16 @@
                 </div>
             </script>
             <script type="text/html" id="list-table-toolbar-detail">
-                <a class="layui-btn layui-btn-sm layui-btn-xs" lay-event="info"><i
-                        class="layui-icon layui-icon-about"></i>详情</a>
-                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"
-                   sec:authorize="hasAuthority('超级管理员')">
-                    <i class="layui-icon layui-icon-edit"></i>编辑</a>
-                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"
-                   sec:authorize="hasAuthority('超级管理员')">
-                    <i class="layui-icon layui-icon-delete"></i>删除</a>
+                <div class="layui-btn-group">
+                    <a class="layui-btn layui-btn-sm layui-btn-xs" lay-event="info"><i
+                            class="layui-icon layui-icon-about"></i>详情</a>
+                    <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"
+                       sec:authorize="hasAuthority('超级管理员')">
+                        <i class="layui-icon layui-icon-edit"></i>编辑</a>
+                    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"
+                       sec:authorize="hasAuthority('超级管理员')">
+                        <i class="layui-icon layui-icon-delete"></i>删除</a>
+                </div>
             </script>
         </div>
     </div>
@@ -210,7 +212,7 @@
                     sort: !0
                 }, {
                     title: '操作',
-                    width: authority ? 250 : 100,
+                    width: authority ? 200 : 100,
                     align: 'center',
                     fixed: (device.ios || device.android) ? false : 'right',
                     toolbar: '#list-table-toolbar-detail'
