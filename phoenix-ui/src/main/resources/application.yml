@@ -3,7 +3,8 @@ server:
   servlet:
     context-path: /phoenix-ui
     session:
-      timeout: 30m
+      # @EnableJdbcHttpSession > spring.session.timeout > server.servlet.session.timeout
+      timeout: PT30M
   undertow:
     accesslog:
       #Undertow日志存放目录
