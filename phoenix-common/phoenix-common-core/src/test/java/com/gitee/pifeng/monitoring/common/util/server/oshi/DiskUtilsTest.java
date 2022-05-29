@@ -26,9 +26,10 @@ public class DiskUtilsTest {
      * @custom.date 2022/5/12 11:14
      */
     @Test
-    public void getDiskInfo() {
+    public void testGetDiskInfo() {
         DiskDomain diskInfo = DiskUtils.getDiskInfo();
         assertNotNull(diskInfo);
         log.info(diskInfo.toJsonString());
     }
+
 }

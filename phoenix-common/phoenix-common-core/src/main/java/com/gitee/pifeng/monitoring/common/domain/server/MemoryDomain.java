@@ -43,22 +43,22 @@ public class MemoryDomain extends AbstractSuperBean {
         /**
          * 物理内存总量（单位：byte）
          */
-        private long memTotal;
+        private Long memTotal;
 
         /**
          * 物理内存使用量（单位：byte）
          */
-        private long memUsed;
+        private Long memUsed;
 
         /**
          * 物理内存剩余量（单位：byte）
          */
-        private long memFree;
+        private Long memFree;
 
         /**
          * 物理内存使用率
          */
-        private double menUsedPercent;
+        private Double menUsedPercent;
     }
 
     @Data
@@ -73,22 +73,22 @@ public class MemoryDomain extends AbstractSuperBean {
         /**
          * 交换区总量（单位：byte）
          */
-        private long swapTotal;
+        private Long swapTotal;
 
         /**
          * 交换区使用量（单位：byte）
          */
-        private long swapUsed;
+        private Long swapUsed;
 
         /**
          * 交换区剩余量（单位：byte）
          */
-        private long swapFree;
+        private Long swapFree;
 
         /**
          * 交换区使用率
          */
-        private double swapUsedPercent;
+        private Double swapUsedPercent;
     }
 
 }

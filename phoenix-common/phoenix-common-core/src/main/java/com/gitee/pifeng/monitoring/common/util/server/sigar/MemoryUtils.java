@@ -1,5 +1,6 @@
 package com.gitee.pifeng.monitoring.common.util.server.sigar;
 
+import cn.hutool.core.util.NumberUtil;
 import com.gitee.pifeng.monitoring.common.domain.server.MemoryDomain;
 import com.gitee.pifeng.monitoring.common.init.InitSigar;
 import org.hyperic.sigar.Mem;
@@ -36,7 +37,7 @@ public class MemoryUtils extends InitSigar {
                 // 实际内存剩余量
                 .memFree(mem.getActualFree())
                 // 物理内存使用率
-                .menUsedPercent(mem.getUsedPercent() / 100D)
+                .menUsedPercent(NumberUtil.round(mem.getUsedPercent() / 100D, 4).doubleValue())
                 .build();
         MemoryDomain.SwapDomain swapDomain = MemoryDomain.SwapDomain.builder()
                 // 交换区总量
@@ -46,7 +47,7 @@ public class MemoryUtils extends InitSigar {
                 // 交换区剩余量
                 .swapFree(swap.getFree())
                 // 交换区使用率
-                .swapUsedPercent((double) swap.getUsed() / (double) swap.getTotal())
+                .swapUsedPercent(NumberUtil.round((double) swap.getUsed() / (double) swap.getTotal(), 4).doubleValue())
                 .build();
         return MemoryDomain.builder().menDomain(menDomain).swapDomain(swapDomain).build();
     }
