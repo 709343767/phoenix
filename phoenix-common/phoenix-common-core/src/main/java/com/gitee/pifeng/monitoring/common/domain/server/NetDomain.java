@@ -25,7 +25,7 @@ public final class NetDomain extends AbstractSuperBean {
     /**
      * 网卡总数
      */
-    private int netNum;
+    private Integer netNum;
     /**
      * 网卡信息
      */
@@ -69,52 +69,52 @@ public final class NetDomain extends AbstractSuperBean {
         /**
          * 接收到的总字节数
          */
-        long rxBytes;
+        Long rxBytes;
 
         /**
          * 接收的总包数
          */
-        long rxPackets;
+        Long rxPackets;
 
         /**
          * 接收到的错误包数
          */
-        long rxErrors;
+        Long rxErrors;
 
         /**
          * 接收时丢弃的包数
          */
-        long rxDropped;
+        Long rxDropped;
 
         /**
          * 发送的总字节数
          */
-        long txBytes;
+        Long txBytes;
 
         /**
          * 发送的总包数
          */
-        long txPackets;
+        Long txPackets;
 
         /**
          * 发送时的错误包数
          */
-        long txErrors;
+        Long txErrors;
 
         /**
          * 发送时丢弃的包数
          */
-        long txDropped;
+        Long txDropped;
 
         /**
          * 下载速度
          */
-        double downloadBps;
+        Double downloadBps;
 
         /**
          * 上传速度
          */
-        double uploadBps;
+        Double uploadBps;
 
     }
 

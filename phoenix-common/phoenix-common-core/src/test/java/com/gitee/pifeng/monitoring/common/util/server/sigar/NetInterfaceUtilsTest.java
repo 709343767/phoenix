@@ -5,8 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.hyperic.sigar.SigarException;
 import org.junit.Test;
 
-import java.util.List;
-
 import static org.junit.Assert.assertNotNull;
 
 /**
@@ -31,12 +29,11 @@ public class NetInterfaceUtilsTest {
      */
     @Test
     public void testGetNetInfo() throws SigarException {
-        NetDomain netVo = NetInterfaceUtils.getNetInfo();
-        assertNotNull(netVo);
-        int netNum = netVo.getNetNum();
-        List<NetDomain.NetInterfaceDomain> netInterfaces = netVo.getNetList();
+        NetDomain netInfo = NetInterfaceUtils.getNetInfo();
+        assertNotNull(netInfo);
+        int netNum = netInfo.getNetNum();
         log.info("网卡总数：" + netNum);
-        netInterfaces.forEach(netInterfaceConfig -> log.info(netInterfaceConfig.toJsonString()));
+        log.info("网卡信息：" + netInfo.toJsonString());
     }
 
 }

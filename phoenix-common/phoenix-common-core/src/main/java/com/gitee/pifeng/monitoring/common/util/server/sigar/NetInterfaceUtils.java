@@ -4,6 +4,7 @@ import com.gitee.pifeng.monitoring.common.domain.server.NetDomain;
 import com.gitee.pifeng.monitoring.common.init.InitSigar;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.hyperic.sigar.NetFlags;
 import org.hyperic.sigar.NetInterfaceConfig;
 import org.hyperic.sigar.NetInterfaceStat;
@@ -43,32 +44,42 @@ public class NetInterfaceUtils extends InitSigar {
             NetInterfaceConfig netInfo = SIGAR.getNetInterfaceConfig(info);
             // 网卡状态
             NetInterfaceStat netStat = SIGAR.getNetInterfaceStat(info);
+            // 网卡地址
+            String address = netInfo.getAddress();
+            // MAC地址
+            String hwaddr = netInfo.getHwaddr();
+            // 子网掩码
+            String netmask = netInfo.getNetmask();
+            // 广播地址
+            String broadcast = netInfo.getBroadcast();
+            // 网卡描述信息
+            String description = netInfo.getDescription();
             if (
                 // 127.0.0.1
-                    NetFlags.LOOPBACK_ADDRESS.equals(netInfo.getAddress())
+                    NetFlags.LOOPBACK_ADDRESS.equals(address)
                             // 标识为0
                             || netInfo.getFlags() == 0
                             // MAC地址不存在
-                            || NetFlags.NULL_HWADDR.equals(netInfo.getHwaddr())
+                            || NetFlags.NULL_HWADDR.equals(hwaddr)
                             // 0.0.0.0
-                            || NetFlags.ANY_ADDR.equals(netInfo.getAddress())
+                            || NetFlags.ANY_ADDR.equals(address)
             ) {
                 continue;
             }
             NetDomain.NetInterfaceDomain netInterfaceDomain = new NetDomain.NetInterfaceDomain();
             // 网卡名字
             String name = netInfo.getName();
-            if (name.contains("docker") || name.contains("lo")) {
+            if (StringUtils.containsIgnoreCase(name, "docker") || StringUtils.containsIgnoreCase(name, "lo")) {
                 continue;
             }
             // 网卡配置
             netInterfaceDomain.setName(name)
                     .setType(netInfo.getType())
-                    .setAddress(netInfo.getAddress())
-                    .setMask(netInfo.getNetmask())
-                    .setBroadcast(netInfo.getBroadcast())
-                    .setHwAddr(netInfo.getHwaddr())
-                    .setDescription(netInfo.getDescription());
+                    .setAddress(address)
+                    .setMask(netmask)
+                    .setBroadcast(broadcast)
+                    .setHwAddr(hwaddr)
+                    .setDescription(description);
             // 网速
             long start = System.currentTimeMillis();
             long rxBytesStart = netStat.getRxBytes();
