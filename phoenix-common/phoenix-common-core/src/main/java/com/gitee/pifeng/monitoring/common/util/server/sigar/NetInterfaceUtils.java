@@ -52,6 +52,8 @@ public class NetInterfaceUtils extends InitSigar {
             String netmask = netInfo.getNetmask();
             // 广播地址
             String broadcast = netInfo.getBroadcast();
+            // 网卡名字
+            String name = netInfo.getName();
             // 网卡描述信息
             String description = netInfo.getDescription();
             if (
@@ -63,15 +65,12 @@ public class NetInterfaceUtils extends InitSigar {
                             || NetFlags.NULL_HWADDR.equals(hwaddr)
                             // 0.0.0.0
                             || NetFlags.ANY_ADDR.equals(address)
+                            || StringUtils.containsIgnoreCase(name, "docker")
+                            || StringUtils.containsIgnoreCase(name, "lo")
             ) {
                 continue;
             }
             NetDomain.NetInterfaceDomain netInterfaceDomain = new NetDomain.NetInterfaceDomain();
-            // 网卡名字
-            String name = netInfo.getName();
-            if (StringUtils.containsIgnoreCase(name, "docker") || StringUtils.containsIgnoreCase(name, "lo")) {
-                continue;
-            }
             // 网卡配置
             netInterfaceDomain.setName(name)
                     .setType(netInfo.getType())
