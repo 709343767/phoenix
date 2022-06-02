@@ -94,8 +94,10 @@ public class NetInterfaceUtils extends InitSigar {
             long rxBytesEnd = statEnd.getRxBytes();
             long txBytesEnd = statEnd.getTxBytes();
             // 1Byte=8bit
-            double rxBps = (((double) (rxBytesEnd - rxBytesStart) * 8) / ((double) (end - start) / 1000)) / 8;
-            double txBps = (((double) (txBytesEnd - txBytesStart) * 8) / ((double) (end - start) / 1000)) / 8;
+            // double rxBps = (((double) (rxBytesEnd - rxBytesStart) * 8) / ((double) (end - start) / 1000)) / 8;
+            // double txBps = (((double) (txBytesEnd - txBytesStart) * 8) / ((double) (end - start) / 1000)) / 8;
+            double rxBps = (double) (rxBytesEnd - rxBytesStart) / ((double) (end - start) / 1000);
+            double txBps = (double) (txBytesEnd - txBytesStart) / ((double) (end - start) / 1000);
             netInterfaceDomain.setDownloadBps(rxBps)
                     .setUploadBps(txBps);
             // 网卡状态
