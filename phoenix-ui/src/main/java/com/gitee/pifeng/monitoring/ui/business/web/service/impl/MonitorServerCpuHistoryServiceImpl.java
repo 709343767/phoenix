@@ -58,12 +58,30 @@ public class MonitorServerCpuHistoryServiceImpl extends ServiceImpl<IMonitorServ
         List<ServerDetailPageServerCpuChartVo> serverDetailPageServerCpuChartVos = this.monitorServerCpuHistoryDao.getServerDetailPageServerCpuChartInfo(params);
         for (ServerDetailPageServerCpuChartVo serverDetailPageServerCpuChartVo : serverDetailPageServerCpuChartVos) {
             // 乘以100，保留两位小数
-            serverDetailPageServerCpuChartVo.setCpuCombined(NumberUtil.round(serverDetailPageServerCpuChartVo.getCpuCombined() * 100D, 2).doubleValue());
-            serverDetailPageServerCpuChartVo.setCpuIdle(NumberUtil.round(serverDetailPageServerCpuChartVo.getCpuIdle() * 100D, 2).doubleValue());
-            serverDetailPageServerCpuChartVo.setCpuNice(NumberUtil.round(serverDetailPageServerCpuChartVo.getCpuNice() * 100D, 2).doubleValue());
-            serverDetailPageServerCpuChartVo.setCpuSys(NumberUtil.round(serverDetailPageServerCpuChartVo.getCpuSys() * 100D, 2).doubleValue());
-            serverDetailPageServerCpuChartVo.setCpuUser(NumberUtil.round(serverDetailPageServerCpuChartVo.getCpuUser() * 100D, 2).doubleValue());
-            serverDetailPageServerCpuChartVo.setCpuWait(NumberUtil.round(serverDetailPageServerCpuChartVo.getCpuWait() * 100D, 2).doubleValue());
+            Double cpuCombined = serverDetailPageServerCpuChartVo.getCpuCombined();
+            if (cpuCombined != null) {
+                serverDetailPageServerCpuChartVo.setCpuCombined(NumberUtil.round(cpuCombined * 100D, 2).doubleValue());
+            }
+            Double cpuIdle = serverDetailPageServerCpuChartVo.getCpuIdle();
+            if (cpuIdle != null) {
+                serverDetailPageServerCpuChartVo.setCpuIdle(NumberUtil.round(cpuIdle * 100D, 2).doubleValue());
+            }
+            Double cpuNice = serverDetailPageServerCpuChartVo.getCpuNice();
+            if (cpuNice != null) {
+                serverDetailPageServerCpuChartVo.setCpuNice(NumberUtil.round(cpuNice * 100D, 2).doubleValue());
+            }
+            Double cpuSys = serverDetailPageServerCpuChartVo.getCpuSys();
+            if (cpuSys != null) {
+                serverDetailPageServerCpuChartVo.setCpuSys(NumberUtil.round(cpuSys * 100D, 2).doubleValue());
+            }
+            Double cpuUser = serverDetailPageServerCpuChartVo.getCpuUser();
+            if (cpuUser != null) {
+                serverDetailPageServerCpuChartVo.setCpuUser(NumberUtil.round(cpuUser * 100D, 2).doubleValue());
+            }
+            Double cpuWait = serverDetailPageServerCpuChartVo.getCpuWait();
+            if (cpuWait != null) {
+                serverDetailPageServerCpuChartVo.setCpuWait(NumberUtil.round(cpuWait * 100D, 2).doubleValue());
+            }
         }
         return serverDetailPageServerCpuChartVos;
     }

@@ -3,6 +3,7 @@ package com.gitee.pifeng.monitoring.common.util.server.oshi;
 import com.gitee.pifeng.monitoring.common.domain.server.CpuDomain;
 import com.gitee.pifeng.monitoring.common.init.InitOshi;
 import com.google.common.collect.Lists;
+import lombok.extern.slf4j.Slf4j;
 import oshi.hardware.CentralProcessor;
 
 import java.util.List;
@@ -15,6 +16,7 @@ import java.util.List;
  * @author 皮锋
  * @custom.date 2022/5/5 17:22
  */
+@Slf4j
 public class CpuUtils extends InitOshi {
 
     /**
@@ -33,6 +35,12 @@ public class CpuUtils extends InitOshi {
         String vendor = processorIdentifier.getVendor();
         long[] currentFreq = processor.getCurrentFreq();
         long[][] processorCpuLoadTicks = processor.getProcessorCpuLoadTicks();
+        // 休眠一秒
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            log.error("线程中断异常！", e);
+        }
         double[] processorCpuLoadBetweenTicks = processor.getProcessorCpuLoadBetweenTicks(processorCpuLoadTicks);
         // 创建返回对象
         CpuDomain cpuDomain = new CpuDomain();
