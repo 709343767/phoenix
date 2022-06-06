@@ -1,13 +1,6 @@
 package com.gitee.pifeng.monitoring.common.util.server;
 
 import com.gitee.pifeng.monitoring.common.domain.Server;
-import com.gitee.pifeng.monitoring.common.util.server.oshi.PowerSourceUtils;
-import com.gitee.pifeng.monitoring.common.util.server.oshi.ProcessUtils;
-import com.gitee.pifeng.monitoring.common.util.server.oshi.SensorsUtils;
-import com.gitee.pifeng.monitoring.common.util.server.sigar.CpuUtils;
-import com.gitee.pifeng.monitoring.common.util.server.sigar.DiskUtils;
-import com.gitee.pifeng.monitoring.common.util.server.sigar.MemoryUtils;
-import com.gitee.pifeng.monitoring.common.util.server.sigar.NetInterfaceUtils;
 import org.hyperic.sigar.SigarException;
 
 /**
@@ -32,7 +25,7 @@ public final class ServerUtils {
 
     /**
      * <p>
-     * 获取服务器信息
+     * 通过 sigar 获取服务器信息
      * </p>
      *
      * @return {@link Server}
@@ -40,16 +33,38 @@ public final class ServerUtils {
      * @author 皮锋
      * @custom.date 2020年3月3日 下午4:25:30
      */
-    public static Server getServerInfo() throws SigarException {
+    public static Server getSigarServerInfo() throws SigarException {
         return Server.builder()
-                .cpuDomain(CpuUtils.getCpuInfo())
-                .memoryDomain(MemoryUtils.getMemoryInfo())
-                .netDomain(NetInterfaceUtils.getNetInfo())
+                .cpuDomain(com.gitee.pifeng.monitoring.common.util.server.sigar.CpuUtils.getCpuInfo())
+                .memoryDomain(com.gitee.pifeng.monitoring.common.util.server.sigar.MemoryUtils.getMemoryInfo())
+                .netDomain(com.gitee.pifeng.monitoring.common.util.server.sigar.NetInterfaceUtils.getNetInfo())
+                .diskDomain(com.gitee.pifeng.monitoring.common.util.server.sigar.DiskUtils.getDiskInfo())
                 .osDomain(OsUtils.getOsInfo())
-                .diskDomain(DiskUtils.getDiskInfo())
-                .powerSourcesDomain(PowerSourceUtils.getPowerSourcesInfo())
-                .sensorsDomain(SensorsUtils.getSensorsInfo())
-                .processDomain(ProcessUtils.getProcessInfo())
+                .powerSourcesDomain(com.gitee.pifeng.monitoring.common.util.server.oshi.PowerSourceUtils.getPowerSourcesInfo())
+                .sensorsDomain(com.gitee.pifeng.monitoring.common.util.server.oshi.SensorsUtils.getSensorsInfo())
+                .processDomain(com.gitee.pifeng.monitoring.common.util.server.oshi.ProcessUtils.getProcessInfo())
+                .build();
+    }
+
+    /**
+     * <p>
+     * 通过 oshi 获取服务器信息
+     * </p>
+     *
+     * @return {@link Server}
+     * @author 皮锋
+     * @custom.date 2022/6/2 17:23
+     */
+    public static Server getOshiServerInfo() {
+        return Server.builder()
+                .cpuDomain(com.gitee.pifeng.monitoring.common.util.server.oshi.CpuUtils.getCpuInfo())
+                .memoryDomain(com.gitee.pifeng.monitoring.common.util.server.oshi.MemoryUtils.getMemoryInfo())
+                .netDomain(com.gitee.pifeng.monitoring.common.util.server.oshi.NetInterfaceUtils.getNetInfo())
+                .diskDomain(com.gitee.pifeng.monitoring.common.util.server.oshi.DiskUtils.getDiskInfo())
+                .powerSourcesDomain(com.gitee.pifeng.monitoring.common.util.server.oshi.PowerSourceUtils.getPowerSourcesInfo())
+                .sensorsDomain(com.gitee.pifeng.monitoring.common.util.server.oshi.SensorsUtils.getSensorsInfo())
+                .processDomain(com.gitee.pifeng.monitoring.common.util.server.oshi.ProcessUtils.getProcessInfo())
+                .osDomain(OsUtils.getOsInfo())
                 .build();
     }
 

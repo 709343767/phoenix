@@ -132,7 +132,7 @@ public class PackageConstructor extends AbstractPackageConstructor {
         networkChain.add(ip);
         serverPackage.setNetworkChain(networkChain);
         serverPackage.setComputerName(OsUtils.getComputerName());
-        serverPackage.setServer(ServerUtils.getServerInfo());
+        serverPackage.setServer(ConfigLoader.MONITORING_PROPERTIES.getServerInfoProperties().isUserSigarEnable() ? ServerUtils.getSigarServerInfo() : ServerUtils.getOshiServerInfo());
         serverPackage.setRate(ConfigLoader.MONITORING_PROPERTIES.getServerInfoProperties().getRate());
         return serverPackage;
     }

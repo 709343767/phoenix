@@ -47,7 +47,7 @@ public class NetInterfaceUtils extends InitSigar {
             // 网卡地址
             String address = netInfo.getAddress();
             // MAC地址
-            String hwaddr = netInfo.getHwaddr();
+            String hwaddr = netInfo.getHwaddr().toUpperCase();
             // 子网掩码
             String netmask = netInfo.getNetmask();
             // 广播地址

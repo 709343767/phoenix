@@ -25,6 +25,11 @@ public class MonitoringServerInfoProperties {
     private boolean enable;
 
     /**
+     * 是否使用 Sigar 采集服务器信息
+     */
+    private boolean userSigarEnable;
+
+    /**
      * 发送服务器信息的频率
      */
     private long rate;

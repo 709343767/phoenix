@@ -29,9 +29,12 @@ public class ServerUtilsTest {
      */
     @Test
     public void testGetServerInfo() throws SigarException {
-        Server serverInfoVo = ServerUtils.getServerInfo();
-        assertNotNull(serverInfoVo);
-        log.info(serverInfoVo.toJsonString());
+        Server serverInfoVo1 = ServerUtils.getSigarServerInfo();
+        assertNotNull(serverInfoVo1);
+        log.info(serverInfoVo1.toJsonString());
+        Server serverInfoVo2 = ServerUtils.getOshiServerInfo();
+        assertNotNull(serverInfoVo2);
+        log.info(serverInfoVo2.toJsonString());
     }
 
 }

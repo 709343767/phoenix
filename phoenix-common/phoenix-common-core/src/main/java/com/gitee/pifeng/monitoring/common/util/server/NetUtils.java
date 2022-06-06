@@ -50,18 +50,17 @@ public class NetUtils {
      * </p>
      *
      * @return MAC地址
-     * @throws NetException   获取网络信息异常：获取本机MAC地址异常！
-     * @throws SigarException Sigar异常
+     * @throws NetException 获取网络信息异常：获取本机MAC地址异常！
      * @author 皮锋
      * @custom.date 2020/9/15 12:35
      */
-    public static String getLocalMac() throws NetException, SigarException {
+    public static String getLocalMac() throws NetException {
         try {
             // 通过InetAddress的方式
             return getLocalMacByInetAddress();
         } catch (Exception e) {
-            // 通过Sigar的方式
-            return getLocalMacBySigar();
+            // 通过 Oshi 的方式
+            return getLocalMacByOshi();
         }
     }
 
@@ -103,7 +102,7 @@ public class NetUtils {
 
     /**
      * <p>
-     * 获取本机MAC地址：通过Sigar的方式。
+     * 获取本机MAC地址：通过 Sigar 的方式。
      * </p>
      *
      * @return MAC地址
@@ -113,10 +112,42 @@ public class NetUtils {
      * @custom.date 2020/8/30 16:41
      * @since v0.0.2
      */
+    @Deprecated
     private static String getLocalMacBySigar() throws SigarException, NetException {
         // 获取本机IP地址
         String ip = getLocalIp();
         NetDomain netDomain = NetInterfaceUtils.getNetInfo();
+        List<NetDomain.NetInterfaceDomain> netInterfaceDomains = netDomain.getNetList();
+        for (NetDomain.NetInterfaceDomain netInterfaceDomain : netInterfaceDomains) {
+            // 网卡IP地址
+            String address = netInterfaceDomain.getAddress();
+            // 是当前网卡的IP地址
+            if (StringUtils.equals(ip, address)) {
+                // 返回此网卡的MAC地址
+                return netInterfaceDomain.getHwAddr();
+            }
+        }
+        // 手动抛出异常
+        String exp = "获取本机MAC地址异常！";
+        NetException netException = new NetException(exp);
+        log.error(exp, netException);
+        throw new NetException(exp);
+    }
+
+    /**
+     * <p>
+     * 获取本机MAC地址：通过 Oshi 的方式。
+     * </p>
+     *
+     * @return MAC地址
+     * @throws NetException 获取网络信息异常：获取本机MAC地址异常！
+     * @author 皮锋
+     * @custom.date 2022/6/6 8:53
+     */
+    private static String getLocalMacByOshi() {
+        // 获取本机IP地址
+        String ip = getLocalIp();
+        NetDomain netDomain = com.gitee.pifeng.monitoring.common.util.server.oshi.NetInterfaceUtils.getNetInfo();
         List<NetDomain.NetInterfaceDomain> netInterfaceDomains = netDomain.getNetList();
         for (NetDomain.NetInterfaceDomain netInterfaceDomain : netInterfaceDomains) {
             // 网卡IP地址

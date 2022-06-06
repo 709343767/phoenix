@@ -44,7 +44,7 @@ public class NetInterfaceUtils extends InitOshi {
             // 掩码长度
             Short[] subnetMasks = net.getSubnetMasks();
             // MAC地址
-            String macAddr = net.getMacaddr();
+            String macAddr = net.getMacaddr().toUpperCase();
             // 网卡名字
             String netName = net.getName();
             // 网卡描述信息
