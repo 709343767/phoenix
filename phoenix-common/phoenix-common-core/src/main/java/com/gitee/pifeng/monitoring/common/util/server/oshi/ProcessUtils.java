@@ -9,6 +9,8 @@ import com.google.common.collect.Lists;
 import org.apache.commons.collections.CollectionUtils;
 import oshi.software.os.OSProcess;
 import oshi.software.os.OperatingSystem;
+import oshi.software.os.OperatingSystem.ProcessFiltering;
+import oshi.software.os.OperatingSystem.ProcessSorting;
 
 import java.util.Comparator;
 import java.util.Date;
@@ -85,7 +87,7 @@ public class ProcessUtils extends InitOshi {
     public static List<ProcessDomain.ProcessInfoDomain> getProcessOccupyCpuTop10Info() {
         OperatingSystem os = SYSTEM_INFO.getOperatingSystem();
         // 获取进程列表
-        List<OSProcess> processes = os.getProcesses(10, OperatingSystem.ProcessSort.CPU);
+        List<OSProcess> processes = os.getProcesses(ProcessFiltering.ALL_PROCESSES, ProcessSorting.CPU_DESC, 10);
         // 构建返回值
         return wrapProcessInfoDomainList(processes);
     }
@@ -102,7 +104,7 @@ public class ProcessUtils extends InitOshi {
     public static List<ProcessDomain.ProcessInfoDomain> getProcessOccupyMemoryTop10Info() {
         OperatingSystem os = SYSTEM_INFO.getOperatingSystem();
         // 获取进程列表
-        List<OSProcess> processes = os.getProcesses(10, OperatingSystem.ProcessSort.MEMORY);
+        List<OSProcess> processes = os.getProcesses(ProcessFiltering.ALL_PROCESSES, ProcessSorting.RSS_DESC, 10);
         // 构建返回值
         return wrapProcessInfoDomainList(processes);
     }
