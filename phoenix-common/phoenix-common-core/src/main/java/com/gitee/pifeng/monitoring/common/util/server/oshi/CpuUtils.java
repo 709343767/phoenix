@@ -82,7 +82,7 @@ public class CpuUtils extends InitOshi {
 
             cpuInfoDomains.add(cpuInfoDomain);
         }
-        cpuDomain.setCpuNum(cpuInfoDomains.size()).setCpuList(cpuInfoDomains);
+        cpuDomain.setCpuNum(logicalProcessorCount).setCpuList(cpuInfoDomains);
         return cpuDomain;
     }
 }
