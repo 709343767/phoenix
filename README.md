@@ -55,7 +55,7 @@
 - 运行环境
 
   Maven3+  
-  Jdk1.8(1.8.0_131到1.8.0_241)  
+  Jdk >=1.8，若使用Sigar监控服务器，则Jdk版本要用1.8(1.8.0_131到1.8.0_241)   
   Lombok  
   Mysql5.7+
   
@@ -205,6 +205,7 @@ public class MonitoringUiProdConfig {
   |monitoring.server-info.enable                  |是否采集服务器信息                                                        |否           |false |
   |monitoring.server-info.rate                    |与服务端或者代理端发服务器信息包的频率（秒），最小不能小于30秒                 |否           |60    |
   |monitoring.server-info.ip                      |被监控服务器本机ip地址                                                    |否（自动获取） |      |
+  |monitoring.server-info.user-sigar-enable       |是否使用Sigar采集服务器信息，要求Jdk1.8(1.8.0_131到1.8.0_241)              |否            |true  |
   |monitoring.jvm-info.enable                     |是否采集Java虚拟机信息                                                    |否           |false |
   |monitoring.jvm-info.rate                       |与服务端或者代理端发送Java虚拟机信息的频率（秒），最小不能小于30秒             |否           |60    |
 
