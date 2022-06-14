@@ -39,7 +39,7 @@
                 </div>
                 <div class="layui-inline">
                     <label class="layui-form-label">类型</label>
-                    <div class="layui-input-block" style="width: 120px;">
+                    <div class="layui-input-block" style="width: 182px;">
                         <select name="dbType">
                             <option value="">所有</option>
                             <option value="MySQL">MySQL</option>
@@ -49,9 +49,10 @@
                         </select>
                     </div>
                 </div>
+                <br/>
                 <div class="layui-inline">
                     <label class="layui-form-label">状态</label>
-                    <div class="layui-input-block" style="width: 120px;">
+                    <div class="layui-input-block" style="width: 182px;">
                         <select name="isOnline">
                             <option value="">所有</option>
                             <option value="1">正常</option>
@@ -62,7 +63,7 @@
                 </div>
                 <div class="layui-inline">
                     <label class="layui-form-label">环境</label>
-                    <div class="layui-input-block" style="width: 120px;">
+                    <div class="layui-input-block" style="width: 182px;">
                         <select name="monitorEnv">
                             <option value="">所有</option>
                             <option th:each="monitorEnv:${monitorEnvs}" th:value="${monitorEnv}"
@@ -72,7 +73,7 @@
                 </div>
                 <div class="layui-inline">
                     <label class="layui-form-label">分组</label>
-                    <div class="layui-input-block" style="width: 120px;">
+                    <div class="layui-input-block" style="width: 182px;">
                         <select name="monitorGroup">
                             <option value="">所有</option>
                             <option th:each="monitorGroup:${monitorGroups}" th:value="${monitorGroup}"
