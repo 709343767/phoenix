@@ -196,6 +196,12 @@ public class MonitorDbServiceImpl extends ServiceImpl<IMonitorDbDao, MonitorDb> 
         if (StringUtils.equalsIgnoreCase(DbEnums.Mongo.name(), dbType)) {
             monitorDb.setDriverClass(DbDriverClassConstants.MONGO_DRIVER_CLASS);
         }
+        if (StringUtils.isEmpty(monitorDbVo.getMonitorEnv())) {
+            monitorDb.setMonitorEnv(null);
+        }
+        if (StringUtils.isEmpty(monitorDbVo.getMonitorGroup())) {
+            monitorDb.setMonitorGroup(null);
+        }
         monitorDb.setOfflineCount(0);
         monitorDb.setInsertTime(new Date());
         int result = this.monitorDbDao.insert(monitorDb);
