@@ -47,25 +47,29 @@ public class MonitorDbServiceImpl extends ServiceImpl<IMonitorDbDao, MonitorDb> 
      * 获取数据库列表
      * </p>
      *
-     * @param current  当前页
-     * @param size     每页显示条数
-     * @param connName 数据库连接名
-     * @param url      数据库URL
-     * @param dbType   数据库类型
-     * @param isOnline 数据库状态
+     * @param current      当前页
+     * @param size         每页显示条数
+     * @param connName     数据库连接名
+     * @param url          数据库URL
+     * @param dbType       数据库类型
+     * @param isOnline     数据库状态
+     * @param monitorEnv   监控环境
+     * @param monitorGroup 监控分组
      * @return 简单分页模型
      * @author 皮锋
      * @custom.date 2020/12/19 17:37
      */
     @Override
-    public Page<MonitorDbVo> getMonitorDbList(Long current, Long size, String connName, String url, String dbType, String isOnline) {
+    public Page<MonitorDbVo> getMonitorDbList(Long current, Long size, String connName, String url, String dbType,
+                                              String isOnline, String monitorEnv, String monitorGroup) {
         // 查询数据库
         IPage<MonitorDb> ipage = new Page<>(current, size);
         LambdaQueryWrapper<MonitorDb> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         // 只查询部分字段
         lambdaQueryWrapper.select(MonitorDb::getId, MonitorDb::getConnName, MonitorDb::getUrl,
                 MonitorDb::getDbType, MonitorDb::getIsOnline, MonitorDb::getOfflineCount,
-                MonitorDb::getDbDesc, MonitorDb::getInsertTime, MonitorDb::getUpdateTime);
+                MonitorDb::getDbDesc, MonitorDb::getInsertTime, MonitorDb::getUpdateTime,
+                MonitorDb::getMonitorEnv, MonitorDb::getMonitorGroup);
         if (StringUtils.isNotBlank(connName)) {
             lambdaQueryWrapper.like(MonitorDb::getConnName, connName);
         }
@@ -83,6 +87,12 @@ public class MonitorDbServiceImpl extends ServiceImpl<IMonitorDbDao, MonitorDb> 
             } else {
                 lambdaQueryWrapper.eq(MonitorDb::getIsOnline, isOnline);
             }
+        }
+        if (StringUtils.isNotBlank(monitorEnv)) {
+            lambdaQueryWrapper.in(MonitorDb::getMonitorEnv, monitorEnv);
+        }
+        if (StringUtils.isNotBlank(monitorGroup)) {
+            lambdaQueryWrapper.in(MonitorDb::getMonitorGroup, monitorGroup);
         }
         IPage<MonitorDb> monitorDbPage = this.monitorDbDao.selectPage(ipage, lambdaQueryWrapper);
         List<MonitorDb> monitorDbs = monitorDbPage.getRecords();

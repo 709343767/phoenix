@@ -3,7 +3,11 @@ package com.gitee.pifeng.monitoring.ui.business.web.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.gitee.pifeng.monitoring.ui.business.web.annotation.OperateLog;
 import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorDb;
+import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorEnv;
+import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorGroup;
 import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorDbService;
+import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorEnvService;
+import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorGroupService;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.LayUiAdminResultVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.MonitorDbVo;
 import com.gitee.pifeng.monitoring.ui.constant.OperateTypeConstants;
@@ -20,6 +24,7 @@ import org.springframework.web.servlet.ModelAndView;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -41,6 +46,18 @@ public class MonitorDbController {
     private IMonitorDbService monitorDbService;
 
     /**
+     * 监控环境服务类
+     */
+    @Autowired
+    private IMonitorEnvService monitorEnvService;
+
+    /**
+     * 监控分组服务类
+     */
+    @Autowired
+    private IMonitorGroupService monitorGroupService;
+
+    /**
      * <p>
      * 访问数据库列表页面
      * </p>
@@ -52,7 +69,14 @@ public class MonitorDbController {
     @ApiOperation(value = "访问数据库列表页面")
     @GetMapping("/list")
     public ModelAndView list() {
-        return new ModelAndView("db/db");
+        ModelAndView mv = new ModelAndView("db/db");
+        // 监控环境列表
+        List<String> monitorEnvs = this.monitorEnvService.list().stream().map(MonitorEnv::getEnvName).collect(Collectors.toList());
+        // 监控分组列表
+        List<String> monitorGroups = this.monitorGroupService.list().stream().map(MonitorGroup::getGroupName).collect(Collectors.toList());
+        mv.addObject("monitorEnvs", monitorEnvs);
+        mv.addObject("monitorGroups", monitorGroups);
+        return mv;
     }
 
     /**
@@ -60,12 +84,14 @@ public class MonitorDbController {
      * 获取数据库列表
      * </p>
      *
-     * @param current  当前页
-     * @param size     每页显示条数
-     * @param connName 数据库连接名
-     * @param url      数据库URL
-     * @param dbType   数据库类型
-     * @param isOnline 数据库状态
+     * @param current      当前页
+     * @param size         每页显示条数
+     * @param connName     数据库连接名
+     * @param url          数据库URL
+     * @param dbType       数据库类型
+     * @param isOnline     数据库状态
+     * @param monitorEnv   监控环境
+     * @param monitorGroup 监控分组
      * @return layUiAdmin响应对象
      * @author 皮锋
      * @custom.date 2020/12/19 17:36
@@ -77,12 +103,15 @@ public class MonitorDbController {
             @ApiImplicitParam(name = "connName", value = "数据库连接名", paramType = "query", dataType = "string", dataTypeClass = String.class),
             @ApiImplicitParam(name = "url", value = "数据库URL", paramType = "query", dataType = "string", dataTypeClass = String.class),
             @ApiImplicitParam(name = "dbType", value = "数据库类型", paramType = "query", dataType = "string", dataTypeClass = String.class),
-            @ApiImplicitParam(name = "isOnline", value = "数据库状态", paramType = "query", dataType = "string", dataTypeClass = String.class)})
+            @ApiImplicitParam(name = "isOnline", value = "数据库状态", paramType = "query", dataType = "string", dataTypeClass = String.class),
+            @ApiImplicitParam(name = "monitorEnv", value = "监控环境", paramType = "query", dataType = "string", dataTypeClass = String.class),
+            @ApiImplicitParam(name = "monitorGroup", value = "监控分组", paramType = "query", dataType = "string", dataTypeClass = String.class)})
     @GetMapping("get-monitor-db-list")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.DATABASE, operType = OperateTypeConstants.QUERY, operDesc = "获取数据库列表")
-    public LayUiAdminResultVo getMonitorDbList(Long current, Long size, String connName, String url, String dbType, String isOnline) {
-        Page<MonitorDbVo> page = this.monitorDbService.getMonitorDbList(current, size, connName, url, dbType, isOnline);
+    public LayUiAdminResultVo getMonitorDbList(Long current, Long size, String connName, String url, String dbType,
+                                               String isOnline, String monitorEnv, String monitorGroup) {
+        Page<MonitorDbVo> page = this.monitorDbService.getMonitorDbList(current, size, connName, url, dbType, isOnline, monitorEnv, monitorGroup);
         return LayUiAdminResultVo.ok(page);
     }
 
@@ -107,6 +136,14 @@ public class MonitorDbController {
         monitorDbVo.setPassword(new String(Base64.getDecoder().decode(monitorDbVo.getPassword()), StandardCharsets.UTF_8));
         ModelAndView mv = new ModelAndView("db/edit-db");
         mv.addObject(monitorDbVo);
+        // 监控环境列表
+        List<String> monitorEnvs = this.monitorEnvService.list().stream().map(MonitorEnv::getEnvName).collect(Collectors.toList());
+        // 监控分组列表
+        List<String> monitorGroups = this.monitorGroupService.list().stream().map(MonitorGroup::getGroupName).collect(Collectors.toList());
+        mv.addObject("monitorEnvs", monitorEnvs);
+        mv.addObject("monitorGroups", monitorGroups);
+        mv.addObject("env", monitorDbVo.getMonitorEnv());
+        mv.addObject("group", monitorDbVo.getMonitorGroup());
         return mv;
     }
 
@@ -141,7 +178,14 @@ public class MonitorDbController {
     @ApiOperation(value = "访问新增数据库信息表单页面")
     @GetMapping("/add-monitor-db-form")
     public ModelAndView addMonitorDbForm() {
-        return new ModelAndView("db/add-db");
+        ModelAndView mv = new ModelAndView("db/add-db");
+        // 监控环境列表
+        List<String> monitorEnvs = this.monitorEnvService.list().stream().map(MonitorEnv::getEnvName).collect(Collectors.toList());
+        // 监控分组列表
+        List<String> monitorGroups = this.monitorGroupService.list().stream().map(MonitorGroup::getGroupName).collect(Collectors.toList());
+        mv.addObject("monitorEnvs", monitorEnvs);
+        mv.addObject("monitorGroups", monitorGroups);
+        return mv;
     }
 
     /**

@@ -39,7 +39,7 @@
                 </div>
                 <div class="layui-inline">
                     <label class="layui-form-label">类型</label>
-                    <div class="layui-input-block">
+                    <div class="layui-input-block" style="width: 120px;">
                         <select name="dbType">
                             <option value="">所有</option>
                             <option value="MySQL">MySQL</option>
@@ -51,12 +51,32 @@
                 </div>
                 <div class="layui-inline">
                     <label class="layui-form-label">状态</label>
-                    <div class="layui-input-block">
+                    <div class="layui-input-block" style="width: 120px;">
                         <select name="isOnline">
                             <option value="">所有</option>
                             <option value="1">正常</option>
                             <option value="0">异常</option>
                             <option value="-1">未知</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">环境</label>
+                    <div class="layui-input-block" style="width: 120px;">
+                        <select name="monitorEnv">
+                            <option value="">所有</option>
+                            <option th:each="monitorEnv:${monitorEnvs}" th:value="${monitorEnv}"
+                                    th:text="${monitorEnv}"></option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">分组</label>
+                    <div class="layui-input-block" style="width: 120px;">
+                        <select name="monitorGroup">
+                            <option value="">所有</option>
+                            <option th:each="monitorGroup:${monitorGroups}" th:value="${monitorGroup}"
+                                    th:text="${monitorGroup}"></option>
                         </select>
                     </div>
                 </div>
@@ -196,6 +216,16 @@
                     minWidth: 110,
                     sort: !0
                 }, {
+                    field: 'monitorEnv',
+                    title: '环境',
+                    minWidth: 120,
+                    sort: !0
+                }, {
+                    field: 'monitorGroup',
+                    title: '分组',
+                    minWidth: 120,
+                    sort: !0
+                }, {
                     field: 'dbDesc',
                     title: '描述',
                     minWidth: 200,
@@ -285,7 +315,7 @@
                         // 宽度
                         width = document.body.clientWidth * 0.4 + 'px';
                         // 高度
-                        height = document.body.clientHeight * 0.68 + 'px';
+                        height = document.body.clientHeight * 0.8 + 'px';
                     }
                     layer.open({
                         type: 2,
@@ -379,7 +409,7 @@
                     // 宽度
                     width = document.body.clientWidth * 0.4 + 'px';
                     // 高度
-                    height = document.body.clientHeight * 0.68 + 'px';
+                    height = document.body.clientHeight * 0.8 + 'px';
                 }
                 layer.open({
                     type: 2,
