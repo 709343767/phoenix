@@ -24,7 +24,7 @@ public final class MySql {
     /**
      * 检查连接
      */
-    public static final String CHECK_CONN = "SELECT 1 FROM DUAL";
+    public static final String CHECK_CONN = "SELECT 1";
 
     /**
      * 会话列表
