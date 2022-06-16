@@ -3,7 +3,11 @@ package com.gitee.pifeng.monitoring.ui.business.web.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.gitee.pifeng.monitoring.common.exception.NetException;
 import com.gitee.pifeng.monitoring.ui.business.web.annotation.OperateLog;
+import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorEnv;
+import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorGroup;
 import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorTcp;
+import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorEnvService;
+import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorGroupService;
 import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorNetService;
 import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorTcpService;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.LayUiAdminResultVo;
@@ -20,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -47,6 +52,18 @@ public class MonitorTcpController {
     private IMonitorTcpService monitorTcpService;
 
     /**
+     * 监控环境服务类
+     */
+    @Autowired
+    private IMonitorEnvService monitorEnvService;
+
+    /**
+     * 监控分组服务类
+     */
+    @Autowired
+    private IMonitorGroupService monitorGroupService;
+
+    /**
      * <p>
      * 访问TCP列表页面
      * </p>
@@ -61,6 +78,12 @@ public class MonitorTcpController {
         ModelAndView mv = new ModelAndView("tcp/tcp");
         // 源IP
         mv.addObject("ipSource", this.monitorNetService.getSourceIp());
+        // 监控环境列表
+        List<String> monitorEnvs = this.monitorEnvService.list().stream().map(MonitorEnv::getEnvName).collect(Collectors.toList());
+        // 监控分组列表
+        List<String> monitorGroups = this.monitorGroupService.list().stream().map(MonitorGroup::getGroupName).collect(Collectors.toList());
+        mv.addObject("monitorEnvs", monitorEnvs);
+        mv.addObject("monitorGroups", monitorGroups);
         return mv;
     }
 
@@ -75,6 +98,8 @@ public class MonitorTcpController {
      * @param hostnameTarget 主机名（目的地）
      * @param portTarget     目标端口
      * @param status         状态（0：不通，1：正常）
+     * @param monitorEnv     监控环境
+     * @param monitorGroup   监控分组
      * @return layUiAdmin响应对象
      * @author 皮锋
      * @custom.date 2022/1/11 9:31
@@ -86,12 +111,16 @@ public class MonitorTcpController {
             @ApiImplicitParam(name = "hostnameSource", value = "主机名（来源）", paramType = "query", dataType = "string", dataTypeClass = String.class),
             @ApiImplicitParam(name = "hostnameTarget", value = "主机名（目的地）", paramType = "query", dataType = "string", dataTypeClass = String.class),
             @ApiImplicitParam(name = "portTarget", value = "目标端口", paramType = "query", dataType = "int", dataTypeClass = Integer.class),
-            @ApiImplicitParam(name = "status", value = "状态（0：不通，1：正常）", paramType = "query", dataType = "string", dataTypeClass = String.class)})
+            @ApiImplicitParam(name = "status", value = "状态（0：不通，1：正常）", paramType = "query", dataType = "string", dataTypeClass = String.class),
+            @ApiImplicitParam(name = "monitorEnv", value = "监控环境", paramType = "query", dataType = "string", dataTypeClass = String.class),
+            @ApiImplicitParam(name = "monitorGroup", value = "监控分组", paramType = "query", dataType = "string", dataTypeClass = String.class)})
     @GetMapping("/get-monitor-tcp-list")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.TCP4SERVICE, operType = OperateTypeConstants.QUERY, operDesc = "获取TCP列表")
-    public LayUiAdminResultVo getMonitorTcpList(Long current, Long size, String hostnameSource, String hostnameTarget, Integer portTarget, String status) {
-        Page<MonitorTcpVo> page = this.monitorTcpService.getMonitorTcpList(current, size, hostnameSource, hostnameTarget, portTarget, status);
+    public LayUiAdminResultVo getMonitorTcpList(Long current, Long size, String hostnameSource, String hostnameTarget,
+                                                Integer portTarget, String status, String monitorEnv, String monitorGroup) {
+        Page<MonitorTcpVo> page = this.monitorTcpService.getMonitorTcpList(current, size, hostnameSource, hostnameTarget,
+                portTarget, status, monitorEnv, monitorGroup);
         return LayUiAdminResultVo.ok(page);
     }
 
@@ -125,7 +154,14 @@ public class MonitorTcpController {
     @ApiOperation(value = "访问新增TCP信息表单页面")
     @GetMapping("/add-monitor-tcp-form")
     public ModelAndView addMonitorTcpForm() {
-        return new ModelAndView("tcp/add-tcp");
+        ModelAndView mv = new ModelAndView("tcp/add-tcp");
+        // 监控环境列表
+        List<String> monitorEnvs = this.monitorEnvService.list().stream().map(MonitorEnv::getEnvName).collect(Collectors.toList());
+        // 监控分组列表
+        List<String> monitorGroups = this.monitorGroupService.list().stream().map(MonitorGroup::getGroupName).collect(Collectors.toList());
+        mv.addObject("monitorEnvs", monitorEnvs);
+        mv.addObject("monitorGroups", monitorGroups);
+        return mv;
     }
 
     /**
@@ -169,6 +205,14 @@ public class MonitorTcpController {
         MonitorTcpVo monitorTcpVo = MonitorTcpVo.builder().build().convertFor(monitorTcp);
         ModelAndView mv = new ModelAndView("tcp/edit-tcp");
         mv.addObject(monitorTcpVo);
+        // 监控环境列表
+        List<String> monitorEnvs = this.monitorEnvService.list().stream().map(MonitorEnv::getEnvName).collect(Collectors.toList());
+        // 监控分组列表
+        List<String> monitorGroups = this.monitorGroupService.list().stream().map(MonitorGroup::getGroupName).collect(Collectors.toList());
+        mv.addObject("monitorEnvs", monitorEnvs);
+        mv.addObject("monitorGroups", monitorGroups);
+        mv.addObject("env", monitorTcpVo.getMonitorEnv());
+        mv.addObject("group", monitorTcpVo.getMonitorGroup());
         return mv;
     }
 

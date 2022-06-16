@@ -192,6 +192,12 @@ public class MonitorNetServiceImpl extends ServiceImpl<IMonitorNetDao, MonitorNe
         MonitorNet monitorNet = monitorNetVo.convertTo();
         monitorNet.setIpSource(this.getSourceIp());
         monitorNet.setUpdateTime(new Date());
+        if (StringUtils.isBlank(monitorNetVo.getMonitorEnv())) {
+            monitorNet.setMonitorEnv(null);
+        }
+        if (StringUtils.isBlank(monitorNetVo.getMonitorGroup())) {
+            monitorNet.setMonitorGroup(null);
+        }
         int result = this.monitorNetDao.updateById(monitorNet);
         if (result == 1) {
             return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);

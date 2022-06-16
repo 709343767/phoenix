@@ -62,6 +62,12 @@ public class MonitorTcpVo implements ISuperBean {
     @ApiModelProperty(value = "更新时间")
     private Date updateTime;
 
+    @ApiModelProperty(value = "监控环境")
+    private String monitorEnv;
+
+    @ApiModelProperty(value = "监控分组")
+    private String monitorGroup;
+
     /**
      * <p>
      * MonitorTcpVo转MonitorTcp

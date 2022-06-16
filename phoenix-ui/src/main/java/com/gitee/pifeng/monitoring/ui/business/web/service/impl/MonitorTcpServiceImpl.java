@@ -62,12 +62,15 @@ public class MonitorTcpServiceImpl extends ServiceImpl<IMonitorTcpDao, MonitorTc
      * @param hostnameTarget 主机名（目的地）
      * @param portTarget     目标端口
      * @param status         状态（0：网络不通，1：网络正常）
+     * @param monitorEnv     监控环境
+     * @param monitorGroup   监控分组
      * @return 简单分页模型
      * @author 皮锋
      * @custom.date 2022/1/11 9:33
      */
     @Override
-    public Page<MonitorTcpVo> getMonitorTcpList(Long current, Long size, String hostnameSource, String hostnameTarget, Integer portTarget, String status) {
+    public Page<MonitorTcpVo> getMonitorTcpList(Long current, Long size, String hostnameSource, String hostnameTarget,
+                                                Integer portTarget, String status, String monitorEnv, String monitorGroup) {
         // 查询数据库
         IPage<MonitorTcp> ipage = new Page<>(current, size);
         LambdaQueryWrapper<MonitorTcp> lambdaQueryWrapper = new LambdaQueryWrapper<>();
@@ -88,6 +91,12 @@ public class MonitorTcpServiceImpl extends ServiceImpl<IMonitorTcpDao, MonitorTc
             } else {
                 lambdaQueryWrapper.eq(MonitorTcp::getStatus, status);
             }
+        }
+        if (StringUtils.isNotBlank(monitorEnv)) {
+            lambdaQueryWrapper.eq(MonitorTcp::getMonitorEnv, monitorEnv);
+        }
+        if (StringUtils.isNotBlank(monitorGroup)) {
+            lambdaQueryWrapper.eq(MonitorTcp::getMonitorGroup, monitorGroup);
         }
         IPage<MonitorTcp> monitorTcpPage = this.monitorTcpDao.selectPage(ipage, lambdaQueryWrapper);
         List<MonitorTcp> monitorTcps = monitorTcpPage.getRecords();
@@ -157,6 +166,12 @@ public class MonitorTcpServiceImpl extends ServiceImpl<IMonitorTcpDao, MonitorTc
         MonitorTcp monitorTcp = monitorTcpVo.convertTo();
         monitorTcp.setInsertTime(new Date());
         monitorTcp.setOfflineCount(0);
+        if (StringUtils.isBlank(monitorTcpVo.getMonitorEnv())) {
+            monitorTcp.setMonitorEnv(null);
+        }
+        if (StringUtils.isBlank(monitorTcpVo.getMonitorGroup())) {
+            monitorTcp.setMonitorGroup(null);
+        }
         int result = this.monitorTcpDao.insert(monitorTcp);
         if (result == 1) {
             return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);
@@ -189,6 +204,12 @@ public class MonitorTcpServiceImpl extends ServiceImpl<IMonitorTcpDao, MonitorTc
         }
         MonitorTcp monitorTcp = monitorTcpVo.convertTo();
         monitorTcp.setUpdateTime(new Date());
+        if (StringUtils.isBlank(monitorTcpVo.getMonitorEnv())) {
+            monitorTcp.setMonitorEnv(null);
+        }
+        if (StringUtils.isBlank(monitorTcpVo.getMonitorGroup())) {
+            monitorTcp.setMonitorGroup(null);
+        }
         int result = this.monitorTcpDao.updateById(monitorTcp);
         if (result == 1) {
             return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);

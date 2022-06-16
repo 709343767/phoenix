@@ -1,5 +1,6 @@
 package com.gitee.pifeng.monitoring.ui.business.web.entity;
 
+import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -70,5 +71,13 @@ public class MonitorTcp implements Serializable {
     @ApiModelProperty(value = "更新时间")
     @TableField("UPDATE_TIME")
     private Date updateTime;
+
+    @ApiModelProperty(value = "监控环境")
+    @TableField(value = "MONITOR_ENV", updateStrategy = FieldStrategy.IGNORED)
+    private String monitorEnv;
+
+    @ApiModelProperty(value = "监控分组")
+    @TableField(value = "MONITOR_GROUP", updateStrategy = FieldStrategy.IGNORED)
+    private String monitorGroup;
 
 }

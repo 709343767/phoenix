@@ -85,4 +85,16 @@ public class MonitorTcp {
     @TableField("UPDATE_TIME")
     private Date updateTime;
 
+    /**
+     * 监控环境
+     */
+    @TableField("MONITOR_ENV")
+    private String monitorEnv;
+
+    /**
+     * 监控分组
+     */
+    @TableField("MONITOR_GROUP")
+    private String monitorGroup;
+
 }

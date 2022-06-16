@@ -151,6 +151,12 @@ public class MonitorDbServiceImpl extends ServiceImpl<IMonitorDbDao, MonitorDb> 
             // mybatis-plus不会更新值为null字段
             monitorDb.setPassword(null);
         }
+        if (StringUtils.isBlank(monitorDbVo.getMonitorEnv())) {
+            monitorDb.setMonitorEnv(null);
+        }
+        if (StringUtils.isBlank(monitorDbVo.getMonitorGroup())) {
+            monitorDb.setMonitorGroup(null);
+        }
         monitorDb.setUpdateTime(new Date());
         // 更新
         int result = this.monitorDbDao.updateById(monitorDb);

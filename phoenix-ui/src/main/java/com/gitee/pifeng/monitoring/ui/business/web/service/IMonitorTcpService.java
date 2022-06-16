@@ -30,11 +30,14 @@ public interface IMonitorTcpService extends IService<MonitorTcp> {
      * @param hostnameTarget 主机名（目的地）
      * @param portTarget     目标端口
      * @param status         状态（0：网络不通，1：网络正常）
+     * @param monitorEnv     监控环境
+     * @param monitorGroup   监控分组
      * @return 简单分页模型
      * @author 皮锋
      * @custom.date 2022/1/11 9:33
      */
-    Page<MonitorTcpVo> getMonitorTcpList(Long current, Long size, String hostnameSource, String hostnameTarget, Integer portTarget, String status);
+    Page<MonitorTcpVo> getMonitorTcpList(Long current, Long size, String hostnameSource, String hostnameTarget,
+                                         Integer portTarget, String status, String monitorEnv, String monitorGroup);
 
     /**
      * <p>
