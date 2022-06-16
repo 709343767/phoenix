@@ -30,11 +30,14 @@ public interface IMonitorHttpService extends IService<MonitorHttp> {
      * @param urlTarget      URL地址（目的地）
      * @param method         请求方法
      * @param status         状态
+     * @param monitorEnv     监控环境
+     * @param monitorGroup   监控分组
      * @return layUiAdmin响应对象
      * @author 皮锋
      * @custom.date 2022/4/11 10:51
      */
-    Page<MonitorHttpVo> getMonitorHttpList(Long current, Long size, String hostnameSource, String urlTarget, String method, Integer status);
+    Page<MonitorHttpVo> getMonitorHttpList(Long current, Long size, String hostnameSource, String urlTarget,
+                                           String method, Integer status, String monitorEnv, String monitorGroup);
 
     /**
      * <p>

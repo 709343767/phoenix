@@ -55,12 +55,15 @@ public class MonitorHttpServiceImpl extends ServiceImpl<IMonitorHttpDao, Monitor
      * @param urlTarget      URL地址（目的地）
      * @param method         请求方法
      * @param status         状态
+     * @param monitorEnv     监控环境
+     * @param monitorGroup   监控分组
      * @return layUiAdmin响应对象
      * @author 皮锋
      * @custom.date 2022/4/11 10:51
      */
     @Override
-    public Page<MonitorHttpVo> getMonitorHttpList(Long current, Long size, String hostnameSource, String urlTarget, String method, Integer status) {
+    public Page<MonitorHttpVo> getMonitorHttpList(Long current, Long size, String hostnameSource, String urlTarget,
+                                                  String method, Integer status, String monitorEnv, String monitorGroup) {
         // 查询数据库
         IPage<MonitorHttp> ipage = new Page<>(current, size);
         LambdaQueryWrapper<MonitorHttp> lambdaQueryWrapper = new LambdaQueryWrapper<>();
@@ -91,6 +94,12 @@ public class MonitorHttpServiceImpl extends ServiceImpl<IMonitorHttpDao, Monitor
             } else {
                 lambdaQueryWrapper.eq(MonitorHttp::getStatus, status);
             }
+        }
+        if (StringUtils.isNotBlank(monitorEnv)) {
+            lambdaQueryWrapper.eq(MonitorHttp::getMonitorEnv, monitorEnv);
+        }
+        if (StringUtils.isNotBlank(monitorGroup)) {
+            lambdaQueryWrapper.eq(MonitorHttp::getMonitorGroup, monitorGroup);
         }
         IPage<MonitorHttp> monitorHttpPage = this.baseMapper.selectPage(ipage, lambdaQueryWrapper);
         List<MonitorHttp> monitorHttps = monitorHttpPage.getRecords();
@@ -159,6 +168,12 @@ public class MonitorHttpServiceImpl extends ServiceImpl<IMonitorHttpDao, Monitor
         MonitorHttp monitorHttp = monitorHttpVo.convertTo();
         monitorHttp.setInsertTime(new Date());
         monitorHttp.setOfflineCount(0);
+        if (StringUtils.isBlank(monitorHttpVo.getMonitorEnv())) {
+            monitorHttp.setMonitorEnv(null);
+        }
+        if (StringUtils.isBlank(monitorHttpVo.getMonitorGroup())) {
+            monitorHttp.setMonitorGroup(null);
+        }
         int result = this.baseMapper.insert(monitorHttp);
         if (result == 1) {
             return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);
@@ -190,6 +205,12 @@ public class MonitorHttpServiceImpl extends ServiceImpl<IMonitorHttpDao, Monitor
         }
         MonitorHttp monitorHttp = monitorHttpVo.convertTo();
         monitorHttp.setUpdateTime(new Date());
+        if (StringUtils.isBlank(monitorHttpVo.getMonitorEnv())) {
+            monitorHttp.setMonitorEnv(null);
+        }
+        if (StringUtils.isBlank(monitorHttpVo.getMonitorGroup())) {
+            monitorHttp.setMonitorGroup(null);
+        }
         int result = this.baseMapper.updateById(monitorHttp);
         if (result == 1) {
             return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);

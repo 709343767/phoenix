@@ -42,7 +42,7 @@
                 </div>
                 <div class="layui-inline">
                     <label class="layui-form-label">请求方法</label>
-                    <div class="layui-input-block" style="width: 100px;">
+                    <div class="layui-input-block" style="width: 182px;">
                         <select name="method">
                             <option value="">所有</option>
                             <option value="GET">GET</option>
@@ -50,9 +50,10 @@
                         </select>
                     </div>
                 </div>
+                <br/>
                 <div class="layui-inline">
                     <label class="layui-form-label">状态</label>
-                    <div class="layui-input-block" style="width: 100px;">
+                    <div class="layui-input-block" style="width: 182px;">
                         <select name="status">
                             <option value="">所有</option>
                             <option value="200">200</option>
@@ -62,6 +63,26 @@
                             <option value="400">400</option>
                             <option value="-2">其它</option>
                             <option value="-1">未知</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">环境</label>
+                    <div class="layui-input-block" style="width: 182px;">
+                        <select name="monitorEnv">
+                            <option value="">所有</option>
+                            <option th:each="monitorEnv:${monitorEnvs}" th:value="${monitorEnv}"
+                                    th:text="${monitorEnv}"></option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">分组</label>
+                    <div class="layui-input-block" style="width: 182px;">
+                        <select name="monitorGroup">
+                            <option value="">所有</option>
+                            <option th:each="monitorGroup:${monitorGroups}" th:value="${monitorGroup}"
+                                    th:text="${monitorGroup}"></option>
                         </select>
                     </div>
                 </div>
@@ -214,6 +235,16 @@
                     field: 'offlineCount',
                     title: '异常次数',
                     minWidth: 110,
+                    sort: !0
+                }, {
+                    field: 'monitorEnv',
+                    title: '环境',
+                    minWidth: 120,
+                    sort: !0
+                }, {
+                    field: 'monitorGroup',
+                    title: '分组',
+                    minWidth: 120,
                     sort: !0
                 }, {
                     field: 'descr',

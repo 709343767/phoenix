@@ -68,6 +68,12 @@ public class MonitorHttpVo implements ISuperBean {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date updateTime;
 
+    @ApiModelProperty(value = "监控环境")
+    private String monitorEnv;
+
+    @ApiModelProperty(value = "监控分组")
+    private String monitorGroup;
+
     /**
      * <p>
      * MonitorHttpVo转MonitorHttp

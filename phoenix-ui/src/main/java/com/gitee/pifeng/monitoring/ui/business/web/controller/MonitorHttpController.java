@@ -3,7 +3,11 @@ package com.gitee.pifeng.monitoring.ui.business.web.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.gitee.pifeng.monitoring.common.exception.NetException;
 import com.gitee.pifeng.monitoring.ui.business.web.annotation.OperateLog;
+import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorEnv;
+import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorGroup;
 import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorHttp;
+import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorEnvService;
+import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorGroupService;
 import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorHttpService;
 import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorNetService;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.LayUiAdminResultVo;
@@ -20,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -47,6 +52,18 @@ public class MonitorHttpController {
     private IMonitorHttpService monitorHttpService;
 
     /**
+     * 监控环境服务类
+     */
+    @Autowired
+    private IMonitorEnvService monitorEnvService;
+
+    /**
+     * 监控分组服务类
+     */
+    @Autowired
+    private IMonitorGroupService monitorGroupService;
+
+    /**
      * <p>
      * 访问HTTP列表页面
      * </p>
@@ -61,6 +78,12 @@ public class MonitorHttpController {
         ModelAndView mv = new ModelAndView("http/http");
         // 源IP
         mv.addObject("ipSource", this.monitorNetService.getSourceIp());
+        // 监控环境列表
+        List<String> monitorEnvs = this.monitorEnvService.list().stream().map(MonitorEnv::getEnvName).collect(Collectors.toList());
+        // 监控分组列表
+        List<String> monitorGroups = this.monitorGroupService.list().stream().map(MonitorGroup::getGroupName).collect(Collectors.toList());
+        mv.addObject("monitorEnvs", monitorEnvs);
+        mv.addObject("monitorGroups", monitorGroups);
         return mv;
     }
 
@@ -75,6 +98,8 @@ public class MonitorHttpController {
      * @param urlTarget      URL地址（目的地）
      * @param method         请求方法
      * @param status         状态
+     * @param monitorEnv     监控环境
+     * @param monitorGroup   监控分组
      * @return layUiAdmin响应对象
      * @author 皮锋
      * @custom.date 2022/1/11 9:31
@@ -86,12 +111,16 @@ public class MonitorHttpController {
             @ApiImplicitParam(name = "hostnameSource", value = "主机名（来源）", paramType = "query", dataType = "string", dataTypeClass = String.class),
             @ApiImplicitParam(name = "urlTarget", value = "URL地址（目的地）", paramType = "query", dataType = "string", dataTypeClass = String.class),
             @ApiImplicitParam(name = "method", value = "请求方法", paramType = "query", dataType = "string", dataTypeClass = String.class),
-            @ApiImplicitParam(name = "status", value = "状态", paramType = "query", dataType = "int", dataTypeClass = Integer.class)})
+            @ApiImplicitParam(name = "status", value = "状态", paramType = "query", dataType = "int", dataTypeClass = Integer.class),
+            @ApiImplicitParam(name = "monitorEnv", value = "监控环境", paramType = "query", dataType = "string", dataTypeClass = String.class),
+            @ApiImplicitParam(name = "monitorGroup", value = "监控分组", paramType = "query", dataType = "string", dataTypeClass = String.class)})
     @GetMapping("/get-monitor-http-list")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.HTTP4SERVICE, operType = OperateTypeConstants.QUERY, operDesc = "获取HTTP列表")
-    public LayUiAdminResultVo getMonitorHttpList(Long current, Long size, String hostnameSource, String urlTarget, String method, Integer status) {
-        Page<MonitorHttpVo> page = this.monitorHttpService.getMonitorHttpList(current, size, hostnameSource, urlTarget, method, status);
+    public LayUiAdminResultVo getMonitorHttpList(Long current, Long size, String hostnameSource, String urlTarget,
+                                                 String method, Integer status, String monitorEnv, String monitorGroup) {
+        Page<MonitorHttpVo> page = this.monitorHttpService.getMonitorHttpList(current, size, hostnameSource, urlTarget,
+                method, status, monitorEnv, monitorGroup);
         return LayUiAdminResultVo.ok(page);
     }
 
@@ -125,7 +154,14 @@ public class MonitorHttpController {
     @ApiOperation(value = "访问新增HTTP信息表单页面")
     @GetMapping("/add-monitor-http-form")
     public ModelAndView addMonitorHttpForm() {
-        return new ModelAndView("http/add-http");
+        ModelAndView mv = new ModelAndView("http/add-http");
+        // 监控环境列表
+        List<String> monitorEnvs = this.monitorEnvService.list().stream().map(MonitorEnv::getEnvName).collect(Collectors.toList());
+        // 监控分组列表
+        List<String> monitorGroups = this.monitorGroupService.list().stream().map(MonitorGroup::getGroupName).collect(Collectors.toList());
+        mv.addObject("monitorEnvs", monitorEnvs);
+        mv.addObject("monitorGroups", monitorGroups);
+        return mv;
     }
 
     /**
@@ -169,6 +205,14 @@ public class MonitorHttpController {
         MonitorHttpVo monitorHttpVo = MonitorHttpVo.builder().build().convertFor(monitorHttp);
         ModelAndView mv = new ModelAndView("http/edit-http");
         mv.addObject(monitorHttpVo);
+        // 监控环境列表
+        List<String> monitorEnvs = this.monitorEnvService.list().stream().map(MonitorEnv::getEnvName).collect(Collectors.toList());
+        // 监控分组列表
+        List<String> monitorGroups = this.monitorGroupService.list().stream().map(MonitorGroup::getGroupName).collect(Collectors.toList());
+        mv.addObject("monitorEnvs", monitorEnvs);
+        mv.addObject("monitorGroups", monitorGroups);
+        mv.addObject("env", monitorHttpVo.getMonitorEnv());
+        mv.addObject("group", monitorHttpVo.getMonitorGroup());
         return mv;
     }
 
