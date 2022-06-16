@@ -514,7 +514,7 @@ docker run -itd -v /tmp:/tmp -v /liblog4phoenix:/liblog4phoenix -v /etc/localtim
 ![集群部署架构](https://gitee.com/monitoring-platform/phoenix/raw/master/doc/%E9%9B%86%E7%BE%A4%E9%83%A8%E7%BD%B2%E6%9E%B6%E6%9E%84.png "集群部署架构")
 
 ### 访问  
-**监控UI端** 访问URL：**https://localhost/phoenix-ui/index** ，初始账号/密码：**admin/admin123**，**guest/guest123**。 
+**监控UI端** 访问URL：**http(s)://localhost/phoenix-ui/index** ，开发环境(dev)使用http，生产环境(prod)使用https，初始账号/密码：**admin/admin123**，**guest/guest123**。 
 
 ## 功能截图
 
