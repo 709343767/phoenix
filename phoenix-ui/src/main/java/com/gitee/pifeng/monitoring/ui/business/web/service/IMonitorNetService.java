@@ -36,16 +36,18 @@ public interface IMonitorNetService extends IService<MonitorNet> {
      * 获取网络列表
      * </p>
      *
-     * @param current  当前页
-     * @param size     每页显示条数
-     * @param ipSource IP地址（来源）
-     * @param ipTarget IP地址（目的地）
-     * @param status   状态（0：网络不通，1：网络正常）
+     * @param current      当前页
+     * @param size         每页显示条数
+     * @param ipSource     IP地址（来源）
+     * @param ipTarget     IP地址（目的地）
+     * @param status       状态（0：网络不通，1：网络正常）
+     * @param monitorEnv   监控环境
+     * @param monitorGroup 监控分组
      * @return 简单分页模型
      * @author 皮锋
      * @custom.date 2020/9/26 13:28
      */
-    Page<MonitorNetVo> getMonitorNetList(Long current, Long size, String ipSource, String ipTarget, String status);
+    Page<MonitorNetVo> getMonitorNetList(Long current, Long size, String ipSource, String ipTarget, String status, String monitorEnv, String monitorGroup);
 
     /**
      * <p>

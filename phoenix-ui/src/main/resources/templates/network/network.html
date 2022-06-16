@@ -49,6 +49,27 @@
                         </select>
                     </div>
                 </div>
+                <br/>
+                <div class="layui-inline">
+                    <label class="layui-form-label">环境</label>
+                    <div class="layui-input-block" style="width: 182px;">
+                        <select name="monitorEnv">
+                            <option value="">所有</option>
+                            <option th:each="monitorEnv:${monitorEnvs}" th:value="${monitorEnv}"
+                                    th:text="${monitorEnv}"></option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">分组</label>
+                    <div class="layui-input-block" style="width: 182px;">
+                        <select name="monitorGroup">
+                            <option value="">所有</option>
+                            <option th:each="monitorGroup:${monitorGroups}" th:value="${monitorGroup}"
+                                    th:text="${monitorGroup}"></option>
+                        </select>
+                    </div>
+                </div>
                 <div class="layui-inline">
                     <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="list-table-search">
                         <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
@@ -190,6 +211,16 @@
                     minWidth: 110,
                     sort: !0
                 }, {
+                    field: 'monitorEnv',
+                    title: '环境',
+                    minWidth: 120,
+                    sort: !0
+                }, {
+                    field: 'monitorGroup',
+                    title: '分组',
+                    minWidth: 120,
+                    sort: !0
+                }, {
                     field: 'ipDesc',
                     title: '描述',
                     minWidth: 250,
@@ -288,7 +319,7 @@
                         // 宽度
                         width = document.body.clientWidth * 0.3 + 'px';
                         // 高度
-                        height = document.body.clientHeight * 0.35 + 'px';
+                        height = document.body.clientHeight * 0.5 + 'px';
                     }
                     layer.open({
                         type: 2,
@@ -387,7 +418,7 @@
                     // 宽度
                     width = document.body.clientWidth * 0.3 + 'px';
                     // 高度
-                    height = document.body.clientHeight * 0.35 + 'px';
+                    height = document.body.clientHeight * 0.5 + 'px';
                 }
                 layer.open({
                     type: 2,

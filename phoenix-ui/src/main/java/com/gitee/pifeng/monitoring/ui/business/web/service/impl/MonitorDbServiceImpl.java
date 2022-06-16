@@ -89,10 +89,10 @@ public class MonitorDbServiceImpl extends ServiceImpl<IMonitorDbDao, MonitorDb> 
             }
         }
         if (StringUtils.isNotBlank(monitorEnv)) {
-            lambdaQueryWrapper.in(MonitorDb::getMonitorEnv, monitorEnv);
+            lambdaQueryWrapper.eq(MonitorDb::getMonitorEnv, monitorEnv);
         }
         if (StringUtils.isNotBlank(monitorGroup)) {
-            lambdaQueryWrapper.in(MonitorDb::getMonitorGroup, monitorGroup);
+            lambdaQueryWrapper.eq(MonitorDb::getMonitorGroup, monitorGroup);
         }
         IPage<MonitorDb> monitorDbPage = this.monitorDbDao.selectPage(ipage, lambdaQueryWrapper);
         List<MonitorDb> monitorDbs = monitorDbPage.getRecords();
@@ -196,10 +196,10 @@ public class MonitorDbServiceImpl extends ServiceImpl<IMonitorDbDao, MonitorDb> 
         if (StringUtils.equalsIgnoreCase(DbEnums.Mongo.name(), dbType)) {
             monitorDb.setDriverClass(DbDriverClassConstants.MONGO_DRIVER_CLASS);
         }
-        if (StringUtils.isEmpty(monitorDbVo.getMonitorEnv())) {
+        if (StringUtils.isBlank(monitorDbVo.getMonitorEnv())) {
             monitorDb.setMonitorEnv(null);
         }
-        if (StringUtils.isEmpty(monitorDbVo.getMonitorGroup())) {
+        if (StringUtils.isBlank(monitorDbVo.getMonitorGroup())) {
             monitorDb.setMonitorGroup(null);
         }
         monitorDb.setOfflineCount(0);

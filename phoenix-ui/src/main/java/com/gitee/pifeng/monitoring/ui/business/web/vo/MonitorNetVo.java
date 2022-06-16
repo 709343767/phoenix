@@ -59,6 +59,12 @@ public class MonitorNetVo implements ISuperBean {
     @ApiModelProperty(value = "离线次数")
     private Integer offlineCount;
 
+    @ApiModelProperty(value = "监控环境")
+    private String monitorEnv;
+
+    @ApiModelProperty(value = "监控分组")
+    private String monitorGroup;
+
     /**
      * <p>
      * MonitorNetVo转MonitorNet

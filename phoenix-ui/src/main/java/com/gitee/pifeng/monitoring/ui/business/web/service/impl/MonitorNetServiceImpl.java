@@ -86,17 +86,19 @@ public class MonitorNetServiceImpl extends ServiceImpl<IMonitorNetDao, MonitorNe
      * 获取网络列表
      * </p>
      *
-     * @param current  当前页
-     * @param size     每页显示条数
-     * @param ipSource IP地址（来源）
-     * @param ipTarget IP地址（目的地）
-     * @param status   状态（0：网络不通，1：网络正常）
+     * @param current      当前页
+     * @param size         每页显示条数
+     * @param ipSource     IP地址（来源）
+     * @param ipTarget     IP地址（目的地）
+     * @param status       状态（0：网络不通，1：网络正常）
+     * @param monitorEnv   监控环境
+     * @param monitorGroup 监控分组
      * @return 简单分页模型
      * @author 皮锋
      * @custom.date 2020/9/26 13:28
      */
     @Override
-    public Page<MonitorNetVo> getMonitorNetList(Long current, Long size, String ipSource, String ipTarget, String status) {
+    public Page<MonitorNetVo> getMonitorNetList(Long current, Long size, String ipSource, String ipTarget, String status, String monitorEnv, String monitorGroup) {
         // 查询数据库
         IPage<MonitorNet> ipage = new Page<>(current, size);
         LambdaQueryWrapper<MonitorNet> lambdaQueryWrapper = new LambdaQueryWrapper<>();
@@ -114,6 +116,12 @@ public class MonitorNetServiceImpl extends ServiceImpl<IMonitorNetDao, MonitorNe
             } else {
                 lambdaQueryWrapper.eq(MonitorNet::getStatus, status);
             }
+        }
+        if (StringUtils.isNotBlank(monitorEnv)) {
+            lambdaQueryWrapper.eq(MonitorNet::getMonitorEnv, monitorEnv);
+        }
+        if (StringUtils.isNotBlank(monitorGroup)) {
+            lambdaQueryWrapper.eq(MonitorNet::getMonitorGroup, monitorGroup);
         }
         IPage<MonitorNet> monitorNetPage = this.monitorNetDao.selectPage(ipage, lambdaQueryWrapper);
         List<MonitorNet> monitorNets = monitorNetPage.getRecords();
@@ -216,6 +224,12 @@ public class MonitorNetServiceImpl extends ServiceImpl<IMonitorNetDao, MonitorNe
         monitorNet.setIpSource(this.getSourceIp());
         monitorNet.setInsertTime(new Date());
         monitorNet.setOfflineCount(0);
+        if (StringUtils.isBlank(monitorNetVo.getMonitorEnv())) {
+            monitorNet.setMonitorEnv(null);
+        }
+        if (StringUtils.isBlank(monitorNetVo.getMonitorGroup())) {
+            monitorNet.setMonitorGroup(null);
+        }
         int result = this.monitorNetDao.insert(monitorNet);
         if (result == 1) {
             return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);

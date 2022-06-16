@@ -3,7 +3,11 @@ package com.gitee.pifeng.monitoring.ui.business.web.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.gitee.pifeng.monitoring.common.exception.NetException;
 import com.gitee.pifeng.monitoring.ui.business.web.annotation.OperateLog;
+import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorEnv;
+import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorGroup;
 import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorNet;
+import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorEnvService;
+import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorGroupService;
 import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorNetService;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.LayUiAdminResultVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.MonitorNetVo;
@@ -19,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -40,6 +45,18 @@ public class MonitorNetworkController {
     private IMonitorNetService monitorNetService;
 
     /**
+     * 监控环境服务类
+     */
+    @Autowired
+    private IMonitorEnvService monitorEnvService;
+
+    /**
+     * 监控分组服务类
+     */
+    @Autowired
+    private IMonitorGroupService monitorGroupService;
+
+    /**
      * <p>
      * 访问网络列表页面
      * </p>
@@ -54,6 +71,12 @@ public class MonitorNetworkController {
         ModelAndView mv = new ModelAndView("network/network");
         // 源IP
         mv.addObject("ipSource", this.monitorNetService.getSourceIp());
+        // 监控环境列表
+        List<String> monitorEnvs = this.monitorEnvService.list().stream().map(MonitorEnv::getEnvName).collect(Collectors.toList());
+        // 监控分组列表
+        List<String> monitorGroups = this.monitorGroupService.list().stream().map(MonitorGroup::getGroupName).collect(Collectors.toList());
+        mv.addObject("monitorEnvs", monitorEnvs);
+        mv.addObject("monitorGroups", monitorGroups);
         return mv;
     }
 
@@ -62,11 +85,13 @@ public class MonitorNetworkController {
      * 获取网络列表
      * </p>
      *
-     * @param current  当前页
-     * @param size     每页显示条数
-     * @param ipSource IP地址（来源）
-     * @param ipTarget IP地址（目的地）
-     * @param status   状态（0：网络不通，1：网络正常）
+     * @param current      当前页
+     * @param size         每页显示条数
+     * @param ipSource     IP地址（来源）
+     * @param ipTarget     IP地址（目的地）
+     * @param status       状态（0：网络不通，1：网络正常）
+     * @param monitorEnv   监控环境
+     * @param monitorGroup 监控分组
      * @return layUiAdmin响应对象
      * @author 皮锋
      * @custom.date 2020/9/26 10:59
@@ -77,12 +102,15 @@ public class MonitorNetworkController {
             @ApiImplicitParam(name = "size", value = "每页显示条数", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class),
             @ApiImplicitParam(name = "ipSource", value = "IP地址（来源）", paramType = "query", dataType = "string", dataTypeClass = String.class),
             @ApiImplicitParam(name = "ipTarget", value = "IP地址（目的地）", paramType = "query", dataType = "string", dataTypeClass = String.class),
-            @ApiImplicitParam(name = "status", value = "状态（0：网络不通，1：网络正常）", paramType = "query", dataType = "string", dataTypeClass = String.class)})
+            @ApiImplicitParam(name = "status", value = "状态（0：网络不通，1：网络正常）", paramType = "query", dataType = "string", dataTypeClass = String.class),
+            @ApiImplicitParam(name = "monitorEnv", value = "监控环境", paramType = "query", dataType = "string", dataTypeClass = String.class),
+            @ApiImplicitParam(name = "monitorGroup", value = "监控分组", paramType = "query", dataType = "string", dataTypeClass = String.class)})
     @GetMapping("/get-monitor-network-list")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.NET, operType = OperateTypeConstants.QUERY, operDesc = "获取网络列表")
-    public LayUiAdminResultVo getMonitorNetList(Long current, Long size, String ipSource, String ipTarget, String status) {
-        Page<MonitorNetVo> page = this.monitorNetService.getMonitorNetList(current, size, ipSource, ipTarget, status);
+    public LayUiAdminResultVo getMonitorNetList(Long current, Long size, String ipSource, String ipTarget, String status,
+                                                String monitorEnv, String monitorGroup) {
+        Page<MonitorNetVo> page = this.monitorNetService.getMonitorNetList(current, size, ipSource, ipTarget, status, monitorEnv, monitorGroup);
         return LayUiAdminResultVo.ok(page);
     }
 
@@ -123,6 +151,14 @@ public class MonitorNetworkController {
         MonitorNetVo monitorNetVo = MonitorNetVo.builder().build().convertFor(monitorNet);
         ModelAndView mv = new ModelAndView("network/edit-network");
         mv.addObject(monitorNetVo);
+        // 监控环境列表
+        List<String> monitorEnvs = this.monitorEnvService.list().stream().map(MonitorEnv::getEnvName).collect(Collectors.toList());
+        // 监控分组列表
+        List<String> monitorGroups = this.monitorGroupService.list().stream().map(MonitorGroup::getGroupName).collect(Collectors.toList());
+        mv.addObject("monitorEnvs", monitorEnvs);
+        mv.addObject("monitorGroups", monitorGroups);
+        mv.addObject("env", monitorNetVo.getMonitorEnv());
+        mv.addObject("group", monitorNetVo.getMonitorGroup());
         return mv;
     }
 
@@ -138,7 +174,14 @@ public class MonitorNetworkController {
     @ApiOperation(value = "访问新增网络信息表单页面")
     @GetMapping("/add-monitor-network-form")
     public ModelAndView addMonitorNetworkForm() {
-        return new ModelAndView("network/add-network");
+        ModelAndView mv = new ModelAndView("network/add-network");
+        // 监控环境列表
+        List<String> monitorEnvs = this.monitorEnvService.list().stream().map(MonitorEnv::getEnvName).collect(Collectors.toList());
+        // 监控分组列表
+        List<String> monitorGroups = this.monitorGroupService.list().stream().map(MonitorGroup::getGroupName).collect(Collectors.toList());
+        mv.addObject("monitorEnvs", monitorEnvs);
+        mv.addObject("monitorGroups", monitorGroups);
+        return mv;
     }
 
     /**
