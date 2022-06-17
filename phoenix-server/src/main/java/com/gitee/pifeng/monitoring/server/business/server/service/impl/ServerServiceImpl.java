@@ -113,6 +113,18 @@ public class ServerServiceImpl extends ServiceImpl<IMonitorServerDao, MonitorSer
     private IServerProcessHistoryService serverProcessHistoryService;
 
     /**
+     * 服务器平均负载服务层接口
+     */
+    @Autowired
+    private IServerLoadAverageService serverLoadAverageService;
+
+    /**
+     * 服务器平均负载历史记录服务层接口
+     */
+    @Autowired
+    private IServerLoadAverageHistoryService serverLoadAverageHistoryService;
+
+    /**
      * 服务器进程历史记录信息数据访问对象
      */
     @Autowired
@@ -141,6 +153,12 @@ public class ServerServiceImpl extends ServiceImpl<IMonitorServerDao, MonitorSer
      */
     @Autowired
     private IMonitorServerNetcardHistoryDao monitorServerNetcardHistoryDao;
+
+    /**
+     * 服服务器平均负载历史记录数据访问对象
+     */
+    @Autowired
+    private IMonitorServerLoadAverageHistoryDao monitorServerLoadAverageHistoryDao;
 
     /**
      * <p>
@@ -184,8 +202,73 @@ public class ServerServiceImpl extends ServiceImpl<IMonitorServerDao, MonitorSer
         this.operateServerProcess(serverPackage);
         // 把服务器进程历史记录添加到数据库
         this.operateServerProcessHistory(serverPackage);
+        // 把服务器平均负载信息添加或更新到数据库
+        this.operateServerLoadAverage(serverPackage);
+        // 把服务器平均负载历史记录添加到数据库
+        this.operateServerLoadAverageHistory(serverPackage);
         // 返回结果
         return Result.builder().isSuccess(true).msg(ResultMsgConstants.SUCCESS).build();
+    }
+
+    /**
+     * <p>
+     * 把服务器平均负载历史记录添加到数据库
+     * </p>
+     *
+     * @param serverPackage 服务器信息包
+     * @author 皮锋
+     * @custom.date 2022/6/17 14:50
+     */
+    private void operateServerLoadAverageHistory(ServerPackage serverPackage) {
+        // IP地址
+        String ip = serverPackage.getIp();
+        SystemLoadAverageDomain systemLoadAverageDomain = serverPackage.getServer().getSystemLoadAverageDomain();
+        // 封装对象
+        MonitorServerLoadAverageHistory monitorServerLoadAverageHistory = new MonitorServerLoadAverageHistory();
+        monitorServerLoadAverageHistory.setIp(ip);
+        monitorServerLoadAverageHistory.setOne(systemLoadAverageDomain.getOneLoadAverage());
+        monitorServerLoadAverageHistory.setFive(systemLoadAverageDomain.getFiveLoadAverage());
+        monitorServerLoadAverageHistory.setFifteen(systemLoadAverageDomain.getFifteenLoadAverage());
+        monitorServerLoadAverageHistory.setInsertTime(serverPackage.getDateTime());
+        monitorServerLoadAverageHistory.setUpdateTime(serverPackage.getDateTime());
+        this.serverLoadAverageHistoryService.save(monitorServerLoadAverageHistory);
+    }
+
+    /**
+     * <p>
+     * 把服务器平均负载信息添加或更新到数据库
+     * </p>
+     *
+     * @param serverPackage 服务器信息包
+     * @author 皮锋
+     * @custom.date 2022/6/17 14:50
+     */
+    private void operateServerLoadAverage(ServerPackage serverPackage) {
+        // IP地址
+        String ip = serverPackage.getIp();
+        SystemLoadAverageDomain systemLoadAverageDomain = serverPackage.getServer().getSystemLoadAverageDomain();
+        // 查询数据库中是否有此IP的服务器平均负载信息
+        LambdaQueryWrapper<MonitorServerLoadAverage> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(MonitorServerLoadAverage::getIp, ip);
+        int selectCountDb = this.serverLoadAverageService.count(lambdaQueryWrapper);
+        // 封装对象
+        MonitorServerLoadAverage monitorServerLoadAverage = new MonitorServerLoadAverage();
+        monitorServerLoadAverage.setIp(ip);
+        monitorServerLoadAverage.setOne(systemLoadAverageDomain.getOneLoadAverage());
+        monitorServerLoadAverage.setFive(systemLoadAverageDomain.getFiveLoadAverage());
+        monitorServerLoadAverage.setFifteen(systemLoadAverageDomain.getFifteenLoadAverage());
+        // 没有
+        if (selectCountDb == 0) {
+            monitorServerLoadAverage.setInsertTime(serverPackage.getDateTime());
+            this.serverLoadAverageService.save(monitorServerLoadAverage);
+        }
+        // 有
+        else {
+            monitorServerLoadAverage.setUpdateTime(serverPackage.getDateTime());
+            LambdaUpdateWrapper<MonitorServerLoadAverage> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+            lambdaUpdateWrapper.eq(MonitorServerLoadAverage::getIp, ip);
+            this.serverLoadAverageService.update(monitorServerLoadAverage, lambdaUpdateWrapper);
+        }
     }
 
     /**
@@ -856,11 +939,15 @@ public class ServerServiceImpl extends ServiceImpl<IMonitorServerDao, MonitorSer
         LambdaUpdateWrapper<MonitorServerNetcardHistory> serverNetcardHistoryLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
         serverNetcardHistoryLambdaUpdateWrapper.le(MonitorServerNetcardHistory::getInsertTime, historyTime);
         int deleteServerNetcardHistoryNum = this.monitorServerNetcardHistoryDao.delete(serverNetcardHistoryLambdaUpdateWrapper);
+        LambdaUpdateWrapper<MonitorServerLoadAverageHistory> serverLoadAverageHistoryLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+        serverLoadAverageHistoryLambdaUpdateWrapper.le(MonitorServerLoadAverageHistory::getInsertTime, historyTime);
+        int deleteServerLoadAverageHistoryNum = this.monitorServerLoadAverageHistoryDao.delete(serverLoadAverageHistoryLambdaUpdateWrapper);
         return deleteServerProcessHistoryNum
                 + deleteServerCpuHistoryNum
                 + deleteServerDiskHistoryNum
                 + deleteServerMemoryHistoryNum
-                + deleteServerNetcardHistoryNum;
+                + deleteServerNetcardHistoryNum
+                + deleteServerLoadAverageHistoryNum;
     }
 
 }

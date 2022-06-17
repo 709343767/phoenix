@@ -43,6 +43,7 @@ public final class ServerUtils {
                 .powerSourcesDomain(com.gitee.pifeng.monitoring.common.util.server.oshi.PowerSourceUtils.getPowerSourcesInfo())
                 .sensorsDomain(com.gitee.pifeng.monitoring.common.util.server.oshi.SensorsUtils.getSensorsInfo())
                 .processDomain(com.gitee.pifeng.monitoring.common.util.server.oshi.ProcessUtils.getProcessInfo())
+                .systemLoadAverageDomain(com.gitee.pifeng.monitoring.common.util.server.oshi.SystemLoadAverageUtils.getSystemLoadAverage())
                 .build();
     }
 
@@ -64,6 +65,7 @@ public final class ServerUtils {
                 .powerSourcesDomain(com.gitee.pifeng.monitoring.common.util.server.oshi.PowerSourceUtils.getPowerSourcesInfo())
                 .sensorsDomain(com.gitee.pifeng.monitoring.common.util.server.oshi.SensorsUtils.getSensorsInfo())
                 .processDomain(com.gitee.pifeng.monitoring.common.util.server.oshi.ProcessUtils.getProcessInfo())
+                .systemLoadAverageDomain(com.gitee.pifeng.monitoring.common.util.server.oshi.SystemLoadAverageUtils.getSystemLoadAverage())
                 .osDomain(OsUtils.getOsInfo())
                 .build();
     }
