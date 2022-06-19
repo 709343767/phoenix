@@ -14,7 +14,6 @@
         <if test="params.startTime!=null and params.endTime!=null">
             AND INSERT_TIME BETWEEN #{params.startTime} AND #{params.endTime}
         </if>
-        GROUP BY INSERT_TIME
     </select>
 
 </mapper>
