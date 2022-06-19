@@ -11,6 +11,7 @@
         var getServerNetworkSpeedInfoChart = echarts.init(document.getElementById('get-server-network-speed-info'), 'infographic');
         var getServerPowerSourceInfoChart = echarts.init(document.getElementById('get-server-power-source-info'), 'infographic');
         var getServerSensorsInfoChart = echarts.init(document.getElementById('get-server-sensors-info'), 'infographic');
+        var getServerLoadAverageInfoChart = echarts.init(document.getElementById('get-server-load-average-info'), 'infographic');
         // 浏览器窗口大小发生改变时
         window.addEventListener("resize", function () {
             getServerCpuInfoChart.resize();
@@ -19,6 +20,7 @@
             getServerNetworkSpeedInfoChart.resize();
             getServerPowerSourceInfoChart.resize();
             getServerSensorsInfoChart.resize();
+            getServerLoadAverageInfoChart.resize();
         });
         // 堆内存图表和非堆内存图表时间
         var time = 'hour';
@@ -38,6 +40,8 @@
             getServerProcessChartInfo(time);
             // 发送ajax请求，获取网速图表数据
             getServerNetworkSpeedChartInfo(time, chartAddress);
+            // 发送ajax请求，获取平均负载图表数据
+            getServerLoadAverageChartInfo(time);
         });
         // 服务器网卡地址改变
         form.on('select(address)', function (data) {
@@ -1891,6 +1895,205 @@
             });
         }
 
+        // 发送ajax请求，获取平均负载图表数据
+        function getServerLoadAverageChartInfo(time) {
+            admin.req({
+                type: 'get',
+                url: layui.setter.base + 'monitor-server-load-average-history/get-server-detail-page-server-load-average-chart-info',
+                dataType: 'json',
+                contentType: 'application/json;charset=utf-8',
+                headers: {
+                    "X-CSRF-TOKEN": tokenValue
+                },
+                data: {
+                    ip: ip, // 服务器IP
+                    time: time // 时间
+                },
+                success: function (result) {
+                    var data = result.data;
+                    // 1分钟
+                    var one = data.map(function (item) {
+                        return item.one;
+                    });
+                    // 5分钟
+                    var five = data.map(function (item) {
+                        return item.five;
+                    });
+                    // 15分钟
+                    var fifteen = data.map(function (item) {
+                        return item.fifteen;
+                    });
+                    // 新增时间
+                    var insertTime = data.map(function (item) {
+                        return item.insertTime.replace(' ', '\n');
+                    });
+                    // 最新负载情况
+                    var lastOne = data.length !== 0 ? data[data.length - 1].one : -1;
+                    var lastFive = data.length !== 0 ? data[data.length - 1].five : -1;
+                    var lastFifteen = data.length !== 0 ? data[data.length - 1].fifteen : -1;
+                    var option = {
+                        title: {
+                            text: '平均负载',
+                            left: 'center',
+                            textStyle: {
+                                color: '#696969',
+                                fontSize: 14
+                            },
+                            subtext: '1分钟：' + lastOne + '，5分钟：' + lastFive + '，15分钟：' + lastFifteen,
+                            subtextStyle: {
+                                color: '#BEBEBE'
+                            }
+                        },
+                        legend: {
+                            data: ['1分钟', '5分钟', '15分钟'],
+                            x: 'center',
+                            y: '12%',
+                            orient: 'horizontal'
+                        },
+                        toolbox: {
+                            show: true,
+                            feature: {
+                                dataZoom: {
+                                    yAxisIndex: "none"
+                                },
+                                dataView: {
+                                    readOnly: false
+                                },
+                                magicType: {
+                                    type: ["line", "bar"]
+                                },
+                                restore: {},
+                                saveAsImage: {}
+                            },
+                            iconStyle: {
+                                borderColor: "rgba(105, 98, 98, 1)"
+                            },
+                            right: "2%",
+                            orient: "vertical",
+                            showTitle: false,
+                        },
+                        grid: {
+                            left: '5%',
+                            right: '5%'
+                        },
+                        xAxis: {
+                            type: 'category',
+                            // X轴从零刻度开始
+                            boundaryGap: false,
+                            data: insertTime,
+                            axisLabel: {
+                                rotate: 0 //调整数值改变倾斜的幅度（范围-90到90）
+                            }
+                        },
+                        yAxis: {
+                            type: 'value',
+                            name: '负载'
+                        },
+                        // 鼠标移到折线上展示数据
+                        tooltip: {
+                            trigger: 'axis',
+                            formatter: function (params) {
+                                var result = '';
+                                var axisName = '';
+                                params.forEach(function (item) {
+                                    axisName = item.axisValue;
+                                    var itemValue = item.marker + item.seriesName + ': ' + item.data + '</br>';
+                                    result += itemValue;
+                                });
+                                return axisName + '</br>' + result;
+                            }
+                        },
+                        // 数据
+                        series: [{
+                            name: '1分钟',
+                            data: one,
+                            type: 'line',
+                            smooth: true,
+                            areaStyle: {
+                                type: 'default',
+                                // 渐变色实现
+                                color: new echarts.graphic.LinearGradient(0, 0, 0, 1,
+                                    // 三种由深及浅的颜色
+                                    [{
+                                        offset: 0,
+                                        color: '#B4EEB4'
+                                    }, {
+                                        offset: 0.5,
+                                        color: '#C1FFC1'
+                                    }, {
+                                        offset: 1,
+                                        color: '#FFFFFF'
+                                    }])
+                            },
+                            itemStyle: {
+                                normal: {
+                                    // 设置颜色
+                                    color: '#9BCD9B'
+                                }
+                            }
+                        }, {
+                            name: '5分钟',
+                            data: five,
+                            type: 'line',
+                            smooth: true,
+                            areaStyle: {
+                                type: 'default',
+                                // 渐变色实现
+                                color: new echarts.graphic.LinearGradient(0, 0, 0, 1,
+                                    // 三种由深及浅的颜色
+                                    [{
+                                        offset: 0,
+                                        color: '#00E5EE'
+                                    }, {
+                                        offset: 0.5,
+                                        color: '#00F5FF'
+                                    }, {
+                                        offset: 1,
+                                        color: '#FFFFFF'
+                                    }])
+                            },
+                            itemStyle: {
+                                normal: {
+                                    // 设置颜色
+                                    color: '#00C5CD'
+                                }
+                            }
+                        }, {
+                            name: '15分钟',
+                            data: fifteen,
+                            type: 'line',
+                            smooth: true,
+                            areaStyle: {
+                                type: 'default',
+                                // 渐变色实现
+                                color: new echarts.graphic.LinearGradient(0, 0, 0, 1,
+                                    // 三种由深及浅的颜色
+                                    [{
+                                        offset: 0,
+                                        color: '#EEEE00'
+                                    }, {
+                                        offset: 0.5,
+                                        color: '#FFFF00'
+                                    }, {
+                                        offset: 1,
+                                        color: '#FFFFFF'
+                                    }])
+                            },
+                            itemStyle: {
+                                normal: {
+                                    // 设置颜色
+                                    color: '#CDCD00'
+                                }
+                            }
+                        }]
+                    };
+                    getServerLoadAverageInfoChart.setOption(option);
+                },
+                error: function () {
+                }
+            });
+        }
+
         // 发送ajax请求
         function execute() {
             if (autoRefresh) {
@@ -1908,6 +2111,8 @@
                 getServerPowerSourcesChartInfo();
                 // 发送ajax请求，获取传感器图表数据
                 getServerSensorsChartInfo();
+                // 发送ajax请求，获取平均负载图表数据
+                getServerLoadAverageChartInfo(time);
             }
             // 发送ajax请求，获取操作系统数据
             getServerOsInfo();

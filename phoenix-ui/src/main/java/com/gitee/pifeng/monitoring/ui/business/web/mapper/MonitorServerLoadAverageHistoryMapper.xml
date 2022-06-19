@@ -2,4 +2,19 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.gitee.pifeng.monitoring.ui.business.web.dao.IMonitorServerLoadAverageHistoryDao">
 
+    <!-- 获取服务器详情页面服务器平均负载图表信息 -->
+    <select id="getServerDetailPageServerLoadAverageChartInfo"
+            resultType="com.gitee.pifeng.monitoring.ui.business.web.vo.ServerDetailPageServerLoadAverageChartVo">
+        SELECT ONE AS one,
+        FIVE AS five,
+        FIFTEEN AS fifteen,
+        INSERT_TIME AS insertTime
+        FROM MONITOR_SERVER_LOAD_AVERAGE_HISTORY
+        WHERE IP = #{params.ip}
+        <if test="params.startTime!=null and params.endTime!=null">
+            AND INSERT_TIME BETWEEN #{params.startTime} AND #{params.endTime}
+        </if>
+        GROUP BY INSERT_TIME
+    </select>
+
 </mapper>
