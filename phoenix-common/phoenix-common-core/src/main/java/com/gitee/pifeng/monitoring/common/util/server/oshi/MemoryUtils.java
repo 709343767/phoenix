@@ -42,7 +42,9 @@ public class MemoryUtils extends InitOshi {
         VirtualMemory virtualMemory = memory.getVirtualMemory();
         long swapTotal = virtualMemory.getVirtualMax();
         // long swapUsed = virtualMemory.getSwapTotal(); // 到底是哪个？
-        long swapUsed = virtualMemory.getSwapUsed() + virtualMemory.getVirtualInUse();
+        // long swapUsed = virtualMemory.getSwapUsed() + virtualMemory.getVirtualInUse(); // 到底是哪个？
+        // long swapUsed = virtualMemory.getVirtualInUse(); // 到底是哪个？
+        long swapUsed = virtualMemory.getSwapUsed();
         long swapFree = swapTotal - swapUsed;
         MemoryDomain.SwapDomain swapDomain = MemoryDomain.SwapDomain.builder()
                 // 交换区总量

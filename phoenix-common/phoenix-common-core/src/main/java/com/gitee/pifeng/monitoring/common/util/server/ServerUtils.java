@@ -39,11 +39,11 @@ public final class ServerUtils {
                 .memoryDomain(com.gitee.pifeng.monitoring.common.util.server.sigar.MemoryUtils.getMemoryInfo())
                 .netDomain(com.gitee.pifeng.monitoring.common.util.server.sigar.NetInterfaceUtils.getNetInfo())
                 .diskDomain(com.gitee.pifeng.monitoring.common.util.server.sigar.DiskUtils.getDiskInfo())
+                .systemLoadAverageDomain(com.gitee.pifeng.monitoring.common.util.server.sigar.SystemLoadAverageUtils.getSystemLoadAverage())
                 .osDomain(OsUtils.getOsInfo())
                 .powerSourcesDomain(com.gitee.pifeng.monitoring.common.util.server.oshi.PowerSourceUtils.getPowerSourcesInfo())
                 .sensorsDomain(com.gitee.pifeng.monitoring.common.util.server.oshi.SensorsUtils.getSensorsInfo())
                 .processDomain(com.gitee.pifeng.monitoring.common.util.server.oshi.ProcessUtils.getProcessInfo())
-                .systemLoadAverageDomain(com.gitee.pifeng.monitoring.common.util.server.oshi.SystemLoadAverageUtils.getSystemLoadAverage())
                 .build();
     }
 

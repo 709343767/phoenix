@@ -1,0 +1,41 @@
+package com.gitee.pifeng.monitoring.common.util.server.sigar;
+
+import com.gitee.pifeng.monitoring.common.domain.server.SystemLoadAverageDomain;
+import com.gitee.pifeng.monitoring.common.init.InitSigar;
+import com.gitee.pifeng.monitoring.common.util.server.OsUtils;
+import org.hyperic.sigar.SigarException;
+
+/**
+ * <p>
+ * 系统平均负载工具类
+ * </p>
+ *
+ * @author 皮锋
+ * @custom.date 2022/6/17 11:18
+ */
+public class SystemLoadAverageUtils extends InitSigar {
+
+    /**
+     * <p>
+     * 获取系统平均负载信息
+     * </p>
+     *
+     * @return {@link SystemLoadAverageDomain}
+     * @throws SigarException Sigar异常
+     * @author 皮锋
+     * @custom.date 2022/6/17 11:28
+     */
+    public static SystemLoadAverageDomain getSystemLoadAverage() throws SigarException {
+        // window系统不能获取，设置为-1
+        if (OsUtils.isWindowsOs()) {
+            return SystemLoadAverageDomain.builder().oneLoadAverage(-1D).fiveLoadAverage(-1D).fifteenLoadAverage(-1D).build();
+        }
+        double[] loadAverage = SIGAR.getLoadAverage();
+        return SystemLoadAverageDomain.builder()
+                .oneLoadAverage(loadAverage[0])
+                .fiveLoadAverage(loadAverage[1])
+                .fifteenLoadAverage(loadAverage[2])
+                .build();
+    }
+
+}

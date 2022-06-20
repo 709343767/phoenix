@@ -126,6 +126,18 @@ public class MonitorServerServiceImpl extends ServiceImpl<IMonitorServerDao, Mon
     private IMonitorServerProcessHistoryDao monitorServerProcessHistoryDao;
 
     /**
+     * 服务器平均负载数据访问对象
+     */
+    @Autowired
+    private IMonitorServerLoadAverageDao monitorServerLoadAverageDao;
+
+    /**
+     * 服务器平均负载历史记录数据访问对象
+     */
+    @Autowired
+    private IMonitorServerLoadAverageHistoryDao monitorServerLoadAverageHistoryDao;
+
+    /**
      * <p>
      * 获取home页的服务器信息
      * </p>
@@ -271,6 +283,14 @@ public class MonitorServerServiceImpl extends ServiceImpl<IMonitorServerDao, Mon
         LambdaUpdateWrapper<MonitorServerProcessHistory> serverProcessHistoryLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
         serverProcessHistoryLambdaUpdateWrapper.in(MonitorServerProcessHistory::getIp, ips);
         this.monitorServerProcessHistoryDao.delete(serverProcessHistoryLambdaUpdateWrapper);
+        // 服务器平均负载历史记录表
+        LambdaUpdateWrapper<MonitorServerLoadAverageHistory> serverLoadAverageHistoryLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+        serverLoadAverageHistoryLambdaUpdateWrapper.in(MonitorServerLoadAverageHistory::getIp, ips);
+        this.monitorServerLoadAverageHistoryDao.delete(serverLoadAverageHistoryLambdaUpdateWrapper);
+        // 服务器平均负载表
+        LambdaUpdateWrapper<MonitorServerLoadAverage> serverLoadAverageLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+        serverLoadAverageLambdaUpdateWrapper.in(MonitorServerLoadAverage::getIp, ips);
+        this.monitorServerLoadAverageDao.delete(serverLoadAverageLambdaUpdateWrapper);
         // 服务器表
         LambdaUpdateWrapper<MonitorServer> serverLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
         serverLambdaUpdateWrapper.in(MonitorServer::getIp, ips);
@@ -343,6 +363,11 @@ public class MonitorServerServiceImpl extends ServiceImpl<IMonitorServerDao, Mon
         serverProcessHistoryLambdaUpdateWrapper.eq(MonitorServerProcessHistory::getIp, ip);
         serverProcessHistoryLambdaUpdateWrapper.lt(MonitorServerProcessHistory::getInsertTime, clearTime);
         this.monitorServerProcessHistoryDao.delete(serverProcessHistoryLambdaUpdateWrapper);
+        // 服务器平均负载历史记录表
+        LambdaUpdateWrapper<MonitorServerLoadAverageHistory> serverLoadAverageHistoryLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+        serverLoadAverageHistoryLambdaUpdateWrapper.eq(MonitorServerLoadAverageHistory::getIp, ip);
+        serverLoadAverageHistoryLambdaUpdateWrapper.lt(MonitorServerLoadAverageHistory::getInsertTime, clearTime);
+        this.monitorServerLoadAverageHistoryDao.delete(serverLoadAverageHistoryLambdaUpdateWrapper);
         return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);
     }
 
