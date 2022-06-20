@@ -2009,6 +2009,14 @@
                             data: one,
                             type: 'line',
                             smooth: true,
+                            markLine: {
+                                data: [{
+                                    yAxis: 1,
+                                    itemStyle: {
+                                        color: '#E13C00'
+                                    }
+                                }]
+                            },
                             areaStyle: {
                                 type: 'default',
                                 // 渐变色实现
@@ -2036,6 +2044,14 @@
                             data: five,
                             type: 'line',
                             smooth: true,
+                            markLine: {
+                                data: [{
+                                    yAxis: 1,
+                                    itemStyle: {
+                                        color: '#E13C00'
+                                    }
+                                }]
+                            },
                             areaStyle: {
                                 type: 'default',
                                 // 渐变色实现
@@ -2063,6 +2079,14 @@
                             data: fifteen,
                             type: 'line',
                             smooth: true,
+                            markLine: {
+                                data: [{
+                                    yAxis: 1,
+                                    itemStyle: {
+                                        color: '#E13C00'
+                                    }
+                                }]
+                            },
                             areaStyle: {
                                 type: 'default',
                                 // 渐变色实现
