@@ -140,8 +140,10 @@ public class MonitoringConfigPropertiesLoader {
         MonitoringServerDiskProperties serverDiskProperties = new MonitoringServerDiskProperties(90D, AlarmLevelEnums.INFO);
         // 服务器内存配置属性
         MonitoringServerMemoryProperties serverMemoryProperties = new MonitoringServerMemoryProperties(90D, AlarmLevelEnums.INFO);
+        // 服务器平均负载配置属性
+        MonitoringServerLoadAverageProperties serverLoadAverageProperties = new MonitoringServerLoadAverageProperties(1D, AlarmLevelEnums.INFO);
         // 服务器配置属性
-        MonitoringServerProperties serverProperties = new MonitoringServerProperties(true, serverCpuProperties, serverDiskProperties, serverMemoryProperties);
+        MonitoringServerProperties serverProperties = new MonitoringServerProperties(true, serverCpuProperties, serverDiskProperties, serverMemoryProperties, serverLoadAverageProperties);
         // 数据库表空间配置属性
         MonitoringDbTableSpaceProperties dbTableSpaceProperties = new MonitoringDbTableSpaceProperties(90D, AlarmLevelEnums.INFO);
         // 数据库配置

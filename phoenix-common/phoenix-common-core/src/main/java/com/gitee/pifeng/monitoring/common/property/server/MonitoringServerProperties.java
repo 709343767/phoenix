@@ -38,4 +38,9 @@ public class MonitoringServerProperties implements ISuperBean {
      */
     private MonitoringServerMemoryProperties serverMemoryProperties;
 
+    /**
+     * 服务器平均负载配置属性
+     */
+    private MonitoringServerLoadAverageProperties serverLoadAverageProperties;
+
 }
