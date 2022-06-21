@@ -176,6 +176,7 @@ public class MonitorServerController {
             @ApiImplicitParam(name = "id", value = "服务器主键ID", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class),
             @ApiImplicitParam(name = "ip", value = "服务器IP", required = true, paramType = "query", dataType = "string", dataTypeClass = String.class)})
     @GetMapping("/server-detail")
+    @OperateLog(operModule = UiModuleConstants.SERVER, operType = OperateTypeConstants.PAGE, operDesc = "访问服务器详情页面")
     public ModelAndView serverDetail(Long id, String ip) {
         ModelAndView mv = new ModelAndView("server/server-detail");
         mv.addObject("id", id);

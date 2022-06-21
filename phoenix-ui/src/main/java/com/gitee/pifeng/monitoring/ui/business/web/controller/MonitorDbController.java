@@ -239,6 +239,7 @@ public class MonitorDbController {
     @ApiImplicitParams(value = {
             @ApiImplicitParam(name = "id", value = "数据库ID", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class)})
     @GetMapping("/db-detail")
+    @OperateLog(operModule = UiModuleConstants.DATABASE, operType = OperateTypeConstants.PAGE, operDesc = "访问数据库详情页面")
     public ModelAndView dbDetail(Long id) {
         ModelAndView mv = new ModelAndView("db/db-detail");
         MonitorDb monitorDb = this.monitorDbService.getById(id);

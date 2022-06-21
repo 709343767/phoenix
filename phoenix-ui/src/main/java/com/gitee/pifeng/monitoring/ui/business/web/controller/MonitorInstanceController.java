@@ -173,6 +173,7 @@ public class MonitorInstanceController {
             @ApiImplicitParam(name = "id", value = "应用实例主键ID", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class),
             @ApiImplicitParam(name = "instanceId", value = "应用实例ID", required = true, paramType = "query", dataType = "string", dataTypeClass = String.class)})
     @GetMapping("/instance-detail")
+    @OperateLog(operModule = UiModuleConstants.INSTANCE, operType = OperateTypeConstants.PAGE, operDesc = "访问应用程序详情页面")
     public ModelAndView instanceDetail(Long id, String instanceId) {
         ModelAndView mv = new ModelAndView("instance/instance-detail");
         mv.addObject("id", id);

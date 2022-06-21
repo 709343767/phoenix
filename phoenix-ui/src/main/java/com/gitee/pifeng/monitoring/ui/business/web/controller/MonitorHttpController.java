@@ -294,6 +294,7 @@ public class MonitorHttpController {
     @ApiImplicitParams(value = {
             @ApiImplicitParam(name = "id", value = "HTTP ID", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class)})
     @GetMapping("/http-detail")
+    @OperateLog(operModule = UiModuleConstants.HTTP4SERVICE, operType = OperateTypeConstants.PAGE, operDesc = "访问HTTP服务详情页面")
     public ModelAndView httpDetail(Long id) {
         ModelAndView mv = new ModelAndView("http/http-detail");
         MonitorHttp monitorHttp = this.monitorHttpService.getById(id);
