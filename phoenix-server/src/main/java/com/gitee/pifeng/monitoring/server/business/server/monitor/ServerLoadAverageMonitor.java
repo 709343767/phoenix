@@ -78,21 +78,21 @@ public class ServerLoadAverageMonitor implements IServerMonitoringListener {
         if (monitorServerLoadAverage == null) {
             return;
         }
-        // 过载阈值
-        double overloadThreshold = MonitoringConfigPropertiesLoader.getMonitoringProperties().getServerProperties().getServerLoadAverageProperties().getOverloadThreshold();
+        // 15分钟过载阈值
+        double overloadThreshold15minutes = MonitoringConfigPropertiesLoader.getMonitoringProperties().getServerProperties().getServerLoadAverageProperties().getOverloadThreshold15minutes();
         // 1分钟负载平均值
-        Double loadAverage1minute = monitorServerLoadAverage.getOne();
+        Double loadAverage1minutes = monitorServerLoadAverage.getOne();
         // 5分钟负载平均值
-        Double loadAverage5minute = monitorServerLoadAverage.getFive();
+        Double loadAverage5minutes = monitorServerLoadAverage.getFive();
         // 15分钟负载平均值
-        double loadAverage15minute = monitorServerLoadAverage.getFifteen();
+        double loadAverage15minutes = monitorServerLoadAverage.getFifteen();
         // 平均负载大于等于配置的过载阈值
-        if (loadAverage15minute >= overloadThreshold) {
+        if (loadAverage15minutes >= overloadThreshold15minutes) {
             // 处理平均负载过载
-            this.dealLoadAverageOverLoad(ip, loadAverage1minute, loadAverage5minute, loadAverage15minute);
+            this.dealLoadAverageOverLoad(ip, loadAverage1minutes, loadAverage5minutes, loadAverage15minutes);
         } else {
             // 处理平均负载正常
-            this.dealLoadAverageNotOverLoad(ip, loadAverage1minute, loadAverage5minute, loadAverage15minute);
+            this.dealLoadAverageNotOverLoad(ip, loadAverage1minutes, loadAverage5minutes, loadAverage15minutes);
         }
     }
 
@@ -101,14 +101,14 @@ public class ServerLoadAverageMonitor implements IServerMonitoringListener {
      * 处理平均负载正常
      * </p>
      *
-     * @param ip                  IP地址
-     * @param loadAverage1minute  1分钟平均负载
-     * @param loadAverage5minute  5分钟平均负载
-     * @param loadAverage15minute 15分钟平均负载
+     * @param ip                   IP地址
+     * @param loadAverage1minutes  1分钟平均负载
+     * @param loadAverage5minutes  5分钟平均负载
+     * @param loadAverage15minutes 15分钟平均负载
      * @author 皮锋
      * @custom.date 2022/6/21 22:06
      */
-    private void dealLoadAverageNotOverLoad(String ip, Double loadAverage1minute, Double loadAverage5minute, double loadAverage15minute) {
+    private void dealLoadAverageNotOverLoad(String ip, Double loadAverage1minutes, Double loadAverage5minutes, double loadAverage15minutes) {
         MonitorServer monitorServer = this.serverService.getOne(new LambdaQueryWrapper<MonitorServer>().eq(MonitorServer::getIp, ip));
         String serverName = monitorServer.getServerName();
         String serverSummary = monitorServer.getServerSummary();
@@ -118,9 +118,9 @@ public class ServerLoadAverageMonitor implements IServerMonitoringListener {
                     ip,
                     serverName,
                     serverSummary,
-                    loadAverage1minute,
-                    loadAverage5minute,
-                    loadAverage15minute,
+                    loadAverage1minutes,
+                    loadAverage5minutes,
+                    loadAverage15minutes,
                     AlarmLevelEnums.INFO,
                     AlarmReasonEnums.ABNORMAL_2_NORMAL);
         } catch (Exception e) {
@@ -133,28 +133,28 @@ public class ServerLoadAverageMonitor implements IServerMonitoringListener {
      * 处理平均负载过载
      * </p>
      *
-     * @param ip                  IP地址
-     * @param loadAverage1minute  1分钟平均负载
-     * @param loadAverage5minute  5分钟平均负载
-     * @param loadAverage15minute 15分钟平均负载
+     * @param ip                   IP地址
+     * @param loadAverage1minutes  1分钟平均负载
+     * @param loadAverage5minutes  5分钟平均负载
+     * @param loadAverage15minutes 15分钟平均负载
      * @author 皮锋
      * @custom.date 2022/6/21 21:47
      */
-    private void dealLoadAverageOverLoad(String ip, double loadAverage1minute, double loadAverage5minute, double loadAverage15minute) {
+    private void dealLoadAverageOverLoad(String ip, double loadAverage1minutes, double loadAverage5minutes, double loadAverage15minutes) {
         MonitorServer monitorServer = this.serverService.getOne(new LambdaQueryWrapper<MonitorServer>().eq(MonitorServer::getIp, ip));
         String serverName = monitorServer.getServerName();
         String serverSummary = monitorServer.getServerSummary();
         // 告警级别
-        AlarmLevelEnums alarmLevelEnum = MonitoringConfigPropertiesLoader.getMonitoringProperties().getServerProperties().getServerLoadAverageProperties().getLevelEnum();
+        AlarmLevelEnums alarmLevelEnum = MonitoringConfigPropertiesLoader.getMonitoringProperties().getServerProperties().getServerLoadAverageProperties().getLevelEnum15minutes();
         // 发送告警信息
         try {
             this.sendAlarmInfo("服务器15分钟负载过载",
                     ip,
                     serverName,
                     serverSummary,
-                    loadAverage1minute,
-                    loadAverage5minute,
-                    loadAverage15minute,
+                    loadAverage1minutes,
+                    loadAverage5minutes,
+                    loadAverage15minutes,
                     alarmLevelEnum,
                     AlarmReasonEnums.NORMAL_2_ABNORMAL);
         } catch (Exception e) {
@@ -167,31 +167,31 @@ public class ServerLoadAverageMonitor implements IServerMonitoringListener {
      * 发送告警信息
      * </p>
      *
-     * @param title               告警标题
-     * @param ip                  IP地址
-     * @param serverName          服务器名
-     * @param serverSummary       服务器摘要
-     * @param loadAverage1minute  1分钟平均负载
-     * @param loadAverage5minute  5分钟平均负载
-     * @param loadAverage15minute 15分钟平均负载
-     * @param alarmLevelEnum      告警级别
-     * @param alarmReasonEnum     告警原因
+     * @param title                告警标题
+     * @param ip                   IP地址
+     * @param serverName           服务器名
+     * @param serverSummary        服务器摘要
+     * @param loadAverage1minutes  1分钟平均负载
+     * @param loadAverage5minutes  5分钟平均负载
+     * @param loadAverage15minutes 15分钟平均负载
+     * @param alarmLevelEnum       告警级别
+     * @param alarmReasonEnum      告警原因
      * @throws NetException   获取网络信息异常
      * @throws SigarException Sigar异常
      * @author 皮锋
      * @custom.date 2020/3/25 14:46
      */
     private void sendAlarmInfo(String title, String ip, String serverName, String serverSummary,
-                               double loadAverage1minute, double loadAverage5minute, double loadAverage15minute,
+                               double loadAverage1minutes, double loadAverage5minutes, double loadAverage15minutes,
                                AlarmLevelEnums alarmLevelEnum, AlarmReasonEnums alarmReasonEnum) throws NetException, SigarException {
         StringBuilder msgBuilder = new StringBuilder();
         msgBuilder.append("IP地址：").append(ip).append("，<br>服务器：").append(serverName);
         if (StringUtils.isNotBlank(serverSummary)) {
             msgBuilder.append("，<br>服务器描述：").append(serverSummary);
         }
-        msgBuilder.append("，<br>1分钟平均负载：").append(loadAverage1minute)
-                .append("，<br>5分钟平均负载：").append(loadAverage5minute)
-                .append("，<br>15分钟平均负载：").append(loadAverage15minute)
+        msgBuilder.append("，<br>1分钟平均负载：").append(loadAverage1minutes)
+                .append("，<br>5分钟平均负载：").append(loadAverage5minutes)
+                .append("，<br>15分钟平均负载：").append(loadAverage15minutes)
                 .append("，<br>时间：").append(DateTimeUtils.dateToString(new Date()));
         Alarm alarm = Alarm.builder()
                 // 保证code的唯一性

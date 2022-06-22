@@ -116,6 +116,18 @@ public class MonitorConfigPageFormVo implements ISuperBean {
     private String serverCpuLevel;
 
     /**
+     * 服务器15分钟过载阈值
+     */
+    @ApiModelProperty(value = "服务器15分钟过载阈值")
+    private double serverOverloadThreshold15minutes;
+
+    /**
+     * 服务器15分钟过载监控级别
+     */
+    @ApiModelProperty(value = "服务器15分钟过载监控级别")
+    private String serverOverloadLevel15minutes;
+
+    /**
      * 磁盘过载阈值
      */
     @ApiModelProperty(value = "磁盘过载阈值")

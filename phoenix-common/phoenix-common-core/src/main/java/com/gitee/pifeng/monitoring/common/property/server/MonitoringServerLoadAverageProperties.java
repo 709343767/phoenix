@@ -19,13 +19,13 @@ import lombok.*;
 public class MonitoringServerLoadAverageProperties {
 
     /**
-     * 过载阈值
+     * 15分钟过载阈值
      */
-    private double overloadThreshold;
+    private double overloadThreshold15minutes;
 
     /**
-     * 监控级别，四级：INFO &#60; WARN &#60; ERROR &#60; FATAL
+     * 15分钟过载监控级别，四级：INFO &#60; WARN &#60; ERROR &#60; FATAL
      */
-    private AlarmLevelEnums levelEnum;
+    private AlarmLevelEnums levelEnum15minutes;
 
 }

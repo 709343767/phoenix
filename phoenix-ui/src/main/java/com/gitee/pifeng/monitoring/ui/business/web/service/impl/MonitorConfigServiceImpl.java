@@ -79,6 +79,8 @@ public class MonitorConfigServiceImpl extends ServiceImpl<IMonitorConfigDao, Mon
         monitorConfigPageFormVo.setServerEnable(properties.getServerProperties().isEnable() ? 1 : 0);
         monitorConfigPageFormVo.setServerCpuOverloadThreshold(properties.getServerProperties().getServerCpuProperties().getOverloadThreshold());
         monitorConfigPageFormVo.setServerCpuLevel(properties.getServerProperties().getServerCpuProperties().getLevelEnum().name());
+        monitorConfigPageFormVo.setServerOverloadThreshold15minutes(properties.getServerProperties().getServerLoadAverageProperties().getOverloadThreshold15minutes());
+        monitorConfigPageFormVo.setServerOverloadLevel15minutes(properties.getServerProperties().getServerLoadAverageProperties().getLevelEnum15minutes().name());
         monitorConfigPageFormVo.setServerDiskOverloadThreshold(properties.getServerProperties().getServerDiskProperties().getOverloadThreshold());
         monitorConfigPageFormVo.setServerDiskLevel(properties.getServerProperties().getServerDiskProperties().getLevelEnum().name());
         monitorConfigPageFormVo.setServerMemoryOverloadThreshold(properties.getServerProperties().getServerMemoryProperties().getOverloadThreshold());
@@ -135,6 +137,10 @@ public class MonitorConfigServiceImpl extends ServiceImpl<IMonitorConfigDao, Mon
         MonitoringServerCpuProperties monitoringServerCpuProperties = new MonitoringServerCpuProperties();
         monitoringServerCpuProperties.setOverloadThreshold(monitorConfigPageFormVo.getServerCpuOverloadThreshold());
         monitoringServerCpuProperties.setLevelEnum(AlarmLevelEnums.str2Enum(monitorConfigPageFormVo.getServerCpuLevel()));
+        // 服务器平均负载配置属性
+        MonitoringServerLoadAverageProperties monitoringServerLoadAverageProperties = new MonitoringServerLoadAverageProperties();
+        monitoringServerLoadAverageProperties.setOverloadThreshold15minutes(monitorConfigPageFormVo.getServerOverloadThreshold15minutes());
+        monitoringServerLoadAverageProperties.setLevelEnum15minutes(AlarmLevelEnums.str2Enum(monitorConfigPageFormVo.getServerOverloadLevel15minutes()));
         // 服务器磁盘配置属性
         MonitoringServerDiskProperties monitoringServerDiskProperties = new MonitoringServerDiskProperties();
         monitoringServerDiskProperties.setOverloadThreshold(monitorConfigPageFormVo.getServerDiskOverloadThreshold());
@@ -147,6 +153,7 @@ public class MonitorConfigServiceImpl extends ServiceImpl<IMonitorConfigDao, Mon
         MonitoringServerProperties monitoringServerProperties = new MonitoringServerProperties();
         monitoringServerProperties.setEnable(monitorConfigPageFormVo.getServerEnable() == 1);
         monitoringServerProperties.setServerCpuProperties(monitoringServerCpuProperties);
+        monitoringServerProperties.setServerLoadAverageProperties(monitoringServerLoadAverageProperties);
         monitoringServerProperties.setServerDiskProperties(monitoringServerDiskProperties);
         monitoringServerProperties.setServerMemoryProperties(monitoringServerMemoryProperties);
         // 数据库表空间配置属性

@@ -268,6 +268,38 @@
                                             </div>
                                         </div>
                                         <div class="layui-card">
+                                            <div class="layui-card-header div-font-weight">15分钟负载</div>
+                                            <div class="layui-card-body" pad20>
+                                                <div class="layui-form-item">
+                                                    <label class="layui-form-label"
+                                                           style="text-align: left;">过载阈值</label>
+                                                    <div class="layui-input-block">
+                                                        <input type="text" name="serverOverloadThreshold15minutes"
+                                                               class="layui-input"
+                                                               lay-verify="number" lay-verType="tips"
+                                                               th:value="${monitorConfigPageForm.serverOverloadThreshold15minutes}">
+                                                    </div>
+                                                </div>
+                                                <div class="layui-form-item">
+                                                    <label class="layui-form-label" style="text-align: left;">级别</label>
+                                                    <div class="layui-input-block">
+                                                        <input type="radio" name="serverOverloadLevel15minutes"
+                                                               value="INFO" title="INFO"
+                                                               th:checked="${monitorConfigPageForm.serverOverloadLevel15minutes=='INFO'}? true : false">
+                                                        <input type="radio" name="serverOverloadLevel15minutes"
+                                                               value="WARN" title="WARN"
+                                                               th:checked="${monitorConfigPageForm.serverOverloadLevel15minutes=='WARN'}? true : false">
+                                                        <input type="radio" name="serverOverloadLevel15minutes"
+                                                               value="ERROR" title="ERROR"
+                                                               th:checked="${monitorConfigPageForm.serverOverloadLevel15minutes=='ERROR'}? true : false">
+                                                        <input type="radio" name="serverOverloadLevel15minutes"
+                                                               value="FATAL" title="FATAL"
+                                                               th:checked="${monitorConfigPageForm.serverOverloadLevel15minutes=='FATAL'}? true : false">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="layui-card">
                                             <div class="layui-card-header div-font-weight">内存</div>
                                             <div class="layui-card-body" pad20>
                                                 <div class="layui-form-item">
