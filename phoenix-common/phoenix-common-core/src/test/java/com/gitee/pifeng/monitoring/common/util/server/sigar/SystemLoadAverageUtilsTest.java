@@ -28,8 +28,8 @@ public class SystemLoadAverageUtilsTest {
      * @custom.date 2022/6/17 11:30
      */
     @Test
-    public void testGetSystemLoadAverage() throws SigarException {
-        SystemLoadAverageDomain systemLoadAverage = SystemLoadAverageUtils.getSystemLoadAverage();
+    public void testGetSystemLoadAverageInfo() throws SigarException {
+        SystemLoadAverageDomain systemLoadAverage = SystemLoadAverageUtils.getSystemLoadAverageInfo();
         assertNotNull(systemLoadAverage);
         log.info(systemLoadAverage.toJsonString());
     }

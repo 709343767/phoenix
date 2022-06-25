@@ -23,7 +23,7 @@ public class SystemLoadAverageUtils extends InitOshi {
      * @author 皮锋
      * @custom.date 2022/6/17 11:28
      */
-    public static SystemLoadAverageDomain getSystemLoadAverage() {
+    public static SystemLoadAverageDomain getSystemLoadAverageInfo() {
         CentralProcessor processor = SYSTEM_INFO.getHardware().getProcessor();
         double[] loadAverage = processor.getSystemLoadAverage(3);
         return SystemLoadAverageDomain.builder()

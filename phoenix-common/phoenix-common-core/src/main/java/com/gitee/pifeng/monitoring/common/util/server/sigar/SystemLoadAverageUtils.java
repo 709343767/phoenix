@@ -25,7 +25,7 @@ public class SystemLoadAverageUtils extends InitSigar {
      * @author 皮锋
      * @custom.date 2022/6/17 11:28
      */
-    public static SystemLoadAverageDomain getSystemLoadAverage() throws SigarException {
+    public static SystemLoadAverageDomain getSystemLoadAverageInfo() throws SigarException {
         // window系统不能获取，设置为-1
         if (OsUtils.isWindowsOs()) {
             return SystemLoadAverageDomain.builder().oneLoadAverage(-1D).fiveLoadAverage(-1D).fifteenLoadAverage(-1D).build();
