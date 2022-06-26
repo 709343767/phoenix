@@ -42,7 +42,7 @@ public class JvmController {
      */
     @ApiOperation(value = "接收和响应监控客户端程序发的Java虚拟机信息包", notes = "接收Java虚拟机信息包")
     @PostMapping("/accept-jvm-package")
-    public BaseResponsePackage acceptServerPackage(@RequestBody JvmPackage jvmPackage) {
+    public BaseResponsePackage acceptJvmPackage(@RequestBody JvmPackage jvmPackage) {
         return this.jvmService.dealJvmPackage(jvmPackage);
     }
 }

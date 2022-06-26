@@ -41,7 +41,7 @@ public class JvmServiceImpl implements IJvmService {
      * @custom.date 2020年3月7日 下午5:24:47
      */
     @Override
-    public BaseResponsePackage sendServerPackage(JvmPackage jvmPackage) throws Exception {
+    public BaseResponsePackage sendJvmPackage(JvmPackage jvmPackage) throws Exception {
         // IP地址
         String ip = ConfigLoader.MONITORING_PROPERTIES.getServerInfoProperties().getIp() == null ? NetUtils.getLocalIp() : ConfigLoader.MONITORING_PROPERTIES.getServerInfoProperties().getIp();
         // 请求包地址链中添加当前IP地址

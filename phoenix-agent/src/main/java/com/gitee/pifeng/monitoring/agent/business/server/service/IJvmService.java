@@ -28,6 +28,6 @@ public interface IJvmService {
      * @custom.date 2020年3月7日 下午5:24:47
      */
     @TargetMethod(method = "sendJvmPackage")
-    BaseResponsePackage sendServerPackage(JvmPackage jvmPackage) throws Exception;
+    BaseResponsePackage sendJvmPackage(JvmPackage jvmPackage) throws Exception;
 
 }
