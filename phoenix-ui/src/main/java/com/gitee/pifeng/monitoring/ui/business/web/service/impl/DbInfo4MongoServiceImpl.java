@@ -63,8 +63,7 @@ public class DbInfo4MongoServiceImpl implements IDbInfo4MongoService {
         // 封装请求数据
         JSONObject extraMsg = new JSONObject();
         extraMsg.put("url", url);
-        BaseRequestPackage baseRequestPackage = new PackageConstructor().structureBaseRequestPackage();
-        baseRequestPackage.setExtraMsg(extraMsg);
+        BaseRequestPackage baseRequestPackage = new PackageConstructor().structureBaseRequestPackage(extraMsg);
         // 从服务端获取数据
         String resultStr = Sender.send(UrlConstants.MONGO_GET_MONGO_INFO_LIST, baseRequestPackage.toJsonString());
         BaseResponsePackage baseResponsePackage = JSON.parseObject(resultStr, BaseResponsePackage.class);

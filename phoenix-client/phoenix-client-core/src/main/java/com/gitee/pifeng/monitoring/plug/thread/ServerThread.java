@@ -2,9 +2,12 @@ package com.gitee.pifeng.monitoring.plug.thread;
 
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.date.TimeInterval;
+import com.gitee.pifeng.monitoring.common.domain.Server;
 import com.gitee.pifeng.monitoring.common.dto.ServerPackage;
 import com.gitee.pifeng.monitoring.common.exception.NetException;
+import com.gitee.pifeng.monitoring.common.util.server.ServerUtils;
 import com.gitee.pifeng.monitoring.plug.constant.UrlConstants;
+import com.gitee.pifeng.monitoring.plug.core.ConfigLoader;
 import com.gitee.pifeng.monitoring.plug.core.PackageConstructor;
 import com.gitee.pifeng.monitoring.plug.core.Sender;
 import lombok.extern.slf4j.Slf4j;
@@ -36,8 +39,10 @@ public class ServerThread implements Runnable {
         // 计时器
         TimeInterval timer = DateUtil.timer();
         try {
+            // 获取服务器信息
+            Server server = ConfigLoader.MONITORING_PROPERTIES.getServerInfoProperties().isUserSigarEnable() ? ServerUtils.getSigarServerInfo() : ServerUtils.getOshiServerInfo();
             // 构建服务器数据包
-            ServerPackage serverPackage = new PackageConstructor().structureServerPackage();
+            ServerPackage serverPackage = new PackageConstructor().structureServerPackage(server);
             // 发送请求
             String result = Sender.send(UrlConstants.SERVER_URL, serverPackage.toJsonString());
             log.debug("服务器信息包响应消息：{}", result);

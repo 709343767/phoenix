@@ -1,6 +1,7 @@
 package com.gitee.pifeng.monitoring.ui.core;
 
 import cn.hutool.core.util.IdUtil;
+import com.alibaba.fastjson.JSONObject;
 import com.gitee.pifeng.monitoring.common.abs.AbstractPackageConstructor;
 import com.gitee.pifeng.monitoring.common.dto.BaseRequestPackage;
 import com.gitee.pifeng.monitoring.common.exception.NetException;
@@ -29,6 +30,7 @@ public class PackageConstructor extends AbstractPackageConstructor {
      * 构建基础请求包
      * </p>
      *
+     * @param extraMsg 附加信息
      * @return {@link BaseRequestPackage}
      * @throws NetException   自定义获取网络信息异常
      * @throws SigarException Sigar异常
@@ -36,7 +38,7 @@ public class PackageConstructor extends AbstractPackageConstructor {
      * @custom.date 2021/4/5 12:45
      */
     @Override
-    public BaseRequestPackage structureBaseRequestPackage() throws NetException, SigarException {
+    public BaseRequestPackage structureBaseRequestPackage(JSONObject extraMsg) throws NetException, SigarException {
         BaseRequestPackage baseRequestPackage = new BaseRequestPackage();
         baseRequestPackage.setId(IdUtil.randomUUID());
         baseRequestPackage.setDateTime(new Date());
@@ -52,6 +54,8 @@ public class PackageConstructor extends AbstractPackageConstructor {
         networkChain.add(ip);
         baseRequestPackage.setNetworkChain(networkChain);
         baseRequestPackage.setComputerName(OsUtils.getComputerName());
+        // 设置附加信息
+        baseRequestPackage.setExtraMsg(extraMsg);
         return baseRequestPackage;
     }
 

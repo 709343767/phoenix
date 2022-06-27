@@ -3,16 +3,16 @@ package com.gitee.pifeng.monitoring.plug.core;
 import cn.hutool.core.util.IdUtil;
 import com.gitee.pifeng.monitoring.common.abs.AbstractPackageConstructor;
 import com.gitee.pifeng.monitoring.common.domain.Alarm;
+import com.gitee.pifeng.monitoring.common.domain.Jvm;
+import com.gitee.pifeng.monitoring.common.domain.Server;
 import com.gitee.pifeng.monitoring.common.dto.AlarmPackage;
 import com.gitee.pifeng.monitoring.common.dto.HeartbeatPackage;
 import com.gitee.pifeng.monitoring.common.dto.JvmPackage;
 import com.gitee.pifeng.monitoring.common.dto.ServerPackage;
 import com.gitee.pifeng.monitoring.common.exception.NetException;
 import com.gitee.pifeng.monitoring.common.util.AppServerDetectorUtils;
-import com.gitee.pifeng.monitoring.common.util.jvm.JvmUtils;
 import com.gitee.pifeng.monitoring.common.util.server.NetUtils;
 import com.gitee.pifeng.monitoring.common.util.server.OsUtils;
-import com.gitee.pifeng.monitoring.common.util.server.ServerUtils;
 import com.gitee.pifeng.monitoring.plug.util.InstanceUtils;
 import org.hyperic.sigar.SigarException;
 
@@ -109,6 +109,7 @@ public class PackageConstructor extends AbstractPackageConstructor {
      * 构建服务器数据包
      * </p>
      *
+     * @param server 服务器信息
      * @return {@link ServerPackage}
      * @throws SigarException Sigar异常
      * @throws NetException   获取网络信息异常
@@ -116,7 +117,7 @@ public class PackageConstructor extends AbstractPackageConstructor {
      * @custom.date 2020年3月7日 下午4:51:51
      */
     @Override
-    public ServerPackage structureServerPackage() throws SigarException, NetException {
+    public ServerPackage structureServerPackage(Server server) throws SigarException, NetException {
         ServerPackage serverPackage = new ServerPackage();
         serverPackage.setId(IdUtil.randomUUID());
         serverPackage.setDateTime(new Date());
@@ -132,7 +133,8 @@ public class PackageConstructor extends AbstractPackageConstructor {
         networkChain.add(ip);
         serverPackage.setNetworkChain(networkChain);
         serverPackage.setComputerName(OsUtils.getComputerName());
-        serverPackage.setServer(ConfigLoader.MONITORING_PROPERTIES.getServerInfoProperties().isUserSigarEnable() ? ServerUtils.getSigarServerInfo() : ServerUtils.getOshiServerInfo());
+        // 设置服务器信息
+        serverPackage.setServer(server);
         serverPackage.setRate(ConfigLoader.MONITORING_PROPERTIES.getServerInfoProperties().getRate());
         return serverPackage;
     }
@@ -142,6 +144,7 @@ public class PackageConstructor extends AbstractPackageConstructor {
      * 构建Java虚拟机信息包
      * </p>
      *
+     * @param jvm Java虚拟机信息
      * @return {@link JvmPackage}
      * @throws NetException   获取网络信息异常
      * @throws SigarException Sigar异常
@@ -149,7 +152,7 @@ public class PackageConstructor extends AbstractPackageConstructor {
      * @custom.date 2020/8/14 21:28
      */
     @Override
-    public JvmPackage structureJvmPackage() throws NetException, SigarException {
+    public JvmPackage structureJvmPackage(Jvm jvm) throws NetException, SigarException {
         JvmPackage jvmPackage = new JvmPackage();
         jvmPackage.setId(IdUtil.randomUUID());
         jvmPackage.setDateTime(new Date());
@@ -165,7 +168,8 @@ public class PackageConstructor extends AbstractPackageConstructor {
         networkChain.add(ip);
         jvmPackage.setNetworkChain(networkChain);
         jvmPackage.setComputerName(OsUtils.getComputerName());
-        jvmPackage.setJvm(JvmUtils.getJvmInfo());
+        // 设置Java虚拟机信息
+        jvmPackage.setJvm(jvm);
         jvmPackage.setRate(ConfigLoader.MONITORING_PROPERTIES.getJvmInfoProperties().getRate());
         return jvmPackage;
     }

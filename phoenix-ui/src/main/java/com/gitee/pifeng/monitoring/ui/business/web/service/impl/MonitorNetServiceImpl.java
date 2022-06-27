@@ -255,7 +255,7 @@ public class MonitorNetServiceImpl extends ServiceImpl<IMonitorNetDao, MonitorNe
     @Override
     public String getSourceIp() {
         try {
-            BaseRequestPackage baseRequestPackage = new PackageConstructor().structureBaseRequestPackage();
+            BaseRequestPackage baseRequestPackage = new PackageConstructor().structureBaseRequestPackage(null);
             String resultStr = Sender.send(UrlConstants.GET_SOURCE_IP, baseRequestPackage.toJsonString());
             BaseResponsePackage baseResponsePackage = JSON.parseObject(resultStr, BaseResponsePackage.class);
             Result result = baseResponsePackage.getResult();

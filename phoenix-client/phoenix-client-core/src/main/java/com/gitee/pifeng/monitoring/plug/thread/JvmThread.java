@@ -2,8 +2,10 @@ package com.gitee.pifeng.monitoring.plug.thread;
 
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.date.TimeInterval;
+import com.gitee.pifeng.monitoring.common.domain.Jvm;
 import com.gitee.pifeng.monitoring.common.dto.JvmPackage;
 import com.gitee.pifeng.monitoring.common.exception.NetException;
+import com.gitee.pifeng.monitoring.common.util.jvm.JvmUtils;
 import com.gitee.pifeng.monitoring.plug.constant.UrlConstants;
 import com.gitee.pifeng.monitoring.plug.core.PackageConstructor;
 import com.gitee.pifeng.monitoring.plug.core.Sender;
@@ -36,7 +38,10 @@ public class JvmThread implements Runnable {
         // 计时器
         TimeInterval timer = DateUtil.timer();
         try {
-            JvmPackage jvmPackage = new PackageConstructor().structureJvmPackage();
+            // 获取Java虚拟机信息
+            Jvm jvm = JvmUtils.getJvmInfo();
+            // 构建Java虚拟机信息包
+            JvmPackage jvmPackage = new PackageConstructor().structureJvmPackage(jvm);
             // 发送请求
             String result = Sender.send(UrlConstants.JVM_URL, jvmPackage.toJsonString());
             log.debug("Java虚拟机信息包响应消息：{}", result);

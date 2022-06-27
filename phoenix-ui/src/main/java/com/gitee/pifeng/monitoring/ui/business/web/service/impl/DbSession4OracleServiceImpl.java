@@ -79,8 +79,7 @@ public class DbSession4OracleServiceImpl implements IDbSession4OracleService {
         extraMsg.put("url", url);
         extraMsg.put("username", username);
         extraMsg.put("password", password);
-        BaseRequestPackage baseRequestPackage = new PackageConstructor().structureBaseRequestPackage();
-        baseRequestPackage.setExtraMsg(extraMsg);
+        BaseRequestPackage baseRequestPackage = new PackageConstructor().structureBaseRequestPackage(extraMsg);
         // 从服务端获取数据
         String resultStr = Sender.send(UrlConstants.ORACLE_GET_SESSION_LIST, baseRequestPackage.toJsonString());
         BaseResponsePackage baseResponsePackage = JSON.parseObject(resultStr, BaseResponsePackage.class);
@@ -161,8 +160,7 @@ public class DbSession4OracleServiceImpl implements IDbSession4OracleService {
         extraMsg.put("password", password);
         extraMsg.put("sids", sids);
         extraMsg.put("serials", serials);
-        BaseRequestPackage baseRequestPackage = new PackageConstructor().structureBaseRequestPackage();
-        baseRequestPackage.setExtraMsg(extraMsg);
+        BaseRequestPackage baseRequestPackage = new PackageConstructor().structureBaseRequestPackage(extraMsg);
         // 从服务端获取数据
         String resultStr = Sender.send(UrlConstants.ORACLE_DESTROY_SESSION, baseRequestPackage.toJsonString());
         BaseResponsePackage baseResponsePackage = JSON.parseObject(resultStr, BaseResponsePackage.class);

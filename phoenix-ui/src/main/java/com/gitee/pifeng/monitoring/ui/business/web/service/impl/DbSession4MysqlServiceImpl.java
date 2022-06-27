@@ -78,8 +78,7 @@ public class DbSession4MysqlServiceImpl implements IDbSession4MysqlService {
         extraMsg.put("url", url);
         extraMsg.put("username", username);
         extraMsg.put("password", password);
-        BaseRequestPackage baseRequestPackage = new PackageConstructor().structureBaseRequestPackage();
-        baseRequestPackage.setExtraMsg(extraMsg);
+        BaseRequestPackage baseRequestPackage = new PackageConstructor().structureBaseRequestPackage(extraMsg);
         // 从服务端获取数据
         String resultStr = Sender.send(UrlConstants.MYSQL_GET_SESSION_LIST, baseRequestPackage.toJsonString());
         BaseResponsePackage baseResponsePackage = JSON.parseObject(resultStr, BaseResponsePackage.class);
@@ -149,8 +148,7 @@ public class DbSession4MysqlServiceImpl implements IDbSession4MysqlService {
         extraMsg.put("username", username);
         extraMsg.put("password", password);
         extraMsg.put("sessionIds", sessionIds);
-        BaseRequestPackage baseRequestPackage = new PackageConstructor().structureBaseRequestPackage();
-        baseRequestPackage.setExtraMsg(extraMsg);
+        BaseRequestPackage baseRequestPackage = new PackageConstructor().structureBaseRequestPackage(extraMsg);
         // 从服务端获取数据
         String resultStr = Sender.send(UrlConstants.MYSQL_DESTROY_SESSION, baseRequestPackage.toJsonString());
         BaseResponsePackage baseResponsePackage = JSON.parseObject(resultStr, BaseResponsePackage.class);

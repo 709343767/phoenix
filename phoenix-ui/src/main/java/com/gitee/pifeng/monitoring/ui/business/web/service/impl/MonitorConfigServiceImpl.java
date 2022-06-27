@@ -187,7 +187,7 @@ public class MonitorConfigServiceImpl extends ServiceImpl<IMonitorConfigDao, Mon
         }
         // 刷新服务端监控属性配置
         try {
-            BaseRequestPackage baseRequestPackage = new PackageConstructor().structureBaseRequestPackage();
+            BaseRequestPackage baseRequestPackage = new PackageConstructor().structureBaseRequestPackage(null);
             String result = Sender.send(UrlConstants.MONITORING_PROPERTIES_CONFIG_REFRESH_URL, baseRequestPackage.toJsonString());
             BaseResponsePackage baseResponsePackage = JSON.parseObject(result, BaseResponsePackage.class);
             // 是否刷新配置成功

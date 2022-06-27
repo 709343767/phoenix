@@ -65,8 +65,7 @@ public class DbInfo4RedisServiceImpl implements IDbInfo4RedisService {
         extraMsg.put("host", host);
         extraMsg.put("port", port);
         extraMsg.put("password", password);
-        BaseRequestPackage baseRequestPackage = new PackageConstructor().structureBaseRequestPackage();
-        baseRequestPackage.setExtraMsg(extraMsg);
+        BaseRequestPackage baseRequestPackage = new PackageConstructor().structureBaseRequestPackage(extraMsg);
         // 从服务端获取数据
         String resultStr = Sender.send(UrlConstants.REDIS_GET_REDIS_INFO, baseRequestPackage.toJsonString());
         BaseResponsePackage baseResponsePackage = JSON.parseObject(resultStr, BaseResponsePackage.class);

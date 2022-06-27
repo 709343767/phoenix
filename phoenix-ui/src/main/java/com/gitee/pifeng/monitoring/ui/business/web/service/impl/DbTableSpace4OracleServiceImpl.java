@@ -75,8 +75,7 @@ public class DbTableSpace4OracleServiceImpl implements IDbTableSpace4OracleServi
         extraMsg.put("url", url);
         extraMsg.put("username", username);
         extraMsg.put("password", password);
-        BaseRequestPackage baseRequestPackage = new PackageConstructor().structureBaseRequestPackage();
-        baseRequestPackage.setExtraMsg(extraMsg);
+        BaseRequestPackage baseRequestPackage = new PackageConstructor().structureBaseRequestPackage(extraMsg);
         // 从服务端获取数据
         String resultStr = Sender.send(UrlConstants.ORACLE_GET_TABLESPACE_LIST_FILE, baseRequestPackage.toJsonString());
         BaseResponsePackage baseResponsePackage = JSON.parseObject(resultStr, BaseResponsePackage.class);
@@ -147,8 +146,7 @@ public class DbTableSpace4OracleServiceImpl implements IDbTableSpace4OracleServi
         extraMsg.put("url", url);
         extraMsg.put("username", username);
         extraMsg.put("password", password);
-        BaseRequestPackage baseRequestPackage = new PackageConstructor().structureBaseRequestPackage();
-        baseRequestPackage.setExtraMsg(extraMsg);
+        BaseRequestPackage baseRequestPackage = new PackageConstructor().structureBaseRequestPackage(extraMsg);
         // 从服务端获取数据
         String resultStr = Sender.send(UrlConstants.ORACLE_GET_TABLESPACE_LIST_ALL, baseRequestPackage.toJsonString());
         BaseResponsePackage baseResponsePackage = JSON.parseObject(resultStr, BaseResponsePackage.class);
