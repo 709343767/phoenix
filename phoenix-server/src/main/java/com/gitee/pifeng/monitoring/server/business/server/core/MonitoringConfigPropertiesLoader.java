@@ -13,10 +13,10 @@ import com.gitee.pifeng.monitoring.server.business.server.entity.MonitorConfig;
 import com.gitee.pifeng.monitoring.server.business.server.service.IConfigService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.util.Date;
 
 /**
@@ -76,7 +76,7 @@ public class MonitoringConfigPropertiesLoader {
      * @author 皮锋
      * @custom.date 2020/11/9 22:23
      */
-    @Bean
+    @PostConstruct
     public void init() {
         // 获取监控配置属性
         MonitoringProperties properties = this.loadAllMonitorConfig();
