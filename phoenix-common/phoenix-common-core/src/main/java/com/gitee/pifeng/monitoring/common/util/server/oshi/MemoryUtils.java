@@ -40,7 +40,8 @@ public class MemoryUtils extends InitOshi {
                 .menUsedPercent(NumberUtil.round((double) memUsed / (double) memoryTotal, 4).doubleValue())
                 .build();
         VirtualMemory virtualMemory = memory.getVirtualMemory();
-        long swapTotal = virtualMemory.getVirtualMax();
+        // long swapTotal = virtualMemory.getVirtualMax();
+        long swapTotal = virtualMemory.getSwapTotal();
         // long swapUsed = virtualMemory.getSwapTotal(); // 到底是哪个？
         // long swapUsed = virtualMemory.getSwapUsed() + virtualMemory.getVirtualInUse(); // 到底是哪个？
         // long swapUsed = virtualMemory.getVirtualInUse(); // 到底是哪个？
