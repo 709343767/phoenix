@@ -68,6 +68,9 @@ public class MonitorServerVo implements ISuperBean {
     @ApiModelProperty(value = "内存使用率")
     private Double menUsedPercent;
 
+    @ApiModelProperty(value = "服务器负载")
+    private Double loadAverage;
+
     @ApiModelProperty(value = "下行带宽")
     private String downloadBps;
 

@@ -21,28 +21,31 @@
         CAST(AVG(1 - CPU.CPU_IDLE)*100 AS DECIMAL(10, 2)) AS CPU_USER_PERCENT,
         CAST(AVG(MEMORY.MEN_USED_PERCENT)*100 AS DECIMAL(10, 2)) AS MEN_USED_PERCENT,
         NETCARD.DOWNLOAD_BPS,
-        NETCARD.UPLOAD_BPS
+        NETCARD.UPLOAD_BPS,
+        AVERAGE.FIFTEEN AS LOAD_AVERAGE
         FROM MONITOR_SERVER S
         LEFT JOIN MONITOR_SERVER_OS O ON O.IP =S.IP
         LEFT JOIN MONITOR_SERVER_CPU CPU ON CPU.IP = S.IP
         LEFT JOIN MONITOR_SERVER_MEMORY MEMORY ON MEMORY.IP = S.IP
         LEFT JOIN MONITOR_SERVER_NETCARD NETCARD ON (NETCARD.IP = S.IP AND NETCARD.ADDRESS = S.IP)
-        WHERE 1 = 1
-        <if test="criteria.ip!=null and criteria.ip!=''">
-            AND S.IP like concat('%',#{criteria.ip},'%')
-        </if>
-        <if test="criteria.serverName!=null and criteria.serverName!=''">
-            AND S.SERVER_NAME like concat('%',#{criteria.serverName},'%')
-        </if>
-        <if test="criteria.isOnline!=null and criteria.isOnline!=''">
-            AND S.IS_ONLINE=#{criteria.isOnline}
-        </if>
-        <if test="criteria.monitorEnv!=null and criteria.monitorEnv!=''">
-            AND S.MONITOR_ENV like concat('%',#{criteria.monitorEnv},'%')
-        </if>
-        <if test="criteria.monitorGroup!=null and criteria.monitorGroup!=''">
-            AND S.MONITOR_GROUP like concat('%',#{criteria.monitorGroup},'%')
-        </if>
+        LEFT JOIN MONITOR_SERVER_LOAD_AVERAGE AVERAGE ON AVERAGE.IP=S.IP
+        <where>
+            <if test="criteria.ip!=null and criteria.ip!=''">
+                AND S.IP like concat('%',#{criteria.ip},'%')
+            </if>
+            <if test="criteria.serverName!=null and criteria.serverName!=''">
+                AND S.SERVER_NAME like concat('%',#{criteria.serverName},'%')
+            </if>
+            <if test="criteria.isOnline!=null and criteria.isOnline!=''">
+                AND S.IS_ONLINE=#{criteria.isOnline}
+            </if>
+            <if test="criteria.monitorEnv!=null and criteria.monitorEnv!=''">
+                AND S.MONITOR_ENV like concat('%',#{criteria.monitorEnv},'%')
+            </if>
+            <if test="criteria.monitorGroup!=null and criteria.monitorGroup!=''">
+                AND S.MONITOR_GROUP like concat('%',#{criteria.monitorGroup},'%')
+            </if>
+        </where>
         GROUP BY S.ID,
         S.IP,
         S.SERVER_NAME,
@@ -53,7 +56,8 @@
         S.UPDATE_TIME,
         O.OS_NAME,
         NETCARD.DOWNLOAD_BPS,
-        NETCARD.UPLOAD_BPS
+        NETCARD.UPLOAD_BPS,
+        AVERAGE.FIFTEEN
         ORDER BY S.ID
     </select>
 </mapper>
