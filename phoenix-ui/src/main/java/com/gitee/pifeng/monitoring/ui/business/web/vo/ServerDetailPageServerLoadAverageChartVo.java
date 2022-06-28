@@ -37,6 +37,9 @@ public class ServerDetailPageServerLoadAverageChartVo implements ISuperBean {
     @ApiModelProperty(value = "15分钟负载平均值")
     private Double fifteen;
 
+    @ApiModelProperty(value = "CPU逻辑核数量")
+    private Integer logicalProcessorCount;
+
     @JsonFormat(pattern = "yyyy/MM/dd HH:mm:ss", timezone = "GMT+8")
     @ApiModelProperty(value = "新增时间")
     private Date insertTime;

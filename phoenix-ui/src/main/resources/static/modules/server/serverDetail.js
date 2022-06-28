@@ -1927,6 +1927,8 @@
                     var insertTime = data.map(function (item) {
                         return item.insertTime.replace(' ', '\n');
                     });
+                    // CPU逻辑核数量
+                    var logicalProcessorCount = data.length !== 0 ? data[data.length - 1].logicalProcessorCount : 0;
                     // 最新负载情况
                     var lastOne = data.length !== 0 ? data[data.length - 1].one : -1;
                     var lastFive = data.length !== 0 ? data[data.length - 1].five : -1;
@@ -2011,9 +2013,19 @@
                             smooth: true,
                             markLine: {
                                 data: [{
-                                    yAxis: 1,
+                                    yAxis: logicalProcessorCount * 0.7,
                                     itemStyle: {
-                                        color: '#E13C00'
+                                        color: '#2E8B57'
+                                    }
+                                }, {
+                                    yAxis: logicalProcessorCount,
+                                    itemStyle: {
+                                        color: '#FFB90F'
+                                    }
+                                }, {
+                                    yAxis: logicalProcessorCount * 5,
+                                    itemStyle: {
+                                        color: '#EE2C2C'
                                     }
                                 }]
                             },
@@ -2046,9 +2058,19 @@
                             smooth: true,
                             markLine: {
                                 data: [{
-                                    yAxis: 1,
+                                    yAxis: logicalProcessorCount * 0.7,
                                     itemStyle: {
-                                        color: '#E13C00'
+                                        color: '#2E8B57'
+                                    }
+                                }, {
+                                    yAxis: logicalProcessorCount,
+                                    itemStyle: {
+                                        color: '#FFB90F'
+                                    }
+                                }, {
+                                    yAxis: logicalProcessorCount * 5,
+                                    itemStyle: {
+                                        color: '#EE2C2C'
                                     }
                                 }]
                             },
@@ -2081,9 +2103,19 @@
                             smooth: true,
                             markLine: {
                                 data: [{
-                                    yAxis: 1,
+                                    yAxis: logicalProcessorCount * 0.7,
                                     itemStyle: {
-                                        color: '#E13C00'
+                                        color: '#2E8B57'
+                                    }
+                                }, {
+                                    yAxis: logicalProcessorCount,
+                                    itemStyle: {
+                                        color: '#FFB90F'
+                                    }
+                                }, {
+                                    yAxis: logicalProcessorCount * 5,
+                                    itemStyle: {
+                                        color: '#EE2C2C'
                                     }
                                 }]
                             },

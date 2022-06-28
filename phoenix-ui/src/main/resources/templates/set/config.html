@@ -272,12 +272,14 @@
                                             <div class="layui-card-body" pad20>
                                                 <div class="layui-form-item">
                                                     <label class="layui-form-label"
-                                                           style="text-align: left;">过载阈值(大于0)</label>
-                                                    <div class="layui-input-block">
+                                                           style="text-align: left;width: 90px;">过载阈值(>0)</label>
+                                                    <div class="layui-input-block" style="display: flex;">
                                                         <input type="text" name="serverOverloadThreshold15minutes"
+                                                               style="width: 100px;"
                                                                class="layui-input"
                                                                lay-verify="number" lay-verType="tips"
                                                                th:value="${monitorConfigPageForm.serverOverloadThreshold15minutes}">
+                                                        <label style="padding:9px 15px;"> × CPU逻辑核数</label>
                                                     </div>
                                                 </div>
                                                 <div class="layui-form-item">

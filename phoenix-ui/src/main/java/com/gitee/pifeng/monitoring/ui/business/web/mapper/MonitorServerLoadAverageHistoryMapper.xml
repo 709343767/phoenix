@@ -8,6 +8,7 @@
         SELECT ONE AS one,
         FIVE AS five,
         FIFTEEN AS fifteen,
+        LOGICAL_PROCESSOR_COUNT AS logicalProcessorCount,
         INSERT_TIME AS insertTime
         FROM MONITOR_SERVER_LOAD_AVERAGE_HISTORY
         WHERE IP = #{params.ip}

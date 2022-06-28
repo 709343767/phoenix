@@ -59,6 +59,12 @@ public class MonitorServerLoadAverageHistory {
     private Double fifteen;
 
     /**
+     * CPU逻辑核数量
+     */
+    @TableField("LOGICAL_PROCESSOR_COUNT")
+    private Integer logicalProcessorCount;
+
+    /**
      * 新增时间
      */
     @TableField("INSERT_TIME")

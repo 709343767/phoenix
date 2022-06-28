@@ -50,6 +50,10 @@ public class MonitorServerLoadAverageHistory implements Serializable {
     @TableField("FIFTEEN")
     private Double fifteen;
 
+    @ApiModelProperty(value = "CPU逻辑核数量")
+    @TableField("LOGICAL_PROCESSOR_COUNT")
+    private Integer logicalProcessorCount;
+
     @ApiModelProperty(value = "新增时间")
     @TableField("INSERT_TIME")
     private Date insertTime;

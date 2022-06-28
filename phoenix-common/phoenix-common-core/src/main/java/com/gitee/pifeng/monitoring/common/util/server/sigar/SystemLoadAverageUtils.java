@@ -28,10 +28,16 @@ public class SystemLoadAverageUtils extends InitSigar {
     public static SystemLoadAverageDomain getSystemLoadAverageInfo() throws SigarException {
         // window系统不能获取，设置为-1
         if (OsUtils.isWindowsOs()) {
-            return SystemLoadAverageDomain.builder().oneLoadAverage(-1D).fiveLoadAverage(-1D).fifteenLoadAverage(-1D).build();
+            return SystemLoadAverageDomain.builder()
+                    .logicalProcessorCount(SIGAR.getCpuPercList().length)
+                    .oneLoadAverage(-1D)
+                    .fiveLoadAverage(-1D)
+                    .fifteenLoadAverage(-1D)
+                    .build();
         }
         double[] loadAverage = SIGAR.getLoadAverage();
         return SystemLoadAverageDomain.builder()
+                .logicalProcessorCount(SIGAR.getCpuPercList().length)
                 .oneLoadAverage(loadAverage[0])
                 .fiveLoadAverage(loadAverage[1])
                 .fifteenLoadAverage(loadAverage[2])

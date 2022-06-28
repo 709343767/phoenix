@@ -22,6 +22,11 @@ import lombok.experimental.Accessors;
 public class SystemLoadAverageDomain extends AbstractSuperBean {
 
     /**
+     * CPU逻辑核数量
+     */
+    private Integer logicalProcessorCount;
+
+    /**
      * 1分钟负载平均值
      */
     private Double oneLoadAverage;

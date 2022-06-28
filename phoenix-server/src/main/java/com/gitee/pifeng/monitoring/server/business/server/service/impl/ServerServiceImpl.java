@@ -226,6 +226,7 @@ public class ServerServiceImpl extends ServiceImpl<IMonitorServerDao, MonitorSer
         // 封装对象
         MonitorServerLoadAverageHistory monitorServerLoadAverageHistory = new MonitorServerLoadAverageHistory();
         monitorServerLoadAverageHistory.setIp(ip);
+        monitorServerLoadAverageHistory.setLogicalProcessorCount(systemLoadAverageDomain.getLogicalProcessorCount());
         monitorServerLoadAverageHistory.setOne(systemLoadAverageDomain.getOneLoadAverage());
         monitorServerLoadAverageHistory.setFive(systemLoadAverageDomain.getFiveLoadAverage());
         monitorServerLoadAverageHistory.setFifteen(systemLoadAverageDomain.getFifteenLoadAverage());
@@ -254,6 +255,7 @@ public class ServerServiceImpl extends ServiceImpl<IMonitorServerDao, MonitorSer
         // 封装对象
         MonitorServerLoadAverage monitorServerLoadAverage = new MonitorServerLoadAverage();
         monitorServerLoadAverage.setIp(ip);
+        monitorServerLoadAverage.setLogicalProcessorCount(systemLoadAverageDomain.getLogicalProcessorCount());
         monitorServerLoadAverage.setOne(systemLoadAverageDomain.getOneLoadAverage());
         monitorServerLoadAverage.setFive(systemLoadAverageDomain.getFiveLoadAverage());
         monitorServerLoadAverage.setFifteen(systemLoadAverageDomain.getFifteenLoadAverage());
