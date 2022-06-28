@@ -215,10 +215,10 @@
 [GNU General Public License v3.0](https://www.gnu.org/licenses/gpl-3.0.txt)
 
 ## 联系
-作者QQ：709343767
+作者QQ：709343767  
 QQ群：[773127639](https://qm.qq.com/cgi-bin/qm/qr?k=a0yY8EZMVTwvt8Tc1uWuk2hGpvhnyp3C&authKey=nvLNq0pw1yo32ZxbW8rxkYa6yyDn4Vc7f4R65CiifQ+RAgyWXuhszxIKSCB+eb5q&noverify=0)  
 
-捐赠至少50元联系作者或者入群获取使用文档！  
+捐赠至少**50元**联系作者或者入群获取使用文档！  
 
 ## 捐赠
 
