@@ -668,13 +668,14 @@ CREATE TABLE `MONITOR_SERVER_DISK_HISTORY`
 DROP TABLE IF EXISTS `MONITOR_SERVER_LOAD_AVERAGE`;
 CREATE TABLE `MONITOR_SERVER_LOAD_AVERAGE`
 (
-    `ID`          bigint(20)                                                   NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-    `IP`          varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'IP地址',
-    `ONE`         double(16, 4)                                                NULL DEFAULT NULL COMMENT '1分钟负载平均值',
-    `FIVE`        double(16, 4)                                                NULL DEFAULT NULL COMMENT '5分钟负载平均值',
-    `FIFTEEN`     double(16, 4)                                                NULL DEFAULT NULL COMMENT '15分钟负载平均值',
-    `INSERT_TIME` datetime                                                     NOT NULL COMMENT '新增时间',
-    `UPDATE_TIME` datetime                                                     NULL DEFAULT NULL COMMENT '更新时间',
+    `ID`                      bigint(20)                                                   NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `IP`                      varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'IP地址',
+    `LOGICAL_PROCESSOR_COUNT` int(4)                                                       NULL DEFAULT NULL COMMENT 'CPU逻辑核数量',
+    `ONE`                     double(16, 4)                                                NULL DEFAULT NULL COMMENT '1分钟负载平均值',
+    `FIVE`                    double(16, 4)                                                NULL DEFAULT NULL COMMENT '5分钟负载平均值',
+    `FIFTEEN`                 double(16, 4)                                                NULL DEFAULT NULL COMMENT '15分钟负载平均值',
+    `INSERT_TIME`             datetime                                                     NOT NULL COMMENT '新增时间',
+    `UPDATE_TIME`             datetime                                                     NULL DEFAULT NULL COMMENT '更新时间',
     PRIMARY KEY (`ID`) USING BTREE,
     INDEX `NX_IP` (`IP`) USING BTREE COMMENT '索引_IP'
 ) ENGINE = InnoDB
@@ -688,13 +689,14 @@ CREATE TABLE `MONITOR_SERVER_LOAD_AVERAGE`
 DROP TABLE IF EXISTS `MONITOR_SERVER_LOAD_AVERAGE_HISTORY`;
 CREATE TABLE `MONITOR_SERVER_LOAD_AVERAGE_HISTORY`
 (
-    `ID`          bigint(20)                                                   NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-    `IP`          varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'IP地址',
-    `ONE`         double(16, 4)                                                NULL DEFAULT NULL COMMENT '1分钟负载平均值',
-    `FIVE`        double(16, 4)                                                NULL DEFAULT NULL COMMENT '5分钟负载平均值',
-    `FIFTEEN`     double(16, 4)                                                NULL DEFAULT NULL COMMENT '15分钟负载平均值',
-    `INSERT_TIME` datetime                                                     NOT NULL COMMENT '新增时间',
-    `UPDATE_TIME` datetime                                                     NULL DEFAULT NULL COMMENT '更新时间',
+    `ID`                      bigint(20)                                                   NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `IP`                      varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'IP地址',
+    `LOGICAL_PROCESSOR_COUNT` int(4)                                                       NULL DEFAULT NULL COMMENT 'CPU逻辑核数量',
+    `ONE`                     double(16, 4)                                                NULL DEFAULT NULL COMMENT '1分钟负载平均值',
+    `FIVE`                    double(16, 4)                                                NULL DEFAULT NULL COMMENT '5分钟负载平均值',
+    `FIFTEEN`                 double(16, 4)                                                NULL DEFAULT NULL COMMENT '15分钟负载平均值',
+    `INSERT_TIME`             datetime                                                     NOT NULL COMMENT '新增时间',
+    `UPDATE_TIME`             datetime                                                     NULL DEFAULT NULL COMMENT '更新时间',
     PRIMARY KEY (`ID`) USING BTREE,
     INDEX `NX_IP` (`IP`) USING BTREE COMMENT '索引_IP',
     INDEX `NX_INSERT_TIME` (`INSERT_TIME`) USING BTREE COMMENT '索引_服务器平均负载新增时间',
