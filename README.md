@@ -146,7 +146,7 @@
 
 - 最新稳定版本  
 
-  1.2.2.RELEASE  
+  1.2.4.RELEASE-CR1 
 
 ## 功能截图
 
@@ -218,7 +218,7 @@
 作者QQ：709343767  
 QQ群：[773127639](https://qm.qq.com/cgi-bin/qm/qr?k=a0yY8EZMVTwvt8Tc1uWuk2hGpvhnyp3C&authKey=nvLNq0pw1yo32ZxbW8rxkYa6yyDn4Vc7f4R65CiifQ+RAgyWXuhszxIKSCB+eb5q&noverify=0)  
 
-捐赠至少**50元**联系作者或者入群获取使用文档！  
+捐赠至少**50元**联系作者或者捐赠至少**50元**入群获取使用文档！  
 
 ## 捐赠
 
