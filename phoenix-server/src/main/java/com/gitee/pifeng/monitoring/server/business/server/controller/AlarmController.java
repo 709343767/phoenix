@@ -16,9 +16,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-
 /**
  * <p>
  * 告警包控制器
@@ -46,19 +43,16 @@ public class AlarmController {
      *
      * @param alarmPackage 告警包
      * @return {@link BaseResponsePackage}
-     * @throws ExecutionException   执行异常
-     * @throws InterruptedException 中断异常
      * @author 皮锋
      * @custom.date 2020年3月6日 下午3:49:45
      */
     @ApiOperation(value = "接收和响应监控代理端程序或者监控客户端程序发的告警包", notes = "接收告警包")
     @PostMapping("/accept-alarm-package")
-    public BaseResponsePackage acceptAlarmPackage(@RequestBody AlarmPackage alarmPackage) throws ExecutionException, InterruptedException {
+    public BaseResponsePackage acceptAlarmPackage(@RequestBody AlarmPackage alarmPackage) {
         // 计时器
         TimeInterval timer = DateUtil.timer();
-        Future<Result> resultFuture = this.alarmService.dealAlarmPackage(alarmPackage);
         // 返回值
-        Result result = resultFuture.get();
+        Result result = this.alarmService.dealAlarmPackage(alarmPackage);
         BaseResponsePackage baseResponsePackage = new PackageConstructor().structureBaseResponsePackage(result);
         // 时间差（毫秒）
         String betweenDay = timer.intervalPretty();

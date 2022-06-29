@@ -20,15 +20,14 @@ import com.gitee.pifeng.monitoring.server.business.server.service.IRealtimeMonit
 import com.gitee.pifeng.monitoring.server.business.server.service.ISmsService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.Future;
 
 /**
  * <p>
@@ -74,22 +73,21 @@ public class AlarmServiceImpl implements IAlarmService {
 
     /**
      * <p>
-     * 异步处理告警包
+     * 处理告警包
      * </p>
      *
      * @param alarmPackage 告警包
-     * @return {@link Future}
+     * @return {@link Result}
      * @author 皮锋
      * @custom.date 2020年3月10日 下午1:33:55
      */
-    @Async
     @Override
-    public Future<Result> dealAlarmPackage(AlarmPackage alarmPackage) {
+    public Result dealAlarmPackage(AlarmPackage alarmPackage) {
         // 返回结果
         Result result = new Result();
         // 处理告警信息
         this.dealAlarm(result, alarmPackage);
-        return new AsyncResult<>(result);
+        return result;
     }
 
     /**
@@ -148,7 +146,7 @@ public class AlarmServiceImpl implements IAlarmService {
             }
         }
         // 不管发不发送告警信息，先把告警记录存入数据库
-        this.insertMonitorAlarmRecordToDb(alarm, alarmUuid);
+        ((IAlarmService) AopContext.currentProxy()).insertMonitorAlarmRecordToDb(alarm, alarmUuid);
         // 是否发送告警信息
         if (!this.isSendAlarm(result, alarm)) {
             return;
@@ -338,7 +336,9 @@ public class AlarmServiceImpl implements IAlarmService {
      * @author 皮锋
      * @custom.date 2020/5/13 16:21
      */
-    private void insertMonitorAlarmRecordToDb(Alarm alarm, String alarmUuid) {
+    @Override
+    @Transactional(rollbackFor = Throwable.class)
+    public void insertMonitorAlarmRecordToDb(Alarm alarm, String alarmUuid) {
         // 告警定义编码
         String code = alarm.getCode();
         // 告警级别
@@ -375,6 +375,7 @@ public class AlarmServiceImpl implements IAlarmService {
             }
             monitorAlarmRecord.setWay(alarmWayEnum.name());
             monitorAlarmRecord.setInsertTime(new Date());
+            monitorAlarmRecord.setId(null);
             this.monitorAlarmRecordDao.insert(monitorAlarmRecord);
         }
     }
