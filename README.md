@@ -105,10 +105,6 @@
   
   **注意：一定要下载最新发行版源码！**
 
-- 示例代码仓库地址
-
-  [https://gitee.com/monitoring-platform/phoenix-example](https://gitee.com/monitoring-platform/phoenix-example)
-
 - 中央仓库地址
 
 1. 客户端为普通Java程序
