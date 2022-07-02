@@ -39,15 +39,16 @@ public class MemoryUtils extends InitSigar {
                 // 物理内存使用率
                 .menUsedPercent(NumberUtil.round(mem.getUsedPercent() / 100D, 4).doubleValue())
                 .build();
+        long total = swap.getTotal();
         MemoryDomain.SwapDomain swapDomain = MemoryDomain.SwapDomain.builder()
                 // 交换区总量
-                .swapTotal(swap.getTotal())
+                .swapTotal(total)
                 // 交换区使用量
                 .swapUsed(swap.getUsed())
                 // 交换区剩余量
                 .swapFree(swap.getFree())
                 // 交换区使用率
-                .swapUsedPercent(NumberUtil.round((double) swap.getUsed() / (double) swap.getTotal(), 4).doubleValue())
+                .swapUsedPercent(total == 0 ? 0 : NumberUtil.round((double) swap.getUsed() / (double) total, 4).doubleValue())
                 .build();
         return MemoryDomain.builder().menDomain(menDomain).swapDomain(swapDomain).build();
     }

@@ -1,8 +1,8 @@
 package com.gitee.pifeng.monitoring.common.util.server.sigar;
 
 import com.gitee.pifeng.monitoring.common.domain.server.DiskDomain;
-import com.google.common.collect.Lists;
 import com.gitee.pifeng.monitoring.common.init.InitSigar;
+import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.hyperic.sigar.FileSystem;
 import org.hyperic.sigar.FileSystemUsage;
@@ -61,7 +61,7 @@ public class DiskUtils extends InitSigar {
             // TYPE_UNKNOWN ：未知
             if (type == 0) {
                 log.debug("{}", "TYPE_UNKNOWN！");
-                continue;
+                // continue;
             }
             // TYPE_NONE
             else if (type == 1) {

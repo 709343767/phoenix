@@ -55,7 +55,7 @@ public class MemoryUtils extends InitOshi {
                 // 交换区剩余量
                 .swapFree(swapFree)
                 // 交换区使用率
-                .swapUsedPercent(NumberUtil.round((double) swapUsed / (double) swapTotal, 4).doubleValue())
+                .swapUsedPercent(swapTotal == 0 ? 0 : NumberUtil.round((double) swapUsed / (double) swapTotal, 4).doubleValue())
                 .build();
         return MemoryDomain.builder().menDomain(menDomain).swapDomain(swapDomain).build();
     }
