@@ -92,7 +92,7 @@ CREATE TABLE `MONITOR_DB`
     `DB_TYPE`       varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci   NOT NULL COMMENT '数据库类型',
     `DRIVER_CLASS`  varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NULL DEFAULT NULL COMMENT '驱动类',
     `DB_DESC`       varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '描述',
-    `IS_ONLINE`     varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NULL DEFAULT NULL COMMENT '数据库状态（0：离线，1：在线）',
+    `IS_ONLINE`     varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci    NULL DEFAULT NULL COMMENT '数据库状态（0：离线，1：在线）',
     `OFFLINE_COUNT` int(8)                                                         NULL DEFAULT NULL COMMENT '离线次数',
     `MONITOR_ENV`   varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NULL DEFAULT NULL COMMENT '监控环境',
     `MONITOR_GROUP` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NULL DEFAULT NULL COMMENT '监控分组',
