@@ -55,7 +55,7 @@ public class InstanceMonitorJob extends QuartzJobBean implements CommandLineRunn
 
     /**
      * <p>
-     * 项目启动后，先把之前为在线状态的应用”更新时间“设置为当前时间，继续保证在线状态。
+     * 项目启动后，先把之前为在线状态的应用“更新时间”设置为当前时间，继续保证在线状态。
      * </p>
      *
      * @param args 传入的主方法参数
