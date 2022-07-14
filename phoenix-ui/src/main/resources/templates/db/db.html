@@ -96,7 +96,7 @@
                 <img style="display: inline-block; width: 50%; height: 100%;" src={{ d.avatar }}>
             </script>
             <script type="text/html" id="list-table-toolbar">
-                <div class="layui-btn-container" sec:authorize="hasAuthority('超级管理员')">
+                <div class="layui-btn-group" sec:authorize="hasAuthority('超级管理员')">
                     <button class="layui-btn layui-btn-sm layui-btn-danger" lay-event="batchdel">
                         <i class="layui-icon layui-icon-delete"></i>删除
                     </button>
