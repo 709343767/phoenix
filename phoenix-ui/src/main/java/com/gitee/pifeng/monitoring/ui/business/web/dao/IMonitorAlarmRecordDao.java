@@ -48,4 +48,15 @@ public interface IMonitorAlarmRecordDao extends BaseMapper<MonitorAlarmRecord> {
      * @custom.date 2020/9/23 9:53
      */
     List<Map<String, Object>> getAlarmRecordTypeStatistics();
+
+    /**
+     * <p>
+     * 清空告警记录
+     * </p>
+     *
+     * @author 皮锋
+     * @custom.date 2022/7/13 10:09
+     */
+    void cleanupMonitorAlarmRecord();
+
 }

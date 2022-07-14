@@ -83,6 +83,17 @@ public interface IMonitorAlarmRecordService extends IService<MonitorAlarmRecord>
 
     /**
      * <p>
+     * 清空告警记录
+     * </p>
+     *
+     * @return layUiAdmin响应对象：如果清空成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @author 皮锋
+     * @custom.date 2022/7/13 10:09
+     */
+    LayUiAdminResultVo cleanupMonitorAlarmRecord();
+
+    /**
+     * <p>
      * 获取最近7天的告警统计信息
      * </p>
      *
@@ -125,4 +136,5 @@ public interface IMonitorAlarmRecordService extends IService<MonitorAlarmRecord>
      * @custom.date 2021/9/1 9:30
      */
     LayUiAdminResultVo getLast5AlarmRecord();
+
 }

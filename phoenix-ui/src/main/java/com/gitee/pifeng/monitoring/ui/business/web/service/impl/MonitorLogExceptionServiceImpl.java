@@ -112,6 +112,21 @@ public class MonitorLogExceptionServiceImpl extends ServiceImpl<IMonitorLogExcep
 
     /**
      * <p>
+     * 清空异常日志
+     * </p>
+     *
+     * @return layUiAdmin响应对象：如果清空成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @author 皮锋
+     * @custom.date 2022/7/13 15:21
+     */
+    @Override
+    public LayUiAdminResultVo cleanupMonitorLogException() {
+        this.monitorLogExceptionDao.cleanupMonitorLogException();
+        return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);
+    }
+
+    /**
+     * <p>
      * 获取异常日志信息
      * </p>
      *

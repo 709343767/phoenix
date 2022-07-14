@@ -48,6 +48,17 @@ public interface IMonitorLogExceptionService extends IService<MonitorLogExceptio
 
     /**
      * <p>
+     * 清空异常日志
+     * </p>
+     *
+     * @return layUiAdmin响应对象：如果清空成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @author 皮锋
+     * @custom.date 2022/7/13 15:21
+     */
+    LayUiAdminResultVo cleanupMonitorLogException();
+
+    /**
+     * <p>
      * 获取异常日志信息
      * </p>
      *

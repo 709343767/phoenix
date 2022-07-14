@@ -120,9 +120,12 @@
                 <img style="display: inline-block; width: 50%; height: 100%;" src={{ d.avatar }}>
             </script>
             <script type="text/html" id="list-table-toolbar">
-                <div class="layui-btn-container" sec:authorize="hasAuthority('超级管理员')">
+                <div class="layui-btn-group" sec:authorize="hasAuthority('超级管理员')">
                     <button class="layui-btn layui-btn-sm layui-btn-danger" lay-event="batchdel">
                         <i class="layui-icon layui-icon-delete"></i>删除
+                    </button>
+                    <button class="layui-btn layui-btn-sm layui-btn-danger" lay-event="cleanup">
+                        <i class="layui-icon layui-icon-delete"></i>清空
                     </button>
                 </div>
             </script>
@@ -355,6 +358,31 @@
                                     layer.msg('删除成功！', {icon: 6});
                                 } else {
                                     layer.msg('删除失败！', {icon: 5, shift: 6});
+                                }
+                            },
+                            error: function () {
+                                layer.msg('系统错误！', {icon: 5, shift: 6});
+                            }
+                        });
+                    });
+                    break;
+                case 'cleanup':
+                    layer.confirm('确定清空吗？', function (index) {
+                        admin.req({
+                            type: 'delete',
+                            url: ctxPath + 'monitor-alarm-record/cleanup-monitor-alarm-record',
+                            dataType: 'json',
+                            contentType: 'application/json;charset=utf-8',
+                            headers: {
+                                [[${_csrf.headerName}]]: [[${_csrf.token}]]
+                            },
+                            success: function (result) {
+                                var data = result.data;
+                                if (data === webConst.SUCCESS) {
+                                    table.reload('alarm-record-list-table'); //数据刷新
+                                    layer.msg('清空成功！', {icon: 6});
+                                } else {
+                                    layer.msg('清空失败！', {icon: 5, shift: 6});
                                 }
                             },
                             error: function () {

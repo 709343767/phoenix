@@ -128,6 +128,23 @@ public class MonitorAlarmRecordController {
 
     /**
      * <p>
+     * 清空告警记录
+     * </p>
+     *
+     * @return layUiAdmin响应对象：如果清空成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @author 皮锋
+     * @custom.date 2022/7/13 10:08
+     */
+    @ApiOperation(value = "清空告警记录")
+    @DeleteMapping("/cleanup-monitor-alarm-record")
+    @ResponseBody
+    @OperateLog(operModule = UiModuleConstants.ALARM, operType = OperateTypeConstants.DELETE, operDesc = "清空告警记录")
+    public LayUiAdminResultVo cleanupMonitorAlarmRecord() {
+        return this.monitorAlarmRecordService.cleanupMonitorAlarmRecord();
+    }
+
+    /**
+     * <p>
      * 导出告警记录列表
      * </p>
      *

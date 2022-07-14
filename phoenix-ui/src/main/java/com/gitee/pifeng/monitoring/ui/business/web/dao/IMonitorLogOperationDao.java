@@ -13,4 +13,14 @@ import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorLogOperation;
  */
 public interface IMonitorLogOperationDao extends BaseMapper<MonitorLogOperation> {
 
+    /**
+     * <p>
+     * 清空操作日志
+     * </p>
+     *
+     * @author 皮锋
+     * @custom.date 2022/7/13 15:41
+     */
+    void cleanupMonitorLogOperation();
+
 }

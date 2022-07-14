@@ -2,4 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.gitee.pifeng.monitoring.ui.business.web.dao.IMonitorLogOperationDao">
 
+    <!-- 清空操作日志 -->
+    <update id="cleanupMonitorLogOperation" databaseId="mysql">
+        TRUNCATE TABLE MONITOR_LOG_OPERATION
+    </update>
+
 </mapper>

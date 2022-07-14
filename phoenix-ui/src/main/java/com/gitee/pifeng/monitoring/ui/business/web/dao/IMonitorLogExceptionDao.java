@@ -13,4 +13,14 @@ import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorLogException;
  */
 public interface IMonitorLogExceptionDao extends BaseMapper<MonitorLogException> {
 
+    /**
+     * <p>
+     * 清空异常日志
+     * </p>
+     *
+     * @author 皮锋
+     * @custom.date 2022/7/13 15:22
+     */
+    void cleanupMonitorLogException();
+
 }

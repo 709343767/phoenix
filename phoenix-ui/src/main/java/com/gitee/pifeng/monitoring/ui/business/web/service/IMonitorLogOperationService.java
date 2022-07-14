@@ -49,6 +49,17 @@ public interface IMonitorLogOperationService extends IService<MonitorLogOperatio
 
     /**
      * <p>
+     * 清空操作日志
+     * </p>
+     *
+     * @return layUiAdmin响应对象：如果清空成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @author 皮锋
+     * @custom.date 2022/7/13 15:39
+     */
+    LayUiAdminResultVo cleanupMonitorLogOperation();
+
+    /**
+     * <p>
      * 获取操作日志信息
      * </p>
      *
@@ -58,4 +69,5 @@ public interface IMonitorLogOperationService extends IService<MonitorLogOperatio
      * @custom.date 2021/6/18 16:25
      */
     MonitorLogOperationVo getMonitorLogOperationInfo(Long id);
+
 }

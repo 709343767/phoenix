@@ -2,6 +2,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.gitee.pifeng.monitoring.ui.business.web.dao.IMonitorAlarmRecordDao">
 
+    <!-- 清空告警记录 -->
+    <update id="cleanupMonitorAlarmRecord" databaseId="mysql">
+        TRUNCATE TABLE MONITOR_ALARM_RECORD
+    </update>
+
     <!-- 获取最近7天的告警统计信息 -->
     <select id="getLast7DaysAlarmRecordStatistics" resultType="java.util.Map" databaseId="mysql">
         SELECT b.date                       AS date,

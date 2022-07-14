@@ -99,6 +99,23 @@ public class MonitorLogExceptionController {
 
     /**
      * <p>
+     * 清空异常日志
+     * </p>
+     *
+     * @return layUiAdmin响应对象：如果清空成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @author 皮锋
+     * @custom.date 2022/7/13 15:20
+     */
+    @ApiOperation(value = "清空异常日志")
+    @DeleteMapping("/cleanup-monitor-log-exception")
+    @ResponseBody
+    @OperateLog(operModule = UiModuleConstants.LOG + "#异常日志", operType = OperateTypeConstants.DELETE, operDesc = "清空异常日志")
+    public LayUiAdminResultVo cleanupMonitorLogException() {
+        return this.monitorLogExceptionService.cleanupMonitorLogException();
+    }
+
+    /**
+     * <p>
      * 访问异常日志详情页面
      * </p>
      *
