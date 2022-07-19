@@ -34,7 +34,7 @@
         <!-- 根项目名称 -->
         <myproject.name>phoenix</myproject.name>
         <!-- spring-boot-starter-parent版本 -->
-        <spring-boot-starter-parent.version>2.3.0.RELEASE</spring-boot-starter-parent.version>
+        <spring-boot-starter-parent.version>2.3.12.RELEASE</spring-boot-starter-parent.version>
         <!-- 解决eclipse中maven报错的问题 -->
         <maven-jar-plugin.version>3.1.1</maven-jar-plugin.version>
         <!-- java版本 -->
