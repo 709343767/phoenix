@@ -59,7 +59,7 @@ public class DiskUtils extends InitOshi {
             diskInfoDomain.setFree(free);
             diskInfoDomain.setUsed(used);
             diskInfoDomain.setAvail(usable);
-            diskInfoDomain.setUsePercent(NumberUtil.round((double) used / (double) total, 4).doubleValue());
+            diskInfoDomain.setUsePercent(total == 0 ? 0 : NumberUtil.round((double) used / (double) total, 4).doubleValue());
             diskInfoDomains.add(diskInfoDomain);
         }
         diskDomain.setDiskInfoList(diskInfoDomains);
