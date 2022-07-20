@@ -65,7 +65,7 @@ function start() {
     echo "${programName}正在运行，请先停止程序！"
   else
     #启动进程
-    nohup java -jar -Xms64m -Xmx128m ${packageName} --spring.profiles.active=prod >/dev/null 2>&1 &
+    nohup java -jar ${packageName} --spring.profiles.active=prod >/dev/null 2>&1 &
     pid=$(ps -ef | grep -n ${packageName} | grep -v grep | awk '{print $2}')
     if [ ${pid} ]; then
       echo "${programName}已经启动，进程ID为：$pid"
