@@ -8,7 +8,7 @@
     <parent>
         <artifactId>phoenix-common</artifactId>
         <groupId>com.gitee.pifeng</groupId>
-        <version>1.2.4.RELEASE-CR3</version>
+        <version>1.2.4.RELEASE-CR4</version>
         <relativePath>..</relativePath>
     </parent>
 
