@@ -66,6 +66,7 @@ public class MonitoringConfigPropertiesLoader {
      */
     private static synchronized void setMonitoringProperties(MonitoringProperties properties) {
         monitoringProperties = properties;
+        log.info("设置监控配置属性成功，属性详情：{}", monitoringProperties.toJsonString());
     }
 
     /**

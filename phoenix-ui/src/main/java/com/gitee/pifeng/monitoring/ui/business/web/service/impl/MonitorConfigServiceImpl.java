@@ -27,7 +27,6 @@ import com.gitee.pifeng.monitoring.ui.core.PackageConstructor;
 import org.hyperic.sigar.SigarException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.Date;
@@ -106,7 +105,6 @@ public class MonitorConfigServiceImpl extends ServiceImpl<IMonitorConfigDao, Mon
      * @custom.date 2020/11/9 20:11
      */
     @Override
-    @Transactional(rollbackFor = Throwable.class)
     public LayUiAdminResultVo update(MonitorConfigPageFormVo monitorConfigPageFormVo) throws NetException, SigarException {
         // 告警邮箱配置属性
         MonitoringAlarmMailProperties monitoringAlarmMailProperties = new MonitoringAlarmMailProperties();
