@@ -244,9 +244,9 @@ public class ConfigLoader {
         if ((null != serverInfoIp) && (!IpAddressUtils.isIpAddress(serverInfoIp))) {
             throw new ErrorConfigParamException("服务器本机IP不是合法的IPv4地址！");
         }
-        // 缺省[是否使用sigar采集服务器信息，默认：true]
+        // 缺省[是否使用sigar采集服务器信息，默认：false]
         String serverInfoUserSigarEnableStr = StringUtils.trimToNull(properties.getProperty("monitoring.server-info.user-sigar-enable"));
-        boolean serverInfoUserSigarEnable = StringUtils.isBlank(serverInfoUserSigarEnableStr) || Boolean.parseBoolean(serverInfoUserSigarEnableStr);
+        boolean serverInfoUserSigarEnable = StringUtils.isNotBlank(serverInfoUserSigarEnableStr) && Boolean.parseBoolean(serverInfoUserSigarEnableStr);
         MonitoringServerInfoProperties monitoringServerInfoProperties = new MonitoringServerInfoProperties();
         monitoringServerInfoProperties.setEnable(serverInfoEnable);
         monitoringServerInfoProperties.setUserSigarEnable(serverInfoUserSigarEnable);

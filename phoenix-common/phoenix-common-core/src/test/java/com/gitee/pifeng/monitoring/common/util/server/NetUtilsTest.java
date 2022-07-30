@@ -2,7 +2,6 @@ package com.gitee.pifeng.monitoring.common.util.server;
 
 import com.gitee.pifeng.monitoring.common.exception.NetException;
 import lombok.extern.slf4j.Slf4j;
-import org.hyperic.sigar.SigarException;
 import org.junit.Test;
 
 import java.util.Map;
@@ -30,7 +29,7 @@ public class NetUtilsTest {
      * @custom.date 2021/1/14 12:57
      */
     @Test
-    public void testGetLocalMac() throws NetException, SigarException {
+    public void testGetLocalMac() throws NetException {
         String mac = NetUtils.getLocalMac();
         assertNotNull(mac);
         log.info(mac);

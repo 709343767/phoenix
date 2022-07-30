@@ -59,8 +59,18 @@ public class NetUtils {
             // 通过InetAddress的方式
             return getLocalMacByInetAddress();
         } catch (Exception e) {
-            // 通过 Oshi 的方式
-            return getLocalMacByOshi();
+            try {
+                // 通过 Oshi 的方式
+                return getLocalMacByOshi();
+            } catch (Exception e1) {
+                try {
+                    // 通过 Sigar 的方式
+                    return getLocalMacBySigar();
+                } catch (SigarException ex) {
+                    log.error("获取本机MAC地址异常：{}", e.getMessage());
+                    throw new NetException(ex.getMessage());
+                }
+            }
         }
     }
 
@@ -112,7 +122,6 @@ public class NetUtils {
      * @custom.date 2020/8/30 16:41
      * @since v0.0.2
      */
-    @Deprecated
     private static String getLocalMacBySigar() throws SigarException, NetException {
         // 获取本机IP地址
         String ip = getLocalIp();
