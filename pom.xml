@@ -96,6 +96,8 @@
         <!-- mongodb驱动版本 -->
         <mongo-java-driver.version>3.12.10</mongo-java-driver.version>
 
+        <!-- maven clear插件版本 -->
+        <maven-clean-plugin.version>3.0.0</maven-clean-plugin.version>
         <!-- 编译插件版本 -->
         <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
         <!-- 单元测试插件版本 -->
@@ -481,6 +483,21 @@
 
         <!-- 插件 -->
         <plugins>
+            <!-- maven clean插件 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-clean-plugin</artifactId>
+                <version>${maven-clean-plugin.version}</version>
+                <configuration>
+                    <!-- 当配置true时，只清理filesets里的文件，构建目录中得文件不被清理，默认是flase -->
+                    <excludeDefaultDirectories>false</excludeDefaultDirectories>
+                    <filesets>
+                        <fileset>
+                            <directory>${project.basedir}/liblog4phoenix</directory>
+                        </fileset>
+                    </filesets>
+                </configuration>
+            </plugin>
             <!-- 生成java doc插件 -->
             <!-- http://maven.apache.org/plugins/maven-javadoc-plugin/javadoc-mojo.html -->
             <plugin>
