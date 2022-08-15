@@ -218,13 +218,10 @@
 ## 联系
 作者微信：pifengeclipse  
 作者QQ：709343767  
-QQ群：[773127639](https://qm.qq.com/cgi-bin/qm/qr?k=a0yY8EZMVTwvt8Tc1uWuk2hGpvhnyp3C&authKey=nvLNq0pw1yo32ZxbW8rxkYa6yyDn4Vc7f4R65CiifQ+RAgyWXuhszxIKSCB+eb5q&noverify=0)  
 
-为了防止无关人员恶意加群，以及促进平台发展，捐赠**10元**入群，捐赠**50元**联系作者获取《phoenix云监控平台使用说明书》！  
+为了促进平台发展，捐赠**50元**联系作者获取《phoenix云监控平台使用说明书》！  
 
 ## 捐赠
-
-> [捐赠记录,感谢你们的支持！](https://gitee.com/monitoring-platform/phoenix/wikis/pages?sort_id=5547585&doc_id=935794)
  
 ![捐赠](https://gitee.com/monitoring-platform/phoenix/raw/master/doc/%E5%85%B6%E5%AE%83/donate.jpg "捐赠")
 
