@@ -32,6 +32,7 @@ public class LoginController {
      */
     @ApiOperation(value = "访问登录页面")
     @GetMapping("/login")
+    @OperateLog(operModule = UiModuleConstants.LOGIN, operType = OperateTypeConstants.PAGE, operDesc = "访问登录页面")
     public ModelAndView login() {
         return new ModelAndView("user/login");
     }
@@ -63,6 +64,7 @@ public class LoginController {
      */
     @ApiOperation(value = "退出登录成功重定向到首页")
     @GetMapping("/logout-success")
+    @OperateLog(operModule = UiModuleConstants.LOGOUT, operType = OperateTypeConstants.LOGOUT, operDesc = "退出登录成功重定向到首页")
     public String logoutSuccess() {
         return "redirect:index";
     }

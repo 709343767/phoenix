@@ -16,6 +16,11 @@ public final class OperateTypeConstants {
     public static final String LOGIN = "登录";
 
     /**
+     * 退出登录
+     */
+    public static final String LOGOUT = "退出登录";
+
+    /**
      * 新增
      */
     public static final String ADD = "新增";
