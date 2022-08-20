@@ -23,6 +23,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * <p>
@@ -64,7 +65,7 @@ public class MyselfController {
         ModelAndView mv = new ModelAndView("myself/info");
         MonitorUserRealm userRealm = SpringSecurityUtils.getCurrentMonitorUserRealm();
         // 查询当前用户
-        MonitorUser monitorUser = this.monitorUserService.getById(userRealm.getId());
+        MonitorUser monitorUser = this.monitorUserService.getById(Objects.requireNonNull(userRealm).getId());
         // 转换成监控用户表现层对象
         MonitorUserVo monitorUserVo = MonitorUserVo.builder().build().convertFor(monitorUser);
         mv.addObject("user", monitorUserVo);

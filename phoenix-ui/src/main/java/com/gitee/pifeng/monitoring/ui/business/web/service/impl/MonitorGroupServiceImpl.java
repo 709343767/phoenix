@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * <p>
@@ -100,7 +101,7 @@ public class MonitorGroupServiceImpl extends ServiceImpl<IMonitorGroupDao, Monit
         // 转成监控分组实体对象
         MonitorGroup monitorGroup = monitorGroupVo.convertTo();
         monitorGroup.setInsertTime(new Date());
-        monitorGroup.setCreateAccount(SpringSecurityUtils.getCurrentMonitorUserRealm().getUsername());
+        monitorGroup.setCreateAccount(Objects.requireNonNull(SpringSecurityUtils.getCurrentMonitorUserRealm()).getUsername());
         int result = this.monitorGroupDao.insert(monitorGroup);
         if (result == 1) {
             return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);
@@ -122,7 +123,7 @@ public class MonitorGroupServiceImpl extends ServiceImpl<IMonitorGroupDao, Monit
     public LayUiAdminResultVo editMonitorGroup(MonitorGroupVo monitorGroupVo) {
         MonitorGroup monitorGroup = monitorGroupVo.convertTo();
         monitorGroup.setUpdateTime(new Date());
-        monitorGroup.setUpdateAccount(SpringSecurityUtils.getCurrentMonitorUserRealm().getUsername());
+        monitorGroup.setUpdateAccount(Objects.requireNonNull(SpringSecurityUtils.getCurrentMonitorUserRealm()).getUsername());
         int update = this.monitorGroupDao.updateById(monitorGroup);
         if (update == 1) {
             return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);

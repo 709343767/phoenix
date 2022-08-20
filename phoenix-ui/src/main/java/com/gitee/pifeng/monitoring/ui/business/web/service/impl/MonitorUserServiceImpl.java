@@ -194,7 +194,7 @@ public class MonitorUserServiceImpl extends ServiceImpl<IMonitorUserDao, Monitor
         password = new String(Base64.getDecoder().decode(password), StandardCharsets.UTF_8);
         // 二.校验密码是否正确
         MonitorUserRealm monitorUserRealm = SpringSecurityUtils.getCurrentMonitorUserRealm();
-        Long userId = monitorUserRealm.getId();
+        Long userId = Objects.requireNonNull(monitorUserRealm).getId();
         // 查询数据库
         MonitorUser monitorUser = this.monitorUserDao.selectById(userId);
         String dbPassword = monitorUser.getPassword();
@@ -236,6 +236,9 @@ public class MonitorUserServiceImpl extends ServiceImpl<IMonitorUserDao, Monitor
         MonitorUser monitorUser = monitorUserVo.convertTo();
         // 设置更新时间
         monitorUser.setUpdateTime(new Date());
+        // 把账号和角色设置成null，让这两个字段不更新
+        monitorUser.setAccount(null);
+        monitorUser.setRoleId(null);
         int result = this.monitorUserDao.updateById(monitorUser);
         if (result == 1) {
             // 更新springsecurity中当前用户
@@ -353,6 +356,7 @@ public class MonitorUserServiceImpl extends ServiceImpl<IMonitorUserDao, Monitor
         if (StringUtils.isBlank(password)) {
             // mybatis-plus不会更新值为null字段
             monitorUser.setPassword(null);
+            monitorUser.setAccount(null);
         } else {
             BCryptPasswordEncoder bc = new BCryptPasswordEncoder();
             monitorUser.setPassword(bc.encode(password));
@@ -360,7 +364,7 @@ public class MonitorUserServiceImpl extends ServiceImpl<IMonitorUserDao, Monitor
         monitorUser.setUpdateTime(new Date());
         int result = this.monitorUserDao.updateById(monitorUser);
         if (result == 1) {
-            Long currentMonitorUserRealmId = SpringSecurityUtils.getCurrentMonitorUserRealm().getId();
+            Long currentMonitorUserRealmId = Objects.requireNonNull(SpringSecurityUtils.getCurrentMonitorUserRealm()).getId();
             MonitorUserRealm realm = (MonitorUserRealm) this.loadUserByUsername(monitorUser.getAccount());
             // 如果修改的是当前用户
             if (Objects.equals(currentMonitorUserRealmId, monitorUser.getId())) {

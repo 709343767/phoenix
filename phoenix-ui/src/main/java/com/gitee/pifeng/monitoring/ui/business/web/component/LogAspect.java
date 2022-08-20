@@ -119,8 +119,8 @@ public class LogAspect {
         Map<String, String> reqParamMap = MapUtils.convertParamMap(request.getParameterMap());
         builder.reqParam(reqParamMap.isEmpty() ? "" : JSON.toJSONString(reqParamMap));
         builder.respParam(response != null ? JSON.toJSONString(response) : "");
-        builder.userId(SpringSecurityUtils.getCurrentMonitorUserRealm().getId());
-        builder.username(SpringSecurityUtils.getCurrentMonitorUserRealm().getUsrname());
+        builder.userId(SpringSecurityUtils.getCurrentMonitorUserRealm() == null ? null : SpringSecurityUtils.getCurrentMonitorUserRealm().getId());
+        builder.username(SpringSecurityUtils.getCurrentMonitorUserRealm() == null ? null : SpringSecurityUtils.getCurrentMonitorUserRealm().getUsrname());
         builder.operMethod(methodName);
         builder.uri(request.getRequestURI());
         builder.ip(AccessObjectUtils.getClientAddress(request));
@@ -158,8 +158,8 @@ public class LogAspect {
         builder.reqParam(reqParamMap.isEmpty() ? "" : JSON.toJSONString(reqParamMap));
         builder.excName(excName);
         builder.excMessage(ExceptionUtils.stackTraceToString(excName, e.getMessage(), e.getStackTrace()));
-        builder.userId(SpringSecurityUtils.getCurrentMonitorUserRealm().getId());
-        builder.username(SpringSecurityUtils.getCurrentMonitorUserRealm().getUsrname());
+        builder.userId(SpringSecurityUtils.getCurrentMonitorUserRealm() == null ? null : SpringSecurityUtils.getCurrentMonitorUserRealm().getId());
+        builder.username(SpringSecurityUtils.getCurrentMonitorUserRealm() == null ? null : SpringSecurityUtils.getCurrentMonitorUserRealm().getUsrname());
         builder.operMethod(methodName);
         builder.uri(request.getRequestURI());
         builder.ip(AccessObjectUtils.getClientAddress(request));

@@ -12,6 +12,7 @@ import org.springframework.security.core.session.SessionRegistry;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * <p>
@@ -57,7 +58,8 @@ public class SpringSecurityUtils {
      * @custom.date 2020/7/7 19:16
      */
     public static MonitorUserRealm getCurrentMonitorUserRealm() {
-        return (MonitorUserRealm) getCurrentUserAuthentication().getPrincipal();
+        Object principal = getCurrentUserAuthentication().getPrincipal();
+        return Objects.equals("anonymousUser", principal) ? null : (MonitorUserRealm) principal;
     }
 
     /**

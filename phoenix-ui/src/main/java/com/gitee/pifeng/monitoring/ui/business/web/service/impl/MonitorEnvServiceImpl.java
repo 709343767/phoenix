@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * <p>
@@ -100,7 +101,7 @@ public class MonitorEnvServiceImpl extends ServiceImpl<IMonitorEnvDao, MonitorEn
         // 转成监控环境实体对象
         MonitorEnv monitorEnv = monitorEnvVo.convertTo();
         monitorEnv.setInsertTime(new Date());
-        monitorEnv.setCreateAccount(SpringSecurityUtils.getCurrentMonitorUserRealm().getUsername());
+        monitorEnv.setCreateAccount(Objects.requireNonNull(SpringSecurityUtils.getCurrentMonitorUserRealm()).getUsername());
         int result = this.monitorEnvDao.insert(monitorEnv);
         if (result == 1) {
             return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);
@@ -122,7 +123,7 @@ public class MonitorEnvServiceImpl extends ServiceImpl<IMonitorEnvDao, MonitorEn
     public LayUiAdminResultVo editMonitorEnv(MonitorEnvVo monitorEnvVo) {
         MonitorEnv monitorEnv = monitorEnvVo.convertTo();
         monitorEnv.setUpdateTime(new Date());
-        monitorEnv.setUpdateAccount(SpringSecurityUtils.getCurrentMonitorUserRealm().getUsername());
+        monitorEnv.setUpdateAccount(Objects.requireNonNull(SpringSecurityUtils.getCurrentMonitorUserRealm()).getUsername());
         int update = this.monitorEnvDao.updateById(monitorEnv);
         if (update == 1) {
             return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);
