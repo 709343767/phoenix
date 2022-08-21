@@ -85,6 +85,15 @@ var isEmpty = function (o) {
 };
 
 /**
+ * 判断字符串是否不为空
+ * @param o 字符串对象
+ * @returns {boolean}
+ */
+var isNotEmpty = function (o) {
+    return !isEmpty(o);
+};
+
+/**
  * js获取UUID
  * @returns {string}
  */

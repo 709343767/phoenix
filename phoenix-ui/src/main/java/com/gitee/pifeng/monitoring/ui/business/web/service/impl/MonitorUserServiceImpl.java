@@ -27,6 +27,7 @@ import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.preauth.PreAuthenticatedCredentialsNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -232,6 +233,7 @@ public class MonitorUserServiceImpl extends ServiceImpl<IMonitorUserDao, Monitor
      * @custom.date 2020/7/13 18:58
      */
     @Override
+    @Transactional(rollbackFor = Throwable.class)
     public LayUiAdminResultVo updateUser(MonitorUserVo monitorUserVo) {
         MonitorUser monitorUser = monitorUserVo.convertTo();
         // 设置更新时间
@@ -239,10 +241,21 @@ public class MonitorUserServiceImpl extends ServiceImpl<IMonitorUserDao, Monitor
         // 把账号和角色设置成null，让这两个字段不更新
         monitorUser.setAccount(null);
         monitorUser.setRoleId(null);
+        // 获取当前操作用户的信息
+        MonitorUserRealm currentMonitorUserRealm = SpringSecurityUtils.getCurrentMonitorUserRealm();
+        Long currentMonitorUserRealmId = Objects.requireNonNull(currentMonitorUserRealm).getId();
+        String currentMonitorUserRealmAccount = Objects.requireNonNull(currentMonitorUserRealm).getUsername();
+        Long currentMonitorUserRealmUsrnameRoleId = Objects.requireNonNull(currentMonitorUserRealm).getRoleId();
+        // 这种情况下，可能是黑客通过修改用户信息进行强行提权，获取超级管理员角色的登录权限
+        if (!Objects.equals(currentMonitorUserRealmId, monitorUserVo.getId()) ||
+                !StringUtils.equals(currentMonitorUserRealmAccount, monitorUserVo.getAccount()) ||
+                !Objects.equals(currentMonitorUserRealmUsrnameRoleId, monitorUserVo.getRoleId())) {
+            throw new PreAuthenticatedCredentialsNotFoundException("身份信息不匹配！");
+        }
         int result = this.monitorUserDao.updateById(monitorUser);
         if (result == 1) {
             // 更新springsecurity中当前用户
-            MonitorUserRealm realm = (MonitorUserRealm) this.loadUserByUsername(monitorUser.getAccount());
+            MonitorUserRealm realm = (MonitorUserRealm) this.loadUserByUsername(monitorUserVo.getAccount());
             SpringSecurityUtils.updateCurrentMonitorUserRealm(realm);
             return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);
         }

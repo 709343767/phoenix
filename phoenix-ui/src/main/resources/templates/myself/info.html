@@ -26,10 +26,10 @@
                 <div class="layui-card-header">设置我的资料</div>
                 <div class="layui-card-body" pad15>
                     <form class="layui-form" lay-filter="">
-                        <div class="layui-form-item">
+                        <div class="layui-form-item" style="display: none;">
                             <label class="layui-form-label">ID</label>
                             <div class="layui-input-inline">
-                                <input type="text" name="id" th:value="${user.id}" readonly
+                                <input type="hidden" name="id" th:value="${user.id}" readonly
                                        class="layui-input">
                             </div>
                         </div>
@@ -130,7 +130,11 @@
                     if (data === webConst.SUCCESS) {
                         layer.msg('保存成功！', {icon: 6});
                     } else {
-                        layer.msg('保存失败！', {icon: 5, shift: 6});
+                        var msg = '保存失败！';
+                        if (isNotEmpty(data)) {
+                            msg += data;
+                        }
+                        layer.msg(msg, {icon: 5, shift: 6});
                     }
                 },
                 error: function () {

@@ -30,7 +30,7 @@ public class ControllerExceptionHandlerAdvice {
     @ExceptionHandler(value = Throwable.class)
     public LayUiAdminResultVo handler(Throwable throwable) {
         log.error("异常：", throwable);
-        return LayUiAdminResultVo.fail(throwable.toString());
+        return LayUiAdminResultVo.fail(throwable.getMessage());
     }
 
 }
