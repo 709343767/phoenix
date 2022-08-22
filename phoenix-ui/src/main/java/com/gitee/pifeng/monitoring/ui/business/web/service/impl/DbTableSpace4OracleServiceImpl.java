@@ -88,11 +88,15 @@ public class DbTableSpace4OracleServiceImpl implements IDbTableSpace4OracleServi
             Long fileId = entity.getLong("FILEID");
             String fileName = entity.getStr("FILENAME", StandardCharsets.UTF_8);
             String tablespaceName = entity.getStr("TABLESPACENAME", StandardCharsets.UTF_8);
-            String total = DataSizeUtil.format(entity.getLong("TOTAL"));
-            String used = DataSizeUtil.format(entity.getLong("USED"));
-            String free = DataSizeUtil.format(entity.getLong("FREE"));
-            double freePer = NumberUtil.round(entity.getDouble("FREEPER"), 4).doubleValue();
-            double usedPer = NumberUtil.round(100D - freePer, 4).doubleValue();
+            Long totalTemp = entity.getLong("TOTAL");
+            String total = totalTemp == null ? null : DataSizeUtil.format(totalTemp);
+            Long usedTemp = entity.getLong("USED");
+            String used = usedTemp == null ? null : DataSizeUtil.format(usedTemp);
+            Long freeTemp = entity.getLong("FREE");
+            String free = freeTemp == null ? null : DataSizeUtil.format(freeTemp);
+            Double freeperTemp = entity.getDouble("FREEPER");
+            Double freePer = freeperTemp == null ? null : NumberUtil.round(freeperTemp, 4).doubleValue();
+            Double usedPer = freePer == null ? null : NumberUtil.round(100D - freePer, 4).doubleValue();
             DbTableSpaceFile4OracleVo dbTableSpace4OracleVo = DbTableSpaceFile4OracleVo.builder()
                     .fileId(fileId)
                     .fileName(fileName)
