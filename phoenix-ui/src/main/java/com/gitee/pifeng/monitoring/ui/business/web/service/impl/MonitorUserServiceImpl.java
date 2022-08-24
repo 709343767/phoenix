@@ -233,7 +233,6 @@ public class MonitorUserServiceImpl extends ServiceImpl<IMonitorUserDao, Monitor
      * @custom.date 2020/7/13 18:58
      */
     @Override
-    @Transactional(rollbackFor = Throwable.class)
     public LayUiAdminResultVo updateUser(MonitorUserVo monitorUserVo) {
         MonitorUser monitorUser = monitorUserVo.convertTo();
         // 设置更新时间
