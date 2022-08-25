@@ -146,7 +146,9 @@
   
 ## 演示地址
 
-[https://49.234.23.142/phoenix-ui/index](https://49.234.23.142/phoenix-ui/index)   
+[https://49.234.23.142/phoenix-ui/index](https://49.234.23.142/phoenix-ui/index)     
+账号：guest  
+密码：guest123  
 注意：演示项目只提供非管理员账号，只有查看权限！ 
 
 ## 功能截图
