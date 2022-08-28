@@ -405,7 +405,8 @@
                                 axisLine: {				// 仪表盘轴线(轮廓线)相关配置。
                                     show: true,				// 是否显示仪表盘轴线(轮廓线),默认 true。
                                     lineStyle: {			// 仪表盘轴线样式。
-                                        color: [[0.2, 'rgba(255,0,0,0.8)'], [0.8, 'rgba(0,255,255,0.8)'], [1, 'rgba(0,255,0,0.8)']], 	//仪表盘的轴线可以被分成不同颜色的多段。每段的  结束位置(范围是[0,1]) 和  颜色  可以通过一个数组来表示。默认取值：[[0.2, '#91c7ae'], [0.8, '#63869e'], [1, '#c23531']]
+                                        //color: [[0.2, 'rgba(255,0,0,0.8)'], [0.8, 'rgba(0,255,255,0.8)'], [1, 'rgba(0,255,0,0.8)']], 	//仪表盘的轴线可以被分成不同颜色的多段。每段的  结束位置(范围是[0,1]) 和  颜色  可以通过一个数组来表示。默认取值：[[0.2, '#91c7ae'], [0.8, '#63869e'], [1, '#c23531']]
+                                        color: [[0.2, '#F56C6C'], [0.4, '#E6A23C'], [0.6, '#5CB87A'], [0.8, '#1989FA'], [1, '#6F7AD3']],
                                         opacity: 1,					//图形透明度。支持从 0 到 1 的数字，为 0 时不绘制该图形。
                                         width: 15,					//轴线宽度,默认 30。
                                         shadowBlur: 20,				//(发光效果)图形阴影的模糊大小。该属性配合 shadowColor,shadowOffsetX, shadowOffsetY 一起设置图形的阴影效果。
@@ -1009,14 +1010,22 @@
                         var obj = data[i];
                         // 分区的盘符名称
                         var devName = obj.devName;
+                        // 分区的盘符路径
+                        var dirName = obj.dirName;
+                        // 磁盘类型
+                        var sysTypeName = obj.sysTypeName;
                         // 磁盘总大小
                         var totalStr = obj.totalStr;
                         // 磁盘可用大小
                         var availStr = obj.availStr;
                         // 磁盘资源的利用率
                         var usePercent = obj.usePercent;
-                        html += '<div class="layui-progress layui-progress-big" lay-showPercent="yes">' +
-                            '        <h3>' + devName + '（可用' + availStr + '/共' + totalStr + '）</h3>';
+                        html += '<div class="layui-col-md4" style="padding-right: 30px;">' +
+                            '         <div class="layui-progress layui-progress-big" style="margin: 100px 0 15px;" lay-showPercent="yes">' +
+                            '              <h3 style="top: -85px;">盘符名称：' + devName + '</h3>' +
+                            '              <h3 style="top: -65px;">盘符路径：' + dirName + '</h3>' +
+                            '              <h3 style="top: -45px;">磁盘类型：' + sysTypeName + '</h3>' +
+                            '              <h3 style="top: -25px;">容量：可用' + availStr + '/共' + totalStr + '</h3>';
                         if (usePercent >= 90) {
                             html += '<div class="layui-progress-bar layui-bg-red" lay-percent="' + usePercent + '%"></div>';
                         } else if (usePercent >= 80 && usePercent < 90) {
@@ -1024,7 +1033,7 @@
                         } else {
                             html += '<div class="layui-progress-bar layui-bg-green" lay-percent="' + usePercent + '%"></div>';
                         }
-                        html += '</div>';
+                        html += '</div></div>';
                     }
                     $('#get-server-disk-info').empty().append(html);
                     // 重新渲染进度条

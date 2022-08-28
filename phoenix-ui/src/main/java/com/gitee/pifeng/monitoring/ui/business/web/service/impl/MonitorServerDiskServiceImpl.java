@@ -50,6 +50,8 @@ public class MonitorServerDiskServiceImpl extends ServiceImpl<IMonitorServerDisk
         for (MonitorServerDisk monitorServerDisk : monitorServerDisks) {
             ServerDetailPageServerDiskChartVo serverDetailPageServerDiskChartVo = new ServerDetailPageServerDiskChartVo();
             serverDetailPageServerDiskChartVo.setDevName(monitorServerDisk.getDevName());
+            serverDetailPageServerDiskChartVo.setDirName(monitorServerDisk.getDirName());
+            serverDetailPageServerDiskChartVo.setSysTypeName(monitorServerDisk.getSysTypeName());
             serverDetailPageServerDiskChartVo.setTotalStr(DataSizeUtil.format(monitorServerDisk.getTotal()));
             serverDetailPageServerDiskChartVo.setFreeStr(DataSizeUtil.format(monitorServerDisk.getFree()));
             serverDetailPageServerDiskChartVo.setUsedStr(DataSizeUtil.format(monitorServerDisk.getUsed()));

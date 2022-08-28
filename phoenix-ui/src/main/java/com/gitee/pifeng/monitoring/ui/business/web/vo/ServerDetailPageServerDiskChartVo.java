@@ -28,6 +28,12 @@ public class ServerDetailPageServerDiskChartVo implements ISuperBean {
     @ApiModelProperty(value = "分区的盘符名称")
     private String devName;
 
+    @ApiModelProperty(value = "分区的盘符路径")
+    private String dirName;
+
+    @ApiModelProperty(value = "磁盘类型，比如 FAT32、NTFS")
+    private String sysTypeName;
+
     @ApiModelProperty(value = "磁盘总大小")
     private String totalStr;
 
