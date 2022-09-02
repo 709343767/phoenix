@@ -98,8 +98,8 @@
             },
             password: function (value) {
                 if (value.length !== 0) {
-                    if (!(/^[\S]{6,20}$/.test(value))) {
-                        return '密码必须6到20位，且不能出现空格'
+                    if (!(/^[\S]{6,30}$/.test(value))) {
+                        return '密码必须6到30位，且不能出现空格'
                     }
                 }
             },

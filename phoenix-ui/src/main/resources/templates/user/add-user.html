@@ -90,8 +90,8 @@
                             ? "用户名不能全为数字" : void 0 : "用户名不能有特殊字符";
             },
             password: function (value) {
-                if (!(/^[\S]{6,12}$/.test(value))) {
-                    return '密码必须6到12位，且不能出现空格'
+                if (!(/^[\S]{6,30}$/.test(value))) {
+                    return '密码必须6到30位，且不能出现空格'
                 }
             },
             email: function (value) {
