@@ -117,7 +117,7 @@ var getUUID = function () {
 var convertSize = function (num) {
     if (num === 0) return '0 B';
     var k = 1024; //设定基础容量大小
-    var sizeStr = ['B', 'K', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y']; //容量单位
+    var sizeStr = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']; //容量单位
     var i = 0; //单位下标和次幂
     for (var l = 0; l < 8; l++) {   //因为只有8个单位所以循环八次
         if (num / Math.pow(k, l) < 1) { //判断传入数值 除以 基础大小的次幂 是否小于1，这里小于1 就代表已经当前下标的单位已经不合适了所以跳出循环
