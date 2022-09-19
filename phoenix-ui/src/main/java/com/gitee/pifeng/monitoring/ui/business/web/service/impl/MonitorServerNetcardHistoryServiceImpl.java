@@ -1,6 +1,5 @@
 package com.gitee.pifeng.monitoring.ui.business.web.service.impl;
 
-import cn.hutool.core.util.NumberUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gitee.pifeng.monitoring.ui.business.web.dao.IMonitorServerNetcardHistoryDao;
 import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorServerNetcardHistory;
@@ -56,13 +55,7 @@ public class MonitorServerNetcardHistoryServiceImpl extends ServiceImpl<IMonitor
         Date endTime = calculateDateTime.getEndTime();
         params.put("startTime", startTime);
         params.put("endTime", endTime);
-        List<ServerDetailPageServerNetworkSpeedChartVo> networkSpeedChartVos = this.monitorServerNetcardHistoryDao.getServerDetailPageServerNetworkSpeedChartInfo(params);
-        for (ServerDetailPageServerNetworkSpeedChartVo networkSpeedChartVo : networkSpeedChartVos) {
-            // B/s转KB/s
-            networkSpeedChartVo.setDownloadSpeed(NumberUtil.round(networkSpeedChartVo.getDownloadSpeed() / 1024D, 2).doubleValue());
-            networkSpeedChartVo.setUploadSpeed(NumberUtil.round(networkSpeedChartVo.getUploadSpeed() / 1024D, 2).doubleValue());
-        }
-        return networkSpeedChartVos;
+        return this.monitorServerNetcardHistoryDao.getServerDetailPageServerNetworkSpeedChartInfo(params);
     }
 
 }

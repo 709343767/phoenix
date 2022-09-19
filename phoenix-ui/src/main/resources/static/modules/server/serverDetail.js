@@ -1740,19 +1740,9 @@
                         return item.uploadSpeed;
                     });
                     // 最新下载速度
-                    var lastDownloadSpeed = data.length !== 0 ? data[data.length - 1].downloadSpeed : 0;
-                    if (lastDownloadSpeed >= 1024) {
-                        lastDownloadSpeed = (lastDownloadSpeed / 1024).toFixed(2) + ' MB/s';
-                    } else {
-                        lastDownloadSpeed = lastDownloadSpeed + ' KB/s';
-                    }
+                    var lastDownloadSpeed = data.length !== 0 ? convertSize(data[data.length - 1].downloadSpeed) + '/s' : '没数据';
                     // 最新上传速度
-                    var lastUploadSpeed = data.length !== 0 ? data[data.length - 1].uploadSpeed : 0;
-                    if (lastUploadSpeed >= 1024) {
-                        lastUploadSpeed = (lastUploadSpeed / 1024).toFixed(2) + ' MB/s';
-                    } else {
-                        lastUploadSpeed = lastUploadSpeed + ' KB/s';
-                    }
+                    var lastUploadSpeed = data.length !== 0 ? convertSize(data[data.length - 1].uploadSpeed) + '/s' : '没数据';
                     var option = {
                         title: {
                             text: chartAddress + '（' + name + '） 上行/下行 带宽',
@@ -1774,13 +1764,7 @@
                                 var axisName = '';
                                 params.forEach(function (item) {
                                     axisName = item.axisValue;
-                                    var itemData = item.data;
-                                    if (itemData >= 1024) {
-                                        itemData = (itemData / 1024).toFixed(2) + ' MB/s</br>'
-                                    } else {
-                                        itemData = itemData + ' KB/s</br>'
-                                    }
-                                    var itemValue = item.marker + item.seriesName + ': ' + itemData;
+                                    var itemValue = item.marker + item.seriesName + ': ' + convertSize(item.data) + '/s</br>';
                                     result += itemValue;
                                 });
                                 return axisName + '</br>' + result;
@@ -1833,7 +1817,9 @@
                             type: 'value',
                             name: '带宽',
                             axisLabel: {
-                                formatter: '{value} KB/s'
+                                formatter: function (value, index) {
+                                    return convertSize(value) + '/s';
+                                }
                             }
                         },
                         // 数据
