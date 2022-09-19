@@ -21,91 +21,64 @@
 <body>
 <div class="layui-fluid">
     <div class="layui-card">
-        <!-- <div class="layui-card-header">折叠面板</div>-->
-        <div class="layui-card-body">
-            <div class="layui-collapse" lay-filter="component-panel">
-                <div class="layui-colla-item">
-                    <h2 class="layui-colla-title">ID</h2>
-                    <div class="layui-colla-content layui-show">
-                        <p style="white-space:pre-wrap;word-wrap:break-word;"
-                           th:text="${monitorHttpVo.id}"></p>
+        <div class="layui-collapse">
+            <div class="layui-colla-item">
+                <h2 class="layui-colla-title">HTTP</h2>
+                <div class="layui-colla-content layui-show">
+                    <div class="layui-row layui-col-space10" style="word-break: break-all;">
+                        <div class="layui-col-md12">
+                            <label class="label-font-weight">ID：</label>[[${monitorHttpVo.id}]]
+                        </div>
+                        <div class="layui-col-md12">
+                            <label class="label-font-weight">主机名（来源）：</label>[[${monitorHttpVo.hostnameSource}]]
+                        </div>
+                        <div class="layui-col-md12">
+                            <label class="label-font-weight">URL地址（目的地）：</label>
+                            <a target="_blank" style="cursor: pointer;text-decoration:underline;"
+                               th:href="${monitorHttpVo.urlTarget}">[[${monitorHttpVo.urlTarget}]]</a>
+                        </div>
+                        <div class="layui-col-md12">
+                            <label class="label-font-weight">请求方法：</label>[[${monitorHttpVo.method}]]
+                        </div>
+                        <div class="layui-col-md12">
+                            <label class="label-font-weight">请求参数：</label>[[${monitorHttpVo.parameter}]]
+                        </div>
+                        <div class="layui-col-md12">
+                            <label class="label-font-weight">平均响应时间（毫秒）：</label>[[${monitorHttpVo.avgTime}]]
+                        </div>
+                        <div class="layui-col-md12">
+                            <label class="label-font-weight">状态：</label>[[${monitorHttpVo.status}]]
+                        </div>
+                        <div class="layui-col-md12">
+                            <label class="label-font-weight">异常信息：</label>[[${monitorHttpVo.excMessage}]]
+                        </div>
+                        <div class="layui-col-md12">
+                            <label class="label-font-weight">离线次数：</label>[[${monitorHttpVo.offlineCount}]]
+                        </div>
                     </div>
                 </div>
-                <div class="layui-colla-item">
-                    <h2 class="layui-colla-title">主机名（来源）</h2>
-                    <div class="layui-colla-content layui-show">
-                        <p style="white-space:pre-wrap;word-wrap:break-word;"
-                           th:text="${monitorHttpVo.hostnameSource}"></p>
-                    </div>
-                </div>
-                <div class="layui-colla-item">
-                    <h2 class="layui-colla-title">URL地址（目的地）</h2>
-                    <div class="layui-colla-content layui-show">
-                        <p style="white-space:pre-wrap;word-wrap:break-word;"
-                           th:text="${monitorHttpVo.urlTarget}"></p>
-                    </div>
-                </div>
-                <div class="layui-colla-item">
-                    <h2 class="layui-colla-title">请求方法</h2>
-                    <div class="layui-colla-content layui-show">
-                        <p style="white-space:pre-wrap;word-wrap:break-word;"
-                           th:text="${monitorHttpVo.method}"></p>
-                    </div>
-                </div>
-                <div class="layui-colla-item" th:unless="${#strings.isEmpty(monitorHttpVo.parameter)}">
-                    <h2 class="layui-colla-title">请求参数</h2>
-                    <div class="layui-colla-content layui-show">
-                        <p style="white-space:pre-wrap;word-wrap:break-word;"
-                           th:text="${monitorHttpVo.parameter}"></p>
-                    </div>
-                </div>
-                <div class="layui-colla-item" th:unless="${#strings.isEmpty(monitorHttpVo.descr)}">
-                    <h2 class="layui-colla-title">描述</h2>
-                    <div class="layui-colla-content layui-show">
-                        <p style="white-space:pre-wrap;word-wrap:break-word;"
-                           th:utext="${monitorHttpVo.descr}"></p>
-                    </div>
-                </div>
-                <div class="layui-colla-item">
-                    <h2 class="layui-colla-title">平均响应时间（毫秒）</h2>
-                    <div class="layui-colla-content layui-show">
-                        <p style="white-space:pre-wrap;word-wrap:break-word;"
-                           th:utext="${monitorHttpVo.avgTime}"></p>
-                    </div>
-                </div>
-                <div class="layui-colla-item">
-                    <h2 class="layui-colla-title">状态</h2>
-                    <div class="layui-colla-content layui-show">
-                        <p style="white-space:pre-wrap;word-wrap:break-word;"
-                           th:text="${monitorHttpVo.status}"></p>
-                    </div>
-                </div>
-                <div class="layui-colla-item" th:unless="${#strings.isEmpty(monitorHttpVo.excMessage)}">
-                    <h2 class="layui-colla-title">异常信息</h2>
-                    <div class="layui-colla-content layui-show">
-                        <p style="white-space:pre-wrap;word-wrap:break-word;"
-                           th:text="${monitorHttpVo.excMessage}"></p>
-                    </div>
-                </div>
-                <div class="layui-colla-item">
-                    <h2 class="layui-colla-title">离线次数</h2>
-                    <div class="layui-colla-content layui-show">
-                        <p style="white-space:pre-wrap;word-wrap:break-word;"
-                           th:text="${monitorHttpVo.offlineCount}"></p>
-                    </div>
-                </div>
-                <div class="layui-colla-item">
-                    <h2 class="layui-colla-title">新增时间</h2>
-                    <div class="layui-colla-content layui-show">
-                        <p style="white-space:pre-wrap;word-wrap:break-word;"
-                           th:text="${#dates.format(monitorHttpVo.insertTime,'yyyy/MM/dd HH:mm:ss')}"></p>
-                    </div>
-                </div>
-                <div class="layui-colla-item">
-                    <h2 class="layui-colla-title">更新时间</h2>
-                    <div class="layui-colla-content layui-show">
-                        <p style="white-space:pre-wrap;word-wrap:break-word;"
-                           th:text="${#dates.format(monitorHttpVo.updateTime,'yyyy/MM/dd HH:mm:ss')}"></p>
+            </div>
+            <div class="layui-colla-item">
+                <h2 class="layui-colla-title">管理信息</h2>
+                <div class="layui-colla-content layui-show">
+                    <div class="layui-row layui-col-space10" style="word-wrap:break-word;">
+                        <div class="layui-col-md12">
+                            <label class="label-font-weight">新增时间：</label>
+                            [[${#dates.format(monitorHttpVo.insertTime,'yyyy-MM-dd HH:mm:ss')}]]
+                        </div>
+                        <div class="layui-col-md12">
+                            <label class="label-font-weight">更新时间：</label>
+                            [[${#dates.format(monitorHttpVo.updateTime,'yyyy-MM-dd HH:mm:ss')}]]
+                        </div>
+                        <div class="layui-col-md12">
+                            <label class="label-font-weight">监控环境：</label>[[${monitorHttpVo.monitorEnv}]]
+                        </div>
+                        <div class="layui-col-md12">
+                            <label class="label-font-weight">监控分组：</label>[[${monitorHttpVo.monitorGroup}]]
+                        </div>
+                        <div class="layui-col-md12">
+                            <label class="label-font-weight">摘要：</label>[[${monitorHttpVo.descr}]]
+                        </div>
                     </div>
                 </div>
             </div>
