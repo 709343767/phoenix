@@ -86,7 +86,7 @@ public class DbSession4MysqlController {
     @ApiImplicitParams(value = {
             @ApiImplicitParam(name = "id", value = "数据库ID", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class)})
     @ResponseBody
-    @OperateLog(operModule = UiModuleConstants.DATABASE + "#会话", operType = OperateTypeConstants.DELETE, operDesc = "结束会话")
+    @OperateLog(operModule = UiModuleConstants.DATABASE + "#会话", operType = OperateTypeConstants.CONTROL, operDesc = "结束会话")
     public LayUiAdminResultVo destroySession(@RequestBody List<DbSession4MysqlVo> dbSession4MysqlVos, Long id) throws NetException, IOException, SigarException {
         return this.dbSession4MysqlService.destroySession(dbSession4MysqlVos, id);
     }

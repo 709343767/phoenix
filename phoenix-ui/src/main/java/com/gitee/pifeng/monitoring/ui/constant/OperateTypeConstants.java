@@ -50,4 +50,9 @@ public final class OperateTypeConstants {
      */
     public static final String PAGE = "访问页面";
 
+    /**
+     * 控制
+     */
+    public static final String CONTROL = "控制";
+
 }
