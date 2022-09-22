@@ -16,9 +16,11 @@ import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorLogOperation;
 import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorLogExceptionService;
 import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorLogOperationService;
 import com.gitee.pifeng.monitoring.ui.util.SpringSecurityUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.annotation.AfterReturning;
+import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.AfterThrowing;
+import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
@@ -39,6 +41,7 @@ import java.util.Map;
  * @author 皮锋
  * @custom.date 2021/6/10 10:43
  */
+@Slf4j
 @Aspect
 @Component
 public class LogAspect {
@@ -81,16 +84,16 @@ public class LogAspect {
 
     /**
      * <p>
-     * 正常返回通知，记录用户操作日志，连接点正常执行完成后执行，如果连接点抛出异常，则不会执行
+     * 记录用户操作日志
      * </p>
      *
      * @param joinPoint 切入点
-     * @param response  返回结果
+     * @return 方法返回值
      * @author 皮锋
      * @custom.date 2021/6/10 10:55
      */
-    @AfterReturning(value = "operateLogPointCut()", returning = "response")
-    public void saveOperateLog(JoinPoint joinPoint, Object response) {
+    @Around(value = "operateLogPointCut()")
+    public Object saveOperateLog(ProceedingJoinPoint joinPoint) {
         HttpServletRequest request = ContextUtils.getRequest();
         // 从切面织入点处通过反射机制获取织入点处的方法
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
@@ -118,14 +121,22 @@ public class LogAspect {
         // 转换请求参数
         Map<String, String> reqParamMap = MapUtils.convertParamMap(request.getParameterMap());
         builder.reqParam(reqParamMap.isEmpty() ? "" : JSON.toJSONString(reqParamMap));
-        builder.respParam(response != null ? JSON.toJSONString(response) : "");
         builder.userId(SpringSecurityUtils.getCurrentMonitorUserRealm() == null ? null : SpringSecurityUtils.getCurrentMonitorUserRealm().getId());
         builder.username(SpringSecurityUtils.getCurrentMonitorUserRealm() == null ? null : SpringSecurityUtils.getCurrentMonitorUserRealm().getUsrname());
         builder.operMethod(methodName);
         builder.uri(request.getRequestURI());
         builder.ip(AccessObjectUtils.getClientAddress(request));
         builder.insertTime(new Date());
+        // 返回值
+        Object response = null;
+        try {
+            response = joinPoint.proceed(joinPoint.getArgs());
+            builder.respParam(response != null ? JSON.toJSONString(response) : "");
+        } catch (Throwable throwable) {
+            log.error(throwable.getMessage(), throwable);
+        }
         this.monitorLogOperationService.save(builder.build());
+        return response;
     }
 
     /**
