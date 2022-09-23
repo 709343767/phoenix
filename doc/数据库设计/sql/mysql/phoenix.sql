@@ -18,7 +18,7 @@ SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS `MONITOR_ALARM_DEFINITION`;
 CREATE TABLE `MONITOR_ALARM_DEFINITION`
 (
-    `ID`           bigint(20)                                                    NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `ID`           bigint(20) UNSIGNED                                           NOT NULL AUTO_INCREMENT COMMENT '主键ID',
     `TYPE`         varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT '告警类型（SERVER、NET、TCP4SERVICE、HTTP4SERVICE、DOCKER、INSTANCE、DATABASE、CUSTOM）',
     `FIRST_CLASS`  varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '一级分类',
     `SECOND_CLASS` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '二级分类',
@@ -42,7 +42,7 @@ CREATE TABLE `MONITOR_ALARM_DEFINITION`
 DROP TABLE IF EXISTS `MONITOR_ALARM_RECORD`;
 CREATE TABLE `MONITOR_ALARM_RECORD`
 (
-    `ID`             bigint(20)                                                    NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `ID`             bigint(20) UNSIGNED                                           NOT NULL AUTO_INCREMENT COMMENT '主键ID',
     `CODE`           varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT '告警代码，使用UUID',
     `ALARM_DEF_CODE` varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NULL DEFAULT NULL COMMENT '告警定义编码',
     `TYPE`           varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT '告警类型（SERVER、NET、TCP4SERVICE、HTTP4SERVICE、DOCKER、INSTANCE、DATABASE、CUSTOM）',
@@ -68,7 +68,7 @@ CREATE TABLE `MONITOR_ALARM_RECORD`
 DROP TABLE IF EXISTS `MONITOR_CONFIG`;
 CREATE TABLE `MONITOR_CONFIG`
 (
-    `ID`          bigint(20)                                            NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `ID`          bigint(20) UNSIGNED                                   NOT NULL AUTO_INCREMENT COMMENT '主键ID',
     `VALUE`       text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '配置内容（json字符串）',
     `INSERT_TIME` datetime                                              NOT NULL COMMENT '插入时间',
     `UPDATE_TIME` datetime                                              NULL DEFAULT NULL COMMENT '更新时间',
@@ -84,7 +84,7 @@ CREATE TABLE `MONITOR_CONFIG`
 DROP TABLE IF EXISTS `MONITOR_DB`;
 CREATE TABLE `MONITOR_DB`
 (
-    `ID`            bigint(20)                                                     NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `ID`            bigint(20) UNSIGNED                                            NOT NULL AUTO_INCREMENT COMMENT '主键ID',
     `CONN_NAME`     varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT '连接名称',
     `URL`           varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '数据库URL',
     `USERNAME`      varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci   NULL DEFAULT NULL COMMENT '用户名',
@@ -114,7 +114,7 @@ CREATE TABLE `MONITOR_DB`
 DROP TABLE IF EXISTS `MONITOR_ENV`;
 CREATE TABLE `MONITOR_ENV`
 (
-    `ID`             bigint(20)                                                    NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `ID`             bigint(20) UNSIGNED                                           NOT NULL AUTO_INCREMENT COMMENT '主键ID',
     `ENV_NAME`       varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT '环境名',
     `ENV_DESC`       varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '环境描述',
     `CREATE_ACCOUNT` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '创建人账号',
@@ -134,7 +134,7 @@ CREATE TABLE `MONITOR_ENV`
 DROP TABLE IF EXISTS `MONITOR_GROUP`;
 CREATE TABLE `MONITOR_GROUP`
 (
-    `ID`             bigint(20)                                                    NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `ID`             bigint(20) UNSIGNED                                           NOT NULL AUTO_INCREMENT COMMENT '主键ID',
     `GROUP_NAME`     varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT '分组名',
     `GROUP_DESC`     varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '分组描述',
     `CREATE_ACCOUNT` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '创建人账号',
@@ -154,7 +154,7 @@ CREATE TABLE `MONITOR_GROUP`
 DROP TABLE IF EXISTS `MONITOR_HTTP`;
 CREATE TABLE `MONITOR_HTTP`
 (
-    `ID`              bigint(20)                                                    NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `ID`              bigint(20) UNSIGNED                                           NOT NULL AUTO_INCREMENT COMMENT '主键ID',
     `HOSTNAME_SOURCE` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT '主机名（来源）',
     `URL_TARGET`      varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'URL地址（目的地）',
     `METHOD`          varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NULL DEFAULT NULL COMMENT '请求方法',
@@ -186,7 +186,7 @@ CREATE TABLE `MONITOR_HTTP`
 DROP TABLE IF EXISTS `MONITOR_HTTP_HISTORY`;
 CREATE TABLE `MONITOR_HTTP_HISTORY`
 (
-    `ID`              bigint(20)                                                    NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `ID`              bigint(20) UNSIGNED                                           NOT NULL AUTO_INCREMENT COMMENT '主键ID',
     `HTTP_ID`         bigint(20)                                                    NOT NULL COMMENT 'HTTP主表ID',
     `HOSTNAME_SOURCE` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT '主机名（来源）',
     `URL_TARGET`      varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'URL地址（目的地）',
@@ -215,7 +215,7 @@ CREATE TABLE `MONITOR_HTTP_HISTORY`
 DROP TABLE IF EXISTS `MONITOR_INSTANCE`;
 CREATE TABLE `MONITOR_INSTANCE`
 (
-    `ID`               bigint(20)                                                    NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `ID`               bigint(20) UNSIGNED                                           NOT NULL AUTO_INCREMENT COMMENT '主键ID',
     `INSTANCE_ID`      varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT '应用实例ID',
     `ENDPOINT`         varchar(8) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci   NOT NULL COMMENT '端点（客户端<client>、代理端<agent>、服务端<server>、UI端<ui>）',
     `INSTANCE_NAME`    varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT '应用实例名',
@@ -248,7 +248,7 @@ CREATE TABLE `MONITOR_INSTANCE`
 DROP TABLE IF EXISTS `MONITOR_JVM_CLASS_LOADING`;
 CREATE TABLE `MONITOR_JVM_CLASS_LOADING`
 (
-    `ID`                       bigint(20)                                                   NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `ID`                       bigint(20) UNSIGNED                                          NOT NULL AUTO_INCREMENT COMMENT '主键ID',
     `INSTANCE_ID`              varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '应用实例ID',
     `TOTAL_LOADED_CLASS_COUNT` int(8)                                                       NULL DEFAULT NULL COMMENT '加载的类的总数',
     `LOADED_CLASS_COUNT`       int(8)                                                       NULL DEFAULT NULL COMMENT '当前加载的类的总数',
@@ -269,7 +269,7 @@ CREATE TABLE `MONITOR_JVM_CLASS_LOADING`
 DROP TABLE IF EXISTS `MONITOR_JVM_GARBAGE_COLLECTOR`;
 CREATE TABLE `MONITOR_JVM_GARBAGE_COLLECTOR`
 (
-    `ID`                     bigint(20)                                                    NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `ID`                     bigint(20) UNSIGNED                                           NOT NULL AUTO_INCREMENT COMMENT '主键ID',
     `INSTANCE_ID`            varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT '应用实例ID',
     `GARBAGE_COLLECTOR_NO`   int(8)                                                        NULL DEFAULT NULL COMMENT '内存管理器序号',
     `GARBAGE_COLLECTOR_NAME` varchar(125) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '内存管理器名称',
@@ -290,7 +290,7 @@ CREATE TABLE `MONITOR_JVM_GARBAGE_COLLECTOR`
 DROP TABLE IF EXISTS `MONITOR_JVM_MEMORY`;
 CREATE TABLE `MONITOR_JVM_MEMORY`
 (
-    `ID`          bigint(20)                                                    NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `ID`          bigint(20) UNSIGNED                                           NOT NULL AUTO_INCREMENT COMMENT '主键ID',
     `INSTANCE_ID` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT '应用实例ID',
     `MEMORY_TYPE` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NULL DEFAULT NULL COMMENT '内存类型',
     `INIT`        bigint(20)                                                    NULL DEFAULT NULL COMMENT '初始内存量（单位：byte）',
@@ -312,7 +312,7 @@ CREATE TABLE `MONITOR_JVM_MEMORY`
 DROP TABLE IF EXISTS `MONITOR_JVM_MEMORY_HISTORY`;
 CREATE TABLE `MONITOR_JVM_MEMORY_HISTORY`
 (
-    `ID`          bigint(20)                                                    NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `ID`          bigint(20) UNSIGNED                                           NOT NULL AUTO_INCREMENT COMMENT '主键ID',
     `INSTANCE_ID` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT '应用实例ID',
     `MEMORY_TYPE` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NULL DEFAULT NULL COMMENT '内存类型',
     `INIT`        bigint(20)                                                    NULL DEFAULT NULL COMMENT '初始内存量（单位：byte）',
@@ -337,7 +337,7 @@ CREATE TABLE `MONITOR_JVM_MEMORY_HISTORY`
 DROP TABLE IF EXISTS `MONITOR_JVM_RUNTIME`;
 CREATE TABLE `MONITOR_JVM_RUNTIME`
 (
-    `ID`                           bigint(20)                                                    NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `ID`                           bigint(20) UNSIGNED                                           NOT NULL AUTO_INCREMENT COMMENT '主键ID',
     `INSTANCE_ID`                  varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT '应用实例ID',
     `NAME`                         varchar(125) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '正在运行的Java虚拟机名称',
     `VM_NAME`                      varchar(125) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'Java虚拟机实现名称',
@@ -369,7 +369,7 @@ CREATE TABLE `MONITOR_JVM_RUNTIME`
 DROP TABLE IF EXISTS `MONITOR_JVM_THREAD`;
 CREATE TABLE `MONITOR_JVM_THREAD`
 (
-    `ID`                         bigint(20)                                                   NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `ID`                         bigint(20) UNSIGNED                                          NOT NULL AUTO_INCREMENT COMMENT '主键ID',
     `INSTANCE_ID`                varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '应用实例ID',
     `THREAD_COUNT`               int(8)                                                       NULL DEFAULT NULL COMMENT '当前活动线程数',
     `PEAK_THREAD_COUNT`          int(8)                                                       NULL DEFAULT NULL COMMENT '线程峰值',
@@ -390,7 +390,7 @@ CREATE TABLE `MONITOR_JVM_THREAD`
 DROP TABLE IF EXISTS `MONITOR_LOG_EXCEPTION`;
 CREATE TABLE `MONITOR_LOG_EXCEPTION`
 (
-    `ID`          bigint(20)                                                    NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `ID`          bigint(20) UNSIGNED                                           NOT NULL AUTO_INCREMENT COMMENT '主键ID',
     `REQ_PARAM`   text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci         NULL COMMENT '请求参数',
     `EXC_NAME`    varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '异常名称',
     `EXC_MESSAGE` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci     NULL COMMENT '异常信息',
@@ -413,7 +413,7 @@ CREATE TABLE `MONITOR_LOG_EXCEPTION`
 DROP TABLE IF EXISTS `MONITOR_LOG_OPERATION`;
 CREATE TABLE `MONITOR_LOG_OPERATION`
 (
-    `ID`          bigint(20)                                                    NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `ID`          bigint(20) UNSIGNED                                           NOT NULL AUTO_INCREMENT COMMENT '主键ID',
     `OPER_MODULE` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT '功能模块',
     `OPER_TYPE`   varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '操作类型',
     `OPER_DESC`   varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '操作描述',
@@ -438,7 +438,7 @@ CREATE TABLE `MONITOR_LOG_OPERATION`
 DROP TABLE IF EXISTS `MONITOR_NET`;
 CREATE TABLE `MONITOR_NET`
 (
-    `ID`            bigint(20)                                                    NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `ID`            bigint(20) UNSIGNED                                           NOT NULL AUTO_INCREMENT COMMENT '主键ID',
     `IP_SOURCE`     varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT 'IP地址（来源）',
     `IP_TARGET`     varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT 'IP地址（目的地）',
     `IP_DESC`       varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'IP地址描述',
@@ -467,7 +467,7 @@ CREATE TABLE `MONITOR_NET`
 DROP TABLE IF EXISTS `MONITOR_NET_HISTORY`;
 CREATE TABLE `MONITOR_NET_HISTORY`
 (
-    `ID`            bigint(20)                                                    NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `ID`            bigint(20) UNSIGNED                                           NOT NULL AUTO_INCREMENT COMMENT '主键ID',
     `NET_ID`        bigint(20)                                                    NOT NULL COMMENT '网络主表ID',
     `IP_SOURCE`     varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT 'IP地址（来源）',
     `IP_TARGET`     varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT 'IP地址（目的地）',
@@ -493,7 +493,7 @@ CREATE TABLE `MONITOR_NET_HISTORY`
 DROP TABLE IF EXISTS `MONITOR_REALTIME_MONITORING`;
 CREATE TABLE `MONITOR_REALTIME_MONITORING`
 (
-    `ID`            bigint(20)                                                   NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `ID`            bigint(20) UNSIGNED                                          NOT NULL AUTO_INCREMENT COMMENT '主键ID',
     `TYPE`          varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '监控类型（SERVER、NET、TCP4SERVICE、HTTP4SERVICE、DOCKER、INSTANCE、DATABASE、CUSTOM）',
     `CODE`          varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '监控编号',
     `IS_SENT_ALARM` varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT '是否已经发送了告警（1：是，0：否）',
@@ -512,7 +512,7 @@ CREATE TABLE `MONITOR_REALTIME_MONITORING`
 DROP TABLE IF EXISTS `MONITOR_ROLE`;
 CREATE TABLE `MONITOR_ROLE`
 (
-    `ID`          bigint(20)                                                    NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `ID`          bigint(20) UNSIGNED                                           NOT NULL AUTO_INCREMENT COMMENT '主键ID',
     `ROLE_NAME`   varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '角色名称',
     `CREATE_TIME` datetime                                                      NOT NULL COMMENT '创建时间',
     `UPDATE_TIME` datetime                                                      NULL DEFAULT NULL COMMENT '更新时间',
@@ -528,7 +528,7 @@ CREATE TABLE `MONITOR_ROLE`
 DROP TABLE IF EXISTS `MONITOR_SERVER`;
 CREATE TABLE `MONITOR_SERVER`
 (
-    `ID`             bigint(20)                                                    NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `ID`             bigint(20) UNSIGNED                                           NOT NULL AUTO_INCREMENT COMMENT '主键ID',
     `IP`             varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT 'IP地址',
     `SERVER_NAME`    varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NULL DEFAULT NULL COMMENT '服务器名',
     `SERVER_SUMMARY` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '服务器摘要',
@@ -556,7 +556,7 @@ CREATE TABLE `MONITOR_SERVER`
 DROP TABLE IF EXISTS `MONITOR_SERVER_CPU`;
 CREATE TABLE `MONITOR_SERVER_CPU`
 (
-    `ID`           bigint(20)                                                    NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `ID`           bigint(20) UNSIGNED                                           NOT NULL AUTO_INCREMENT COMMENT '主键ID',
     `IP`           varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT 'IP地址',
     `CPU_NO`       int(8)                                                        NULL DEFAULT NULL COMMENT 'CPU序号',
     `CPU_MHZ`      int(11)                                                       NULL DEFAULT NULL COMMENT 'CPU频率（MHz）',
@@ -583,7 +583,7 @@ CREATE TABLE `MONITOR_SERVER_CPU`
 DROP TABLE IF EXISTS `MONITOR_SERVER_CPU_HISTORY`;
 CREATE TABLE `MONITOR_SERVER_CPU_HISTORY`
 (
-    `ID`           bigint(20)                                                    NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `ID`           bigint(20) UNSIGNED                                           NOT NULL AUTO_INCREMENT COMMENT '主键ID',
     `IP`           varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT 'IP地址',
     `CPU_NO`       int(8)                                                        NULL DEFAULT NULL COMMENT 'CPU序号',
     `CPU_MHZ`      int(11)                                                       NULL DEFAULT NULL COMMENT 'CPU频率（MHz）',
@@ -612,7 +612,7 @@ CREATE TABLE `MONITOR_SERVER_CPU_HISTORY`
 DROP TABLE IF EXISTS `MONITOR_SERVER_DISK`;
 CREATE TABLE `MONITOR_SERVER_DISK`
 (
-    `ID`            bigint(20)                                                    NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `ID`            bigint(20) UNSIGNED                                           NOT NULL AUTO_INCREMENT COMMENT '主键ID',
     `IP`            varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT 'IP地址',
     `DISK_NO`       int(8)                                                        NULL DEFAULT NULL COMMENT '磁盘序号',
     `DEV_NAME`      varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '分区的盘符名称',
@@ -639,7 +639,7 @@ CREATE TABLE `MONITOR_SERVER_DISK`
 DROP TABLE IF EXISTS `MONITOR_SERVER_DISK_HISTORY`;
 CREATE TABLE `MONITOR_SERVER_DISK_HISTORY`
 (
-    `ID`            bigint(20)                                                    NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `ID`            bigint(20) UNSIGNED                                           NOT NULL AUTO_INCREMENT COMMENT '主键ID',
     `IP`            varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT 'IP地址',
     `DISK_NO`       int(8)                                                        NULL DEFAULT NULL COMMENT '磁盘序号',
     `DEV_NAME`      varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '分区的盘符名称',
@@ -668,7 +668,7 @@ CREATE TABLE `MONITOR_SERVER_DISK_HISTORY`
 DROP TABLE IF EXISTS `MONITOR_SERVER_LOAD_AVERAGE`;
 CREATE TABLE `MONITOR_SERVER_LOAD_AVERAGE`
 (
-    `ID`                      bigint(20)                                                   NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `ID`                      bigint(20) UNSIGNED                                          NOT NULL AUTO_INCREMENT COMMENT '主键ID',
     `IP`                      varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'IP地址',
     `LOGICAL_PROCESSOR_COUNT` int(4)                                                       NULL DEFAULT NULL COMMENT 'CPU逻辑核数量',
     `ONE`                     double(16, 4)                                                NULL DEFAULT NULL COMMENT '1分钟负载平均值',
@@ -689,7 +689,7 @@ CREATE TABLE `MONITOR_SERVER_LOAD_AVERAGE`
 DROP TABLE IF EXISTS `MONITOR_SERVER_LOAD_AVERAGE_HISTORY`;
 CREATE TABLE `MONITOR_SERVER_LOAD_AVERAGE_HISTORY`
 (
-    `ID`                      bigint(20)                                                   NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `ID`                      bigint(20) UNSIGNED                                          NOT NULL AUTO_INCREMENT COMMENT '主键ID',
     `IP`                      varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'IP地址',
     `LOGICAL_PROCESSOR_COUNT` int(4)                                                       NULL DEFAULT NULL COMMENT 'CPU逻辑核数量',
     `ONE`                     double(16, 4)                                                NULL DEFAULT NULL COMMENT '1分钟负载平均值',
@@ -712,7 +712,7 @@ CREATE TABLE `MONITOR_SERVER_LOAD_AVERAGE_HISTORY`
 DROP TABLE IF EXISTS `MONITOR_SERVER_MEMORY`;
 CREATE TABLE `MONITOR_SERVER_MEMORY`
 (
-    `ID`                bigint(20)                                                   NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `ID`                bigint(20) UNSIGNED                                          NOT NULL AUTO_INCREMENT COMMENT '主键ID',
     `IP`                varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'IP地址',
     `MEM_TOTAL`         bigint(20)                                                   NULL DEFAULT NULL COMMENT '物理内存总量（单位：byte）',
     `MEM_USED`          bigint(20)                                                   NULL DEFAULT NULL COMMENT '物理内存使用量（单位：byte）',
@@ -737,7 +737,7 @@ CREATE TABLE `MONITOR_SERVER_MEMORY`
 DROP TABLE IF EXISTS `MONITOR_SERVER_MEMORY_HISTORY`;
 CREATE TABLE `MONITOR_SERVER_MEMORY_HISTORY`
 (
-    `ID`                bigint(20)                                                   NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `ID`                bigint(20) UNSIGNED                                          NOT NULL AUTO_INCREMENT COMMENT '主键ID',
     `IP`                varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'IP地址',
     `MEM_TOTAL`         bigint(20)                                                   NULL DEFAULT NULL COMMENT '物理内存总量（单位：byte）',
     `MEM_USED`          bigint(20)                                                   NULL DEFAULT NULL COMMENT '物理内存使用量（单位：byte）',
@@ -764,7 +764,7 @@ CREATE TABLE `MONITOR_SERVER_MEMORY_HISTORY`
 DROP TABLE IF EXISTS `MONITOR_SERVER_NETCARD`;
 CREATE TABLE `MONITOR_SERVER_NETCARD`
 (
-    `ID`           bigint(20)                                                    NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `ID`           bigint(20) UNSIGNED                                           NOT NULL AUTO_INCREMENT COMMENT '主键ID',
     `IP`           varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT 'IP地址',
     `NET_NO`       int(8)                                                        NULL DEFAULT NULL COMMENT '网卡序号',
     `NAME`         varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NULL DEFAULT NULL COMMENT '网卡名字',
@@ -799,7 +799,7 @@ CREATE TABLE `MONITOR_SERVER_NETCARD`
 DROP TABLE IF EXISTS `MONITOR_SERVER_NETCARD_HISTORY`;
 CREATE TABLE `MONITOR_SERVER_NETCARD_HISTORY`
 (
-    `ID`           bigint(20)                                                    NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `ID`           bigint(20) UNSIGNED                                           NOT NULL AUTO_INCREMENT COMMENT '主键ID',
     `IP`           varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT 'IP地址',
     `NET_NO`       int(8)                                                        NULL DEFAULT NULL COMMENT '网卡序号',
     `NAME`         varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NULL DEFAULT NULL COMMENT '网卡名字',
@@ -837,7 +837,7 @@ CREATE TABLE `MONITOR_SERVER_NETCARD_HISTORY`
 DROP TABLE IF EXISTS `MONITOR_SERVER_OS`;
 CREATE TABLE `MONITOR_SERVER_OS`
 (
-    `ID`           bigint(20)                                                    NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `ID`           bigint(20) UNSIGNED                                           NOT NULL AUTO_INCREMENT COMMENT '主键ID',
     `IP`           varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT 'IP地址',
     `SERVER_NAME`  varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '服务器名',
     `OS_NAME`      varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '操作系统名称',
@@ -861,7 +861,7 @@ CREATE TABLE `MONITOR_SERVER_OS`
 DROP TABLE IF EXISTS `MONITOR_SERVER_POWER_SOURCES`;
 CREATE TABLE `MONITOR_SERVER_POWER_SOURCES`
 (
-    `ID`                         bigint(20)                                                    NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `ID`                         bigint(20) UNSIGNED                                           NOT NULL AUTO_INCREMENT COMMENT '主键ID',
     `IP`                         varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT 'IP地址',
     `POWER_SOURCES_NO`           int(8)                                                        NULL DEFAULT NULL COMMENT '电池序号',
     `NAME`                       varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '操作系统级别的电源名称',
@@ -899,7 +899,7 @@ CREATE TABLE `MONITOR_SERVER_POWER_SOURCES`
 DROP TABLE IF EXISTS `MONITOR_SERVER_PROCESS`;
 CREATE TABLE `MONITOR_SERVER_PROCESS`
 (
-    `ID`                        bigint(20)                                                    NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `ID`                        bigint(20) UNSIGNED                                           NOT NULL AUTO_INCREMENT COMMENT '主键ID',
     `IP`                        varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT 'IP地址',
     `PROCESS_ID`                int(8)                                                        NOT NULL COMMENT '进程ID',
     `NAME`                      varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '进程名',
@@ -928,7 +928,7 @@ CREATE TABLE `MONITOR_SERVER_PROCESS`
 DROP TABLE IF EXISTS `MONITOR_SERVER_PROCESS_HISTORY`;
 CREATE TABLE `MONITOR_SERVER_PROCESS_HISTORY`
 (
-    `ID`          bigint(20)                                                   NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `ID`          bigint(20) UNSIGNED                                          NOT NULL AUTO_INCREMENT COMMENT '主键ID',
     `IP`          varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'IP地址',
     `PROCESS_NUM` int(8)                                                       NULL DEFAULT NULL COMMENT '正在运行的进程数',
     `INSERT_TIME` datetime                                                     NOT NULL COMMENT '新增时间',
@@ -948,7 +948,7 @@ CREATE TABLE `MONITOR_SERVER_PROCESS_HISTORY`
 DROP TABLE IF EXISTS `MONITOR_SERVER_SENSORS`;
 CREATE TABLE `MONITOR_SERVER_SENSORS`
 (
-    `ID`              bigint(20)                                                    NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `ID`              bigint(20) UNSIGNED                                           NOT NULL AUTO_INCREMENT COMMENT '主键ID',
     `IP`              varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT 'IP地址',
     `CPU_TEMPERATURE` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NULL DEFAULT NULL COMMENT 'CPU温度（以摄氏度为单位）（如果可用）',
     `CPU_VOLTAGE`     varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NULL DEFAULT NULL COMMENT 'CPU电压（以伏特为单位）（如果可用）',
@@ -968,7 +968,7 @@ CREATE TABLE `MONITOR_SERVER_SENSORS`
 DROP TABLE IF EXISTS `MONITOR_TCP`;
 CREATE TABLE `MONITOR_TCP`
 (
-    `ID`              bigint(20)                                                    NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `ID`              bigint(20) UNSIGNED                                           NOT NULL AUTO_INCREMENT COMMENT '主键ID',
     `HOSTNAME_SOURCE` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT '主机名（来源）',
     `HOSTNAME_TARGET` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT '主机名（目的地）',
     `PORT_TARGET`     int(8)                                                        NOT NULL COMMENT '端口号',
@@ -999,7 +999,7 @@ CREATE TABLE `MONITOR_TCP`
 DROP TABLE IF EXISTS `MONITOR_TCP_HISTORY`;
 CREATE TABLE `MONITOR_TCP_HISTORY`
 (
-    `ID`              bigint(20)                                                    NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `ID`              bigint(20) UNSIGNED                                           NOT NULL AUTO_INCREMENT COMMENT '主键ID',
     `TCP_ID`          bigint(20)                                                    NOT NULL COMMENT 'TCP主表ID',
     `HOSTNAME_SOURCE` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT '主机名（来源）',
     `HOSTNAME_TARGET` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT '主机名（目的地）',
@@ -1027,11 +1027,11 @@ CREATE TABLE `MONITOR_TCP_HISTORY`
 DROP TABLE IF EXISTS `MONITOR_USER`;
 CREATE TABLE `MONITOR_USER`
 (
-    `ID`            bigint(20)                                                     NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `ID`            bigint(20) UNSIGNED                                            NOT NULL AUTO_INCREMENT COMMENT '主键ID',
     `ACCOUNT`       varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT '账号',
     `USERNAME`      varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci   NOT NULL COMMENT '用户名',
     `PASSWORD`      varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT '密码',
-    `ROLE_ID`       bigint(20)                                                     NOT NULL COMMENT '角色ID',
+    `ROLE_ID`       bigint(20) UNSIGNED                                            NOT NULL COMMENT '角色ID',
     `EMAIL`         varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NULL DEFAULT NULL COMMENT '电子邮箱',
     `REMARKS`       varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
     `REGISTER_TIME` datetime                                                       NOT NULL COMMENT '注册时间',
