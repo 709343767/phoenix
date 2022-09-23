@@ -15,6 +15,7 @@ import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorLogException;
 import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorLogOperation;
 import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorLogExceptionService;
 import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorLogOperationService;
+import com.gitee.pifeng.monitoring.ui.business.web.vo.LayUiAdminResultVo;
 import com.gitee.pifeng.monitoring.ui.util.SpringSecurityUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
@@ -128,13 +129,14 @@ public class LogAspect {
         builder.ip(AccessObjectUtils.getClientAddress(request));
         builder.insertTime(new Date());
         // 返回值
-        Object response = null;
+        Object response;
         try {
             response = joinPoint.proceed(joinPoint.getArgs());
-            builder.respParam(response != null ? JSON.toJSONString(response) : "");
         } catch (Throwable throwable) {
             log.error(throwable.getMessage(), throwable);
+            response = LayUiAdminResultVo.fail(throwable.getMessage());
         }
+        builder.respParam(response != null ? JSON.toJSONString(response) : "");
         this.monitorLogOperationService.save(builder.build());
         return response;
     }
