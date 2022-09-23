@@ -22,7 +22,7 @@ import java.util.List;
  * @custom.date 2021-09-15
  */
 @RestController
-@Api(tags = "服务器进程历史记录")
+@Api(tags = "服务器.服务器进程历史记录")
 @RequestMapping("/monitor-server-process-history")
 public class MonitorServerProcessHistoryController {
 

@@ -21,7 +21,7 @@ import java.util.List;
  * @custom.date 2021-09-15
  */
 @RestController
-@Api(tags = "服务器进程")
+@Api(tags = "服务器.服务器进程")
 @RequestMapping("/monitor-server-process")
 public class MonitorServerProcessController {
 
