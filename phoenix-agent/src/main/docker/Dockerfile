@@ -11,4 +11,4 @@ ADD phoenix-agent.jar app.jar
 #暴露端口
 EXPOSE 12000
 #指定执行启动项目
-ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-Dspring.profiles.active=prod","-jar","app.jar"]
+ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-Duser.timezone=GMT+08","-Dspring.profiles.active=prod","-jar","app.jar"]
