@@ -2,6 +2,7 @@ package com.gitee.pifeng.monitoring.common.util.server;
 
 import com.gitee.pifeng.monitoring.common.domain.server.OsDomain;
 import com.gitee.pifeng.monitoring.common.util.server.oshi.OperatingSystemUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import oshi.software.os.OperatingSystem;
 
@@ -19,6 +20,7 @@ import java.util.TimeZone;
  * @author 皮锋
  * @custom.date 2020年4月13日 下午5:05:53
  */
+@Slf4j
 public final class OsUtils {
 
     /**
@@ -70,20 +72,25 @@ public final class OsUtils {
      * @custom.date 2020年3月3日 下午2:15:45
      */
     public static OsDomain getOsInfo() {
-        Calendar cal = Calendar.getInstance();
-        TimeZone timeZone = cal.getTimeZone();
-        OperatingSystem operatingSystem = OperatingSystemUtils.getOperatingSystemInfo();
-        OperatingSystem.OSVersionInfo osVersionInfo = operatingSystem.getVersionInfo();
-        return new OsDomain()
-                // .setOsName(PROPS.getProperty("os.name"))
-                .setOsName(operatingSystem.toString())
-                .setOsArch(PROPS.getProperty("os.arch"))
-                // .setOsVersion(PROPS.getProperty("os.version"))
-                .setOsVersion(osVersionInfo.getVersion())
-                .setUserName(PROPS.getProperty("user.name"))
-                .setUserHome(PROPS.getProperty("user.home"))
-                .setOsTimeZone(timeZone.getDisplayName())
-                .setComputerName(getComputerName());
+        try {
+            Calendar cal = Calendar.getInstance();
+            TimeZone timeZone = cal.getTimeZone();
+            OperatingSystem operatingSystem = OperatingSystemUtils.getOperatingSystemInfo();
+            OperatingSystem.OSVersionInfo osVersionInfo = operatingSystem.getVersionInfo();
+            return new OsDomain()
+                    // .setOsName(PROPS.getProperty("os.name"))
+                    .setOsName(operatingSystem.toString())
+                    .setOsArch(PROPS.getProperty("os.arch"))
+                    // .setOsVersion(PROPS.getProperty("os.version"))
+                    .setOsVersion(osVersionInfo.getVersion())
+                    .setUserName(PROPS.getProperty("user.name"))
+                    .setUserHome(PROPS.getProperty("user.home"))
+                    .setOsTimeZone(timeZone.getDisplayName())
+                    .setComputerName(getComputerName());
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            return null;
+        }
     }
 
     /**

@@ -6,6 +6,7 @@ import cn.hutool.core.util.NumberUtil;
 import com.gitee.pifeng.monitoring.common.domain.server.ProcessDomain;
 import com.gitee.pifeng.monitoring.common.init.InitOshi;
 import com.google.common.collect.Lists;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import oshi.software.os.OSProcess;
 import oshi.software.os.OperatingSystem;
@@ -27,6 +28,7 @@ import static com.gitee.pifeng.monitoring.common.util.CollectionUtils.distinctBy
  * @author 皮锋
  * @custom.date 2021/9/11 12:26
  */
+@Slf4j
 public class ProcessUtils extends InitOshi {
 
     /**
@@ -51,28 +53,33 @@ public class ProcessUtils extends InitOshi {
      * @custom.date 2021/9/11 22:26
      */
     public static ProcessDomain getProcessInfo() {
-        // 构建返回值
-        ProcessDomain processDomain = ProcessDomain.builder().build();
-        List<ProcessDomain.ProcessInfoDomain> processInfoList = Lists.newArrayList();
-        // 获取占用CPU排名前十的进程信息
-        List<ProcessDomain.ProcessInfoDomain> processOccupyCpuTop10Info = getProcessOccupyCpuTop10Info();
-        // 获取占用内存排名前十的进程信息
-        List<ProcessDomain.ProcessInfoDomain> processOccupyMemoryTop10Info = getProcessOccupyMemoryTop10Info();
-        processInfoList.addAll(processOccupyCpuTop10Info);
-        processInfoList.addAll(processOccupyMemoryTop10Info);
-        if (CollectionUtils.isNotEmpty(processInfoList)) {
-            processInfoList = processInfoList.stream()
-                    // 根据进程ID去重
-                    .filter(distinctByKey(ProcessDomain.ProcessInfoDomain::getProcessId))
-                    // 根据内存大小降序排列
-                    .sorted(Comparator.comparing(ProcessDomain.ProcessInfoDomain::getMemorySize).reversed())
-                    .collect(Collectors.toList());
+        try {
+            // 构建返回值
+            ProcessDomain processDomain = ProcessDomain.builder().build();
+            List<ProcessDomain.ProcessInfoDomain> processInfoList = Lists.newArrayList();
+            // 获取占用CPU排名前十的进程信息
+            List<ProcessDomain.ProcessInfoDomain> processOccupyCpuTop10Info = getProcessOccupyCpuTop10Info();
+            // 获取占用内存排名前十的进程信息
+            List<ProcessDomain.ProcessInfoDomain> processOccupyMemoryTop10Info = getProcessOccupyMemoryTop10Info();
+            processInfoList.addAll(processOccupyCpuTop10Info);
+            processInfoList.addAll(processOccupyMemoryTop10Info);
+            if (CollectionUtils.isNotEmpty(processInfoList)) {
+                processInfoList = processInfoList.stream()
+                        // 根据进程ID去重
+                        .filter(distinctByKey(ProcessDomain.ProcessInfoDomain::getProcessId))
+                        // 根据内存大小降序排列
+                        .sorted(Comparator.comparing(ProcessDomain.ProcessInfoDomain::getMemorySize).reversed())
+                        .collect(Collectors.toList());
+            }
+            // 进程信息
+            processDomain.setProcessInfoList(processInfoList);
+            // 正在运行的进程数
+            processDomain.setProcessNum(getTotalProcess());
+            return processDomain;
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            return null;
         }
-        // 进程信息
-        processDomain.setProcessInfoList(processInfoList);
-        // 正在运行的进程数
-        processDomain.setProcessNum(getTotalProcess());
-        return processDomain;
     }
 
     /**

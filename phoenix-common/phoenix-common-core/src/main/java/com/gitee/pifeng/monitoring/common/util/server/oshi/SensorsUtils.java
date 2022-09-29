@@ -4,6 +4,7 @@ import cn.hutool.core.util.NumberUtil;
 import com.gitee.pifeng.monitoring.common.domain.server.SensorsDomain;
 import com.gitee.pifeng.monitoring.common.init.InitOshi;
 import com.google.common.collect.Lists;
+import lombok.extern.slf4j.Slf4j;
 import oshi.hardware.HardwareAbstractionLayer;
 import oshi.hardware.Sensors;
 
@@ -17,6 +18,7 @@ import java.util.List;
  * @author 皮锋
  * @custom.date 2021/1/14 16:21
  */
+@Slf4j
 public class SensorsUtils extends InitOshi {
 
     /**
@@ -40,22 +42,27 @@ public class SensorsUtils extends InitOshi {
      * @custom.date 2021/1/14 17:18
      */
     public static SensorsDomain getSensorsInfo() {
-        HardwareAbstractionLayer hardwareAbstractionLayer = SYSTEM_INFO.getHardware();
-        Sensors sensors = hardwareAbstractionLayer.getSensors();
-        double cpuTemperature = NumberUtil.round(sensors.getCpuTemperature(), 2).doubleValue();
-        double cpuVoltage = NumberUtil.round(sensors.getCpuVoltage(), 2).doubleValue();
-        int[] fanSpeeds = sensors.getFanSpeeds();
-        SensorsDomain sensorDomain = new SensorsDomain();
-        sensorDomain.setCpuTemperature(cpuTemperature != 0 ? cpuTemperature + "℃" : "未知");
-        sensorDomain.setCpuVoltage(cpuVoltage != 0 ? cpuVoltage + "V" : "未知");
-        List<SensorsDomain.FanSpeedDomain> fanSpeedDomains = Lists.newArrayList();
-        for (int fanSpeed : fanSpeeds) {
-            SensorsDomain.FanSpeedDomain fanSpeedDomain = new SensorsDomain.FanSpeedDomain();
-            fanSpeedDomain.setFanSpeed(fanSpeed != 0 ? fanSpeed + "rpm" : "未知");
-            fanSpeedDomains.add(fanSpeedDomain);
-            sensorDomain.setFanSpeedDomainList(fanSpeedDomains);
+        try {
+            HardwareAbstractionLayer hardwareAbstractionLayer = SYSTEM_INFO.getHardware();
+            Sensors sensors = hardwareAbstractionLayer.getSensors();
+            double cpuTemperature = NumberUtil.round(sensors.getCpuTemperature(), 2).doubleValue();
+            double cpuVoltage = NumberUtil.round(sensors.getCpuVoltage(), 2).doubleValue();
+            int[] fanSpeeds = sensors.getFanSpeeds();
+            SensorsDomain sensorDomain = new SensorsDomain();
+            sensorDomain.setCpuTemperature(cpuTemperature != 0 ? cpuTemperature + "℃" : "未知");
+            sensorDomain.setCpuVoltage(cpuVoltage != 0 ? cpuVoltage + "V" : "未知");
+            List<SensorsDomain.FanSpeedDomain> fanSpeedDomains = Lists.newArrayList();
+            for (int fanSpeed : fanSpeeds) {
+                SensorsDomain.FanSpeedDomain fanSpeedDomain = new SensorsDomain.FanSpeedDomain();
+                fanSpeedDomain.setFanSpeed(fanSpeed != 0 ? fanSpeed + "rpm" : "未知");
+                fanSpeedDomains.add(fanSpeedDomain);
+                sensorDomain.setFanSpeedDomainList(fanSpeedDomains);
+            }
+            return sensorDomain;
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            return null;
         }
-        return sensorDomain;
     }
 
 }
