@@ -86,7 +86,7 @@ public class PowerSourceUtils extends InitOshi {
             }
             powerSourcesDomain.setPowerSourceDomainList(powerSourceDomains);
             return powerSourcesDomain;
-        } catch (Exception e) {
+        } catch (Throwable e) {
             log.error(e.getMessage(), e);
             return null;
         }

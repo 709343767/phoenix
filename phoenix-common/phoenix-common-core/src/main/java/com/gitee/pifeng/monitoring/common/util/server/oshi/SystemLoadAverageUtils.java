@@ -35,7 +35,7 @@ public class SystemLoadAverageUtils extends InitOshi {
                     .fiveLoadAverage(loadAverage[1])
                     .fifteenLoadAverage(loadAverage[2])
                     .build();
-        } catch (Exception e) {
+        } catch (Throwable e) {
             log.error(e.getMessage(), e);
             return null;
         }

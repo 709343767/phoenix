@@ -85,7 +85,7 @@ public class CpuUtils extends InitOshi {
             }
             cpuDomain.setCpuNum(logicalProcessorCount).setCpuList(cpuInfoDomains);
             return cpuDomain;
-        } catch (Exception e) {
+        } catch (Throwable e) {
             log.error(e.getMessage(), e);
             return null;
         }

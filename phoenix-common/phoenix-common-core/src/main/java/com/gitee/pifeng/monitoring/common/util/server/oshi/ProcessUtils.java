@@ -76,7 +76,7 @@ public class ProcessUtils extends InitOshi {
             // 正在运行的进程数
             processDomain.setProcessNum(getTotalProcess());
             return processDomain;
-        } catch (Exception e) {
+        } catch (Throwable e) {
             log.error(e.getMessage(), e);
             return null;
         }

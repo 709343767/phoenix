@@ -116,7 +116,7 @@ public class NetInterfaceUtils extends InitSigar {
             return netDomain;
         } catch (SigarException s) {
             throw s;
-        } catch (Exception e) {
+        } catch (Throwable e) {
             log.error(e.getMessage(), e);
             return null;
         }

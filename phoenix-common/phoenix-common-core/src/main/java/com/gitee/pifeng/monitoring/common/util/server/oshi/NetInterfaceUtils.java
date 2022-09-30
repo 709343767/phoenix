@@ -97,7 +97,7 @@ public class NetInterfaceUtils extends InitOshi {
 
             netDomain.setNetNum(netInterfaceConfigDomains.size()).setNetList(netInterfaceConfigDomains);
             return netDomain;
-        } catch (Exception e) {
+        } catch (Throwable e) {
             log.error(e.getMessage(), e);
             return null;
         }

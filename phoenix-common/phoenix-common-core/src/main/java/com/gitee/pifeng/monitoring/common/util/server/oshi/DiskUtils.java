@@ -68,7 +68,7 @@ public class DiskUtils extends InitOshi {
             diskDomain.setDiskInfoList(diskInfoDomains);
             diskDomain.setDiskNum(diskInfoDomains.size());
             return diskDomain;
-        } catch (Exception e) {
+        } catch (Throwable e) {
             log.error(e.getMessage(), e);
             return null;
         }

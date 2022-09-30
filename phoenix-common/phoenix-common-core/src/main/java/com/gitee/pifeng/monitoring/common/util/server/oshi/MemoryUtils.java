@@ -61,7 +61,7 @@ public class MemoryUtils extends InitOshi {
                     .swapUsedPercent(swapTotal == 0 ? 0 : NumberUtil.round((double) swapUsed / (double) swapTotal, 4).doubleValue())
                     .build();
             return MemoryDomain.builder().menDomain(menDomain).swapDomain(swapDomain).build();
-        } catch (Exception e) {
+        } catch (Throwable e) {
             log.error(e.getMessage(), e);
             return null;
         }

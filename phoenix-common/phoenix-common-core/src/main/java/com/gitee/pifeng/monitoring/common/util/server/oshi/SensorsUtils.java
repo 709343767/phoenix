@@ -59,7 +59,7 @@ public class SensorsUtils extends InitOshi {
                 sensorDomain.setFanSpeedDomainList(fanSpeedDomains);
             }
             return sensorDomain;
-        } catch (Exception e) {
+        } catch (Throwable e) {
             log.error(e.getMessage(), e);
             return null;
         }

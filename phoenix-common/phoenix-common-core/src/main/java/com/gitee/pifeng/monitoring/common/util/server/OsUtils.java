@@ -87,7 +87,7 @@ public final class OsUtils {
                     .setUserHome(PROPS.getProperty("user.home"))
                     .setOsTimeZone(timeZone.getDisplayName())
                     .setComputerName(getComputerName());
-        } catch (Exception e) {
+        } catch (Throwable e) {
             log.error(e.getMessage(), e);
             return null;
         }

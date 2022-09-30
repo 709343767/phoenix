@@ -56,7 +56,7 @@ public class MemoryUtils extends InitSigar {
             return MemoryDomain.builder().menDomain(menDomain).swapDomain(swapDomain).build();
         } catch (SigarException s) {
             throw s;
-        } catch (Exception e) {
+        } catch (Throwable e) {
             log.error(e.getMessage(), e);
             return null;
         }

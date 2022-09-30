@@ -107,7 +107,7 @@ public class DiskUtils extends InitSigar {
             return diskDomain;
         } catch (SigarException s) {
             throw s;
-        } catch (Exception e) {
+        } catch (Throwable e) {
             log.error(e.getMessage(), e);
             return null;
         }

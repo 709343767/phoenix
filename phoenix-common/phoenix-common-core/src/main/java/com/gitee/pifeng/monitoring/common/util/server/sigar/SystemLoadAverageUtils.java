@@ -47,7 +47,7 @@ public class SystemLoadAverageUtils extends InitSigar {
                     .build();
         } catch (SigarException s) {
             throw s;
-        } catch (Exception e) {
+        } catch (Throwable e) {
             log.error(e.getMessage(), e);
             return null;
         }
