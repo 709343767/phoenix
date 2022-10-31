@@ -18,11 +18,13 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.hyperic.sigar.SigarException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -172,6 +174,8 @@ public class MonitorHttpController {
      * @param monitorHttpVo HTTP信息
      * @return layUiAdmin响应对象：如果数据库中已经存在，LayUiAdminResultVo.data="exist"；
      * 如果添加成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @throws SigarException Sigar异常
+     * @throws IOException    IO异常
      * @author 皮锋
      * @custom.date 2022/1/11 10:16
      */
@@ -179,11 +183,14 @@ public class MonitorHttpController {
     @PostMapping("/add-monitor-http")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.HTTP4SERVICE, operType = OperateTypeConstants.ADD, operDesc = "添加HTTP信息")
-    public LayUiAdminResultVo addMonitorHttp(MonitorHttpVo monitorHttpVo) throws NetException {
+    public LayUiAdminResultVo addMonitorHttp(MonitorHttpVo monitorHttpVo) throws NetException, SigarException, IOException {
         // 获取被监控HTTP源IP地址，获取失败则返回null
         String sourceIp = this.monitorNetService.getSourceIp();
         monitorHttpVo.setHostnameSource(sourceIp);
-        return this.monitorHttpService.addMonitorHttp(monitorHttpVo);
+        LayUiAdminResultVo layUiAdminResultVo = this.monitorHttpService.addMonitorHttp(monitorHttpVo);
+        // 测试HTTP连通性
+        this.monitorHttpService.testMonitorHttp(monitorHttpVo);
+        return layUiAdminResultVo;
     }
 
     /**
@@ -224,6 +231,8 @@ public class MonitorHttpController {
      * @param monitorHttpVo HTTP信息
      * @return layUiAdmin响应对象：如果数据库中已经存在，LayUiAdminResultVo.data="exist"；
      * 如果编辑成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @throws SigarException Sigar异常
+     * @throws IOException    IO异常
      * @author 皮锋
      * @custom.date 2022/1/11 12:26
      */
@@ -231,11 +240,14 @@ public class MonitorHttpController {
     @PutMapping("/edit-monitor-http")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.HTTP4SERVICE, operType = OperateTypeConstants.UPDATE, operDesc = "编辑HTTP信息")
-    public LayUiAdminResultVo editMonitorHttp(MonitorHttpVo monitorHttpVo) {
+    public LayUiAdminResultVo editMonitorHttp(MonitorHttpVo monitorHttpVo) throws SigarException, IOException {
         // 获取被监控HTTP源IP地址，获取失败则返回null
         String sourceIp = this.monitorNetService.getSourceIp();
         monitorHttpVo.setHostnameSource(sourceIp);
-        return this.monitorHttpService.editMonitorHttp(monitorHttpVo);
+        LayUiAdminResultVo layUiAdminResultVo = this.monitorHttpService.editMonitorHttp(monitorHttpVo);
+        // 测试HTTP连通性
+        this.monitorHttpService.testMonitorHttp(monitorHttpVo);
+        return layUiAdminResultVo;
     }
 
     /**
@@ -301,6 +313,26 @@ public class MonitorHttpController {
         MonitorHttpVo monitorHttpVo = MonitorHttpVo.builder().build().convertFor(monitorHttp);
         mv.addObject("monitorHttpVo", monitorHttpVo);
         return mv;
+    }
+
+    /**
+     * <p>
+     * 测试HTTP连通性
+     * </p>
+     *
+     * @param monitorHttpVo HTTP信息
+     * @return layUiAdmin响应对象：HTTP连通性
+     * @throws SigarException Sigar异常
+     * @throws IOException    IO异常
+     * @author 皮锋
+     * @custom.date 2022/10/9 10:16
+     */
+    @ApiOperation(value = "测试HTTP连通性")
+    @PostMapping("/test-monitor-http")
+    @ResponseBody
+    @OperateLog(operModule = UiModuleConstants.HTTP4SERVICE, operType = OperateTypeConstants.TEST, operDesc = "测试HTTP连通性")
+    public LayUiAdminResultVo testMonitorHttp(MonitorHttpVo monitorHttpVo) throws NetException, SigarException, IOException {
+        return this.monitorHttpService.testMonitorHttp(monitorHttpVo);
     }
 
 }

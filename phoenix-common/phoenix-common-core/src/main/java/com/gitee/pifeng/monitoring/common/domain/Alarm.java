@@ -1,9 +1,9 @@
 package com.gitee.pifeng.monitoring.common.domain;
 
 import com.gitee.pifeng.monitoring.common.abs.AbstractSuperBean;
-import com.gitee.pifeng.monitoring.common.constant.AlarmLevelEnums;
-import com.gitee.pifeng.monitoring.common.constant.AlarmReasonEnums;
 import com.gitee.pifeng.monitoring.common.constant.MonitorTypeEnums;
+import com.gitee.pifeng.monitoring.common.constant.alarm.AlarmLevelEnums;
+import com.gitee.pifeng.monitoring.common.constant.alarm.AlarmReasonEnums;
 import lombok.*;
 import lombok.experimental.Accessors;
 

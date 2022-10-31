@@ -62,6 +62,8 @@ public class MonitorLogOperationController {
      * @param operModule 功能模块
      * @param operDesc   操作描述
      * @param operType   操作类型
+     * @param username   操作用户
+     * @param ip         请求IP
      * @param insertTime 插入时间
      * @return layUiAdmin响应对象
      * @author 皮锋
@@ -74,13 +76,16 @@ public class MonitorLogOperationController {
             @ApiImplicitParam(name = "operModule", value = "功能模块", paramType = "query", dataType = "string", dataTypeClass = String.class),
             @ApiImplicitParam(name = "operDesc", value = "操作描述", paramType = "query", dataType = "string", dataTypeClass = String.class),
             @ApiImplicitParam(name = "operType", value = "操作类型", paramType = "query", dataType = "string", dataTypeClass = String.class),
+            @ApiImplicitParam(name = "username", value = "操作用户", paramType = "query", dataType = "string", dataTypeClass = String.class),
+            @ApiImplicitParam(name = "ip", value = "请求IP", paramType = "query", dataType = "string", dataTypeClass = String.class),
             @ApiImplicitParam(name = "insertTime", value = "插入时间", paramType = "query", dataType = "string", dataTypeClass = String.class)
     })
     @GetMapping("/get-monitor-log-operation-list")
     @ResponseBody
     // @OperateLog(operModule = UiModuleConstants.LOG + "#操作日志", operType = OperateTypeConstants.QUERY, operDesc = "获取操作日志列表")
-    public LayUiAdminResultVo getMonitorLogOperationList(Long current, Long size, String operModule, String operDesc, String operType, String insertTime) {
-        Page<MonitorLogOperationVo> page = this.monitorLogOperationService.getMonitorLogOperationList(current, size, operModule, operDesc, operType, insertTime);
+    public LayUiAdminResultVo getMonitorLogOperationList(Long current, Long size, String operModule, String operDesc,
+                                                         String operType, String username, String ip, String insertTime) {
+        Page<MonitorLogOperationVo> page = this.monitorLogOperationService.getMonitorLogOperationList(current, size, operModule, operDesc, operType, username, ip, insertTime);
         return LayUiAdminResultVo.ok(page);
     }
 
@@ -141,4 +146,3 @@ public class MonitorLogOperationController {
     }
 
 }
-

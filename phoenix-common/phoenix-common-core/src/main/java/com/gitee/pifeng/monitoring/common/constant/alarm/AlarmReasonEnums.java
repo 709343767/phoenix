@@ -1,4 +1,4 @@
-package com.gitee.pifeng.monitoring.common.constant;
+package com.gitee.pifeng.monitoring.common.constant.alarm;
 
 /**
  * <p>

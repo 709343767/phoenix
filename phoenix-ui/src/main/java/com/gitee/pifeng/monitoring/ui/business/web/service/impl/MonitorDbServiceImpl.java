@@ -2,12 +2,18 @@ package com.gitee.pifeng.monitoring.ui.business.web.service.impl;
 
 import cn.hutool.core.util.NumberUtil;
 import cn.hutool.db.dialect.DriverUtil;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gitee.pifeng.monitoring.common.constant.DbEnums;
 import com.gitee.pifeng.monitoring.common.constant.ZeroOrOneConstants;
+import com.gitee.pifeng.monitoring.common.domain.Result;
+import com.gitee.pifeng.monitoring.common.dto.BaseRequestPackage;
+import com.gitee.pifeng.monitoring.common.dto.BaseResponsePackage;
+import com.gitee.pifeng.monitoring.plug.core.Sender;
 import com.gitee.pifeng.monitoring.ui.business.web.dao.IMonitorDbDao;
 import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorDb;
 import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorDbService;
@@ -15,12 +21,16 @@ import com.gitee.pifeng.monitoring.ui.business.web.vo.HomeDbVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.LayUiAdminResultVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.MonitorDbVo;
 import com.gitee.pifeng.monitoring.ui.constant.DbDriverClassConstants;
+import com.gitee.pifeng.monitoring.ui.constant.UrlConstants;
 import com.gitee.pifeng.monitoring.ui.constant.WebResponseConstants;
+import com.gitee.pifeng.monitoring.ui.core.PackageConstructor;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
+import org.hyperic.sigar.SigarException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -257,6 +267,41 @@ public class MonitorDbServiceImpl extends ServiceImpl<IMonitorDbDao, MonitorDb> 
                 .dbUnsentSum(NumberUtil.parseInt(map.get("dbUnsentSum").toString()))
                 .dbConnectRate(NumberUtil.round(map.get("dbConnectRate").toString(), 2).toString())
                 .build();
+    }
+
+    /**
+     * <p>
+     * 测试数据库连通性
+     * </p>
+     *
+     * @param monitorDbVo 数据库信息
+     * @return layUiAdmin响应对象：网络连通性
+     * @throws SigarException Sigar异常
+     * @throws IOException    IO异常
+     * @author 皮锋
+     * @custom.date 2022/10/9 10:16
+     */
+    @Override
+    public LayUiAdminResultVo testMonitorDb(MonitorDbVo monitorDbVo) throws SigarException, IOException {
+        // 封装请求数据
+        JSONObject extraMsg = new JSONObject();
+        extraMsg.put("url", StringUtils.trim(monitorDbVo.getUrl()));
+        extraMsg.put("dbType", monitorDbVo.getDbType());
+        extraMsg.put("username", monitorDbVo.getUsername());
+        extraMsg.put("password", monitorDbVo.getPassword());
+        BaseRequestPackage baseRequestPackage = new PackageConstructor().structureBaseRequestPackage(extraMsg);
+        // 从服务端获取数据
+        String resultStr = Sender.send(UrlConstants.TEST_MONITOR_DB_URL, baseRequestPackage.toJsonString());
+        BaseResponsePackage baseResponsePackage = JSON.parseObject(resultStr, BaseResponsePackage.class);
+        Result result = baseResponsePackage.getResult();
+        String msg = result.getMsg();
+        boolean isConnected = Boolean.parseBoolean(msg);
+        if (isConnected) {
+            msg = WebResponseConstants.SUCCESS;
+        } else {
+            msg = WebResponseConstants.FAIL;
+        }
+        return LayUiAdminResultVo.ok(msg);
     }
 
 }

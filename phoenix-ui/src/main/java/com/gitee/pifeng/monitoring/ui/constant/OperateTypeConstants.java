@@ -55,4 +55,9 @@ public final class OperateTypeConstants {
      */
     public static final String CONTROL = "控制";
 
+    /**
+     * 测试
+     */
+    public static final String TEST = "测试";
+
 }

@@ -123,3 +123,8 @@
     background-color: #87CEEB;
     color: #fff !important;
 }
+
+body .layui-layer-class-my .layui-layer-btn .layui-layer-btn1 {
+    background: #009688;
+    color: #fff;
+}

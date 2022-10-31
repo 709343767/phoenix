@@ -10,6 +10,7 @@
           content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <link rel="stylesheet" href="./layui/css/layui.css" th:href="@{/layui/css/layui.css}" media="all">
     <link rel="stylesheet" href="./style/admin.css" th:href="@{/style/admin.css}" media="all">
+    <link rel="stylesheet" href="./style/myself.css" th:href="@{/style/myself.css}" media="all">
     <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
     <!--[if lt IE 9]>
     <script src="./js/html5.min.js" th:src="@{/js/html5.min.js}"></script>
@@ -326,8 +327,9 @@
                         title: '添加网络信息',
                         content: ctxPath + 'monitor-network/add-monitor-network-form',
                         maxmin: true,
+                        skin: 'layui-layer-class-my',
                         area: [width, height],
-                        btn: ['确定', '取消'],
+                        btn: ['确定', '测试', '取消'],
                         yes: function (index, layero) {
                             var iframeWindow = window['layui-layer-iframe' + index],
                                 submitID = 'LAY-front-submit',
@@ -335,6 +337,9 @@
                             //监听提交
                             iframeWindow.layui.form.on('submit(' + submitID + ')', function (data) {
                                 var field = data.field; //获取提交的字段
+                                var loading = layer.load(1, {
+                                    shade: [0.1, '#fff'] //0.1透明度的白色背景
+                                });
                                 admin.req({
                                     type: 'post',
                                     url: ctxPath + 'monitor-network/add-monitor-network',
@@ -354,13 +359,51 @@
                                         } else {
                                             layer.msg('添加失败！', {icon: 5, shift: 6});
                                         }
+                                        layer.close(loading);
                                     },
                                     error: function () {
                                         layer.msg('系统错误！', {icon: 5, shift: 6});
+                                        layer.close(loading);
                                     }
                                 });
                             });
                             submit.trigger('click');
+                        },
+                        btn2: function (index, layero) {
+                            var iframeWindow = window['layui-layer-iframe' + index],
+                                submitID = 'LAY-front-submit',
+                                submit = layero.find('iframe').contents().find('#' + submitID);
+                            //监听提交
+                            iframeWindow.layui.form.on('submit(' + submitID + ')', function (data) {
+                                var field = data.field; //获取提交的字段
+                                var loading = layer.load(1, {
+                                    shade: [0.1, '#fff'] //0.1透明度的白色背景
+                                });
+                                admin.req({
+                                    type: 'post',
+                                    url: ctxPath + 'monitor-network/test-monitor-network',
+                                    data: field,
+                                    dataType: 'json',
+                                    headers: {
+                                        [[${_csrf.headerName}]]: [[${_csrf.token}]]
+                                    },
+                                    success: function (result) {
+                                        var data = result.data;
+                                        if (data === webConst.SUCCESS) {
+                                            layer.msg('状态：正常！', {icon: 6});
+                                        } else if (data === webConst.FAIL) {
+                                            layer.msg('状态：异常！', {icon: 5, shift: 6});
+                                        }
+                                        layer.close(loading);
+                                    },
+                                    error: function () {
+                                        layer.msg('系统错误！', {icon: 5, shift: 6});
+                                        layer.close(loading);
+                                    }
+                                });
+                            });
+                            submit.trigger('click');
+                            return false;
                         }
                     });
                     break;
@@ -425,8 +468,9 @@
                     title: '编辑网络信息',
                     content: ctxPath + 'monitor-network/edit-monitor-network-form?id=' + data.id,
                     maxmin: true,
+                    skin: 'layui-layer-class-my',
                     area: [width, height],
-                    btn: ['确定', '取消'],
+                    btn: ['确定', '测试', '取消'],
                     yes: function (index, layero) {
                         var iframeWindow = window['layui-layer-iframe' + index],
                             submitID = 'LAY-front-submit',
@@ -434,6 +478,9 @@
                         //监听提交
                         iframeWindow.layui.form.on('submit(' + submitID + ')', function (data) {
                             var field = data.field; //获取提交的字段
+                            var loading = layer.load(1, {
+                                shade: [0.1, '#fff'] //0.1透明度的白色背景
+                            });
                             admin.req({
                                 type: 'put',
                                 url: ctxPath + 'monitor-network/edit-monitor-network',
@@ -453,13 +500,51 @@
                                     } else {
                                         layer.msg('编辑失败！', {icon: 5, shift: 6});
                                     }
+                                    layer.close(loading);
                                 },
                                 error: function () {
                                     layer.msg('系统错误！', {icon: 5, shift: 6});
+                                    layer.close(loading);
                                 }
                             });
                         });
                         submit.trigger('click');
+                    },
+                    btn2: function (index, layero) {
+                        var iframeWindow = window['layui-layer-iframe' + index],
+                            submitID = 'LAY-front-submit',
+                            submit = layero.find('iframe').contents().find('#' + submitID);
+                        //监听提交
+                        iframeWindow.layui.form.on('submit(' + submitID + ')', function (data) {
+                            var field = data.field; //获取提交的字段
+                            var loading = layer.load(1, {
+                                shade: [0.1, '#fff'] //0.1透明度的白色背景
+                            });
+                            admin.req({
+                                type: 'post',
+                                url: ctxPath + 'monitor-network/test-monitor-network',
+                                data: field,
+                                dataType: 'json',
+                                headers: {
+                                    [[${_csrf.headerName}]]: [[${_csrf.token}]]
+                                },
+                                success: function (result) {
+                                    var data = result.data;
+                                    if (data === webConst.SUCCESS) {
+                                        layer.msg('状态：正常！', {icon: 6});
+                                    } else if (data === webConst.FAIL) {
+                                        layer.msg('状态：异常！', {icon: 5, shift: 6});
+                                    }
+                                    layer.close(loading);
+                                },
+                                error: function () {
+                                    layer.msg('系统错误！', {icon: 5, shift: 6});
+                                    layer.close(loading);
+                                }
+                            });
+                        });
+                        submit.trigger('click');
+                        return false;
                     }
                 });
             } else if (obj.event === 'avgTimeHistory') {

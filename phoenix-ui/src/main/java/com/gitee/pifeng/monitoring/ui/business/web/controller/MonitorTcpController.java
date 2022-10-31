@@ -18,11 +18,14 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
+import org.hyperic.sigar.SigarException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -34,6 +37,7 @@ import java.util.stream.Collectors;
  * @author 皮锋
  * @custom.date 2022-01-10
  */
+@Slf4j
 @Controller
 @RequestMapping("/monitor-tcp")
 @Api(tags = "TCP")
@@ -172,6 +176,8 @@ public class MonitorTcpController {
      * @param monitorTcpVo TCP信息
      * @return layUiAdmin响应对象：如果数据库中已经存在，LayUiAdminResultVo.data="exist"；
      * 如果添加成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @throws SigarException Sigar异常
+     * @throws IOException    IO异常
      * @author 皮锋
      * @custom.date 2022/1/11 10:16
      */
@@ -179,11 +185,14 @@ public class MonitorTcpController {
     @PostMapping("/add-monitor-tcp")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.TCP4SERVICE, operType = OperateTypeConstants.ADD, operDesc = "添加TCP信息")
-    public LayUiAdminResultVo addMonitorTcp(MonitorTcpVo monitorTcpVo) throws NetException {
+    public LayUiAdminResultVo addMonitorTcp(MonitorTcpVo monitorTcpVo) throws NetException, SigarException, IOException {
         // 获取被监控TCP源IP地址，获取失败则返回null
         String sourceIp = this.monitorNetService.getSourceIp();
         monitorTcpVo.setHostnameSource(sourceIp);
-        return this.monitorTcpService.addMonitorTcp(monitorTcpVo);
+        LayUiAdminResultVo layUiAdminResultVo = this.monitorTcpService.addMonitorTcp(monitorTcpVo);
+        // 测试TCP连通性
+        this.monitorTcpService.testMonitorTcp(monitorTcpVo);
+        return layUiAdminResultVo;
     }
 
     /**
@@ -224,6 +233,8 @@ public class MonitorTcpController {
      * @param monitorTcpVo TCP信息
      * @return layUiAdmin响应对象：如果数据库中已经存在，LayUiAdminResultVo.data="exist"；
      * 如果编辑成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @throws SigarException Sigar异常
+     * @throws IOException    IO异常
      * @author 皮锋
      * @custom.date 2022/1/11 12:26
      */
@@ -231,11 +242,14 @@ public class MonitorTcpController {
     @PutMapping("/edit-monitor-tcp")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.TCP4SERVICE, operType = OperateTypeConstants.UPDATE, operDesc = "编辑TCP信息")
-    public LayUiAdminResultVo editMonitorTcp(MonitorTcpVo monitorTcpVo) {
+    public LayUiAdminResultVo editMonitorTcp(MonitorTcpVo monitorTcpVo) throws SigarException, IOException {
         // 获取被监控TCP源IP地址，获取失败则返回null
         String sourceIp = this.monitorNetService.getSourceIp();
         monitorTcpVo.setHostnameSource(sourceIp);
-        return this.monitorTcpService.editMonitorTcp(monitorTcpVo);
+        LayUiAdminResultVo layUiAdminResultVo = this.monitorTcpService.editMonitorTcp(monitorTcpVo);
+        // 测试TCP连通性
+        this.monitorTcpService.testMonitorTcp(monitorTcpVo);
+        return layUiAdminResultVo;
     }
 
     /**
@@ -278,6 +292,26 @@ public class MonitorTcpController {
         ModelAndView mv = new ModelAndView("tcp/tcp-clear-form");
         mv.addObject("id", id);
         return mv;
+    }
+
+    /**
+     * <p>
+     * 测试TCP连通性
+     * </p>
+     *
+     * @param monitorTcpVo TCP信息
+     * @return layUiAdmin响应对象：TCP连通性
+     * @throws SigarException Sigar异常
+     * @throws IOException    IO异常
+     * @author 皮锋
+     * @custom.date 2022/10/9 10:16
+     */
+    @ApiOperation(value = "测试TCP连通性")
+    @PostMapping("/test-monitor-tcp")
+    @ResponseBody
+    @OperateLog(operModule = UiModuleConstants.TCP4SERVICE, operType = OperateTypeConstants.TEST, operDesc = "测试TCP连通性")
+    public LayUiAdminResultVo testMonitorTcp(MonitorTcpVo monitorTcpVo) throws SigarException, IOException {
+        return this.monitorTcpService.testMonitorTcp(monitorTcpVo);
     }
 
 }

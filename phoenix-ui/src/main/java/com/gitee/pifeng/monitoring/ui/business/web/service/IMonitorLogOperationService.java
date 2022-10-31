@@ -28,12 +28,16 @@ public interface IMonitorLogOperationService extends IService<MonitorLogOperatio
      * @param operModule 功能模块
      * @param operDesc   操作描述
      * @param operType   操作类型
+     * @param username   操作用户
+     * @param ip         请求IP
      * @param insertTime 插入时间
      * @return 简单分页模型
      * @author 皮锋
      * @custom.date 2021/6/14 21:28
      */
-    Page<MonitorLogOperationVo> getMonitorLogOperationList(Long current, Long size, String operModule, String operDesc, String operType, String insertTime);
+    Page<MonitorLogOperationVo> getMonitorLogOperationList(Long current, Long size, String operModule,
+                                                           String operDesc, String operType,
+                                                           String username, String ip, String insertTime);
 
     /**
      * <p>

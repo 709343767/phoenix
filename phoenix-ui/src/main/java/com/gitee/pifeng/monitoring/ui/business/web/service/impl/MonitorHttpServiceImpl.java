@@ -1,11 +1,17 @@
 package com.gitee.pifeng.monitoring.ui.business.web.service.impl;
 
 import cn.hutool.core.util.NumberUtil;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.gitee.pifeng.monitoring.common.domain.Result;
+import com.gitee.pifeng.monitoring.common.dto.BaseRequestPackage;
+import com.gitee.pifeng.monitoring.common.dto.BaseResponsePackage;
+import com.gitee.pifeng.monitoring.plug.core.Sender;
 import com.gitee.pifeng.monitoring.ui.business.web.dao.IMonitorHttpDao;
 import com.gitee.pifeng.monitoring.ui.business.web.dao.IMonitorHttpHistoryDao;
 import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorHttp;
@@ -14,15 +20,19 @@ import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorHttpService;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.HomeHttpVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.LayUiAdminResultVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.MonitorHttpVo;
+import com.gitee.pifeng.monitoring.ui.constant.UrlConstants;
 import com.gitee.pifeng.monitoring.ui.constant.WebResponseConstants;
+import com.gitee.pifeng.monitoring.ui.core.PackageConstructor;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
+import org.hyperic.sigar.SigarException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -238,6 +248,39 @@ public class MonitorHttpServiceImpl extends ServiceImpl<IMonitorHttpDao, Monitor
                 .httpUnsentSum(NumberUtil.parseInt(map.get("httpUnsentSum").toString()))
                 .httpConnectRate(NumberUtil.round(map.get("httpConnectRate").toString(), 2).toString())
                 .build();
+    }
+
+    /**
+     * <p>
+     * 测试HTTP连通性
+     * </p>
+     *
+     * @param monitorHttpVo HTTP信息
+     * @return layUiAdmin响应对象：HTTP连通性
+     * @throws SigarException Sigar异常
+     * @throws IOException    IO异常
+     * @author 皮锋
+     * @custom.date 2022/10/9 22:23
+     */
+    @Override
+    public LayUiAdminResultVo testMonitorHttp(MonitorHttpVo monitorHttpVo) throws SigarException, IOException {
+        // 封装请求数据
+        JSONObject extraMsg = new JSONObject();
+        extraMsg.put("method", monitorHttpVo.getMethod());
+        extraMsg.put("urlTarget", monitorHttpVo.getUrlTarget());
+        extraMsg.put("parameter", monitorHttpVo.getParameter());
+        BaseRequestPackage baseRequestPackage = new PackageConstructor().structureBaseRequestPackage(extraMsg);
+        // 从服务端获取数据
+        String resultStr = Sender.send(UrlConstants.TEST_MONITOR_HTTP_URL, baseRequestPackage.toJsonString());
+        BaseResponsePackage baseResponsePackage = JSON.parseObject(resultStr, BaseResponsePackage.class);
+        Result result = baseResponsePackage.getResult();
+        String msg = result.getMsg();
+        // 200：成功
+        String code = "200";
+        if (StringUtils.equals(msg, code)) {
+            msg = WebResponseConstants.SUCCESS;
+        }
+        return LayUiAdminResultVo.ok(msg);
     }
 
 }

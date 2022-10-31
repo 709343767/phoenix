@@ -17,11 +17,13 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.hyperic.sigar.SigarException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -192,6 +194,8 @@ public class MonitorNetworkController {
      * @param monitorNetVo 网络信息
      * @return layUiAdmin响应对象：如果数据库中已经存在，LayUiAdminResultVo.data="exist"；
      * 如果编辑成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @throws SigarException Sigar异常
+     * @throws IOException    IO异常
      * @author 皮锋
      * @custom.date 2020/11/20 13:56
      */
@@ -199,8 +203,11 @@ public class MonitorNetworkController {
     @PutMapping("/edit-monitor-network")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.NET, operType = OperateTypeConstants.UPDATE, operDesc = "编辑网络信息")
-    public LayUiAdminResultVo editMonitorNetwork(MonitorNetVo monitorNetVo) {
-        return this.monitorNetService.editMonitorNetwork(monitorNetVo);
+    public LayUiAdminResultVo editMonitorNetwork(MonitorNetVo monitorNetVo) throws SigarException, IOException {
+        LayUiAdminResultVo layUiAdminResultVo = this.monitorNetService.editMonitorNetwork(monitorNetVo);
+        // 测试网络连通性
+        this.monitorNetService.testMonitorNetwork(monitorNetVo);
+        return layUiAdminResultVo;
     }
 
     /**
@@ -211,7 +218,9 @@ public class MonitorNetworkController {
      * @param monitorNetVo 网络信息
      * @return layUiAdmin响应对象：如果数据库中已经存在，LayUiAdminResultVo.data="exist"；
      * 如果添加成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
-     * @throws NetException 自定义获取网络信息异常
+     * @throws NetException   自定义获取网络信息异常
+     * @throws SigarException Sigar异常
+     * @throws IOException    IO异常
      * @author 皮锋
      * @custom.date 2020/11/20 15:05
      */
@@ -219,8 +228,11 @@ public class MonitorNetworkController {
     @PostMapping("/add-monitor-network")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.NET, operType = OperateTypeConstants.ADD, operDesc = "添加网络信息")
-    public LayUiAdminResultVo addMonitorNetwork(MonitorNetVo monitorNetVo) throws NetException {
-        return this.monitorNetService.addMonitorNetwork(monitorNetVo);
+    public LayUiAdminResultVo addMonitorNetwork(MonitorNetVo monitorNetVo) throws NetException, SigarException, IOException {
+        LayUiAdminResultVo layUiAdminResultVo = this.monitorNetService.addMonitorNetwork(monitorNetVo);
+        // 测试网络连通性
+        this.monitorNetService.testMonitorNetwork(monitorNetVo);
+        return layUiAdminResultVo;
     }
 
     /**
@@ -263,6 +275,26 @@ public class MonitorNetworkController {
         ModelAndView mv = new ModelAndView("network/network-clear-form");
         mv.addObject("id", id);
         return mv;
+    }
+
+    /**
+     * <p>
+     * 测试网络连通性
+     * </p>
+     *
+     * @param monitorNetVo 网络信息
+     * @return layUiAdmin响应对象：网络连通性
+     * @throws SigarException Sigar异常
+     * @throws IOException    IO异常
+     * @author 皮锋
+     * @custom.date 2022/10/9 10:16
+     */
+    @ApiOperation(value = "测试网络连通性")
+    @PostMapping("/test-monitor-network")
+    @ResponseBody
+    @OperateLog(operModule = UiModuleConstants.NET, operType = OperateTypeConstants.TEST, operDesc = "测试网络连通性")
+    public LayUiAdminResultVo testMonitorNetwork(MonitorNetVo monitorNetVo) throws SigarException, IOException {
+        return this.monitorNetService.testMonitorNetwork(monitorNetVo);
     }
 
 }

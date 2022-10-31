@@ -10,6 +10,7 @@
           content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <link rel="stylesheet" href="./layui/css/layui.css" th:href="@{/layui/css/layui.css}" media="all">
     <link rel="stylesheet" href="./style/admin.css" th:href="@{/style/admin.css}" media="all">
+    <link rel="stylesheet" href="./style/myself.css" th:href="@{/style/myself.css}" media="all">
     <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
     <!--[if lt IE 9]>
     <script src="./js/html5.min.js" th:src="@{/js/html5.min.js}"></script>
@@ -181,10 +182,12 @@
                 });
                 $('[data-field="status"]').children().each(function () {
                     var status = $(this).text();
-                    if (status !== '200' && status !== '状态') {
+                    if (status !== '200' && status !== '状态' && isNotEmpty(status)) {
                         $(this).html('<span style="color: #FF4500;font-weight: bold;">' + status + '</span>');
                     } else if (status === '200') {
                         $(this).html('<span style="color: #439D6F;font-weight: bold;">' + status + '</span>');
+                    } else if (isEmpty((status))) {
+                        $(this).text('未知');
                     }
                 });
                 for (var i in res.data) {		//遍历整个表格数据
@@ -351,8 +354,9 @@
                         title: '添加HTTP信息',
                         content: ctxPath + 'monitor-http/add-monitor-http-form',
                         maxmin: true,
+                        skin: 'layui-layer-class-my',
                         area: [width, height],
-                        btn: ['确定', '取消'],
+                        btn: ['确定', '测试', '取消'],
                         success: function (layero, index) {
                             // 在回调方法中的第2个参数“index”表示的是当前弹窗的索引
                             // 通过layer.full方法将窗口放大
@@ -365,6 +369,9 @@
                             //监听提交
                             iframeWindow.layui.form.on('submit(' + submitID + ')', function (data) {
                                 var field = data.field; //获取提交的字段
+                                var loading = layer.load(1, {
+                                    shade: [0.1, '#fff'] //0.1透明度的白色背景
+                                });
                                 admin.req({
                                     type: 'post',
                                     url: ctxPath + 'monitor-http/add-monitor-http',
@@ -384,13 +391,51 @@
                                         } else {
                                             layer.msg('添加失败！', {icon: 5, shift: 6});
                                         }
+                                        layer.close(loading);
                                     },
                                     error: function () {
                                         layer.msg('系统错误！', {icon: 5, shift: 6});
+                                        layer.close(loading);
                                     }
                                 });
                             });
                             submit.trigger('click');
+                        },
+                        btn2: function (index, layero) {
+                            var iframeWindow = window['layui-layer-iframe' + index],
+                                submitID = 'LAY-front-submit',
+                                submit = layero.find('iframe').contents().find('#' + submitID);
+                            //监听提交
+                            iframeWindow.layui.form.on('submit(' + submitID + ')', function (data) {
+                                var field = data.field; //获取提交的字段
+                                var loading = layer.load(1, {
+                                    shade: [0.1, '#fff'] //0.1透明度的白色背景
+                                });
+                                admin.req({
+                                    type: 'post',
+                                    url: ctxPath + 'monitor-http/test-monitor-http',
+                                    data: field,
+                                    dataType: 'json',
+                                    headers: {
+                                        [[${_csrf.headerName}]]: [[${_csrf.token}]]
+                                    },
+                                    success: function (result) {
+                                        var data = result.data;
+                                        if (data === webConst.SUCCESS) {
+                                            layer.msg('状态：正常！', {icon: 6});
+                                        } else {
+                                            layer.msg('状态：' + data, {icon: 5, shift: 6});
+                                        }
+                                        layer.close(loading);
+                                    },
+                                    error: function () {
+                                        layer.msg('系统错误！', {icon: 5, shift: 6});
+                                        layer.close(loading);
+                                    }
+                                });
+                            });
+                            submit.trigger('click');
+                            return false;
                         }
                     });
                     break;
@@ -487,8 +532,9 @@
                     title: '编辑HTTP信息',
                     content: ctxPath + 'monitor-http/edit-monitor-http-form?id=' + data.id,
                     maxmin: true,
+                    skin: 'layui-layer-class-my',
                     area: [width, height],
-                    btn: ['确定', '取消'],
+                    btn: ['确定', '测试', '取消'],
                     yes: function (index, layero) {
                         var iframeWindow = window['layui-layer-iframe' + index],
                             submitID = 'LAY-front-submit',
@@ -496,6 +542,9 @@
                         //监听提交
                         iframeWindow.layui.form.on('submit(' + submitID + ')', function (data) {
                             var field = data.field; //获取提交的字段
+                            var loading = layer.load(1, {
+                                shade: [0.1, '#fff'] //0.1透明度的白色背景
+                            });
                             admin.req({
                                 type: 'put',
                                 url: ctxPath + 'monitor-http/edit-monitor-http',
@@ -515,13 +564,51 @@
                                     } else {
                                         layer.msg('编辑失败！', {icon: 5, shift: 6});
                                     }
+                                    layer.close(loading);
                                 },
                                 error: function () {
                                     layer.msg('系统错误！', {icon: 5, shift: 6});
+                                    layer.close(loading);
                                 }
                             });
                         });
                         submit.trigger('click');
+                    },
+                    btn2: function (index, layero) {
+                        var iframeWindow = window['layui-layer-iframe' + index],
+                            submitID = 'LAY-front-submit',
+                            submit = layero.find('iframe').contents().find('#' + submitID);
+                        //监听提交
+                        iframeWindow.layui.form.on('submit(' + submitID + ')', function (data) {
+                            var field = data.field; //获取提交的字段
+                            var loading = layer.load(1, {
+                                shade: [0.1, '#fff'] //0.1透明度的白色背景
+                            });
+                            admin.req({
+                                type: 'post',
+                                url: ctxPath + 'monitor-http/test-monitor-http',
+                                data: field,
+                                dataType: 'json',
+                                headers: {
+                                    [[${_csrf.headerName}]]: [[${_csrf.token}]]
+                                },
+                                success: function (result) {
+                                    var data = result.data;
+                                    if (data === webConst.SUCCESS) {
+                                        layer.msg('状态：正常！', {icon: 6});
+                                    } else {
+                                        layer.msg('状态：' + data, {icon: 5, shift: 6});
+                                    }
+                                    layer.close(loading);
+                                },
+                                error: function () {
+                                    layer.msg('系统错误！', {icon: 5, shift: 6});
+                                    layer.close(loading);
+                                }
+                            });
+                        });
+                        submit.trigger('click');
+                        return false;
                     }
                 });
             } else if (obj.event === 'avgTimeHistory') {

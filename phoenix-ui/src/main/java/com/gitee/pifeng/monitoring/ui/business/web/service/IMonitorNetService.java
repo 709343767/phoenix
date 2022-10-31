@@ -7,7 +7,9 @@ import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorNet;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.HomeNetVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.LayUiAdminResultVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.MonitorNetVo;
+import org.hyperic.sigar.SigarException;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -98,4 +100,19 @@ public interface IMonitorNetService extends IService<MonitorNet> {
      * @custom.date 2021/10/6 22:19
      */
     String getSourceIp();
+
+    /**
+     * <p>
+     * 测试网络连通性
+     * </p>
+     *
+     * @param monitorNetVo 网络信息
+     * @return layUiAdmin响应对象：网络连通性
+     * @throws SigarException Sigar异常
+     * @throws IOException    IO异常
+     * @author 皮锋
+     * @custom.date 2022/10/9 10:16
+     */
+    LayUiAdminResultVo testMonitorNetwork(MonitorNetVo monitorNetVo) throws SigarException, IOException;
+
 }

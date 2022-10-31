@@ -2,6 +2,7 @@ package com.gitee.pifeng.monitoring.ui.business.web.service.impl;
 
 import cn.hutool.core.util.NumberUtil;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -26,12 +27,14 @@ import com.gitee.pifeng.monitoring.ui.constant.WebResponseConstants;
 import com.gitee.pifeng.monitoring.ui.core.PackageConstructor;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
+import org.hyperic.sigar.SigarException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -268,6 +271,38 @@ public class MonitorNetServiceImpl extends ServiceImpl<IMonitorNetDao, MonitorNe
             log.error(e.getMessage());
         }
         return null;
+    }
+
+    /**
+     * <p>
+     * 测试网络连通性
+     * </p>
+     *
+     * @param monitorNetVo 网络信息
+     * @return layUiAdmin响应对象：网络连通性
+     * @throws SigarException Sigar异常
+     * @throws IOException    IO异常
+     * @author 皮锋
+     * @custom.date 2022/10/9 10:16
+     */
+    @Override
+    public LayUiAdminResultVo testMonitorNetwork(MonitorNetVo monitorNetVo) throws SigarException, IOException {
+        // 封装请求数据
+        JSONObject extraMsg = new JSONObject();
+        extraMsg.put("ipTarget", monitorNetVo.getIpTarget());
+        BaseRequestPackage baseRequestPackage = new PackageConstructor().structureBaseRequestPackage(extraMsg);
+        // 从服务端获取数据
+        String resultStr = Sender.send(UrlConstants.TEST_MONITOR_NETWORK_URL, baseRequestPackage.toJsonString());
+        BaseResponsePackage baseResponsePackage = JSON.parseObject(resultStr, BaseResponsePackage.class);
+        Result result = baseResponsePackage.getResult();
+        String msg = result.getMsg();
+        boolean isConnected = Boolean.parseBoolean(msg);
+        if (isConnected) {
+            msg = WebResponseConstants.SUCCESS;
+        } else {
+            msg = WebResponseConstants.FAIL;
+        }
+        return LayUiAdminResultVo.ok(msg);
     }
 
 }

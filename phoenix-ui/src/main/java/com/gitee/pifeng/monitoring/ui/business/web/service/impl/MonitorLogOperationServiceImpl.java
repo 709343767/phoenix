@@ -49,13 +49,17 @@ public class MonitorLogOperationServiceImpl extends ServiceImpl<IMonitorLogOpera
      * @param operModule 功能模块
      * @param operDesc   操作描述
      * @param operType   操作类型
+     * @param username   操作用户
+     * @param ip         请求IP
      * @param insertTime 插入时间
      * @return 简单分页模型
      * @author 皮锋
      * @custom.date 2021/6/14 21:28
      */
     @Override
-    public Page<MonitorLogOperationVo> getMonitorLogOperationList(Long current, Long size, String operModule, String operDesc, String operType, String insertTime) {
+    public Page<MonitorLogOperationVo> getMonitorLogOperationList(Long current, Long size, String operModule,
+                                                                  String operDesc, String operType,
+                                                                  String username, String ip, String insertTime) {
         // 查询数据库
         IPage<MonitorLogOperation> ipage = new Page<>(current, size);
         LambdaQueryWrapper<MonitorLogOperation> lambdaQueryWrapper = new LambdaQueryWrapper<>();
@@ -72,6 +76,12 @@ public class MonitorLogOperationServiceImpl extends ServiceImpl<IMonitorLogOpera
         }
         if (StringUtils.isNotBlank(operType)) {
             lambdaQueryWrapper.eq(MonitorLogOperation::getOperType, operType);
+        }
+        if (StringUtils.isNotBlank(username)) {
+            lambdaQueryWrapper.like(MonitorLogOperation::getUsername, username);
+        }
+        if (StringUtils.isNotBlank(ip)) {
+            lambdaQueryWrapper.like(MonitorLogOperation::getIp, ip);
         }
         if (StringUtils.isNotBlank(insertTime)) {
             String[] split = StringUtils.split(insertTime, "~");

@@ -1,4 +1,4 @@
-package com.gitee.pifeng.monitoring.common.constant;
+package com.gitee.pifeng.monitoring.common.constant.alarm;
 
 import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;

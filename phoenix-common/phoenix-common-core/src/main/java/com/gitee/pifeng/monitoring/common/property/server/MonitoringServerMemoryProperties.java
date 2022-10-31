@@ -1,6 +1,6 @@
 package com.gitee.pifeng.monitoring.common.property.server;
 
-import com.gitee.pifeng.monitoring.common.constant.AlarmLevelEnums;
+import com.gitee.pifeng.monitoring.common.constant.alarm.AlarmLevelEnums;
 import com.gitee.pifeng.monitoring.common.inf.ISuperBean;
 import lombok.*;
 

@@ -25,4 +25,16 @@ public interface INetService extends IService<MonitorNet> {
      * @custom.date 2021/10/6 22:05
      */
     String getSourceIp() throws NetException;
+
+    /**
+     * <p>
+     * 测试网络连通性
+     * </p>
+     *
+     * @param ipTarget IP地址（目的地）
+     * @return true 或者 false
+     * @author 皮锋
+     * @custom.date 2022/10/10 22:04
+     */
+    Boolean testMonitorNetwork(String ipTarget);
 }

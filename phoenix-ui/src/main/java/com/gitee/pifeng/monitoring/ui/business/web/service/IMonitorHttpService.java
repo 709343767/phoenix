@@ -6,7 +6,9 @@ import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorHttp;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.HomeHttpVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.LayUiAdminResultVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.MonitorHttpVo;
+import org.hyperic.sigar.SigarException;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -87,4 +89,18 @@ public interface IMonitorHttpService extends IService<MonitorHttp> {
      * @custom.date 2022/4/23 13:23
      */
     HomeHttpVo getHomeHttpInfo();
+
+    /**
+     * <p>
+     * 测试HTTP连通性
+     * </p>
+     *
+     * @param monitorHttpVo HTTP信息
+     * @return layUiAdmin响应对象：HTTP连通性
+     * @throws SigarException Sigar异常
+     * @throws IOException    IO异常
+     * @author 皮锋
+     * @custom.date 2022/10/9 22:23
+     */
+    LayUiAdminResultVo testMonitorHttp(MonitorHttpVo monitorHttpVo) throws SigarException, IOException;
 }

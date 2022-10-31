@@ -78,4 +78,24 @@ public class UrlConstants {
      */
     public static final String MONGO_GET_MONGO_INFO_LIST = ROOT_URI + "/db-info4mongo/get-mongo-info-list";
 
+    /**
+     * 测试HTTP连通性URL地址
+     */
+    public static final String TEST_MONITOR_HTTP_URL = ROOT_URI + "/http/test-monitor-http";
+
+    /**
+     * 测试TCP连通性URL地址
+     */
+    public static final String TEST_MONITOR_TCP_URL = ROOT_URI + "/tcp/test-monitor-tcp";
+
+    /**
+     * 测试网络连通性URL地址
+     */
+    public static final String TEST_MONITOR_NETWORK_URL = ROOT_URI + "/network/test-monitor-network";
+
+    /**
+     * 测试数据库连通性URL地址
+     */
+    public static final String TEST_MONITOR_DB_URL = ROOT_URI + "/db/test-monitor-db";
+
 }

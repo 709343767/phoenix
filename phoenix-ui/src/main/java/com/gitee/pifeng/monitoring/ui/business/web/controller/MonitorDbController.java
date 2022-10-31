@@ -16,11 +16,13 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.hyperic.sigar.SigarException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.List;
@@ -155,6 +157,8 @@ public class MonitorDbController {
      * @param monitorDbVo 数据库信息
      * @return layUiAdmin响应对象：如果数据库中已经存在，LayUiAdminResultVo.data="exist"；
      * 如果编辑成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @throws SigarException Sigar异常
+     * @throws IOException    IO异常
      * @author 皮锋
      * @custom.date 2020/12/19 19:56
      */
@@ -162,8 +166,11 @@ public class MonitorDbController {
     @PutMapping("/edit-monitor-db")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.DATABASE, operType = OperateTypeConstants.UPDATE, operDesc = "编辑数据库信息")
-    public LayUiAdminResultVo editMonitorDb(MonitorDbVo monitorDbVo) {
-        return this.monitorDbService.editMonitorDb(monitorDbVo);
+    public LayUiAdminResultVo editMonitorDb(MonitorDbVo monitorDbVo) throws SigarException, IOException {
+        LayUiAdminResultVo layUiAdminResultVo = this.monitorDbService.editMonitorDb(monitorDbVo);
+        // 测试数据库连通性
+        this.monitorDbService.testMonitorDb(monitorDbVo);
+        return layUiAdminResultVo;
     }
 
     /**
@@ -196,6 +203,8 @@ public class MonitorDbController {
      * @param monitorDbVo 数据库信息
      * @return layUiAdmin响应对象：如果数据库中已经存在，LayUiAdminResultVo.data="exist"；
      * 如果添加成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @throws SigarException Sigar异常
+     * @throws IOException    IO异常
      * @author 皮锋
      * @custom.date 2020/12/19 20:05
      */
@@ -203,8 +212,11 @@ public class MonitorDbController {
     @PostMapping("/add-monitor-db")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.DATABASE, operType = OperateTypeConstants.ADD, operDesc = "添加数据库信息")
-    public LayUiAdminResultVo addMonitorDb(MonitorDbVo monitorDbVo) {
-        return this.monitorDbService.addMonitorDb(monitorDbVo);
+    public LayUiAdminResultVo addMonitorDb(MonitorDbVo monitorDbVo) throws SigarException, IOException {
+        LayUiAdminResultVo layUiAdminResultVo = this.monitorDbService.addMonitorDb(monitorDbVo);
+        // 测试数据库连通性
+        this.monitorDbService.testMonitorDb(monitorDbVo);
+        return layUiAdminResultVo;
     }
 
     /**
@@ -250,5 +262,24 @@ public class MonitorDbController {
         return mv;
     }
 
-}
+    /**
+     * <p>
+     * 测试数据库连通性
+     * </p>
+     *
+     * @param monitorDbVo 数据库信息
+     * @return layUiAdmin响应对象：网络连通性
+     * @throws SigarException Sigar异常
+     * @throws IOException    IO异常
+     * @author 皮锋
+     * @custom.date 2022/10/9 10:16
+     */
+    @ApiOperation(value = "测试数据库连通性")
+    @PostMapping("/test-monitor-db")
+    @ResponseBody
+    @OperateLog(operModule = UiModuleConstants.DATABASE, operType = OperateTypeConstants.TEST, operDesc = "测试数据库连通性")
+    public LayUiAdminResultVo testMonitorDb(MonitorDbVo monitorDbVo) throws SigarException, IOException {
+        return this.monitorDbService.testMonitorDb(monitorDbVo);
+    }
 
+}

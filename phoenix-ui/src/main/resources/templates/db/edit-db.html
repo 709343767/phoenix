@@ -49,7 +49,8 @@
         <label class="layui-form-label" id="urlLabel" th:text="${monitorDbVo.dbType=='Redis'?'地址':'URL'}">URL</label>
         <div class="layui-input-block">
             <textarea th:text="${monitorDbVo.url}" id="url" name="url" class="layui-textarea" lay-verify="required"
-                      th:placeholder="${monitorDbVo.dbType=='Redis'?'例如：127.0.0.1:6379':'请输入URL'}" autocomplete="off"
+                      th:placeholder="${monitorDbVo.dbType=='Redis'?'例如：127.0.0.1:6379':'请输入URL'}"
+                      autocomplete="off"
                       lay-verType="tips"></textarea>
         </div>
     </div>
@@ -64,7 +65,8 @@
     <div class="layui-form-item" id="passwordDiv" th:style="${monitorDbVo.dbType=='Mongo' ?'display: none;':''}">
         <label class="layui-form-label">密码</label>
         <div class="layui-input-block">
-            <input type="password" name="password" autocomplete="off" placeholder="密码不填则不修改" class="layui-input">
+            <input type="password" name="password" autocomplete="off"
+                   placeholder="密码不填则不修改，测试连通性需填写密码" class="layui-input">
         </div>
     </div>
     <div class="layui-form-item">

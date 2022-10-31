@@ -6,7 +6,9 @@ import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorDb;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.HomeDbVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.LayUiAdminResultVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.MonitorDbVo;
+import org.hyperic.sigar.SigarException;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -87,5 +89,19 @@ public interface IMonitorDbService extends IService<MonitorDb> {
      * @custom.date 2020/12/19 21:43
      */
     HomeDbVo getHomeDbInfo();
+
+    /**
+     * <p>
+     * 测试数据库连通性
+     * </p>
+     *
+     * @param monitorDbVo 数据库信息
+     * @return layUiAdmin响应对象：网络连通性
+     * @throws SigarException Sigar异常
+     * @throws IOException    IO异常
+     * @author 皮锋
+     * @custom.date 2022/10/9 10:16
+     */
+    LayUiAdminResultVo testMonitorDb(MonitorDbVo monitorDbVo) throws SigarException, IOException;
 
 }

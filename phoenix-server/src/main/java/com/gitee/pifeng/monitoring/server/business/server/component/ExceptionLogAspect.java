@@ -1,7 +1,7 @@
 package com.gitee.pifeng.monitoring.server.business.server.component;
 
 import com.alibaba.fastjson.JSON;
-import com.gitee.pifeng.monitoring.common.constant.AlarmLevelEnums;
+import com.gitee.pifeng.monitoring.common.constant.alarm.AlarmLevelEnums;
 import com.gitee.pifeng.monitoring.common.constant.MonitorTypeEnums;
 import com.gitee.pifeng.monitoring.common.domain.Alarm;
 import com.gitee.pifeng.monitoring.common.dto.AlarmPackage;
