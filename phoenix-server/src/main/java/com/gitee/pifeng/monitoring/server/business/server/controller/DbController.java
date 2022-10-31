@@ -43,6 +43,7 @@ public class DbController {
      * 测试数据库连通性
      * </p>
      *
+     * @param baseRequestPackage 基础请求包
      * @return {@link BaseResponsePackage}
      * @throws NetException 自定义获取网络信息异常
      * @author 皮锋
