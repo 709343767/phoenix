@@ -1,9 +1,9 @@
 package com.gitee.pifeng.monitoring.server.business.server.monitor;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.gitee.pifeng.monitoring.common.constant.MonitorTypeEnums;
 import com.gitee.pifeng.monitoring.common.constant.alarm.AlarmLevelEnums;
 import com.gitee.pifeng.monitoring.common.constant.alarm.AlarmReasonEnums;
-import com.gitee.pifeng.monitoring.common.constant.MonitorTypeEnums;
 import com.gitee.pifeng.monitoring.common.domain.Alarm;
 import com.gitee.pifeng.monitoring.common.dto.AlarmPackage;
 import com.gitee.pifeng.monitoring.common.threadpool.ThreadPool;
@@ -255,6 +255,7 @@ public class HttpMonitorJob extends QuartzJobBean {
         Date date = new Date();
         monitorHttp.setStatus(statusCode);
         monitorHttp.setAvgTime(avgTime);
+        monitorHttp.setExcMessage(null);
         monitorHttp.setUpdateTime(date);
         // 更新数据库
         this.httpService.updateById(monitorHttp);
