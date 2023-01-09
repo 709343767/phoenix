@@ -368,16 +368,17 @@ public class MonitorUserServiceImpl extends ServiceImpl<IMonitorUserDao, Monitor
         if (StringUtils.isBlank(password)) {
             // mybatis-plus不会更新值为null字段
             monitorUser.setPassword(null);
-            monitorUser.setAccount(null);
         } else {
             BCryptPasswordEncoder bc = new BCryptPasswordEncoder();
             monitorUser.setPassword(bc.encode(password));
         }
+        // mybatis-plus不会更新值为null字段，让用户无法越权修改到其它账号
+        monitorUser.setAccount(null);
         monitorUser.setUpdateTime(new Date());
         int result = this.monitorUserDao.updateById(monitorUser);
         if (result == 1) {
             Long currentMonitorUserRealmId = Objects.requireNonNull(SpringSecurityUtils.getCurrentMonitorUserRealm()).getId();
-            MonitorUserRealm realm = (MonitorUserRealm) this.loadUserByUsername(monitorUser.getAccount());
+            MonitorUserRealm realm = (MonitorUserRealm) this.loadUserByUsername(monitorUserVo.getAccount());
             // 如果修改的是当前用户
             if (Objects.equals(currentMonitorUserRealmId, monitorUser.getId())) {
                 // 更新springsecurity中当前用户
