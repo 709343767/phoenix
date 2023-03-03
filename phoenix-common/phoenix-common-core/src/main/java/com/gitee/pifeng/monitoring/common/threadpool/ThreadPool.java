@@ -79,7 +79,8 @@ public class ThreadPool {
             (int) (ProcessorsUtils.getAvailableProcessors() / (1 - 0.2)),
             1L,
             TimeUnit.SECONDS,
-            new LinkedBlockingQueue<>(1024),
+            // 2^16
+            new LinkedBlockingQueue<>(65536),
             new BasicThreadFactory.Builder()
                     // 设置线程名
                     .namingPattern("phoenix-common-cpu-intensive-thread-%d")
@@ -104,7 +105,8 @@ public class ThreadPool {
             (int) (ProcessorsUtils.getAvailableProcessors() / (1 - 0.8)),
             1L,
             TimeUnit.SECONDS,
-            new LinkedBlockingQueue<>(1024),
+            // 2^16
+            new LinkedBlockingQueue<>(65536),
             new BasicThreadFactory.Builder()
                     // 设置线程名
                     .namingPattern("phoenix-common-io-intensive-thread-%d")
