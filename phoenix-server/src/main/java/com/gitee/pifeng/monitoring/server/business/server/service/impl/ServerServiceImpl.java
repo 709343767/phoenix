@@ -11,6 +11,7 @@ import com.gitee.pifeng.monitoring.common.dto.ServerPackage;
 import com.gitee.pifeng.monitoring.server.business.server.dao.*;
 import com.gitee.pifeng.monitoring.server.business.server.entity.*;
 import com.gitee.pifeng.monitoring.server.business.server.service.*;
+import com.google.common.collect.Lists;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.retry.annotation.Retryable;
@@ -224,6 +225,8 @@ public class ServerServiceImpl extends ServiceImpl<IMonitorServerDao, MonitorSer
         if (systemLoadAverageDomain != null) {
             // IP地址
             String ip = serverPackage.getIp();
+            // 当前时间
+            Date currentTime = new Date();
             // 封装对象
             MonitorServerLoadAverageHistory monitorServerLoadAverageHistory = new MonitorServerLoadAverageHistory();
             monitorServerLoadAverageHistory.setIp(ip);
@@ -231,8 +234,8 @@ public class ServerServiceImpl extends ServiceImpl<IMonitorServerDao, MonitorSer
             monitorServerLoadAverageHistory.setOne(systemLoadAverageDomain.getOneLoadAverage());
             monitorServerLoadAverageHistory.setFive(systemLoadAverageDomain.getFiveLoadAverage());
             monitorServerLoadAverageHistory.setFifteen(systemLoadAverageDomain.getFifteenLoadAverage());
-            monitorServerLoadAverageHistory.setInsertTime(serverPackage.getDateTime());
-            monitorServerLoadAverageHistory.setUpdateTime(serverPackage.getDateTime());
+            monitorServerLoadAverageHistory.setInsertTime(currentTime);
+            monitorServerLoadAverageHistory.setUpdateTime(currentTime);
             this.serverLoadAverageHistoryService.save(monitorServerLoadAverageHistory);
         }
     }
@@ -251,6 +254,8 @@ public class ServerServiceImpl extends ServiceImpl<IMonitorServerDao, MonitorSer
         if (systemLoadAverageDomain != null) {
             // IP地址
             String ip = serverPackage.getIp();
+            // 当前时间
+            Date currentTime = new Date();
             // 查询数据库中是否有此IP的服务器平均负载信息
             LambdaQueryWrapper<MonitorServerLoadAverage> lambdaQueryWrapper = new LambdaQueryWrapper<>();
             lambdaQueryWrapper.eq(MonitorServerLoadAverage::getIp, ip);
@@ -264,12 +269,12 @@ public class ServerServiceImpl extends ServiceImpl<IMonitorServerDao, MonitorSer
             monitorServerLoadAverage.setFifteen(systemLoadAverageDomain.getFifteenLoadAverage());
             // 没有
             if (selectCountDb == 0) {
-                monitorServerLoadAverage.setInsertTime(serverPackage.getDateTime());
+                monitorServerLoadAverage.setInsertTime(currentTime);
                 this.serverLoadAverageService.save(monitorServerLoadAverage);
             }
             // 有
             else {
-                monitorServerLoadAverage.setUpdateTime(serverPackage.getDateTime());
+                monitorServerLoadAverage.setUpdateTime(currentTime);
                 LambdaUpdateWrapper<MonitorServerLoadAverage> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();
                 lambdaUpdateWrapper.eq(MonitorServerLoadAverage::getIp, ip);
                 this.serverLoadAverageService.update(monitorServerLoadAverage, lambdaUpdateWrapper);
@@ -289,6 +294,8 @@ public class ServerServiceImpl extends ServiceImpl<IMonitorServerDao, MonitorSer
     private void operateServer(ServerPackage serverPackage) {
         // IP地址
         String ip = serverPackage.getIp();
+        // 当前时间
+        Date currentTime = new Date();
         // 查询数据库中是否有此IP的服务器
         LambdaQueryWrapper<MonitorServer> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         lambdaQueryWrapper.eq(MonitorServer::getIp, ip);
@@ -300,13 +307,13 @@ public class ServerServiceImpl extends ServiceImpl<IMonitorServerDao, MonitorSer
         monitorServer.setConnFrequency((int) serverPackage.getRate());
         // 没有
         if (selectCountDb == 0) {
-            monitorServer.setInsertTime(new Date());
+            monitorServer.setInsertTime(currentTime);
             monitorServer.setOfflineCount(0);
             this.save(monitorServer);
         }
         // 有
         else {
-            monitorServer.setUpdateTime(new Date());
+            monitorServer.setUpdateTime(currentTime);
             LambdaUpdateWrapper<MonitorServer> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();
             lambdaUpdateWrapper.eq(MonitorServer::getIp, ip);
             this.update(monitorServer, lambdaUpdateWrapper);
@@ -327,6 +334,8 @@ public class ServerServiceImpl extends ServiceImpl<IMonitorServerDao, MonitorSer
         if (processDomain != null) {
             // IP地址
             String ip = serverPackage.getIp();
+            // 当前时间
+            Date currentTime = new Date();
             List<ProcessDomain.ProcessInfoDomain> processInfoList = processDomain.getProcessInfoList();
             // 先删除此服务器对应的进程信息
             LambdaUpdateWrapper<MonitorServerProcess> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();
@@ -349,8 +358,8 @@ public class ServerServiceImpl extends ServiceImpl<IMonitorServerDao, MonitorSer
                 monitorServerProcess.setCpuLoadCumulative(processInfo.getCpuLoadCumulative());
                 monitorServerProcess.setBitness(processInfo.getBitness());
                 monitorServerProcess.setMemorySize(processInfo.getMemorySize());
-                monitorServerProcess.setInsertTime(serverPackage.getDateTime());
-                monitorServerProcess.setUpdateTime(serverPackage.getDateTime());
+                monitorServerProcess.setInsertTime(currentTime);
+                monitorServerProcess.setUpdateTime(currentTime);
                 insertMonitorServerProcesses.add(monitorServerProcess);
             }
             this.serverProcessService.saveBatch(insertMonitorServerProcesses);
@@ -371,13 +380,15 @@ public class ServerServiceImpl extends ServiceImpl<IMonitorServerDao, MonitorSer
         if (processDomain != null) {
             // IP地址
             String ip = serverPackage.getIp();
+            // 当前时间
+            Date currentTime = new Date();
             int processNum = processDomain.getProcessNum();
             // 添加记录到数据库
             MonitorServerProcessHistory monitorServerProcessHistory = MonitorServerProcessHistory.builder().build();
             monitorServerProcessHistory.setIp(ip);
             monitorServerProcessHistory.setProcessNum(processNum);
-            monitorServerProcessHistory.setInsertTime(serverPackage.getDateTime());
-            monitorServerProcessHistory.setUpdateTime(serverPackage.getDateTime());
+            monitorServerProcessHistory.setInsertTime(currentTime);
+            monitorServerProcessHistory.setUpdateTime(currentTime);
             this.serverProcessHistoryService.save(monitorServerProcessHistory);
         }
     }
@@ -396,6 +407,8 @@ public class ServerServiceImpl extends ServiceImpl<IMonitorServerDao, MonitorSer
         if (sensorsDomain != null) {
             // IP地址
             String ip = serverPackage.getIp();
+            // 当前时间
+            Date currentTime = new Date();
             // 查询数据库中是否有此IP的传感器
             LambdaQueryWrapper<MonitorServerSensors> lambdaQueryWrapper = new LambdaQueryWrapper<>();
             lambdaQueryWrapper.eq(MonitorServerSensors::getIp, ip);
@@ -411,12 +424,12 @@ public class ServerServiceImpl extends ServiceImpl<IMonitorServerDao, MonitorSer
             }
             // 没有
             if (selectCountDb == 0) {
-                monitorServerSensors.setInsertTime(serverPackage.getDateTime());
+                monitorServerSensors.setInsertTime(currentTime);
                 this.serverSensorsService.save(monitorServerSensors);
             }
             // 有
             else {
-                monitorServerSensors.setUpdateTime(serverPackage.getDateTime());
+                monitorServerSensors.setUpdateTime(currentTime);
                 LambdaUpdateWrapper<MonitorServerSensors> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();
                 lambdaUpdateWrapper.eq(MonitorServerSensors::getIp, ip);
                 this.serverSensorsService.update(monitorServerSensors, lambdaUpdateWrapper);
@@ -439,9 +452,11 @@ public class ServerServiceImpl extends ServiceImpl<IMonitorServerDao, MonitorSer
         if (powerSourcesDomain != null) {
             // IP地址
             String ip = serverPackage.getIp();
+            // 当前时间
+            Date currentTime = new Date();
             List<PowerSourcesDomain.PowerSourceDomain> powerSourceDomains = powerSourcesDomain.getPowerSourceDomainList();
             // 要添加的电池信息
-            List<MonitorServerPowerSources> saveMonitorServerPowerSources = new ArrayList<>();
+            List<MonitorServerPowerSources> saveMonitorServerPowerSources = Lists.newArrayList();
             for (int i = 0; i < powerSourceDomains.size(); i++) {
                 PowerSourcesDomain.PowerSourceDomain powerSourceDomain = powerSourceDomains.get(i);
                 // 查询数据库中是否有此IP的电池信息
@@ -475,12 +490,12 @@ public class ServerServiceImpl extends ServiceImpl<IMonitorServerDao, MonitorSer
                 monitorServerPowerSources.setTemperature(powerSourceDomain.getTemperature());
                 // 没有
                 if (selectCountDb == 0) {
-                    monitorServerPowerSources.setInsertTime(serverPackage.getDateTime());
+                    monitorServerPowerSources.setInsertTime(currentTime);
                     saveMonitorServerPowerSources.add(monitorServerPowerSources);
                 }
                 // 有
                 else {
-                    monitorServerPowerSources.setUpdateTime(serverPackage.getDateTime());
+                    monitorServerPowerSources.setUpdateTime(currentTime);
                     LambdaUpdateWrapper<MonitorServerPowerSources> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();
                     lambdaUpdateWrapper.eq(MonitorServerPowerSources::getIp, ip);
                     lambdaUpdateWrapper.eq(MonitorServerPowerSources::getPowerSourcesNo, i + 1);
@@ -509,9 +524,11 @@ public class ServerServiceImpl extends ServiceImpl<IMonitorServerDao, MonitorSer
         if (diskDomain != null) {
             // IP地址
             String ip = serverPackage.getIp();
+            // 当前时间
+            Date currentTime = new Date();
             List<DiskDomain.DiskInfoDomain> diskInfoDomains = diskDomain.getDiskInfoList();
             // 要添加的磁盘信息
-            List<MonitorServerDisk> saveMonitorServerDisk = new ArrayList<>();
+            List<MonitorServerDisk> saveMonitorServerDisk = Lists.newArrayList();
             for (int i = 0; i < diskInfoDomains.size(); i++) {
                 DiskDomain.DiskInfoDomain diskInfoDomain = diskInfoDomains.get(i);
                 // 查询数据库中有没有此IP和磁盘的磁盘信息
@@ -534,12 +551,12 @@ public class ServerServiceImpl extends ServiceImpl<IMonitorServerDao, MonitorSer
                 monitorServerDisk.setUsePercent(diskInfoDomain.getUsePercent());
                 // 没有
                 if (selectCountDb == 0) {
-                    monitorServerDisk.setInsertTime(serverPackage.getDateTime());
+                    monitorServerDisk.setInsertTime(currentTime);
                     saveMonitorServerDisk.add(monitorServerDisk);
                 }
                 // 有
                 else {
-                    monitorServerDisk.setUpdateTime(serverPackage.getDateTime());
+                    monitorServerDisk.setUpdateTime(currentTime);
                     LambdaUpdateWrapper<MonitorServerDisk> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();
                     lambdaUpdateWrapper.eq(MonitorServerDisk::getIp, ip);
                     lambdaUpdateWrapper.eq(MonitorServerDisk::getDiskNo, i + 1);
@@ -568,9 +585,11 @@ public class ServerServiceImpl extends ServiceImpl<IMonitorServerDao, MonitorSer
         if (diskDomain != null) {
             // IP地址
             String ip = serverPackage.getIp();
+            // 当前时间
+            Date currentTime = new Date();
             List<DiskDomain.DiskInfoDomain> diskInfoDomains = diskDomain.getDiskInfoList();
             // 要添加的磁盘信息
-            List<MonitorServerDiskHistory> saveMonitorServerDiskHistory = new ArrayList<>();
+            List<MonitorServerDiskHistory> saveMonitorServerDiskHistory = Lists.newArrayList();
             for (int i = 0; i < diskInfoDomains.size(); i++) {
                 DiskDomain.DiskInfoDomain diskInfoDomain = diskInfoDomains.get(i);
                 // 封装对象
@@ -586,8 +605,8 @@ public class ServerServiceImpl extends ServiceImpl<IMonitorServerDao, MonitorSer
                 monitorServerDiskHistory.setTotal(diskInfoDomain.getTotal());
                 monitorServerDiskHistory.setUsed(diskInfoDomain.getUsed());
                 monitorServerDiskHistory.setUsePercent(diskInfoDomain.getUsePercent());
-                monitorServerDiskHistory.setInsertTime(serverPackage.getDateTime());
-                monitorServerDiskHistory.setUpdateTime(serverPackage.getDateTime());
+                monitorServerDiskHistory.setInsertTime(currentTime);
+                monitorServerDiskHistory.setUpdateTime(currentTime);
                 saveMonitorServerDiskHistory.add(monitorServerDiskHistory);
             }
             this.serverDiskHistoryService.saveBatch(saveMonitorServerDiskHistory);
@@ -609,10 +628,12 @@ public class ServerServiceImpl extends ServiceImpl<IMonitorServerDao, MonitorSer
         if (netDomain != null) {
             // IP地址
             String ip = serverPackage.getIp();
+            // 当前时间
+            Date currentTime = new Date();
             // 设置网卡信息
             List<NetDomain.NetInterfaceDomain> netInterfaceDomains = netDomain.getNetList();
             // 要添加的网卡信息
-            List<MonitorServerNetcard> saveMonitorServerNetcard = new ArrayList<>();
+            List<MonitorServerNetcard> saveMonitorServerNetcard = Lists.newArrayList();
             for (int i = 0; i < netInterfaceDomains.size(); i++) {
                 NetDomain.NetInterfaceDomain netInterfaceDomain = netInterfaceDomains.get(i);
                 // 查询数据库中有没有此IP和网卡的网卡信息
@@ -646,12 +667,12 @@ public class ServerServiceImpl extends ServiceImpl<IMonitorServerDao, MonitorSer
                 monitorServerNetcard.setUploadBps(netInterfaceDomain.getUploadBps());
                 // 没有
                 if (selectCountDb == 0) {
-                    monitorServerNetcard.setInsertTime(serverPackage.getDateTime());
+                    monitorServerNetcard.setInsertTime(currentTime);
                     saveMonitorServerNetcard.add(monitorServerNetcard);
                 }
                 // 有
                 else {
-                    monitorServerNetcard.setUpdateTime(serverPackage.getDateTime());
+                    monitorServerNetcard.setUpdateTime(currentTime);
                     LambdaUpdateWrapper<MonitorServerNetcard> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();
                     lambdaUpdateWrapper.eq(MonitorServerNetcard::getIp, ip);
                     lambdaUpdateWrapper.eq(MonitorServerNetcard::getNetNo, i + 1);
@@ -680,10 +701,12 @@ public class ServerServiceImpl extends ServiceImpl<IMonitorServerDao, MonitorSer
         if (netDomain != null) {
             // IP地址
             String ip = serverPackage.getIp();
+            // 当前时间
+            Date currentTime = new Date();
             // 设置网卡信息
             List<NetDomain.NetInterfaceDomain> netInterfaceDomains = netDomain.getNetList();
             // 要添加的网卡信息
-            List<MonitorServerNetcardHistory> saveMonitorServerNetcardHistory = new ArrayList<>();
+            List<MonitorServerNetcardHistory> saveMonitorServerNetcardHistory = Lists.newArrayList();
             for (int i = 0; i < netInterfaceDomains.size(); i++) {
                 NetDomain.NetInterfaceDomain netInterfaceDomain = netInterfaceDomains.get(i);
                 // 封装对象
@@ -711,8 +734,8 @@ public class ServerServiceImpl extends ServiceImpl<IMonitorServerDao, MonitorSer
                 monitorServerNetcardHistory.setDownloadBps(netInterfaceDomain.getDownloadBps());
                 monitorServerNetcardHistory.setUploadBps(netInterfaceDomain.getUploadBps());
                 // 时间
-                monitorServerNetcardHistory.setInsertTime(serverPackage.getDateTime());
-                monitorServerNetcardHistory.setUpdateTime(serverPackage.getDateTime());
+                monitorServerNetcardHistory.setInsertTime(currentTime);
+                monitorServerNetcardHistory.setUpdateTime(currentTime);
                 saveMonitorServerNetcardHistory.add(monitorServerNetcardHistory);
             }
             this.serverNetcardHistoryService.saveBatch(saveMonitorServerNetcardHistory);
@@ -734,9 +757,11 @@ public class ServerServiceImpl extends ServiceImpl<IMonitorServerDao, MonitorSer
         if (cpuDomain != null) {
             // IP地址
             String ip = serverPackage.getIp();
+            // 当前时间
+            Date currentTime = new Date();
             List<CpuDomain.CpuInfoDomain> cpuInfoDomains = cpuDomain.getCpuList();
             // 要添加的Cpu信息集合
-            List<MonitorServerCpu> saveMonitorServerCpus = new ArrayList<>();
+            List<MonitorServerCpu> saveMonitorServerCpus = Lists.newArrayList();
             for (int i = 0; i < cpuInfoDomains.size(); i++) {
                 CpuDomain.CpuInfoDomain cpuInfoDomain = cpuInfoDomains.get(i);
                 // 查询数据库中有没有此IP和此CPU的CPU信息
@@ -759,12 +784,12 @@ public class ServerServiceImpl extends ServiceImpl<IMonitorServerDao, MonitorSer
                 monitorServerCpu.setCpuIdle(cpuInfoDomain.getCpuIdle());
                 // 没有
                 if (selectCountDb == 0) {
-                    monitorServerCpu.setInsertTime(serverPackage.getDateTime());
+                    monitorServerCpu.setInsertTime(currentTime);
                     saveMonitorServerCpus.add(monitorServerCpu);
                 }
                 // 有
                 else {
-                    monitorServerCpu.setUpdateTime(serverPackage.getDateTime());
+                    monitorServerCpu.setUpdateTime(currentTime);
                     LambdaUpdateWrapper<MonitorServerCpu> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();
                     lambdaUpdateWrapper.eq(MonitorServerCpu::getIp, ip);
                     lambdaUpdateWrapper.eq(MonitorServerCpu::getCpuNo, i + 1);
@@ -793,9 +818,11 @@ public class ServerServiceImpl extends ServiceImpl<IMonitorServerDao, MonitorSer
         if (cpuDomain != null) {
             // IP地址
             String ip = serverPackage.getIp();
+            // 当前时间
+            Date currentTime = new Date();
             List<CpuDomain.CpuInfoDomain> cpuInfoDomains = cpuDomain.getCpuList();
             // 要添加的Cpu信息
-            List<MonitorServerCpuHistory> saveMonitorServerCpuHistory = new ArrayList<>();
+            List<MonitorServerCpuHistory> saveMonitorServerCpuHistory = Lists.newArrayList();
             for (int i = 0; i < cpuInfoDomains.size(); i++) {
                 CpuDomain.CpuInfoDomain cpuInfoDomain = cpuInfoDomains.get(i);
                 // 封装对象
@@ -811,8 +838,8 @@ public class ServerServiceImpl extends ServiceImpl<IMonitorServerDao, MonitorSer
                 monitorServerCpuHistory.setCpuWait(cpuInfoDomain.getCpuWait());
                 monitorServerCpuHistory.setCpuCombined(cpuInfoDomain.getCpuCombined());
                 monitorServerCpuHistory.setCpuIdle(cpuInfoDomain.getCpuIdle());
-                monitorServerCpuHistory.setInsertTime(serverPackage.getDateTime());
-                monitorServerCpuHistory.setUpdateTime(serverPackage.getDateTime());
+                monitorServerCpuHistory.setInsertTime(currentTime);
+                monitorServerCpuHistory.setUpdateTime(currentTime);
                 saveMonitorServerCpuHistory.add(monitorServerCpuHistory);
             }
             this.serverCpuHistoryService.saveBatch(saveMonitorServerCpuHistory);
@@ -834,6 +861,8 @@ public class ServerServiceImpl extends ServiceImpl<IMonitorServerDao, MonitorSer
         if (memoryDomain != null) {
             // IP地址
             String ip = serverPackage.getIp();
+            // 当前时间
+            Date currentTime = new Date();
             MemoryDomain.MenDomain menDomain = memoryDomain.getMenDomain();
             MemoryDomain.SwapDomain swapDomain = memoryDomain.getSwapDomain();
             // 判断数据库中是否有此IP的服务器内存
@@ -853,12 +882,12 @@ public class ServerServiceImpl extends ServiceImpl<IMonitorServerDao, MonitorSer
             monitorServerMemory.setSwapUsedPercent(swapDomain.getSwapUsedPercent());
             // 没有
             if (selectCountDb == 0) {
-                monitorServerMemory.setInsertTime(serverPackage.getDateTime());
+                monitorServerMemory.setInsertTime(currentTime);
                 this.serverMemoryService.save(monitorServerMemory);
             }
             // 有
             else {
-                monitorServerMemory.setUpdateTime(serverPackage.getDateTime());
+                monitorServerMemory.setUpdateTime(currentTime);
                 LambdaUpdateWrapper<MonitorServerMemory> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();
                 lambdaUpdateWrapper.eq(MonitorServerMemory::getIp, ip);
                 this.serverMemoryService.update(monitorServerMemory, lambdaUpdateWrapper);
@@ -881,6 +910,8 @@ public class ServerServiceImpl extends ServiceImpl<IMonitorServerDao, MonitorSer
         if (memoryDomain != null) {
             // IP地址
             String ip = serverPackage.getIp();
+            // 当前时间
+            Date currentTime = new Date();
             MemoryDomain.MenDomain menDomain = memoryDomain.getMenDomain();
             MemoryDomain.SwapDomain swapDomain = memoryDomain.getSwapDomain();
             // 封装对象
@@ -894,8 +925,8 @@ public class ServerServiceImpl extends ServiceImpl<IMonitorServerDao, MonitorSer
             monitorServerMemoryHistory.setSwapUsed(swapDomain.getSwapUsed());
             monitorServerMemoryHistory.setSwapFree(swapDomain.getSwapFree());
             monitorServerMemoryHistory.setSwapUsedPercent(swapDomain.getSwapUsedPercent());
-            monitorServerMemoryHistory.setInsertTime(serverPackage.getDateTime());
-            monitorServerMemoryHistory.setUpdateTime(serverPackage.getDateTime());
+            monitorServerMemoryHistory.setInsertTime(currentTime);
+            monitorServerMemoryHistory.setUpdateTime(currentTime);
             this.serverMemoryHistoryService.save(monitorServerMemoryHistory);
         }
     }
@@ -915,6 +946,8 @@ public class ServerServiceImpl extends ServiceImpl<IMonitorServerDao, MonitorSer
         if (osDomain != null) {
             // IP地址
             String ip = serverPackage.getIp();
+            // 当前时间
+            Date currentTime = new Date();
             LambdaQueryWrapper<MonitorServerOs> lambdaQueryWrapper = new LambdaQueryWrapper<>();
             lambdaQueryWrapper.eq(MonitorServerOs::getIp, ip);
             int selectCountDb = this.serverOsService.count(lambdaQueryWrapper);
@@ -930,12 +963,12 @@ public class ServerServiceImpl extends ServiceImpl<IMonitorServerDao, MonitorSer
             monitorServerOs.setUserName(osDomain.getUserName());
             // 没有
             if (selectCountDb == 0) {
-                monitorServerOs.setInsertTime(serverPackage.getDateTime());
+                monitorServerOs.setInsertTime(currentTime);
                 this.serverOsService.save(monitorServerOs);
             }
             // 有
             else {
-                monitorServerOs.setUpdateTime(serverPackage.getDateTime());
+                monitorServerOs.setUpdateTime(currentTime);
                 LambdaUpdateWrapper<MonitorServerOs> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();
                 lambdaUpdateWrapper.eq(MonitorServerOs::getIp, ip);
                 this.serverOsService.update(monitorServerOs, lambdaUpdateWrapper);

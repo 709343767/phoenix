@@ -3,7 +3,9 @@ package com.gitee.pifeng.monitoring.server.business.server.service.impl;
 import cn.hutool.core.util.ArrayUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
-import com.gitee.pifeng.monitoring.common.constant.*;
+import com.gitee.pifeng.monitoring.common.constant.MonitorTypeEnums;
+import com.gitee.pifeng.monitoring.common.constant.ResultMsgConstants;
+import com.gitee.pifeng.monitoring.common.constant.ZeroOrOneConstants;
 import com.gitee.pifeng.monitoring.common.constant.alarm.AlarmLevelEnums;
 import com.gitee.pifeng.monitoring.common.constant.alarm.AlarmWayEnums;
 import com.gitee.pifeng.monitoring.common.domain.Alarm;
@@ -357,6 +359,9 @@ public class AlarmServiceImpl implements IAlarmService {
             if (alarmLevelEnum == null) {
                 continue;
             }
+            if (alarmWayEnum == null) {
+                continue;
+            }
             // 告警方式为短信告警
             if (alarmWayEnum == AlarmWayEnums.SMS) {
                 String[] phones = MonitoringConfigPropertiesLoader.getMonitoringProperties().getAlarmProperties().getSmsProperties().getPhoneNumbers();
@@ -367,7 +372,7 @@ public class AlarmServiceImpl implements IAlarmService {
                 String[] mails = MonitoringConfigPropertiesLoader.getMonitoringProperties().getAlarmProperties().getMailProperties().getEmills();
                 monitorAlarmRecord.setNumber(StringUtils.join(mails, ";"));
             }
-            monitorAlarmRecord.setWay(alarmWayEnum != null ? alarmWayEnum.name() : null);
+            monitorAlarmRecord.setWay(alarmWayEnum.name());
             monitorAlarmRecord.setInsertTime(new Date());
             monitorAlarmRecord.setId(null);
             this.monitorAlarmRecordDao.insert(monitorAlarmRecord);
