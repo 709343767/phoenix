@@ -90,11 +90,12 @@ public class LogAspect {
      *
      * @param joinPoint 切入点
      * @return 方法返回值
+     * @throws Throwable 异常
      * @author 皮锋
      * @custom.date 2021/6/10 10:55
      */
     @Around(value = "operateLogPointCut()")
-    public Object saveOperateLog(ProceedingJoinPoint joinPoint) {
+    public Object saveOperateLog(ProceedingJoinPoint joinPoint) throws Throwable {
         HttpServletRequest request = ContextUtils.getRequest();
         // 从切面织入点处通过反射机制获取织入点处的方法
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
@@ -129,15 +130,18 @@ public class LogAspect {
         builder.ip(AccessObjectUtils.getClientAddress(request));
         builder.insertTime(new Date());
         // 返回值
-        Object response;
+        Object response = null;
         try {
             response = joinPoint.proceed(joinPoint.getArgs());
         } catch (Throwable throwable) {
             log.error(throwable.getMessage(), throwable);
             response = LayUiAdminResultVo.fail(throwable.getMessage());
+            // 在 ControllerExceptionHandlerAdvice 进行全局异常处理，返回的也是 LayUiAdminResultVo.fail(throwable.getMessage())
+            throw throwable;
+        } finally {
+            builder.respParam(response != null ? JSON.toJSONString(response) : "");
+            this.monitorLogOperationService.save(builder.build());
         }
-        builder.respParam(response != null ? JSON.toJSONString(response) : "");
-        this.monitorLogOperationService.save(builder.build());
         return response;
     }
 
