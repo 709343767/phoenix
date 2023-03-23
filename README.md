@@ -69,7 +69,7 @@
   持久层框架：MyBatis、 MyBatis-Plus  
   数据库连接池：Alibaba Druid  
   日志管理：SLF4J、Logback  
-  前端框架：Layui、ECharts 、jtopo 
+  前端框架：Layui、ECharts 、jtopo   
   监控框架：Sigar、oshi
   
 - 模块结构
