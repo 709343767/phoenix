@@ -59,6 +59,9 @@ public class MonitorServerVo implements ISuperBean {
     @ApiModelProperty(value = "更新时间")
     private Date updateTime;
 
+    @ApiModelProperty(value = "最后心跳时间")
+    private String finalHeartbeat;
+
     @ApiModelProperty(value = "操作系统名称")
     private String osName;
 

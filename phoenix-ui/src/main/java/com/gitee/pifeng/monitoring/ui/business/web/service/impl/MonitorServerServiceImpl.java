@@ -1,5 +1,7 @@
 package com.gitee.pifeng.monitoring.ui.business.web.service.impl;
 
+import cn.hutool.core.date.BetweenFormatter;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.NumberUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
@@ -192,6 +194,8 @@ public class MonitorServerServiceImpl extends ServiceImpl<IMonitorServerDao, Mon
         criteria.put("monitorGroup", monitorGroup);
         IPage<MonitorServerVo> monitorServerPage = this.monitorServerDao.getMonitorServerList(ipage, criteria);
         List<MonitorServerVo> monitorServerVos = monitorServerPage.getRecords();
+        // 当前时间
+        Date currentDateTime = new Date();
         for (MonitorServerVo monitorServerVo : monitorServerVos) {
             // 下行带宽
             String downloadBps = monitorServerVo.getDownloadBps();
@@ -205,6 +209,10 @@ public class MonitorServerServiceImpl extends ServiceImpl<IMonitorServerDao, Mon
                 String format = DataSizeUtil.format(Double.parseDouble(uploadBps));
                 monitorServerVo.setUploadBps(ZeroOrOneConstants.ZERO.equals(format) ? ZeroOrOneConstants.ZERO : format + "/s");
             }
+            Date updateTime = monitorServerVo.getUpdateTime();
+            // 最后心跳时间
+            String finalHeartbeat = updateTime != null ? DateUtil.formatBetween(currentDateTime, updateTime, BetweenFormatter.Level.SECOND) + "前" : "";
+            monitorServerVo.setFinalHeartbeat(finalHeartbeat);
         }
         // 设置返回对象
         Page<MonitorServerVo> monitorServerVoPage = new Page<>();

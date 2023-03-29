@@ -1,5 +1,7 @@
 package com.gitee.pifeng.monitoring.ui.business.web.service.impl;
 
+import cn.hutool.core.date.BetweenFormatter;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.NumberUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
@@ -142,6 +144,8 @@ public class MonitorInstanceServiceImpl extends ServiceImpl<IMonitorInstanceDao,
         List<MonitorInstance> monitorInstances = monitorInstancePage.getRecords();
         // 转换成应用程序信息表现层对象
         List<MonitorInstanceVo> monitorInstanceVos = Lists.newLinkedList();
+        // 当前时间
+        Date currentDateTime = new Date();
         for (MonitorInstance monitorInstance : monitorInstances) {
             MonitorInstanceVo monitorInstanceVo = MonitorInstanceVo.builder().build().convertFor(monitorInstance);
             // 如果应用实例摘要信息不为空，则把 应用实例摘要信息 赋给 应用实例描述。因为：摘要信息是用户通过UI界面设置的，优先级大于描述。
@@ -149,6 +153,10 @@ public class MonitorInstanceServiceImpl extends ServiceImpl<IMonitorInstanceDao,
             if (StringUtils.isNotBlank(instanceSummary)) {
                 monitorInstanceVo.setInstanceDesc(instanceSummary);
             }
+            Date updateTime = monitorInstance.getUpdateTime();
+            // 最后心跳时间
+            String finalHeartbeat = updateTime != null ? DateUtil.formatBetween(currentDateTime, updateTime, BetweenFormatter.Level.SECOND) + "前" : "";
+            monitorInstanceVo.setFinalHeartbeat(finalHeartbeat);
             monitorInstanceVos.add(monitorInstanceVo);
         }
         // 设置返回对象

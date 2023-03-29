@@ -59,6 +59,9 @@ public class MonitorInstanceVo implements ISuperBean {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date updateTime;
 
+    @ApiModelProperty(value = "最后心跳时间")
+    private String finalHeartbeat;
+
     @ApiModelProperty(value = "应用状态（0：离线，1：在线）")
     private String isOnline;
 
