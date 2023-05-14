@@ -71,10 +71,10 @@
   安全框架：SpringSecurity、SpringSession  
   任务调度：JUC、SpringTask、Quartz  
   持久层框架：MyBatis、MyBatis-Plus  
-  数据库连接池：Alibaba Druid  
+  数据库连接池：Alibaba druid  
   日志管理：SLF4J、Logback  
-  前端框架：Layui、ECharts 、jtopo   
-  监控框架：Sigar、oshi、arthas  
+  前端框架：Layui、ECharts、jtopo、xterm   
+  监控框架：Sigar、oshi、Alibaba arthas  
   
 - 模块结构
 
