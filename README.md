@@ -78,7 +78,7 @@
   
 - 模块结构
 
-  平台使用Java + Layui + ECharts开发，数据库采用MySQL。
+  平台使用 Java + Layui 开发，数据库采用MySQL。
 
   phoenix（监控平台父工程）  
   ├── phoenix-common（监控公共模块父工程）  
