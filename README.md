@@ -4,11 +4,7 @@
 
 - 应用程序
 
-  默认支持Java应用程序，监控内容包括：在线状态、JVM、业务埋点。其它应用程序需要自己开发客户端，来调用接口与服务端或者代理端通信（心跳接口、服务器信息接口、告警接口）；
-
-- JVM
-
-  监控内容包括：内存、线程、类、GC等；
+  默认支持Java应用程序，监控内容包括：在线状态、JVM（内存、线程、类、GC等）、业务埋点。其它应用程序需要自己开发客户端，来调用接口与服务端或者代理端通信（心跳接口、服务器信息接口、告警接口）；  
 
 - 服务器
 
@@ -44,7 +40,8 @@
 4. 实时监测告警；  
 5. 数据加密传输；  
 6. 灵活可配置；  
-7. 用户界面支持PC端、移动端。
+7. 用户界面支持PC端、移动端；  
+8. 基于http接口，支持拓展实现监控其它编程语言编写的程序。  
 
 ## 设计  
 
@@ -70,15 +67,15 @@
   核心框架：SpringBoot  
   安全框架：SpringSecurity、SpringSession  
   任务调度：JUC、SpringTask、Quartz  
-  持久层框架：MyBatis、 MyBatis-Plus  
-  数据库连接池：Alibaba Druid  
+  持久层框架：MyBatis、MyBatis-Plus  
+  数据库连接池：Alibaba druid  
   日志管理：SLF4J、Logback  
-  前端框架：Layui、ECharts 、jtopo   
-  监控框架：Sigar、oshi
+  前端框架：Layui、ECharts、jtopo、xterm   
+  监控框架：Sigar、oshi、Alibaba arthas  
   
 - 模块结构
 
-  平台使用Java + Layui + ECharts开发，数据库采用MySQL。
+  平台使用 Java + Layui 开发，数据库采用MySQL。
 
   phoenix（监控平台父工程）  
   ├── phoenix-common（监控公共模块父工程）  
