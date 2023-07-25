@@ -47,7 +47,7 @@
 
 - 功能架构
 
-  **红旗标注部分为收费功能，需向作者购买（暂不售卖）。**  
+  **红旗标注部分为收费功能，需向作者购买（5000￥）。**  
 
   ![功能导图](https://gitee.com/monitoring-platform/phoenix/raw/master/doc/%E5%8A%9F%E8%83%BD%E5%AF%BC%E5%9B%BE.png "功能导图")
 
@@ -152,7 +152,8 @@
 [https://49.234.23.142/phoenix-ui/index](https://49.234.23.142/phoenix-ui/index)     
 账号：guest  
 密码：guest123  
-注意：演示项目只提供非管理员账号，只有查看权限！ 
+注意：1.演示项目只提供非管理员账号，只有查看权限！  
+&emsp;&emsp;&emsp;2.演示项目访问比较慢是因为服务器太菜，带宽太小！
 
 ## 功能截图
 
