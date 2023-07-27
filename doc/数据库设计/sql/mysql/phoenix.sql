@@ -56,7 +56,8 @@ CREATE TABLE `MONITOR_ALARM_RECORD`
     `UPDATE_TIME`    datetime                                                      NULL DEFAULT NULL COMMENT '告警结果获取时间',
     PRIMARY KEY (`ID`) USING BTREE,
     INDEX `NX_CODE` (`CODE`) USING BTREE COMMENT '索引_告警记录编码',
-    INDEX `NX_INSERT_TIME` (`INSERT_TIME`) USING BTREE COMMENT '索引_插入时间'
+    INDEX `NX_INSERT_TIME` (`INSERT_TIME`) USING BTREE COMMENT '索引_插入时间',
+    INDEX `NX_UPDATE_TIME` (`UPDATE_TIME`) USING BTREE COMMENT '索引_更新时间'
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_general_ci COMMENT = '告警记录表'
