@@ -27,33 +27,32 @@ function stop() {
   #关闭进程
   if (($count > 0)); then
     kill $pid
+    #打印关掉的进程ID
+    echo "关闭进程：$pid"
+    count=$(ps -ef | grep -n ${packageName} | grep -v grep | wc -l)
+    sec=5
+    sum=12
+    #开始一个循环
+    while (($sum > 0)); do
+      if (($count > 0)); then
+        #若进程还未关闭，则脚本sleep几秒
+        sleep $sec
+        count=$(ps -ef | grep -n ${packageName} | grep -v grep | wc -l)
+      else
+        #若进程已经关闭，则跳出循环
+        echo "${programName}已经关闭！"
+        break
+      fi
+      sum=$(($sum - 1))
+    done
+    #超时不能停止，强制杀掉进程
+    if (($count > 0)); then
+      kill -9 $pid
+      echo "${programName}被强制关闭！"
+      sleep 1
+    fi
   else
     echo "${programName}未运行！"
-    exit 0
-  fi
-  #打印关掉的进程ID
-  echo "关闭进程：$pid"
-  count=$(ps -ef | grep -n ${packageName} | grep -v grep | wc -l)
-  sec=5
-  sum=12
-  #开始一个循环
-  while (($sum > 0)); do
-    if (($count > 0)); then
-      #若进程还未关闭，则脚本sleep几秒
-      sleep $sec
-      count=$(ps -ef | grep -n ${packageName} | grep -v grep | wc -l)
-    else
-      #若进程已经关闭，则跳出循环
-      echo "${programName}已经关闭！"
-      break
-    fi
-    sum=$(($sum - 1))
-  done
-  #超时不能停止，强制杀掉进程
-  if (($count > 0)); then
-    kill -9 $pid
-    echo "${programName}被强制关闭！"
-    sleep 1
   fi
 }
 
@@ -70,8 +69,8 @@ function start() {
     if [ ${pid} ]; then
       echo "${programName}已经启动，进程ID为：$pid"
     else
-      #等待5秒
-      sleep 5
+      #等待15秒
+      sleep 15
       pid=$(ps -ef | grep -n ${packageName} | grep -v grep | awk '{print $2}')
       if [ !${pid} ]; then
         echo "${programName}启动失败！"
@@ -106,6 +105,6 @@ else
     stop：停止
     restart：重启
     status：检查状态
-    示例命令如：./phoenix_ui start
+    示例命令如：./phoenix_ui.sh start
     "
 fi
