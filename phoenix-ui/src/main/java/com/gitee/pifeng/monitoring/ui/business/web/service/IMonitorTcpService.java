@@ -6,7 +6,6 @@ import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorTcp;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.HomeTcpVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.LayUiAdminResultVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.MonitorTcpVo;
-import org.hyperic.sigar.SigarException;
 
 import java.io.IOException;
 import java.util.List;
@@ -97,21 +96,10 @@ public interface IMonitorTcpService extends IService<MonitorTcp> {
      *
      * @param monitorTcpVo TCP信息表现层对象
      * @return layUiAdmin响应对象：TCP连通性
-     * @throws SigarException Sigar异常
-     * @throws IOException    IO异常
+     * @throws IOException IO异常
      * @author 皮锋
      * @custom.date 2022/10/12 21:41
      */
-    LayUiAdminResultVo testMonitorTcp(MonitorTcpVo monitorTcpVo) throws SigarException, IOException;
+    LayUiAdminResultVo testMonitorTcp(MonitorTcpVo monitorTcpVo) throws IOException;
 
-    /**
-     * <p>
-     * 获取TCP信息
-     * </p>
-     *
-     * @return TCP信息表现层对象
-     * @author 皮锋
-     * @custom.date 2022/11/27 19:34
-     */
-    List<MonitorTcpVo> getMonitorTcpInfo();
 }

@@ -25,7 +25,6 @@ import com.gitee.pifeng.monitoring.ui.constant.WebResponseConstants;
 import com.gitee.pifeng.monitoring.ui.core.UiPackageConstructor;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
-import org.hyperic.sigar.SigarException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
@@ -263,13 +262,12 @@ public class MonitorHttpServiceImpl extends ServiceImpl<IMonitorHttpDao, Monitor
      *
      * @param monitorHttpVo HTTP信息
      * @return layUiAdmin响应对象：HTTP连通性
-     * @throws SigarException Sigar异常
-     * @throws IOException    IO异常
+     * @throws IOException IO异常
      * @author 皮锋
      * @custom.date 2022/10/9 22:23
      */
     @Override
-    public LayUiAdminResultVo testMonitorHttp(MonitorHttpVo monitorHttpVo) throws SigarException, IOException {
+    public LayUiAdminResultVo testMonitorHttp(MonitorHttpVo monitorHttpVo) throws IOException {
         // 封装请求数据
         JSONObject extraMsg = new JSONObject();
         extraMsg.put("method", monitorHttpVo.getMethod());
@@ -287,28 +285,6 @@ public class MonitorHttpServiceImpl extends ServiceImpl<IMonitorHttpDao, Monitor
             msg = WebResponseConstants.SUCCESS;
         }
         return LayUiAdminResultVo.ok(msg);
-    }
-
-    /**
-     * <p>
-     * 获取HTTP信息
-     * </p>
-     *
-     * @return HTTP信息表现层对象
-     * @author 皮锋
-     * @custom.date 2022/11/27 19:34
-     */
-    @Override
-    public List<MonitorHttpVo> getMonitorHttpInfo() {
-        List<MonitorHttpVo> result = Lists.newArrayList();
-        // 查询数据库
-        List<MonitorHttp> monitorHttps = this.list();
-        // 封装返回数据
-        for (MonitorHttp monitorHttp : monitorHttps) {
-            MonitorHttpVo monitorHttpVo = MonitorHttpVo.builder().build().convertFor(monitorHttp);
-            result.add(monitorHttpVo);
-        }
-        return result;
     }
 
 }

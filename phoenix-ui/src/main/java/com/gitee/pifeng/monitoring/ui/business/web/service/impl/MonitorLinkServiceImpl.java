@@ -3,29 +3,21 @@ package com.gitee.pifeng.monitoring.ui.business.web.service.impl;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gitee.pifeng.monitoring.common.constant.MonitorTypeEnums;
 import com.gitee.pifeng.monitoring.common.exception.DbException;
-import com.gitee.pifeng.monitoring.ui.business.web.dao.IMonitorInstanceDao;
 import com.gitee.pifeng.monitoring.ui.business.web.dao.IMonitorLinkDao;
-import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorInstance;
 import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorLink;
 import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorLinkService;
-import com.gitee.pifeng.monitoring.ui.business.web.vo.MonitorLinkVo;
 import com.google.common.collect.Lists;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -37,70 +29,6 @@ import java.util.stream.Collectors;
  */
 @Service
 public class MonitorLinkServiceImpl extends ServiceImpl<IMonitorLinkDao, MonitorLink> implements IMonitorLinkService {
-
-    /**
-     * 应用实例数据访问对象
-     */
-    @Autowired
-    private IMonitorInstanceDao monitorInstanceDao;
-
-    /**
-     * <p>
-     * 获取链路信息
-     * </p>
-     *
-     * @param linkTypeEnum 链路类型
-     * @return 链路表现层对象
-     * @author 皮锋
-     * @custom.date 2022/12/19 14:23
-     */
-    @Override
-    public List<MonitorLinkVo> getMonitorLinkInfo(MonitorTypeEnums linkTypeEnum) {
-        // 返回对象
-        List<MonitorLinkVo> monitorLinkVos = Lists.newArrayList();
-        // 查询条件
-        LambdaQueryWrapper<MonitorLink> monitorLinkLambdaQueryWrapper = new LambdaQueryWrapper<>();
-        monitorLinkLambdaQueryWrapper.eq(MonitorLink::getType, linkTypeEnum.name());
-        List<MonitorLink> monitorLinks = this.baseMapper.selectList(monitorLinkLambdaQueryWrapper);
-        if (CollectionUtils.isEmpty(monitorLinks)) {
-            return monitorLinkVos;
-        }
-        // 封装 MonitorLinkVo
-        for (MonitorLink monitorLink : monitorLinks) {
-            MonitorLinkVo monitorLinkVo = MonitorLinkVo.builder().build().convertFor(monitorLink);
-            monitorLinkVos.add(monitorLinkVo);
-        }
-        if (linkTypeEnum == MonitorTypeEnums.INSTANCE) {
-            List<MonitorInstance> monitorInstances = this.monitorInstanceDao.selectList(new QueryWrapper<>());
-            if (CollectionUtils.isEmpty(monitorInstances)) {
-                return monitorLinkVos;
-            }
-            Map<String, MonitorInstance> monitorInstanceMap = monitorInstances.stream().collect(Collectors.toMap(MonitorInstance::getInstanceId, instance -> instance));
-            for (MonitorLinkVo monitorLinkVo : monitorLinkVos) {
-                MonitorInstance instance = monitorInstanceMap.get(monitorLinkVo.getRootNode());
-                monitorLinkVo.setRootNodeName(instance != null ? instance.getInstanceName() : null);
-                monitorLinkVo.setRootNodeIp(instance != null ? instance.getIp() : null);
-                String[] linkNodes = StringUtils.split(monitorLinkVo.getLink(), ",");
-                String linkName = Arrays.stream(linkNodes).map(l -> {
-                            if (monitorInstanceMap.get(l) != null) {
-                                return monitorInstanceMap.get(l).getInstanceName();
-                            }
-                            return "";
-                        }
-                ).collect(Collectors.joining(","));
-                monitorLinkVo.setLinkName(linkName);
-                String linkIp = Arrays.stream(linkNodes).map(l -> {
-                            if (monitorInstanceMap.get(l) != null) {
-                                return monitorInstanceMap.get(l).getIp();
-                            }
-                            return "";
-                        }
-                ).collect(Collectors.joining(","));
-                monitorLinkVo.setLinkIp(linkIp);
-            }
-        }
-        return monitorLinkVos;
-    }
 
     /**
      * <p>

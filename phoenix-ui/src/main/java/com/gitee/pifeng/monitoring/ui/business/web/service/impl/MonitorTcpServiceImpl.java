@@ -262,13 +262,12 @@ public class MonitorTcpServiceImpl extends ServiceImpl<IMonitorTcpDao, MonitorTc
      *
      * @param monitorTcpVo TCP信息表现层对象
      * @return layUiAdmin响应对象：TCP连通性
-     * @throws SigarException Sigar异常
      * @throws IOException    IO异常
      * @author 皮锋
      * @custom.date 2022/10/12 21:41
      */
     @Override
-    public LayUiAdminResultVo testMonitorTcp(MonitorTcpVo monitorTcpVo) throws SigarException, IOException {
+    public LayUiAdminResultVo testMonitorTcp(MonitorTcpVo monitorTcpVo) throws IOException {
         // 封装请求数据
         JSONObject extraMsg = new JSONObject();
         extraMsg.put("hostnameTarget", monitorTcpVo.getHostnameTarget());
@@ -286,28 +285,6 @@ public class MonitorTcpServiceImpl extends ServiceImpl<IMonitorTcpDao, MonitorTc
             msg = WebResponseConstants.FAIL;
         }
         return LayUiAdminResultVo.ok(msg);
-    }
-
-    /**
-     * <p>
-     * 获取TCP信息
-     * </p>
-     *
-     * @return TCP信息表现层对象
-     * @author 皮锋
-     * @custom.date 2022/11/27 19:34
-     */
-    @Override
-    public List<MonitorTcpVo> getMonitorTcpInfo() {
-        List<MonitorTcpVo> result = Lists.newArrayList();
-        // 查询数据库
-        List<MonitorTcp> monitorTcps = this.list();
-        // 封装返回数据
-        for (MonitorTcp monitorTcp : monitorTcps) {
-            MonitorTcpVo monitorTcpVo = MonitorTcpVo.builder().build().convertFor(monitorTcp);
-            result.add(monitorTcpVo);
-        }
-        return result;
     }
 
 }

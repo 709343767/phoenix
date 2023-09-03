@@ -27,7 +27,6 @@ import com.gitee.pifeng.monitoring.ui.constant.WebResponseConstants;
 import com.gitee.pifeng.monitoring.ui.core.UiPackageConstructor;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
-import org.hyperic.sigar.SigarException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
@@ -286,7 +285,7 @@ public class MonitorNetServiceImpl extends ServiceImpl<IMonitorNetDao, MonitorNe
      *
      * @param monitorNetVo 网络信息
      * @return layUiAdmin响应对象：网络连通性
-     * @throws IOException    IO异常
+     * @throws IOException IO异常
      * @author 皮锋
      * @custom.date 2022/10/9 10:16
      */
@@ -308,28 +307,6 @@ public class MonitorNetServiceImpl extends ServiceImpl<IMonitorNetDao, MonitorNe
             msg = WebResponseConstants.FAIL;
         }
         return LayUiAdminResultVo.ok(msg);
-    }
-
-    /**
-     * <p>
-     * 获取网络信息
-     * </p>
-     *
-     * @return 网络信息表现层对象
-     * @author 皮锋
-     * @custom.date 2022/11/27 19:34
-     */
-    @Override
-    public List<MonitorNetVo> getMonitorNetInfo() {
-        List<MonitorNetVo> result = Lists.newArrayList();
-        // 查询数据库
-        List<MonitorNet> monitorNets = this.list();
-        // 封装返回数据
-        for (MonitorNet monitorNet : monitorNets) {
-            MonitorNetVo monitorNetVo = MonitorNetVo.builder().build().convertFor(monitorNet);
-            result.add(monitorNetVo);
-        }
-        return result;
     }
 
 }
