@@ -3,8 +3,7 @@ package com.gitee.pifeng.monitoring.ui.business.web.vo;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.gitee.pifeng.monitoring.common.inf.ISuperBean;
 import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorInstance;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import lombok.experimental.Accessors;
 import org.springframework.beans.BeanUtils;
@@ -27,60 +26,63 @@ import java.util.Date;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel(value = "应用程序信息表现层对象")
+@Schema(description = "应用程序信息表现层对象")
 public class MonitorInstanceVo implements ISuperBean {
 
-    @ApiModelProperty(value = "主键ID")
+    @Schema(description = "主键ID")
     private Long id;
 
-    @ApiModelProperty(value = "应用实例ID")
+    @Schema(description = "应用实例ID")
     private String instanceId;
 
-    @ApiModelProperty(value = "端点（客户端<client>、代理端<agent>、服务端<server>、UI端<ui>）")
+    @Schema(description = "端点（客户端<client>、代理端<agent>、服务端<server>、UI端<ui>）")
     private String endpoint;
 
-    @ApiModelProperty(value = "应用实例名")
+    @Schema(description = "应用实例名")
     private String instanceName;
 
-    @ApiModelProperty(value = "应用实例描述")
+    @Schema(description = "应用实例描述")
     private String instanceDesc;
 
-    @ApiModelProperty(value = "应用实例摘要")
+    @Schema(description = "应用实例摘要")
     private String instanceSummary;
 
-    @ApiModelProperty(value = "IP地址")
+    @Schema(description = "IP地址")
     private String ip;
 
-    @ApiModelProperty(value = "新增时间")
+    @Schema(description = "新增时间")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date insertTime;
 
-    @ApiModelProperty(value = "更新时间")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @Schema(description = "更新时间")
     private Date updateTime;
 
-    @ApiModelProperty(value = "最后心跳时间")
+    @Schema(description = "最后心跳时间")
     private String finalHeartbeat;
 
-    @ApiModelProperty(value = "应用状态（0：离线，1：在线）")
+    @Schema(description = "应用状态（0：离线，1：在线）")
     private String isOnline;
 
-    @ApiModelProperty(value = "离线次数")
+    @Schema(description = "是否收到离线通知（0：否，1：是）")
+    private String isOfflineNotice;
+
+    @Schema(description = "离线次数")
     private Integer offlineCount;
 
-    @ApiModelProperty(value = "连接频率")
+    @Schema(description = "连接频率")
     private Integer connFrequency;
 
-    @ApiModelProperty(value = "程序语言")
+    @Schema(description = "程序语言")
     private String language;
 
-    @ApiModelProperty(value = "应用服务器类型")
+    @Schema(description = "应用服务器类型")
     private String appServerType;
 
-    @ApiModelProperty(value = "监控环境")
+    @Schema(description = "监控环境")
     private String monitorEnv;
 
-    @ApiModelProperty(value = "监控分组")
+    @Schema(description = "监控分组")
     private String monitorGroup;
 
     /**

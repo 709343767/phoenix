@@ -3,8 +3,7 @@ package com.gitee.pifeng.monitoring.ui.business.web.vo;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.gitee.pifeng.monitoring.common.inf.ISuperBean;
 import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorLogException;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import lombok.experimental.Accessors;
 import org.springframework.beans.BeanUtils;
@@ -27,37 +26,37 @@ import java.util.Date;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel(value = "MonitorLogException对象")
+@Schema(description = "MonitorLogException对象")
 public class MonitorLogExceptionVo implements ISuperBean {
 
-    @ApiModelProperty(value = "主键ID")
+    @Schema(description = "主键ID")
     private Long id;
 
-    @ApiModelProperty(value = "请求参数")
+    @Schema(description = "请求参数")
     private String reqParam;
 
-    @ApiModelProperty(value = "异常名称")
+    @Schema(description = "异常名称")
     private String excName;
 
-    @ApiModelProperty(value = "异常信息")
+    @Schema(description = "异常信息")
     private String excMessage;
 
-    @ApiModelProperty(value = "操作用户ID")
+    @Schema(description = "操作用户ID")
     private Long userId;
 
-    @ApiModelProperty(value = "操作用户名")
+    @Schema(description = "操作用户名")
     private String username;
 
-    @ApiModelProperty(value = "操作方法")
+    @Schema(description = "操作方法")
     private String operMethod;
 
-    @ApiModelProperty(value = "请求URI")
+    @Schema(description = "请求URI")
     private String uri;
 
-    @ApiModelProperty(value = "请求IP")
+    @Schema(description = "请求IP")
     private String ip;
 
-    @ApiModelProperty(value = "插入时间")
+    @Schema(description = "插入时间")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date insertTime;
 

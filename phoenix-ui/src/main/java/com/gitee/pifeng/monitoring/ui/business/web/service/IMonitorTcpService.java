@@ -104,4 +104,14 @@ public interface IMonitorTcpService extends IService<MonitorTcp> {
      */
     LayUiAdminResultVo testMonitorTcp(MonitorTcpVo monitorTcpVo) throws SigarException, IOException;
 
+    /**
+     * <p>
+     * 获取TCP信息
+     * </p>
+     *
+     * @return TCP信息表现层对象
+     * @author 皮锋
+     * @custom.date 2022/11/27 19:34
+     */
+    List<MonitorTcpVo> getMonitorTcpInfo();
 }

@@ -23,7 +23,7 @@ import com.gitee.pifeng.monitoring.ui.business.web.vo.LayUiAdminResultVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.MonitorTcpVo;
 import com.gitee.pifeng.monitoring.ui.constant.UrlConstants;
 import com.gitee.pifeng.monitoring.ui.constant.WebResponseConstants;
-import com.gitee.pifeng.monitoring.ui.core.PackageConstructor;
+import com.gitee.pifeng.monitoring.ui.core.UiPackageConstructor;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
 import org.hyperic.sigar.SigarException;
@@ -48,6 +48,12 @@ import java.util.Map;
  */
 @Service
 public class MonitorTcpServiceImpl extends ServiceImpl<IMonitorTcpDao, MonitorTcp> implements IMonitorTcpService {
+
+    /**
+     * UI端包构造器
+     */
+    @Autowired
+    private UiPackageConstructor uiPackageConstructor;
 
     /**
      * TCP信息数据访问对象
@@ -267,7 +273,7 @@ public class MonitorTcpServiceImpl extends ServiceImpl<IMonitorTcpDao, MonitorTc
         JSONObject extraMsg = new JSONObject();
         extraMsg.put("hostnameTarget", monitorTcpVo.getHostnameTarget());
         extraMsg.put("portTarget", monitorTcpVo.getPortTarget());
-        BaseRequestPackage baseRequestPackage = new PackageConstructor().structureBaseRequestPackage(extraMsg);
+        BaseRequestPackage baseRequestPackage = this.uiPackageConstructor.structureBaseRequestPackage(extraMsg);
         // 从服务端获取数据
         String resultStr = Sender.send(UrlConstants.TEST_MONITOR_TCP_URL, baseRequestPackage.toJsonString());
         BaseResponsePackage baseResponsePackage = JSON.parseObject(resultStr, BaseResponsePackage.class);
@@ -280,6 +286,28 @@ public class MonitorTcpServiceImpl extends ServiceImpl<IMonitorTcpDao, MonitorTc
             msg = WebResponseConstants.FAIL;
         }
         return LayUiAdminResultVo.ok(msg);
+    }
+
+    /**
+     * <p>
+     * 获取TCP信息
+     * </p>
+     *
+     * @return TCP信息表现层对象
+     * @author 皮锋
+     * @custom.date 2022/11/27 19:34
+     */
+    @Override
+    public List<MonitorTcpVo> getMonitorTcpInfo() {
+        List<MonitorTcpVo> result = Lists.newArrayList();
+        // 查询数据库
+        List<MonitorTcp> monitorTcps = this.list();
+        // 封装返回数据
+        for (MonitorTcp monitorTcp : monitorTcps) {
+            MonitorTcpVo monitorTcpVo = MonitorTcpVo.builder().build().convertFor(monitorTcp);
+            result.add(monitorTcpVo);
+        }
+        return result;
     }
 
 }

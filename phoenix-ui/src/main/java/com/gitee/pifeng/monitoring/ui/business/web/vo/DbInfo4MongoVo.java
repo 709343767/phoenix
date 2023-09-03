@@ -1,7 +1,7 @@
 package com.gitee.pifeng.monitoring.ui.business.web.vo;
 
 import com.gitee.pifeng.monitoring.common.inf.ISuperBean;
-import io.swagger.annotations.ApiModel;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import lombok.experimental.Accessors;
 
@@ -24,7 +24,7 @@ import java.math.BigDecimal;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel(value = "Mongo数据库信息表现层对象")
+@Schema(description = "Mongo数据库信息表现层对象")
 public class DbInfo4MongoVo implements ISuperBean {
 
     /**

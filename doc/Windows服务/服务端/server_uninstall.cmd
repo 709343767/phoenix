@@ -1,0 +1,1 @@
+phoenixServer.exe uninstall

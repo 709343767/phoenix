@@ -3,8 +3,7 @@ package com.gitee.pifeng.monitoring.ui.business.web.vo;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.gitee.pifeng.monitoring.common.inf.ISuperBean;
 import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorJvmRuntime;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import lombok.experimental.Accessors;
 import org.springframework.beans.BeanUtils;
@@ -27,66 +26,66 @@ import java.util.Date;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel(value = "java虚拟机运行时信息表现层对象")
+@Schema(description = "java虚拟机运行时信息表现层对象")
 public class MonitorJvmRuntimeVo implements ISuperBean {
 
-    @ApiModelProperty(value = "主键ID")
+    @Schema(description = "主键ID")
     private Long id;
 
-    @ApiModelProperty(value = "应用实例ID")
+    @Schema(description = "应用实例ID")
     private String instanceId;
 
-    @ApiModelProperty(value = "正在运行的Java虚拟机名称")
+    @Schema(description = "正在运行的Java虚拟机名称")
     private String name;
 
-    @ApiModelProperty(value = "Java虚拟机实现名称")
+    @Schema(description = "Java虚拟机实现名称")
     private String vmName;
 
-    @ApiModelProperty(value = "Java虚拟机实现供应商")
+    @Schema(description = "Java虚拟机实现供应商")
     private String vmVendor;
 
-    @ApiModelProperty(value = "Java虚拟机实现版本")
+    @Schema(description = "Java虚拟机实现版本")
     private String vmVersion;
 
-    @ApiModelProperty(value = "Java虚拟机规范名称")
+    @Schema(description = "Java虚拟机规范名称")
     private String specName;
 
-    @ApiModelProperty(value = "Java虚拟机规范供应商")
+    @Schema(description = "Java虚拟机规范供应商")
     private String specVendor;
 
-    @ApiModelProperty(value = "Java虚拟机规范版本")
+    @Schema(description = "Java虚拟机规范版本")
     private String specVersion;
 
-    @ApiModelProperty(value = "管理接口规范版本")
+    @Schema(description = "管理接口规范版本")
     private String managementSpecVersion;
 
-    @ApiModelProperty(value = "Java类路径")
+    @Schema(description = "Java类路径")
     private String classPath;
 
-    @ApiModelProperty(value = "Java库路径")
+    @Schema(description = "Java库路径")
     private String libraryPath;
 
-    @ApiModelProperty(value = "Java虚拟机是否支持引导类路径")
+    @Schema(description = "Java虚拟机是否支持引导类路径")
     private String isBootClassPathSupported;
 
-    @ApiModelProperty(value = "引导类路径")
+    @Schema(description = "引导类路径")
     private String bootClassPath;
 
-    @ApiModelProperty(value = "Java虚拟机入参")
+    @Schema(description = "Java虚拟机入参")
     private String inputArguments;
 
-    @ApiModelProperty(value = "Java虚拟机的正常运行时间（毫秒）")
+    @Schema(description = "Java虚拟机的正常运行时间（毫秒）")
     private String uptime;
 
-    @ApiModelProperty(value = "Java虚拟机的开始时间")
+    @Schema(description = "Java虚拟机的开始时间")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date startTime;
 
-    @ApiModelProperty(value = "新增时间")
+    @Schema(description = "新增时间")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date insertTime;
 
-    @ApiModelProperty(value = "更新时间")
+    @Schema(description = "更新时间")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date updateTime;
 

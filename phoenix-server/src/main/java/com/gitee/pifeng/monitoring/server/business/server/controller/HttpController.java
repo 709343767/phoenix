@@ -6,11 +6,15 @@ import com.alibaba.fastjson.JSONObject;
 import com.gitee.pifeng.monitoring.common.domain.Result;
 import com.gitee.pifeng.monitoring.common.dto.BaseRequestPackage;
 import com.gitee.pifeng.monitoring.common.dto.BaseResponsePackage;
+import com.gitee.pifeng.monitoring.common.dto.CiphertextPackage;
 import com.gitee.pifeng.monitoring.common.exception.NetException;
-import com.gitee.pifeng.monitoring.server.business.server.core.PackageConstructor;
+import com.gitee.pifeng.monitoring.server.business.server.core.ServerPackageConstructor;
 import com.gitee.pifeng.monitoring.server.business.server.service.IHttpService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,8 +33,14 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RestController
 @RequestMapping("/http")
-@Api(tags = "HTTP信息")
+@Tag(name = "HTTP信息")
 public class HttpController {
+
+    /**
+     * 服务端包构造器
+     */
+    @Autowired
+    private ServerPackageConstructor serverPackageConstructor;
 
     /**
      * HTTP信息服务接口
@@ -49,7 +59,9 @@ public class HttpController {
      * @author 皮锋
      * @custom.date 2022/10/10 22:04
      */
-    @ApiOperation(value = "测试HTTP连通性", notes = "测试HTTP连通性")
+    @Operation(summary = "测试HTTP连通性", description = "测试HTTP连通性",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(content = @Content(schema = @Schema(implementation = CiphertextPackage.class))),
+            responses = @ApiResponse(content = {@Content(schema = @Schema(implementation = CiphertextPackage.class))}))
     @PostMapping("/test-monitor-http")
     public BaseResponsePackage testMonitorHttp(@RequestBody BaseRequestPackage baseRequestPackage) throws NetException {
         // 计时器
@@ -59,7 +71,7 @@ public class HttpController {
         String urlTarget = extraMsg.getString("urlTarget");
         String parameter = extraMsg.getString("parameter");
         String httpCode = this.httpService.testMonitorHttp(method, urlTarget, parameter);
-        BaseResponsePackage baseResponsePackage = new PackageConstructor().structureBaseResponsePackage(Result.builder().isSuccess(true).msg(httpCode).build());
+        BaseResponsePackage baseResponsePackage = this.serverPackageConstructor.structureBaseResponsePackage(Result.builder().isSuccess(true).msg(httpCode).build());
         // 时间差（毫秒）
         String betweenDay = timer.intervalPretty();
         if (timer.intervalSecond() > 1) {

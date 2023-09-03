@@ -3,8 +3,12 @@ package com.gitee.pifeng.monitoring.agent.business.client.controller;
 import com.gitee.pifeng.monitoring.agent.business.client.service.IAlarmService;
 import com.gitee.pifeng.monitoring.common.dto.AlarmPackage;
 import com.gitee.pifeng.monitoring.common.dto.BaseResponsePackage;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import com.gitee.pifeng.monitoring.common.dto.CiphertextPackage;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author 皮锋
  * @custom.date 2020年3月6日 下午2:58:09
  */
-@Api(tags = "信息包.告警包")
+@Tag(name = "信息包.告警包")
 @RestController
 @RequestMapping("/alarm")
 public class AlarmController {
@@ -40,7 +44,9 @@ public class AlarmController {
      * @author 皮锋
      * @custom.date 2020年3月6日 下午3:00:54
      */
-    @ApiOperation(value = "接收和响应监控客户端程序发的告警包", notes = "接收告警包")
+    @Operation(description = "接收和响应监控客户端程序发的告警包", summary = "接收告警包",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(content = @Content(schema = @Schema(implementation = CiphertextPackage.class))),
+            responses = @ApiResponse(content = {@Content(schema = @Schema(implementation = CiphertextPackage.class))}))
     @PostMapping("/accept-alarm-package")
     public BaseResponsePackage acceptAlarmPackage(@RequestBody AlarmPackage heartbeatPackage) {
         return this.alarmService.dealAlarmPackage(heartbeatPackage);

@@ -1,0 +1,37 @@
+.layui-dropMenu {
+    position: fixed;
+    width: 130px;
+    opacity: 0;
+    overflow: hidden; /*果内容溢出一个元素的框，会发生什么。*/
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    box-shadow: 0 1px 8px #000; /*阴影*/
+    /*过度功能 无论是透明还是大小*/
+    transition: opacity .4s linear;
+    background: #fff;
+    border-radius: 7px;
+    text-align: center;
+}
+
+.layui-dropMenu a {
+    padding: 6px 10px;
+}
+
+.layui-dropMenu li {
+    padding-left: 10px;
+    padding-right: 10px;
+    line-height: 28px;
+}
+
+.layui-dropMenu li:hover {
+    background: #ddd;
+    cursor: pointer;
+}
+
+.layui-dropMenu .hr {
+    height: 1px;
+    margin: 5px 0;
+    overflow: hidden;
+    background-color: #e5e5e5;
+}

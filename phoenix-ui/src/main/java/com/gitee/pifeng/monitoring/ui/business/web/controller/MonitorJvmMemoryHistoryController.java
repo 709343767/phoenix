@@ -4,10 +4,11 @@ package com.gitee.pifeng.monitoring.ui.business.web.controller;
 import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorJvmMemoryHistoryService;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.InstanceDetailPageJvmMemoryChartVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.LayUiAdminResultVo;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,7 +26,7 @@ import java.util.List;
  * @author 皮锋
  * @custom.date 2021-01-24
  */
-@Api(tags = "应用程序.java虚拟机内存历史记录")
+@Tag(name = "应用程序.java虚拟机内存历史记录")
 @Controller
 @RequestMapping("/monitor-jvm-memory-history")
 public class MonitorJvmMemoryHistoryController {
@@ -48,13 +49,13 @@ public class MonitorJvmMemoryHistoryController {
      * @author 皮锋
      * @custom.date 2020/10/14 11:52
      */
-    @ApiOperation(value = "获取应用实例详情页面java虚拟机内存图表信息")
+    @Operation(summary = "获取应用实例详情页面java虚拟机内存图表信息")
     @ResponseBody
     @GetMapping("/get-instance-detail-page-jvm-memory-chart-info")
-    @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "instanceId", value = "应用实例ID", required = true, paramType = "query", dataType = "string", dataTypeClass = String.class),
-            @ApiImplicitParam(name = "memoryType", value = "内存类型", paramType = "query", dataType = "string", dataTypeClass = String.class),
-            @ApiImplicitParam(name = "time", value = "时间", paramType = "query", dataType = "string", dataTypeClass = String.class)})
+    @Parameters(value = {
+            @Parameter(name = "instanceId", description = "应用实例ID", required = true, in = ParameterIn.QUERY),
+            @Parameter(name = "memoryType", description = "内存类型", in = ParameterIn.QUERY),
+            @Parameter(name = "time", description = "时间", in = ParameterIn.QUERY)})
     public LayUiAdminResultVo getInstanceDetailPageJvmMemoryChartInfo(@RequestParam(name = "instanceId") String instanceId,
                                                                       @RequestParam(name = "memoryType", required = false) String memoryType,
                                                                       @RequestParam(name = "time", required = false) String time) {

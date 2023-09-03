@@ -1,8 +1,8 @@
 package com.gitee.pifeng.monitoring.server.business.server.component;
 
 import com.alibaba.fastjson.JSON;
-import com.gitee.pifeng.monitoring.common.constant.alarm.AlarmLevelEnums;
 import com.gitee.pifeng.monitoring.common.constant.MonitorTypeEnums;
+import com.gitee.pifeng.monitoring.common.constant.alarm.AlarmLevelEnums;
 import com.gitee.pifeng.monitoring.common.domain.Alarm;
 import com.gitee.pifeng.monitoring.common.dto.AlarmPackage;
 import com.gitee.pifeng.monitoring.common.exception.NetException;
@@ -11,21 +11,23 @@ import com.gitee.pifeng.monitoring.common.util.ExceptionUtils;
 import com.gitee.pifeng.monitoring.common.util.MapUtils;
 import com.gitee.pifeng.monitoring.common.web.util.AccessObjectUtils;
 import com.gitee.pifeng.monitoring.common.web.util.ContextUtils;
-import com.gitee.pifeng.monitoring.server.business.server.core.PackageConstructor;
+import com.gitee.pifeng.monitoring.server.business.server.core.ServerPackageConstructor;
 import com.gitee.pifeng.monitoring.server.business.server.entity.MonitorLogException;
 import com.gitee.pifeng.monitoring.server.business.server.service.IAlarmService;
 import com.gitee.pifeng.monitoring.server.business.server.service.ILogExceptionService;
+import com.google.common.collect.Maps;
+import org.apache.commons.lang3.ArrayUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
-import org.hyperic.sigar.SigarException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.Map;
@@ -41,6 +43,12 @@ import java.util.Map;
 @Aspect
 @Component
 public class ExceptionLogAspect {
+
+    /**
+     * 服务端包构造器
+     */
+    @Autowired
+    private ServerPackageConstructor serverPackageConstructor;
 
     /**
      * 告警服务接口
@@ -73,13 +81,12 @@ public class ExceptionLogAspect {
      *
      * @param joinPoint 切入点
      * @param e         异常信息
-     * @throws NetException   获取数据库信息异常
-     * @throws SigarException Sigar异常
+     * @throws NetException 获取数据库信息异常
      * @author 皮锋
      * @custom.date 2021/6/10 10:58
      */
     @AfterThrowing(pointcut = "exceptionLogPointCut()", throwing = "e")
-    public void saveExceptionLog(JoinPoint joinPoint, Throwable e) throws NetException, SigarException {
+    public void saveExceptionLog(JoinPoint joinPoint, Throwable e) throws NetException {
         HttpServletRequest request;
         try {
             // 如果是http请求，则有请求对象
@@ -97,11 +104,24 @@ public class ExceptionLogAspect {
         String methodName = className + "#" + method.getName();
         // 异常名称
         String excName = e.getClass().getName();
+        // 参数
+        Object[] args = joinPoint.getArgs();
         // 构建异常日志
         MonitorLogException.MonitorLogExceptionBuilder builder = MonitorLogException.builder();
         // 转换请求参数
-        Map<String, String> reqParamMap = request != null ? MapUtils.convertParamMap(request.getParameterMap()) : null;
-        builder.reqParam((reqParamMap == null || reqParamMap.isEmpty()) ? "" : JSON.toJSONString(reqParamMap));
+        Map<String, Object> reqParamMap = request != null ? MapUtils.convertParamMap(request.getParameterMap()) : Maps.newHashMap();
+        if (reqParamMap.isEmpty()) {
+            if (ArrayUtils.isNotEmpty(args)) {
+                // 遍历方法参数
+                for (int i = 0; i < args.length; i++) {
+                    Parameter[] parameters = method.getParameters();
+                    String paramName = parameters[i].getName();
+                    Object paramValue = args[i];
+                    reqParamMap.put(paramName, paramValue != null ? JSON.toJSON(paramValue) : null);
+                }
+            }
+        }
+        builder.reqParam(reqParamMap.isEmpty() ? "" : JSON.toJSONString(reqParamMap));
         builder.excName(excName);
         builder.excMessage(ExceptionUtils.stackTraceToString(excName, e.getMessage(), e.getStackTrace()));
         builder.userId(-1L);
@@ -128,7 +148,7 @@ public class ExceptionLogAspect {
                 .title(excName)
                 .msg(msg)
                 .build();
-        AlarmPackage alarmPackage = new PackageConstructor().structureAlarmPackage(alarm);
+        AlarmPackage alarmPackage = this.serverPackageConstructor.structureAlarmPackage(alarm);
         this.alarmService.dealAlarmPackage(alarmPackage);
     }
 

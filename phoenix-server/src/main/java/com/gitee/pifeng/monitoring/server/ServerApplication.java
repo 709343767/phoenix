@@ -1,8 +1,7 @@
 package com.gitee.pifeng.monitoring.server;
 
-import com.gitee.pifeng.monitoring.common.web.toolkit.CustomizationBeanHandler;
-import com.gitee.pifeng.monitoring.common.web.toolkit.UniqueBeanNameGenerator;
-import com.gitee.pifeng.monitoring.starter.annotation.EnableMonitoring;
+import com.gitee.pifeng.monitoring.common.web.core.CustomizationBeanHandler;
+import com.gitee.pifeng.monitoring.common.web.core.UniqueBeanNameGenerator;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.data.mongo.MongoDataAutoConfiguration;
@@ -10,6 +9,7 @@ import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.retry.annotation.EnableRetry;
+import org.springframework.stereotype.Indexed;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
@@ -21,11 +21,11 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  * @author 皮锋
  * @custom.date 2020年1月20日 上午8:45:29
  */
+@Indexed
 @SpringBootApplication(exclude = {MongoAutoConfiguration.class, MongoDataAutoConfiguration.class})
 @ComponentScan(nameGenerator = UniqueBeanNameGenerator.class)
 @EnableTransactionManagement
 @EnableAspectJAutoProxy(proxyTargetClass = true, exposeProxy = true)
-@EnableMonitoring
 @EnableRetry
 public class ServerApplication extends CustomizationBeanHandler {
 

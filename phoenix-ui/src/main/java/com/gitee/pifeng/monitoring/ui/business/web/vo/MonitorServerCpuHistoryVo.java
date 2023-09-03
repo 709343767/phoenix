@@ -6,8 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.gitee.pifeng.monitoring.common.inf.ISuperBean;
 import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorServerCpuHistory;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import lombok.experimental.Accessors;
 import org.springframework.beans.BeanUtils;
@@ -30,64 +29,64 @@ import java.util.Date;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel(value = "服务器CPU历史记录表现层对象")
+@Schema(description = "服务器CPU历史记录表现层对象")
 public class MonitorServerCpuHistoryVo implements ISuperBean {
 
-    @ApiModelProperty(value = "主键ID")
+    @Schema(description = "主键ID")
     @TableId(value = "ID", type = IdType.AUTO)
     private Long id;
 
-    @ApiModelProperty(value = "IP地址")
+    @Schema(description = "IP地址")
     @TableField("IP")
     private String ip;
 
-    @ApiModelProperty(value = "CPU序号")
+    @Schema(description = "CPU序号")
     @TableField("CPU_NO")
     private Integer cpuNo;
 
-    @ApiModelProperty(value = "CPU频率（MHz）")
+    @Schema(description = "CPU频率（MHz）")
     @TableField("CPU_MHZ")
     private Integer cpuMhz;
 
-    @ApiModelProperty(value = "CPU卖主")
+    @Schema(description = "CPU卖主")
     @TableField("CPU_VENDOR")
     private String cpuVendor;
 
-    @ApiModelProperty(value = "CPU的类别，如：Celeron")
+    @Schema(description = "CPU的类别，如：Celeron")
     @TableField("CPU_MODEL")
     private String cpuModel;
 
-    @ApiModelProperty(value = "CPU用户使用率")
+    @Schema(description = "CPU用户使用率")
     @TableField("CPU_USER")
     private Double cpuUser;
 
-    @ApiModelProperty(value = "CPU系统使用率")
+    @Schema(description = "CPU系统使用率")
     @TableField("CPU_SYS")
     private Double cpuSys;
 
-    @ApiModelProperty(value = "CPU等待率")
+    @Schema(description = "CPU等待率")
     @TableField("CPU_WAIT")
     private Double cpuWait;
 
-    @ApiModelProperty(value = "CPU错误率")
+    @Schema(description = "CPU错误率")
     @TableField("CPU_NICE")
     private Double cpuNice;
 
-    @ApiModelProperty(value = "CPU使用率")
+    @Schema(description = "CPU使用率")
     @TableField("CPU_COMBINED")
     private Double cpuCombined;
 
-    @ApiModelProperty(value = "CPU剩余率")
+    @Schema(description = "CPU剩余率")
     @TableField("CPU_IDLE")
     private Double cpuIdle;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    @ApiModelProperty(value = "新增时间")
+    @Schema(description = "新增时间")
     @TableField("INSERT_TIME")
     private Date insertTime;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    @ApiModelProperty(value = "更新时间")
+    @Schema(description = "更新时间")
     @TableField("UPDATE_TIME")
     private Date updateTime;
 

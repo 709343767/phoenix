@@ -1,8 +1,7 @@
 package com.gitee.pifeng.monitoring.ui.business.web.vo;
 
 import com.gitee.pifeng.monitoring.common.inf.ISuperBean;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import lombok.experimental.Accessors;
 
@@ -22,28 +21,28 @@ import lombok.experimental.Accessors;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel(value = "home页的服务器表现层对象")
+@Schema(description = "home页的服务器表现层对象")
 public class HomeServerVo implements ISuperBean {
 
-    @ApiModelProperty(value = "服务器数量")
+    @Schema(description = "服务器数量")
     private Integer serverSum;
 
-    @ApiModelProperty(value = "linux服务器数量")
+    @Schema(description = "linux服务器数量")
     private Integer linuxSum;
 
-    @ApiModelProperty(value = "windows服务器数量")
+    @Schema(description = "windows服务器数量")
     private Integer windowsSum;
 
-    @ApiModelProperty(value = "其它服务器数量")
+    @Schema(description = "其它服务器数量")
     private Integer otherSum;
 
-    @ApiModelProperty(value = "服务器在线数量")
+    @Schema(description = "服务器在线数量")
     private Integer serverOnLineSum;
 
-    @ApiModelProperty(value = "服务器离线数量")
+    @Schema(description = "服务器离线数量")
     private Integer serverOffLineSum;
 
-    @ApiModelProperty(value = "服务器在线率")
+    @Schema(description = "服务器在线率")
     private String serverOnLineRate;
 
 }

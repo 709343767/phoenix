@@ -57,7 +57,11 @@ CREATE TABLE `MONITOR_ALARM_RECORD`
     PRIMARY KEY (`ID`) USING BTREE,
     INDEX `NX_CODE` (`CODE`) USING BTREE COMMENT '索引_告警记录编码',
     INDEX `NX_INSERT_TIME` (`INSERT_TIME`) USING BTREE COMMENT '索引_插入时间',
-    INDEX `NX_UPDATE_TIME` (`UPDATE_TIME`) USING BTREE COMMENT '索引_更新时间'
+    INDEX `NX_UPDATE_TIME` (`UPDATE_TIME`) USING BTREE COMMENT '索引_更新时间',
+    INDEX `NX_TYPE` (`TYPE`) USING BTREE COMMENT '索引_告警类型',
+    INDEX `NX_WAY` (`WAY`) USING BTREE COMMENT '索引_告警方式',
+    INDEX `NX_LEVEL` (`LEVEL`) USING BTREE COMMENT '索引_告警级别',
+    INDEX `NX_STATUS` (`STATUS`) USING BTREE COMMENT '索引_告警发送状态'
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_general_ci COMMENT = '告警记录表'
@@ -216,22 +220,23 @@ CREATE TABLE `MONITOR_HTTP_HISTORY`
 DROP TABLE IF EXISTS `MONITOR_INSTANCE`;
 CREATE TABLE `MONITOR_INSTANCE`
 (
-    `ID`               bigint(20) UNSIGNED                                           NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-    `INSTANCE_ID`      varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT '应用实例ID',
-    `ENDPOINT`         varchar(8) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci   NOT NULL COMMENT '端点（客户端<client>、代理端<agent>、服务端<server>、UI端<ui>）',
-    `INSTANCE_NAME`    varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT '应用实例名',
-    `INSTANCE_DESC`    varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '应用实例描述',
-    `INSTANCE_SUMMARY` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '应用实例摘要',
-    `LANGUAGE`         varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT '编程语言',
-    `APP_SERVER_TYPE`  varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NULL DEFAULT NULL COMMENT '应用服务器类型',
-    `IP`               varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT 'IP地址',
-    `IS_ONLINE`        varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci   NULL DEFAULT NULL COMMENT '应用状态（0：离线，1：在线）',
-    `OFFLINE_COUNT`    int(8)                                                        NULL DEFAULT NULL COMMENT '离线次数',
-    `CONN_FREQUENCY`   int(8)                                                        NOT NULL COMMENT '连接频率',
-    `MONITOR_ENV`      varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '监控环境',
-    `MONITOR_GROUP`    varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '监控分组',
-    `INSERT_TIME`      datetime                                                      NOT NULL COMMENT '新增时间',
-    `UPDATE_TIME`      datetime                                                      NULL DEFAULT NULL COMMENT '更新时间',
+    `ID`                bigint(20) UNSIGNED                                           NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `INSTANCE_ID`       varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT '应用实例ID',
+    `ENDPOINT`          varchar(8) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci   NOT NULL COMMENT '端点（客户端<client>、代理端<agent>、服务端<server>、UI端<ui>）',
+    `INSTANCE_NAME`     varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT '应用实例名',
+    `INSTANCE_DESC`     varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '应用实例描述',
+    `INSTANCE_SUMMARY`  varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '应用实例摘要',
+    `LANGUAGE`          varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT '编程语言',
+    `APP_SERVER_TYPE`   varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NULL DEFAULT NULL COMMENT '应用服务器类型',
+    `IP`                varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT 'IP地址',
+    `IS_ONLINE`         varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci   NULL DEFAULT NULL COMMENT '应用状态（0：离线，1：在线）',
+    `IS_OFFLINE_NOTICE` varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci   NULL DEFAULT NULL COMMENT '是否收到离线通知（0：否，1：是）',
+    `OFFLINE_COUNT`     int(8)                                                        NULL DEFAULT NULL COMMENT '离线次数',
+    `CONN_FREQUENCY`    int(8)                                                        NOT NULL COMMENT '连接频率',
+    `MONITOR_ENV`       varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '监控环境',
+    `MONITOR_GROUP`     varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '监控分组',
+    `INSERT_TIME`       datetime                                                      NOT NULL COMMENT '新增时间',
+    `UPDATE_TIME`       datetime                                                      NULL DEFAULT NULL COMMENT '更新时间',
     PRIMARY KEY (`ID`) USING BTREE,
     INDEX `NX_INSTANCE_ID` (`INSTANCE_ID`) USING BTREE COMMENT '索引_应用实例ID',
     INDEX `MONITOR_INSTANCE_ENV_FK` (`MONITOR_ENV`) USING BTREE COMMENT '索引_监控环境',
@@ -386,6 +391,26 @@ CREATE TABLE `MONITOR_JVM_THREAD`
   ROW_FORMAT = Dynamic;
 
 -- ----------------------------
+-- Table structure for MONITOR_LINK
+-- ----------------------------
+DROP TABLE IF EXISTS `MONITOR_LINK`;
+CREATE TABLE `MONITOR_LINK`
+(
+    `ID`             bigint(20)                                                   NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `ROOT_NODE`      varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '根节点',
+    `ROOT_NODE_TIME` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '根节点时间',
+    `LINK`           text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci        NULL COMMENT '链路',
+    `LINK_TIME`      text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci        NULL COMMENT '链路时间',
+    `TYPE`           varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '链路类型（SERVER、INSTANCE）',
+    `INSERT_TIME`    datetime                                                     NULL DEFAULT NULL COMMENT '新增时间',
+    `UPDATE_TIME`    datetime                                                     NULL DEFAULT NULL COMMENT '更新时间',
+    PRIMARY KEY (`ID`) USING BTREE
+) ENGINE = InnoDB
+  CHARACTER SET = utf8mb4
+  COLLATE = utf8mb4_general_ci COMMENT = '链路表'
+  ROW_FORMAT = Dynamic;
+
+-- ----------------------------
 -- Table structure for MONITOR_LOG_EXCEPTION
 -- ----------------------------
 DROP TABLE IF EXISTS `MONITOR_LOG_EXCEPTION`;
@@ -445,6 +470,7 @@ CREATE TABLE `MONITOR_NET`
     `IP_DESC`       varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'IP地址描述',
     `STATUS`        varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci   NULL DEFAULT NULL COMMENT '状态（0：网络不通，1：网络正常）',
     `AVG_TIME`      double                                                        NULL DEFAULT NULL COMMENT '平均响应时间（毫秒）',
+    `PING_DETAIL`   text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci         NULL DEFAULT NULL COMMENT 'ping详情',
     `OFFLINE_COUNT` int(8)                                                        NULL DEFAULT NULL COMMENT '离线次数',
     `MONITOR_ENV`   varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '监控环境',
     `MONITOR_GROUP` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '监控分组',
@@ -475,6 +501,7 @@ CREATE TABLE `MONITOR_NET_HISTORY`
     `IP_DESC`       varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'IP地址描述',
     `STATUS`        varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci   NULL DEFAULT NULL COMMENT '状态（0：网络不通，1：网络正常）',
     `AVG_TIME`      double                                                        NULL DEFAULT NULL COMMENT '平均响应时间（毫秒）',
+    `PING_DETAIL`   text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci         NULL DEFAULT NULL COMMENT 'ping详情',
     `OFFLINE_COUNT` int(8)                                                        NULL DEFAULT NULL COMMENT '离线次数',
     `INSERT_TIME`   datetime                                                      NOT NULL COMMENT '新增时间',
     `UPDATE_TIME`   datetime                                                      NULL DEFAULT NULL COMMENT '更新时间',

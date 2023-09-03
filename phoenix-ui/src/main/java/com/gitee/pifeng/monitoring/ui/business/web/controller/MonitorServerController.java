@@ -13,16 +13,18 @@ import com.gitee.pifeng.monitoring.ui.business.web.vo.MonitorConfigPageFormVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.MonitorServerVo;
 import com.gitee.pifeng.monitoring.ui.constant.OperateTypeConstants;
 import com.gitee.pifeng.monitoring.ui.constant.UiModuleConstants;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -35,7 +37,7 @@ import java.util.stream.Collectors;
  */
 @Controller
 @RequestMapping("/monitor-server")
-@Api(tags = "服务器")
+@Tag(name = "服务器")
 public class MonitorServerController {
 
     /**
@@ -71,7 +73,7 @@ public class MonitorServerController {
      * @author 皮锋
      * @custom.date 2020/9/2 21:46
      */
-    @ApiOperation(value = "访问服务器列表页面")
+    @Operation(summary = "访问服务器列表页面")
     @GetMapping("/list")
     public ModelAndView list() {
         ModelAndView mv = new ModelAndView("server/server");
@@ -103,19 +105,25 @@ public class MonitorServerController {
      * @author 皮锋
      * @custom.date 2020/9/4 12:34
      */
-    @ApiOperation(value = "获取服务器列表")
-    @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "current", value = "当前页", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class),
-            @ApiImplicitParam(name = "size", value = "每页显示条数", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class),
-            @ApiImplicitParam(name = "ip", value = "IP", paramType = "query", dataType = "string", dataTypeClass = String.class),
-            @ApiImplicitParam(name = "serverName", value = "服务器名", paramType = "query", dataType = "string", dataTypeClass = String.class),
-            @ApiImplicitParam(name = "isOnline", value = "状态", paramType = "query", dataType = "string", dataTypeClass = String.class),
-            @ApiImplicitParam(name = "monitorEnv", value = "监控环境", paramType = "query", dataType = "string", dataTypeClass = String.class),
-            @ApiImplicitParam(name = "monitorGroup", value = "监控分组", paramType = "query", dataType = "string", dataTypeClass = String.class)})
+    @Operation(summary = "获取服务器列表")
+    @Parameters(value = {
+            @Parameter(name = "current", description = "当前页", required = true, in = ParameterIn.QUERY),
+            @Parameter(name = "size", description = "每页显示条数", required = true, in = ParameterIn.QUERY),
+            @Parameter(name = "ip", description = "IP", in = ParameterIn.QUERY),
+            @Parameter(name = "serverName", description = "服务器名", in = ParameterIn.QUERY),
+            @Parameter(name = "isOnline", description = "状态", in = ParameterIn.QUERY),
+            @Parameter(name = "monitorEnv", description = "监控环境", in = ParameterIn.QUERY),
+            @Parameter(name = "monitorGroup", description = "监控分组", in = ParameterIn.QUERY)})
     @GetMapping("/get-monitor-server-list")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.SERVER, operType = OperateTypeConstants.QUERY, operDesc = "获取服务器列表")
-    public LayUiAdminResultVo getMonitorServerList(Long current, Long size, String ip, String serverName, String isOnline, String monitorEnv, String monitorGroup) {
+    public LayUiAdminResultVo getMonitorServerList(@RequestParam(value = "current") Long current,
+                                                   @RequestParam(value = "size") Long size,
+                                                   @RequestParam(value = "ip", required = false) String ip,
+                                                   @RequestParam(value = "serverName", required = false) String serverName,
+                                                   @RequestParam(value = "isOnline", required = false) String isOnline,
+                                                   @RequestParam(value = "monitorEnv", required = false) String monitorEnv,
+                                                   @RequestParam(value = "monitorGroup", required = false) String monitorGroup) {
         Page<MonitorServerVo> page = this.monitorServerService.getMonitorServerList(current, size, ip, serverName, isOnline, monitorEnv, monitorGroup);
         return LayUiAdminResultVo.ok(page);
     }
@@ -130,7 +138,7 @@ public class MonitorServerController {
      * @author 皮锋
      * @custom.date 2020/9/4 16:10
      */
-    @ApiOperation(value = "删除服务器")
+    @Operation(summary = "删除服务器")
     @DeleteMapping("/delete-monitor-server")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.SERVER, operType = OperateTypeConstants.DELETE, operDesc = "删除服务器")
@@ -149,10 +157,10 @@ public class MonitorServerController {
      * @author 皮锋
      * @custom.date 2021/7/20 20:52
      */
-    @ApiOperation(value = "清理服务器监控历史数据")
-    @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "ip", value = "服务器IP", required = true, paramType = "query", dataType = "string", dataTypeClass = String.class),
-            @ApiImplicitParam(name = "time", value = "时间", required = true, paramType = "query", dataType = "string", dataTypeClass = String.class)})
+    @Operation(summary = "清理服务器监控历史数据")
+    @Parameters(value = {
+            @Parameter(name = "ip", description = "服务器IP", required = true, in = ParameterIn.QUERY),
+            @Parameter(name = "time", description = "时间", required = true, in = ParameterIn.QUERY)})
     @DeleteMapping("/clear-monitor-server-history")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.SERVER, operType = OperateTypeConstants.DELETE, operDesc = "清理服务器监控历史数据")
@@ -171,10 +179,10 @@ public class MonitorServerController {
      * @author 皮锋
      * @custom.date 2020/10/16 15:59
      */
-    @ApiOperation(value = "访问服务器详情页面")
-    @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "id", value = "服务器主键ID", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class),
-            @ApiImplicitParam(name = "ip", value = "服务器IP", required = true, paramType = "query", dataType = "string", dataTypeClass = String.class)})
+    @Operation(summary = "访问服务器详情页面")
+    @Parameters(value = {
+            @Parameter(name = "id", description = "服务器主键ID", required = true, in = ParameterIn.QUERY),
+            @Parameter(name = "ip", description = "服务器IP", required = true, in = ParameterIn.QUERY)})
     @GetMapping("/server-detail")
     @OperateLog(operModule = UiModuleConstants.SERVER, operType = OperateTypeConstants.PAGE, operDesc = "访问服务器详情页面")
     public ModelAndView serverDetail(Long id, String ip) {
@@ -198,9 +206,9 @@ public class MonitorServerController {
      * @author 皮锋
      * @custom.date 2021/7/20 20:56
      */
-    @ApiOperation(value = "访问清理服务器监控历史数据表单页面")
-    @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "ip", value = "服务器IP", required = true, paramType = "query", dataType = "string", dataTypeClass = String.class)})
+    @Operation(summary = "访问清理服务器监控历史数据表单页面")
+    @Parameters(value = {
+            @Parameter(name = "ip", description = "服务器IP", required = true, in = ParameterIn.QUERY)})
     @GetMapping("/server-clear")
     public ModelAndView serverClear(String ip) {
         ModelAndView mv = new ModelAndView("server/server-clear-form");
@@ -219,10 +227,10 @@ public class MonitorServerController {
      * @author 皮锋
      * @custom.date 2021/8/27 12:37
      */
-    @ApiOperation(value = "访问服务器编辑页面")
-    @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "id", value = "服务器主键ID", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class),
-            @ApiImplicitParam(name = "ip", value = "服务器IP", required = true, paramType = "query", dataType = "string", dataTypeClass = String.class)})
+    @Operation(summary = "访问服务器编辑页面")
+    @Parameters(value = {
+            @Parameter(name = "id", description = "服务器主键ID", required = true, in = ParameterIn.QUERY),
+            @Parameter(name = "ip", description = "服务器IP", required = true, in = ParameterIn.QUERY)})
     @GetMapping("/edit-monitor-server-form")
     public ModelAndView editMonitorServerForm(Long id, String ip) {
         ModelAndView mv = new ModelAndView("server/edit-server");
@@ -252,12 +260,29 @@ public class MonitorServerController {
      * @author 皮锋
      * @custom.date 2021/8/27 13:45
      */
-    @ApiOperation(value = "编辑服务器信息")
+    @Operation(summary = "编辑服务器信息")
     @PutMapping("/edit-monitor-server")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.SERVER, operType = OperateTypeConstants.UPDATE, operDesc = "编辑服务器信息")
     public LayUiAdminResultVo editMonitorServer(MonitorServerVo monitorServerVo) {
         return this.monitorServerService.editMonitorServer(monitorServerVo);
+    }
+
+    /**
+     * <p>
+     * 获取服务器信息(Map形式)
+     * </p>
+     *
+     * @return com.gitee.pifeng.monitoring.ui.business.web.vo.LayUiAdminResultVo
+     * @author 皮锋
+     * @custom.date 2022/12/21 14:58
+     */
+    @Operation(summary = "获取服务器信息(Map形式)")
+    @PostMapping("/get-monitor-server-to-map")
+    @ResponseBody
+    public LayUiAdminResultVo getMonitorServer2Map() {
+        Map<String, MonitorServerVo> monitorServer2Map = this.monitorServerService.getMonitorServer2Map();
+        return LayUiAdminResultVo.ok(monitorServer2Map);
     }
 
 }

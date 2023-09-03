@@ -10,10 +10,14 @@ import com.gitee.pifeng.monitoring.common.constant.ResultMsgConstants;
 import com.gitee.pifeng.monitoring.common.domain.Result;
 import com.gitee.pifeng.monitoring.common.dto.BaseRequestPackage;
 import com.gitee.pifeng.monitoring.common.dto.BaseResponsePackage;
-import com.gitee.pifeng.monitoring.server.business.server.core.PackageConstructor;
+import com.gitee.pifeng.monitoring.common.dto.CiphertextPackage;
+import com.gitee.pifeng.monitoring.server.business.server.core.ServerPackageConstructor;
 import com.gitee.pifeng.monitoring.server.business.server.service.IDbSession4MysqlService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,9 +38,15 @@ import java.util.List;
  */
 @Slf4j
 @RestController
-@Api(tags = "数据库会话.MySQL")
+@Tag(name = "数据库会话.MySQL")
 @RequestMapping("/db-session4mysql")
 public class DbSession4MysqlController {
+
+    /**
+     * 包构造器接口
+     */
+    @Autowired
+    private ServerPackageConstructor serverPackageConstructor;
 
     /**
      * MySQL数据库会话服务类
@@ -55,7 +65,9 @@ public class DbSession4MysqlController {
      * @author 皮锋
      * @custom.date 2020/12/24 16:53
      */
-    @ApiOperation(value = "获取会话列表")
+    @Operation(summary = "获取会话列表",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(content = @Content(schema = @Schema(implementation = CiphertextPackage.class))),
+            responses = @ApiResponse(content = {@Content(schema = @Schema(implementation = CiphertextPackage.class))}))
     @PostMapping("/get-session-list")
     public BaseResponsePackage getSessionList(@RequestBody BaseRequestPackage baseRequestPackage) throws SQLException {
         // 计时器
@@ -66,7 +78,7 @@ public class DbSession4MysqlController {
         String password = extraMsg.getString("password");
         List<Entity> entities = this.dbSession4MysqlService.getSessionList(url, username, password);
         String jsonString = JSON.toJSONString(entities);
-        BaseResponsePackage baseResponsePackage = new PackageConstructor().structureBaseResponsePackage(Result.builder().isSuccess(true).msg(jsonString).build());
+        BaseResponsePackage baseResponsePackage = this.serverPackageConstructor.structureBaseResponsePackage(Result.builder().isSuccess(true).msg(jsonString).build());
         // 时间差（毫秒）
         String betweenDay = timer.intervalPretty();
         if (timer.intervalSecond() > 1) {
@@ -86,7 +98,9 @@ public class DbSession4MysqlController {
      * @author 皮锋
      * @custom.date 2020/12/25 17:03
      */
-    @ApiOperation(value = "结束会话")
+    @Operation(summary = "结束会话",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(content = @Content(schema = @Schema(implementation = CiphertextPackage.class))),
+            responses = @ApiResponse(content = {@Content(schema = @Schema(implementation = CiphertextPackage.class))}))
     @PostMapping("/destroy-session")
     public BaseResponsePackage destroySession(@RequestBody BaseRequestPackage baseRequestPackage) throws SQLException {
         // 计时器
@@ -98,7 +112,7 @@ public class DbSession4MysqlController {
         List<Long> sessionIds = extraMsg.getObject("sessionIds", new TypeReference<List<Long>>() {
         });
         this.dbSession4MysqlService.destroySession(url, username, password, sessionIds);
-        BaseResponsePackage baseResponsePackage = new PackageConstructor().structureBaseResponsePackage(Result.builder().isSuccess(true).msg(ResultMsgConstants.SUCCESS).build());
+        BaseResponsePackage baseResponsePackage = this.serverPackageConstructor.structureBaseResponsePackage(Result.builder().isSuccess(true).msg(ResultMsgConstants.SUCCESS).build());
         // 时间差（毫秒）
         String betweenDay = timer.intervalPretty();
         if (timer.intervalSecond() > 1) {

@@ -7,8 +7,8 @@ import com.gitee.pifeng.monitoring.ui.business.web.vo.LayUiAdminResultVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.MonitorConfigPageFormVo;
 import com.gitee.pifeng.monitoring.ui.constant.OperateTypeConstants;
 import com.gitee.pifeng.monitoring.ui.constant.UiModuleConstants;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.hyperic.sigar.SigarException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -28,7 +28,7 @@ import org.springframework.web.servlet.ModelAndView;
  */
 @Controller
 @RequestMapping("/monitor-config")
-@Api(tags = "配置管理.监控配置")
+@Tag(name = "配置管理.监控配置")
 public class MonitorConfigController {
 
     /**
@@ -46,7 +46,7 @@ public class MonitorConfigController {
      * @author 皮锋
      * @custom.date 2020/11/3 13:01
      */
-    @ApiOperation(value = "访问监控配置页")
+    @Operation(summary = "访问监控配置页")
     @GetMapping("/config")
     public ModelAndView config() {
         ModelAndView mv = new ModelAndView("set/config");
@@ -69,7 +69,7 @@ public class MonitorConfigController {
      * @author 皮锋
      * @custom.date 2020/11/9 19:56
      */
-    @ApiOperation(value = "更新监控配置")
+    @Operation(summary = "更新监控配置")
     @ResponseBody
     @PutMapping("/update-monitor-config")
     @OperateLog(operModule = UiModuleConstants.CONFIG_MANAGE + "#监控配置", operType = OperateTypeConstants.UPDATE, operDesc = "更新监控配置")

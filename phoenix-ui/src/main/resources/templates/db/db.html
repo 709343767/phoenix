@@ -110,12 +110,10 @@
                 <div class="layui-btn-group">
                     <a class="layui-btn layui-btn-sm layui-btn-xs" lay-event="info"><i
                             class="layui-icon layui-icon-about"></i>详情</a>
-                    <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"
-                       sec:authorize="hasAuthority('超级管理员')">
-                        <i class="layui-icon layui-icon-edit"></i>编辑</a>
-                    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"
-                       sec:authorize="hasAuthority('超级管理员')">
-                        <i class="layui-icon layui-icon-delete"></i>删除</a>
+                    <a class='layui-btn layui-btn-normal layui-btn-xs rowmoreBtn'
+                       lay-events="edit,del" sec:authorize="hasAuthority('超级管理员')">
+                        <i class="layui-icon layui-icon-down"></i>更多
+                    </a>
                 </div>
             </script>
         </div>
@@ -130,8 +128,9 @@
         base: ctxPath //静态资源所在路径
     }).extend({
         index: 'lib/index' //主入口模块
-    }).use(['index', 'table'], function () {
-        var jq = layui.$, admin = layui.admin, form = layui.form, table = layui.table, device = layui.device();
+    }).use(['index', 'table', 'dropMenu'], function () {
+        var jq = layui.$, admin = layui.admin, form = layui.form,
+            table = layui.table, dropMenu = layui.dropMenu, device = layui.device();
         table.render({
             elem: '#list-table',
             url: ctxPath + 'monitor-db/get-monitor-db-list',
@@ -156,6 +155,16 @@
                 };
             },
             done: function () {
+                dropMenu.render({
+                    elem: '.rowmoreBtn',
+                    location: 'c', //下拉菜单依靠位置，c居中、l左、r右（非必填）
+                    align: 'l', //菜单内容文本对齐方式，c居中、l左、r右（非必填）
+                    width: '80px',
+                    data: [
+                        {title: '编辑', icon: 'layui-icon-edit', event: 'edit'},
+                        {title: '删除', icon: 'layui-icon-delete', event: 'del'}
+                    ]
+                });
                 jq('[data-field="isOnline"]').children().each(function () {
                     if (jq(this).text() === '0') {
                         jq(this).html('<span style="color: #FF4500;font-weight: bold;">异常</span>');
@@ -244,7 +253,7 @@
                     sort: !0
                 }, {
                     title: '操作',
-                    width: authority ? 200 : 100,
+                    width: authority ? 140 : 100,
                     align: 'center',
                     fixed: (device.ios || device.android) ? false : 'right',
                     toolbar: '#list-table-toolbar-detail'

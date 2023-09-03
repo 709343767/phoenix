@@ -3,8 +3,8 @@ package com.gitee.pifeng.monitoring.ui.business.web.controller;
 import com.gitee.pifeng.monitoring.ui.business.web.annotation.OperateLog;
 import com.gitee.pifeng.monitoring.ui.constant.OperateTypeConstants;
 import com.gitee.pifeng.monitoring.ui.constant.UiModuleConstants;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -18,7 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
  * @custom.date 2020/5/15 8:57
  */
 @Controller
-@Api(tags = "登录")
+@Tag(name = "登录")
 public class LoginController {
 
     /**
@@ -30,7 +30,7 @@ public class LoginController {
      * @author 皮锋
      * @custom.date 2020/5/15 9:12
      */
-    @ApiOperation(value = "访问登录页面")
+    @Operation(summary = "访问登录页面")
     @GetMapping("/login")
     @OperateLog(operModule = UiModuleConstants.LOGIN, operType = OperateTypeConstants.PAGE, operDesc = "访问登录页面")
     public ModelAndView login() {
@@ -46,7 +46,7 @@ public class LoginController {
      * @author 皮锋
      * @custom.date 2021/7/18 21:09
      */
-    @ApiOperation(value = "登录成功重定向到首页")
+    @Operation(summary = "登录成功重定向到首页")
     @GetMapping("/login-success")
     @OperateLog(operModule = UiModuleConstants.LOGIN, operType = OperateTypeConstants.LOGIN, operDesc = "用户成功登录")
     public String loginSuccess() {
@@ -62,7 +62,7 @@ public class LoginController {
      * @author 皮锋
      * @custom.date 2021/9/30 21:10
      */
-    @ApiOperation(value = "退出登录成功重定向到首页")
+    @Operation(summary = "退出登录成功重定向到首页")
     @GetMapping("/logout-success")
     @OperateLog(operModule = UiModuleConstants.LOGOUT, operType = OperateTypeConstants.LOGOUT, operDesc = "退出登录成功重定向到首页")
     public String logoutSuccess() {

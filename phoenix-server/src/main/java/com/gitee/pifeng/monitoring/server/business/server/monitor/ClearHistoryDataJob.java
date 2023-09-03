@@ -6,6 +6,7 @@ import org.joda.time.DateTime;
 import org.quartz.JobExecutionContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
+import org.springframework.lang.NonNull;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 import org.springframework.stereotype.Component;
 
@@ -62,7 +63,7 @@ public class ClearHistoryDataJob extends QuartzJobBean {
      * @custom.date 2020/12/09 20:28
      */
     @Override
-    protected void executeInternal(JobExecutionContext jobExecutionContext) {
+    protected void executeInternal(@NonNull JobExecutionContext jobExecutionContext) {
         try {
             // 清理一星期以前的数据
             Date historyTime = new DateTime().plusWeeks(-1).toDate();

@@ -2,8 +2,7 @@ package com.gitee.pifeng.monitoring.ui.business.web.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.gitee.pifeng.monitoring.common.inf.ISuperBean;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import lombok.experimental.Accessors;
 
@@ -26,13 +25,13 @@ import java.util.List;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel(value = "HTTP访问耗时图表信息表现层对象")
+@Schema(description = "HTTP访问耗时图表信息表现层对象")
 public class HttpAvgTimeChartVo implements ISuperBean {
 
-    @ApiModelProperty(value = "所有列表")
+    @Schema(description = "所有列表")
     private List<All> allList;
 
-    @ApiModelProperty(value = "异常列表")
+    @Schema(description = "异常列表")
     private List<Exc> excList;
 
     /**
@@ -43,18 +42,18 @@ public class HttpAvgTimeChartVo implements ISuperBean {
      * @author 皮锋
      * @custom.date 2022/3/19 15:45
      */
-    @ApiModel(value = "所有")
+    @Schema(description = "所有")
     @Data
     public static class All {
 
-        @ApiModelProperty(value = "平均响应时间（毫秒）")
+        @Schema(description = "平均响应时间（毫秒）")
         private Long avgTime;
 
-        @ApiModelProperty(value = "状态码")
+        @Schema(description = "状态码")
         private Integer status;
 
         @JsonFormat(pattern = "yyyy/MM/dd HH:mm:ss", timezone = "GMT+8")
-        @ApiModelProperty(value = "新增时间")
+        @Schema(description = "新增时间")
         private Date insertTime;
     }
 
@@ -66,18 +65,18 @@ public class HttpAvgTimeChartVo implements ISuperBean {
      * @author 皮锋
      * @custom.date 2022/3/19 15:46
      */
-    @ApiModel(value = "异常")
+    @Schema(description = "异常")
     @Data
     public static class Exc {
 
-        @ApiModelProperty(value = "平均响应时间（毫秒）")
+        @Schema(description = "平均响应时间（毫秒）")
         private Long avgTime;
 
-        @ApiModelProperty(value = "状态码")
+        @Schema(description = "状态码")
         private Integer status;
 
         @JsonFormat(pattern = "yyyy/MM/dd HH:mm:ss", timezone = "GMT+8")
-        @ApiModelProperty(value = "新增时间")
+        @Schema(description = "新增时间")
         private Date insertTime;
     }
 

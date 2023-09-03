@@ -7,8 +7,8 @@ import com.gitee.pifeng.monitoring.common.dto.ServerPackage;
 import com.gitee.pifeng.monitoring.common.exception.NetException;
 import com.gitee.pifeng.monitoring.common.util.server.ServerUtils;
 import com.gitee.pifeng.monitoring.plug.constant.UrlConstants;
+import com.gitee.pifeng.monitoring.plug.core.ClientPackageConstructor;
 import com.gitee.pifeng.monitoring.plug.core.ConfigLoader;
-import com.gitee.pifeng.monitoring.plug.core.PackageConstructor;
 import com.gitee.pifeng.monitoring.plug.core.Sender;
 import lombok.extern.slf4j.Slf4j;
 import org.hyperic.sigar.SigarException;
@@ -27,6 +27,11 @@ import java.io.IOException;
 public class ServerThread implements Runnable {
 
     /**
+     * 客户端包构造器
+     */
+    private final ClientPackageConstructor clientPackageConstructor = ClientPackageConstructor.getInstance();
+
+    /**
      * <p>
      * 构建+发送服务器信息包
      * </p>
@@ -40,12 +45,14 @@ public class ServerThread implements Runnable {
         TimeInterval timer = DateUtil.timer();
         try {
             // 获取服务器信息
-            Server server = ConfigLoader.MONITORING_PROPERTIES.getServerInfoProperties().isUserSigarEnable() ? ServerUtils.getSigarServerInfo() : ServerUtils.getOshiServerInfo();
+            Server server = ConfigLoader.getMonitoringProperties().getServerInfoProperties().isUserSigarEnable() ? ServerUtils.getSigarServerInfo() : ServerUtils.getOshiServerInfo();
             // 构建服务器数据包
-            ServerPackage serverPackage = new PackageConstructor().structureServerPackage(server);
+            ServerPackage serverPackage = this.clientPackageConstructor.structureServerPackage(server);
             // 发送请求
             String result = Sender.send(UrlConstants.SERVER_URL, serverPackage.toJsonString());
-            log.debug("服务器信息包响应消息：{}", result);
+            if (log.isDebugEnabled()) {
+                log.debug("服务器信息包响应消息：{}", result);
+            }
         } catch (IOException e) {
             log.error("IO异常！", e);
         } catch (SigarException e) {

@@ -8,14 +8,16 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
-    <link rel="icon" th:href="@{/images/favicon16.png}" type="image/png" sizes="16x16">
-    <link rel="icon" th:href="@{/images/favicon32.png}" type="image/png" sizes="32x32">
-    <link rel="icon" th:href="@{/images/favicon.ico}" type="image/x-icon">
-    <link rel="shortcut icon" th:href="@{/images/favicon.ico}" type="image/x-icon">
-    <link rel="shortcut icon" th:href="@{/images/favicon.ico}" type="image/vnd.microsoft.icon">
-    <link rel="apple-touch-icon" th:href="@{/images/apple-touch-icon.png}" type="image/png" sizes="57x57">
-    <link rel="bookmark" th:href="@{/images/favicon.ico}" type="image/x-icon">
-    <link rel="dns-prefetch" th:href="@{/images/favicon32.png}" type="image/png" sizes="32x32">
+    <link rel="icon" th:href="@{/favicon16.png}" type="image/png" sizes="16x16">
+    <link rel="icon" th:href="@{/favicon32.png}" type="image/png" sizes="32x32">
+    <link rel="icon" th:href="@{/favicon.ico}" type="image/x-icon">
+    <link rel="icon" th:href="@{/favicon.svg}" type="image/svg+xml" sizes="128x128">
+    <link rel="alternate icon" th:href="@{/favicon.ico}" sizes="any">
+    <link rel="shortcut icon" th:href="@{/favicon.ico}" type="image/x-icon">
+    <link rel="shortcut icon" th:href="@{/favicon.ico}" type="image/vnd.microsoft.icon">
+    <link rel="apple-touch-icon" th:href="@{/apple-touch-icon.png}" type="image/png" sizes="128x128">
+    <link rel="bookmark" th:href="@{/favicon.ico}" type="image/x-icon">
+    <link rel="dns-prefetch" th:href="@{/favicon32.png}" type="image/png" sizes="32x32">
     <link rel="stylesheet" href="./layui/css/layui.css" th:href="@{/layui/css/layui.css}" media="all">
     <link rel="stylesheet" href="./style/login.css" th:href="@{/style/login.css}" media="all">
     <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
@@ -44,6 +46,22 @@
                 <input type="password" name="password" id="LAY-user-login-password" lay-verify="password"
                        placeholder="密码" class="layui-input" lay-verType="tips">
             </div>
+            <div class="layui-form-item">
+                <div class="layui-row">
+                    <div class="layui-col-xs7">
+                        <label class="layadmin-user-login-icon layui-icon layui-icon-vercode"
+                               for="LAY-user-login-vercode"></label>
+                        <input type="text" name="captcha" id="LAY-user-login-vercode" lay-verify="captcha"
+                               placeholder="图形验证码" class="layui-input" lay-verType="tips">
+                    </div>
+                    <div class="layui-col-xs5">
+                        <div style="margin-left: 10px;">
+                            <img th:src="@{/captcha.png}" class="layadmin-user-login-codeimg"
+                                 id="LAY-user-get-vercode">
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="layui-form-item" th:if="${param.error}">
                 <label style="color: red;">
                     账号或密码错误，请重新输入！
@@ -57,6 +75,26 @@
             <div class="layui-form-item" th:if="${param.timeout}">
                 <label style="color: red;">
                     登录已超时，请重新登录！
+                </label>
+            </div>
+            <div class="layui-form-item" th:if="${param.captchaCannotBeEmpty}">
+                <label style="color: red;">
+                    图形验证码不能为空！
+                </label>
+            </div>
+            <div class="layui-form-item" th:if="${param.captchaDoesNotExist}">
+                <label style="color: red;">
+                    图形验证码不存在！
+                </label>
+            </div>
+            <div class="layui-form-item" th:if="${param.captchaHasExpired}">
+                <label style="color: red;">
+                    图形验证码已过期！
+                </label>
+            </div>
+            <div class="layui-form-item" th:if="${param.captchaVerificationFailed}">
+                <label style="color: red;">
+                    图形验证码校验失败！
                 </label>
             </div>
             <div class="layui-form-item" style="margin-bottom: 20px;">
@@ -96,8 +134,9 @@
 </div>
 <script src="./layui/layui.js" th:src="@{/layui/layui.js}" charset="utf-8"></script>
 <script th:inline="javascript" charset="utf-8">
-    layui.use('form', function () {
-        var form = layui.form;
+    var ctxPath = /*[[@{/}]]*/'';
+    layui.use(['form', 'jquery'], function () {
+        var form = layui.form, $ = layui.$;
         //自定义验证规则
         form.verify({
             account: function (value) {
@@ -109,7 +148,16 @@
                 if (value.length === 0) {
                     return '密码不能为空！';
                 }
+            },
+            captcha: function (value) {
+                if (value.length === 0) {
+                    return '图形验证码不能为空！';
+                }
             }
+        });
+        // 点击图片刷新
+        $('#LAY-user-get-vercode').click(function (_this) {
+            $('#LAY-user-get-vercode').attr('src', ctxPath + 'captcha.png' + "?t=" + Math.random());
         });
     });
 </script>

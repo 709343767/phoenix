@@ -8,10 +8,11 @@ import com.gitee.pifeng.monitoring.ui.business.web.vo.LayUiAdminResultVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.MonitorGroupVo;
 import com.gitee.pifeng.monitoring.ui.constant.OperateTypeConstants;
 import com.gitee.pifeng.monitoring.ui.constant.UiModuleConstants;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +28,7 @@ import java.util.List;
  * @author 皮锋
  * @custom.date 2021-12-23
  */
-@Api(tags = "配置管理.分组管理")
+@Tag(name = "配置管理.分组管理")
 @Controller
 @RequestMapping("/monitor-group")
 public class MonitorGroupController {
@@ -47,7 +48,7 @@ public class MonitorGroupController {
      * @author 皮锋
      * @custom.date 2021/12/23 17:53
      */
-    @ApiOperation(value = "访问分组列表页面")
+    @Operation(summary = "访问分组列表页面")
     @GetMapping("/list")
     public ModelAndView list() {
         return new ModelAndView("set/group");
@@ -66,16 +67,19 @@ public class MonitorGroupController {
      * @author 皮锋
      * @custom.date 2021/12/24 9:40
      */
-    @ApiOperation(value = "获取分组列表")
-    @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "current", value = "当前页", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class),
-            @ApiImplicitParam(name = "size", value = "每页显示条数", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class),
-            @ApiImplicitParam(name = "groupName", value = "分组名称", paramType = "query", dataType = "string", dataTypeClass = String.class),
-            @ApiImplicitParam(name = "groupDesc", value = "分组描述", paramType = "query", dataType = "string", dataTypeClass = String.class)})
+    @Operation(summary = "获取分组列表")
+    @Parameters(value = {
+            @Parameter(name = "current", description = "当前页", required = true, in = ParameterIn.QUERY),
+            @Parameter(name = "size", description = "每页显示条数", required = true, in = ParameterIn.QUERY),
+            @Parameter(name = "groupName", description = "分组名称", in = ParameterIn.QUERY),
+            @Parameter(name = "groupDesc", description = "分组描述", in = ParameterIn.QUERY)})
     @GetMapping("get-monitor-group-list")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.CONFIG_MANAGE + "#分组管理", operType = OperateTypeConstants.QUERY, operDesc = "获取分组列表")
-    public LayUiAdminResultVo getMonitorGroupList(Long current, Long size, String groupName, String groupDesc) {
+    public LayUiAdminResultVo getMonitorGroupList(@RequestParam(value = "current") Long current,
+                                                  @RequestParam(value = "size") Long size,
+                                                  @RequestParam(value = "groupName", required = false) String groupName,
+                                                  @RequestParam(value = "groupDesc", required = false) String groupDesc) {
         Page<MonitorGroupVo> page = this.monitorGroupService.getMonitorGroupList(current, size, groupName, groupDesc);
         return LayUiAdminResultVo.ok(page);
     }
@@ -89,7 +93,7 @@ public class MonitorGroupController {
      * @author 皮锋
      * @custom.date 2021/12/24 10:19
      */
-    @ApiOperation(value = "访问新增分组信息表单页面")
+    @Operation(summary = "访问新增分组信息表单页面")
     @GetMapping("/add-monitor-group-form")
     public ModelAndView addMonitorGroupForm() {
         return new ModelAndView("set/add-group");
@@ -106,7 +110,7 @@ public class MonitorGroupController {
      * @author 皮锋
      * @custom.date 2021/12/24 10:30
      */
-    @ApiOperation(value = "添加分组信息")
+    @Operation(summary = "添加分组信息")
     @PostMapping("/save-monitor-group")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.CONFIG_MANAGE + "#分组管理", operType = OperateTypeConstants.ADD, operDesc = "添加分组信息")
@@ -124,9 +128,9 @@ public class MonitorGroupController {
      * @author 皮锋
      * @custom.date 2021/12/24 10:58
      */
-    @ApiOperation(value = "访问编辑分组信息表单页面")
-    @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "id", value = "分组ID", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class)})
+    @Operation(summary = "访问编辑分组信息表单页面")
+    @Parameters(value = {
+            @Parameter(name = "id", description = "分组ID", required = true, in = ParameterIn.QUERY)})
     @GetMapping("/edit-monitor-group-form")
     public ModelAndView editMonitorGroupForm(@RequestParam(name = "id") Long id) {
         MonitorGroup monitorGroup = this.monitorGroupService.getById(id);
@@ -146,7 +150,7 @@ public class MonitorGroupController {
      * @author 皮锋
      * @custom.date 2021/12/24 11:07
      */
-    @ApiOperation(value = "编辑分组信息")
+    @Operation(summary = "编辑分组信息")
     @PutMapping("/edit-monitor-group")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.CONFIG_MANAGE + "#分组管理", operType = OperateTypeConstants.UPDATE, operDesc = "编辑分组信息")
@@ -164,7 +168,7 @@ public class MonitorGroupController {
      * @author 皮锋
      * @custom.date 2021/12/27 12:25
      */
-    @ApiOperation(value = "删除分组信息")
+    @Operation(summary = "删除分组信息")
     @DeleteMapping("/delete-monitor-group")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.CONFIG_MANAGE + "#分组管理", operType = OperateTypeConstants.DELETE, operDesc = "删除分组信息")

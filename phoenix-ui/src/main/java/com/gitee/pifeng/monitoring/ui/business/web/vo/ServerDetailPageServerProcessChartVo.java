@@ -2,8 +2,7 @@ package com.gitee.pifeng.monitoring.ui.business.web.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.gitee.pifeng.monitoring.common.inf.ISuperBean;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import lombok.experimental.Accessors;
 
@@ -25,14 +24,14 @@ import java.util.Date;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel(value = "服务器详情页面服务器进程图表信息表现层对象")
+@Schema(description = "服务器详情页面服务器进程图表信息表现层对象")
 public class ServerDetailPageServerProcessChartVo implements ISuperBean {
 
-    @ApiModelProperty(value = "正在运行的进程数")
+    @Schema(description = "正在运行的进程数")
     private Integer processNum;
 
     @JsonFormat(pattern = "yyyy/MM/dd HH:mm:ss", timezone = "GMT+8")
-    @ApiModelProperty(value = "新增时间")
+    @Schema(description = "新增时间")
     private Date insertTime;
 
 }

@@ -91,7 +91,7 @@
                                 var axisName = '';
                                 params.forEach(function (item) {
                                     axisName = item.axisValue;
-                                    var itemValue = item.marker + item.seriesName + ': ' + item.data + ' ms</br>';
+                                    var itemValue = item.marker + item.seriesName + ': ' + formatMillisecond(item.data) + '</br>';
                                     result += itemValue;
                                 });
                                 return axisName + '</br>' + result;
@@ -153,6 +153,9 @@
                             },
                             axisLabel: {
                                 formatter: '{value}',
+                                //formatter: function (value, index) {
+                                //    return formatMillisecond(value);
+                                //},
                                 textStyle: {
                                     // color: '#c3dbff',  //更改坐标轴文字颜色
                                     fontSize: 14      //更改坐标轴文字大小

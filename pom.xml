@@ -7,7 +7,7 @@
     <!-- 项目基本信息 -->
     <groupId>com.gitee.pifeng</groupId>
     <artifactId>phoenix</artifactId>
-    <version>1.2.4.RELEASE-CR8</version>
+    <version>1.2.5.RELEASE</version>
     <modules>
         <!-- 监控公共模块父工程 -->
         <module>phoenix-common</module>
@@ -48,6 +48,8 @@
         <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
         <!-- alibaba的fastjson版本 -->
         <fastjson.version>1.2.83</fastjson.version>
+        <!-- jackson数据解析工具版本 -->
+        <jackson.version>2.15.2</jackson.version>
         <!-- guava基本工具版本 -->
         <guava.version>20.0</guava.version>
         <!-- liferay.portal工具版本 -->
@@ -58,15 +60,16 @@
         <commons-io.version>2.6</commons-io.version>
         <commons-collections.version>3.2.2</commons-collections.version>
         <commons-net.version>3.8.0</commons-net.version>
+        <commons-logging.version>1.2</commons-logging.version>
         <!--<commons-logging.version>1.2</commons-logging.version>-->
         <!-- sigar版本 -->
         <sigar.version>1.6.4</sigar.version>
         <!-- oshi版本 -->
-        <oshi-core.version>6.2.0</oshi-core.version>
+        <oshi-core.version>6.4.4</oshi-core.version>
         <!-- jna版本 -->
-        <jna.version>5.12.0</jna.version>
+        <jna.version>5.13.0</jna.version>
         <!-- jna-platform版本 -->
-        <jna-platform.version>5.12.0</jna-platform.version>
+        <jna-platform.version>5.13.0</jna-platform.version>
         <!-- Hutool工具包版本 -->
         <hutool-all.version>5.6.3</hutool-all.version>
         <!-- easypoi工具包版本 -->
@@ -76,7 +79,7 @@
         <!-- servlet-api版本 -->
         <servlet-api.version>2.5</servlet-api.version>
         <!-- knife4j文档依赖 -->
-        <knife4j.version>3.0.3</knife4j.version>
+        <knife4j.version>4.1.0</knife4j.version>
         <!-- mybatis-plus-boot-starter版本 -->
         <mybatis-plus-boot-starter.version>3.1.2</mybatis-plus-boot-starter.version>
         <!-- mybatis-plus代码生成器版本 -->
@@ -106,6 +109,8 @@
         <maven-jar-plugin.version>3.2.0</maven-jar-plugin.version>
         <!-- springboot插件版本 -->
         <spring-boot-maven-plugin.version>2.3.1.RELEASE</spring-boot-maven-plugin.version>
+        <!-- 定制化打包插件版本 -->
+        <maven-assembly-plugin.version>3.3.0</maven-assembly-plugin.version>
         <!-- sonatype的staging插件版本 -->
         <nexus-staging-maven-plugin.version>1.6.8</nexus-staging-maven-plugin.version>
         <!-- 生成java doc插件版本 -->
@@ -197,6 +202,22 @@
                 <artifactId>fastjson</artifactId>
                 <version>${fastjson.version}</version>
             </dependency>
+            <!-- jackson数据解析工具依赖 -->
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-annotations</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-core</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
             <!-- joda-time时间日期依赖 -->
             <dependency>
                 <groupId>joda-time</groupId>
@@ -230,6 +251,11 @@
                 <groupId>commons-net</groupId>
                 <artifactId>commons-net</artifactId>
                 <version>${commons-net.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-logging</groupId>
+                <artifactId>commons-logging</artifactId>
+                <version>${commons-logging.version}</version>
             </dependency>
             <!-- sigar依赖 -->
             <dependency>
@@ -283,7 +309,7 @@
             <!-- knife4j文档依赖 -->
             <dependency>
                 <groupId>com.github.xiaoymin</groupId>
-                <artifactId>knife4j-spring-boot-starter</artifactId>
+                <artifactId>knife4j-openapi3-spring-boot-starter</artifactId>
                 <version>${knife4j.version}</version>
             </dependency>
             <!-- mybatis-plus依赖 -->
@@ -377,6 +403,10 @@
                         <source>${java.version}</source>
                         <target>${java.version}</target>
                         <encoding>${project.build.sourceEncoding}</encoding>
+                        <compilerArgs>
+                            <!-- 编译器会保留方法参数名，使得在AOP或反射等场景下能够获取到方法的真实参数名 -->
+                            <arg>-parameters</arg>
+                        </compilerArgs>
                     </configuration>
                 </plugin>
                 <!--单元测试插件 -->
@@ -430,6 +460,15 @@
                             </goals>
                         </execution>
                     </executions>
+                </plugin>
+                <!-- 定制化打包插件 -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-assembly-plugin</artifactId>
+                    <version>${maven-assembly-plugin.version}</version>
+                    <configuration>
+                        <outputDirectory>${session.executionRootDirectory}/target</outputDirectory>
+                    </configuration>
                 </plugin>
                 <!-- sonatype的staging插件 -->
                 <plugin>

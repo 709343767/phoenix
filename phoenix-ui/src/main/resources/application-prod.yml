@@ -1,6 +1,6 @@
 ##############################################server配置#################################################
 server:
-  port: 443
+  port: 8443
   ssl:
     enabled: true
     #你生成的证书名字
@@ -21,6 +21,11 @@ spring:
       url: jdbc:mysql://ip:3306/phoenix?useSSL=false&serverTimezone=GMT%2b8&useUnicode=true&characterEncoding=utf-8&autoReconnect=true&failOverReadOnly=false&rewriteBatchedStatements=true
       username:
       password:
+
+
+  ############################################thymeleaf配置###############################################
+  thymeleaf:
+    cache: true
 
 
 ##############################################第三方认证配置#################################################

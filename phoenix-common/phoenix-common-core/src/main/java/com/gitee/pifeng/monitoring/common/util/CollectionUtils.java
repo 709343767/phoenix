@@ -1,5 +1,9 @@
 package com.gitee.pifeng.monitoring.common.util;
 
+import cn.hutool.core.collection.CollectionUtil;
+import com.google.common.collect.Lists;
+
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
@@ -40,6 +44,48 @@ public class CollectionUtils {
     public static <T> Predicate<T> distinctByKey(Function<? super T, Object> keyExtractor) {
         Map<Object, Boolean> seen = new ConcurrentHashMap<>(16);
         return object -> seen.putIfAbsent(keyExtractor.apply(object), Boolean.TRUE) == null;
+    }
+
+    /**
+     * <p>
+     * 根据指定大小拆分List
+     * </p>
+     *
+     * @param <T>          泛型对象
+     * @param resourceList 需要拆分的List
+     * @param subListSize  每个子List的大小
+     * @return 返回拆分后的各个List组成的List
+     **/
+    public static <T> List<List<T>> split(List<T> resourceList, int subListSize) {
+        if (CollectionUtil.isEmpty(resourceList) || subListSize <= 0) {
+            return Lists.newArrayList();
+        }
+        List<List<T>> result = Lists.newArrayList();
+        int size = resourceList.size();
+        if (size <= subListSize) {
+            // 数据量不足 subListSize 指定的大小
+            result.add(resourceList);
+        } else {
+            int pre = size / subListSize;
+            int last = size % subListSize;
+            // 前面pre个集合，每个大小都是 subListSize 个元素
+            for (int i = 0; i < pre; i++) {
+                List<T> itemList = Lists.newArrayList();
+                for (int j = 0; j < subListSize; j++) {
+                    itemList.add(resourceList.get(i * subListSize + j));
+                }
+                result.add(itemList);
+            }
+            // last的进行处理
+            if (last > 0) {
+                List<T> itemList = Lists.newArrayList();
+                for (int i = 0; i < last; i++) {
+                    itemList.add(resourceList.get(pre * subListSize + i));
+                }
+                result.add(itemList);
+            }
+        }
+        return result;
     }
 
 }

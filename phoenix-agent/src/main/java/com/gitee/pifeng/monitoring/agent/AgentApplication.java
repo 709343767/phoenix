@@ -1,11 +1,12 @@
 package com.gitee.pifeng.monitoring.agent;
 
-import com.gitee.pifeng.monitoring.common.web.toolkit.CustomizationBeanHandler;
-import com.gitee.pifeng.monitoring.common.web.toolkit.UniqueBeanNameGenerator;
+import com.gitee.pifeng.monitoring.common.web.core.CustomizationBeanHandler;
+import com.gitee.pifeng.monitoring.common.web.core.UniqueBeanNameGenerator;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.retry.annotation.EnableRetry;
+import org.springframework.stereotype.Indexed;
 
 /**
  * <p>
@@ -16,6 +17,7 @@ import org.springframework.retry.annotation.EnableRetry;
  * @author 皮锋
  * @custom.date 2020年1月20日 上午8:45:29
  */
+@Indexed
 @EnableRetry
 @SpringBootApplication
 @ComponentScan(nameGenerator = UniqueBeanNameGenerator.class)

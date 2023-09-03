@@ -24,7 +24,7 @@ import com.gitee.pifeng.monitoring.ui.business.web.vo.LayUiAdminResultVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.MonitorNetVo;
 import com.gitee.pifeng.monitoring.ui.constant.UrlConstants;
 import com.gitee.pifeng.monitoring.ui.constant.WebResponseConstants;
-import com.gitee.pifeng.monitoring.ui.core.PackageConstructor;
+import com.gitee.pifeng.monitoring.ui.core.UiPackageConstructor;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
 import org.hyperic.sigar.SigarException;
@@ -49,6 +49,12 @@ import java.util.Map;
  */
 @Service
 public class MonitorNetServiceImpl extends ServiceImpl<IMonitorNetDao, MonitorNet> implements IMonitorNetService {
+
+    /**
+     * UI端包构造器
+     */
+    @Autowired
+    private UiPackageConstructor uiPackageConstructor;
 
     /**
      * 网络信息数据访问对象
@@ -258,8 +264,8 @@ public class MonitorNetServiceImpl extends ServiceImpl<IMonitorNetDao, MonitorNe
     @Override
     public String getSourceIp() {
         try {
-            BaseRequestPackage baseRequestPackage = new PackageConstructor().structureBaseRequestPackage(null);
-            String resultStr = Sender.send(UrlConstants.GET_SOURCE_IP, baseRequestPackage.toJsonString());
+            BaseRequestPackage baseRequestPackage = this.uiPackageConstructor.structureBaseRequestPackage(null);
+            String resultStr = Sender.send(UrlConstants.GET_SOURCE_IP_URL, baseRequestPackage.toJsonString());
             BaseResponsePackage baseResponsePackage = JSON.parseObject(resultStr, BaseResponsePackage.class);
             Result result = baseResponsePackage.getResult();
             // 是否成功
@@ -280,17 +286,16 @@ public class MonitorNetServiceImpl extends ServiceImpl<IMonitorNetDao, MonitorNe
      *
      * @param monitorNetVo 网络信息
      * @return layUiAdmin响应对象：网络连通性
-     * @throws SigarException Sigar异常
      * @throws IOException    IO异常
      * @author 皮锋
      * @custom.date 2022/10/9 10:16
      */
     @Override
-    public LayUiAdminResultVo testMonitorNetwork(MonitorNetVo monitorNetVo) throws SigarException, IOException {
+    public LayUiAdminResultVo testMonitorNetwork(MonitorNetVo monitorNetVo) throws IOException {
         // 封装请求数据
         JSONObject extraMsg = new JSONObject();
         extraMsg.put("ipTarget", monitorNetVo.getIpTarget());
-        BaseRequestPackage baseRequestPackage = new PackageConstructor().structureBaseRequestPackage(extraMsg);
+        BaseRequestPackage baseRequestPackage = this.uiPackageConstructor.structureBaseRequestPackage(extraMsg);
         // 从服务端获取数据
         String resultStr = Sender.send(UrlConstants.TEST_MONITOR_NETWORK_URL, baseRequestPackage.toJsonString());
         BaseResponsePackage baseResponsePackage = JSON.parseObject(resultStr, BaseResponsePackage.class);
@@ -303,6 +308,28 @@ public class MonitorNetServiceImpl extends ServiceImpl<IMonitorNetDao, MonitorNe
             msg = WebResponseConstants.FAIL;
         }
         return LayUiAdminResultVo.ok(msg);
+    }
+
+    /**
+     * <p>
+     * 获取网络信息
+     * </p>
+     *
+     * @return 网络信息表现层对象
+     * @author 皮锋
+     * @custom.date 2022/11/27 19:34
+     */
+    @Override
+    public List<MonitorNetVo> getMonitorNetInfo() {
+        List<MonitorNetVo> result = Lists.newArrayList();
+        // 查询数据库
+        List<MonitorNet> monitorNets = this.list();
+        // 封装返回数据
+        for (MonitorNet monitorNet : monitorNets) {
+            MonitorNetVo monitorNetVo = MonitorNetVo.builder().build().convertFor(monitorNet);
+            result.add(monitorNetVo);
+        }
+        return result;
     }
 
 }

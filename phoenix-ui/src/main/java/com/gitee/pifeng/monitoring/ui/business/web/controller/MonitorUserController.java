@@ -12,10 +12,11 @@ import com.gitee.pifeng.monitoring.ui.business.web.vo.MonitorRoleVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.MonitorUserVo;
 import com.gitee.pifeng.monitoring.ui.constant.OperateTypeConstants;
 import com.gitee.pifeng.monitoring.ui.constant.UiModuleConstants;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -33,7 +34,7 @@ import java.util.List;
  * @custom.date 2020/7/23 14:44
  */
 @Controller
-@Api(tags = "用户管理.用户")
+@Tag(name = "用户管理.用户")
 @RequestMapping("/user")
 public class MonitorUserController {
 
@@ -58,7 +59,7 @@ public class MonitorUserController {
      * @author 皮锋
      * @custom.date 2020/7/23 14:46
      */
-    @ApiOperation(value = "访问用户列表页面")
+    @Operation(summary = "访问用户列表页面")
     @GetMapping("/list")
     public ModelAndView list() {
         return new ModelAndView("user/user");
@@ -78,17 +79,21 @@ public class MonitorUserController {
      * @author 皮锋
      * @custom.date 2020/7/23 16:25
      */
-    @ApiOperation(value = "获取监控用户列表")
-    @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "current", value = "当前页", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class),
-            @ApiImplicitParam(name = "size", value = "每页显示条数", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class),
-            @ApiImplicitParam(name = "account", value = "账号", paramType = "query", dataType = "string", dataTypeClass = String.class),
-            @ApiImplicitParam(name = "username", value = "用户名", paramType = "query", dataType = "string", dataTypeClass = String.class),
-            @ApiImplicitParam(name = "email", value = "电子邮箱", paramType = "query", dataType = "string", dataTypeClass = String.class)})
+    @Operation(summary = "获取监控用户列表")
+    @Parameters(value = {
+            @Parameter(name = "current", description = "当前页", required = true, in = ParameterIn.QUERY),
+            @Parameter(name = "size", description = "每页显示条数", required = true, in = ParameterIn.QUERY),
+            @Parameter(name = "account", description = "账号", in = ParameterIn.QUERY),
+            @Parameter(name = "username", description = "用户名", in = ParameterIn.QUERY),
+            @Parameter(name = "email", description = "电子邮箱", in = ParameterIn.QUERY)})
     @GetMapping("/get-monitor-user-list")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.USER_MANAGE + "#用户", operType = OperateTypeConstants.QUERY, operDesc = "获取监控用户列表")
-    public LayUiAdminResultVo getMonitorUserList(Long current, Long size, String account, String username, String email) {
+    public LayUiAdminResultVo getMonitorUserList(@RequestParam(value = "current") Long current,
+                                                 @RequestParam(value = "size") Long size,
+                                                 @RequestParam(value = "account", required = false) String account,
+                                                 @RequestParam(value = "username", required = false) String username,
+                                                 @RequestParam(value = "email", required = false) String email) {
         Page<MonitorUserVo> page = this.monitorUserService.getMonitorUserList(current, size, account, username, email);
         return LayUiAdminResultVo.ok(page);
     }
@@ -102,7 +107,7 @@ public class MonitorUserController {
      * @author 皮锋
      * @custom.date 2020/8/1 18:49
      */
-    @ApiOperation(value = "访问新增用户表单页面")
+    @Operation(summary = "访问新增用户表单页面")
     @GetMapping("/add-user-form")
     public ModelAndView addUserForm() {
         ModelAndView mv = new ModelAndView("user/add-user");
@@ -128,9 +133,9 @@ public class MonitorUserController {
      * @author 皮锋
      * @custom.date 2020/8/2 20:20
      */
-    @ApiOperation(value = "访问编辑用户表单页面")
-    @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "userId", value = "用户ID", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class)})
+    @Operation(summary = "访问编辑用户表单页面")
+    @Parameters(value = {
+            @Parameter(name = "userId", description = "用户ID", required = true, in = ParameterIn.QUERY)})
     @GetMapping("/edit-user-form")
     public ModelAndView editUserForm(@RequestParam(name = "userId") Long userId) {
         ModelAndView mv = new ModelAndView("user/edit-user");
@@ -162,7 +167,7 @@ public class MonitorUserController {
      * @author 皮锋
      * @custom.date 2020/8/1 21:19
      */
-    @ApiOperation(value = "添加用户")
+    @Operation(summary = "添加用户")
     @PostMapping("/save-user")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.USER_MANAGE + "#用户", operType = OperateTypeConstants.ADD, operDesc = "添加用户")
@@ -180,7 +185,7 @@ public class MonitorUserController {
      * @author 皮锋
      * @custom.date 2020/8/2 20:43
      */
-    @ApiOperation(value = "编辑用户")
+    @Operation(summary = "编辑用户")
     @PutMapping("/edit-user")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.USER_MANAGE + "#用户", operType = OperateTypeConstants.UPDATE, operDesc = "编辑用户")
@@ -199,7 +204,7 @@ public class MonitorUserController {
      * @author 皮锋
      * @custom.date 2020/8/2 16:43
      */
-    @ApiOperation(value = "删除用户")
+    @Operation(summary = "删除用户")
     @DeleteMapping("/delete-user")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.USER_MANAGE + "#用户", operType = OperateTypeConstants.DELETE, operDesc = "删除用户")

@@ -87,6 +87,12 @@ public class MonitorInstance {
     private String isOnline;
 
     /**
+     * 是否收到离线通知（0：否，1：是）
+     */
+    @TableField("IS_OFFLINE_NOTICE")
+    private String isOfflineNotice;
+
+    /**
      * 离线次数
      */
     @TableField("OFFLINE_COUNT")

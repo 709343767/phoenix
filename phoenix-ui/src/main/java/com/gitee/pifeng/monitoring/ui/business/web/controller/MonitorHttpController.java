@@ -14,10 +14,11 @@ import com.gitee.pifeng.monitoring.ui.business.web.vo.LayUiAdminResultVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.MonitorHttpVo;
 import com.gitee.pifeng.monitoring.ui.constant.OperateTypeConstants;
 import com.gitee.pifeng.monitoring.ui.constant.UiModuleConstants;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.hyperic.sigar.SigarException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -38,7 +39,7 @@ import java.util.stream.Collectors;
  */
 @Controller
 @RequestMapping("/monitor-http")
-@Api(tags = "HTTP")
+@Tag(name = "HTTP")
 public class MonitorHttpController {
 
     /**
@@ -74,7 +75,7 @@ public class MonitorHttpController {
      * @author 皮锋
      * @custom.date 2022/1/11 9:27
      */
-    @ApiOperation(value = "访问HTTP列表页面")
+    @Operation(summary = "访问HTTP列表页面")
     @GetMapping("/list")
     public ModelAndView list() {
         ModelAndView mv = new ModelAndView("http/http");
@@ -106,21 +107,27 @@ public class MonitorHttpController {
      * @author 皮锋
      * @custom.date 2022/1/11 9:31
      */
-    @ApiOperation(value = "获取HTTP列表")
-    @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "current", value = "当前页", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class),
-            @ApiImplicitParam(name = "size", value = "每页显示条数", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class),
-            @ApiImplicitParam(name = "hostnameSource", value = "主机名（来源）", paramType = "query", dataType = "string", dataTypeClass = String.class),
-            @ApiImplicitParam(name = "urlTarget", value = "URL地址（目的地）", paramType = "query", dataType = "string", dataTypeClass = String.class),
-            @ApiImplicitParam(name = "method", value = "请求方法", paramType = "query", dataType = "string", dataTypeClass = String.class),
-            @ApiImplicitParam(name = "status", value = "状态", paramType = "query", dataType = "int", dataTypeClass = Integer.class),
-            @ApiImplicitParam(name = "monitorEnv", value = "监控环境", paramType = "query", dataType = "string", dataTypeClass = String.class),
-            @ApiImplicitParam(name = "monitorGroup", value = "监控分组", paramType = "query", dataType = "string", dataTypeClass = String.class)})
+    @Operation(summary = "获取HTTP列表")
+    @Parameters(value = {
+            @Parameter(name = "current", description = "当前页", required = true, in = ParameterIn.QUERY),
+            @Parameter(name = "size", description = "每页显示条数", required = true, in = ParameterIn.QUERY),
+            @Parameter(name = "hostnameSource", description = "主机名（来源）", in = ParameterIn.QUERY),
+            @Parameter(name = "urlTarget", description = "URL地址（目的地）", in = ParameterIn.QUERY),
+            @Parameter(name = "method", description = "请求方法", in = ParameterIn.QUERY),
+            @Parameter(name = "status", description = "状态", in = ParameterIn.QUERY),
+            @Parameter(name = "monitorEnv", description = "监控环境", in = ParameterIn.QUERY),
+            @Parameter(name = "monitorGroup", description = "监控分组", in = ParameterIn.QUERY)})
     @GetMapping("/get-monitor-http-list")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.HTTP4SERVICE, operType = OperateTypeConstants.QUERY, operDesc = "获取HTTP列表")
-    public LayUiAdminResultVo getMonitorHttpList(Long current, Long size, String hostnameSource, String urlTarget,
-                                                 String method, Integer status, String monitorEnv, String monitorGroup) {
+    public LayUiAdminResultVo getMonitorHttpList(@RequestParam(value = "current") Long current,
+                                                 @RequestParam(value = "size") Long size,
+                                                 @RequestParam(value = "hostnameSource", required = false) String hostnameSource,
+                                                 @RequestParam(value = "urlTarget", required = false) String urlTarget,
+                                                 @RequestParam(value = "method", required = false) String method,
+                                                 @RequestParam(value = "status", required = false) Integer status,
+                                                 @RequestParam(value = "monitorEnv", required = false) String monitorEnv,
+                                                 @RequestParam(value = "monitorGroup", required = false) String monitorGroup) {
         Page<MonitorHttpVo> page = this.monitorHttpService.getMonitorHttpList(current, size, hostnameSource, urlTarget,
                 method, status, monitorEnv, monitorGroup);
         return LayUiAdminResultVo.ok(page);
@@ -136,7 +143,7 @@ public class MonitorHttpController {
      * @author 皮锋
      * @custom.date 2022/1/11 9:44
      */
-    @ApiOperation(value = "删除HTTP")
+    @Operation(summary = "删除HTTP")
     @DeleteMapping("/delete-monitor-http")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.HTTP4SERVICE, operType = OperateTypeConstants.DELETE, operDesc = "删除HTTP")
@@ -153,7 +160,7 @@ public class MonitorHttpController {
      * @author 皮锋
      * @custom.date 2022/1/11 10:52
      */
-    @ApiOperation(value = "访问新增HTTP信息表单页面")
+    @Operation(summary = "访问新增HTTP信息表单页面")
     @GetMapping("/add-monitor-http-form")
     public ModelAndView addMonitorHttpForm() {
         ModelAndView mv = new ModelAndView("http/add-http");
@@ -179,7 +186,7 @@ public class MonitorHttpController {
      * @author 皮锋
      * @custom.date 2022/1/11 10:16
      */
-    @ApiOperation(value = "添加HTTP信息")
+    @Operation(summary = "添加HTTP信息")
     @PostMapping("/add-monitor-http")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.HTTP4SERVICE, operType = OperateTypeConstants.ADD, operDesc = "添加HTTP信息")
@@ -203,9 +210,9 @@ public class MonitorHttpController {
      * @author 皮锋
      * @custom.date 2022/1/11 11:20
      */
-    @ApiOperation(value = "访问编辑HTTP信息表单页面")
-    @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "id", value = "HTTP ID", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class)})
+    @Operation(summary = "访问编辑HTTP信息表单页面")
+    @Parameters(value = {
+            @Parameter(name = "id", description = "HTTP ID", required = true, in = ParameterIn.QUERY)})
     @GetMapping("/edit-monitor-http-form")
     public ModelAndView editMonitorHttpForm(@RequestParam(name = "id") Long id) {
         MonitorHttp monitorHttp = this.monitorHttpService.getById(id);
@@ -236,7 +243,7 @@ public class MonitorHttpController {
      * @author 皮锋
      * @custom.date 2022/1/11 12:26
      */
-    @ApiOperation(value = "编辑HTTP信息")
+    @Operation(summary = "编辑HTTP信息")
     @PutMapping("/edit-monitor-http")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.HTTP4SERVICE, operType = OperateTypeConstants.UPDATE, operDesc = "编辑HTTP信息")
@@ -260,9 +267,9 @@ public class MonitorHttpController {
      * @author 皮锋
      * @custom.date 2022/3/17 11:13
      */
-    @ApiOperation(value = "访问平均时间页面")
-    @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "id", value = "HTTP ID", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class)})
+    @Operation(summary = "访问平均时间页面")
+    @Parameters(value = {
+            @Parameter(name = "id", description = "HTTP ID", required = true, in = ParameterIn.QUERY)})
     @GetMapping("/avg-time")
     public ModelAndView avgTime(Long id) {
         MonitorHttp monitorHttp = this.monitorHttpService.getById(id);
@@ -282,9 +289,9 @@ public class MonitorHttpController {
      * @author 皮锋
      * @custom.date 2021/7/20 20:56
      */
-    @ApiOperation(value = "访问清理HTTP服务监控历史数据表单页面")
-    @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "id", value = "主键ID", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class)})
+    @Operation(summary = "访问清理HTTP服务监控历史数据表单页面")
+    @Parameters(value = {
+            @Parameter(name = "id", description = "主键ID", required = true, in = ParameterIn.QUERY)})
     @GetMapping("/http-clear")
     public ModelAndView httpClear(Long id) {
         ModelAndView mv = new ModelAndView("http/http-clear-form");
@@ -302,9 +309,9 @@ public class MonitorHttpController {
      * @author 皮锋
      * @custom.date 2022/4/23 11:52
      */
-    @ApiOperation(value = "访问HTTP服务详情页面")
-    @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "id", value = "HTTP ID", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class)})
+    @Operation(summary = "访问HTTP服务详情页面")
+    @Parameters(value = {
+            @Parameter(name = "id", description = "HTTP ID", required = true, in = ParameterIn.QUERY)})
     @GetMapping("/http-detail")
     @OperateLog(operModule = UiModuleConstants.HTTP4SERVICE, operType = OperateTypeConstants.PAGE, operDesc = "访问HTTP服务详情页面")
     public ModelAndView httpDetail(Long id) {
@@ -327,7 +334,7 @@ public class MonitorHttpController {
      * @author 皮锋
      * @custom.date 2022/10/9 10:16
      */
-    @ApiOperation(value = "测试HTTP连通性")
+    @Operation(summary = "测试HTTP连通性")
     @PostMapping("/test-monitor-http")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.HTTP4SERVICE, operType = OperateTypeConstants.TEST, operDesc = "测试HTTP连通性")

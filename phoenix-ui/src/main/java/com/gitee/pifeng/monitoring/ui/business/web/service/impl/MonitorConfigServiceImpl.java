@@ -7,10 +7,10 @@ import com.alibaba.fastjson.parser.Feature;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.gitee.pifeng.monitoring.common.constant.CommProtocolTypeEnums;
+import com.gitee.pifeng.monitoring.common.constant.EnterpriseEnums;
 import com.gitee.pifeng.monitoring.common.constant.alarm.AlarmLevelEnums;
 import com.gitee.pifeng.monitoring.common.constant.alarm.AlarmWayEnums;
-import com.gitee.pifeng.monitoring.common.constant.EnterpriseEnums;
-import com.gitee.pifeng.monitoring.common.constant.ProtocolTypeEnums;
 import com.gitee.pifeng.monitoring.common.dto.BaseRequestPackage;
 import com.gitee.pifeng.monitoring.common.dto.BaseResponsePackage;
 import com.gitee.pifeng.monitoring.common.exception.NetException;
@@ -23,7 +23,7 @@ import com.gitee.pifeng.monitoring.ui.business.web.vo.LayUiAdminResultVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.MonitorConfigPageFormVo;
 import com.gitee.pifeng.monitoring.ui.constant.UrlConstants;
 import com.gitee.pifeng.monitoring.ui.constant.WebResponseConstants;
-import com.gitee.pifeng.monitoring.ui.core.PackageConstructor;
+import com.gitee.pifeng.monitoring.ui.core.UiPackageConstructor;
 import org.hyperic.sigar.SigarException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -43,10 +43,10 @@ import java.util.Date;
 public class MonitorConfigServiceImpl extends ServiceImpl<IMonitorConfigDao, MonitorConfig> implements IMonitorConfigService {
 
     /**
-     * 监控配置数据访问对象
+     * UI端包构造器
      */
     @Autowired
-    private IMonitorConfigDao monitorConfigDao;
+    private UiPackageConstructor uiPackageConstructor;
 
     /**
      * <p>
@@ -59,7 +59,7 @@ public class MonitorConfigServiceImpl extends ServiceImpl<IMonitorConfigDao, Mon
      */
     @Override
     public MonitorConfigPageFormVo getMonitorConfigPageFormInfo() {
-        MonitorConfig monitorConfig = this.monitorConfigDao.selectOne(new LambdaQueryWrapper<>());
+        MonitorConfig monitorConfig = this.baseMapper.selectOne(new LambdaQueryWrapper<>());
         Feature[] feature = new Feature[]{Feature.AllowComment, Feature.AllowUnQuotedFieldNames, Feature.AllowSingleQuotes};
         MonitoringProperties properties = JSON.parseObject(monitorConfig.getValue(), MonitoringProperties.class, feature);
         MonitorConfigPageFormVo monitorConfigPageFormVo = new MonitorConfigPageFormVo();
@@ -113,7 +113,7 @@ public class MonitorConfigServiceImpl extends ServiceImpl<IMonitorConfigDao, Mon
         MonitoringAlarmSmsProperties monitoringAlarmSmsProperties = new MonitoringAlarmSmsProperties();
         monitoringAlarmSmsProperties.setPhoneNumbers(StrUtil.splitToArray(monitorConfigPageFormVo.getAlarmSmsPhoneNumbers(), ';'));
         monitoringAlarmSmsProperties.setAddress(monitorConfigPageFormVo.getAlarmSmsAddress());
-        monitoringAlarmSmsProperties.setProtocolTypeEnum(ProtocolTypeEnums.str2Enum(monitorConfigPageFormVo.getAlarmSmsProtocol()));
+        monitoringAlarmSmsProperties.setProtocolTypeEnum(CommProtocolTypeEnums.str2Enum(monitorConfigPageFormVo.getAlarmSmsProtocol()));
         monitoringAlarmSmsProperties.setEnterpriseEnum(EnterpriseEnums.str2Enum(monitorConfigPageFormVo.getAlarmSmsEnterprise()));
         // 告警配置属性
         MonitoringAlarmProperties monitoringAlarmProperties = new MonitoringAlarmProperties();
@@ -174,18 +174,18 @@ public class MonitorConfigServiceImpl extends ServiceImpl<IMonitorConfigDao, Mon
         // 监控属性转json字符串
         String value = properties.toJsonString();
         // 查询数据库中是否有监控配置信息
-        Integer selectCountDb = this.monitorConfigDao.selectCount(new LambdaQueryWrapper<>());
+        Integer selectCountDb = this.baseMapper.selectCount(new LambdaQueryWrapper<>());
         // 没有
         if (selectCountDb == null || selectCountDb == 0) {
-            this.monitorConfigDao.insert(MonitorConfig.builder().value(value).insertTime(new Date()).build());
+            this.baseMapper.insert(MonitorConfig.builder().value(value).insertTime(new Date()).build());
         }
         // 有
         else {
-            this.monitorConfigDao.update(MonitorConfig.builder().value(value).updateTime(new Date()).build(), new LambdaUpdateWrapper<>());
+            this.baseMapper.update(MonitorConfig.builder().value(value).updateTime(new Date()).build(), new LambdaUpdateWrapper<>());
         }
         // 刷新服务端监控属性配置
         try {
-            BaseRequestPackage baseRequestPackage = new PackageConstructor().structureBaseRequestPackage(null);
+            BaseRequestPackage baseRequestPackage = this.uiPackageConstructor.structureBaseRequestPackage(null);
             String result = Sender.send(UrlConstants.MONITORING_PROPERTIES_CONFIG_REFRESH_URL, baseRequestPackage.toJsonString());
             BaseResponsePackage baseResponsePackage = JSON.parseObject(result, BaseResponsePackage.class);
             // 是否刷新配置成功

@@ -1,5 +1,7 @@
 #指定基镜像
 FROM openjdk:8-jdk-alpine
+#系统编码
+ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
 #指定数据卷
 VOLUME ["/tmp","/liblog4phoenix"]
 #作者

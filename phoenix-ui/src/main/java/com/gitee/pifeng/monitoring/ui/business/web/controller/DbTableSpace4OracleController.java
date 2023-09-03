@@ -9,15 +9,17 @@ import com.gitee.pifeng.monitoring.ui.business.web.vo.DbTableSpaceFile4OracleVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.LayUiAdminResultVo;
 import com.gitee.pifeng.monitoring.ui.constant.OperateTypeConstants;
 import com.gitee.pifeng.monitoring.ui.constant.UiModuleConstants;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.hyperic.sigar.SigarException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.io.IOException;
@@ -31,7 +33,7 @@ import java.io.IOException;
  * @custom.date 2020/12/31 16:08
  */
 @Controller
-@Api(tags = "数据库表空间.Oracle")
+@Tag(name = "数据库表空间.Oracle")
 @RequestMapping("/db-tablespace4oracle")
 public class DbTableSpace4OracleController {
 
@@ -56,15 +58,18 @@ public class DbTableSpace4OracleController {
      * @author 皮锋
      * @custom.date 2020/12/24 16:53
      */
-    @ApiOperation(value = "获取表空间列表(按文件)")
-    @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "current", value = "当前页", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class),
-            @ApiImplicitParam(name = "size", value = "每页显示条数", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class),
-            @ApiImplicitParam(name = "id", value = "数据库ID", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class)})
+    @Operation(summary = "获取表空间列表(按文件)")
+    @Parameters(value = {
+            @Parameter(name = "current", description = "当前页", required = true, in = ParameterIn.QUERY),
+            @Parameter(name = "size", description = "每页显示条数", required = true, in = ParameterIn.QUERY),
+            @Parameter(name = "id", description = "数据库ID", required = true, in = ParameterIn.QUERY)})
     @GetMapping("/get-tablespace-list-file")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.DATABASE + "#表空间", operType = OperateTypeConstants.QUERY, operDesc = "获取表空间列表(按文件)")
-    public LayUiAdminResultVo getTableSpaceListFile(Long current, Long size, Long id) throws NetException, IOException, SigarException {
+    public LayUiAdminResultVo getTableSpaceListFile(@RequestParam(value = "current") Long current,
+                                                    @RequestParam(value = "size") Long size,
+                                                    @RequestParam(value = "id") Long id)
+            throws NetException, IOException, SigarException {
         Page<DbTableSpaceFile4OracleVo> page = this.dbTableSpace4OracleService.getTableSpaceListFile(current, size, id);
         return LayUiAdminResultVo.ok(page);
     }
@@ -84,15 +89,18 @@ public class DbTableSpace4OracleController {
      * @author 皮锋
      * @custom.date 2020/12/24 16:53
      */
-    @ApiOperation(value = "获取表空间列表")
-    @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "current", value = "当前页", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class),
-            @ApiImplicitParam(name = "size", value = "每页显示条数", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class),
-            @ApiImplicitParam(name = "id", value = "数据库ID", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class)})
+    @Operation(summary = "获取表空间列表")
+    @Parameters(value = {
+            @Parameter(name = "current", description = "当前页", required = true, in = ParameterIn.QUERY),
+            @Parameter(name = "size", description = "每页显示条数", required = true, in = ParameterIn.QUERY),
+            @Parameter(name = "id", description = "数据库ID", required = true, in = ParameterIn.QUERY)})
     @GetMapping("/get-tablespace-list-all")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.DATABASE + "#表空间", operType = OperateTypeConstants.QUERY, operDesc = "获取表空间列表")
-    public LayUiAdminResultVo getTableSpaceListAll(Long current, Long size, Long id) throws NetException, IOException, SigarException {
+    public LayUiAdminResultVo getTableSpaceListAll(@RequestParam(value = "current") Long current,
+                                                   @RequestParam(value = "size") Long size,
+                                                   @RequestParam(value = "id") Long id)
+            throws NetException, IOException, SigarException {
         Page<DbTableSpaceAll4OracleVo> page = this.dbTableSpace4OracleService.getTableSpaceListAll(current, size, id);
         return LayUiAdminResultVo.ok(page);
     }

@@ -7,10 +7,11 @@ import com.gitee.pifeng.monitoring.ui.business.web.vo.HttpAvgTimeChartVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.LayUiAdminResultVo;
 import com.gitee.pifeng.monitoring.ui.constant.OperateTypeConstants;
 import com.gitee.pifeng.monitoring.ui.constant.UiModuleConstants;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +26,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @Controller
 @RequestMapping("/monitor-http-history")
-@Api(tags = "HTTP.HTTP历史记录")
+@Tag(name = "HTTP.HTTP历史记录")
 public class MonitorHttpHistoryController {
 
     /**
@@ -48,15 +49,15 @@ public class MonitorHttpHistoryController {
      * @author 皮锋
      * @custom.date 2022/3/17 21:37
      */
-    @ApiOperation(value = "获取访问耗时图表信息")
+    @Operation(summary = "获取访问耗时图表信息")
     @ResponseBody
     @GetMapping("/get-avg-time-chart-info")
-    @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "id", value = "HTTP ID", paramType = "query", dataType = "long", dataTypeClass = Long.class),
-            @ApiImplicitParam(name = "hostnameSource", value = "主机名（来源）", paramType = "query", dataType = "string", dataTypeClass = String.class),
-            @ApiImplicitParam(name = "urlTarget", value = "URL地址（目的地）", paramType = "query", dataType = "string", dataTypeClass = String.class),
-            @ApiImplicitParam(name = "method", value = "请求方法", paramType = "query", dataType = "string", dataTypeClass = String.class),
-            @ApiImplicitParam(name = "dateValue", value = "时间", paramType = "query", dataType = "string", dataTypeClass = String.class)})
+    @Parameters(value = {
+            @Parameter(name = "id", description = "HTTP ID", in = ParameterIn.QUERY),
+            @Parameter(name = "hostnameSource", description = "主机名（来源）", in = ParameterIn.QUERY),
+            @Parameter(name = "urlTarget", description = "URL地址（目的地）", in = ParameterIn.QUERY),
+            @Parameter(name = "method", description = "请求方法", in = ParameterIn.QUERY),
+            @Parameter(name = "dateValue", description = "时间", in = ParameterIn.QUERY)})
     @OperateLog(operModule = UiModuleConstants.HTTP4SERVICE, operType = OperateTypeConstants.QUERY, operDesc = "获取访问耗时图表信息")
     public LayUiAdminResultVo getAvgTimeChartInfo(@RequestParam(name = "id") Long id,
                                                   @RequestParam(name = "hostnameSource") String hostnameSource,
@@ -79,10 +80,10 @@ public class MonitorHttpHistoryController {
      * @author 皮锋
      * @custom.date 2021/7/20 20:52
      */
-    @ApiOperation(value = "清理HTTP监控历史数据")
-    @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "id", value = "HTTP ID", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class),
-            @ApiImplicitParam(name = "time", value = "时间", required = true, paramType = "query", dataType = "string", dataTypeClass = String.class)})
+    @Operation(summary = "清理HTTP监控历史数据")
+    @Parameters(value = {
+            @Parameter(name = "id", description = "HTTP ID", required = true, in = ParameterIn.QUERY),
+            @Parameter(name = "time", description = "时间", required = true, in = ParameterIn.QUERY)})
     @DeleteMapping("/clear-monitor-http-history")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.HTTP4SERVICE, operType = OperateTypeConstants.DELETE, operDesc = "清理HTTP监控历史数据")

@@ -1,9 +1,9 @@
 package com.gitee.pifeng.monitoring.agent.business.server.service;
 
-import com.gitee.pifeng.monitoring.agent.annotation.TargetInf;
-import com.gitee.pifeng.monitoring.agent.annotation.TargetMethod;
 import com.gitee.pifeng.monitoring.common.dto.AlarmPackage;
 import com.gitee.pifeng.monitoring.common.dto.BaseResponsePackage;
+import com.gitee.pifeng.monitoring.common.web.annotation.TargetInf;
+import com.gitee.pifeng.monitoring.common.web.annotation.TargetMethod;
 
 /**
  * <p>
@@ -13,7 +13,7 @@ import com.gitee.pifeng.monitoring.common.dto.BaseResponsePackage;
  * @author 皮锋
  * @custom.date 2020年3月6日 下午3:25:05
  */
-@TargetInf(inf = IAlarmService.class)
+@TargetInf
 public interface IAlarmService {
 
     /**
@@ -27,6 +27,6 @@ public interface IAlarmService {
      * @author 皮锋
      * @custom.date 2020年3月6日 下午3:27:17
      */
-    @TargetMethod(method = "sendAlarmPackage")
+    @TargetMethod
     BaseResponsePackage sendAlarmPackage(AlarmPackage alarmPackage) throws Exception;
 }

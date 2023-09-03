@@ -6,13 +6,15 @@ import com.gitee.pifeng.monitoring.common.constant.alarm.AlarmLevelEnums;
 import com.gitee.pifeng.monitoring.common.constant.alarm.AlarmReasonEnums;
 import com.gitee.pifeng.monitoring.common.domain.Alarm;
 import com.gitee.pifeng.monitoring.common.dto.AlarmPackage;
-import com.gitee.pifeng.monitoring.common.threadpool.ThreadPool;
+import com.gitee.pifeng.monitoring.common.threadpool.ThreadPoolShutdownHelper;
+import com.gitee.pifeng.monitoring.common.util.CollectionUtils;
 import com.gitee.pifeng.monitoring.common.util.DateTimeUtils;
 import com.gitee.pifeng.monitoring.common.util.Md5Utils;
 import com.gitee.pifeng.monitoring.common.util.server.NetUtils;
-import com.gitee.pifeng.monitoring.plug.util.EnumPoolingHttpUtils;
+import com.gitee.pifeng.monitoring.common.util.server.ProcessorsUtils;
+import com.gitee.pifeng.monitoring.plug.core.EnumPoolingHttpClient;
 import com.gitee.pifeng.monitoring.server.business.server.core.MonitoringConfigPropertiesLoader;
-import com.gitee.pifeng.monitoring.server.business.server.core.PackageConstructor;
+import com.gitee.pifeng.monitoring.server.business.server.core.ServerPackageConstructor;
 import com.gitee.pifeng.monitoring.server.business.server.entity.MonitorHttp;
 import com.gitee.pifeng.monitoring.server.business.server.entity.MonitorHttpHistory;
 import com.gitee.pifeng.monitoring.server.business.server.service.IAlarmService;
@@ -20,18 +22,23 @@ import com.gitee.pifeng.monitoring.server.business.server.service.IHttpHistorySe
 import com.gitee.pifeng.monitoring.server.business.server.service.IHttpService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.concurrent.BasicThreadFactory;
 import org.apache.http.HttpStatus;
-import org.hyperic.sigar.SigarException;
 import org.quartz.JobExecutionContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
+import org.springframework.lang.NonNull;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PreDestroy;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.ThreadPoolExecutor;
 
 /**
@@ -46,6 +53,18 @@ import java.util.concurrent.ThreadPoolExecutor;
 @Component
 @Order(8)
 public class HttpMonitorJob extends QuartzJobBean {
+
+    /**
+     * 监控配置属性加载器
+     */
+    @Autowired
+    private MonitoringConfigPropertiesLoader monitoringConfigPropertiesLoader;
+
+    /**
+     * 服务端包构造器
+     */
+    @Autowired
+    private ServerPackageConstructor serverPackageConstructor;
 
     /**
      * 告警服务接口
@@ -66,6 +85,31 @@ public class HttpMonitorJob extends QuartzJobBean {
     private IHttpHistoryService httpHistoryService;
 
     /**
+     * 线程池
+     */
+    private final ScheduledExecutorService seService = new ScheduledThreadPoolExecutor(
+            // 线程数 = Ncpu /（1 - 阻塞系数），IO密集型阻塞系数相对较大
+            (int) (ProcessorsUtils.getAvailableProcessors() / (1 - 0.8)),
+            new BasicThreadFactory.Builder()
+                    // 设置线程名
+                    .namingPattern("phoenix-server-http-monitor-pool-thread-%d")
+                    // 设置为守护线程
+                    .daemon(true)
+                    .build(),
+            new ThreadPoolExecutor.AbortPolicy());
+
+    /**
+     * 在程序关闭前优雅关闭线程池
+     *
+     * @author 皮锋
+     * @custom.date 2023/6/4 22:00
+     */
+    @PreDestroy
+    public void shutdownThreadPoolGracefully() {
+        new ThreadPoolShutdownHelper().shutdownGracefully(this.seService, "phoenix-server-http-monitor-pool-thread");
+    }
+
+    /**
      * <p>
      * 扫描数据库“MONITOR_HTTP”表中的所有HTTP信息，实时更新HTTP服务状态，发送告警。
      * </p>
@@ -75,36 +119,43 @@ public class HttpMonitorJob extends QuartzJobBean {
      * @custom.date 2022/1/11 16:31
      */
     @Override
-    protected void executeInternal(JobExecutionContext jobExecutionContext) {
+    protected void executeInternal(@NonNull JobExecutionContext jobExecutionContext) {
         // 是否监控HTTP服务
-        boolean isMonitoringEnable = MonitoringConfigPropertiesLoader.getMonitoringProperties().getHttpProperties().isEnable();
+        boolean isMonitoringEnable = this.monitoringConfigPropertiesLoader.getMonitoringProperties().getHttpProperties().isEnable();
         if (!isMonitoringEnable) {
             return;
         }
-        try {
-            // 获取HTTP信息列表
-            List<MonitorHttp> monitorHttps = this.httpService.list(new LambdaQueryWrapper<MonitorHttp>().eq(MonitorHttp::getHostnameSource, NetUtils.getLocalIp()));
-            // 循环处理每一个HTTP信息
-            for (MonitorHttp monitorHttp : monitorHttps) {
-                // 使用多线程，加快处理速度
-                ThreadPoolExecutor threadPoolExecutor = ThreadPool.COMMON_IO_INTENSIVE_THREAD_POOL;
-                threadPoolExecutor.execute(() -> {
-                    // 请求方法
-                    String method = monitorHttp.getMethod();
-                    // GET请求
-                    if (StringUtils.equalsIgnoreCase(HttpMethod.GET.name(), method)) {
-                        // 检测HTTP GET请求
-                        this.checkGet(monitorHttp);
-                    }
-                    // POST请求
-                    if (StringUtils.equalsIgnoreCase(HttpMethod.POST.name(), method)) {
-                        // 检测HTTP POST请求
-                        this.checkPost(monitorHttp);
-                    }
-                });
+        synchronized (HttpMonitorJob.class) {
+            try {
+                // 获取HTTP信息列表
+                List<MonitorHttp> monitorHttps = this.httpService.list(new LambdaQueryWrapper<MonitorHttp>().eq(MonitorHttp::getHostnameSource, NetUtils.getLocalIp()));
+                // 打乱
+                Collections.shuffle(monitorHttps);
+                // 按每个list大小为10拆分成多个list
+                List<List<MonitorHttp>> subMonitorHttpLists = CollectionUtils.split(monitorHttps, 10);
+                for (List<MonitorHttp> subMonitorHttps : subMonitorHttpLists) {
+                    // 使用多线程，加快处理速度
+                    this.seService.execute(() -> {
+                        // 循环处理每一个HTTP信息
+                        for (MonitorHttp monitorHttp : subMonitorHttps) {
+                            // 请求方法
+                            String method = monitorHttp.getMethod();
+                            // GET请求
+                            if (StringUtils.equalsIgnoreCase(HttpMethod.GET.name(), method)) {
+                                // 检测HTTP GET请求
+                                this.checkGet(monitorHttp);
+                            }
+                            // POST请求
+                            if (StringUtils.equalsIgnoreCase(HttpMethod.POST.name(), method)) {
+                                // 检测HTTP POST请求
+                                this.checkPost(monitorHttp);
+                            }
+                        }
+                    });
+                }
+            } catch (Exception e) {
+                log.error("定时扫描数据库“MONITOR_HTTP”表中的所有HTTP信息异常！", e);
             }
-        } catch (Exception e) {
-            log.error("定时扫描数据库“MONITOR_HTTP”表中的所有HTTP信息异常！", e);
         }
     }
 
@@ -120,7 +171,7 @@ public class HttpMonitorJob extends QuartzJobBean {
     private void checkPost(MonitorHttp monitorHttp) {
         try {
             //HTTP线程池工具类
-            EnumPoolingHttpUtils httpClient = EnumPoolingHttpUtils.getInstance();
+            EnumPoolingHttpClient httpClient = EnumPoolingHttpClient.getInstance();
             // URL地址（目的地）
             String urlTarget = monitorHttp.getUrlTarget();
             // 请求参数
@@ -159,7 +210,7 @@ public class HttpMonitorJob extends QuartzJobBean {
     private void checkGet(MonitorHttp monitorHttp) {
         try {
             //HTTP线程池工具类
-            EnumPoolingHttpUtils httpClient = EnumPoolingHttpUtils.getInstance();
+            EnumPoolingHttpClient httpClient = EnumPoolingHttpClient.getInstance();
             // URL地址（目的地）
             String urlTarget = monitorHttp.getUrlTarget();
             Map<String, Object> stringObjectMap = httpClient.sendHttpGet(urlTarget);
@@ -284,11 +335,10 @@ public class HttpMonitorJob extends QuartzJobBean {
      * @param alarmLevelEnum  告警级别
      * @param alarmReasonEnum 告警原因
      * @param monitorHttp     HTTP信息
-     * @throws SigarException Sigar异常
      * @author 皮锋
      * @custom.date 2022/4/13 13:14
      */
-    private void sendAlarmInfo(String title, AlarmLevelEnums alarmLevelEnum, AlarmReasonEnums alarmReasonEnum, MonitorHttp monitorHttp) throws SigarException {
+    private void sendAlarmInfo(String title, AlarmLevelEnums alarmLevelEnum, AlarmReasonEnums alarmReasonEnum, MonitorHttp monitorHttp) {
         StringBuilder builder = new StringBuilder();
         // 请求方法
         String method = monitorHttp.getMethod();
@@ -318,7 +368,7 @@ public class HttpMonitorJob extends QuartzJobBean {
                 .alarmReason(alarmReasonEnum)
                 .monitorType(MonitorTypeEnums.HTTP4SERVICE)
                 .build();
-        AlarmPackage alarmPackage = new PackageConstructor().structureAlarmPackage(alarm);
+        AlarmPackage alarmPackage = this.serverPackageConstructor.structureAlarmPackage(alarm);
         this.alarmService.dealAlarmPackage(alarmPackage);
     }
 }

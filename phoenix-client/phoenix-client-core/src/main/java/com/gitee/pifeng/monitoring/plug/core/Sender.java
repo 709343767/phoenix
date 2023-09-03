@@ -6,7 +6,6 @@ import com.alibaba.fastjson.JSON;
 import com.gitee.pifeng.monitoring.common.dto.CiphertextPackage;
 import com.gitee.pifeng.monitoring.common.util.ZipUtils;
 import com.gitee.pifeng.monitoring.common.util.secure.SecureUtils;
-import com.gitee.pifeng.monitoring.plug.util.EnumPoolingHttpUtils;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
@@ -48,7 +47,9 @@ public class Sender {
      */
     public static String send(final String url, final String json) throws IOException {
         // 打印发送的数据包
-        log.debug("发送数据包：{}", json);
+        if (log.isDebugEnabled()) {
+            log.debug("发送数据包：{}", json);
+        }
         CiphertextPackage requestCiphertextPackage;
         // 字符串是否需要进行gzip压缩
         if (ZipUtils.isNeedGzip(json)) {
@@ -63,7 +64,7 @@ public class Sender {
             requestCiphertextPackage = new CiphertextPackage(encrypt, false);
         }
         // 发送请求
-        EnumPoolingHttpUtils httpClient = EnumPoolingHttpUtils.getInstance();
+        EnumPoolingHttpClient httpClient = EnumPoolingHttpClient.getInstance();
         String result = httpClient.sendHttpPostByJson(url, requestCiphertextPackage.toJsonString());
         // 响应结果
         CiphertextPackage responseCiphertextPackage = JSON.parseObject(result, CiphertextPackage.class);

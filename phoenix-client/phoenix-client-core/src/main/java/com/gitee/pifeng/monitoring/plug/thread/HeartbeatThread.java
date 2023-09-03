@@ -5,10 +5,9 @@ import cn.hutool.core.date.TimeInterval;
 import com.gitee.pifeng.monitoring.common.dto.HeartbeatPackage;
 import com.gitee.pifeng.monitoring.common.exception.NetException;
 import com.gitee.pifeng.monitoring.plug.constant.UrlConstants;
-import com.gitee.pifeng.monitoring.plug.core.PackageConstructor;
+import com.gitee.pifeng.monitoring.plug.core.ClientPackageConstructor;
 import com.gitee.pifeng.monitoring.plug.core.Sender;
 import lombok.extern.slf4j.Slf4j;
-import org.hyperic.sigar.SigarException;
 
 import java.io.IOException;
 
@@ -24,6 +23,11 @@ import java.io.IOException;
 public class HeartbeatThread implements Runnable {
 
     /**
+     * 客户端包构造器
+     */
+    private final ClientPackageConstructor clientPackageConstructor = ClientPackageConstructor.getInstance();
+
+    /**
      * <p>
      * 构建+发送心跳包
      * </p>
@@ -37,16 +41,16 @@ public class HeartbeatThread implements Runnable {
         TimeInterval timer = DateUtil.timer();
         try {
             // 构建心跳数据包
-            HeartbeatPackage heartbeatPackage = new PackageConstructor().structureHeartbeatPackage();
+            HeartbeatPackage heartbeatPackage = this.clientPackageConstructor.structureHeartbeatPackage();
             // 发送请求
             String result = Sender.send(UrlConstants.HEARTBEAT_URL, heartbeatPackage.toJsonString());
-            log.debug("心跳包响应消息：{}", result);
+            if (log.isDebugEnabled()) {
+                log.debug("心跳包响应消息：{}", result);
+            }
         } catch (IOException e) {
             log.error("IO异常！", e);
         } catch (NetException e) {
             log.error("获取网络信息异常！", e);
-        } catch (SigarException e) {
-            log.error("Sigar异常！", e);
         } catch (Exception e) {
             log.error("其它异常！", e);
         } finally {

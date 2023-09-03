@@ -4,34 +4,36 @@ import cn.hutool.core.util.ArrayUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.gitee.pifeng.monitoring.common.constant.MonitorTypeEnums;
-import com.gitee.pifeng.monitoring.common.constant.ResultMsgConstants;
 import com.gitee.pifeng.monitoring.common.constant.ZeroOrOneConstants;
 import com.gitee.pifeng.monitoring.common.constant.alarm.AlarmLevelEnums;
 import com.gitee.pifeng.monitoring.common.constant.alarm.AlarmWayEnums;
 import com.gitee.pifeng.monitoring.common.domain.Alarm;
 import com.gitee.pifeng.monitoring.common.domain.Result;
 import com.gitee.pifeng.monitoring.common.dto.AlarmPackage;
+import com.gitee.pifeng.monitoring.common.threadpool.ThreadPoolShutdownHelper;
+import com.gitee.pifeng.monitoring.common.util.server.ProcessorsUtils;
 import com.gitee.pifeng.monitoring.server.business.server.core.MonitoringConfigPropertiesLoader;
 import com.gitee.pifeng.monitoring.server.business.server.dao.IMonitorAlarmDefinitionDao;
 import com.gitee.pifeng.monitoring.server.business.server.dao.IMonitorAlarmRecordDao;
-import com.gitee.pifeng.monitoring.server.business.server.domain.Mail;
-import com.gitee.pifeng.monitoring.server.business.server.domain.Sms;
 import com.gitee.pifeng.monitoring.server.business.server.entity.MonitorAlarmDefinition;
 import com.gitee.pifeng.monitoring.server.business.server.entity.MonitorAlarmRecord;
 import com.gitee.pifeng.monitoring.server.business.server.service.IAlarmService;
-import com.gitee.pifeng.monitoring.server.business.server.service.IMailService;
 import com.gitee.pifeng.monitoring.server.business.server.service.IRealtimeMonitoringService;
-import com.gitee.pifeng.monitoring.server.business.server.service.ISmsService;
+import com.gitee.pifeng.monitoring.server.business.server.service.ITemplateMsgSendFacadeService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.concurrent.BasicThreadFactory;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
+import javax.annotation.PreDestroy;
 import java.util.Date;
-import java.util.List;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * <p>
@@ -46,22 +48,22 @@ import java.util.List;
 public class AlarmServiceImpl implements IAlarmService {
 
     /**
+     * 监控配置属性加载器
+     */
+    @Autowired
+    private MonitoringConfigPropertiesLoader monitoringConfigPropertiesLoader;
+
+    /**
      * 实时监控服务接口
      */
     @Autowired
     private IRealtimeMonitoringService realtimeMonitoringService;
 
     /**
-     * 短信服务接口
+     * 发送模板消息门面服务接口
      */
     @Autowired
-    private ISmsService smsService;
-
-    /**
-     * 邮箱服务接口
-     */
-    @Autowired
-    private IMailService mailService;
+    private ITemplateMsgSendFacadeService templateMsgSendFacadeService;
 
     /**
      * 监控告警定义数据访问对象
@@ -76,12 +78,43 @@ public class AlarmServiceImpl implements IAlarmService {
     private IMonitorAlarmRecordDao monitorAlarmRecordDao;
 
     /**
+     * 线程池
+     */
+    public final ThreadPoolExecutor seService = new ThreadPoolExecutor(
+            1,
+            // 线程数 = Ncpu /（1 - 阻塞系数），IO密集型阻塞系数相对较大
+            (int) (ProcessorsUtils.getAvailableProcessors() / (1 - 0.8)),
+            60L,
+            TimeUnit.SECONDS,
+            // 2^16
+            new LinkedBlockingQueue<>(65536),
+            new BasicThreadFactory.Builder()
+                    // 设置线程名
+                    .namingPattern("phoenix-server-alarm-pool-thread")
+                    // 设置为守护线程
+                    .daemon(true)
+                    .build(),
+            new ThreadPoolExecutor.AbortPolicy());
+
+    /**
+     * 在程序关闭前优雅关闭线程池
+     *
+     * @author 皮锋
+     * @custom.date 2023/6/4 22:00
+     */
+    @Order
+    @PreDestroy
+    public void shutdownThreadPoolGracefully() {
+        new ThreadPoolShutdownHelper().shutdownGracefully(this.seService, "phoenix-server-alarm-pool-thread");
+    }
+
+    /**
      * <p>
      * 处理告警包
      * </p>
      *
      * @param alarmPackage 告警包
-     * @return {@link Result}
+     * @return {@link Result} 返回结果
      * @author 皮锋
      * @custom.date 2020年3月10日 下午1:33:55
      */
@@ -99,7 +132,7 @@ public class AlarmServiceImpl implements IAlarmService {
      * 处理告警信息
      * </p>
      *
-     * @param result       返回结果
+     * @param result       {@link Result} 返回结果
      * @param alarmPackage 告警包
      * @author 皮锋
      * @custom.date 2020/4/2 11:49
@@ -113,7 +146,7 @@ public class AlarmServiceImpl implements IAlarmService {
             this.wrapFailResult(result, expMsg);
             return;
         }
-        // 告警代码
+        // 告警ID
         String alarmUuid = alarmPackage.getId();
         // 监控类型
         MonitorTypeEnums monitorTypeEnum = alarm.getMonitorType();
@@ -149,31 +182,33 @@ public class AlarmServiceImpl implements IAlarmService {
                 return;
             }
         }
-        // 不管发不发送告警信息，先把告警记录存入数据库
+        // 不管发不发送告警信息，先把告警记录存入数据库，AopContext.currentProxy()调用是为了让事务生效
         ((IAlarmService) AopContext.currentProxy()).insertMonitorAlarmRecordToDb(alarm, alarmUuid);
         // 是否发送告警信息
         if (!this.isSendAlarm(result, alarm)) {
             return;
         }
-        // 发送告警以及把告警记录计入数据库
-        this.sendAlarmAndOperateDb(result, alarm, alarmUuid);
+        // 注意：走到此处，就确定发送告警了，不管发送是否成功，result都是返回成功，代表处理此次告警成功了，发送告警和处理告警是两回事，
+        // 因此采用异步的方式发送告警，防止阻塞此方法
+        this.seService.execute(() -> {
+            // 发送告警以及把告警记录计入数据库
+            this.sendAlarm(alarm, alarmUuid);
+        });
     }
 
     /**
      * <p>
-     * 发送告警以及把告警记录计入数据库。
+     * 发送告警
      * </p>
-     * 1.把告警信息存入数据库；<br>
-     * 2.发送告警；<br>
-     * 3.更新数据库中的告警发送结果。<br>
+     * 1.发送告警；<br>
+     * 2.更新数据库中的告警发送结果。<br>
      *
-     * @param result    返回结果
      * @param alarm     告警信息
      * @param alarmUuid 告警代码
      * @author 皮锋
      * @custom.date 2020/9/14 12:56
      */
-    private void sendAlarmAndOperateDb(Result result, Alarm alarm, String alarmUuid) {
+    private void sendAlarm(Alarm alarm, String alarmUuid) {
         // 告警级别
         AlarmLevelEnums alarmLevelEnum = alarm.getAlarmLevel();
         // 告警内容标题
@@ -181,118 +216,13 @@ public class AlarmServiceImpl implements IAlarmService {
         // 告警内容
         String alarmMsg = alarm.getMsg();
         // 告警方式
-        AlarmWayEnums[] alarmWayEnums = MonitoringConfigPropertiesLoader.getMonitoringProperties().getAlarmProperties().getWayEnums();
-        List<AlarmWayEnums> alarmWayEnumsList = Arrays.asList(alarmWayEnums);
-        // 告警方式为短信告警和邮件告警
-        if (alarmWayEnumsList.contains(AlarmWayEnums.SMS)) {
-            // 处理短信告警
-            this.dealSmsAlarm(result, alarmTitle, alarmMsg, alarmLevelEnum);
+        AlarmWayEnums[] alarmWayEnums = this.monitoringConfigPropertiesLoader.getMonitoringProperties().getAlarmProperties().getWayEnums();
+        for (AlarmWayEnums alarmWayEnum : alarmWayEnums) {
+            // 发送模板文本消息
+            Result result = this.templateMsgSendFacadeService.sendTemplateTextMsg(alarmWayEnum, alarmLevelEnum, alarmTitle, alarmMsg);
             // 告警发送完更新数据库中告警发送结果
-            this.updateMonitorAlarmRecordToDb(result, alarmUuid, AlarmWayEnums.SMS);
+            this.updateMonitorAlarmRecordToDb(result, alarmUuid, alarmWayEnum);
         }
-        if (alarmWayEnumsList.contains(AlarmWayEnums.MAIL)) {
-            // 处理邮件告警
-            this.dealMailAlarm(result, alarmTitle, alarmMsg, alarmLevelEnum);
-            // 告警发送完更新数据库中告警发送结果
-            this.updateMonitorAlarmRecordToDb(result, alarmUuid, AlarmWayEnums.MAIL);
-        }
-    }
-
-    /**
-     * <p>
-     * 是否发送告警信息
-     * </p>
-     *
-     * @param result 返回结果
-     * @param alarm  告警信息
-     * @return 是 或 否
-     * @author 皮锋
-     * @custom.date 2020/9/14 12:37
-     */
-    private boolean isSendAlarm(Result result, Alarm alarm) {
-        // 告警开关是否打开
-        boolean isEnable = MonitoringConfigPropertiesLoader.getMonitoringProperties().getAlarmProperties().isEnable();
-        // 告警开关没有打开，不做处理，直接返回
-        if (!isEnable) {
-            String expMsg = "告警开关没有打开，不发送告警信息！";
-            this.wrapFailResult(result, expMsg);
-            return false;
-        }
-        // 是否是测试告警信息
-        boolean isTest = alarm.isTest();
-        // 是测试告警信息，不做处理，直接返回
-        if (isTest) {
-            String expMsg = "当前为测试信息，不发送告警信息！";
-            this.wrapFailResult(result, expMsg);
-            return false;
-        }
-        // 告警级别
-        AlarmLevelEnums configAlarmLevelEnum = MonitoringConfigPropertiesLoader.getMonitoringProperties().getAlarmProperties().getLevelEnum();
-        // 告警级别
-        AlarmLevelEnums levelEnum = alarm.getAlarmLevel();
-        // 告警级别小于配置的告警级别，不做处理，直接返回
-        if (!AlarmLevelEnums.isAlarm(configAlarmLevelEnum, levelEnum)) {
-            String expMsg = "小于配置的告警级别，不发送告警信息！";
-            this.wrapFailResult(result, expMsg);
-            return false;
-        }
-        // 告警内容标题
-        String alarmTitle = alarm.getTitle();
-        // 没有告警标题，不做处理，直接返回
-        if (StringUtils.isBlank(alarmTitle)) {
-            String expMsg = "告警标题为空，不发送告警信息！";
-            this.wrapFailResult(result, expMsg);
-            return false;
-        }
-        // 告警内容
-        String msg = alarm.getMsg();
-        // 没有告警内容，不做处理，直接返回
-        if (StringUtils.isBlank(msg)) {
-            String expMsg = "告警内容为空，不发送告警信息！";
-            this.wrapFailResult(result, expMsg);
-            return false;
-        }
-        // 告警方式
-        AlarmWayEnums[] alarmWayEnums = MonitoringConfigPropertiesLoader.getMonitoringProperties().getAlarmProperties().getWayEnums();
-        // 没有配置告警方式，不做处理，直接返回
-        if (ArrayUtil.isEmpty(alarmWayEnums)) {
-            String expMsg = "没有配置告警方式，不发送告警信息！";
-            this.wrapFailResult(result, expMsg);
-            return false;
-        }
-        return true;
-    }
-
-    /**
-     * <p>
-     * 封装失败时的返回结果。
-     * </p>
-     *
-     * @param result 返回结果
-     * @param msg    结果信息
-     * @author 皮锋
-     * @custom.date 2020/9/13 21:35
-     */
-    private void wrapFailResult(Result result, String msg) {
-        if (log.isDebugEnabled()) {
-            log.debug(msg);
-        }
-        result.setSuccess(false);
-        result.setMsg(msg);
-    }
-
-    /**
-     * <p>
-     * 封装成功时的返回结果。
-     * </p>
-     *
-     * @param result 返回结果
-     * @author 皮锋
-     * @custom.date 2020/9/13 21:35
-     */
-    private void wrapSuccessResult(Result result) {
-        result.setSuccess(true);
-        result.setMsg(ResultMsgConstants.SUCCESS);
     }
 
     /**
@@ -300,7 +230,7 @@ public class AlarmServiceImpl implements IAlarmService {
      * 更新数据库中告警信息发送状态
      * </p>
      *
-     * @param result        返回结果
+     * @param result        {@link Result} 返回结果
      * @param uuid          告警代码
      * @param alarmWayEnums 告警方式
      * @author 皮锋
@@ -346,7 +276,7 @@ public class AlarmServiceImpl implements IAlarmService {
         // 告警内容
         String alarmMsg = alarm.getMsg();
         // 告警方式
-        AlarmWayEnums[] alarmWayEnums = MonitoringConfigPropertiesLoader.getMonitoringProperties().getAlarmProperties().getWayEnums();
+        AlarmWayEnums[] alarmWayEnums = this.monitoringConfigPropertiesLoader.getMonitoringProperties().getAlarmProperties().getWayEnums();
         MonitorAlarmRecord monitorAlarmRecord = new MonitorAlarmRecord();
         monitorAlarmRecord.setCode(alarmUuid);
         monitorAlarmRecord.setAlarmDefCode(code);
@@ -354,23 +284,24 @@ public class AlarmServiceImpl implements IAlarmService {
         monitorAlarmRecord.setContent(alarmMsg);
         monitorAlarmRecord.setLevel(alarmLevelEnum != null ? alarmLevelEnum.name() : null);
         monitorAlarmRecord.setType(monitorTypeEnum != null ? monitorTypeEnum.name() : null);
+        // 没有告警级别
+        if (alarmLevelEnum == null) {
+            return;
+        }
         // 告警方式
         for (AlarmWayEnums alarmWayEnum : alarmWayEnums) {
-            if (alarmLevelEnum == null) {
-                continue;
-            }
-            if (alarmWayEnum == null) {
-                continue;
-            }
-            // 告警方式为短信告警
-            if (alarmWayEnum == AlarmWayEnums.SMS) {
-                String[] phones = MonitoringConfigPropertiesLoader.getMonitoringProperties().getAlarmProperties().getSmsProperties().getPhoneNumbers();
-                monitorAlarmRecord.setNumber(StringUtils.join(phones, ";"));
-            }
-            // 告警方式为邮件告警
-            else if (alarmWayEnum == AlarmWayEnums.MAIL) {
-                String[] mails = MonitoringConfigPropertiesLoader.getMonitoringProperties().getAlarmProperties().getMailProperties().getEmills();
-                monitorAlarmRecord.setNumber(StringUtils.join(mails, ";"));
+            switch (alarmWayEnum) {
+                case SMS:
+                    String[] phones = this.monitoringConfigPropertiesLoader.getMonitoringProperties().getAlarmProperties().getSmsProperties().getPhoneNumbers();
+                    monitorAlarmRecord.setNumber(StringUtils.join(phones, ";"));
+                    break;
+                case MAIL:
+                    String[] mails = this.monitoringConfigPropertiesLoader.getMonitoringProperties().getAlarmProperties().getMailProperties().getEmills();
+                    monitorAlarmRecord.setNumber(StringUtils.join(mails, ";"));
+                    break;
+                default:
+                    // 其它情况直接结束
+                    return;
             }
             monitorAlarmRecord.setWay(alarmWayEnum.name());
             monitorAlarmRecord.setInsertTime(new Date());
@@ -381,64 +312,85 @@ public class AlarmServiceImpl implements IAlarmService {
 
     /**
      * <p>
-     * 处理短信告警
+     * 是否发送告警信息
      * </p>
      *
-     * @param result         返回结果
-     * @param title          告警信息标题
-     * @param msg            告警信息
-     * @param alarmLevelEnum 告警级别
+     * @param result {@link Result} 返回结果
+     * @param alarm  告警信息
+     * @return 是 或 否
      * @author 皮锋
-     * @custom.date 2020年3月10日 下午3:13:35
+     * @custom.date 2020/9/14 12:37
      */
-    private void dealSmsAlarm(Result result, String title, String msg, AlarmLevelEnums alarmLevelEnum) {
-        Sms sms = Sms.builder()
-                .phones(MonitoringConfigPropertiesLoader.getMonitoringProperties().getAlarmProperties().getSmsProperties().getPhoneNumbers())
-                .title(title)
-                .content(msg)
-                .level(alarmLevelEnum != null ? alarmLevelEnum.name() : null)
-                .build();
-        boolean b = this.smsService.sendAlarmTemplateSms(sms);
-        // 成功
-        if (b) {
-            this.wrapSuccessResult(result);
-        }
-        // 失败
-        else {
-            String expMsg = "发送短信失败！";
+    private boolean isSendAlarm(Result result, Alarm alarm) {
+        // 告警开关是否打开
+        boolean isEnable = this.monitoringConfigPropertiesLoader.getMonitoringProperties().getAlarmProperties().isEnable();
+        // 告警开关没有打开，不做处理，直接返回
+        if (!isEnable) {
+            String expMsg = "告警开关没有打开，不发送告警信息！";
             this.wrapFailResult(result, expMsg);
+            return false;
         }
+        // 是否是测试告警信息
+        boolean isTest = alarm.isTest();
+        // 是测试告警信息，不做处理，直接返回
+        if (isTest) {
+            String expMsg = "当前为测试信息，不发送告警信息！";
+            this.wrapFailResult(result, expMsg);
+            return false;
+        }
+        // 告警级别
+        AlarmLevelEnums configAlarmLevelEnum = this.monitoringConfigPropertiesLoader.getMonitoringProperties().getAlarmProperties().getLevelEnum();
+        // 告警级别
+        AlarmLevelEnums levelEnum = alarm.getAlarmLevel();
+        // 告警级别小于配置的告警级别，不做处理，直接返回
+        if (!AlarmLevelEnums.isAlarm(configAlarmLevelEnum, levelEnum)) {
+            String expMsg = "小于配置的告警级别，不发送告警信息！";
+            this.wrapFailResult(result, expMsg);
+            return false;
+        }
+        // 告警内容标题
+        String alarmTitle = alarm.getTitle();
+        // 没有告警标题，不做处理，直接返回
+        if (StringUtils.isBlank(alarmTitle)) {
+            String expMsg = "告警标题为空，不发送告警信息！";
+            this.wrapFailResult(result, expMsg);
+            return false;
+        }
+        // 告警内容
+        String msg = alarm.getMsg();
+        // 没有告警内容，不做处理，直接返回
+        if (StringUtils.isBlank(msg)) {
+            String expMsg = "告警内容为空，不发送告警信息！";
+            this.wrapFailResult(result, expMsg);
+            return false;
+        }
+        // 告警方式
+        AlarmWayEnums[] alarmWayEnums = this.monitoringConfigPropertiesLoader.getMonitoringProperties().getAlarmProperties().getWayEnums();
+        // 没有配置告警方式，不做处理，直接返回
+        if (ArrayUtil.isEmpty(alarmWayEnums)) {
+            String expMsg = "没有配置告警方式，不发送告警信息！";
+            this.wrapFailResult(result, expMsg);
+            return false;
+        }
+        return true;
     }
 
     /**
      * <p>
-     * 处理邮件告警
+     * 封装失败时的返回结果。
      * </p>
      *
-     * @param result         返回结果
-     * @param title          告警信息标题
-     * @param msg            告警信息
-     * @param alarmLevelEnum 告警级别
+     * @param result {@link Result} 返回结果
+     * @param msg    结果信息
      * @author 皮锋
-     * @custom.date 2020/4/13 13:23
+     * @custom.date 2020/9/13 21:35
      */
-    private void dealMailAlarm(Result result, String title, String msg, AlarmLevelEnums alarmLevelEnum) {
-        Mail mail = Mail.builder()
-                .email(MonitoringConfigPropertiesLoader.getMonitoringProperties().getAlarmProperties().getMailProperties().getEmills())
-                .title(title)
-                .content(msg)
-                .level(alarmLevelEnum != null ? alarmLevelEnum.name() : null)
-                .build();
-        boolean b = this.mailService.sendAlarmTemplateMail(mail);
-        // 成功
-        if (b) {
-            this.wrapSuccessResult(result);
+    private void wrapFailResult(Result result, String msg) {
+        if (log.isDebugEnabled()) {
+            log.debug(msg);
         }
-        // 失败
-        else {
-            String expMsg = "发送电子邮件失败！";
-            this.wrapFailResult(result, expMsg);
-        }
+        result.setSuccess(false);
+        result.setMsg(msg);
     }
 
 }

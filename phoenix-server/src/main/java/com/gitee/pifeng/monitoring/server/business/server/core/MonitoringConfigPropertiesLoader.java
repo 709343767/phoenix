@@ -4,10 +4,10 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.parser.Feature;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.gitee.pifeng.monitoring.common.constant.CommProtocolTypeEnums;
+import com.gitee.pifeng.monitoring.common.constant.EnterpriseEnums;
 import com.gitee.pifeng.monitoring.common.constant.alarm.AlarmLevelEnums;
 import com.gitee.pifeng.monitoring.common.constant.alarm.AlarmWayEnums;
-import com.gitee.pifeng.monitoring.common.constant.EnterpriseEnums;
-import com.gitee.pifeng.monitoring.common.constant.ProtocolTypeEnums;
 import com.gitee.pifeng.monitoring.common.property.server.*;
 import com.gitee.pifeng.monitoring.server.business.server.entity.MonitorConfig;
 import com.gitee.pifeng.monitoring.server.business.server.service.IConfigService;
@@ -51,7 +51,7 @@ public class MonitoringConfigPropertiesLoader {
      * @author 皮锋
      * @custom.date 2020/11/9 22:18
      */
-    public static synchronized MonitoringProperties getMonitoringProperties() {
+    public MonitoringProperties getMonitoringProperties() {
         return monitoringProperties;
     }
 
@@ -64,9 +64,9 @@ public class MonitoringConfigPropertiesLoader {
      * @author 皮锋
      * @custom.date 2020/11/10 8:43
      */
-    private static synchronized void setMonitoringProperties(MonitoringProperties properties) {
+    private synchronized void setMonitoringProperties(MonitoringProperties properties) {
         monitoringProperties = properties;
-        log.info("设置监控配置属性成功，属性详情：{}", monitoringProperties.toJsonString());
+        log.info("设置到监控配置属性对象成功，属性详情：{}", monitoringProperties.toJsonString());
     }
 
     /**
@@ -81,7 +81,7 @@ public class MonitoringConfigPropertiesLoader {
     public void init() {
         // 获取监控配置属性
         MonitoringProperties properties = this.loadAllMonitorConfig();
-        setMonitoringProperties(properties);
+        this.setMonitoringProperties(properties);
         log.info("加载监控服务端配置成功！");
     }
 
@@ -126,9 +126,13 @@ public class MonitoringConfigPropertiesLoader {
         // 告警邮箱配置属性
         MonitoringAlarmMailProperties alarmMailProperties = new MonitoringAlarmMailProperties();
         // 告警短信配置属性
-        MonitoringAlarmSmsProperties alarmSmsProperties = new MonitoringAlarmSmsProperties(null, null, ProtocolTypeEnums.HTTP, EnterpriseEnums.PHOENIX);
+        MonitoringAlarmSmsProperties alarmSmsProperties = new MonitoringAlarmSmsProperties(null, null, CommProtocolTypeEnums.HTTP, EnterpriseEnums.PHOENIX);
         // 告警配置属性
-        MonitoringAlarmProperties alarmProperties = new MonitoringAlarmProperties(false, AlarmLevelEnums.INFO, new AlarmWayEnums[]{AlarmWayEnums.MAIL, AlarmWayEnums.SMS}, alarmSmsProperties, alarmMailProperties);
+        MonitoringAlarmProperties alarmProperties = new MonitoringAlarmProperties(false,
+                AlarmLevelEnums.INFO,
+                new AlarmWayEnums[]{AlarmWayEnums.MAIL, AlarmWayEnums.SMS},
+                alarmSmsProperties,
+                alarmMailProperties);
         // 网络配置属性
         MonitoringNetworkProperties networkProperties = new MonitoringNetworkProperties(true);
         // TCP配置属性
@@ -174,7 +178,7 @@ public class MonitoringConfigPropertiesLoader {
      */
     @Scheduled(initialDelay = 300000, fixedDelay = 300000)
     public void wakeUpMonitoringConfigPropertiesLoader() {
-        setMonitoringProperties(this.loadAllMonitorConfig());
+        this.setMonitoringProperties(this.loadAllMonitorConfig());
     }
 
 }

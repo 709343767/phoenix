@@ -8,10 +8,12 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.gitee.pifeng.monitoring.common.constant.MonitorTypeEnums;
 import com.gitee.pifeng.monitoring.common.constant.ZeroOrOneConstants;
-import com.gitee.pifeng.monitoring.common.util.DataSizeUtil;
+import com.gitee.pifeng.monitoring.common.util.DataSizeUtils;
 import com.gitee.pifeng.monitoring.ui.business.web.dao.*;
 import com.gitee.pifeng.monitoring.ui.business.web.entity.*;
+import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorLinkService;
 import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorServerService;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.HomeServerVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.LayUiAdminResultVo;
@@ -20,6 +22,7 @@ import com.gitee.pifeng.monitoring.ui.constant.TimeSelectConstants;
 import com.gitee.pifeng.monitoring.ui.constant.WebResponseConstants;
 import com.gitee.pifeng.monitoring.ui.core.CalculateDateTime;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.retry.annotation.Retryable;
@@ -140,6 +143,12 @@ public class MonitorServerServiceImpl extends ServiceImpl<IMonitorServerDao, Mon
     private IMonitorServerLoadAverageHistoryDao monitorServerLoadAverageHistoryDao;
 
     /**
+     * 链路 服务类
+     */
+    @Autowired
+    private IMonitorLinkService monitorLinkService;
+
+    /**
      * <p>
      * 获取home页的服务器信息
      * </p>
@@ -202,11 +211,11 @@ public class MonitorServerServiceImpl extends ServiceImpl<IMonitorServerDao, Mon
             // 上行带宽
             String uploadBps = monitorServerVo.getUploadBps();
             if (StringUtils.isNoneBlank(downloadBps)) {
-                String format = DataSizeUtil.format(Double.parseDouble(downloadBps));
+                String format = DataSizeUtils.format(Double.parseDouble(downloadBps));
                 monitorServerVo.setDownloadBps(ZeroOrOneConstants.ZERO.equals(format) ? ZeroOrOneConstants.ZERO : format + "/s");
             }
             if (StringUtils.isNoneBlank(uploadBps)) {
-                String format = DataSizeUtil.format(Double.parseDouble(uploadBps));
+                String format = DataSizeUtils.format(Double.parseDouble(uploadBps));
                 monitorServerVo.setUploadBps(ZeroOrOneConstants.ZERO.equals(format) ? ZeroOrOneConstants.ZERO : format + "/s");
             }
             Date updateTime = monitorServerVo.getUpdateTime();
@@ -303,6 +312,8 @@ public class MonitorServerServiceImpl extends ServiceImpl<IMonitorServerDao, Mon
         LambdaUpdateWrapper<MonitorServer> serverLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
         serverLambdaUpdateWrapper.in(MonitorServer::getIp, ips);
         this.monitorServerDao.delete(serverLambdaUpdateWrapper);
+        // 注意：删除服务器相关链路信息，这个不要忘记了
+        this.monitorLinkService.deleteMonitorLinks(ips, MonitorTypeEnums.SERVER);
         return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);
     }
 
@@ -423,6 +434,38 @@ public class MonitorServerServiceImpl extends ServiceImpl<IMonitorServerDao, Mon
         monitorServerLambdaQueryWrapper.eq(MonitorServer::getIp, ip);
         MonitorServer monitorServer = this.getOne(monitorServerLambdaQueryWrapper);
         return new MonitorServerVo().convertFor(monitorServer);
+    }
+
+    /**
+     * <p>
+     * 获取服务器信息(Map形式)
+     * </p>
+     *
+     * @return 服务器信息
+     * @author 皮锋
+     * @custom.date 2022/12/21 14:29
+     */
+    @Override
+    public Map<String, MonitorServerVo> getMonitorServer2Map() {
+        List<MonitorServerVo> monitorServerVos = this.monitorServerDao.getMonitorServers();
+        Map<String, MonitorServerVo> result = Maps.newHashMap();
+        for (MonitorServerVo monitorServerVo : monitorServerVos) {
+            String ip = monitorServerVo.getIp();
+            // 下行带宽
+            String downloadBps = monitorServerVo.getDownloadBps();
+            // 上行带宽
+            String uploadBps = monitorServerVo.getUploadBps();
+            if (StringUtils.isNoneBlank(downloadBps)) {
+                String format = DataSizeUtils.format(Double.parseDouble(downloadBps));
+                monitorServerVo.setDownloadBps(ZeroOrOneConstants.ZERO.equals(format) ? ZeroOrOneConstants.ZERO : format + "/s");
+            }
+            if (StringUtils.isNoneBlank(uploadBps)) {
+                String format = DataSizeUtils.format(Double.parseDouble(uploadBps));
+                monitorServerVo.setUploadBps(ZeroOrOneConstants.ZERO.equals(format) ? ZeroOrOneConstants.ZERO : format + "/s");
+            }
+            result.put(ip, monitorServerVo);
+        }
+        return result;
     }
 
 }

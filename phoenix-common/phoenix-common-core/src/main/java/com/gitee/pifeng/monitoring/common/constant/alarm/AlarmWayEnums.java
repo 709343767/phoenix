@@ -63,6 +63,9 @@ public enum AlarmWayEnums {
             return new AlarmWayEnums[0];
         }
         for (String alarmStr : alarmWayStrs) {
+            if (alarmStr == null) {
+                continue;
+            }
             AlarmWayEnums alarmLevelEnum = str2Enum(alarmStr);
             alarmWayEnumsList.add(alarmLevelEnum);
         }

@@ -77,6 +77,7 @@ public class NetUtilsTest {
      * @custom.date 2022/1/26 15:00
      */
     @Test
+    @Deprecated
     public void testTelnet() {
         boolean telnet = NetUtils.telnet("127.0.0.1", 8000);
         assertTrue(telnet);

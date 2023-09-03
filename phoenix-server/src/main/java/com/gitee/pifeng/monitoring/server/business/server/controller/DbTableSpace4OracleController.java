@@ -8,10 +8,14 @@ import com.alibaba.fastjson.JSONObject;
 import com.gitee.pifeng.monitoring.common.domain.Result;
 import com.gitee.pifeng.monitoring.common.dto.BaseRequestPackage;
 import com.gitee.pifeng.monitoring.common.dto.BaseResponsePackage;
-import com.gitee.pifeng.monitoring.server.business.server.core.PackageConstructor;
+import com.gitee.pifeng.monitoring.common.dto.CiphertextPackage;
+import com.gitee.pifeng.monitoring.server.business.server.core.ServerPackageConstructor;
 import com.gitee.pifeng.monitoring.server.business.server.service.IDbTableSpace4OracleService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,9 +36,15 @@ import java.util.List;
  */
 @Slf4j
 @RestController
-@Api(tags = "数据库表空间.Oracle")
+@Tag(name = "数据库表空间.Oracle")
 @RequestMapping("/db-tablespace4oracle")
 public class DbTableSpace4OracleController {
+
+    /**
+     * 服务端包构造器
+     */
+    @Autowired
+    private ServerPackageConstructor serverPackageConstructor;
 
     /**
      * Oracle数据库表空间服务类
@@ -53,7 +63,9 @@ public class DbTableSpace4OracleController {
      * @author 皮锋
      * @custom.date 2020/12/24 16:53
      */
-    @ApiOperation(value = "获取表空间列表(按文件)")
+    @Operation(summary = "获取表空间列表(按文件)",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(content = @Content(schema = @Schema(implementation = CiphertextPackage.class))),
+            responses = @ApiResponse(content = {@Content(schema = @Schema(implementation = CiphertextPackage.class))}))
     @PostMapping("/get-tablespace-list-file")
     public BaseResponsePackage getTableSpaceListFile(@RequestBody BaseRequestPackage baseRequestPackage) throws SQLException {
         // 计时器
@@ -64,7 +76,7 @@ public class DbTableSpace4OracleController {
         String password = extraMsg.getString("password");
         List<Entity> entities = this.dbTableSpace4OracleService.getTableSpaceListFile(url, username, password);
         String jsonString = JSON.toJSONString(entities);
-        BaseResponsePackage baseResponsePackage = new PackageConstructor().structureBaseResponsePackage(Result.builder().isSuccess(true).msg(jsonString).build());
+        BaseResponsePackage baseResponsePackage = this.serverPackageConstructor.structureBaseResponsePackage(Result.builder().isSuccess(true).msg(jsonString).build());
         // 时间差（毫秒）
         String betweenDay = timer.intervalPretty();
         if (timer.intervalSecond() > 1) {
@@ -84,7 +96,9 @@ public class DbTableSpace4OracleController {
      * @author 皮锋
      * @custom.date 2020/12/24 16:53
      */
-    @ApiOperation(value = "获取表空间列表")
+    @Operation(summary = "获取表空间列表",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(content = @Content(schema = @Schema(implementation = CiphertextPackage.class))),
+            responses = @ApiResponse(content = {@Content(schema = @Schema(implementation = CiphertextPackage.class))}))
     @PostMapping("/get-tablespace-list-all")
     public BaseResponsePackage getTableSpaceListAll(@RequestBody BaseRequestPackage baseRequestPackage) throws SQLException {
         // 计时器
@@ -95,7 +109,7 @@ public class DbTableSpace4OracleController {
         String password = extraMsg.getString("password");
         List<Entity> entities = this.dbTableSpace4OracleService.getTableSpaceListAll(url, username, password);
         String jsonString = JSON.toJSONString(entities);
-        BaseResponsePackage baseResponsePackage = new PackageConstructor().structureBaseResponsePackage(Result.builder().isSuccess(true).msg(jsonString).build());
+        BaseResponsePackage baseResponsePackage = this.serverPackageConstructor.structureBaseResponsePackage(Result.builder().isSuccess(true).msg(jsonString).build());
         // 时间差（毫秒）
         String betweenDay = timer.intervalPretty();
         if (timer.intervalSecond() > 1) {

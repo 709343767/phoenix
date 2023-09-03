@@ -3,8 +3,7 @@ package com.gitee.pifeng.monitoring.ui.business.web.vo;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.gitee.pifeng.monitoring.common.inf.ISuperBean;
 import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorDb;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import lombok.experimental.Accessors;
 import org.springframework.beans.BeanUtils;
@@ -27,51 +26,51 @@ import java.util.Date;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel(value = "数据库信息表现层对象")
+@Schema(description = "数据库信息表现层对象")
 public class MonitorDbVo implements ISuperBean {
 
-    @ApiModelProperty(value = "主键ID")
+    @Schema(description = "主键ID")
     private Long id;
 
-    @ApiModelProperty(value = "数据库连接名")
+    @Schema(description = "数据库连接名")
     private String connName;
 
-    @ApiModelProperty(value = "数据库URL")
+    @Schema(description = "数据库URL")
     private String url;
 
-    @ApiModelProperty(value = "用户名")
+    @Schema(description = "用户名")
     private String username;
 
-    @ApiModelProperty(value = "密码")
+    @Schema(description = "密码")
     private String password;
 
-    @ApiModelProperty(value = "数据库类型")
+    @Schema(description = "数据库类型")
     private String dbType;
 
-    @ApiModelProperty(value = "驱动类")
+    @Schema(description = "驱动类")
     private String driverClass;
 
-    @ApiModelProperty(value = "描述")
+    @Schema(description = "描述")
     private String dbDesc;
 
-    @ApiModelProperty(value = "数据库状态（0：离线，1：在线）")
+    @Schema(description = "数据库状态（0：离线，1：在线）")
     private String isOnline;
 
-    @ApiModelProperty(value = "离线次数")
+    @Schema(description = "离线次数")
     private Integer offlineCount;
 
-    @ApiModelProperty(value = "插入时间")
+    @Schema(description = "插入时间")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date insertTime;
 
-    @ApiModelProperty(value = "更新时间")
+    @Schema(description = "更新时间")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date updateTime;
 
-    @ApiModelProperty(value = "监控环境")
+    @Schema(description = "监控环境")
     private String monitorEnv;
 
-    @ApiModelProperty(value = "监控分组")
+    @Schema(description = "监控分组")
     private String monitorGroup;
 
     /**

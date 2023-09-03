@@ -8,9 +8,11 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.gitee.pifeng.monitoring.common.constant.MonitorTypeEnums;
 import com.gitee.pifeng.monitoring.ui.business.web.dao.*;
 import com.gitee.pifeng.monitoring.ui.business.web.entity.*;
 import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorInstanceService;
+import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorLinkService;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.HomeInstanceVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.LayUiAdminResultVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.MonitorInstanceVo;
@@ -18,6 +20,7 @@ import com.gitee.pifeng.monitoring.ui.constant.TimeSelectConstants;
 import com.gitee.pifeng.monitoring.ui.constant.WebResponseConstants;
 import com.gitee.pifeng.monitoring.ui.core.CalculateDateTime;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.retry.annotation.Retryable;
@@ -81,6 +84,12 @@ public class MonitorInstanceServiceImpl extends ServiceImpl<IMonitorInstanceDao,
      */
     @Autowired
     private IMonitorJvmThreadDao monitorJvmThreadDao;
+
+    /**
+     * 链路 服务类
+     */
+    @Autowired
+    private IMonitorLinkService monitorLinkService;
 
     /**
      * <p>
@@ -212,6 +221,8 @@ public class MonitorInstanceServiceImpl extends ServiceImpl<IMonitorInstanceDao,
         LambdaUpdateWrapper<MonitorInstance> monitorInstanceLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
         monitorInstanceLambdaUpdateWrapper.in(MonitorInstance::getInstanceId, instances);
         this.monitorInstanceDao.delete(monitorInstanceLambdaUpdateWrapper);
+        // 注意：删除应用程序相关链路信息，这个不要忘记了
+        this.monitorLinkService.deleteMonitorLinks(instances, MonitorTypeEnums.INSTANCE);
         return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);
     }
 
@@ -289,6 +300,32 @@ public class MonitorInstanceServiceImpl extends ServiceImpl<IMonitorInstanceDao,
         monitorInstanceLambdaUpdateWrapper.eq(MonitorInstance::getInstanceId, monitorInstance.getInstanceId());
         this.monitorInstanceDao.update(monitorInstance, monitorInstanceLambdaUpdateWrapper);
         return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);
+    }
+
+    /**
+     * <p>
+     * 获取应用程序信息(Map形式)
+     * </p>
+     *
+     * @return 应用程序信息
+     * @author 皮锋
+     * @custom.date 2022/12/21 8:56
+     */
+    @Override
+    public Map<String, MonitorInstanceVo> getMonitorInstance2Map() {
+        List<MonitorInstance> monitorInstances = this.monitorInstanceDao.selectList(new LambdaQueryWrapper<>());
+        Map<String, MonitorInstanceVo> result = Maps.newHashMap();
+        for (MonitorInstance instance : monitorInstances) {
+            String instanceId = instance.getInstanceId();
+            MonitorInstanceVo monitorInstanceVo = MonitorInstanceVo.builder().build().convertFor(instance);
+            // 如果应用实例摘要信息不为空，则把 应用实例摘要信息 赋给 应用实例描述。因为：摘要信息是用户通过UI界面设置的，优先级大于描述。
+            String instanceSummary = monitorInstanceVo.getInstanceSummary();
+            if (StringUtils.isNotBlank(instanceSummary)) {
+                monitorInstanceVo.setInstanceDesc(instanceSummary);
+            }
+            result.put(instanceId, monitorInstanceVo);
+        }
+        return result;
     }
 
 }

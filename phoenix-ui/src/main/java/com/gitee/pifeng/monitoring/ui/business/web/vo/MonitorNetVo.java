@@ -3,8 +3,7 @@ package com.gitee.pifeng.monitoring.ui.business.web.vo;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.gitee.pifeng.monitoring.common.inf.ISuperBean;
 import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorNet;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import lombok.experimental.Accessors;
 import org.springframework.beans.BeanUtils;
@@ -27,42 +26,45 @@ import java.util.Date;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel(value = "网络信息表现层对象")
+@Schema(description = "网络信息表现层对象")
 public class MonitorNetVo implements ISuperBean {
 
-    @ApiModelProperty(value = "主键ID")
+    @Schema(description = "主键ID")
     private Long id;
 
-    @ApiModelProperty(value = "IP地址（来源）")
+    @Schema(description = "IP地址（来源）")
     private String ipSource;
 
-    @ApiModelProperty(value = "IP地址（目的地）")
+    @Schema(description = "IP地址（目的地）")
     private String ipTarget;
 
-    @ApiModelProperty(value = "IP地址描述")
+    @Schema(description = "IP地址描述")
     private String ipDesc;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    @ApiModelProperty(value = "新增时间")
+    @Schema(description = "新增时间")
     private Date insertTime;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    @ApiModelProperty(value = "更新时间")
+    @Schema(description = "更新时间")
     private Date updateTime;
 
-    @ApiModelProperty(value = "状态（0：网络不通，1：网络正常）")
+    @Schema(description = "状态（0：网络不通，1：网络正常）")
     private String status;
 
-    @ApiModelProperty(value = "平均响应时间（毫秒）")
+    @Schema(description = "平均响应时间（毫秒）")
     private Double avgTime;
 
-    @ApiModelProperty(value = "离线次数")
+    @Schema(description = "ping详情")
+    private String pingDetail;
+
+    @Schema(description = "离线次数")
     private Integer offlineCount;
 
-    @ApiModelProperty(value = "监控环境")
+    @Schema(description = "监控环境")
     private String monitorEnv;
 
-    @ApiModelProperty(value = "监控分组")
+    @Schema(description = "监控分组")
     private String monitorGroup;
 
     /**

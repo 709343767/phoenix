@@ -3,10 +3,11 @@ package com.gitee.pifeng.monitoring.ui.business.web.controller;
 import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorServerCpuHistoryService;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.LayUiAdminResultVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.ServerDetailPageServerCpuChartVo;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,7 +25,7 @@ import java.util.List;
  * @author 皮锋
  * @custom.date 2021-01-24
  */
-@Api(tags = "服务器.服务器CPU历史记录")
+@Tag(name = "服务器.服务器CPU历史记录")
 @Controller
 @RequestMapping("/monitor-server-cpu-history")
 public class MonitorServerCpuHistoryController {
@@ -46,12 +47,12 @@ public class MonitorServerCpuHistoryController {
      * @author 皮锋
      * @custom.date 2020/10/19 14:20
      */
-    @ApiOperation(value = "获取服务器详情页面服务器CPU图表信息")
+    @Operation(summary = "获取服务器详情页面服务器CPU图表信息")
     @ResponseBody
     @GetMapping("/get-server-detail-page-server-cpu-chart-info")
-    @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "ip", value = "服务器IP地址", required = true, paramType = "query", dataType = "string", dataTypeClass = String.class),
-            @ApiImplicitParam(name = "time", value = "时间", paramType = "query", dataType = "string", dataTypeClass = String.class)})
+    @Parameters(value = {
+            @Parameter(name = "ip", description = "服务器IP地址", required = true, in = ParameterIn.QUERY),
+            @Parameter(name = "time", description = "时间", in = ParameterIn.QUERY)})
     public LayUiAdminResultVo getServerDetailPageServerCpuChartInfo(@RequestParam(name = "ip") String ip,
                                                                     @RequestParam(name = "time", required = false) String time) {
         List<ServerDetailPageServerCpuChartVo> monitorServerCpuChartVos = this.monitorServerCpuHistoryService.getServerDetailPageServerCpuChartInfo(ip, time);

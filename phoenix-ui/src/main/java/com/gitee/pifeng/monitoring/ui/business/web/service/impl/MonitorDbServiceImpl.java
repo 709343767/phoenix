@@ -23,7 +23,7 @@ import com.gitee.pifeng.monitoring.ui.business.web.vo.MonitorDbVo;
 import com.gitee.pifeng.monitoring.ui.constant.DbDriverClassConstants;
 import com.gitee.pifeng.monitoring.ui.constant.UrlConstants;
 import com.gitee.pifeng.monitoring.ui.constant.WebResponseConstants;
-import com.gitee.pifeng.monitoring.ui.core.PackageConstructor;
+import com.gitee.pifeng.monitoring.ui.core.UiPackageConstructor;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
 import org.hyperic.sigar.SigarException;
@@ -45,6 +45,12 @@ import java.util.Map;
  */
 @Service
 public class MonitorDbServiceImpl extends ServiceImpl<IMonitorDbDao, MonitorDb> implements IMonitorDbService {
+
+    /**
+     * UI端包构造器
+     */
+    @Autowired
+    private UiPackageConstructor uiPackageConstructor;
 
     /**
      * 数据库表数据访问对象
@@ -289,7 +295,7 @@ public class MonitorDbServiceImpl extends ServiceImpl<IMonitorDbDao, MonitorDb> 
         extraMsg.put("dbType", monitorDbVo.getDbType());
         extraMsg.put("username", monitorDbVo.getUsername());
         extraMsg.put("password", monitorDbVo.getPassword());
-        BaseRequestPackage baseRequestPackage = new PackageConstructor().structureBaseRequestPackage(extraMsg);
+        BaseRequestPackage baseRequestPackage = this.uiPackageConstructor.structureBaseRequestPackage(extraMsg);
         // 从服务端获取数据
         String resultStr = Sender.send(UrlConstants.TEST_MONITOR_DB_URL, baseRequestPackage.toJsonString());
         BaseResponsePackage baseResponsePackage = JSON.parseObject(resultStr, BaseResponsePackage.class);

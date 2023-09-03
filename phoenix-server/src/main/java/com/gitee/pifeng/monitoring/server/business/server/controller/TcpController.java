@@ -6,11 +6,15 @@ import com.alibaba.fastjson.JSONObject;
 import com.gitee.pifeng.monitoring.common.domain.Result;
 import com.gitee.pifeng.monitoring.common.dto.BaseRequestPackage;
 import com.gitee.pifeng.monitoring.common.dto.BaseResponsePackage;
+import com.gitee.pifeng.monitoring.common.dto.CiphertextPackage;
 import com.gitee.pifeng.monitoring.common.exception.NetException;
-import com.gitee.pifeng.monitoring.server.business.server.core.PackageConstructor;
+import com.gitee.pifeng.monitoring.server.business.server.core.ServerPackageConstructor;
 import com.gitee.pifeng.monitoring.server.business.server.service.ITcpService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,8 +33,14 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RestController
 @RequestMapping("/tcp")
-@Api(tags = "TCP信息")
+@Tag(name = "TCP信息")
 public class TcpController {
+
+    /**
+     * 服务端包构造器
+     */
+    @Autowired
+    private ServerPackageConstructor serverPackageConstructor;
 
     /**
      * TCP信息服务接口
@@ -49,7 +59,9 @@ public class TcpController {
      * @author 皮锋
      * @custom.date 2022/10/10 22:04
      */
-    @ApiOperation(value = "测试TCP连通性", notes = "测试TCP连通性")
+    @Operation(summary = "测试TCP连通性", description = "测试TCP连通性",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(content = @Content(schema = @Schema(implementation = CiphertextPackage.class))),
+            responses = @ApiResponse(content = {@Content(schema = @Schema(implementation = CiphertextPackage.class))}))
     @PostMapping("/test-monitor-tcp")
     public BaseResponsePackage testMonitorTcp(@RequestBody BaseRequestPackage baseRequestPackage) throws NetException {
         // 计时器
@@ -58,7 +70,7 @@ public class TcpController {
         String hostnameTarget = extraMsg.getString("hostnameTarget");
         Integer portTarget = extraMsg.getInteger("portTarget");
         Boolean isConnected = this.tcpService.testMonitorTcp(hostnameTarget, portTarget);
-        BaseResponsePackage baseResponsePackage = new PackageConstructor().structureBaseResponsePackage(Result.builder().isSuccess(true).msg(String.valueOf(isConnected)).build());
+        BaseResponsePackage baseResponsePackage = this.serverPackageConstructor.structureBaseResponsePackage(Result.builder().isSuccess(true).msg(String.valueOf(isConnected)).build());
         // 时间差（毫秒）
         String betweenDay = timer.intervalPretty();
         if (timer.intervalSecond() > 1) {

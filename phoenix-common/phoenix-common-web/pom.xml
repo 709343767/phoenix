@@ -8,7 +8,7 @@
     <parent>
         <artifactId>phoenix-common</artifactId>
         <groupId>com.gitee.pifeng</groupId>
-        <version>1.2.4.RELEASE-CR8</version>
+        <version>1.2.5.RELEASE</version>
         <relativePath>..</relativePath>
     </parent>
 
@@ -60,12 +60,23 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <!-- 提供Spring上下文的一些扩展模块的依赖 -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context-support</artifactId>
         </dependency>
         <!-- 支持热部署依赖 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
             <scope>runtime</scope>
+        </dependency>
+        <!-- spring-context-indexer依赖 -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context-indexer</artifactId>
         </dependency>
         <!-- web模块依赖 -->
         <dependency>
@@ -124,6 +135,14 @@
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+        </dependency>
         <!-- cglib动态代理依赖 -->
         <dependency>
             <groupId>cglib</groupId>
@@ -132,7 +151,7 @@
         <!-- knife4j文档依赖 -->
         <dependency>
             <groupId>com.github.xiaoymin</groupId>
-            <artifactId>knife4j-spring-boot-starter</artifactId>
+            <artifactId>knife4j-openapi3-spring-boot-starter</artifactId>
         </dependency>
     </dependencies>
 

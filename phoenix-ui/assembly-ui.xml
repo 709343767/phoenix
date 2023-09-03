@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<assembly>
+    <id>windows</id>
+    <!--这个id会出现在zip包名称的后面，zip的完整名是：pom.xml中的artifactId-version-id.zip -->
+    <formats>
+        <!--支持的打包格式有zip、tar、tar.gz (or tgz)、tar.bz2 (or tbz2)、jar、dir、war-->
+        <format>zip</format>
+    </formats>
+
+    <includeBaseDirectory>false</includeBaseDirectory>
+
+    <!--指定需要包含的文件-->
+    <fileSets>
+        <fileSet>
+            <!--源目录-->
+            <directory>../target</directory>
+            <!--放在哪-->
+            <outputDirectory>/phoenixUI</outputDirectory>
+            <includes>
+                <include>phoenix-ui.jar</include>
+            </includes>
+        </fileSet>
+        <fileSet>
+            <!--源目录-->
+            <directory>../doc/Windows服务/UI端/</directory>
+            <!--放在哪-->
+            <outputDirectory>/phoenixUI</outputDirectory>
+            <includes>
+                <include>**</include>
+            </includes>
+        </fileSet>
+    </fileSets>
+</assembly>

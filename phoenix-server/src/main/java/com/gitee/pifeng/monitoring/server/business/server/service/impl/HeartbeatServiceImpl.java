@@ -3,6 +3,7 @@ package com.gitee.pifeng.monitoring.server.business.server.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.gitee.pifeng.monitoring.common.constant.ResultMsgConstants;
+import com.gitee.pifeng.monitoring.common.constant.ZeroOrOneConstants;
 import com.gitee.pifeng.monitoring.common.domain.Result;
 import com.gitee.pifeng.monitoring.common.dto.HeartbeatPackage;
 import com.gitee.pifeng.monitoring.server.business.server.entity.MonitorInstance;
@@ -79,6 +80,7 @@ public class HeartbeatServiceImpl implements IHeartbeatService {
         entity.setConnFrequency((int) heartbeatPackage.getRate());
         entity.setLanguage(heartbeatPackage.getInstanceLanguage());
         entity.setAppServerType(heartbeatPackage.getAppServerType().getName());
+        entity.setIsOfflineNotice(ZeroOrOneConstants.ZERO);
         // 插入记录
         if (selectCountDb == 0) {
             entity.setInsertTime(currentTime);

@@ -1,8 +1,7 @@
 package com.gitee.pifeng.monitoring.ui.business.web.vo;
 
 import com.gitee.pifeng.monitoring.common.inf.ISuperBean;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import lombok.experimental.Accessors;
 
@@ -22,22 +21,22 @@ import lombok.experimental.Accessors;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel(value = "home页的网络信息表现层对象")
+@Schema(description = "home页的网络信息表现层对象")
 public class HomeNetVo implements ISuperBean {
 
-    @ApiModelProperty(value = "网络数量")
+    @Schema(description = "网络数量")
     private Integer netSum;
 
-    @ApiModelProperty(value = "网络正常数量")
+    @Schema(description = "网络正常数量")
     private Integer netConnectSum;
 
-    @ApiModelProperty(value = "网络断开数量")
+    @Schema(description = "网络断开数量")
     private Integer netDisconnectSum;
 
-    @ApiModelProperty(value = "网络未知数量")
+    @Schema(description = "网络未知数量")
     private Integer netUnsentSum;
 
-    @ApiModelProperty(value = "网络正常率")
+    @Schema(description = "网络正常率")
     private String netConnectRate;
 
 }

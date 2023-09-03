@@ -2031,6 +2031,10 @@ a cite {
     background-color: #FF5722
 }
 
+.layui-btn-clear {
+    background-color: #DD001B
+}
+
 .layui-btn-checked {
     background-color: #5FB878
 }
@@ -4253,7 +4257,7 @@ body .layui-table-tips .layui-layer-content {
 
 .layui-carousel > [carousel-item]:before {
     position: absolute;
-    content: '\e63d';
+    /*content: '\e63d';*/
     left: 50%;
     top: 50%;
     width: 100px;

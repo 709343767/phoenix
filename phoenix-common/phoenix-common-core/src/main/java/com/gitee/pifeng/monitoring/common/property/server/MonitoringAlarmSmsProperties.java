@@ -1,7 +1,7 @@
 package com.gitee.pifeng.monitoring.common.property.server;
 
+import com.gitee.pifeng.monitoring.common.constant.CommProtocolTypeEnums;
 import com.gitee.pifeng.monitoring.common.constant.EnterpriseEnums;
-import com.gitee.pifeng.monitoring.common.constant.ProtocolTypeEnums;
 import com.gitee.pifeng.monitoring.common.inf.ISuperBean;
 import lombok.*;
 
@@ -33,7 +33,7 @@ public class MonitoringAlarmSmsProperties implements ISuperBean {
     /**
      * 接口协议
      */
-    private ProtocolTypeEnums protocolTypeEnum;
+    private CommProtocolTypeEnums protocolTypeEnum;
 
     /**
      * 接口所属企业

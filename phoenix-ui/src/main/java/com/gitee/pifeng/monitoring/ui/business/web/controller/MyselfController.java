@@ -12,10 +12,11 @@ import com.gitee.pifeng.monitoring.ui.business.web.vo.MonitorUserVo;
 import com.gitee.pifeng.monitoring.ui.constant.OperateTypeConstants;
 import com.gitee.pifeng.monitoring.ui.constant.UiModuleConstants;
 import com.gitee.pifeng.monitoring.ui.util.SpringSecurityUtils;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -34,7 +35,7 @@ import java.util.Objects;
  * @custom.date 2020/7/7 17:40
  */
 @Controller
-@Api(tags = "我的")
+@Tag(name = "我的")
 @RequestMapping("/myself")
 public class MyselfController {
 
@@ -59,7 +60,7 @@ public class MyselfController {
      * @author 皮锋
      * @custom.date 2020/7/7 17:42
      */
-    @ApiOperation(value = "访问用户基本资料页面")
+    @Operation(summary = "访问用户基本资料页面")
     @GetMapping("/info")
     public ModelAndView userInfo() {
         ModelAndView mv = new ModelAndView("myself/info");
@@ -90,7 +91,7 @@ public class MyselfController {
      * @author 皮锋
      * @custom.date 2020/7/22 11:09
      */
-    @ApiOperation(value = "访问修改密码页面")
+    @Operation(summary = "访问修改密码页面")
     @GetMapping("/password")
     public ModelAndView password() {
         return new ModelAndView("myself/password");
@@ -109,10 +110,10 @@ public class MyselfController {
      * @author 皮锋
      * @custom.date 2020/7/11 15:22
      */
-    @ApiOperation(value = "修改密码")
-    @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "oldPassword", value = "原始密码", required = true, paramType = "query", dataType = "string", dataTypeClass = String.class),
-            @ApiImplicitParam(name = "password", value = "新密码", required = true, paramType = "query", dataType = "string", dataTypeClass = String.class)})
+    @Operation(summary = "修改密码")
+    @Parameters(value = {
+            @Parameter(name = "oldPassword", description = "原始密码", required = true, in = ParameterIn.QUERY),
+            @Parameter(name = "password", description = "新密码", required = true, in = ParameterIn.QUERY)})
     @PutMapping("/update-password")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.MYSELF + "#修改密码", operType = OperateTypeConstants.UPDATE, operDesc = "修改密码")
@@ -131,7 +132,7 @@ public class MyselfController {
      * @author 皮锋
      * @custom.date 2020/7/13 18:55
      */
-    @ApiOperation(value = "修改当前用户信息")
+    @Operation(summary = "修改当前用户信息")
     @PutMapping("/update-user")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.MYSELF + "#基本资料", operType = OperateTypeConstants.UPDATE, operDesc = "修改当前用户信息")

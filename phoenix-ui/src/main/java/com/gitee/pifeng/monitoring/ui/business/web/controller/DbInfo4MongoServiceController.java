@@ -7,14 +7,16 @@ import com.gitee.pifeng.monitoring.ui.business.web.vo.DbInfo4MongoVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.LayUiAdminResultVo;
 import com.gitee.pifeng.monitoring.ui.constant.OperateTypeConstants;
 import com.gitee.pifeng.monitoring.ui.constant.UiModuleConstants;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.hyperic.sigar.SigarException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
@@ -28,7 +30,7 @@ import java.io.IOException;
  * @custom.date 2022/1/20 14:22
  */
 @RestController
-@Api(tags = "数据库信息.Mongo")
+@Tag(name = "数据库信息.Mongo")
 @RequestMapping("/db-info4mongo")
 public class DbInfo4MongoServiceController {
 
@@ -52,14 +54,16 @@ public class DbInfo4MongoServiceController {
      * @author 皮锋
      * @custom.date 2022/1/20 14:28
      */
-    @ApiOperation(value = "获取Mongo信息列表")
-    @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "current", value = "当前页", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class),
-            @ApiImplicitParam(name = "size", value = "每页显示条数", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class),
-            @ApiImplicitParam(name = "id", value = "数据库ID", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class)})
+    @Operation(summary = "获取Mongo信息列表")
+    @Parameters(value = {
+            @Parameter(name = "current", description = "当前页", required = true, in = ParameterIn.QUERY),
+            @Parameter(name = "size", description = "每页显示条数", required = true, in = ParameterIn.QUERY),
+            @Parameter(name = "id", description = "数据库ID", required = true, in = ParameterIn.QUERY)})
     @GetMapping("/get-mongo-info-list")
     @OperateLog(operModule = UiModuleConstants.DATABASE + "#信息", operType = OperateTypeConstants.QUERY, operDesc = "获取Mongo信息列表")
-    public LayUiAdminResultVo getMongoInfoList(Long current, Long size, Long id) throws IOException, SigarException {
+    public LayUiAdminResultVo getMongoInfoList(@RequestParam(value = "current") Long current,
+                                               @RequestParam(value = "size") Long size,
+                                               @RequestParam(value = "id") Long id) throws IOException, SigarException {
         Page<DbInfo4MongoVo> page = this.dbInfo4MongoService.getMongoInfoList(current, size, id);
         return LayUiAdminResultVo.ok(page);
     }

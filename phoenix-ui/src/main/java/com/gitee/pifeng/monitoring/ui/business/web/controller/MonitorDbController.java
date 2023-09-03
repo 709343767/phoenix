@@ -12,10 +12,11 @@ import com.gitee.pifeng.monitoring.ui.business.web.vo.LayUiAdminResultVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.MonitorDbVo;
 import com.gitee.pifeng.monitoring.ui.constant.OperateTypeConstants;
 import com.gitee.pifeng.monitoring.ui.constant.UiModuleConstants;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.hyperic.sigar.SigarException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -37,7 +38,7 @@ import java.util.stream.Collectors;
  * @custom.date 2020-12-19
  */
 @Controller
-@Api(tags = "数据库")
+@Tag(name = "数据库")
 @RequestMapping("/monitor-db")
 public class MonitorDbController {
 
@@ -68,7 +69,7 @@ public class MonitorDbController {
      * @author 皮锋
      * @custom.date 2020/12/19 17:31
      */
-    @ApiOperation(value = "访问数据库列表页面")
+    @Operation(summary = "访问数据库列表页面")
     @GetMapping("/list")
     public ModelAndView list() {
         ModelAndView mv = new ModelAndView("db/db");
@@ -98,21 +99,27 @@ public class MonitorDbController {
      * @author 皮锋
      * @custom.date 2020/12/19 17:36
      */
-    @ApiOperation(value = "获取数据库列表")
-    @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "current", value = "当前页", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class),
-            @ApiImplicitParam(name = "size", value = "每页显示条数", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class),
-            @ApiImplicitParam(name = "connName", value = "数据库连接名", paramType = "query", dataType = "string", dataTypeClass = String.class),
-            @ApiImplicitParam(name = "url", value = "数据库URL", paramType = "query", dataType = "string", dataTypeClass = String.class),
-            @ApiImplicitParam(name = "dbType", value = "数据库类型", paramType = "query", dataType = "string", dataTypeClass = String.class),
-            @ApiImplicitParam(name = "isOnline", value = "数据库状态", paramType = "query", dataType = "string", dataTypeClass = String.class),
-            @ApiImplicitParam(name = "monitorEnv", value = "监控环境", paramType = "query", dataType = "string", dataTypeClass = String.class),
-            @ApiImplicitParam(name = "monitorGroup", value = "监控分组", paramType = "query", dataType = "string", dataTypeClass = String.class)})
+    @Operation(summary = "获取数据库列表")
+    @Parameters(value = {
+            @Parameter(name = "current", description = "当前页", required = true, in = ParameterIn.QUERY),
+            @Parameter(name = "size", description = "每页显示条数", required = true, in = ParameterIn.QUERY),
+            @Parameter(name = "connName", description = "数据库连接名", in = ParameterIn.QUERY),
+            @Parameter(name = "url", description = "数据库URL", in = ParameterIn.QUERY),
+            @Parameter(name = "dbType", description = "数据库类型", in = ParameterIn.QUERY),
+            @Parameter(name = "isOnline", description = "数据库状态", in = ParameterIn.QUERY),
+            @Parameter(name = "monitorEnv", description = "监控环境", in = ParameterIn.QUERY),
+            @Parameter(name = "monitorGroup", description = "监控分组", in = ParameterIn.QUERY)})
     @GetMapping("get-monitor-db-list")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.DATABASE, operType = OperateTypeConstants.QUERY, operDesc = "获取数据库列表")
-    public LayUiAdminResultVo getMonitorDbList(Long current, Long size, String connName, String url, String dbType,
-                                               String isOnline, String monitorEnv, String monitorGroup) {
+    public LayUiAdminResultVo getMonitorDbList(@RequestParam(value = "current") Long current,
+                                               @RequestParam(value = "size") Long size,
+                                               @RequestParam(value = "connName", required = false) String connName,
+                                               @RequestParam(value = "url", required = false) String url,
+                                               @RequestParam(value = "dbType", required = false) String dbType,
+                                               @RequestParam(value = "isOnline", required = false) String isOnline,
+                                               @RequestParam(value = "monitorEnv", required = false) String monitorEnv,
+                                               @RequestParam(value = "monitorGroup", required = false) String monitorGroup) {
         Page<MonitorDbVo> page = this.monitorDbService.getMonitorDbList(current, size, connName, url, dbType, isOnline, monitorEnv, monitorGroup);
         return LayUiAdminResultVo.ok(page);
     }
@@ -127,9 +134,9 @@ public class MonitorDbController {
      * @author 皮锋
      * @custom.date 2020/12/19 18:51
      */
-    @ApiOperation(value = "访问编辑数据库信息表单页面")
-    @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "id", value = "数据库ID", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class)})
+    @Operation(summary = "访问编辑数据库信息表单页面")
+    @Parameters(value = {
+            @Parameter(name = "id", description = "数据库ID", required = true, in = ParameterIn.QUERY)})
     @GetMapping("/edit-monitor-db-form")
     public ModelAndView editMonitorDbForm(@RequestParam(name = "id") Long id) {
         MonitorDb monitorDb = this.monitorDbService.getById(id);
@@ -162,7 +169,7 @@ public class MonitorDbController {
      * @author 皮锋
      * @custom.date 2020/12/19 19:56
      */
-    @ApiOperation(value = "编辑数据库信息")
+    @Operation(summary = "编辑数据库信息")
     @PutMapping("/edit-monitor-db")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.DATABASE, operType = OperateTypeConstants.UPDATE, operDesc = "编辑数据库信息")
@@ -182,7 +189,7 @@ public class MonitorDbController {
      * @author 皮锋
      * @custom.date 2020/12/19 19:54
      */
-    @ApiOperation(value = "访问新增数据库信息表单页面")
+    @Operation(summary = "访问新增数据库信息表单页面")
     @GetMapping("/add-monitor-db-form")
     public ModelAndView addMonitorDbForm() {
         ModelAndView mv = new ModelAndView("db/add-db");
@@ -208,7 +215,7 @@ public class MonitorDbController {
      * @author 皮锋
      * @custom.date 2020/12/19 20:05
      */
-    @ApiOperation(value = "添加数据库信息")
+    @Operation(summary = "添加数据库信息")
     @PostMapping("/add-monitor-db")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.DATABASE, operType = OperateTypeConstants.ADD, operDesc = "添加数据库信息")
@@ -229,7 +236,7 @@ public class MonitorDbController {
      * @author 皮锋
      * @custom.date 2020/12/19 20:59
      */
-    @ApiOperation(value = "删除数据库信息")
+    @Operation(summary = "删除数据库信息")
     @DeleteMapping("/delete-monitor-db")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.DATABASE, operType = OperateTypeConstants.DELETE, operDesc = "删除数据库信息")
@@ -247,9 +254,9 @@ public class MonitorDbController {
      * @author 皮锋
      * @custom.date 2020/12/22 14:47
      */
-    @ApiOperation(value = "访问数据库详情页面")
-    @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "id", value = "数据库ID", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class)})
+    @Operation(summary = "访问数据库详情页面")
+    @Parameters(value = {
+            @Parameter(name = "id", description = "数据库ID", required = true, in = ParameterIn.QUERY)})
     @GetMapping("/db-detail")
     @OperateLog(operModule = UiModuleConstants.DATABASE, operType = OperateTypeConstants.PAGE, operDesc = "访问数据库详情页面")
     public ModelAndView dbDetail(Long id) {
@@ -274,7 +281,7 @@ public class MonitorDbController {
      * @author 皮锋
      * @custom.date 2022/10/9 10:16
      */
-    @ApiOperation(value = "测试数据库连通性")
+    @Operation(summary = "测试数据库连通性")
     @PostMapping("/test-monitor-db")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.DATABASE, operType = OperateTypeConstants.TEST, operDesc = "测试数据库连通性")

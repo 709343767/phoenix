@@ -1,8 +1,7 @@
 package com.gitee.pifeng.monitoring.ui.business.web.vo;
 
 import com.gitee.pifeng.monitoring.common.inf.ISuperBean;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import lombok.experimental.Accessors;
 
@@ -22,22 +21,22 @@ import lombok.experimental.Accessors;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel(value = "home页的TCP信息表现层对象")
+@Schema(description = "home页的TCP信息表现层对象")
 public class HomeTcpVo implements ISuperBean {
 
-    @ApiModelProperty(value = "TCP数量")
+    @Schema(description = "TCP数量")
     private Integer tcpSum;
 
-    @ApiModelProperty(value = "TCP正常数量")
+    @Schema(description = "TCP正常数量")
     private Integer tcpConnectSum;
 
-    @ApiModelProperty(value = "TCP断开数量")
+    @Schema(description = "TCP断开数量")
     private Integer tcpDisconnectSum;
 
-    @ApiModelProperty(value = "TCP未知数量")
+    @Schema(description = "TCP未知数量")
     private Integer tcpUnsentSum;
 
-    @ApiModelProperty(value = "TCP正常率")
+    @Schema(description = "TCP正常率")
     private String tcpConnectRate;
 
 }

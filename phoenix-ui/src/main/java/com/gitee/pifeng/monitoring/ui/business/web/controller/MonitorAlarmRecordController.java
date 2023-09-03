@@ -15,10 +15,11 @@ import com.gitee.pifeng.monitoring.ui.business.web.vo.MonitorAlarmRecordVo;
 import com.gitee.pifeng.monitoring.ui.constant.OperateTypeConstants;
 import com.gitee.pifeng.monitoring.ui.constant.UiModuleConstants;
 import com.gitee.pifeng.monitoring.ui.core.CustomExcelExportStyler;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -42,7 +43,7 @@ import java.util.Map;
  * @custom.date 2020/8/7 15:53
  */
 @Controller
-@Api(tags = "告警记录")
+@Tag(name = "告警记录")
 @RequestMapping("/monitor-alarm-record")
 public class MonitorAlarmRecordController {
 
@@ -61,7 +62,7 @@ public class MonitorAlarmRecordController {
      * @author 皮锋
      * @custom.date 2020/8/7 15:56
      */
-    @ApiOperation(value = "访问告警记录列表页面")
+    @Operation(summary = "访问告警记录列表页面")
     @GetMapping("/list")
     public ModelAndView list() {
         return new ModelAndView("alarm/alarm-record");
@@ -86,24 +87,31 @@ public class MonitorAlarmRecordController {
      * @author 皮锋
      * @custom.date 2020/8/7 16:12
      */
-    @ApiOperation(value = "获取告警记录列表")
-    @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "current", value = "当前页", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class),
-            @ApiImplicitParam(name = "size", value = "每页显示条数", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class),
-            @ApiImplicitParam(name = "type", value = "告警类型", paramType = "query", dataType = "string", dataTypeClass = String.class),
-            @ApiImplicitParam(name = "level", value = "告警级别", paramType = "query", dataType = "string", dataTypeClass = String.class),
-            @ApiImplicitParam(name = "status", value = "告警状态", paramType = "query", dataType = "string", dataTypeClass = String.class),
-            @ApiImplicitParam(name = "title", value = "告警标题", paramType = "query", dataType = "string", dataTypeClass = String.class),
-            @ApiImplicitParam(name = "content", value = "告警内容", paramType = "query", dataType = "string", dataTypeClass = String.class),
-            @ApiImplicitParam(name = "number", value = "被告警人号码", paramType = "query", dataType = "string", dataTypeClass = String.class),
-            @ApiImplicitParam(name = "insertDate", value = "记录日期", paramType = "query", dataType = "string", dataTypeClass = String.class),
-            @ApiImplicitParam(name = "updateDate", value = "告警日期", paramType = "query", dataType = "string", dataTypeClass = String.class)})
+    @Operation(summary = "获取告警记录列表")
+    @Parameters(value = {
+            @Parameter(name = "current", description = "当前页", required = true, in = ParameterIn.QUERY),
+            @Parameter(name = "size", description = "每页显示条数", required = true, in = ParameterIn.QUERY),
+            @Parameter(name = "type", description = "告警类型", in = ParameterIn.QUERY),
+            @Parameter(name = "level", description = "告警级别", in = ParameterIn.QUERY),
+            @Parameter(name = "status", description = "告警状态", in = ParameterIn.QUERY),
+            @Parameter(name = "title", description = "告警标题", in = ParameterIn.QUERY),
+            @Parameter(name = "content", description = "告警内容", in = ParameterIn.QUERY),
+            @Parameter(name = "number", description = "被告警人号码", in = ParameterIn.QUERY),
+            @Parameter(name = "insertDate", description = "记录日期", in = ParameterIn.QUERY),
+            @Parameter(name = "updateDate", description = "告警日期", in = ParameterIn.QUERY)})
     @GetMapping("/get-monitor-alarm-record-list")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.ALARM, operType = OperateTypeConstants.QUERY, operDesc = "获取告警记录列表")
-    public LayUiAdminResultVo getMonitorAlarmRecordList(Long current, Long size, String type, String level,
-                                                        String status, String title, String content,
-                                                        String number, String insertDate, String updateDate) {
+    public LayUiAdminResultVo getMonitorAlarmRecordList(@RequestParam(value = "current") Long current,
+                                                        @RequestParam(value = "size") Long size,
+                                                        @RequestParam(value = "type", required = false) String type,
+                                                        @RequestParam(value = "level", required = false) String level,
+                                                        @RequestParam(value = "status", required = false) String status,
+                                                        @RequestParam(value = "title", required = false) String title,
+                                                        @RequestParam(value = "content", required = false) String content,
+                                                        @RequestParam(value = "number", required = false) String number,
+                                                        @RequestParam(value = "insertDate", required = false) String insertDate,
+                                                        @RequestParam(value = "updateDate", required = false) String updateDate) {
         Page<MonitorAlarmRecordVo> page = this.monitorAlarmRecordService.getMonitorAlarmRecordList(current, size, type, level, status, title, content, number, insertDate, updateDate);
         return LayUiAdminResultVo.ok(page);
     }
@@ -118,7 +126,7 @@ public class MonitorAlarmRecordController {
      * @author 皮锋
      * @custom.date 2020/8/7 16:58
      */
-    @ApiOperation(value = "删除告警记录")
+    @Operation(summary = "删除告警记录")
     @DeleteMapping("/delete-monitor-alarm-record")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.ALARM, operType = OperateTypeConstants.DELETE, operDesc = "删除告警记录")
@@ -135,7 +143,7 @@ public class MonitorAlarmRecordController {
      * @author 皮锋
      * @custom.date 2022/7/13 10:08
      */
-    @ApiOperation(value = "清空告警记录")
+    @Operation(summary = "清空告警记录")
     @DeleteMapping("/cleanup-monitor-alarm-record")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.ALARM, operType = OperateTypeConstants.DELETE, operDesc = "清空告警记录")
@@ -148,27 +156,40 @@ public class MonitorAlarmRecordController {
      * 导出告警记录列表
      * </p>
      *
-     * @param type    告警类型
-     * @param level   告警级别
-     * @param status  告警状态
-     * @param title   告警标题
-     * @param content 告警内容
+     * @param type       告警类型
+     * @param level      告警级别
+     * @param status     告警状态
+     * @param title      告警标题
+     * @param content    告警内容
+     * @param number     被告警人号码
+     * @param insertDate 记录日期
+     * @param updateDate 告警日期
      * @author 皮锋
      * @custom.date 2021/5/18 22:12
      */
-    @ApiOperation(value = "导出告警记录列表")
-    @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "type", value = "告警类型", paramType = "query", dataType = "string", dataTypeClass = String.class),
-            @ApiImplicitParam(name = "level", value = "告警级别", paramType = "query", dataType = "string", dataTypeClass = String.class),
-            @ApiImplicitParam(name = "status", value = "告警状态", paramType = "query", dataType = "string", dataTypeClass = String.class),
-            @ApiImplicitParam(name = "title", value = "告警标题", paramType = "query", dataType = "string", dataTypeClass = String.class),
-            @ApiImplicitParam(name = "content", value = "告警内容", paramType = "query", dataType = "string", dataTypeClass = String.class)})
+    @Operation(summary = "导出告警记录列表")
+    @Parameters(value = {
+            @Parameter(name = "type", description = "告警类型", in = ParameterIn.QUERY),
+            @Parameter(name = "level", description = "告警级别", in = ParameterIn.QUERY),
+            @Parameter(name = "status", description = "告警状态", in = ParameterIn.QUERY),
+            @Parameter(name = "title", description = "告警标题", in = ParameterIn.QUERY),
+            @Parameter(name = "content", description = "告警内容", in = ParameterIn.QUERY),
+            @Parameter(name = "number", description = "被告警人号码", in = ParameterIn.QUERY),
+            @Parameter(name = "insertDate", description = "记录日期", in = ParameterIn.QUERY),
+            @Parameter(name = "updateDate", description = "告警日期", in = ParameterIn.QUERY)})
     @GetMapping("/export-monitor-alarm-record-list")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.ALARM, operType = OperateTypeConstants.EXPORT, operDesc = "导出告警记录列表")
-    public void exportMonitorAlarmRecordList(String type, String level, String status, String title, String content) {
+    public void exportMonitorAlarmRecordList(@RequestParam(value = "type", required = false) String type,
+                                             @RequestParam(value = "level", required = false) String level,
+                                             @RequestParam(value = "status", required = false) String status,
+                                             @RequestParam(value = "title", required = false) String title,
+                                             @RequestParam(value = "content", required = false) String content,
+                                             @RequestParam(value = "number", required = false) String number,
+                                             @RequestParam(value = "insertDate", required = false) String insertDate,
+                                             @RequestParam(value = "updateDate", required = false) String updateDate) {
         String name = "告警记录";
-        List<MonitorAlarmRecordVo> monitorAlarmRecordVos = this.monitorAlarmRecordService.getMonitorAlarmRecordList(type, level, status, title, content);
+        List<MonitorAlarmRecordVo> monitorAlarmRecordVos = this.monitorAlarmRecordService.getMonitorAlarmRecordList(type, level, status, title, content, number, insertDate, updateDate);
         for (MonitorAlarmRecordVo monitorAlarmRecordVo : monitorAlarmRecordVos) {
             // 单独处理下告警内容
             String alarmRecordVoContent = monitorAlarmRecordVo.getContent() != null ? monitorAlarmRecordVo.getContent() : "";
@@ -206,10 +227,10 @@ public class MonitorAlarmRecordController {
      * @author 皮锋
      * @custom.date 2021/6/18 17:20
      */
-    @ApiOperation(value = "访问告警记录详情页面")
+    @Operation(summary = "访问告警记录详情页面")
     @GetMapping("/monitor-alarm-record-detail")
-    @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "id", value = "告警记录ID", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class)})
+    @Parameters(value = {
+            @Parameter(name = "id", description = "告警记录ID", required = true, in = ParameterIn.QUERY)})
     public ModelAndView monitorAlarmRecordDetail(Long id) {
         ModelAndView mv = new ModelAndView("alarm/alarm-record-detail");
         MonitorAlarmRecordVo monitorAlarmRecordInfo = this.monitorAlarmRecordService.getMonitorAlarmRecordDetail(id);

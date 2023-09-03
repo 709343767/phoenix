@@ -17,7 +17,7 @@ import com.gitee.pifeng.monitoring.ui.business.web.service.IDbTableSpace4OracleS
 import com.gitee.pifeng.monitoring.ui.business.web.vo.DbTableSpaceAll4OracleVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.DbTableSpaceFile4OracleVo;
 import com.gitee.pifeng.monitoring.ui.constant.UrlConstants;
-import com.gitee.pifeng.monitoring.ui.core.PackageConstructor;
+import com.gitee.pifeng.monitoring.ui.core.UiPackageConstructor;
 import com.google.common.collect.Lists;
 import org.hyperic.sigar.SigarException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +40,12 @@ import java.util.List;
 public class DbTableSpace4OracleServiceImpl implements IDbTableSpace4OracleService {
 
     /**
+     * UI端包构造器
+     */
+    @Autowired
+    private UiPackageConstructor uiPackageConstructor;
+
+    /**
      * 数据库表数据访问对象
      */
     @Autowired
@@ -55,13 +61,12 @@ public class DbTableSpace4OracleServiceImpl implements IDbTableSpace4OracleServi
      * @param id      数据库ID
      * @return 简单分页模型
      * @throws NetException   自定义获取网络信息异常
-     * @throws SigarException Sigar异常
      * @throws IOException    IO异常
      * @author 皮锋
      * @custom.date 2020/12/31 16:15
      */
     @Override
-    public Page<DbTableSpaceFile4OracleVo> getTableSpaceListFile(Long current, Long size, Long id) throws IOException, NetException, SigarException {
+    public Page<DbTableSpaceFile4OracleVo> getTableSpaceListFile(Long current, Long size, Long id) throws IOException, NetException {
         // 根据ID查询到此数据库信息
         MonitorDb monitorDb = this.monitorDbDao.selectById(id);
         // url
@@ -75,9 +80,9 @@ public class DbTableSpace4OracleServiceImpl implements IDbTableSpace4OracleServi
         extraMsg.put("url", url);
         extraMsg.put("username", username);
         extraMsg.put("password", password);
-        BaseRequestPackage baseRequestPackage = new PackageConstructor().structureBaseRequestPackage(extraMsg);
+        BaseRequestPackage baseRequestPackage = this.uiPackageConstructor.structureBaseRequestPackage(extraMsg);
         // 从服务端获取数据
-        String resultStr = Sender.send(UrlConstants.ORACLE_GET_TABLESPACE_LIST_FILE, baseRequestPackage.toJsonString());
+        String resultStr = Sender.send(UrlConstants.ORACLE_GET_TABLESPACE_LIST_FILE_URL, baseRequestPackage.toJsonString());
         BaseResponsePackage baseResponsePackage = JSON.parseObject(resultStr, BaseResponsePackage.class);
         Result result = baseResponsePackage.getResult();
         String msg = result.getMsg();
@@ -88,15 +93,11 @@ public class DbTableSpace4OracleServiceImpl implements IDbTableSpace4OracleServi
             Long fileId = entity.getLong("FILEID");
             String fileName = entity.getStr("FILENAME", StandardCharsets.UTF_8);
             String tablespaceName = entity.getStr("TABLESPACENAME", StandardCharsets.UTF_8);
-            Long totalTemp = entity.getLong("TOTAL");
-            String total = totalTemp == null ? null : DataSizeUtil.format(totalTemp);
-            Long usedTemp = entity.getLong("USED");
-            String used = usedTemp == null ? null : DataSizeUtil.format(usedTemp);
-            Long freeTemp = entity.getLong("FREE");
-            String free = freeTemp == null ? null : DataSizeUtil.format(freeTemp);
-            Double freeperTemp = entity.getDouble("FREEPER");
-            Double freePer = freeperTemp == null ? null : NumberUtil.round(freeperTemp, 4).doubleValue();
-            Double usedPer = freePer == null ? null : NumberUtil.round(100D - freePer, 4).doubleValue();
+            String total = DataSizeUtil.format(entity.getLong("TOTAL"));
+            String used = DataSizeUtil.format(entity.getLong("USED"));
+            String free = DataSizeUtil.format(entity.getLong("FREE"));
+            double freePer = NumberUtil.round(entity.getDouble("FREEPER"), 4).doubleValue();
+            double usedPer = NumberUtil.round(100D - freePer, 4).doubleValue();
             DbTableSpaceFile4OracleVo dbTableSpace4OracleVo = DbTableSpaceFile4OracleVo.builder()
                     .fileId(fileId)
                     .fileName(fileName)
@@ -130,13 +131,12 @@ public class DbTableSpace4OracleServiceImpl implements IDbTableSpace4OracleServi
      * @param id      数据库ID
      * @return 简单分页模型
      * @throws NetException   自定义获取网络信息异常
-     * @throws SigarException Sigar异常
      * @throws IOException    IO异常
      * @author 皮锋
      * @custom.date 2020/12/31 16:15
      */
     @Override
-    public Page<DbTableSpaceAll4OracleVo> getTableSpaceListAll(Long current, Long size, Long id) throws NetException, SigarException, IOException {
+    public Page<DbTableSpaceAll4OracleVo> getTableSpaceListAll(Long current, Long size, Long id) throws NetException, IOException {
         // 根据ID查询到此数据库信息
         MonitorDb monitorDb = this.monitorDbDao.selectById(id);
         // url
@@ -150,9 +150,9 @@ public class DbTableSpace4OracleServiceImpl implements IDbTableSpace4OracleServi
         extraMsg.put("url", url);
         extraMsg.put("username", username);
         extraMsg.put("password", password);
-        BaseRequestPackage baseRequestPackage = new PackageConstructor().structureBaseRequestPackage(extraMsg);
+        BaseRequestPackage baseRequestPackage = this.uiPackageConstructor.structureBaseRequestPackage(extraMsg);
         // 从服务端获取数据
-        String resultStr = Sender.send(UrlConstants.ORACLE_GET_TABLESPACE_LIST_ALL, baseRequestPackage.toJsonString());
+        String resultStr = Sender.send(UrlConstants.ORACLE_GET_TABLESPACE_LIST_ALL_URL, baseRequestPackage.toJsonString());
         BaseResponsePackage baseResponsePackage = JSON.parseObject(resultStr, BaseResponsePackage.class);
         Result result = baseResponsePackage.getResult();
         String msg = result.getMsg();

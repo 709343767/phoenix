@@ -3,15 +3,14 @@ package com.gitee.pifeng.monitoring.server.business.server.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.gitee.pifeng.monitoring.common.constant.alarm.AlarmReasonEnums;
 import com.gitee.pifeng.monitoring.common.constant.MonitorTypeEnums;
 import com.gitee.pifeng.monitoring.common.constant.ZeroOrOneConstants;
+import com.gitee.pifeng.monitoring.common.constant.alarm.AlarmReasonEnums;
 import com.gitee.pifeng.monitoring.common.domain.Alarm;
 import com.gitee.pifeng.monitoring.server.business.server.dao.IMonitorRealtimeMonitoringDao;
 import com.gitee.pifeng.monitoring.server.business.server.entity.MonitorRealtimeMonitoring;
 import com.gitee.pifeng.monitoring.server.business.server.service.IRealtimeMonitoringService;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,12 +26,6 @@ import java.util.Date;
  */
 @Service
 public class RealtimeMonitoringServiceImpl extends ServiceImpl<IMonitorRealtimeMonitoringDao, MonitorRealtimeMonitoring> implements IRealtimeMonitoringService {
-
-    /**
-     * 实时监控数据访问对象
-     */
-    @Autowired
-    private IMonitorRealtimeMonitoringDao monitorRealtimeMonitoringDao;
 
     /**
      * <p>
@@ -62,7 +55,7 @@ public class RealtimeMonitoringServiceImpl extends ServiceImpl<IMonitorRealtimeM
             LambdaQueryWrapper<MonitorRealtimeMonitoring> lambdaQueryWrapper = new LambdaQueryWrapper<>();
             lambdaQueryWrapper.eq(MonitorRealtimeMonitoring::getType, monitorTypeEnum.name());
             lambdaQueryWrapper.eq(MonitorRealtimeMonitoring::getCode, alarmCode);
-            MonitorRealtimeMonitoring monitorRealtimeMonitoringDb = this.monitorRealtimeMonitoringDao.selectOne(lambdaQueryWrapper);
+            MonitorRealtimeMonitoring monitorRealtimeMonitoringDb = this.baseMapper.selectOne(lambdaQueryWrapper);
             // 一.数据库中没有此实时监控信息
             if (monitorRealtimeMonitoringDb == null) {
                 MonitorRealtimeMonitoring monitorRealtimeMonitoring = MonitorRealtimeMonitoring.builder()
@@ -72,7 +65,7 @@ public class RealtimeMonitoringServiceImpl extends ServiceImpl<IMonitorRealtimeM
                         .isSentAlarm(alarmReasonEnum == AlarmReasonEnums.NORMAL_2_ABNORMAL ? ZeroOrOneConstants.ONE : ZeroOrOneConstants.ZERO)
                         .insertTime(new Date())
                         .build();
-                this.monitorRealtimeMonitoringDao.insert(monitorRealtimeMonitoring);
+                this.baseMapper.insert(monitorRealtimeMonitoring);
                 // 发现（应用程序、服务器、...） 或者 正常变异常，需要告警；否则，不发送告警
                 return (alarmReasonEnum == AlarmReasonEnums.DISCOVERY || alarmReasonEnum == AlarmReasonEnums.NORMAL_2_ABNORMAL);
             }
@@ -88,7 +81,7 @@ public class RealtimeMonitoringServiceImpl extends ServiceImpl<IMonitorRealtimeM
             lambdaUpdateWrapper.eq(MonitorRealtimeMonitoring::getType, monitorTypeEnum.name());
             lambdaUpdateWrapper.eq(MonitorRealtimeMonitoring::getCode, alarmCode);
             // 更新实时监控信息
-            this.monitorRealtimeMonitoringDao.update(monitorRealtimeMonitoring, lambdaUpdateWrapper);
+            this.baseMapper.update(monitorRealtimeMonitoring, lambdaUpdateWrapper);
             // 是否已经发送了告警
             boolean isSentAlarm = StringUtils.equals(monitorRealtimeMonitoringDb.getIsSentAlarm(), ZeroOrOneConstants.ONE);
             // 判断是否允许发送告警

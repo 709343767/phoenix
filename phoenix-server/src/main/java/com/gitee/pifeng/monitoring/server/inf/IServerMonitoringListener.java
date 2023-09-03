@@ -19,7 +19,7 @@ public interface IServerMonitoringListener {
      * <p>
      * 收到服务器信息包时，唤醒执行监控回调方法。
      * </p>
-     * 此方法在{@link ServerAspect#wakeUp(JoinPoint)}中被注册监听。
+     * 此方法在{@link ServerAspect#afterWakeUp(JoinPoint)}中被注册监听。
      *
      * @param param 回调参数
      * @author 皮锋

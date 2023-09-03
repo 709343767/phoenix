@@ -8,6 +8,7 @@ import com.gitee.pifeng.monitoring.ui.business.web.vo.LayUiAdminResultVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.MonitorInstanceVo;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -96,4 +97,16 @@ public interface IMonitorInstanceService extends IService<MonitorInstance> {
      * @custom.date 2021/8/28 20:45
      */
     LayUiAdminResultVo editMonitorInstance(MonitorInstanceVo monitorInstanceVo);
+
+    /**
+     * <p>
+     * 获取应用程序信息(Map形式)
+     * </p>
+     *
+     * @return 应用程序信息
+     * @author 皮锋
+     * @custom.date 2022/12/21 8:56
+     */
+    Map<String, MonitorInstanceVo> getMonitorInstance2Map();
+
 }

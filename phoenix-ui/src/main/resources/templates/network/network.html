@@ -167,6 +167,10 @@
                         $(this).text('未知');
                     }
                 });
+                $('[data-field="pingDetail"]').children().each(function () {
+                    var text = isNotEmpty($(this).text()) ? $(this).text().replaceAll('\n', '<br>') : $(this).text();
+                    $(this).html(text);
+                });
                 for (var i in res.data) {		//遍历整个表格数据
                     var item = res.data[i];		//获取当前行数据
                     // 源IP与当前监控服务端所在的服务器IP不同，把这条记录标红
@@ -201,15 +205,20 @@
                     minWidth: 80,
                     sort: !0
                 }, {
+                    field: 'offlineCount',
+                    title: '异常次数',
+                    minWidth: 110,
+                    sort: !0
+                }, {
                     field: 'avgTime',
                     title: 'Ping耗时(ms)',
                     minWidth: 130,
                     toolbar: '#avgTimeTpl',
                     sort: !0
                 }, {
-                    field: 'offlineCount',
-                    title: '异常次数',
-                    minWidth: 110,
+                    field: 'pingDetail',
+                    title: 'Ping详情',
+                    minWidth: 250,
                     sort: !0
                 }, {
                     field: 'monitorEnv',

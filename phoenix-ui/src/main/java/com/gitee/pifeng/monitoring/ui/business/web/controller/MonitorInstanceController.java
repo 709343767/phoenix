@@ -12,16 +12,18 @@ import com.gitee.pifeng.monitoring.ui.business.web.vo.LayUiAdminResultVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.MonitorInstanceVo;
 import com.gitee.pifeng.monitoring.ui.constant.OperateTypeConstants;
 import com.gitee.pifeng.monitoring.ui.constant.UiModuleConstants;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -34,7 +36,7 @@ import java.util.stream.Collectors;
  */
 @Controller
 @RequestMapping("/monitor-instance")
-@Api(tags = "应用程序")
+@Tag(name = "应用程序")
 public class MonitorInstanceController {
 
     /**
@@ -70,7 +72,7 @@ public class MonitorInstanceController {
      * @author 皮锋
      * @custom.date 2020/9/26 10:53
      */
-    @ApiOperation(value = "访问应用程序列表页面")
+    @Operation(summary = "访问应用程序列表页面")
     @GetMapping("/list")
     public ModelAndView list() {
         ModelAndView mv = new ModelAndView("instance/instance");
@@ -99,20 +101,25 @@ public class MonitorInstanceController {
      * @author 皮锋
      * @custom.date 2020/9/26 10:59
      */
-    @ApiOperation(value = "获取应用程序列表")
-    @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "current", value = "当前页", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class),
-            @ApiImplicitParam(name = "size", value = "每页显示条数", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class),
-            @ApiImplicitParam(name = "instanceName", value = "应用实例名", paramType = "query", dataType = "string", dataTypeClass = String.class),
-            @ApiImplicitParam(name = "endpoint", value = "端点", paramType = "query", dataType = "string", dataTypeClass = String.class),
-            @ApiImplicitParam(name = "isOnline", value = "应用状态", paramType = "query", dataType = "string", dataTypeClass = String.class),
-            @ApiImplicitParam(name = "monitorEnv", value = "监控环境", paramType = "query", dataType = "string", dataTypeClass = String.class),
-            @ApiImplicitParam(name = "monitorGroup", value = "监控分组", paramType = "query", dataType = "string", dataTypeClass = String.class)})
+    @Operation(summary = "获取应用程序列表")
+    @Parameters(value = {
+            @Parameter(name = "current", description = "当前页", required = true, in = ParameterIn.QUERY),
+            @Parameter(name = "size", description = "每页显示条数", required = true, in = ParameterIn.QUERY),
+            @Parameter(name = "instanceName", description = "应用实例名", in = ParameterIn.QUERY),
+            @Parameter(name = "endpoint", description = "端点", in = ParameterIn.QUERY),
+            @Parameter(name = "isOnline", description = "应用状态", in = ParameterIn.QUERY),
+            @Parameter(name = "monitorEnv", description = "监控环境", in = ParameterIn.QUERY),
+            @Parameter(name = "monitorGroup", description = "监控分组", in = ParameterIn.QUERY)})
     @GetMapping("/get-monitor-instance-list")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.INSTANCE, operType = OperateTypeConstants.QUERY, operDesc = "获取应用程序列表")
-    public LayUiAdminResultVo getMonitorInstanceList(Long current, Long size, String instanceName, String endpoint,
-                                                     String isOnline, String monitorEnv, String monitorGroup) {
+    public LayUiAdminResultVo getMonitorInstanceList(@RequestParam(value = "current") Long current,
+                                                     @RequestParam(value = "size") Long size,
+                                                     @RequestParam(value = "instanceName", required = false) String instanceName,
+                                                     @RequestParam(value = "endpoint", required = false) String endpoint,
+                                                     @RequestParam(value = "isOnline", required = false) String isOnline,
+                                                     @RequestParam(value = "monitorEnv", required = false) String monitorEnv,
+                                                     @RequestParam(value = "monitorGroup", required = false) String monitorGroup) {
         Page<MonitorInstanceVo> page = this.monitorInstanceService.getMonitorInstanceList(current, size, instanceName, endpoint, isOnline, monitorEnv, monitorGroup);
         return LayUiAdminResultVo.ok(page);
     }
@@ -127,7 +134,7 @@ public class MonitorInstanceController {
      * @author 皮锋
      * @custom.date 2020/9/26 12:59
      */
-    @ApiOperation(value = "删除应用程序")
+    @Operation(summary = "删除应用程序")
     @DeleteMapping("/delete-monitor-instance")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.INSTANCE, operType = OperateTypeConstants.DELETE, operDesc = "删除应用程序")
@@ -146,10 +153,10 @@ public class MonitorInstanceController {
      * @author 皮锋
      * @custom.date 2021/7/20 20:52
      */
-    @ApiOperation(value = "清理应用程序监控历史数据")
-    @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "instanceId", value = "应用实例ID", required = true, paramType = "query", dataType = "string", dataTypeClass = String.class),
-            @ApiImplicitParam(name = "time", value = "时间", required = true, paramType = "query", dataType = "string", dataTypeClass = String.class)})
+    @Operation(summary = "清理应用程序监控历史数据")
+    @Parameters(value = {
+            @Parameter(name = "instanceId", description = "应用实例ID", required = true, in = ParameterIn.QUERY),
+            @Parameter(name = "time", description = "时间", required = true, in = ParameterIn.QUERY)})
     @DeleteMapping("/clear-monitor-instance-history")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.INSTANCE, operType = OperateTypeConstants.DELETE, operDesc = "清理应用程序监控历史数据")
@@ -168,10 +175,10 @@ public class MonitorInstanceController {
      * @author 皮锋
      * @custom.date 2020/9/26 10:53
      */
-    @ApiOperation(value = "访问应用程序详情页面")
-    @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "id", value = "应用实例主键ID", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class),
-            @ApiImplicitParam(name = "instanceId", value = "应用实例ID", required = true, paramType = "query", dataType = "string", dataTypeClass = String.class)})
+    @Operation(summary = "访问应用程序详情页面")
+    @Parameters(value = {
+            @Parameter(name = "id", description = "应用实例主键ID", required = true, in = ParameterIn.QUERY),
+            @Parameter(name = "instanceId", description = "应用实例ID", required = true, in = ParameterIn.QUERY)})
     @GetMapping("/instance-detail")
     @OperateLog(operModule = UiModuleConstants.INSTANCE, operType = OperateTypeConstants.PAGE, operDesc = "访问应用程序详情页面")
     public ModelAndView instanceDetail(Long id, String instanceId) {
@@ -196,9 +203,9 @@ public class MonitorInstanceController {
      * @author 皮锋
      * @custom.date 2021/7/20 20:56
      */
-    @ApiOperation(value = "访问清理应用程序监控历史数据表单页面")
-    @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "instanceId", value = "应用实例ID", required = true, paramType = "query", dataType = "string", dataTypeClass = String.class)})
+    @Operation(summary = "访问清理应用程序监控历史数据表单页面")
+    @Parameters(value = {
+            @Parameter(name = "instanceId", description = "应用实例ID", required = true, in = ParameterIn.QUERY)})
     @GetMapping("/instance-clear")
     public ModelAndView instanceClear(String instanceId) {
         ModelAndView mv = new ModelAndView("instance/instance-clear-form");
@@ -216,9 +223,9 @@ public class MonitorInstanceController {
      * @author 皮锋
      * @custom.date 2021/8/28 20:18
      */
-    @ApiOperation(value = "访问应用程序编辑页面")
-    @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "instanceId", value = "应用实例ID", required = true, paramType = "query", dataType = "string", dataTypeClass = String.class)})
+    @Operation(summary = "访问应用程序编辑页面")
+    @Parameters(value = {
+            @Parameter(name = "instanceId", description = "应用实例ID", required = true, in = ParameterIn.QUERY)})
     @GetMapping("/edit-monitor-instance-form")
     public ModelAndView editMonitorInstanceForm(String instanceId) {
         ModelAndView mv = new ModelAndView("instance/edit-instance");
@@ -247,12 +254,29 @@ public class MonitorInstanceController {
      * @author 皮锋
      * @custom.date 2021/8/28 20:44
      */
-    @ApiOperation(value = "编辑应用程序信息")
+    @Operation(summary = "编辑应用程序信息")
     @PutMapping("/edit-monitor-instance")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.INSTANCE, operType = OperateTypeConstants.UPDATE, operDesc = "编辑应用程序信息")
     public LayUiAdminResultVo editMonitorInstance(MonitorInstanceVo monitorInstanceVo) {
         return this.monitorInstanceService.editMonitorInstance(monitorInstanceVo);
+    }
+
+    /**
+     * <p>
+     * 获取应用程序信息(Map形式)
+     * </p>
+     *
+     * @return clayUiAdmin响应对象
+     * @author 皮锋
+     * @custom.date 2023/4/16 11:17
+     */
+    @Operation(summary = "获取应用程序信息(Map形式)")
+    @PostMapping("/get-monitor-instance-to-map")
+    @ResponseBody
+    public LayUiAdminResultVo getMonitorInstance2Map() {
+        Map<String, MonitorInstanceVo> map = this.monitorInstanceService.getMonitorInstance2Map();
+        return LayUiAdminResultVo.ok(map);
     }
 
 }

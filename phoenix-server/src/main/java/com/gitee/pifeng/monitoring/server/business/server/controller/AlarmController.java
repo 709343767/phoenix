@@ -5,10 +5,14 @@ import cn.hutool.core.date.TimeInterval;
 import com.gitee.pifeng.monitoring.common.domain.Result;
 import com.gitee.pifeng.monitoring.common.dto.AlarmPackage;
 import com.gitee.pifeng.monitoring.common.dto.BaseResponsePackage;
-import com.gitee.pifeng.monitoring.server.business.server.core.PackageConstructor;
+import com.gitee.pifeng.monitoring.common.dto.CiphertextPackage;
+import com.gitee.pifeng.monitoring.server.business.server.core.ServerPackageConstructor;
 import com.gitee.pifeng.monitoring.server.business.server.service.IAlarmService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,7 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RestController
 @RequestMapping("/alarm")
-@Api(tags = "信息包.告警包")
+@Tag(name = "信息包.告警包")
 public class AlarmController {
 
     /**
@@ -35,6 +39,12 @@ public class AlarmController {
      */
     @Autowired
     private IAlarmService alarmService;
+
+    /**
+     * 服务端包构造器
+     */
+    @Autowired
+    private ServerPackageConstructor serverPackageConstructor;
 
     /**
      * <p>
@@ -46,14 +56,16 @@ public class AlarmController {
      * @author 皮锋
      * @custom.date 2020年3月6日 下午3:49:45
      */
-    @ApiOperation(value = "接收和响应监控代理端程序或者监控客户端程序发的告警包", notes = "接收告警包")
+    @Operation(summary = "接收告警包", description = "接收和响应监控代理端程序或者监控客户端程序发的告警包",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(content = @Content(schema = @Schema(implementation = CiphertextPackage.class))),
+            responses = @ApiResponse(content = {@Content(schema = @Schema(implementation = CiphertextPackage.class))}))
     @PostMapping("/accept-alarm-package")
     public BaseResponsePackage acceptAlarmPackage(@RequestBody AlarmPackage alarmPackage) {
         // 计时器
         TimeInterval timer = DateUtil.timer();
         // 返回值
         Result result = this.alarmService.dealAlarmPackage(alarmPackage);
-        BaseResponsePackage baseResponsePackage = new PackageConstructor().structureBaseResponsePackage(result);
+        BaseResponsePackage baseResponsePackage = this.serverPackageConstructor.structureBaseResponsePackage(result);
         // 时间差（毫秒）
         String betweenDay = timer.intervalPretty();
         if (timer.intervalSecond() > 1) {

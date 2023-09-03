@@ -8,7 +8,7 @@ $(function () {
             $('.tag').css({'background-color': '#D2D2D2', 'border-color': '#D2D2D2'});
         }
     });
-    // 收件人号码
+    // 短信收信人号码
     $('textarea[name="alarmSmsPhoneNumbers"]').tagsInput({
         width: 'auto',
         'delimiter': ';',

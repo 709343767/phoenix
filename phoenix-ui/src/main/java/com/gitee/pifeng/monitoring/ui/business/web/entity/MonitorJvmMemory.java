@@ -4,8 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -27,44 +26,44 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 @TableName("MONITOR_JVM_MEMORY")
-@ApiModel(value = "MonitorJvmMemory对象", description = "java虚拟机内存信息表")
+@Schema(description = "MonitorJvmMemory对象")
 public class MonitorJvmMemory implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "主键ID")
+    @Schema(description = "主键ID")
     @TableId(value = "ID", type = IdType.AUTO)
     private Long id;
 
-    @ApiModelProperty(value = "应用实例ID")
+    @Schema(description = "应用实例ID")
     @TableField("INSTANCE_ID")
     private String instanceId;
 
-    @ApiModelProperty(value = "内存类型")
+    @Schema(description = "内存类型")
     @TableField("MEMORY_TYPE")
     private String memoryType;
 
-    @ApiModelProperty(value = "初始内存量（单位：byte）")
+    @Schema(description = "初始内存量（单位：byte）")
     @TableField("INIT")
     private Long init;
 
-    @ApiModelProperty(value = "已用内存量（单位：byte）")
+    @Schema(description = "已用内存量（单位：byte）")
     @TableField("USED")
     private Long used;
 
-    @ApiModelProperty(value = "提交内存量（单位：byte）")
+    @Schema(description = "提交内存量（单位：byte）")
     @TableField("COMMITTED")
     private Long committed;
 
-    @ApiModelProperty(value = "最大内存量（单位：byte，可能存在未定义）")
+    @Schema(description = "最大内存量（单位：byte，可能存在未定义）")
     @TableField("MAX")
     private String max;
 
-    @ApiModelProperty(value = "新增时间")
+    @Schema(description = "新增时间")
     @TableField("INSERT_TIME")
     private Date insertTime;
 
-    @ApiModelProperty(value = "更新时间")
+    @Schema(description = "更新时间")
     @TableField("UPDATE_TIME")
     private Date updateTime;
 

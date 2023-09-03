@@ -38,7 +38,20 @@ public class ConfigLoader {
     /**
      * 监控属性
      */
-    public static final MonitoringProperties MONITORING_PROPERTIES = new MonitoringProperties();
+    private static final MonitoringProperties MONITORING_PROPERTIES = new MonitoringProperties();
+
+    /**
+     * <p>
+     * 获取监控属性
+     * </p>
+     *
+     * @return {@link MonitoringProperties}
+     * @author 皮锋
+     * @custom.date 2023年5月19日 下午8:23:32
+     */
+    public static MonitoringProperties getMonitoringProperties() {
+        return MONITORING_PROPERTIES;
+    }
 
     /**
      * <p>
@@ -67,7 +80,7 @@ public class ConfigLoader {
         Properties properties;
         try {
             properties = PropertiesUtils.loadProperties(configPath + configName);
-            log.info("监控配置项：{}", properties.toString());
+            log.info("监控配置项：{}", properties);
         } catch (Exception e) {
             throw new NotFoundConfigFileException("监控程序找不到监控配置文件！");
         }

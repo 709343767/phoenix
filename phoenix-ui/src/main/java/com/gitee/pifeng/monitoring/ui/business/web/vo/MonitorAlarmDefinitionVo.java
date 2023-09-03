@@ -3,8 +3,7 @@ package com.gitee.pifeng.monitoring.ui.business.web.vo;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.gitee.pifeng.monitoring.common.inf.ISuperBean;
 import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorAlarmDefinition;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import lombok.experimental.Accessors;
 import org.springframework.beans.BeanUtils;
@@ -27,41 +26,41 @@ import java.util.Date;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel(value = "告警定义表现层对象")
+@Schema(description = "告警定义表现层对象")
 public class MonitorAlarmDefinitionVo implements ISuperBean {
 
-    @ApiModelProperty(value = "主键ID")
+    @Schema(description = "主键ID")
     private Long id;
 
-    @ApiModelProperty(value = "告警类型（SERVER、NET、TCP4SERVICE、HTTP4SERVICE、DOCKER、INSTANCE、DATABASE、CUSTOM）")
+    @Schema(description = "告警类型（SERVER、NET、TCP4SERVICE、HTTP4SERVICE、DOCKER、INSTANCE、DATABASE、CUSTOM）")
     private String type;
 
-    @ApiModelProperty(value = "一级分类")
+    @Schema(description = "一级分类")
     private String firstClass;
 
-    @ApiModelProperty(value = "二级分类")
+    @Schema(description = "二级分类")
     private String secondClass;
 
-    @ApiModelProperty(value = "三级分类")
+    @Schema(description = "三级分类")
     private String thirdClass;
 
-    @ApiModelProperty(value = "告警级别（INFO、WARN、ERROR、FATAL）")
+    @Schema(description = "告警级别（INFO、WARN、ERROR、FATAL）")
     private String grade;
 
-    @ApiModelProperty(value = "告警编码")
+    @Schema(description = "告警编码")
     private String code;
 
-    @ApiModelProperty(value = "告警标题")
+    @Schema(description = "告警标题")
     private String title;
 
-    @ApiModelProperty(value = "告警内容")
+    @Schema(description = "告警内容")
     private String content;
 
-    @ApiModelProperty(value = "插入时间")
+    @Schema(description = "插入时间")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date insertTime;
 
-    @ApiModelProperty(value = "更新时间")
+    @Schema(description = "更新时间")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date updateTime;
 

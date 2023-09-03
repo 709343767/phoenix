@@ -3,9 +3,10 @@ package com.gitee.pifeng.monitoring.server.business.server.component;
 import com.gitee.pifeng.monitoring.common.domain.Result;
 import com.gitee.pifeng.monitoring.common.dto.BaseResponsePackage;
 import com.gitee.pifeng.monitoring.common.dto.CiphertextPackage;
-import com.gitee.pifeng.monitoring.common.web.toolkit.HttpInputMessagePackageEncrypt;
-import com.gitee.pifeng.monitoring.server.business.server.core.PackageConstructor;
+import com.gitee.pifeng.monitoring.common.web.core.http.HttpOutputMessagePackageEncrypt;
+import com.gitee.pifeng.monitoring.server.business.server.core.ServerPackageConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -28,6 +29,12 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 public class ResponsePackageEncryptAdvice implements ResponseBodyAdvice<Object> {
 
     /**
+     * 服务端包构造器
+     */
+    @Autowired
+    private ServerPackageConstructor serverPackageConstructor;
+
+    /**
      * <p>
      * 捕捉异常并进行处理
      * </p>
@@ -41,8 +48,8 @@ public class ResponsePackageEncryptAdvice implements ResponseBodyAdvice<Object> 
     public CiphertextPackage handler(Throwable throwable) {
         log.error("异常：", throwable);
         Result build = Result.builder().isSuccess(false).msg(throwable.toString()).build();
-        BaseResponsePackage baseResponsePackage = new PackageConstructor().structureBaseResponsePackage(build);
-        return new HttpInputMessagePackageEncrypt().encrypt(baseResponsePackage);
+        BaseResponsePackage baseResponsePackage = this.serverPackageConstructor.structureBaseResponsePackage(build);
+        return new HttpOutputMessagePackageEncrypt().encrypt(baseResponsePackage);
     }
 
     @Override
@@ -57,7 +64,7 @@ public class ResponsePackageEncryptAdvice implements ResponseBodyAdvice<Object> 
                                   ServerHttpResponse response) {
         if (null != body) {
             // 加密
-            return new HttpInputMessagePackageEncrypt().encrypt(body);
+            return new HttpOutputMessagePackageEncrypt().encrypt(body);
         }
         return null;
     }

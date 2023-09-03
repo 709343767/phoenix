@@ -5,8 +5,8 @@ import com.gitee.pifeng.monitoring.ui.business.web.service.*;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.*;
 import com.gitee.pifeng.monitoring.ui.constant.OperateTypeConstants;
 import com.gitee.pifeng.monitoring.ui.constant.UiModuleConstants;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,7 +26,7 @@ import java.util.Map;
  * @custom.date 2020/8/3 15:11
  */
 @Controller
-@Api(tags = "主页")
+@Tag(name = "主页")
 public class HomeController {
 
     /**
@@ -80,7 +80,7 @@ public class HomeController {
      * @author 皮锋
      * @custom.date 2020/8/3 15:14
      */
-    @ApiOperation(value = "访问主页")
+    @Operation(summary = "访问主页")
     @GetMapping("/home")
     @OperateLog(operModule = UiModuleConstants.HOME, operType = OperateTypeConstants.PAGE, operDesc = "访问主页")
     public ModelAndView home() {
@@ -111,7 +111,7 @@ public class HomeController {
      * @author 皮锋
      * @custom.date 2020/10/13 14:31
      */
-    @ApiOperation(value = "获取主页的摘要信息")
+    @Operation(summary = "获取主页的摘要信息")
     @ResponseBody
     @PostMapping("/home/get-summary-info")
     public LayUiAdminResultVo getSummaryInfo() {
@@ -142,7 +142,7 @@ public class HomeController {
      * @author 皮锋
      * @custom.date 2020/9/18 10:20
      */
-    @ApiOperation(value = "获取最近7天的告警统计信息")
+    @Operation(summary = "获取最近7天的告警统计信息")
     @ResponseBody
     @PostMapping("/home/get-last-7-days-alarm-record-statistics")
     public LayUiAdminResultVo getLast7DaysAlarmRecordStatistics() {
@@ -158,7 +158,7 @@ public class HomeController {
      * @author 皮锋
      * @custom.date 2020/9/23 9:51
      */
-    @ApiOperation(value = "获取告警类型统计信息")
+    @Operation(summary = "获取告警类型统计信息")
     @ResponseBody
     @PostMapping("/home/get-alarm-record-type-statistics")
     public LayUiAdminResultVo getAlarmRecordTypeStatistics() {
@@ -174,7 +174,7 @@ public class HomeController {
      * @author 皮锋
      * @custom.date 2022/4/7 10:46
      */
-    @ApiOperation(value = "获取告警结果统计信息")
+    @Operation(summary = "获取告警结果统计信息")
     @ResponseBody
     @PostMapping("/home/get-alarm-record-result-statistics")
     public LayUiAdminResultVo getAlarmRecordResultStatistics() {
@@ -191,7 +191,7 @@ public class HomeController {
      * @author 皮锋
      * @custom.date 2020/9/24 16:35
      */
-    @ApiOperation(value = "获取最新的5条告警记录")
+    @Operation(summary = "获取最新的5条告警记录")
     @ResponseBody
     @PostMapping("/home/get-last-5-alarm-record")
     public LayUiAdminResultVo getLast5AlarmRecord() {

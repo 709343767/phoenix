@@ -4,8 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -27,56 +26,56 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 @TableName("MONITOR_ALARM_RECORD")
-@ApiModel(value = "MonitorAlarmRecord对象", description = "告警记录表")
+@Schema(description = "MonitorAlarmRecord对象")
 public class MonitorAlarmRecord implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "主键ID")
+    @Schema(description = "主键ID")
     @TableId(value = "ID", type = IdType.AUTO)
     private Long id;
 
-    @ApiModelProperty(value = "告警代码，使用UUID")
+    @Schema(description = "告警代码，使用UUID")
     @TableField("CODE")
     private String code;
 
-    @ApiModelProperty(value = "告警定义编码")
+    @Schema(description = "告警定义编码")
     @TableField("ALARM_DEF_CODE")
     private String alarmDefCode;
 
-    @ApiModelProperty(value = "告警类型（SERVER、NET、TCP4SERVICE、HTTP4SERVICE、DOCKER、INSTANCE、DATABASE、CUSTOM）")
+    @Schema(description = "告警类型（SERVER、NET、TCP4SERVICE、HTTP4SERVICE、DOCKER、INSTANCE、DATABASE、CUSTOM）")
     @TableField("TYPE")
     private String type;
 
-    @ApiModelProperty(value = "告警方式（SMS、MAIL、...）")
+    @Schema(description = "告警方式（SMS、MAIL、...）")
     @TableField("WAY")
     private String way;
 
-    @ApiModelProperty(value = "告警级别（INFO、WARM、ERROR、FATAL）")
+    @Schema(description = "告警级别（INFO、WARM、ERROR、FATAL）")
     @TableField("LEVEL")
     private String level;
 
-    @ApiModelProperty(value = "告警时间")
+    @Schema(description = "告警时间")
     @TableField("INSERT_TIME")
     private Date insertTime;
 
-    @ApiModelProperty(value = "告警结果获取时间")
+    @Schema(description = "告警结果获取时间")
     @TableField("UPDATE_TIME")
     private Date updateTime;
 
-    @ApiModelProperty(value = "告警标题")
+    @Schema(description = "告警标题")
     @TableField("TITLE")
     private String title;
 
-    @ApiModelProperty(value = "告警内容")
+    @Schema(description = "告警内容")
     @TableField("CONTENT")
     private String content;
 
-    @ApiModelProperty(value = "告警发送状态（0：失败；1：成功）")
+    @Schema(description = "告警发送状态（0：失败；1：成功）")
     @TableField("STATUS")
     private String status;
 
-    @ApiModelProperty(value = "被告警人号码（手机号码、电子邮箱、...）")
+    @Schema(description = "被告警人号码（手机号码、电子邮箱、...）")
     @TableField("NUMBER")
     private String number;
 

@@ -26,12 +26,17 @@ public final class UrlConstants {
     /**
      * 服务根路径
      */
-    private static final String ROOT_URI = ConfigLoader.MONITORING_PROPERTIES.getServerProperties().getUrl();
+    private static final String ROOT_URI = ConfigLoader.getMonitoringProperties().getServerProperties().getUrl();
 
     /**
      * 心跳地址
      */
     public static final String HEARTBEAT_URL = ROOT_URI + "/heartbeat/accept-heartbeat-package";
+
+    /**
+     * 下线地址
+     */
+    public static final String OFFLINE_URL = ROOT_URI + "/offline/accept-offline-package";
 
     /**
      * 告警地址

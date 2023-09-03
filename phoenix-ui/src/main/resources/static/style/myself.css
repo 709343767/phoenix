@@ -1,3 +1,33 @@
+/* 自定义滚动条轨道样式 */
+::-webkit-scrollbar-track {
+    background-color: #f1f1f1;
+}
+
+/* 自定义滚动条滑块样式 */
+::-webkit-scrollbar-thumb {
+    background-color: #c1c1c1;
+}
+
+/* 移动端滚动条样式 */
+@media (max-width: 768px) {
+    /* 自定义滚动条边框样式 */
+    ::-webkit-scrollbar {
+        width: 3px;
+        height: 3px;
+        background-color: #f1f1f1;
+    }
+}
+
+/* 在大屏幕上应用样式 */
+@media (min-width: 768px) {
+    /* 自定义滚动条边框样式 */
+    ::-webkit-scrollbar {
+        width: 3px;
+        height: 10px;
+        background-color: #f1f1f1;
+    }
+}
+
 .home-i {
     font-size: 15px;
     float: right;
@@ -82,6 +112,10 @@
     height: 550px !important;
 }
 
+.layadmin-dataview-my-170px {
+    height: 170px;
+}
+
 .layui-card-header-my {
     padding-top: 0px !important;
     padding-bottom: 0px !important;
@@ -124,7 +158,26 @@
     color: #fff !important;
 }
 
+.layui-colla-title-my {
+    height: 30px !important;
+    line-height: 30px !important;
+    word-break: break-all !important;
+    background-color: #fefefe !important;
+}
+
+.background-color-none-my {
+    background-color: transparent !important;
+}
+
 body .layui-layer-class-my .layui-layer-btn .layui-layer-btn1 {
     background: #009688;
     color: #fff;
+}
+
+/* 在大屏幕上应用样式 */
+@media (min-width: 768px) {
+    .last-alarm-layui-card-body {
+        height: 85vh;
+        overflow-y: auto;
+    }
 }

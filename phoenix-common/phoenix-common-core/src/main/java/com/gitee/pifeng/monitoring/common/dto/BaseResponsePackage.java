@@ -1,6 +1,6 @@
 package com.gitee.pifeng.monitoring.common.dto;
 
-import com.gitee.pifeng.monitoring.common.abs.AbstractInstanceBean;
+import com.gitee.pifeng.monitoring.common.abs.AbstractSuperPackage;
 import com.gitee.pifeng.monitoring.common.domain.Result;
 import lombok.*;
 import lombok.experimental.Accessors;
@@ -21,7 +21,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public class BaseResponsePackage extends AbstractInstanceBean {
+public class BaseResponsePackage extends AbstractSuperPackage {
 
     /**
      * ID

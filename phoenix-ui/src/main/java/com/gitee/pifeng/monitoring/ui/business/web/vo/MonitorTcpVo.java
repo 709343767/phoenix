@@ -3,8 +3,7 @@ package com.gitee.pifeng.monitoring.ui.business.web.vo;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.gitee.pifeng.monitoring.common.inf.ISuperBean;
 import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorTcp;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import lombok.experimental.Accessors;
 import org.springframework.beans.BeanUtils;
@@ -27,45 +26,45 @@ import java.util.Date;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel(value = "TCP信息表现层对象")
+@Schema(description = "TCP信息表现层对象")
 public class MonitorTcpVo implements ISuperBean {
 
-    @ApiModelProperty(value = "主键ID")
+    @Schema(description = "主键ID")
     private Long id;
 
-    @ApiModelProperty(value = "主机名（来源）")
+    @Schema(description = "主机名（来源）")
     private String hostnameSource;
 
-    @ApiModelProperty(value = "主机名（目的地）")
+    @Schema(description = "主机名（目的地）")
     private String hostnameTarget;
 
-    @ApiModelProperty(value = "端口号")
+    @Schema(description = "端口号")
     private Integer portTarget;
 
-    @ApiModelProperty(value = "描述")
+    @Schema(description = "描述")
     private String descr;
 
-    @ApiModelProperty(value = "状态（0：不通，1：正常）")
+    @Schema(description = "状态（0：不通，1：正常）")
     private String status;
 
-    @ApiModelProperty(value = "平均响应时间（毫秒）")
+    @Schema(description = "平均响应时间（毫秒）")
     private Long avgTime;
 
-    @ApiModelProperty(value = "离线次数")
+    @Schema(description = "离线次数")
     private Integer offlineCount;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    @ApiModelProperty(value = "新增时间")
+    @Schema(description = "新增时间")
     private Date insertTime;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    @ApiModelProperty(value = "更新时间")
+    @Schema(description = "更新时间")
     private Date updateTime;
 
-    @ApiModelProperty(value = "监控环境")
+    @Schema(description = "监控环境")
     private String monitorEnv;
 
-    @ApiModelProperty(value = "监控分组")
+    @Schema(description = "监控分组")
     private String monitorGroup;
 
     /**

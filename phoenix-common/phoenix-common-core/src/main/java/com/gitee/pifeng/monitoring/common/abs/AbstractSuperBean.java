@@ -4,7 +4,7 @@ import com.gitee.pifeng.monitoring.common.inf.ISuperBean;
 
 /**
  * <p>
- * 父抽象bean，用于定义一些公共方法
+ * 抽象父bean，用于定义一些公共方法
  * </p>
  *
  * @author 皮锋

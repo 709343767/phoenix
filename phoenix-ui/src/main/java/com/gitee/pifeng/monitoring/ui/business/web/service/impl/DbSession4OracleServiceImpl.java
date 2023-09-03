@@ -18,7 +18,7 @@ import com.gitee.pifeng.monitoring.ui.business.web.vo.DbSession4OracleVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.LayUiAdminResultVo;
 import com.gitee.pifeng.monitoring.ui.constant.UrlConstants;
 import com.gitee.pifeng.monitoring.ui.constant.WebResponseConstants;
-import com.gitee.pifeng.monitoring.ui.core.PackageConstructor;
+import com.gitee.pifeng.monitoring.ui.core.UiPackageConstructor;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.hyperic.sigar.SigarException;
@@ -50,6 +50,12 @@ public class DbSession4OracleServiceImpl implements IDbSession4OracleService {
     private IMonitorDbDao monitorDbDao;
 
     /**
+     * UI端包构造器
+     */
+    @Autowired
+    private UiPackageConstructor uiPackageConstructor;
+
+    /**
      * <p>
      * 获取会话列表
      * </p>
@@ -59,13 +65,12 @@ public class DbSession4OracleServiceImpl implements IDbSession4OracleService {
      * @param id      数据库ID
      * @return 简单分页模型
      * @throws NetException   自定义获取网络信息异常
-     * @throws SigarException Sigar异常
      * @throws IOException    IO异常
      * @author 皮锋
      * @custom.date 2020/12/30 12:46
      */
     @Override
-    public Page<DbSession4OracleVo> getSessionList(Long current, Long size, Long id) throws NetException, SigarException, IOException {
+    public Page<DbSession4OracleVo> getSessionList(Long current, Long size, Long id) throws NetException, IOException {
         // 根据ID查询到此数据库信息
         MonitorDb monitorDb = this.monitorDbDao.selectById(id);
         // url
@@ -79,9 +84,9 @@ public class DbSession4OracleServiceImpl implements IDbSession4OracleService {
         extraMsg.put("url", url);
         extraMsg.put("username", username);
         extraMsg.put("password", password);
-        BaseRequestPackage baseRequestPackage = new PackageConstructor().structureBaseRequestPackage(extraMsg);
+        BaseRequestPackage baseRequestPackage = this.uiPackageConstructor.structureBaseRequestPackage(extraMsg);
         // 从服务端获取数据
-        String resultStr = Sender.send(UrlConstants.ORACLE_GET_SESSION_LIST, baseRequestPackage.toJsonString());
+        String resultStr = Sender.send(UrlConstants.ORACLE_GET_SESSION_LIST_URL, baseRequestPackage.toJsonString());
         BaseResponsePackage baseResponsePackage = JSON.parseObject(resultStr, BaseResponsePackage.class);
         Result result = baseResponsePackage.getResult();
         String msg = result.getMsg();
@@ -136,13 +141,12 @@ public class DbSession4OracleServiceImpl implements IDbSession4OracleService {
      * @param id                  数据库ID
      * @return LayUiAdmin响应对象
      * @throws NetException   自定义获取网络信息异常
-     * @throws SigarException Sigar异常
      * @throws IOException    IO异常
      * @author 皮锋
      * @custom.date 2020/12/30 15:22
      */
     @Override
-    public LayUiAdminResultVo destroySession(List<DbSession4OracleVo> dbSession4OracleVos, Long id) throws IOException, NetException, SigarException {
+    public LayUiAdminResultVo destroySession(List<DbSession4OracleVo> dbSession4OracleVos, Long id) throws IOException, NetException {
         List<Long> sids = dbSession4OracleVos.stream().map(DbSession4OracleVo::getSid).collect(Collectors.toList());
         List<Long> serials = dbSession4OracleVos.stream().map(DbSession4OracleVo::getSerial).collect(Collectors.toList());
         // 根据ID查询到此数据库信息
@@ -160,9 +164,9 @@ public class DbSession4OracleServiceImpl implements IDbSession4OracleService {
         extraMsg.put("password", password);
         extraMsg.put("sids", sids);
         extraMsg.put("serials", serials);
-        BaseRequestPackage baseRequestPackage = new PackageConstructor().structureBaseRequestPackage(extraMsg);
+        BaseRequestPackage baseRequestPackage = this.uiPackageConstructor.structureBaseRequestPackage(extraMsg);
         // 从服务端获取数据
-        String resultStr = Sender.send(UrlConstants.ORACLE_DESTROY_SESSION, baseRequestPackage.toJsonString());
+        String resultStr = Sender.send(UrlConstants.ORACLE_DESTROY_SESSION_URL, baseRequestPackage.toJsonString());
         BaseResponsePackage baseResponsePackage = JSON.parseObject(resultStr, BaseResponsePackage.class);
         Result result = baseResponsePackage.getResult();
         boolean b = result.isSuccess();

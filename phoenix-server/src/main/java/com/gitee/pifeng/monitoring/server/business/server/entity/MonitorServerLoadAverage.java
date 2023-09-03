@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 import lombok.experimental.Accessors;
 
@@ -36,7 +35,6 @@ public class MonitorServerLoadAverage {
     /**
      * IP地址
      */
-    @ApiModelProperty(value = "IP地址")
     @TableField("IP")
     private String ip;
 

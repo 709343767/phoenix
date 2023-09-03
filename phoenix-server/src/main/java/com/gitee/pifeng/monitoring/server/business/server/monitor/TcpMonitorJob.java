@@ -1,19 +1,21 @@
 package com.gitee.pifeng.monitoring.server.business.server.monitor;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.gitee.pifeng.monitoring.common.constant.alarm.AlarmLevelEnums;
-import com.gitee.pifeng.monitoring.common.constant.alarm.AlarmReasonEnums;
 import com.gitee.pifeng.monitoring.common.constant.MonitorTypeEnums;
 import com.gitee.pifeng.monitoring.common.constant.ZeroOrOneConstants;
+import com.gitee.pifeng.monitoring.common.constant.alarm.AlarmLevelEnums;
+import com.gitee.pifeng.monitoring.common.constant.alarm.AlarmReasonEnums;
 import com.gitee.pifeng.monitoring.common.domain.Alarm;
 import com.gitee.pifeng.monitoring.common.dto.AlarmPackage;
 import com.gitee.pifeng.monitoring.common.exception.NetException;
-import com.gitee.pifeng.monitoring.common.threadpool.ThreadPool;
+import com.gitee.pifeng.monitoring.common.threadpool.ThreadPoolShutdownHelper;
+import com.gitee.pifeng.monitoring.common.util.CollectionUtils;
 import com.gitee.pifeng.monitoring.common.util.DateTimeUtils;
 import com.gitee.pifeng.monitoring.common.util.Md5Utils;
 import com.gitee.pifeng.monitoring.common.util.server.NetUtils;
+import com.gitee.pifeng.monitoring.common.util.server.ProcessorsUtils;
 import com.gitee.pifeng.monitoring.server.business.server.core.MonitoringConfigPropertiesLoader;
-import com.gitee.pifeng.monitoring.server.business.server.core.PackageConstructor;
+import com.gitee.pifeng.monitoring.server.business.server.core.ServerPackageConstructor;
 import com.gitee.pifeng.monitoring.server.business.server.entity.MonitorTcp;
 import com.gitee.pifeng.monitoring.server.business.server.entity.MonitorTcpHistory;
 import com.gitee.pifeng.monitoring.server.business.server.service.IAlarmService;
@@ -21,16 +23,21 @@ import com.gitee.pifeng.monitoring.server.business.server.service.ITcpHistorySer
 import com.gitee.pifeng.monitoring.server.business.server.service.ITcpService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.hyperic.sigar.SigarException;
+import org.apache.commons.lang3.concurrent.BasicThreadFactory;
 import org.quartz.JobExecutionContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
+import org.springframework.lang.NonNull;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PreDestroy;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.ThreadPoolExecutor;
 
 /**
@@ -45,6 +52,18 @@ import java.util.concurrent.ThreadPoolExecutor;
 @Component
 @Order(7)
 public class TcpMonitorJob extends QuartzJobBean {
+
+    /**
+     * 监控配置属性加载器
+     */
+    @Autowired
+    private MonitoringConfigPropertiesLoader monitoringConfigPropertiesLoader;
+
+    /**
+     * 服务端包构造器
+     */
+    @Autowired
+    private ServerPackageConstructor serverPackageConstructor;
 
     /**
      * 告警服务接口
@@ -65,6 +84,31 @@ public class TcpMonitorJob extends QuartzJobBean {
     private ITcpHistoryService tcpHistoryService;
 
     /**
+     * 线程池
+     */
+    private final ScheduledExecutorService seService = new ScheduledThreadPoolExecutor(
+            // 线程数 = Ncpu /（1 - 阻塞系数），IO密集型阻塞系数相对较大
+            (int) (ProcessorsUtils.getAvailableProcessors() / (1 - 0.8)),
+            new BasicThreadFactory.Builder()
+                    // 设置线程名
+                    .namingPattern("phoenix-server-tcp-monitor-pool-thread-%d")
+                    // 设置为守护线程
+                    .daemon(true)
+                    .build(),
+            new ThreadPoolExecutor.AbortPolicy());
+
+    /**
+     * 在程序关闭前优雅关闭线程池
+     *
+     * @author 皮锋
+     * @custom.date 2023/6/4 22:00
+     */
+    @PreDestroy
+    public void shutdownThreadPoolGracefully() {
+        new ThreadPoolShutdownHelper().shutdownGracefully(this.seService, "phoenix-server-tcp-monitor-pool-thread");
+    }
+
+    /**
      * <p>
      * 扫描数据库“MONITOR_TCP”表中的所有TCP信息，实时更新TCP服务状态，发送告警。
      * </p>
@@ -74,44 +118,51 @@ public class TcpMonitorJob extends QuartzJobBean {
      * @custom.date 2022/1/11 16:31
      */
     @Override
-    protected void executeInternal(JobExecutionContext jobExecutionContext) {
+    protected void executeInternal(@NonNull JobExecutionContext jobExecutionContext) {
         // 是否监控TCP服务
-        boolean isMonitoringEnable = MonitoringConfigPropertiesLoader.getMonitoringProperties().getTcpProperties().isEnable();
+        boolean isMonitoringEnable = this.monitoringConfigPropertiesLoader.getMonitoringProperties().getTcpProperties().isEnable();
         if (!isMonitoringEnable) {
             return;
         }
-        try {
-            // 获取TCP信息列表
-            List<MonitorTcp> monitorTcps = this.tcpService.list(new LambdaQueryWrapper<MonitorTcp>().eq(MonitorTcp::getHostnameSource, NetUtils.getLocalIp()));
-            // 循环处理每一个TCP信息
-            for (MonitorTcp monitorTcp : monitorTcps) {
-                // 目标主机名
-                String hostnameTarget = monitorTcp.getHostnameTarget();
-                // 目标端口号
-                Integer portTarget = monitorTcp.getPortTarget();
-                // 使用多线程，加快处理速度
-                ThreadPoolExecutor threadPoolExecutor = ThreadPool.COMMON_IO_INTENSIVE_THREAD_POOL;
-                threadPoolExecutor.execute(() -> {
-                    // 测试telnet能否成功
-                    Map<String, Object> telnet = NetUtils.telnetVT200(hostnameTarget, portTarget);
-                    // 是否能telnet通
-                    boolean isConnected = Boolean.parseBoolean(String.valueOf(telnet.get("isConnect")));
-                    // 平均时间（毫秒）
-                    Long avgTime = Long.valueOf(String.valueOf(telnet.get("avgTime")));
-                    // TCP服务正常
-                    if (isConnected) {
-                        // 处理TCP服务正常
-                        this.connected(monitorTcp, avgTime);
-                    }
-                    // TCP服务异常
-                    else {
-                        // 处理TCP服务异常
-                        this.disconnected(monitorTcp, avgTime);
-                    }
-                });
+        synchronized (TcpMonitorJob.class) {
+            try {
+                // 获取TCP信息列表
+                List<MonitorTcp> monitorTcps = this.tcpService.list(new LambdaQueryWrapper<MonitorTcp>().eq(MonitorTcp::getHostnameSource, NetUtils.getLocalIp()));
+                // 打乱
+                Collections.shuffle(monitorTcps);
+                // 按每个list大小为10拆分成多个list
+                List<List<MonitorTcp>> subMonitorTcpLists = CollectionUtils.split(monitorTcps, 10);
+                for (List<MonitorTcp> subMonitorTcps : subMonitorTcpLists) {
+                    // 使用多线程，加快处理速度
+                    this.seService.execute(() -> {
+                        // 循环处理每一个TCP信息
+                        for (MonitorTcp monitorTcp : subMonitorTcps) {
+                            // 目标主机名
+                            String hostnameTarget = monitorTcp.getHostnameTarget();
+                            // 目标端口号
+                            Integer portTarget = monitorTcp.getPortTarget();
+                            // 测试telnet能否成功
+                            Map<String, Object> telnet = NetUtils.telnetVT200(hostnameTarget, portTarget);
+                            // 是否能telnet通
+                            boolean isConnected = Boolean.parseBoolean(String.valueOf(telnet.get("isConnect")));
+                            // 平均时间（毫秒）
+                            Long avgTime = Long.valueOf(String.valueOf(telnet.get("avgTime")));
+                            // TCP服务正常
+                            if (isConnected) {
+                                // 处理TCP服务正常
+                                this.connected(monitorTcp, avgTime);
+                            }
+                            // TCP服务异常
+                            else {
+                                // 处理TCP服务异常
+                                this.disconnected(monitorTcp, avgTime);
+                            }
+                        }
+                    });
+                }
+            } catch (NetException e) {
+                log.error("定时扫描数据库“MONITOR_TCP”表中的所有TCP信息异常！", e);
             }
-        } catch (NetException e) {
-            log.error("定时扫描数据库“MONITOR_TCP”表中的所有TCP信息异常！", e);
         }
     }
 
@@ -207,12 +258,11 @@ public class TcpMonitorJob extends QuartzJobBean {
      * @param alarmLevelEnum  告警级别
      * @param alarmReasonEnum 告警原因
      * @param monitorTcp      TCP信息
-     * @throws NetException   获取网络信息异常
-     * @throws SigarException Sigar异常
+     * @throws NetException 获取网络信息异常
      * @author 皮锋
      * @custom.date 2022/1/12 11:33
      */
-    private void sendAlarmInfo(String title, AlarmLevelEnums alarmLevelEnum, AlarmReasonEnums alarmReasonEnum, MonitorTcp monitorTcp) throws NetException, SigarException {
+    private void sendAlarmInfo(String title, AlarmLevelEnums alarmLevelEnum, AlarmReasonEnums alarmReasonEnum, MonitorTcp monitorTcp) throws NetException {
         StringBuilder builder = new StringBuilder();
         builder.append("源主机：").append(monitorTcp.getHostnameSource())
                 .append("，<br>目标主机：").append(monitorTcp.getHostnameTarget())
@@ -230,7 +280,7 @@ public class TcpMonitorJob extends QuartzJobBean {
                 .alarmReason(alarmReasonEnum)
                 .monitorType(MonitorTypeEnums.TCP4SERVICE)
                 .build();
-        AlarmPackage alarmPackage = new PackageConstructor().structureAlarmPackage(alarm);
+        AlarmPackage alarmPackage = this.serverPackageConstructor.structureAlarmPackage(alarm);
         this.alarmService.dealAlarmPackage(alarmPackage);
     }
 

@@ -1,0 +1,2 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.gitee.pifeng.monitoring.common.web.core.BusinessAgencyScaner

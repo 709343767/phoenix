@@ -3,14 +3,11 @@ package com.gitee.pifeng.monitoring.agent.business.server.service.impl;
 import com.gitee.pifeng.monitoring.agent.business.server.service.IHeartbeatService;
 import com.gitee.pifeng.monitoring.agent.business.server.service.IHttpService;
 import com.gitee.pifeng.monitoring.agent.constant.UrlConstants;
+import com.gitee.pifeng.monitoring.agent.core.AgentPackageConstructor;
 import com.gitee.pifeng.monitoring.common.dto.BaseResponsePackage;
 import com.gitee.pifeng.monitoring.common.dto.HeartbeatPackage;
-import com.gitee.pifeng.monitoring.common.util.server.NetUtils;
-import com.gitee.pifeng.monitoring.plug.core.ConfigLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.TreeSet;
 
 /**
  * <p>
@@ -22,6 +19,12 @@ import java.util.TreeSet;
  */
 @Service
 public class HeartbeatServiceImpl implements IHeartbeatService {
+
+    /**
+     * 包构造器接口
+     */
+    @Autowired
+    private AgentPackageConstructor agentPackageConstructor;
 
     /**
      * 跟服务端相关的HTTP服务接口
@@ -42,17 +45,11 @@ public class HeartbeatServiceImpl implements IHeartbeatService {
      */
     @Override
     public BaseResponsePackage sendHeartbeatPackage(HeartbeatPackage heartbeatPackage) throws Exception {
-        // IP地址
-        String ip = ConfigLoader.MONITORING_PROPERTIES.getServerInfoProperties().getIp() == null ? NetUtils.getLocalIp() : ConfigLoader.MONITORING_PROPERTIES.getServerInfoProperties().getIp();
-        // 请求包地址链中添加当前IP地址
-        TreeSet<String> requestNetworkChain = heartbeatPackage.getNetworkChain();
-        requestNetworkChain.add(ip);
-        heartbeatPackage.setNetworkChain(requestNetworkChain);
+        // 添加链路信息
+        heartbeatPackage.setChain(this.agentPackageConstructor.getChain(heartbeatPackage));
         BaseResponsePackage baseResponsePackage = this.httpService.sendHttpPost(heartbeatPackage.toJsonString(), UrlConstants.HEARTBEAT_URL);
-        // 响应包地址链中添加当前IP地址
-        TreeSet<String> responseNetworkChain = baseResponsePackage.getNetworkChain();
-        responseNetworkChain.add(ip);
-        baseResponsePackage.setNetworkChain(responseNetworkChain);
+        // 添加链路信息
+        baseResponsePackage.setChain(this.agentPackageConstructor.getChain(baseResponsePackage));
         return baseResponsePackage;
     }
 

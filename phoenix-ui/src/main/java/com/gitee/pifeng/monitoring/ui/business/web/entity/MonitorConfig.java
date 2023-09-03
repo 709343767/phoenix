@@ -4,8 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -27,24 +26,24 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 @TableName("MONITOR_CONFIG")
-@ApiModel(value = "MonitorConfig对象", description = "监控配置表")
+@Schema(description = "MonitorConfig对象")
 public class MonitorConfig implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "主键ID")
+    @Schema(description = "主键ID")
     @TableId(value = "ID", type = IdType.AUTO)
     private Long id;
 
-    @ApiModelProperty(value = "监控配置值")
+    @Schema(description = "监控配置值")
     @TableField("VALUE")
     private String value;
 
-    @ApiModelProperty(value = "插入时间")
+    @Schema(description = "插入时间")
     @TableField("INSERT_TIME")
     private Date insertTime;
 
-    @ApiModelProperty(value = "更新时间")
+    @Schema(description = "更新时间")
     @TableField("UPDATE_TIME")
     private Date updateTime;
 

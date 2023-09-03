@@ -115,4 +115,15 @@ public interface IMonitorNetService extends IService<MonitorNet> {
      */
     LayUiAdminResultVo testMonitorNetwork(MonitorNetVo monitorNetVo) throws SigarException, IOException;
 
+    /**
+     * <p>
+     * 获取网络信息
+     * </p>
+     *
+     * @return 网络信息表现层对象
+     * @author 皮锋
+     * @custom.date 2022/11/27 19:34
+     */
+    List<MonitorNetVo> getMonitorNetInfo();
+
 }

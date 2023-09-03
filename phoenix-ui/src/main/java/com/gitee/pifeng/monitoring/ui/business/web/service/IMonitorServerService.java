@@ -8,6 +8,7 @@ import com.gitee.pifeng.monitoring.ui.business.web.vo.LayUiAdminResultVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.MonitorServerVo;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -109,4 +110,15 @@ public interface IMonitorServerService extends IService<MonitorServer> {
      * @custom.date 2021/8/27 14:32
      */
     MonitorServerVo getMonitorServerInfo(Long id, String ip);
+
+    /**
+     * <p>
+     * 获取服务器信息(Map形式)
+     * </p>
+     *
+     * @return 服务器信息
+     * @author 皮锋
+     * @custom.date 2022/12/21 14:29
+     */
+    Map<String, MonitorServerVo> getMonitorServer2Map();
 }

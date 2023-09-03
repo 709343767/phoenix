@@ -7,10 +7,9 @@ import com.gitee.pifeng.monitoring.common.dto.JvmPackage;
 import com.gitee.pifeng.monitoring.common.exception.NetException;
 import com.gitee.pifeng.monitoring.common.util.jvm.JvmUtils;
 import com.gitee.pifeng.monitoring.plug.constant.UrlConstants;
-import com.gitee.pifeng.monitoring.plug.core.PackageConstructor;
+import com.gitee.pifeng.monitoring.plug.core.ClientPackageConstructor;
 import com.gitee.pifeng.monitoring.plug.core.Sender;
 import lombok.extern.slf4j.Slf4j;
-import org.hyperic.sigar.SigarException;
 
 import java.io.IOException;
 
@@ -24,6 +23,11 @@ import java.io.IOException;
  */
 @Slf4j
 public class JvmThread implements Runnable {
+
+    /**
+     * 客户端包构造器
+     */
+    private final ClientPackageConstructor clientPackageConstructor = ClientPackageConstructor.getInstance();
 
     /**
      * <p>
@@ -41,16 +45,16 @@ public class JvmThread implements Runnable {
             // 获取Java虚拟机信息
             Jvm jvm = JvmUtils.getJvmInfo();
             // 构建Java虚拟机信息包
-            JvmPackage jvmPackage = new PackageConstructor().structureJvmPackage(jvm);
+            JvmPackage jvmPackage = this.clientPackageConstructor.structureJvmPackage(jvm);
             // 发送请求
             String result = Sender.send(UrlConstants.JVM_URL, jvmPackage.toJsonString());
-            log.debug("Java虚拟机信息包响应消息：{}", result);
+            if (log.isDebugEnabled()) {
+                log.debug("Java虚拟机信息包响应消息：{}", result);
+            }
         } catch (IOException e) {
             log.error("IO异常！", e);
         } catch (NetException e) {
             log.error("获取网络信息异常！", e);
-        } catch (SigarException e) {
-            log.error("Sigar异常！", e);
         } catch (Exception e) {
             log.error("其它异常！", e);
         } finally {

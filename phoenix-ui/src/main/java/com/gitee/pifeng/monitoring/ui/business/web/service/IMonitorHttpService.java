@@ -103,4 +103,15 @@ public interface IMonitorHttpService extends IService<MonitorHttp> {
      * @custom.date 2022/10/9 22:23
      */
     LayUiAdminResultVo testMonitorHttp(MonitorHttpVo monitorHttpVo) throws SigarException, IOException;
+
+    /**
+     * <p>
+     * 获取HTTP信息
+     * </p>
+     *
+     * @return HTTP信息表现层对象
+     * @author 皮锋
+     * @custom.date 2022/11/27 19:34
+     */
+    List<MonitorHttpVo> getMonitorHttpInfo();
 }

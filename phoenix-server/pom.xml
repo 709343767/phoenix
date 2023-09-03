@@ -8,7 +8,7 @@
     <parent>
         <artifactId>phoenix</artifactId>
         <groupId>com.gitee.pifeng</groupId>
-        <version>1.2.4.RELEASE-CR8</version>
+        <version>1.2.5.RELEASE</version>
         <relativePath>..</relativePath>
     </parent>
 
@@ -112,6 +112,27 @@
                     <!-- 指定该Main Class为全局的唯一入口 -->
                     <mainClass>com.gitee.pifeng.monitoring.server.ServerApplication</mainClass>
                 </configuration>
+            </plugin>
+            <!-- 定制化打包插件 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    <descriptors>
+                        <descriptor>assembly-server.xml</descriptor>
+                    </descriptors>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly-server</id>
+                        <!-- 绑定到这个生命周期 -->
+                        <phase>package</phase>
+                        <goals>
+                            <!-- 执行一次 -->
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
             <!-- sonatype的staging插件 -->
             <plugin>

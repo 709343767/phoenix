@@ -1,8 +1,10 @@
 package com.gitee.pifeng.monitoring.agent.core;
 
-import com.gitee.pifeng.monitoring.common.domain.Result;
 import com.gitee.pifeng.monitoring.agent.business.server.service.*;
+import com.gitee.pifeng.monitoring.common.domain.Result;
 import com.gitee.pifeng.monitoring.common.dto.*;
+import com.gitee.pifeng.monitoring.common.web.core.Invoker;
+import com.gitee.pifeng.monitoring.common.web.core.InvokerHolder;
 
 /**
  * <p>
@@ -13,6 +15,11 @@ import com.gitee.pifeng.monitoring.common.dto.*;
  * @custom.date 2020年3月5日 上午10:59:29
  */
 public class MethodExecuteHandler {
+
+    /**
+     * 代理端包构造器
+     */
+    private static final AgentPackageConstructor AGENT_PACKAGE_CONSTRUCTOR = AgentPackageConstructor.getInstance();
 
     /**
      * <p>
@@ -37,8 +44,7 @@ public class MethodExecuteHandler {
      */
     public static BaseResponsePackage sendHeartbeatPackage2Server(HeartbeatPackage heartbeatPackage) {
         // 通过命令执行器管理器，获取指定的命令执行器
-        Invoker invoker = InvokerHolder.getInvoker(IHeartbeatService.class,
-                "sendHeartbeatPackage");
+        Invoker invoker = InvokerHolder.getInvoker(IHeartbeatService.class, "sendHeartbeatPackage");
         // 执行命令，返回执行结果
         return execute(invoker, heartbeatPackage);
     }
@@ -55,8 +61,7 @@ public class MethodExecuteHandler {
      */
     public static BaseResponsePackage sendAlarmPackage2Server(AlarmPackage alarmPackage) {
         // 通过命令执行器管理器，获取指定的命令执行器
-        Invoker invoker = InvokerHolder.getInvoker(IAlarmService.class,
-                "sendAlarmPackage");
+        Invoker invoker = InvokerHolder.getInvoker(IAlarmService.class, "sendAlarmPackage");
         // 执行命令，返回执行结果
         return execute(invoker, alarmPackage);
     }
@@ -73,8 +78,7 @@ public class MethodExecuteHandler {
      */
     public static BaseResponsePackage sendServerPackage2Server(ServerPackage serverPackage) {
         // 通过命令执行器管理器，获取指定的命令执行器
-        Invoker invoker = InvokerHolder.getInvoker(IServerService.class,
-                "sendServerPackage");
+        Invoker invoker = InvokerHolder.getInvoker(IServerService.class, "sendServerPackage");
         // 执行命令，返回执行结果
         return execute(invoker, serverPackage);
     }
@@ -91,10 +95,26 @@ public class MethodExecuteHandler {
      */
     public static BaseResponsePackage sendJvmPackage2Server(JvmPackage jvmPackage) {
         // 通过命令执行器管理器，获取指定的命令执行器
-        Invoker invoker = InvokerHolder.getInvoker(IJvmService.class,
-                "sendJvmPackage");
+        Invoker invoker = InvokerHolder.getInvoker(IJvmService.class, "sendJvmPackage");
         // 执行命令，返回执行结果
         return execute(invoker, jvmPackage);
+    }
+
+    /**
+     * <p>
+     * 向服务端发送下线信息包
+     * </p>
+     *
+     * @param offlinePackage 下线信息包
+     * @return {@link BaseResponsePackage}
+     * @author 皮锋
+     * @custom.date 2023/7/23 9:54
+     */
+    public static BaseResponsePackage sendOfflinePackage2Server(OfflinePackage offlinePackage) {
+        // 通过命令执行器管理器，获取指定的命令执行器
+        Invoker invoker = InvokerHolder.getInvoker(IOfflineService.class, "sendOfflinePackage");
+        // 执行命令，返回执行结果
+        return execute(invoker, offlinePackage);
     }
 
     /**
@@ -110,8 +130,7 @@ public class MethodExecuteHandler {
      */
     public static BaseResponsePackage sendBaseRequestPackage2Server(BaseRequestPackage baseRequestPackage, String url) {
         // 通过命令执行器管理器，获取指定的命令执行器
-        Invoker invoker = InvokerHolder.getInvoker(IBaseRequestPackageService.class,
-                "sendBaseRequestPackage");
+        Invoker invoker = InvokerHolder.getInvoker(IBaseRequestPackageService.class, "sendBaseRequestPackage");
         // 执行命令，返回执行结果
         return execute(invoker, baseRequestPackage, url);
     }
@@ -136,7 +155,7 @@ public class MethodExecuteHandler {
             responsePackage = (BaseResponsePackage) object;
         } catch (Exception e) {
             Result result = Result.builder().isSuccess(false).msg(e.getMessage()).build();
-            responsePackage = new PackageConstructor().structureBaseResponsePackage(result);
+            responsePackage = AGENT_PACKAGE_CONSTRUCTOR.structureBaseResponsePackage(result);
         }
         return responsePackage;
     }

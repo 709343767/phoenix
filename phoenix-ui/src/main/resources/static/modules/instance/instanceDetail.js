@@ -11,7 +11,7 @@
             getJvmMemoryHeapInfoChart.resize();
             getJvmMemoryNonHeapInfoChart.resize();
             getJvmMemoryPoolInfoChart.resize();
-        });
+        }, {capture: true});
         // 时间
         var chartTime = 'hour';
         // 内存池图表内存类型
@@ -289,7 +289,7 @@
                     // 初始内存值
                     var init = '无数据';
                     // 最大内存量
-                    var max = '无数据'
+                    var max = '无数据';
                     if (data.length !== 0) {
                         if (data[data.length - 1].init !== '未定义') {
                             init = data[data.length - 1].init + ' MB';

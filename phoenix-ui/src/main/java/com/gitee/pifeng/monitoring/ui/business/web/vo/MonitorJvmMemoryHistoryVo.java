@@ -6,8 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.gitee.pifeng.monitoring.common.inf.ISuperBean;
 import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorJvmMemoryHistory;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import lombok.experimental.Accessors;
 import org.springframework.beans.BeanUtils;
@@ -30,44 +29,44 @@ import java.util.Date;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel(value = "java虚拟机内存历史记录表现层对象")
+@Schema(description = "java虚拟机内存历史记录表现层对象")
 public class MonitorJvmMemoryHistoryVo implements ISuperBean {
 
-    @ApiModelProperty(value = "主键ID")
+    @Schema(description = "主键ID")
     @TableId(value = "ID", type = IdType.AUTO)
     private Long id;
 
-    @ApiModelProperty(value = "应用实例ID")
+    @Schema(description = "应用实例ID")
     @TableField("INSTANCE_ID")
     private String instanceId;
 
-    @ApiModelProperty(value = "内存类型")
+    @Schema(description = "内存类型")
     @TableField("MEMORY_TYPE")
     private String memoryType;
 
-    @ApiModelProperty(value = "初始内存量（单位：byte）")
+    @Schema(description = "初始内存量（单位：byte）")
     @TableField("INIT")
     private Long init;
 
-    @ApiModelProperty(value = "已用内存量（单位：byte）")
+    @Schema(description = "已用内存量（单位：byte）")
     @TableField("USED")
     private Long used;
 
-    @ApiModelProperty(value = "提交内存量（单位：byte）")
+    @Schema(description = "提交内存量（单位：byte）")
     @TableField("COMMITTED")
     private Long committed;
 
-    @ApiModelProperty(value = "最大内存量（单位：byte，可能存在未定义）")
+    @Schema(description = "最大内存量（单位：byte，可能存在未定义）")
     @TableField("MAX")
     private String max;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    @ApiModelProperty(value = "新增时间")
+    @Schema(description = "新增时间")
     @TableField("INSERT_TIME")
     private Date insertTime;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    @ApiModelProperty(value = "更新时间")
+    @Schema(description = "更新时间")
     @TableField("UPDATE_TIME")
     private Date updateTime;
 

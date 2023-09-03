@@ -13,10 +13,11 @@ import com.gitee.pifeng.monitoring.ui.business.web.vo.LayUiAdminResultVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.MonitorNetVo;
 import com.gitee.pifeng.monitoring.ui.constant.OperateTypeConstants;
 import com.gitee.pifeng.monitoring.ui.constant.UiModuleConstants;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.hyperic.sigar.SigarException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -37,7 +38,7 @@ import java.util.stream.Collectors;
  */
 @Controller
 @RequestMapping("/monitor-network")
-@Api(tags = "网络")
+@Tag(name = "网络")
 public class MonitorNetworkController {
 
     /**
@@ -67,7 +68,7 @@ public class MonitorNetworkController {
      * @author 皮锋
      * @custom.date 2020/9/26 10:53
      */
-    @ApiOperation(value = "访问网络列表页面")
+    @Operation(summary = "访问网络列表页面")
     @GetMapping("/list")
     public ModelAndView list() {
         ModelAndView mv = new ModelAndView("network/network");
@@ -98,20 +99,25 @@ public class MonitorNetworkController {
      * @author 皮锋
      * @custom.date 2020/9/26 10:59
      */
-    @ApiOperation(value = "获取网络列表")
-    @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "current", value = "当前页", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class),
-            @ApiImplicitParam(name = "size", value = "每页显示条数", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class),
-            @ApiImplicitParam(name = "ipSource", value = "IP地址（来源）", paramType = "query", dataType = "string", dataTypeClass = String.class),
-            @ApiImplicitParam(name = "ipTarget", value = "IP地址（目的地）", paramType = "query", dataType = "string", dataTypeClass = String.class),
-            @ApiImplicitParam(name = "status", value = "状态（0：网络不通，1：网络正常）", paramType = "query", dataType = "string", dataTypeClass = String.class),
-            @ApiImplicitParam(name = "monitorEnv", value = "监控环境", paramType = "query", dataType = "string", dataTypeClass = String.class),
-            @ApiImplicitParam(name = "monitorGroup", value = "监控分组", paramType = "query", dataType = "string", dataTypeClass = String.class)})
+    @Operation(summary = "获取网络列表")
+    @Parameters(value = {
+            @Parameter(name = "current", description = "当前页", required = true, in = ParameterIn.QUERY),
+            @Parameter(name = "size", description = "每页显示条数", required = true, in = ParameterIn.QUERY),
+            @Parameter(name = "ipSource", description = "IP地址（来源）", in = ParameterIn.QUERY),
+            @Parameter(name = "ipTarget", description = "IP地址（目的地）", in = ParameterIn.QUERY),
+            @Parameter(name = "status", description = "状态（0：网络不通，1：网络正常）", in = ParameterIn.QUERY),
+            @Parameter(name = "monitorEnv", description = "监控环境", in = ParameterIn.QUERY),
+            @Parameter(name = "monitorGroup", description = "监控分组", in = ParameterIn.QUERY)})
     @GetMapping("/get-monitor-network-list")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.NET, operType = OperateTypeConstants.QUERY, operDesc = "获取网络列表")
-    public LayUiAdminResultVo getMonitorNetList(Long current, Long size, String ipSource, String ipTarget, String status,
-                                                String monitorEnv, String monitorGroup) {
+    public LayUiAdminResultVo getMonitorNetList(@RequestParam(value = "current") Long current,
+                                                @RequestParam(value = "size") Long size,
+                                                @RequestParam(value = "ipSource", required = false) String ipSource,
+                                                @RequestParam(value = "ipTarget", required = false) String ipTarget,
+                                                @RequestParam(value = "status", required = false) String status,
+                                                @RequestParam(value = "monitorEnv", required = false) String monitorEnv,
+                                                @RequestParam(value = "monitorGroup", required = false) String monitorGroup) {
         Page<MonitorNetVo> page = this.monitorNetService.getMonitorNetList(current, size, ipSource, ipTarget, status, monitorEnv, monitorGroup);
         return LayUiAdminResultVo.ok(page);
     }
@@ -126,7 +132,7 @@ public class MonitorNetworkController {
      * @author 皮锋
      * @custom.date 2020/9/26 12:59
      */
-    @ApiOperation(value = "删除网络")
+    @Operation(summary = "删除网络")
     @DeleteMapping("/delete-monitor-network")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.NET, operType = OperateTypeConstants.DELETE, operDesc = "删除网络")
@@ -144,9 +150,9 @@ public class MonitorNetworkController {
      * @author 皮锋
      * @custom.date 2020/11/20 9:17
      */
-    @ApiOperation(value = "访问编辑网络信息表单页面")
-    @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "id", value = "网络ID", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class)})
+    @Operation(summary = "访问编辑网络信息表单页面")
+    @Parameters(value = {
+            @Parameter(name = "id", description = "网络ID", required = true, in = ParameterIn.QUERY)})
     @GetMapping("/edit-monitor-network-form")
     public ModelAndView editMonitorNetworkForm(@RequestParam(name = "id") Long id) {
         MonitorNet monitorNet = this.monitorNetService.getById(id);
@@ -173,7 +179,7 @@ public class MonitorNetworkController {
      * @author 皮锋
      * @custom.date 2020/11/20 14:54
      */
-    @ApiOperation(value = "访问新增网络信息表单页面")
+    @Operation(summary = "访问新增网络信息表单页面")
     @GetMapping("/add-monitor-network-form")
     public ModelAndView addMonitorNetworkForm() {
         ModelAndView mv = new ModelAndView("network/add-network");
@@ -199,7 +205,7 @@ public class MonitorNetworkController {
      * @author 皮锋
      * @custom.date 2020/11/20 13:56
      */
-    @ApiOperation(value = "编辑网络信息")
+    @Operation(summary = "编辑网络信息")
     @PutMapping("/edit-monitor-network")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.NET, operType = OperateTypeConstants.UPDATE, operDesc = "编辑网络信息")
@@ -224,7 +230,7 @@ public class MonitorNetworkController {
      * @author 皮锋
      * @custom.date 2020/11/20 15:05
      */
-    @ApiOperation(value = "添加网络信息")
+    @Operation(summary = "添加网络信息")
     @PostMapping("/add-monitor-network")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.NET, operType = OperateTypeConstants.ADD, operDesc = "添加网络信息")
@@ -245,9 +251,9 @@ public class MonitorNetworkController {
      * @author 皮锋
      * @custom.date 2022/3/17 11:13
      */
-    @ApiOperation(value = "访问平均时间页面")
-    @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "id", value = "网络ID", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class)})
+    @Operation(summary = "访问平均时间页面")
+    @Parameters(value = {
+            @Parameter(name = "id", description = "网络ID", required = true, in = ParameterIn.QUERY)})
     @GetMapping("/avg-time")
     public ModelAndView avgTime(Long id) {
         MonitorNet monitorNet = this.monitorNetService.getById(id);
@@ -267,9 +273,9 @@ public class MonitorNetworkController {
      * @author 皮锋
      * @custom.date 2021/7/20 20:56
      */
-    @ApiOperation(value = "访问清理网络监控历史数据表单页面")
-    @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "id", value = "网络ID", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class)})
+    @Operation(summary = "访问清理网络监控历史数据表单页面")
+    @Parameters(value = {
+            @Parameter(name = "id", description = "网络ID", required = true, in = ParameterIn.QUERY)})
     @GetMapping("/network-clear")
     public ModelAndView networkClear(Long id) {
         ModelAndView mv = new ModelAndView("network/network-clear-form");
@@ -289,7 +295,7 @@ public class MonitorNetworkController {
      * @author 皮锋
      * @custom.date 2022/10/9 10:16
      */
-    @ApiOperation(value = "测试网络连通性")
+    @Operation(summary = "测试网络连通性")
     @PostMapping("/test-monitor-network")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.NET, operType = OperateTypeConstants.TEST, operDesc = "测试网络连通性")

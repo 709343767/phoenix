@@ -4,8 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -27,28 +26,28 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 @TableName("MONITOR_SERVER_PROCESS_HISTORY")
-@ApiModel(value = "MonitorServerProcessHistory对象", description = "服务器进程历史记录表")
+@Schema(description = "MonitorServerProcessHistory对象")
 public class MonitorServerProcessHistory implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "主键ID")
+    @Schema(description = "主键ID")
     @TableId(value = "ID", type = IdType.AUTO)
     private Long id;
 
-    @ApiModelProperty(value = "IP地址")
+    @Schema(description = "IP地址")
     @TableField("IP")
     private String ip;
 
-    @ApiModelProperty(value = "正在运行的进程数")
+    @Schema(description = "正在运行的进程数")
     @TableField("PROCESS_NUM")
     private Integer processNum;
 
-    @ApiModelProperty(value = "新增时间")
+    @Schema(description = "新增时间")
     @TableField("INSERT_TIME")
     private Date insertTime;
 
-    @ApiModelProperty(value = "更新时间")
+    @Schema(description = "更新时间")
     @TableField("UPDATE_TIME")
     private Date updateTime;
 

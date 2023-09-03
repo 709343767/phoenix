@@ -75,6 +75,12 @@ public class MonitorNetHistory {
     private Integer offlineCount;
 
     /**
+     * ping详情
+     */
+    @TableField("PING_DETAIL")
+    private String pingDetail;
+
+    /**
      * 新增时间
      */
     @TableField("INSERT_TIME")

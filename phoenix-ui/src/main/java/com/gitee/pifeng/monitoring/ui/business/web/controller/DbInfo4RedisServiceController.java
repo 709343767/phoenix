@@ -5,14 +5,16 @@ import com.gitee.pifeng.monitoring.ui.business.web.service.IDbInfo4RedisService;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.LayUiAdminResultVo;
 import com.gitee.pifeng.monitoring.ui.constant.OperateTypeConstants;
 import com.gitee.pifeng.monitoring.ui.constant.UiModuleConstants;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.hyperic.sigar.SigarException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
@@ -26,7 +28,7 @@ import java.io.IOException;
  * @custom.date 2021/10/16 20:17
  */
 @RestController
-@Api(tags = "数据库信息.Redis")
+@Tag(name = "数据库信息.Redis")
 @RequestMapping("/db-info4redis")
 public class DbInfo4RedisServiceController {
 
@@ -48,12 +50,12 @@ public class DbInfo4RedisServiceController {
      * @author 皮锋
      * @custom.date 2021/10/16 20:50
      */
-    @ApiOperation(value = "获取Redis信息")
-    @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "id", value = "数据库ID", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class)})
+    @Operation(summary = "获取Redis信息")
+    @Parameters(value = {
+            @Parameter(name = "id", description = "数据库ID", required = true, in = ParameterIn.QUERY)})
     @GetMapping("/get-redis-info")
     @OperateLog(operModule = UiModuleConstants.DATABASE + "#信息", operType = OperateTypeConstants.QUERY, operDesc = "获取Redis信息")
-    public LayUiAdminResultVo getRedisInfo(Long id) throws IOException, SigarException {
+    public LayUiAdminResultVo getRedisInfo(@RequestParam(value = "id") Long id) throws IOException, SigarException {
         String info = this.dbInfo4RedisService.getRedisInfo(id);
         return LayUiAdminResultVo.ok(info);
     }

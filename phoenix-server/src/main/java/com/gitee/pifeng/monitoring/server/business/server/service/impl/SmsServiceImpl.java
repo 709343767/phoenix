@@ -24,6 +24,12 @@ import org.springframework.web.client.RestTemplate;
 @Slf4j
 public class SmsServiceImpl implements ISmsService {
 
+    /**
+     * 监控配置属性加载器
+     */
+    @Autowired
+    private MonitoringConfigPropertiesLoader monitoringConfigPropertiesLoader;
+
     @Autowired
     private RestTemplate restTemplate;
 
@@ -40,7 +46,7 @@ public class SmsServiceImpl implements ISmsService {
     @Override
     public boolean sendAlarmTemplateSms(Sms sms) {
         // 短信接口商家
-        EnterpriseEnums enterpriseEnum = MonitoringConfigPropertiesLoader.getMonitoringProperties().getAlarmProperties().getSmsProperties().getEnterpriseEnum();
+        EnterpriseEnums enterpriseEnum = this.monitoringConfigPropertiesLoader.getMonitoringProperties().getAlarmProperties().getSmsProperties().getEnterpriseEnum();
         // 判断短信接口商家，不同的商家调用不同的接口
         if (EnterpriseEnums.PHOENIX == enterpriseEnum) {
             // 调用phoenix短信接口
@@ -60,7 +66,7 @@ public class SmsServiceImpl implements ISmsService {
      * @custom.date 2020年3月10日 下午3:19:36
      */
     private boolean callMonitoringSmsApi(Sms sms) {
-        String enterprise = MonitoringConfigPropertiesLoader.getMonitoringProperties().getAlarmProperties().getSmsProperties().getEnterpriseEnum().name();
+        String enterprise = this.monitoringConfigPropertiesLoader.getMonitoringProperties().getAlarmProperties().getSmsProperties().getEnterpriseEnum().name();
         // 短信不支持<br>标签换行
         String text = sms.getContent().replace("<br>", "");
         String title = sms.getTitle();
@@ -85,7 +91,7 @@ public class SmsServiceImpl implements ISmsService {
      * @custom.date 2020年3月10日 上午11:01:47
      */
     private boolean sendSmsByMonitoringApi(MonitoringSms sms) {
-        String alarmSmsAddress = MonitoringConfigPropertiesLoader.getMonitoringProperties().getAlarmProperties().getSmsProperties().getAddress();
+        String alarmSmsAddress = this.monitoringConfigPropertiesLoader.getMonitoringProperties().getAlarmProperties().getSmsProperties().getAddress();
         // URL地址
         String url = alarmSmsAddress + "?phone=" + sms.getPhone() + "&type=" + sms.getType() + "&content="
                 + sms.getContent() + "&identity=" + sms.getIdentity();

@@ -4,8 +4,12 @@ import com.gitee.pifeng.monitoring.agent.business.client.service.IBaseRequestPac
 import com.gitee.pifeng.monitoring.agent.constant.UrlConstants;
 import com.gitee.pifeng.monitoring.common.dto.BaseRequestPackage;
 import com.gitee.pifeng.monitoring.common.dto.BaseResponsePackage;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import com.gitee.pifeng.monitoring.common.dto.CiphertextPackage;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author 皮锋
  * @custom.date 2021/4/5 14:17
  */
-@Api(tags = "监控属性配置")
+@Tag(name = "监控属性配置")
 @RestController
 @RequestMapping("/monitoring-properties-config")
 public class MonitoringPropertiesConfigController {
@@ -41,7 +45,9 @@ public class MonitoringPropertiesConfigController {
      * @author 皮锋
      * @custom.date 2021/4/5 14:19
      */
-    @ApiOperation(value = "刷新监控配置属性", notes = "刷新监控配置属性")
+    @Operation(description = "刷新监控配置属性", summary = "刷新监控配置属性",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(content = @Content(schema = @Schema(implementation = CiphertextPackage.class))),
+            responses = @ApiResponse(content = {@Content(schema = @Schema(implementation = CiphertextPackage.class))}))
     @PostMapping("/refresh")
     public BaseResponsePackage refresh(@RequestBody BaseRequestPackage baseRequestPackage) {
         return this.baseRequestPackageService.dealBaseRequestPackage(baseRequestPackage, UrlConstants.MONITORING_PROPERTIES_CONFIG_REFRESH_URL);

@@ -8,10 +8,11 @@ import com.gitee.pifeng.monitoring.ui.business.web.vo.DbSession4MysqlVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.LayUiAdminResultVo;
 import com.gitee.pifeng.monitoring.ui.constant.OperateTypeConstants;
 import com.gitee.pifeng.monitoring.ui.constant.UiModuleConstants;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.hyperic.sigar.SigarException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -29,7 +30,7 @@ import java.util.List;
  * @custom.date 2020/12/22 14:36
  */
 @Controller
-@Api(tags = "数据库会话.MySQL")
+@Tag(name = "数据库会话.MySQL")
 @RequestMapping("/db-session4mysql")
 public class DbSession4MysqlController {
 
@@ -54,15 +55,18 @@ public class DbSession4MysqlController {
      * @author 皮锋
      * @custom.date 2020/12/24 16:53
      */
-    @ApiOperation(value = "获取会话列表")
-    @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "current", value = "当前页", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class),
-            @ApiImplicitParam(name = "size", value = "每页显示条数", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class),
-            @ApiImplicitParam(name = "id", value = "数据库ID", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class)})
+    @Operation(summary = "获取会话列表")
+    @Parameters(value = {
+            @Parameter(name = "current", description = "当前页", required = true, in = ParameterIn.QUERY),
+            @Parameter(name = "size", description = "每页显示条数", required = true, in = ParameterIn.QUERY),
+            @Parameter(name = "id", description = "数据库ID", required = true, in = ParameterIn.QUERY)})
     @GetMapping("/get-session-list")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.DATABASE + "#会话", operType = OperateTypeConstants.QUERY, operDesc = "获取会话列表")
-    public LayUiAdminResultVo getSessionList(Long current, Long size, Long id) throws NetException, IOException, SigarException {
+    public LayUiAdminResultVo getSessionList(@RequestParam(value = "current") Long current,
+                                             @RequestParam(value = "size") Long size,
+                                             @RequestParam(value = "id") Long id)
+            throws NetException, IOException, SigarException {
         Page<DbSession4MysqlVo> page = this.dbSession4MysqlService.getSessionList(current, size, id);
         return LayUiAdminResultVo.ok(page);
     }
@@ -81,13 +85,14 @@ public class DbSession4MysqlController {
      * @author 皮锋
      * @custom.date 2020/12/25 17:03
      */
-    @ApiOperation(value = "结束会话")
+    @Operation(summary = "结束会话")
     @DeleteMapping("/destroy-session")
-    @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "id", value = "数据库ID", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class)})
+    @Parameters(value = {
+            @Parameter(name = "id", description = "数据库ID", required = true, in = ParameterIn.QUERY)})
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.DATABASE + "#会话", operType = OperateTypeConstants.CONTROL, operDesc = "结束会话")
-    public LayUiAdminResultVo destroySession(@RequestBody List<DbSession4MysqlVo> dbSession4MysqlVos, Long id) throws NetException, IOException, SigarException {
+    public LayUiAdminResultVo destroySession(@RequestBody List<DbSession4MysqlVo> dbSession4MysqlVos,
+                                             @RequestParam(value = "id") Long id) throws NetException, IOException, SigarException {
         return this.dbSession4MysqlService.destroySession(dbSession4MysqlVos, id);
     }
 

@@ -22,7 +22,7 @@ import com.gitee.pifeng.monitoring.ui.business.web.vo.LayUiAdminResultVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.MonitorHttpVo;
 import com.gitee.pifeng.monitoring.ui.constant.UrlConstants;
 import com.gitee.pifeng.monitoring.ui.constant.WebResponseConstants;
-import com.gitee.pifeng.monitoring.ui.core.PackageConstructor;
+import com.gitee.pifeng.monitoring.ui.core.UiPackageConstructor;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
 import org.hyperic.sigar.SigarException;
@@ -47,6 +47,12 @@ import java.util.Map;
  */
 @Service
 public class MonitorHttpServiceImpl extends ServiceImpl<IMonitorHttpDao, MonitorHttp> implements IMonitorHttpService {
+
+    /**
+     * UI端包构造器
+     */
+    @Autowired
+    private UiPackageConstructor uiPackageConstructor;
 
     /**
      * HTTP信息历史记录数据访问对象
@@ -269,7 +275,7 @@ public class MonitorHttpServiceImpl extends ServiceImpl<IMonitorHttpDao, Monitor
         extraMsg.put("method", monitorHttpVo.getMethod());
         extraMsg.put("urlTarget", monitorHttpVo.getUrlTarget());
         extraMsg.put("parameter", monitorHttpVo.getParameter());
-        BaseRequestPackage baseRequestPackage = new PackageConstructor().structureBaseRequestPackage(extraMsg);
+        BaseRequestPackage baseRequestPackage = this.uiPackageConstructor.structureBaseRequestPackage(extraMsg);
         // 从服务端获取数据
         String resultStr = Sender.send(UrlConstants.TEST_MONITOR_HTTP_URL, baseRequestPackage.toJsonString());
         BaseResponsePackage baseResponsePackage = JSON.parseObject(resultStr, BaseResponsePackage.class);
@@ -281,6 +287,28 @@ public class MonitorHttpServiceImpl extends ServiceImpl<IMonitorHttpDao, Monitor
             msg = WebResponseConstants.SUCCESS;
         }
         return LayUiAdminResultVo.ok(msg);
+    }
+
+    /**
+     * <p>
+     * 获取HTTP信息
+     * </p>
+     *
+     * @return HTTP信息表现层对象
+     * @author 皮锋
+     * @custom.date 2022/11/27 19:34
+     */
+    @Override
+    public List<MonitorHttpVo> getMonitorHttpInfo() {
+        List<MonitorHttpVo> result = Lists.newArrayList();
+        // 查询数据库
+        List<MonitorHttp> monitorHttps = this.list();
+        // 封装返回数据
+        for (MonitorHttp monitorHttp : monitorHttps) {
+            MonitorHttpVo monitorHttpVo = MonitorHttpVo.builder().build().convertFor(monitorHttp);
+            result.add(monitorHttpVo);
+        }
+        return result;
     }
 
 }

@@ -3,7 +3,7 @@ package com.gitee.pifeng.monitoring.server.config;
 import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.PerformanceInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.pagination.optimize.JsqlParserCountOptimize;
-import com.gitee.pifeng.monitoring.common.web.toolkit.UniqueBeanNameGenerator;
+import com.gitee.pifeng.monitoring.common.web.core.UniqueBeanNameGenerator;
 import com.github.pagehelper.PageHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.mybatis.spring.annotation.MapperScan;

@@ -1,8 +1,7 @@
 package com.gitee.pifeng.monitoring.ui.business.web.vo;
 
 import com.gitee.pifeng.monitoring.common.inf.ISuperBean;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.http.HttpStatus;
@@ -17,25 +16,25 @@ import org.springframework.http.HttpStatus;
  */
 @Data
 @AllArgsConstructor
-@ApiModel(value = "LayUiAdmin响应对象")
+@Schema(description = "LayUiAdmin响应对象")
 public class LayUiAdminResultVo implements ISuperBean {
 
     /**
      * 接口状态码
      */
-    @ApiModelProperty(value = "接口状态码")
+    @Schema(description = "接口状态码")
     private int code;
 
     /**
      * 接口提示信息
      */
-    @ApiModelProperty(value = "接口提示信息")
+    @Schema(description = "接口提示信息")
     private String msg;
 
     /**
      * 数据
      */
-    @ApiModelProperty(value = "数据")
+    @Schema(description = "数据")
     private Object data;
 
     /**

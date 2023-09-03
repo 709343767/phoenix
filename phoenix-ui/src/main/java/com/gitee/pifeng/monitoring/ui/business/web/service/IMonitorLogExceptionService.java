@@ -68,4 +68,5 @@ public interface IMonitorLogExceptionService extends IService<MonitorLogExceptio
      * @custom.date 2021/6/18 16:31
      */
     MonitorLogExceptionVo getMonitorLogExceptionInfo(Long id);
+
 }

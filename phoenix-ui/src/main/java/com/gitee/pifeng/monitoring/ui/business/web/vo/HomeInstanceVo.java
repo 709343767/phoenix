@@ -1,8 +1,7 @@
 package com.gitee.pifeng.monitoring.ui.business.web.vo;
 
 import com.gitee.pifeng.monitoring.common.inf.ISuperBean;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import lombok.experimental.Accessors;
 
@@ -22,19 +21,19 @@ import lombok.experimental.Accessors;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel(value = "home页的应用实例表现层对象")
+@Schema(description = "home页的应用实例表现层对象")
 public class HomeInstanceVo implements ISuperBean {
 
-    @ApiModelProperty(value = "应用实例数量")
+    @Schema(description = "应用实例数量")
     private Integer instanceSum;
 
-    @ApiModelProperty(value = "应用实例在线数量")
+    @Schema(description = "应用实例在线数量")
     private Integer instanceOnLineSum;
 
-    @ApiModelProperty(value = "应用实例离线数量")
+    @Schema(description = "应用实例离线数量")
     private Integer instanceOffLineSum;
 
-    @ApiModelProperty(value = "应用实例在线率")
+    @Schema(description = "应用实例在线率")
     private String instanceOnLineRate;
 
 }

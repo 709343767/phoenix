@@ -1,7 +1,7 @@
 package com.gitee.pifeng.monitoring.common.dto;
 
 import com.alibaba.fastjson.JSONObject;
-import com.gitee.pifeng.monitoring.common.abs.AbstractInstanceBean;
+import com.gitee.pifeng.monitoring.common.abs.AbstractSuperPackage;
 import lombok.*;
 import lombok.experimental.Accessors;
 
@@ -21,7 +21,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public class BaseRequestPackage extends AbstractInstanceBean {
+public class BaseRequestPackage extends AbstractSuperPackage {
 
     /**
      * ID

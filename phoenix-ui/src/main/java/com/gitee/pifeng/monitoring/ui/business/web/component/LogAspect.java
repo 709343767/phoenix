@@ -18,6 +18,7 @@ import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorLogOperationS
 import com.gitee.pifeng.monitoring.ui.business.web.vo.LayUiAdminResultVo;
 import com.gitee.pifeng.monitoring.ui.util.SpringSecurityUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ArrayUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.AfterThrowing;
@@ -30,6 +31,7 @@ import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.Map;
@@ -105,6 +107,8 @@ public class LogAspect {
         String className = joinPoint.getTarget().getClass().getName();
         // 获取请求的方法名
         String methodName = className + "#" + method.getName();
+        // 参数
+        Object[] args = joinPoint.getArgs();
         // 操作日志
         MonitorLogOperation.MonitorLogOperationBuilder builder = MonitorLogOperation.builder();
         // 获取操作
@@ -121,7 +125,18 @@ public class LogAspect {
             builder.operDesc(operateDesc);
         }
         // 转换请求参数
-        Map<String, String> reqParamMap = MapUtils.convertParamMap(request.getParameterMap());
+        Map<String, Object> reqParamMap = MapUtils.convertParamMap(request.getParameterMap());
+        if (reqParamMap.isEmpty()) {
+            if (ArrayUtils.isNotEmpty(args)) {
+                // 遍历方法参数
+                for (int i = 0; i < args.length; i++) {
+                    Parameter[] parameters = method.getParameters();
+                    String paramName = parameters[i].getName();
+                    Object paramValue = args[i];
+                    reqParamMap.put(paramName, paramValue != null ? JSON.toJSON(paramValue) : null);
+                }
+            }
+        }
         builder.reqParam(reqParamMap.isEmpty() ? "" : JSON.toJSONString(reqParamMap));
         builder.userId(SpringSecurityUtils.getCurrentMonitorUserRealm() == null ? null : SpringSecurityUtils.getCurrentMonitorUserRealm().getId());
         builder.username(SpringSecurityUtils.getCurrentMonitorUserRealm() == null ? null : SpringSecurityUtils.getCurrentMonitorUserRealm().getUsrname());
@@ -132,7 +147,7 @@ public class LogAspect {
         // 返回值
         Object response = null;
         try {
-            response = joinPoint.proceed(joinPoint.getArgs());
+            response = joinPoint.proceed(args);
         } catch (Throwable throwable) {
             log.error(throwable.getMessage(), throwable);
             response = LayUiAdminResultVo.fail(throwable.getMessage());
@@ -168,10 +183,23 @@ public class LogAspect {
         String methodName = className + "#" + method.getName();
         // 异常名称
         String excName = e.getClass().getName();
+        // 参数
+        Object[] args = joinPoint.getArgs();
         // 构建异常日志
         MonitorLogException.MonitorLogExceptionBuilder builder = MonitorLogException.builder();
         // 转换请求参数
-        Map<String, String> reqParamMap = MapUtils.convertParamMap(request.getParameterMap());
+        Map<String, Object> reqParamMap = MapUtils.convertParamMap(request.getParameterMap());
+        if (reqParamMap.isEmpty()) {
+            if (ArrayUtils.isNotEmpty(args)) {
+                // 遍历方法参数
+                for (int i = 0; i < args.length; i++) {
+                    Parameter[] parameters = method.getParameters();
+                    String paramName = parameters[i].getName();
+                    Object paramValue = args[i];
+                    reqParamMap.put(paramName, paramValue != null ? JSON.toJSON(paramValue) : null);
+                }
+            }
+        }
         builder.reqParam(reqParamMap.isEmpty() ? "" : JSON.toJSONString(reqParamMap));
         builder.excName(excName);
         builder.excMessage(ExceptionUtils.stackTraceToString(excName, e.getMessage(), e.getStackTrace()));

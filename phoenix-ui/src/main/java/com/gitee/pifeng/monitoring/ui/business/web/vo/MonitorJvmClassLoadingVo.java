@@ -3,8 +3,7 @@ package com.gitee.pifeng.monitoring.ui.business.web.vo;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.gitee.pifeng.monitoring.common.inf.ISuperBean;
 import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorJvmClassLoading;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import lombok.experimental.Accessors;
 import org.springframework.beans.BeanUtils;
@@ -27,32 +26,32 @@ import java.util.Date;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel(value = "java虚拟机类加载信息表现层对象")
+@Schema(description = "java虚拟机类加载信息表现层对象")
 public class MonitorJvmClassLoadingVo implements ISuperBean {
 
-    @ApiModelProperty(value = "主键ID")
+    @Schema(description = "主键ID")
     private Long id;
 
-    @ApiModelProperty(value = "应用实例ID")
+    @Schema(description = "应用实例ID")
     private String instanceId;
 
-    @ApiModelProperty(value = "加载的类的总数")
+    @Schema(description = "加载的类的总数")
     private Integer totalLoadedClassCount;
 
-    @ApiModelProperty(value = "当前加载的类的总数")
+    @Schema(description = "当前加载的类的总数")
     private Integer loadedClassCount;
 
-    @ApiModelProperty(value = "卸载的类总数")
+    @Schema(description = "卸载的类总数")
     private Integer unloadedClassCount;
 
-    @ApiModelProperty(value = "是否启用了类加载系统的详细输出")
+    @Schema(description = "是否启用了类加载系统的详细输出")
     private String isVerbose;
 
-    @ApiModelProperty(value = "新增时间")
+    @Schema(description = "新增时间")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date insertTime;
 
-    @ApiModelProperty(value = "更新时间")
+    @Schema(description = "更新时间")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date updateTime;
 

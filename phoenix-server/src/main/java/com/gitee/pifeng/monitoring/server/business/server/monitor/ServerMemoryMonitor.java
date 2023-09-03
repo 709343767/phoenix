@@ -2,16 +2,16 @@ package com.gitee.pifeng.monitoring.server.business.server.monitor;
 
 import cn.hutool.core.util.NumberUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.gitee.pifeng.monitoring.common.constant.MonitorTypeEnums;
 import com.gitee.pifeng.monitoring.common.constant.alarm.AlarmLevelEnums;
 import com.gitee.pifeng.monitoring.common.constant.alarm.AlarmReasonEnums;
-import com.gitee.pifeng.monitoring.common.constant.MonitorTypeEnums;
 import com.gitee.pifeng.monitoring.common.domain.Alarm;
 import com.gitee.pifeng.monitoring.common.dto.AlarmPackage;
 import com.gitee.pifeng.monitoring.common.exception.NetException;
 import com.gitee.pifeng.monitoring.common.util.DateTimeUtils;
 import com.gitee.pifeng.monitoring.common.util.Md5Utils;
 import com.gitee.pifeng.monitoring.server.business.server.core.MonitoringConfigPropertiesLoader;
-import com.gitee.pifeng.monitoring.server.business.server.core.PackageConstructor;
+import com.gitee.pifeng.monitoring.server.business.server.core.ServerPackageConstructor;
 import com.gitee.pifeng.monitoring.server.business.server.entity.MonitorServer;
 import com.gitee.pifeng.monitoring.server.business.server.entity.MonitorServerMemory;
 import com.gitee.pifeng.monitoring.server.business.server.service.IAlarmService;
@@ -20,7 +20,6 @@ import com.gitee.pifeng.monitoring.server.business.server.service.IServerService
 import com.gitee.pifeng.monitoring.server.inf.IServerMonitoringListener;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.hyperic.sigar.SigarException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -37,6 +36,18 @@ import java.util.Date;
 @Component
 @Slf4j
 public class ServerMemoryMonitor implements IServerMonitoringListener {
+
+    /**
+     * 监控配置属性加载器
+     */
+    @Autowired
+    private MonitoringConfigPropertiesLoader monitoringConfigPropertiesLoader;
+
+    /**
+     * 服务端包构造器
+     */
+    @Autowired
+    private ServerPackageConstructor serverPackageConstructor;
 
     /**
      * 告警服务接口
@@ -68,7 +79,7 @@ public class ServerMemoryMonitor implements IServerMonitoringListener {
     @Override
     public void wakeUpMonitor(Object... obj) {
         // 是否监控服务器
-        boolean isEnable = MonitoringConfigPropertiesLoader.getMonitoringProperties().getServerProperties().isEnable();
+        boolean isEnable = this.monitoringConfigPropertiesLoader.getMonitoringProperties().getServerProperties().isEnable();
         // 不需要监控服务器
         if (!isEnable) {
             return;
@@ -80,7 +91,7 @@ public class ServerMemoryMonitor implements IServerMonitoringListener {
             return;
         }
         // 过载阈值
-        double overloadThreshold = MonitoringConfigPropertiesLoader.getMonitoringProperties().getServerProperties().getServerMemoryProperties().getOverloadThreshold();
+        double overloadThreshold = this.monitoringConfigPropertiesLoader.getMonitoringProperties().getServerProperties().getServerMemoryProperties().getOverloadThreshold();
         // 物理内存使用率
         double menUsedPercent = NumberUtil.round(monitorServerMemory.getMenUsedPercent() * 100D, 2).doubleValue();
         // 物理内存使用率大于等于配置的过载阈值
@@ -105,6 +116,9 @@ public class ServerMemoryMonitor implements IServerMonitoringListener {
      */
     private void dealMemoryNotOverLoad(String ip, double menUsedPercent) {
         MonitorServer monitorServer = this.serverService.getOne(new LambdaQueryWrapper<MonitorServer>().eq(MonitorServer::getIp, ip));
+        if (monitorServer == null) {
+            return;
+        }
         String serverName = monitorServer.getServerName();
         String serverSummary = monitorServer.getServerSummary();
         // 发送告警信息
@@ -128,10 +142,13 @@ public class ServerMemoryMonitor implements IServerMonitoringListener {
      */
     private void dealMemoryOverLoad(String ip, double menUsedPercent) {
         MonitorServer monitorServer = this.serverService.getOne(new LambdaQueryWrapper<MonitorServer>().eq(MonitorServer::getIp, ip));
+        if (monitorServer == null) {
+            return;
+        }
         String serverName = monitorServer.getServerName();
         String serverSummary = monitorServer.getServerSummary();
         // 告警级别
-        AlarmLevelEnums alarmLevelEnum = MonitoringConfigPropertiesLoader.getMonitoringProperties().getServerProperties().getServerMemoryProperties().getLevelEnum();
+        AlarmLevelEnums alarmLevelEnum = this.monitoringConfigPropertiesLoader.getMonitoringProperties().getServerProperties().getServerMemoryProperties().getLevelEnum();
         // 发送告警信息
         try {
             this.sendAlarmInfo("服务器内存过载", ip, serverName, serverSummary, menUsedPercent, alarmLevelEnum, AlarmReasonEnums.NORMAL_2_ABNORMAL);
@@ -152,13 +169,12 @@ public class ServerMemoryMonitor implements IServerMonitoringListener {
      * @param menUsedPercent  物理内存使用率
      * @param alarmLevelEnum  告警级别
      * @param alarmReasonEnum 告警原因
-     * @throws NetException   获取网络信息异常
-     * @throws SigarException Sigar异常
+     * @throws NetException 获取网络信息异常
      * @author 皮锋
      * @custom.date 2020/3/25 14:46
      */
     private void sendAlarmInfo(String title, String ip, String serverName, String serverSummary, double menUsedPercent,
-                               AlarmLevelEnums alarmLevelEnum, AlarmReasonEnums alarmReasonEnum) throws NetException, SigarException {
+                               AlarmLevelEnums alarmLevelEnum, AlarmReasonEnums alarmReasonEnum) throws NetException {
         StringBuilder msgBuilder = new StringBuilder();
         msgBuilder.append("IP地址：").append(ip).append("，<br>服务器：").append(serverName);
         if (StringUtils.isNotBlank(serverSummary)) {
@@ -174,7 +190,7 @@ public class ServerMemoryMonitor implements IServerMonitoringListener {
                 .alarmReason(alarmReasonEnum)
                 .monitorType(MonitorTypeEnums.SERVER)
                 .build();
-        AlarmPackage alarmPackage = new PackageConstructor().structureAlarmPackage(alarm);
+        AlarmPackage alarmPackage = this.serverPackageConstructor.structureAlarmPackage(alarm);
         this.alarmService.dealAlarmPackage(alarmPackage);
     }
 }

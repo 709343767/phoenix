@@ -10,7 +10,7 @@ import com.gitee.pifeng.monitoring.ui.business.web.dao.IMonitorDbDao;
 import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorDb;
 import com.gitee.pifeng.monitoring.ui.business.web.service.IDbInfo4RedisService;
 import com.gitee.pifeng.monitoring.ui.constant.UrlConstants;
-import com.gitee.pifeng.monitoring.ui.core.PackageConstructor;
+import com.gitee.pifeng.monitoring.ui.core.UiPackageConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.hyperic.sigar.SigarException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +30,12 @@ import java.io.IOException;
 public class DbInfo4RedisServiceImpl implements IDbInfo4RedisService {
 
     /**
+     * UI端包构造器
+     */
+    @Autowired
+    private UiPackageConstructor uiPackageConstructor;
+
+    /**
      * 数据库表数据访问对象
      */
     @Autowired
@@ -43,12 +49,11 @@ public class DbInfo4RedisServiceImpl implements IDbInfo4RedisService {
      * @param id 数据库ID
      * @return Redis信息
      * @throws IOException    IO异常
-     * @throws SigarException Sigar异常
      * @author 皮锋
      * @custom.date 2021/10/16 20:48
      */
     @Override
-    public String getRedisInfo(Long id) throws SigarException, IOException {
+    public String getRedisInfo(Long id) throws IOException {
         // 根据ID查询到此数据库信息
         MonitorDb monitorDb = this.monitorDbDao.selectById(id);
         // url
@@ -65,9 +70,9 @@ public class DbInfo4RedisServiceImpl implements IDbInfo4RedisService {
         extraMsg.put("host", host);
         extraMsg.put("port", port);
         extraMsg.put("password", password);
-        BaseRequestPackage baseRequestPackage = new PackageConstructor().structureBaseRequestPackage(extraMsg);
+        BaseRequestPackage baseRequestPackage = this.uiPackageConstructor.structureBaseRequestPackage(extraMsg);
         // 从服务端获取数据
-        String resultStr = Sender.send(UrlConstants.REDIS_GET_REDIS_INFO, baseRequestPackage.toJsonString());
+        String resultStr = Sender.send(UrlConstants.REDIS_GET_REDIS_INFO_URL, baseRequestPackage.toJsonString());
         BaseResponsePackage baseResponsePackage = JSON.parseObject(resultStr, BaseResponsePackage.class);
         Result result = baseResponsePackage.getResult();
         return result.getMsg();

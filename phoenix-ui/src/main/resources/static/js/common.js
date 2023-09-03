@@ -94,6 +94,130 @@ var isNotEmpty = function (o) {
 };
 
 /**
+ * 判断map对象是否为空
+ * @param map map对象
+ * @returns {boolean}
+ */
+var isEmptyMap = function (map) {
+    return map.size === 0;
+};
+
+/**
+ * 求第一个 Map 相对于第二个 Map 的差集
+ * 上述代码中，mapDifference 函数接受两个 Map 对象作为参数，并返回一个包含两个差集 Map 的对象。首先，通过 Array.from 方法将 Map 的键转换为数组，
+ * 然后使用 filter 方法找出两个 Map 中不相同的键。最后，通过这些键创建新的 Map 对象，并返回结果。
+ * 请注意，该代码仅比较了键，如果你想对值进行比较，可以在过滤的步骤中加入相应的条件判断。
+ * @param map1 第一个map对象
+ * @param map2 第二个map对象
+ * @returns {Map<unknown, *>}
+ */
+var mapDifference = function (map1, map2) {
+    const keys1 = Array.from(map1.keys());
+    const keys2 = Array.from(map2.keys());
+    // 求第一个 Map 相对于第二个 Map 的差集
+    const difference = keys1.filter(key => !keys2.includes(key));
+    return new Map(difference.map(key => [key, map1.get(key)]));
+};
+
+/**
+ * 判断是否为json对象
+ * @param obj
+ * @returns {boolean}
+ */
+var isJson = function (obj) {
+    return typeof (obj) == 'object'
+        && Object.prototype.toString.call(obj).toLowerCase() === '[object object]'
+        && !obj.length;
+};
+
+/**
+ * 已知中心点和半径,求圆上任意一点
+ * @param x 圆心X
+ * @param y 圆心Y
+ * @param r 半径
+ * @returns {[*, *]}
+ */
+var randCirclePoint = function (x, y, r) {
+    var radius = 2 * Math.PI * Math.random();
+    var targetX = x + r * Math.cos(radius);
+    var targetY = y + r * Math.sin(radius);
+    return [targetX, targetY];
+};
+
+/**
+ * 获取页面元素中心点
+ * @param $this jQuery选择器，如：$('#id')
+ * @returns {[*, *]}
+ */
+var elementCenterPoint = function ($this) {
+    var offset = $this.offset();
+    var width = $this.width();
+    var height = $this.height();
+    var centerX = offset.left + width / 2;
+    var centerY = offset.top + height / 2;
+    return [centerX, centerY];
+};
+
+/**
+ * 根据数组中对象的某个属性值进行去重
+ * @param arr 数组
+ * @param key  对象的某个属性
+ * @returns {any[]}
+ */
+var uniqueArr = function (arr, key) {
+    var map = new Map();
+    arr.forEach((item) => {
+        if (!map.has(item[key])) {
+            map.set(item[key], item)
+        }
+    });
+    return [...map.values()];
+};
+
+/**
+ * 从对象数组中返回对象某个属性值组成的数组
+ * @param objArr 对象数组
+ * @param attribute 属性名
+ * @param removeDuplicates 是否去重
+ * @returns {any[]}
+ */
+var objectArr2AttributeArr = function (objArr, attribute, removeDuplicates) {
+    var newArr = objArr.map((obj) => {
+        return obj[attribute];
+    });
+    // 去重
+    if (removeDuplicates) {
+        newArr = Array.from(new Set(newArr));
+    }
+    return newArr;
+};
+
+/**
+ * 求两基础数据类型数组交集
+ * @param arr1 数组1
+ * @param arr2 数组2
+ */
+var arrIntersect = function (arr1, arr2) {
+    return Array.from(new Set(arr1.filter(item => {
+        return arr2.includes(item);
+    })));
+};
+
+/**
+ * 根据目标对象的某个key判断对象数组中是否存在某个目标对象
+ * @param arr 对象数组
+ * @param targetObj 目标对象
+ * @param targetObjKey 目标对象中用于判断的key
+ * @returns {*}
+ */
+var arrExistingObj = function (arr, targetObj, targetObjKey) {
+    return arr.some(obj => {
+        // 这里假设对象的判断条件是判断 targetObjKey 的值
+        return obj[targetObjKey] === targetObj[targetObjKey];
+    });
+};
+
+/**
  * js获取UUID
  * @returns {string}
  */
@@ -129,4 +253,64 @@ var convertSize = function (num) {
     //     900 / Math.pow(1024, 1)  1024的1次幂 是1024  900/1024 < 1 所以跳出循环 下边的 i = l；就不会执行  所以 i = 0； sizeStr[0] = 'B';
     //     以此类推 直到循环结束 或 条件成立
     return (num / Math.pow(k, i)).toFixed(2) + ' ' + sizeStr[i];  //循环结束 或 条件成立 返回字符
+};
+
+/**
+ * 时间毫秒转换成天小时分钟秒毫秒的字符串
+ * @param milli 毫秒
+ * @param type 单位类型：en、cn，分别代表：英文格式、中文格式，可以省略，默认：en
+ * @returns {string}
+ */
+var formatMillisecond = function (milli, type) {
+    //秒
+    var second = 0;
+    // 分
+    var minute = 0;
+    // 小时
+    var hour = 0;
+    // 天
+    var day = 0;
+    // 英文单位
+    var en = ['ms', 's', 'min', 'h', 'd'];
+    // 中文单位
+    var cn = ['毫秒', '秒', '分', '小时', '天'];
+    if (milli >= 1000) {
+        second = parseInt(milli / 1000);
+        milli = milli % 1000;
+        if (second > 1) {
+            minute = parseInt(second / 60);
+            second = second % 60;
+            if (minute > 1) {
+                hour = parseInt(minute / 60);
+                minute = minute % 60;
+                if (hour > 1) {
+                    day = parseInt(hour / 24);
+                    hour = hour % 24;
+                }
+            }
+        }
+    }
+    if (day >= 1) {
+        return type === 'cn' ?
+            day + cn[4] + ((hour + minute + second + milli) > 0 ? hour + cn[3] + ((minute + second + milli) > 0 ? minute + cn[2] + ((second + milli) > 0 ? second + cn[1] + (milli > 0 ? milli + cn[0] : '') : '') : '') : '') :
+            day + en[4] + ((hour + minute + second + milli) > 0 ? hour + en[3] + ((minute + second + milli) > 0 ? minute + en[2] + ((second + milli) > 0 ? second + en[1] + (milli > 0 ? milli + en[0] : '') : '') : '') : '');
+    }
+    if (hour >= 1) {
+        return type === 'cn' ?
+            hour + cn[3] + ((minute + second + milli) > 0 ? minute + cn[2] + ((second + milli) > 0 ? second + cn[1] + (milli > 0 ? milli + cn[0] : '') : '') : '') :
+            hour + en[3] + ((minute + second + milli) > 0 ? minute + en[2] + ((second + milli) > 0 ? second + en[1] + (milli > 0 ? milli + en[0] : '') : '') : '');
+    }
+    if (minute >= 1) {
+        return type === 'cn' ?
+            minute + cn[2] + ((second + milli) > 0 ? second + cn[1] + (milli > 0 ? milli + cn[0] : '') : '') :
+            minute + en[2] + ((second + milli) > 0 ? second + en[1] + (milli > 0 ? milli + en[0] : '') : '');
+    }
+    if (second >= 1) {
+        return type === 'cn' ?
+            second + cn[1] + (milli > 0 ? milli + cn[0] : '') :
+            second + en[1] + (milli > 0 ? milli + en[0] : '');
+    }
+    return type === 'cn' ?
+        milli + cn[0] :
+        milli + en[0];
 };

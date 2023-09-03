@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gitee.pifeng.monitoring.common.constant.ResultMsgConstants;
 import com.gitee.pifeng.monitoring.common.util.server.NetUtils;
-import com.gitee.pifeng.monitoring.plug.util.EnumPoolingHttpUtils;
+import com.gitee.pifeng.monitoring.plug.core.EnumPoolingHttpClient;
 import com.gitee.pifeng.monitoring.server.business.server.dao.IMonitorHttpDao;
 import com.gitee.pifeng.monitoring.server.business.server.entity.MonitorHttp;
 import com.gitee.pifeng.monitoring.server.business.server.service.IHttpService;
@@ -43,7 +43,7 @@ public class HttpServiceImpl extends ServiceImpl<IMonitorHttpDao, MonitorHttp> i
     public String testMonitorHttp(String method, String urlTarget, String parameter) {
         Map<String, Object> map;
         // HTTP线程池工具类
-        EnumPoolingHttpUtils httpClient = EnumPoolingHttpUtils.getInstance();
+        EnumPoolingHttpClient httpClient = EnumPoolingHttpClient.getInstance();
         // GET请求
         if (StringUtils.equalsIgnoreCase(HttpMethod.GET.name(), method)) {
             map = httpClient.sendHttpGet(urlTarget);

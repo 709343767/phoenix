@@ -1,9 +1,9 @@
 package com.gitee.pifeng.monitoring.plug;
 
 import cn.hutool.core.lang.Console;
-import com.gitee.pifeng.monitoring.common.constant.alarm.AlarmLevelEnums;
 import com.gitee.pifeng.monitoring.common.constant.MonitorTypeEnums;
 import com.gitee.pifeng.monitoring.common.constant.ThreadTypeEnums;
+import com.gitee.pifeng.monitoring.common.constant.alarm.AlarmLevelEnums;
 import com.gitee.pifeng.monitoring.common.domain.Alarm;
 import com.gitee.pifeng.monitoring.common.domain.Result;
 import com.google.common.base.Charsets;

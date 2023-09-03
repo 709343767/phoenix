@@ -3,8 +3,7 @@ package com.gitee.pifeng.monitoring.ui.business.web.vo;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.gitee.pifeng.monitoring.common.inf.ISuperBean;
 import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorServerCpu;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import lombok.experimental.Accessors;
 import org.springframework.beans.BeanUtils;
@@ -27,51 +26,51 @@ import java.util.Date;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel(value = "服务器CPU信息表现层对象")
+@Schema(description = "服务器CPU信息表现层对象")
 public class MonitorServerCpuVo implements ISuperBean {
 
-    @ApiModelProperty(value = "主键ID")
+    @Schema(description = "主键ID")
     private Long id;
 
-    @ApiModelProperty(value = "IP地址")
+    @Schema(description = "IP地址")
     private String ip;
 
-    @ApiModelProperty(value = "CPU序号")
+    @Schema(description = "CPU序号")
     private Integer cpuNo;
 
-    @ApiModelProperty(value = "CPU频率（MHz）")
+    @Schema(description = "CPU频率（MHz）")
     private Integer cpuMhz;
 
-    @ApiModelProperty(value = "CPU卖主")
+    @Schema(description = "CPU卖主")
     private String cpuVendor;
 
-    @ApiModelProperty(value = "CPU的类别，如：Celeron")
+    @Schema(description = "CPU的类别，如：Celeron")
     private String cpuModel;
 
-    @ApiModelProperty(value = "CPU用户使用率")
+    @Schema(description = "CPU用户使用率")
     private Double cpuUser;
 
-    @ApiModelProperty(value = "CPU系统使用率")
+    @Schema(description = "CPU系统使用率")
     private Double cpuSys;
 
-    @ApiModelProperty(value = "CPU等待率")
+    @Schema(description = "CPU等待率")
     private Double cpuWait;
 
-    @ApiModelProperty(value = "CPU错误率")
+    @Schema(description = "CPU错误率")
     private Double cpuNice;
 
-    @ApiModelProperty(value = "CPU使用率")
+    @Schema(description = "CPU使用率")
     private Double cpuCombined;
 
-    @ApiModelProperty(value = "CPU剩余率")
+    @Schema(description = "CPU剩余率")
     private Double cpuIdle;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    @ApiModelProperty(value = "新增时间")
+    @Schema(description = "新增时间")
     private Date insertTime;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    @ApiModelProperty(value = "更新时间")
+    @Schema(description = "更新时间")
     private Date updateTime;
 
     /**

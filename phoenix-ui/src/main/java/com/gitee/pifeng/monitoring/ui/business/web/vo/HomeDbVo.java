@@ -1,8 +1,7 @@
 package com.gitee.pifeng.monitoring.ui.business.web.vo;
 
 import com.gitee.pifeng.monitoring.common.inf.ISuperBean;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import lombok.experimental.Accessors;
 
@@ -22,22 +21,22 @@ import lombok.experimental.Accessors;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel(value = "home页的数据库信息表现层对象")
+@Schema(description = "home页的数据库信息表现层对象")
 public class HomeDbVo implements ISuperBean {
 
-    @ApiModelProperty(value = "数据库数量")
+    @Schema(description = "数据库数量")
     private Integer dbSum;
 
-    @ApiModelProperty(value = "数据库正常数量")
+    @Schema(description = "数据库正常数量")
     private Integer dbConnectSum;
 
-    @ApiModelProperty(value = "数据库断开数量")
+    @Schema(description = "数据库断开数量")
     private Integer dbDisconnectSum;
 
-    @ApiModelProperty(value = "数据库未知数量")
+    @Schema(description = "数据库未知数量")
     private Integer dbUnsentSum;
 
-    @ApiModelProperty(value = "数据库正常率")
+    @Schema(description = "数据库正常率")
     private String dbConnectRate;
 
 }

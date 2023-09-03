@@ -8,10 +8,11 @@ import com.gitee.pifeng.monitoring.ui.business.web.vo.LayUiAdminResultVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.MonitorAlarmDefinitionVo;
 import com.gitee.pifeng.monitoring.ui.constant.OperateTypeConstants;
 import com.gitee.pifeng.monitoring.ui.constant.UiModuleConstants;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -28,7 +29,7 @@ import java.util.List;
  * @custom.date 2020年3月7日 下午5:03:49
  */
 @Controller
-@Api(tags = "配置管理.告警定义")
+@Tag(name = "配置管理.告警定义")
 @RequestMapping("/monitor-alarm-definition")
 public class MonitorAlarmDefinitionController {
 
@@ -48,7 +49,7 @@ public class MonitorAlarmDefinitionController {
      * @author 皮锋
      * @custom.date 2020/8/6 20:13
      */
-    @ApiOperation(value = "访问告警定义列表页面")
+    @Operation(summary = "访问告警定义列表页面")
     @GetMapping("/list")
     public ModelAndView list() {
         return new ModelAndView("set/alarm-definition");
@@ -69,18 +70,23 @@ public class MonitorAlarmDefinitionController {
      * @author 皮锋
      * @custom.date 2020/8/6 20:18
      */
-    @ApiOperation(value = "获取告警定义列表")
-    @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "current", value = "当前页", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class),
-            @ApiImplicitParam(name = "size", value = "每页显示条数", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class),
-            @ApiImplicitParam(name = "type", value = "告警类型", paramType = "query", dataType = "string", dataTypeClass = String.class),
-            @ApiImplicitParam(name = "grade", value = "告警级别", paramType = "query", dataType = "string", dataTypeClass = String.class),
-            @ApiImplicitParam(name = "title", value = "告警标题", paramType = "query", dataType = "string", dataTypeClass = String.class),
-            @ApiImplicitParam(name = "content", value = "告警内容", paramType = "query", dataType = "string", dataTypeClass = String.class)})
+    @Operation(summary = "获取告警定义列表")
+    @Parameters(value = {
+            @Parameter(name = "current", description = "当前页", required = true, in = ParameterIn.QUERY),
+            @Parameter(name = "size", description = "每页显示条数", required = true, in = ParameterIn.QUERY),
+            @Parameter(name = "type", description = "告警类型", in = ParameterIn.QUERY),
+            @Parameter(name = "grade", description = "告警级别", in = ParameterIn.QUERY),
+            @Parameter(name = "title", description = "告警标题", in = ParameterIn.QUERY),
+            @Parameter(name = "content", description = "告警内容", in = ParameterIn.QUERY)})
     @ResponseBody
     @GetMapping("/get-monitor-alarm-definition-list")
     @OperateLog(operModule = UiModuleConstants.CONFIG_MANAGE + "#告警定义", operType = OperateTypeConstants.QUERY, operDesc = "获取告警定义列表")
-    public LayUiAdminResultVo getMonitorAlarmDefinitionList(Long current, Long size, String type, String grade, String title, String content) {
+    public LayUiAdminResultVo getMonitorAlarmDefinitionList(@RequestParam(value = "current") Long current,
+                                                            @RequestParam(value = "size") Long size,
+                                                            @RequestParam(value = "type", required = false) String type,
+                                                            @RequestParam(value = "grade", required = false) String grade,
+                                                            @RequestParam(value = "title", required = false) String title,
+                                                            @RequestParam(value = "content", required = false) String content) {
         Page<MonitorAlarmDefinitionVo> page = this.monitorAlarmDefinitionService.getMonitorAlarmDefinitionList(current, size, type, grade, title, content);
         return LayUiAdminResultVo.ok(page);
     }
@@ -95,7 +101,7 @@ public class MonitorAlarmDefinitionController {
      * @author 皮锋
      * @custom.date 2020/8/7 11:00
      */
-    @ApiOperation(value = "访问新增告警定义表单页面")
+    @Operation(summary = "访问新增告警定义表单页面")
     @GetMapping("/add-monitor-alarm-definition-form")
     public ModelAndView addMonitorAlarmDefinitionForm() {
         return new ModelAndView("set/add-alarm-definition");
@@ -111,9 +117,9 @@ public class MonitorAlarmDefinitionController {
      * @author 皮锋
      * @custom.date 2020/8/7 11:07
      */
-    @ApiOperation(value = "访问编辑告警定义表单页面")
-    @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "id", value = "告警ID", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class)})
+    @Operation(summary = "访问编辑告警定义表单页面")
+    @Parameters(value = {
+            @Parameter(name = "id", description = "告警ID", required = true, in = ParameterIn.QUERY)})
     @GetMapping("/edit-monitor-alarm-definition-form")
     public ModelAndView editMonitorAlarmDefinitionForm(@RequestParam(name = "id") Long id) {
         MonitorAlarmDefinition monitorAlarmDefinition = this.monitorAlarmDefinitionService.getById(id);
@@ -134,7 +140,7 @@ public class MonitorAlarmDefinitionController {
      * @author 皮锋
      * @custom.date 2020/8/7 12:19
      */
-    @ApiOperation(value = "添加告警定义")
+    @Operation(summary = "添加告警定义")
     @PostMapping("/save-monitor-alarm-definition")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.CONFIG_MANAGE + "#告警定义", operType = OperateTypeConstants.ADD, operDesc = "添加告警定义")
@@ -152,7 +158,7 @@ public class MonitorAlarmDefinitionController {
      * @author 皮锋
      * @custom.date 2020/8/7 15:24
      */
-    @ApiOperation(value = "编辑告警定义")
+    @Operation(summary = "编辑告警定义")
     @PutMapping("/edit-monitor-alarm-definition")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.CONFIG_MANAGE + "#告警定义", operType = OperateTypeConstants.UPDATE, operDesc = "编辑告警定义")
@@ -170,7 +176,7 @@ public class MonitorAlarmDefinitionController {
      * @author 皮锋
      * @custom.date 2020/8/7 15:34
      */
-    @ApiOperation(value = "删除告警定义")
+    @Operation(summary = "删除告警定义")
     @DeleteMapping("/delete-monitor-alarm-definition")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.CONFIG_MANAGE + "#告警定义", operType = OperateTypeConstants.DELETE, operDesc = "删除告警定义")

@@ -6,7 +6,9 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.gitee.pifeng.monitoring.common.constant.*;
+import com.gitee.pifeng.monitoring.common.constant.DateTimeStylesEnums;
+import com.gitee.pifeng.monitoring.common.constant.MonitorTypeEnums;
+import com.gitee.pifeng.monitoring.common.constant.ZeroOrOneConstants;
 import com.gitee.pifeng.monitoring.common.constant.alarm.AlarmLevelEnums;
 import com.gitee.pifeng.monitoring.common.constant.alarm.AlarmWayEnums;
 import com.gitee.pifeng.monitoring.common.util.DateTimeUtils;
@@ -149,17 +151,21 @@ public class MonitorAlarmRecordServiceImpl extends ServiceImpl<IMonitorAlarmReco
      * 获取监控告警列表
      * </p>
      *
-     * @param type    告警类型
-     * @param level   告警级别
-     * @param status  告警状态
-     * @param title   告警标题
-     * @param content 告警内容
+     * @param type       告警类型
+     * @param level      告警级别
+     * @param status     告警状态
+     * @param title      告警标题
+     * @param content    告警内容
+     * @param number     被告警人号码
+     * @param insertDate 记录日期
+     * @param updateDate 告警日期
      * @return 监控告警表现层对象列表
      * @author 皮锋
      * @custom.date 2021/5/18 22:50
      */
     @Override
-    public List<MonitorAlarmRecordVo> getMonitorAlarmRecordList(String type, String level, String status, String title, String content) {
+    public List<MonitorAlarmRecordVo> getMonitorAlarmRecordList(String type, String level, String status, String title,
+                                                                String content, String number, String insertDate, String updateDate) {
         LambdaQueryWrapper<MonitorAlarmRecord> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         // 倒叙查询
         lambdaQueryWrapper.orderByDesc(MonitorAlarmRecord::getInsertTime);
@@ -182,6 +188,19 @@ public class MonitorAlarmRecordServiceImpl extends ServiceImpl<IMonitorAlarmReco
         }
         if (StringUtils.isNotBlank(content)) {
             lambdaQueryWrapper.like(MonitorAlarmRecord::getContent, content);
+        }
+        if (StringUtils.isNotBlank(number)) {
+            lambdaQueryWrapper.like(MonitorAlarmRecord::getNumber, number);
+        }
+        if (StringUtils.isNotBlank(insertDate)) {
+            Date startDateTime = DateTimeUtils.string2Date(insertDate, DateTimeStylesEnums.YYYY_MM_DD);
+            Date endDateTime = DateUtil.endOfDay(startDateTime).toJdkDate();
+            lambdaQueryWrapper.between(MonitorAlarmRecord::getInsertTime, startDateTime, endDateTime);
+        }
+        if (StringUtils.isNotBlank(updateDate)) {
+            Date startDateTime = DateTimeUtils.string2Date(updateDate, DateTimeStylesEnums.YYYY_MM_DD);
+            Date endDateTime = DateUtil.endOfDay(startDateTime).toJdkDate();
+            lambdaQueryWrapper.between(MonitorAlarmRecord::getUpdateTime, startDateTime, endDateTime);
         }
         List<MonitorAlarmRecord> monitorAlarmRecords = this.monitorAlarmRecordDao.selectList(lambdaQueryWrapper);
         // 转换成监控告警表现层对象

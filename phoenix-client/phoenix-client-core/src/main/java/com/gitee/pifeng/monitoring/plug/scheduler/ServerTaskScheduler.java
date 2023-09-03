@@ -1,15 +1,15 @@
 package com.gitee.pifeng.monitoring.plug.scheduler;
 
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
-
-import org.apache.commons.lang3.concurrent.BasicThreadFactory;
-
-import com.gitee.pifeng.monitoring.common.threadpool.ThreadShutdownHook;
+import com.gitee.pifeng.monitoring.common.threadpool.ExecutorObject;
 import com.gitee.pifeng.monitoring.common.util.server.ProcessorsUtils;
 import com.gitee.pifeng.monitoring.plug.core.ConfigLoader;
 import com.gitee.pifeng.monitoring.plug.thread.ServerThread;
+import org.apache.commons.lang3.concurrent.BasicThreadFactory;
+
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * <p>
@@ -39,12 +39,13 @@ public class ServerTaskScheduler {
      * 则由类{@link ConfigLoader}提供默认的发送服务器信息频率。
      * </p>
      *
+     * @return {@link ExecutorObject}
      * @author 皮锋
      * @custom.date 2020年3月7日 下午4:43:35
      */
-    public static void run() {
+    public static ExecutorObject run() {
         // 是否发送服务器信息
-        boolean serverInfoEnable = ConfigLoader.MONITORING_PROPERTIES.getServerInfoProperties().isEnable();
+        boolean serverInfoEnable = ConfigLoader.getMonitoringProperties().getServerInfoProperties().isEnable();
         if (serverInfoEnable) {
             final ScheduledExecutorService seService = new ScheduledThreadPoolExecutor(
                     // 线程数 = Ncpu /（1 - 阻塞系数），IO密集型阻塞系数相对较大
@@ -54,13 +55,14 @@ public class ServerTaskScheduler {
                             .namingPattern("phoenix-server-pool-thread-%d")
                             // 设置为守护线程
                             .daemon(true)
-                            .build());
+                            .build(),
+                    new ThreadPoolExecutor.AbortPolicy());
             // 发送服务器信息的频率
-            long rate = ConfigLoader.MONITORING_PROPERTIES.getServerInfoProperties().getRate();
+            long rate = ConfigLoader.getMonitoringProperties().getServerInfoProperties().getRate();
             seService.scheduleAtFixedRate(new ServerThread(), 40, rate, TimeUnit.SECONDS);
-            // 关闭钩子
-            Runtime.getRuntime().addShutdownHook(new Thread(() -> new ThreadShutdownHook().shutdownGracefully(seService, "phoenix-server-pool-thread")));
+            return ExecutorObject.builder().scheduledExecutorService(seService).name("phoenix-server-pool-thread").build();
         }
+        return null;
     }
 
 }

@@ -2,7 +2,6 @@ package com.gitee.pifeng.monitoring.common.util.server;
 
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.date.TimeInterval;
-import cn.hutool.core.net.NetUtil;
 import com.gitee.pifeng.monitoring.common.domain.server.NetDomain;
 import com.gitee.pifeng.monitoring.common.exception.NetException;
 import com.gitee.pifeng.monitoring.common.util.server.sigar.NetInterfaceUtils;
@@ -21,6 +20,7 @@ import java.nio.charset.Charset;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * <p>
@@ -126,7 +126,7 @@ public class NetUtils {
         // 获取本机IP地址
         String ip = getLocalIp();
         NetDomain netDomain = NetInterfaceUtils.getNetInfo();
-        List<NetDomain.NetInterfaceDomain> netInterfaceDomains = netDomain.getNetList();
+        List<NetDomain.NetInterfaceDomain> netInterfaceDomains = Objects.requireNonNull(netDomain).getNetList();
         for (NetDomain.NetInterfaceDomain netInterfaceDomain : netInterfaceDomains) {
             // 网卡IP地址
             String address = netInterfaceDomain.getAddress();
@@ -157,7 +157,7 @@ public class NetUtils {
         // 获取本机IP地址
         String ip = getLocalIp();
         NetDomain netDomain = com.gitee.pifeng.monitoring.common.util.server.oshi.NetInterfaceUtils.getNetInfo();
-        List<NetDomain.NetInterfaceDomain> netInterfaceDomains = netDomain.getNetList();
+        List<NetDomain.NetInterfaceDomain> netInterfaceDomains = Objects.requireNonNull(netDomain).getNetList();
         for (NetDomain.NetInterfaceDomain netInterfaceDomain : netInterfaceDomains) {
             // 网卡IP地址
             String address = netInterfaceDomain.getAddress();
@@ -253,18 +253,13 @@ public class NetUtils {
      * @param ip ip地址
      * @return 返回Map，key解释：<br>
      * 1.isConnect：是否能ping通；<br>
-     * 2.avgTime：平均时间（毫秒）<br>
+     * 2.avgTime：平均时间（毫秒）；<br>
+     * 3.detail：ping详情<br>
      * @author 皮锋
      * @custom.date 2020/12/15 10:58
      */
     public static Map<String, Object> isConnect(String ip) {
-        // 返回值
-        Map<String, Object> result = ping(ip);
-        String isConnect = "isConnect";
-        String avgTime = "avgTime";
-        result.put(isConnect, NetUtil.ping(ip, 3000) && Boolean.parseBoolean(String.valueOf(result.get(isConnect))));
-        result.put(avgTime, result.get(avgTime));
-        return result;
+        return ping(ip);
     }
 
     /**
@@ -275,7 +270,8 @@ public class NetUtils {
      * @param ip IP地址
      * @return 返回Map，key解释：<br>
      * 1.isConnect：是否能ping通；<br>
-     * 2.avgTime：平均时间（毫秒）<br>
+     * 2.avgTime：平均时间（毫秒）；<br>
+     * 3.detail：ping详情<br>
      * @author 皮锋
      * @custom.date 2020/3/18 22:22
      */
@@ -284,6 +280,8 @@ public class NetUtils {
         boolean isConnect;
         // ping平均时间
         String avgTime;
+        // ping详情
+        String detail;
         ProcessBuilder processBuilder = new ProcessBuilder();
         // Windows系统
         if (OsUtils.isWindowsOs()) {
@@ -291,6 +289,8 @@ public class NetUtils {
         } else {
             processBuilder.command("ping", ip, "-c", "5");
         }
+        // 计时器
+        TimeInterval timer = DateUtil.timer();
         try {
             // 将错误信息输出流合并到标准输出流
             processBuilder.redirectErrorStream(true);
@@ -302,11 +302,15 @@ public class NetUtils {
             String line;
             // 全部返回数据
             StringBuilder lineResultBuilder = new StringBuilder();
+            StringBuilder lineResultBuilder2 = new StringBuilder();
             // ping正常的次数
             int connectedCount = 0;
             while ((line = buf.readLine()) != null) {
                 lineResultBuilder.append(line);
-                log.info(line);
+                lineResultBuilder2.append(line).append("\n");
+                if (log.isDebugEnabled()) {
+                    log.debug(line);
+                }
                 connectedCount += getCheckResult(line);
             }
             // 等待命令子线程执行完成
@@ -315,17 +319,23 @@ public class NetUtils {
             process.destroy();
             // 有收到数据包
             isConnect = connectedCount >= 1;
+            // ping详情
+            detail = StringUtils.trim(StringUtils.removeStart(StringUtils.removeEnd(lineResultBuilder2.toString(), "\n"), "\n"));
             // 获取平均时间
             avgTime = getPingAvgTime(lineResultBuilder.toString());
         } catch (Exception e) {
             isConnect = false;
             avgTime = "未知";
+            detail = null;
         }
+        // 时间差（毫秒）
+        long ms = timer.interval();
         // 封装返回结果
         // 返回值
         Map<String, Object> result = Maps.newHashMap();
         result.put("isConnect", isConnect);
-        result.put("avgTime", StringUtils.equals(avgTime, "未知") ? "3000" : avgTime);
+        result.put("avgTime", StringUtils.equals(avgTime, "未知") ? ms : avgTime);
+        result.put("detail", detail);
         return result;
     }
 
@@ -445,10 +455,14 @@ public class NetUtils {
             // 查看连通状态
             isConnect = telnetClient.isConnected();
         } catch (ConnectException connectException) {
-            log.debug("对端拒绝连接，服务未启动端口监听或防火墙：{}", connectException.getMessage());
+            if (log.isDebugEnabled()) {
+                log.debug("对端拒绝连接，服务未启动端口监听或防火墙：{}", connectException.getMessage());
+            }
             isConnect = false;
         } catch (IOException ioException) {
-            log.debug("对端连接失败：{}", ioException.getMessage());
+            if (log.isDebugEnabled()) {
+                log.debug("对端连接失败：{}", ioException.getMessage());
+            }
             isConnect = false;
         }
         // 时间差（毫秒）

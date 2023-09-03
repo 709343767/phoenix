@@ -21,7 +21,7 @@ import java.nio.charset.StandardCharsets;
 public class InitBanner {
 
     static {
-        InitBanner.printBanner();
+        InitBanner.printBanner("banner-monitoring.txt");
     }
 
     /**
@@ -37,17 +37,18 @@ public class InitBanner {
 
     /**
      * <p>
-     * 加载“banner.txt”文件
+     * 加载“banner-**.txt”文件
      * </p>
      *
-     * @return “banner.txt”文件字符串
+     * @param bannerName banner文件名
+     * @return “banner-**.txt”文件字符串
      * @throws IOException IO异常
      * @author 皮锋
      * @custom.date 2020/9/16 12:43
      */
-    private static String loadBanner() throws IOException {
+    public static String loadBanner(String bannerName) throws IOException {
         @Cleanup
-        InputStream path = Thread.currentThread().getContextClassLoader().getResourceAsStream("banner-monitoring.txt");
+        InputStream path = Thread.currentThread().getContextClassLoader().getResourceAsStream(bannerName);
         assert path != null;
         return IOUtils.toString(path, StandardCharsets.UTF_8);
     }
@@ -57,13 +58,14 @@ public class InitBanner {
      * 打印banner
      * </p>
      *
+     * @param bannerName banner文件名
      * @author 皮锋
      * @custom.date 2020/9/16 12:46
      */
-    public static void printBanner() {
+    public static void printBanner(String bannerName) {
         try {
             // 加载
-            String banner = loadBanner();
+            String banner = loadBanner(bannerName);
             // 打印banner
             Console.log(banner);
         } catch (IOException e) {

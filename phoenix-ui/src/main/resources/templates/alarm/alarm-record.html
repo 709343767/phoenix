@@ -10,6 +10,7 @@
           content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <link rel="stylesheet" href="./layui/css/layui.css" th:href="@{/layui/css/layui.css}" media="all">
     <link rel="stylesheet" href="./style/admin.css" th:href="@{/style/admin.css}" media="all">
+    <link rel="stylesheet" href="./style/myself.css" th:href="@{/style/myself.css}" media="all">
     <style type="text/css">
         /* 让layui的table表格在同一单元格换行显示 */
         .layui-table-cell {
@@ -124,7 +125,7 @@
                     <button class="layui-btn layui-btn-sm layui-btn-danger" lay-event="batchdel">
                         <i class="layui-icon layui-icon-delete"></i>删除
                     </button>
-                    <button class="layui-btn layui-btn-sm layui-btn-danger" lay-event="cleanup">
+                    <button class="layui-btn layui-btn-sm layui-btn-clear" lay-event="cleanup">
                         <i class="layui-icon layui-icon-delete"></i>清空
                     </button>
                 </div>
@@ -234,7 +235,10 @@
                     }
                 });
                 $('[data-field="way"]').children().each(function () {
-                    $(this).html($(this).text().replace(new RegExp('MAIL', 'g'), '邮件').replace(new RegExp('SMS', 'g'), '短信').replace(new RegExp(';', 'g'), '<br>'));
+                    $(this).html($(this).text()
+                        .replace(new RegExp('MAIL', 'g'), '邮件')
+                        .replace(new RegExp('SMS', 'g'), '短信')
+                        .replace(new RegExp(';', 'g'), '<br>'));
                 });
                 $('[data-field="number"]').children().each(function () {
                     $(this).html($(this).text().replace(new RegExp(';', 'g'), '<br>'));
@@ -325,7 +329,12 @@
             var status = field.status;
             var content = field.content;
             var title = field.title;
-            window.location.href = ctxPath + 'monitor-alarm-record/export-monitor-alarm-record-list?&content=' + content + '&level=' + level + '&status=' + status + '&title=' + title + '&type=' + type;
+            var number = field.number;
+            var insertDate = field.insertDate;
+            var updateDate = field.updateDate;
+            window.location.href = ctxPath + 'monitor-alarm-record/export-monitor-alarm-record-list?' +
+                'content=' + content + '&level=' + level + '&status=' + status + '&title=' + title +
+                '&type=' + type + '&number=' + number + '&insertDate=' + insertDate + '&updateDate=' + updateDate;
         });
         // 点击表头排序
         table.on('sort(alarm-record-list-table)', function (obj) {

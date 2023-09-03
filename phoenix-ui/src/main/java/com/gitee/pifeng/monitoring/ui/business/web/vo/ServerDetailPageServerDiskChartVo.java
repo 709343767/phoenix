@@ -1,8 +1,7 @@
 package com.gitee.pifeng.monitoring.ui.business.web.vo;
 
 import com.gitee.pifeng.monitoring.common.inf.ISuperBean;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import lombok.experimental.Accessors;
 
@@ -22,31 +21,31 @@ import lombok.experimental.Accessors;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel(value = "服务器详情页面服务器磁盘图表信息表现层对象")
+@Schema(description = "服务器详情页面服务器磁盘图表信息表现层对象")
 public class ServerDetailPageServerDiskChartVo implements ISuperBean {
 
-    @ApiModelProperty(value = "分区的盘符名称")
+    @Schema(description = "分区的盘符名称")
     private String devName;
 
-    @ApiModelProperty(value = "分区的盘符路径")
+    @Schema(description = "分区的盘符路径")
     private String dirName;
 
-    @ApiModelProperty(value = "磁盘类型，比如 FAT32、NTFS")
+    @Schema(description = "磁盘类型，比如 FAT32、NTFS")
     private String sysTypeName;
 
-    @ApiModelProperty(value = "磁盘总大小")
+    @Schema(description = "磁盘总大小")
     private String totalStr;
 
-    @ApiModelProperty(value = "磁盘剩余大小")
+    @Schema(description = "磁盘剩余大小")
     private String freeStr;
 
-    @ApiModelProperty(value = "磁盘已用大小")
+    @Schema(description = "磁盘已用大小")
     private String usedStr;
 
-    @ApiModelProperty(value = "磁盘可用大小")
+    @Schema(description = "磁盘可用大小")
     private String availStr;
 
-    @ApiModelProperty(value = "磁盘资源的利用率")
+    @Schema(description = "磁盘资源的利用率")
     private Double usePercent;
 
 }

@@ -12,17 +12,15 @@ import com.gitee.pifeng.monitoring.common.exception.NotFoundConfigFileException;
 import com.gitee.pifeng.monitoring.common.exception.NotFoundConfigParamException;
 import com.gitee.pifeng.monitoring.common.init.InitBanner;
 import com.gitee.pifeng.monitoring.common.property.client.MonitoringProperties;
+import com.gitee.pifeng.monitoring.common.threadpool.ExecutorObject;
 import com.gitee.pifeng.monitoring.plug.constant.UrlConstants;
-import com.gitee.pifeng.monitoring.plug.core.ConfigLoader;
-import com.gitee.pifeng.monitoring.plug.core.PackageConstructor;
-import com.gitee.pifeng.monitoring.plug.core.Sender;
+import com.gitee.pifeng.monitoring.plug.core.*;
 import com.gitee.pifeng.monitoring.plug.scheduler.BusinessBuryingPointScheduler;
 import com.gitee.pifeng.monitoring.plug.scheduler.HeartbeatTaskScheduler;
 import com.gitee.pifeng.monitoring.plug.scheduler.JvmTaskScheduler;
 import com.gitee.pifeng.monitoring.plug.scheduler.ServerTaskScheduler;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.hyperic.sigar.SigarException;
 
 import java.io.IOException;
 import java.util.concurrent.ScheduledExecutorService;
@@ -38,6 +36,11 @@ import java.util.concurrent.TimeUnit;
  */
 @Slf4j
 public class Monitor {
+
+    /**
+     * 客户端包构造器
+     */
+    private static final ClientPackageConstructor CLIENT_PACKAGE_CONSTRUCTOR = ClientPackageConstructor.getInstance();
 
     /**
      * <p>
@@ -101,11 +104,13 @@ public class Monitor {
         // 2.加载配置信息
         MonitoringProperties monitoringProperties = ConfigLoader.load(configPath, configName);
         // 3.开始定时发送心跳包
-        HeartbeatTaskScheduler.run();
+        ExecutorObject heartbeatExecutorObject = HeartbeatTaskScheduler.run();
         // 4.开始定时发送服务器信息包
-        ServerTaskScheduler.run();
+        ExecutorObject serverExecutorObject = ServerTaskScheduler.run();
         // 5.开始定时发送Java虚拟机信息包
-        JvmTaskScheduler.run();
+        ExecutorObject jvmExecutorObject = JvmTaskScheduler.run();
+        // 最后：添加关闭钩子，在jvm退出前做一些操作
+        ShutdownHook.addShutdownHook(heartbeatExecutorObject, serverExecutorObject, jvmExecutorObject);
         // 返回监控属性
         return monitoringProperties;
     }
@@ -123,11 +128,11 @@ public class Monitor {
     public static Result sendAlarm(Alarm alarm) {
         try {
             // 构造告警数据包
-            AlarmPackage alarmPackage = new PackageConstructor().structureAlarmPackage(alarm);
+            AlarmPackage alarmPackage = CLIENT_PACKAGE_CONSTRUCTOR.structureAlarmPackage(alarm);
             String result = Sender.send(UrlConstants.ALARM_URL, alarmPackage.toJsonString());
             BaseResponsePackage baseResponsePackage = JSON.parseObject(result, BaseResponsePackage.class);
             return baseResponsePackage.getResult();
-        } catch (IOException | NetException | SigarException e) {
+        } catch (IOException | NetException e) {
             log.error("监控程序发送告警信息异常！", e);
             return Result.builder().isSuccess(false).msg(e.getMessage()).build();
         }

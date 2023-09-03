@@ -3,8 +3,7 @@ package com.gitee.pifeng.monitoring.ui.business.web.vo;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.gitee.pifeng.monitoring.common.inf.ISuperBean;
 import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorServerOs;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import lombok.experimental.Accessors;
 import org.springframework.beans.BeanUtils;
@@ -27,42 +26,42 @@ import java.util.Date;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel(value = "服务器操作系统信息表现层对象")
+@Schema(description = "服务器操作系统信息表现层对象")
 public class MonitorServerOsVo implements ISuperBean {
 
-    @ApiModelProperty(value = "主键ID")
+    @Schema(description = "主键ID")
     private Long id;
 
-    @ApiModelProperty(value = "IP地址")
+    @Schema(description = "IP地址")
     private String ip;
 
-    @ApiModelProperty(value = "服务器名")
+    @Schema(description = "服务器名")
     private String serverName;
 
-    @ApiModelProperty(value = "操作系统名称")
+    @Schema(description = "操作系统名称")
     private String osName;
 
-    @ApiModelProperty(value = "操作系统架构")
+    @Schema(description = "操作系统架构")
     private String osArch;
 
-    @ApiModelProperty(value = "操作系统版本")
+    @Schema(description = "操作系统版本")
     private String osVersion;
 
-    @ApiModelProperty(value = "用户名称")
+    @Schema(description = "用户名称")
     private String userName;
 
-    @ApiModelProperty(value = "用户主目录")
+    @Schema(description = "用户主目录")
     private String userHome;
 
-    @ApiModelProperty(value = "操作系统时区")
+    @Schema(description = "操作系统时区")
     private String osTimeZone;
 
     @JsonFormat(pattern = "yyyy/MM/dd HH:mm:ss", timezone = "GMT+8")
-    @ApiModelProperty(value = "新增时间")
+    @Schema(description = "新增时间")
     private Date insertTime;
 
     @JsonFormat(pattern = "yyyy/MM/dd HH:mm:ss", timezone = "GMT+8")
-    @ApiModelProperty(value = "更新时间")
+    @Schema(description = "更新时间")
     private Date updateTime;
 
     /**

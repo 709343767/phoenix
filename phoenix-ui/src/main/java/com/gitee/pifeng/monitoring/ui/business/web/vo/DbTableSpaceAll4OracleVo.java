@@ -1,8 +1,7 @@
 package com.gitee.pifeng.monitoring.ui.business.web.vo;
 
 import com.gitee.pifeng.monitoring.common.inf.ISuperBean;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import lombok.experimental.Accessors;
 
@@ -22,25 +21,25 @@ import lombok.experimental.Accessors;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel(value = "Oracle数据库表空间表现层对象")
+@Schema(description = "Oracle数据库表空间表现层对象")
 public class DbTableSpaceAll4OracleVo implements ISuperBean {
 
-    @ApiModelProperty(value = "表空间")
+    @Schema(description = "表空间")
     private String tablespaceName;
 
-    @ApiModelProperty(value = "总空间")
+    @Schema(description = "总空间")
     private String total;
 
-    @ApiModelProperty(value = "使用空间")
+    @Schema(description = "使用空间")
     private String used;
 
-    @ApiModelProperty(value = "剩余空间")
+    @Schema(description = "剩余空间")
     private String free;
 
-    @ApiModelProperty(value = "表空间使用率")
+    @Schema(description = "表空间使用率")
     private Double usedRate;
 
-    @ApiModelProperty(value = "表空间剩余率")
+    @Schema(description = "表空间剩余率")
     private Double freeRate;
 
 }

@@ -1,8 +1,7 @@
 package com.gitee.pifeng.monitoring.ui.business.web.vo;
 
 import com.gitee.pifeng.monitoring.common.inf.ISuperBean;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import lombok.experimental.Accessors;
 
@@ -22,31 +21,31 @@ import lombok.experimental.Accessors;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel(value = "MySQL数据库会话表现层对象")
+@Schema(description = "MySQL数据库会话表现层对象")
 public class DbSession4MysqlVo implements ISuperBean {
 
-    @ApiModelProperty(value = "进程ID")
+    @Schema(description = "进程ID")
     private Long id;
 
-    @ApiModelProperty(value = "用户")
+    @Schema(description = "用户")
     private String user;
 
-    @ApiModelProperty(value = "主机")
+    @Schema(description = "主机")
     private String host;
 
-    @ApiModelProperty(value = "数据库")
+    @Schema(description = "数据库")
     private String db;
 
-    @ApiModelProperty(value = "命令")
+    @Schema(description = "命令")
     private String command;
 
-    @ApiModelProperty(value = "时间")
+    @Schema(description = "时间")
     private String time;
 
-    @ApiModelProperty(value = "状态")
+    @Schema(description = "状态")
     private String state;
 
-    @ApiModelProperty(value = "活动查询")
+    @Schema(description = "活动查询")
     private String info;
 
 }

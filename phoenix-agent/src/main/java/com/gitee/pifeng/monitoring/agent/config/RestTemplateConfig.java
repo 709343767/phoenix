@@ -30,7 +30,6 @@ import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -87,7 +86,7 @@ public class RestTemplateConfig {
      * @author 皮锋
      * @custom.date 2021/12/6 16:43
      */
-    @Bean
+    @Bean(destroyMethod = "close")
     public CloseableHttpClient httpClient() {
         // 注册访问协议相关的Socket工厂
         Registry<ConnectionSocketFactory> socketFactoryRegistry = RegistryBuilder.<ConnectionSocketFactory>create()
@@ -148,18 +147,7 @@ public class RestTemplateConfig {
                 // 设置重试次数，默认是3次
                 .setRetryHandler(new DefaultHttpRequestRetryHandler(3, true))
                 .build();
-        // JVM 停止或重启时，关闭连接池释放掉连接(跟数据库连接池类似)
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            try {
-                if (httpClient != null) {
-                    httpClient.close();
-                    log.info("HTTP连接池关闭成功！");
-                }
-            } catch (IOException e) {
-                log.error("HTTP连接池关闭时发生错误：", e);
-            }
-        }));
-        log.info("HTTP连接池初始化成功！");
+        log.info("代理端HTTP连接池初始化成功！");
         return httpClient;
     }
 

@@ -3,8 +3,7 @@ package com.gitee.pifeng.monitoring.ui.business.web.vo;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.gitee.pifeng.monitoring.common.inf.ISuperBean;
 import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorServer;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import lombok.experimental.Accessors;
 import org.springframework.beans.BeanUtils;
@@ -27,63 +26,63 @@ import java.util.Date;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel(value = "服务器信息表现层对象")
+@Schema(description = "服务器信息表现层对象")
 public class MonitorServerVo implements ISuperBean {
 
-    @ApiModelProperty(value = "主键ID")
+    @Schema(description = "主键ID")
     private Long id;
 
-    @ApiModelProperty(value = "IP地址")
+    @Schema(description = "IP地址")
     private String ip;
 
-    @ApiModelProperty(value = "服务器名")
+    @Schema(description = "服务器名")
     private String serverName;
 
-    @ApiModelProperty(value = "服务器摘要")
+    @Schema(description = "服务器摘要")
     private String serverSummary;
 
-    @ApiModelProperty(value = "服务器状态（0：离线，1：在线）")
+    @Schema(description = "服务器状态（0：离线，1：在线）")
     private String isOnline;
 
-    @ApiModelProperty(value = "离线次数")
+    @Schema(description = "离线次数")
     private Integer offlineCount;
 
-    @ApiModelProperty(value = "连接频率")
+    @Schema(description = "连接频率")
     private Integer connFrequency;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    @ApiModelProperty(value = "新增时间")
+    @Schema(description = "新增时间")
     private Date insertTime;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    @ApiModelProperty(value = "更新时间")
+    @Schema(description = "更新时间")
     private Date updateTime;
 
-    @ApiModelProperty(value = "最后心跳时间")
+    @Schema(description = "最后心跳时间")
     private String finalHeartbeat;
 
-    @ApiModelProperty(value = "操作系统名称")
+    @Schema(description = "操作系统名称")
     private String osName;
 
-    @ApiModelProperty(value = "CPU使用率")
+    @Schema(description = "CPU使用率")
     private Double cpuUserPercent;
 
-    @ApiModelProperty(value = "内存使用率")
+    @Schema(description = "内存使用率")
     private Double menUsedPercent;
 
-    @ApiModelProperty(value = "服务器负载")
+    @Schema(description = "服务器负载")
     private Double loadAverage;
 
-    @ApiModelProperty(value = "下行带宽")
+    @Schema(description = "下行带宽")
     private String downloadBps;
 
-    @ApiModelProperty(value = "上行带宽")
+    @Schema(description = "上行带宽")
     private String uploadBps;
 
-    @ApiModelProperty(value = "监控环境")
+    @Schema(description = "监控环境")
     private String monitorEnv;
 
-    @ApiModelProperty(value = "监控分组")
+    @Schema(description = "监控分组")
     private String monitorGroup;
 
     /**

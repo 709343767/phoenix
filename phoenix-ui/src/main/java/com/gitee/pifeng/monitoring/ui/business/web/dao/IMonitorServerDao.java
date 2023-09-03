@@ -6,6 +6,7 @@ import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorServer;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.MonitorServerVo;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -41,4 +42,16 @@ public interface IMonitorServerDao extends BaseMapper<MonitorServer> {
      * @custom.date 2021/10/13 14:48
      */
     IPage<MonitorServerVo> getMonitorServerList(IPage<MonitorServer> ipage, @Param("criteria") Map<String, Object> criteria);
+
+    /**
+     * <p>
+     * 获取服务器列表
+     * </p>
+     *
+     * @return 服务器信息表现层对象
+     * @author 皮锋
+     * @custom.date 2022/12/21 15:39
+     */
+    List<MonitorServerVo> getMonitorServers();
+
 }

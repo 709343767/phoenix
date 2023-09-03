@@ -31,12 +31,12 @@ public final class OperateTypeConstants {
     public static final String UPDATE = "更新";
 
     /**
-     * 新增
+     * 删除
      */
     public static final String DELETE = "删除";
 
     /**
-     * 新增
+     * 查询
      */
     public static final String QUERY = "查询";
 

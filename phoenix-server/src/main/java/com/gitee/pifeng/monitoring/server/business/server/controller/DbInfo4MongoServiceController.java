@@ -7,10 +7,14 @@ import com.alibaba.fastjson.JSONObject;
 import com.gitee.pifeng.monitoring.common.domain.Result;
 import com.gitee.pifeng.monitoring.common.dto.BaseRequestPackage;
 import com.gitee.pifeng.monitoring.common.dto.BaseResponsePackage;
-import com.gitee.pifeng.monitoring.server.business.server.core.PackageConstructor;
+import com.gitee.pifeng.monitoring.common.dto.CiphertextPackage;
+import com.gitee.pifeng.monitoring.server.business.server.core.ServerPackageConstructor;
 import com.gitee.pifeng.monitoring.server.business.server.service.IDbInfo4MongoService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,9 +34,15 @@ import java.util.List;
  */
 @Slf4j
 @RestController
-@Api(tags = "数据库信息.Mongo")
+@Tag(name = "数据库信息.Mongo")
 @RequestMapping("/db-info4mongo")
 public class DbInfo4MongoServiceController {
+
+    /**
+     * 服务端包构造器
+     */
+    @Autowired
+    private ServerPackageConstructor serverPackageConstructor;
 
     /**
      * Mongo数据库信息服务类
@@ -50,7 +60,9 @@ public class DbInfo4MongoServiceController {
      * @author 皮锋
      * @custom.date 2022/1/20 14:28
      */
-    @ApiOperation(value = "获取Mongo信息列表")
+    @Operation(summary = "获取Mongo信息列表",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(content = @Content(schema = @Schema(implementation = CiphertextPackage.class))),
+            responses = @ApiResponse(content = {@Content(schema = @Schema(implementation = CiphertextPackage.class))}))
     @PostMapping("/get-mongo-info-list")
     public BaseResponsePackage getMongoInfoList(@RequestBody BaseRequestPackage baseRequestPackage) {
         // 计时器
@@ -59,7 +71,7 @@ public class DbInfo4MongoServiceController {
         String url = extraMsg.getString("url");
         List<JSONObject> entities = this.dbInfo4MongoService.getMongoInfoList(url);
         String jsonString = JSON.toJSONString(entities);
-        BaseResponsePackage baseResponsePackage = new PackageConstructor().structureBaseResponsePackage(Result.builder().isSuccess(true).msg(jsonString).build());
+        BaseResponsePackage baseResponsePackage = this.serverPackageConstructor.structureBaseResponsePackage(Result.builder().isSuccess(true).msg(jsonString).build());
         // 时间差（毫秒）
         String betweenDay = timer.intervalPretty();
         if (timer.intervalSecond() > 1) {

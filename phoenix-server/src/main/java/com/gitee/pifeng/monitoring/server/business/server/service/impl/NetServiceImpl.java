@@ -56,6 +56,8 @@ public class NetServiceImpl extends ServiceImpl<IMonitorNetDao, MonitorNet> impl
         boolean isConnected = Boolean.parseBoolean(String.valueOf(objectMap.get("isConnect")));
         // 平均响应时间
         Double avgTime = Double.valueOf(String.valueOf(objectMap.get("avgTime")));
+        // ping详情
+        String detail = String.valueOf(objectMap.get("detail"));
         // 获取网络信息
         LambdaQueryWrapper<MonitorNet> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         lambdaQueryWrapper.eq(MonitorNet::getIpSource, NetUtils.getLocalIp());
@@ -65,6 +67,7 @@ public class NetServiceImpl extends ServiceImpl<IMonitorNetDao, MonitorNet> impl
         if (monitorNet != null) {
             monitorNet.setStatus(isConnected ? ZeroOrOneConstants.ONE : ZeroOrOneConstants.ZERO);
             monitorNet.setAvgTime(avgTime);
+            monitorNet.setPingDetail(detail);
             monitorNet.setUpdateTime(new Date());
             // 更新数据库
             this.updateById(monitorNet);

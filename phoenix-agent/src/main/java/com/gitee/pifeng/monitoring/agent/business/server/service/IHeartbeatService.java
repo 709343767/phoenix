@@ -1,9 +1,9 @@
 package com.gitee.pifeng.monitoring.agent.business.server.service;
 
-import com.gitee.pifeng.monitoring.agent.annotation.TargetInf;
-import com.gitee.pifeng.monitoring.agent.annotation.TargetMethod;
 import com.gitee.pifeng.monitoring.common.dto.BaseResponsePackage;
 import com.gitee.pifeng.monitoring.common.dto.HeartbeatPackage;
+import com.gitee.pifeng.monitoring.common.web.annotation.TargetInf;
+import com.gitee.pifeng.monitoring.common.web.annotation.TargetMethod;
 
 /**
  * <p>
@@ -13,7 +13,7 @@ import com.gitee.pifeng.monitoring.common.dto.HeartbeatPackage;
  * @author 皮锋
  * @custom.date 2020年3月4日 下午2:12:45
  */
-@TargetInf(inf = IHeartbeatService.class)
+@TargetInf
 public interface IHeartbeatService {
 
     /**
@@ -27,7 +27,7 @@ public interface IHeartbeatService {
      * @author 皮锋
      * @custom.date 2020年3月4日 下午2:16:07
      */
-    @TargetMethod(method = "sendHeartbeatPackage")
+    @TargetMethod
     BaseResponsePackage sendHeartbeatPackage(HeartbeatPackage heartbeatPackage) throws Exception;
 
 }

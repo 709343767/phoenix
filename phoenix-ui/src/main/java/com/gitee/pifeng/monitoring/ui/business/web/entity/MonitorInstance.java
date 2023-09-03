@@ -1,8 +1,7 @@
 package com.gitee.pifeng.monitoring.ui.business.web.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -24,72 +23,76 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 @TableName("MONITOR_INSTANCE")
-@ApiModel(value = "MonitorInstance对象", description = "应用实例表")
+@Schema(description = "MonitorInstance对象")
 public class MonitorInstance implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "主键ID")
+    @Schema(description = "主键ID")
     @TableId(value = "ID", type = IdType.AUTO)
     private Long id;
 
-    @ApiModelProperty(value = "应用实例ID")
+    @Schema(description = "应用实例ID")
     @TableField("INSTANCE_ID")
     private String instanceId;
 
-    @ApiModelProperty(value = "端点（客户端<client>、代理端<agent>、服务端<server>、UI端<ui>）")
+    @Schema(description = "端点（客户端<client>、代理端<agent>、服务端<server>、UI端<ui>）")
     @TableField("ENDPOINT")
     private String endpoint;
 
-    @ApiModelProperty(value = "应用实例名")
+    @Schema(description = "应用实例名")
     @TableField("INSTANCE_NAME")
     private String instanceName;
 
-    @ApiModelProperty(value = "应用实例描述")
+    @Schema(description = "应用实例描述")
     @TableField("INSTANCE_DESC")
     private String instanceDesc;
 
-    @ApiModelProperty(value = "应用实例摘要")
+    @Schema(description = "应用实例摘要")
     @TableField("INSTANCE_SUMMARY")
     private String instanceSummary;
 
-    @ApiModelProperty(value = "IP地址")
+    @Schema(description = "IP地址")
     @TableField("IP")
     private String ip;
 
-    @ApiModelProperty(value = "新增时间")
+    @Schema(description = "新增时间")
     @TableField("INSERT_TIME")
     private Date insertTime;
 
-    @ApiModelProperty(value = "更新时间")
+    @Schema(description = "更新时间")
     @TableField("UPDATE_TIME")
     private Date updateTime;
 
-    @ApiModelProperty(value = "应用状态（0：离线，1：在线）")
+    @Schema(description = "应用状态（0：离线，1：在线）")
     @TableField("IS_ONLINE")
     private String isOnline;
 
-    @ApiModelProperty(value = "离线次数")
+    @Schema(description = "是否收到离线通知（0：否，1：是）")
+    @TableField("IS_OFFLINE_NOTICE")
+    private String isOfflineNotice;
+
+    @Schema(description = "离线次数")
     @TableField("OFFLINE_COUNT")
     private Integer offlineCount;
 
-    @ApiModelProperty(value = "连接频率")
+    @Schema(description = "连接频率")
     @TableField("CONN_FREQUENCY")
     private Integer connFrequency;
 
-    @ApiModelProperty(value = "程序语言")
+    @Schema(description = "程序语言")
     @TableField("LANGUAGE")
     private String language;
 
-    @ApiModelProperty(value = "应用服务器类型")
+    @Schema(description = "应用服务器类型")
     @TableField("APP_SERVER_TYPE")
     private String appServerType;
 
-    @ApiModelProperty(value = "监控环境")
+    @Schema(description = "监控环境")
     @TableField(value = "MONITOR_ENV", updateStrategy = FieldStrategy.IGNORED)
     private String monitorEnv;
 
-    @ApiModelProperty(value = "监控分组")
+    @Schema(description = "监控分组")
     @TableField(value = "MONITOR_GROUP", updateStrategy = FieldStrategy.IGNORED)
     private String monitorGroup;
 

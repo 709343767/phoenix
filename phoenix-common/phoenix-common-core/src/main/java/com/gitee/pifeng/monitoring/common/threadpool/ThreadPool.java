@@ -58,11 +58,6 @@ public class ThreadPool {
     private ThreadPool() {
     }
 
-    // 执行关闭钩子，优雅关闭线程池
-    static {
-        new ThreadShutdownHook().executeShutdownHook();
-    }
-
     /**
      * 创建一个CPU密集型的线程池。
      * corePoolSize：指定了线程池中的线程数量，它的数量决定了添加的任务是开辟新的线程去执行，还是放到workQueue任务队列中去。<br>
@@ -73,11 +68,10 @@ public class ThreadPool {
      * handler：拒绝策略。一般用来做日志记录等。<br>
      */
     public static final ThreadPoolExecutor COMMON_CPU_INTENSIVE_THREAD_POOL = new ThreadPoolExecutor(
+            1,
             // 线程数 = Ncpu /（1 - 阻塞系数），CPU密集型阻塞系数相对较小
             (int) (ProcessorsUtils.getAvailableProcessors() / (1 - 0.2)),
-            // 线程数 = Ncpu /（1 - 阻塞系数），CPU密集型阻塞系数相对较小
-            (int) (ProcessorsUtils.getAvailableProcessors() / (1 - 0.2)),
-            1L,
+            60L,
             TimeUnit.SECONDS,
             // 2^16
             new LinkedBlockingQueue<>(65536),
@@ -99,11 +93,10 @@ public class ThreadPool {
      * handler：拒绝策略。一般用来做日志记录等。<br>
      */
     public static final ThreadPoolExecutor COMMON_IO_INTENSIVE_THREAD_POOL = new ThreadPoolExecutor(
+            1,
             // 线程数 = Ncpu /（1 - 阻塞系数），IO密集型阻塞系数相对较大
             (int) (ProcessorsUtils.getAvailableProcessors() / (1 - 0.8)),
-            // 线程数 = Ncpu /（1 - 阻塞系数），IO密集型阻塞系数相对较大
-            (int) (ProcessorsUtils.getAvailableProcessors() / (1 - 0.8)),
-            1L,
+            60L,
             TimeUnit.SECONDS,
             // 2^16
             new LinkedBlockingQueue<>(65536),
@@ -126,7 +119,8 @@ public class ThreadPool {
                     .namingPattern("phoenix-common-cpu-intensive-scheduled-%d")
                     // 设置为守护线程
                     .daemon(true)
-                    .build());
+                    .build(),
+            new ThreadPoolExecutor.AbortPolicy());
 
     /**
      * 延迟/周期执行线程池（IO密集型）
@@ -139,7 +133,8 @@ public class ThreadPool {
                     .namingPattern("phoenix-common-io-intensive-scheduled-%d")
                     // 设置为守护线程
                     .daemon(true)
-                    .build());
+                    .build(),
+            new ThreadPoolExecutor.AbortPolicy());
 
 }
 

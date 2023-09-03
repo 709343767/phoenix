@@ -14,10 +14,11 @@ import com.gitee.pifeng.monitoring.ui.business.web.vo.LayUiAdminResultVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.MonitorTcpVo;
 import com.gitee.pifeng.monitoring.ui.constant.OperateTypeConstants;
 import com.gitee.pifeng.monitoring.ui.constant.UiModuleConstants;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.hyperic.sigar.SigarException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +41,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Controller
 @RequestMapping("/monitor-tcp")
-@Api(tags = "TCP")
+@Tag(name = "TCP")
 public class MonitorTcpController {
 
     /**
@@ -76,7 +77,7 @@ public class MonitorTcpController {
      * @author 皮锋
      * @custom.date 2022/1/11 9:27
      */
-    @ApiOperation(value = "访问TCP列表页面")
+    @Operation(summary = "访问TCP列表页面")
     @GetMapping("/list")
     public ModelAndView list() {
         ModelAndView mv = new ModelAndView("tcp/tcp");
@@ -108,21 +109,27 @@ public class MonitorTcpController {
      * @author 皮锋
      * @custom.date 2022/1/11 9:31
      */
-    @ApiOperation(value = "获取TCP列表")
-    @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "current", value = "当前页", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class),
-            @ApiImplicitParam(name = "size", value = "每页显示条数", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class),
-            @ApiImplicitParam(name = "hostnameSource", value = "主机名（来源）", paramType = "query", dataType = "string", dataTypeClass = String.class),
-            @ApiImplicitParam(name = "hostnameTarget", value = "主机名（目的地）", paramType = "query", dataType = "string", dataTypeClass = String.class),
-            @ApiImplicitParam(name = "portTarget", value = "目标端口", paramType = "query", dataType = "int", dataTypeClass = Integer.class),
-            @ApiImplicitParam(name = "status", value = "状态（0：不通，1：正常）", paramType = "query", dataType = "string", dataTypeClass = String.class),
-            @ApiImplicitParam(name = "monitorEnv", value = "监控环境", paramType = "query", dataType = "string", dataTypeClass = String.class),
-            @ApiImplicitParam(name = "monitorGroup", value = "监控分组", paramType = "query", dataType = "string", dataTypeClass = String.class)})
+    @Operation(summary = "获取TCP列表")
+    @Parameters(value = {
+            @Parameter(name = "current", description = "当前页", required = true, in = ParameterIn.QUERY),
+            @Parameter(name = "size", description = "每页显示条数", required = true, in = ParameterIn.QUERY),
+            @Parameter(name = "hostnameSource", description = "主机名（来源）", in = ParameterIn.QUERY),
+            @Parameter(name = "hostnameTarget", description = "主机名（目的地）", in = ParameterIn.QUERY),
+            @Parameter(name = "portTarget", description = "目标端口", in = ParameterIn.QUERY),
+            @Parameter(name = "status", description = "状态（0：不通，1：正常）", in = ParameterIn.QUERY),
+            @Parameter(name = "monitorEnv", description = "监控环境", in = ParameterIn.QUERY),
+            @Parameter(name = "monitorGroup", description = "监控分组", in = ParameterIn.QUERY)})
     @GetMapping("/get-monitor-tcp-list")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.TCP4SERVICE, operType = OperateTypeConstants.QUERY, operDesc = "获取TCP列表")
-    public LayUiAdminResultVo getMonitorTcpList(Long current, Long size, String hostnameSource, String hostnameTarget,
-                                                Integer portTarget, String status, String monitorEnv, String monitorGroup) {
+    public LayUiAdminResultVo getMonitorTcpList(@RequestParam(value = "current") Long current,
+                                                @RequestParam(value = "size") Long size,
+                                                @RequestParam(value = "hostnameSource", required = false) String hostnameSource,
+                                                @RequestParam(value = "hostnameTarget", required = false) String hostnameTarget,
+                                                @RequestParam(value = "portTarget", required = false) Integer portTarget,
+                                                @RequestParam(value = "status", required = false) String status,
+                                                @RequestParam(value = "monitorEnv", required = false) String monitorEnv,
+                                                @RequestParam(value = "monitorGroup", required = false) String monitorGroup) {
         Page<MonitorTcpVo> page = this.monitorTcpService.getMonitorTcpList(current, size, hostnameSource, hostnameTarget,
                 portTarget, status, monitorEnv, monitorGroup);
         return LayUiAdminResultVo.ok(page);
@@ -138,7 +145,7 @@ public class MonitorTcpController {
      * @author 皮锋
      * @custom.date 2022/1/11 9:44
      */
-    @ApiOperation(value = "删除TCP")
+    @Operation(summary = "删除TCP")
     @DeleteMapping("/delete-monitor-tcp")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.TCP4SERVICE, operType = OperateTypeConstants.DELETE, operDesc = "删除TCP")
@@ -155,7 +162,7 @@ public class MonitorTcpController {
      * @author 皮锋
      * @custom.date 2022/1/11 10:52
      */
-    @ApiOperation(value = "访问新增TCP信息表单页面")
+    @Operation(summary = "访问新增TCP信息表单页面")
     @GetMapping("/add-monitor-tcp-form")
     public ModelAndView addMonitorTcpForm() {
         ModelAndView mv = new ModelAndView("tcp/add-tcp");
@@ -181,7 +188,7 @@ public class MonitorTcpController {
      * @author 皮锋
      * @custom.date 2022/1/11 10:16
      */
-    @ApiOperation(value = "添加TCP信息")
+    @Operation(summary = "添加TCP信息")
     @PostMapping("/add-monitor-tcp")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.TCP4SERVICE, operType = OperateTypeConstants.ADD, operDesc = "添加TCP信息")
@@ -205,9 +212,9 @@ public class MonitorTcpController {
      * @author 皮锋
      * @custom.date 2022/1/11 11:20
      */
-    @ApiOperation(value = "访问编辑TCP信息表单页面")
-    @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "id", value = "TCP ID", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class)})
+    @Operation(summary = "访问编辑TCP信息表单页面")
+    @Parameters(value = {
+            @Parameter(name = "id", description = "TCP ID", required = true, in = ParameterIn.QUERY)})
     @GetMapping("/edit-monitor-tcp-form")
     public ModelAndView editMonitorTcpForm(@RequestParam(name = "id") Long id) {
         MonitorTcp monitorTcp = this.monitorTcpService.getById(id);
@@ -238,7 +245,7 @@ public class MonitorTcpController {
      * @author 皮锋
      * @custom.date 2022/1/11 12:26
      */
-    @ApiOperation(value = "编辑TCP信息")
+    @Operation(summary = "编辑TCP信息")
     @PutMapping("/edit-monitor-tcp")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.TCP4SERVICE, operType = OperateTypeConstants.UPDATE, operDesc = "编辑TCP信息")
@@ -262,9 +269,9 @@ public class MonitorTcpController {
      * @author 皮锋
      * @custom.date 2022/3/17 11:13
      */
-    @ApiOperation(value = "访问平均时间页面")
-    @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "id", value = "TCP ID", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class)})
+    @Operation(summary = "访问平均时间页面")
+    @Parameters(value = {
+            @Parameter(name = "id", description = "TCP ID", required = true, in = ParameterIn.QUERY)})
     @GetMapping("/avg-time")
     public ModelAndView avgTime(Long id) {
         MonitorTcp monitorTcp = this.monitorTcpService.getById(id);
@@ -284,9 +291,9 @@ public class MonitorTcpController {
      * @author 皮锋
      * @custom.date 2021/7/20 20:56
      */
-    @ApiOperation(value = "访问清理TCP服务监控历史数据表单页面")
-    @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "id", value = "主键ID", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class)})
+    @Operation(summary = "访问清理TCP服务监控历史数据表单页面")
+    @Parameters(value = {
+            @Parameter(name = "id", description = "主键ID", required = true, in = ParameterIn.QUERY)})
     @GetMapping("/tcp-clear")
     public ModelAndView tcpClear(Long id) {
         ModelAndView mv = new ModelAndView("tcp/tcp-clear-form");
@@ -306,7 +313,7 @@ public class MonitorTcpController {
      * @author 皮锋
      * @custom.date 2022/10/9 10:16
      */
-    @ApiOperation(value = "测试TCP连通性")
+    @Operation(summary = "测试TCP连通性")
     @PostMapping("/test-monitor-tcp")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.TCP4SERVICE, operType = OperateTypeConstants.TEST, operDesc = "测试TCP连通性")

@@ -63,6 +63,12 @@ public class MonitorNet {
     private Double avgTime;
 
     /**
+     * ping详情
+     */
+    @TableField("PING_DETAIL")
+    private String pingDetail;
+
+    /**
      * 离线次数
      */
     @TableField("OFFLINE_COUNT")

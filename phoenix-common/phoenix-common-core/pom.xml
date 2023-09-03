@@ -8,7 +8,7 @@
     <parent>
         <artifactId>phoenix-common</artifactId>
         <groupId>com.gitee.pifeng</groupId>
-        <version>1.2.4.RELEASE-CR8</version>
+        <version>1.2.5.RELEASE</version>
         <relativePath>..</relativePath>
     </parent>
 
@@ -51,6 +51,10 @@
         <dependency>
             <groupId>commons-net</groupId>
             <artifactId>commons-net</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging</artifactId>
         </dependency>
         <!--lombok依赖 -->
         <dependency>

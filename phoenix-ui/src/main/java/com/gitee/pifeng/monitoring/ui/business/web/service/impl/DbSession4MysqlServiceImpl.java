@@ -18,7 +18,7 @@ import com.gitee.pifeng.monitoring.ui.business.web.vo.DbSession4MysqlVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.LayUiAdminResultVo;
 import com.gitee.pifeng.monitoring.ui.constant.UrlConstants;
 import com.gitee.pifeng.monitoring.ui.constant.WebResponseConstants;
-import com.gitee.pifeng.monitoring.ui.core.PackageConstructor;
+import com.gitee.pifeng.monitoring.ui.core.UiPackageConstructor;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.hyperic.sigar.SigarException;
@@ -43,6 +43,12 @@ import java.util.stream.Collectors;
 public class DbSession4MysqlServiceImpl implements IDbSession4MysqlService {
 
     /**
+     * UI端包构造器
+     */
+    @Autowired
+    private UiPackageConstructor uiPackageConstructor;
+
+    /**
      * 数据库表数据访问对象
      */
     @Autowired
@@ -58,13 +64,12 @@ public class DbSession4MysqlServiceImpl implements IDbSession4MysqlService {
      * @param id      数据库ID
      * @return 简单分页模型
      * @throws NetException   自定义获取网络信息异常
-     * @throws SigarException Sigar异常
      * @throws IOException    IO异常
      * @author 皮锋
      * @custom.date 2020/12/24 16:55
      */
     @Override
-    public Page<DbSession4MysqlVo> getSessionList(Long current, Long size, Long id) throws NetException, SigarException, IOException {
+    public Page<DbSession4MysqlVo> getSessionList(Long current, Long size, Long id) throws NetException, IOException {
         // 根据ID查询到此数据库信息
         MonitorDb monitorDb = this.monitorDbDao.selectById(id);
         // url
@@ -78,9 +83,9 @@ public class DbSession4MysqlServiceImpl implements IDbSession4MysqlService {
         extraMsg.put("url", url);
         extraMsg.put("username", username);
         extraMsg.put("password", password);
-        BaseRequestPackage baseRequestPackage = new PackageConstructor().structureBaseRequestPackage(extraMsg);
+        BaseRequestPackage baseRequestPackage = this.uiPackageConstructor.structureBaseRequestPackage(extraMsg);
         // 从服务端获取数据
-        String resultStr = Sender.send(UrlConstants.MYSQL_GET_SESSION_LIST, baseRequestPackage.toJsonString());
+        String resultStr = Sender.send(UrlConstants.MYSQL_GET_SESSION_LIST_URL, baseRequestPackage.toJsonString());
         BaseResponsePackage baseResponsePackage = JSON.parseObject(resultStr, BaseResponsePackage.class);
         Result result = baseResponsePackage.getResult();
         String msg = result.getMsg();
@@ -126,13 +131,12 @@ public class DbSession4MysqlServiceImpl implements IDbSession4MysqlService {
      * @param id                 数据库ID
      * @return LayUiAdmin响应对象
      * @throws NetException   自定义获取网络信息异常
-     * @throws SigarException Sigar异常
      * @throws IOException    IO异常
      * @author 皮锋
      * @custom.date 2020/12/25 17:05
      */
     @Override
-    public LayUiAdminResultVo destroySession(List<DbSession4MysqlVo> dbSession4MysqlVos, Long id) throws NetException, SigarException, IOException {
+    public LayUiAdminResultVo destroySession(List<DbSession4MysqlVo> dbSession4MysqlVos, Long id) throws NetException, IOException {
         List<Long> sessionIds = dbSession4MysqlVos.stream().map(DbSession4MysqlVo::getId).collect(Collectors.toList());
         // 根据ID查询到此数据库信息
         MonitorDb monitorDb = this.monitorDbDao.selectById(id);
@@ -148,9 +152,9 @@ public class DbSession4MysqlServiceImpl implements IDbSession4MysqlService {
         extraMsg.put("username", username);
         extraMsg.put("password", password);
         extraMsg.put("sessionIds", sessionIds);
-        BaseRequestPackage baseRequestPackage = new PackageConstructor().structureBaseRequestPackage(extraMsg);
+        BaseRequestPackage baseRequestPackage = this.uiPackageConstructor.structureBaseRequestPackage(extraMsg);
         // 从服务端获取数据
-        String resultStr = Sender.send(UrlConstants.MYSQL_DESTROY_SESSION, baseRequestPackage.toJsonString());
+        String resultStr = Sender.send(UrlConstants.MYSQL_DESTROY_SESSION_URL, baseRequestPackage.toJsonString());
         BaseResponsePackage baseResponsePackage = JSON.parseObject(resultStr, BaseResponsePackage.class);
         Result result = baseResponsePackage.getResult();
         boolean b = result.isSuccess();

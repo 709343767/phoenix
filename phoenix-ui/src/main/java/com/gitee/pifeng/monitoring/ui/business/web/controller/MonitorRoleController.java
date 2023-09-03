@@ -8,14 +8,16 @@ import com.gitee.pifeng.monitoring.ui.business.web.vo.LayUiAdminResultVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.MonitorRoleVo;
 import com.gitee.pifeng.monitoring.ui.constant.OperateTypeConstants;
 import com.gitee.pifeng.monitoring.ui.constant.UiModuleConstants;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -30,7 +32,7 @@ import java.util.List;
  * @author 皮锋
  * @custom.date 2020/8/3 10:46
  */
-@Api(tags = "用户管理.角色")
+@Tag(name = "用户管理.角色")
 @Controller
 @RequestMapping("/role")
 public class MonitorRoleController {
@@ -50,7 +52,7 @@ public class MonitorRoleController {
      * @author 皮锋
      * @custom.date 2020/7/23 14:46
      */
-    @ApiOperation(value = "访问角色列表页面")
+    @Operation(summary = "访问角色列表页面")
     @GetMapping("/list")
     public ModelAndView list() {
         ModelAndView mv = new ModelAndView("user/role");
@@ -78,18 +80,19 @@ public class MonitorRoleController {
      * @author 皮锋
      * @custom.date 2020/8/3 11:05
      */
-    @ApiOperation(value = "获取监控角色列表")
-    @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "current", value = "当前页", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class),
-            @ApiImplicitParam(name = "size", value = "每页显示条数", required = true, paramType = "query", dataType = "long", dataTypeClass = Long.class),
-            @ApiImplicitParam(name = "roleId", value = "角色ID", paramType = "query", dataType = "long", dataTypeClass = Long.class)})
+    @Operation(summary = "获取监控角色列表")
+    @Parameters(value = {
+            @Parameter(name = "current", description = "当前页", required = true, in = ParameterIn.QUERY),
+            @Parameter(name = "size", description = "每页显示条数", required = true, in = ParameterIn.QUERY),
+            @Parameter(name = "roleId", description = "角色ID", in = ParameterIn.QUERY)})
     @GetMapping("/get-monitor-role-list")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.USER_MANAGE + "#角色", operType = OperateTypeConstants.QUERY, operDesc = "获取监控角色列表")
-    public LayUiAdminResultVo getMonitorRoleList(Long current, Long size, Long roleId) {
+    public LayUiAdminResultVo getMonitorRoleList(@RequestParam(value = "current") Long current,
+                                                 @RequestParam(value = "size") Long size,
+                                                 @RequestParam(value = "roleId", required = false) Long roleId) {
         Page<MonitorRoleVo> page = this.monitorRoleService.getMonitorRoleList(current, size, roleId);
         return LayUiAdminResultVo.ok(page);
     }
-
 
 }
