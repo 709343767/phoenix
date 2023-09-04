@@ -43,6 +43,7 @@ public class NetworkController {
      * 获取被监控网络源IP地址
      * </p>
      *
+     * @param baseRequestPackage 基础请求包
      * @return {@link BaseResponsePackage}
      * @throws NetException 自定义获取网络信息异常
      * @author 皮锋
