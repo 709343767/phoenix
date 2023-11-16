@@ -207,7 +207,7 @@
 
 ## 常见问题
 
-[https://blog.kacper.fun/types/28](https://blog.kacper.fun/types/28)
+[https://kacper.fun/types/28](https://kacper.fun/types/28)
 
 ## 升级日志
 
