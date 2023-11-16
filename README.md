@@ -207,7 +207,7 @@
 
 ## 常见问题
 
-[https://gitee.com/monitoring-platform/phoenix/wikis/pages?sort_id=4438763&doc_id=935794](https://gitee.com/monitoring-platform/phoenix/wikis/pages?sort_id=4438763&doc_id=935794)
+[https://blog.kacper.fun/types/28](https://blog.kacper.fun/types/28)
 
 ## 升级日志
 
