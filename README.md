@@ -223,9 +223,10 @@
 
 ## 联系
 作者微信：pifengeclipse  
-作者QQ：709343767  
+作者QQ：709343767
 
-为了促进平台发展，捐赠**100元**联系作者获取《phoenix云监控平台使用说明书》！  
+## 交流群 
+QQ群：[![加入QQ群](https://img.shields.io/badge/QQ%E7%BE%A4-773127639-blue)](http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=qEfrXWBpzslfYc9QrTQJwx1Kty0sC3Ee&authKey=0GQGNvA5G0SLWZgRyn9EjX3Uta0WLAGuzSmrGqNWAnaUTU5LzRTZovcB2ivgE%2BFm&noverify=0&group_code=773127639)  
 
 ## 捐赠
  
