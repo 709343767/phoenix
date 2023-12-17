@@ -1,17 +1,124 @@
-# 方式一
+# 一、方式一（推荐）
+
+## 1.创建一个新的服务单元文件
+
+执行以下命令创建一个新的服务单元文件，例如 phoenix_agent.service
+
+```shell
+sudo nano /etc/systemd/system/phoenix_agent.service
+```
+
+## 2.在打开的文件中，添加以下内容
+
+```shell
+[Unit]
+Description=phoenix监控服务端
+After=network.target syslog.target
+
+[Service]
+User=root
+Group=root
+WorkingDirectory=/path/to/your/app
+ExecStart=/usr/bin/java -jar /path/to/your/app/phoenix-agent.jar --spring.profiles.active=prod
+Restart=on-failure
+RestartSec=60s
+ExecReload=/bin/kill -HUP $MAINPID
+
+[Install]
+WantedBy=multi-user.target
+```
+
+*① 请将 **/usr/bin/java** 替换为您服务器的Java可执行文件所在路径，如果不知道路径，可以用命令 **whereis java** 查询。  
+② 请将 **/path/to/your/app** 替换为您的应用程序的实际路径，请确保用户、路径和文件名为您实际的应用程序信息，以确保正确的配置和启动。*
+
+## 3.保存并关闭文件
+
+## 4.重新加载 systemd 配置
+
+执行以下命令重新加载 systemd 配置：
+
+```shell
+sudo systemctl daemon-reload
+```
+
+## 5.将服务添加到开机启动项中
+
+执行以下命令将服务添加到开机启动项中：
+
+```shell
+sudo systemctl enable phoenix_agent.service
+```
+
+## 6.启动、停止、重启服务，查看服务状态
+
+### 1)启动
+
+```shell
+sudo systemctl start phoenix_agent.service
+```
+
+ ### 2)停止
+
+```shell
+sudo systemctl stop phoenix_agent.service
+```
+
+### 3)重启
+
+```shell
+sudo systemctl restart phoenix_agent.service
+```
+
+### 4)查看服务状态
+
+```shell
+systemctl status phoenix_agent.service
+```
+
+## 7.问题诊断
+
+在 systemd 中，可以使用以下命令来查看服务开机自启动失败的日志：
+
+### 1)使用 journalctl 命令查看系统日志
+
+```shell
+sudo journalctl -u <service_name>.service
+```
+
+其中 `<service_name>` 是服务的名称。通过运行上述命令，您将只显示指定服务的日志。
+
+### 2)查看引导过程的日志（包括服务启动）
+
+```shell
+sudo journalctl -b
+```
+
+该命令将显示最近一次引导的整个日志，其中包括服务启动和其他相关信息。
+
+### 3)使用 systemctl 命令查看服务状态和日志
+
+```shell
+systemctl status <service_name>.service
+```
+
+该命令将显示服务的当前状态，包括最近的日志记录片段。  
+
+这些命令将显示与指定服务相关的日志条目，帮助您确定服务开机自启动失败的原因。您可以检查日志中的错误消息、警告和其他有关服务启动过程的详细信息，以便进一步诊断问题。
+
+# 二、方式二
 
 ## 1.创建一个启动脚本
 
 执行以下命令创建一个新的启动脚本：
 
-```shell script
+```shell
 sudo nano /etc/init.d/phoenix_agent
 ```
 **注意：init脚本通常用于旧版的Linux发行版，如CentOS 6及更早版本中。现在，systemd已经成为许多Linux发行版的默认服务管理器，如果您的服务器不支持init脚本，请使用其它方式设置开机自启动。**
 
 ## 2.在打开的文件中，添加以下内容
 
-```shell script
+```shell
 #!/usr/bin/env bash
 
 ### BEGIN INIT INFO
@@ -143,146 +250,39 @@ fi
 
 执行以下命令设置脚本的执行权限：
 
-```shell script
+```shell
 sudo chmod +x /etc/init.d/phoenix_agent
 ```
 ## 5.添加到开机启动项中
 
 执行以下命令将服务添加到开机启动项中：
 
-```shell script
+```shell
 sudo chkconfig --add phoenix_agent
 ```
 
 ## 6.启动、停止、重启服务，查看服务状态
 
- ### 1) 启动
- 
- ```shell script
-sudo service phoenix_agent start
-```    
+### 1)启动
 
- ### 2) 停止
- 
- ```shell script
+```shell
+sudo service phoenix_agent start
+```
+
+### 2)停止
+
+```shell
 sudo service phoenix_agent stop
 ```
 
-### 3) 重启
+### 3)重启
 
-```shell script
+```shell
 sudo service phoenix_agent restart
 ```
 
-### 4) 查看服务状态
+### 4)查看服务状态
 
-```shell script
+```shell
 sudo service phoenix_agent status
 ```
-
-# 方式二（推荐）
-
-## 1.创建一个新的服务单元文件
-
-执行以下命令创建一个新的服务单元文件，例如 phoenix_agent.service：
-
-```shell script
-sudo nano /etc/systemd/system/phoenix_agent.service
-```
-
-## 2.在打开的文件中，添加以下内容
-     
-```shell script
-[Unit]
-Description=phoenix监控服务端
-After=network.target syslog.target
-
-[Service]
-User=root
-Group=root
-WorkingDirectory=/path/to/your/app
-ExecStart=/usr/bin/java -jar /path/to/your/app/phoenix-agent.jar --spring.profiles.active=prod
-Restart=on-failure
-RestartSec=60s
-ExecReload=/bin/kill -HUP $MAINPID
-
-[Install]
-WantedBy=multi-user.target
-```
-
-请将 **/path/to/your/app** 替换为您的应用程序的实际路径。请确保用户、路径和文件名为您实际的应用程序信息，以确保正确的配置和启动。
-
-## 3.保存并关闭文件
-
-## 4.重新加载 systemd 配置
-
-执行以下命令重新加载 systemd 配置：
-
-```shell script
-sudo systemctl daemon-reload
-```
-
-## 5.将服务添加到开机启动项中
-
-执行以下命令将服务添加到开机启动项中：
-
-```shell script
-sudo systemctl enable phoenix_agent.service
-```
-
-## 6.启动、停止、重启服务，查看服务状态
-
-### 1) 启动
- 
- ```shell script
-sudo systemctl start phoenix_agent.service
-```    
-
- ### 2) 停止
- 
- ```shell script
-sudo systemctl stop phoenix_agent.service
-```
-
-### 3) 重启
-
-```shell script
-sudo systemctl restart phoenix_agent.service
-````
-
-### 4) 查看服务状态
-
-```shell script
-systemctl status phoenix_agent.service
-```
-
-## 7.问题诊断
-
-在 systemd 中，可以使用以下命令来查看服务开机自启动失败的日志：
-
-### 1) 使用 journalctl 命令查看系统日志
-
-```shell script
-sudo journalctl -u <service_name>.service
-```
-
-其中 <service_name> 是服务的名称。通过运行上述命令，您将只显示指定服务的日志。
-
-### 2) 查看引导过程的日志（包括服务启动）
-
-```shell script
-sudo journalctl -b
-```
-
-该命令将显示最近一次引导的整个日志，其中包括服务启动和其他相关信息。
-
-### 3) 使用 systemctl 命令查看服务状态和日志
-
-```shell script
-systemctl status <service_name>.service
-```
-
-该命令将显示服务的当前状态，包括最近的日志记录片段。  
-  
-这些命令将显示与指定服务相关的日志条目，帮助您确定服务开机自启动失败的原因。您可以检查日志中的错误消息、警告和其他有关服务启动过程的详细信息，以便进一步诊断问题。
-
