@@ -219,7 +219,8 @@
 
 ## 版权
 
-[GNU General Public License v3.0](https://www.gnu.org/licenses/gpl-3.0.txt)
+[![版权](https://img.shields.io/badge/%E7%89%88%E6%9D%83-GNU%20General%20Public%20License%20v3.0-blue
+)](https://www.gnu.org/licenses/gpl-3.0.txt)
 
 ## 联系
 作者微信：pifengeclipse  
