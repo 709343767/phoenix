@@ -205,7 +205,7 @@
 
 ![监控设置](https://gitee.com/monitoring-platform/phoenix/raw/master/doc/%E6%88%AA%E5%9B%BE/%E7%9B%91%E6%8E%A7%E8%AE%BE%E7%BD%AE.png "监控设置")
 
-## 常见问题
+## 使用说明
 
 [https://kacper.fun/types/28](https://kacper.fun/types/28)
 
@@ -219,8 +219,7 @@
 
 ## 版权
 
-[![版权](https://img.shields.io/badge/%E7%89%88%E6%9D%83-GNU%20General%20Public%20License%20v3.0-blue
-)](https://www.gnu.org/licenses/gpl-3.0.txt)
+[![版权](https://img.shields.io/badge/%E7%89%88%E6%9D%83-GNU%20General%20Public%20License%20v3.0-blue)](https://www.gnu.org/licenses/gpl-3.0.txt)
 
 ## 联系
 作者微信：pifengeclipse  
