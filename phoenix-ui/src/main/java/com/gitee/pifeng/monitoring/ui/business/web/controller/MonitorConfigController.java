@@ -39,15 +39,16 @@ public class MonitorConfigController {
 
     /**
      * <p>
-     * 访问监控配置页
+     * 访问监控配置页面
      * </p>
      *
-     * @return {@link ModelAndView} 监控配置页
+     * @return {@link ModelAndView} 监控配置页面
      * @author 皮锋
      * @custom.date 2020/11/3 13:01
      */
-    @Operation(summary = "访问监控配置页")
+    @Operation(summary = "访问监控配置页面")
     @GetMapping("/config")
+    @OperateLog(operModule = UiModuleConstants.CONFIG_MANAGE + "#监控配置", operType = OperateTypeConstants.PAGE, operDesc = "访问监控配置页面")
     public ModelAndView config() {
         ModelAndView mv = new ModelAndView("set/config");
         MonitorConfigPageFormVo monitorConfigPageForm = this.monitorConfigService.getMonitorConfigPageFormInfo();
