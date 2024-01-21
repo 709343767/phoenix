@@ -170,7 +170,16 @@ public class ServerCpuMonitor implements IServerMonitoringListener {
      * @custom.date 2021/2/4 9:31
      */
     private double calculateCpuAvgCombined(List<MonitorServerCpu> monitorServerCpus) {
-        return NumberUtil.round(monitorServerCpus.stream().mapToDouble(MonitorServerCpu::getCpuCombined).average().orElse(0D) * 100D, 2).doubleValue();
+        if (CollectionUtils.isEmpty(monitorServerCpus)) {
+            return 0D;
+        }
+        return NumberUtil.round(monitorServerCpus.stream()
+                        // 过滤掉为空的元素
+                        .filter(cpu -> cpu != null && cpu.getCpuCombined() != null)
+                        .mapToDouble(MonitorServerCpu::getCpuCombined)
+                        .average()
+                        .orElse(0D) * 100D, 2)
+                .doubleValue();
     }
 
     /**
