@@ -1,4 +1,4 @@
-package com.gitee.pifeng.monitoring.ui.thirdauth.cas;
+package com.gitee.pifeng.monitoring.ui.property.auth.thirdauth.cas;
 
 /**
  * <p>
@@ -18,4 +18,5 @@ public enum ValidationTypeEnums {
      * CAS3
      */
     CAS3
+
 }

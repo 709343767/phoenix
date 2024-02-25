@@ -25,6 +25,7 @@ import java.time.LocalDateTime;
  */
 @Deprecated
 // @Component
+// @ConditionalOnBean(SpringSecurityConfig.class)
 public class SpringSecurityVerificationCodeFilter extends OncePerRequestFilter {
 
     /**

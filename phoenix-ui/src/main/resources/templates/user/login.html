@@ -46,7 +46,7 @@
                 <input type="password" name="password" id="LAY-user-login-password" lay-verify="password"
                        placeholder="密码" class="layui-input" lay-verType="tips">
             </div>
-            <div class="layui-form-item">
+            <div class="layui-form-item" th:if="${enableLoginCaptcha}">
                 <div class="layui-row">
                     <div class="layui-col-xs7">
                         <label class="layadmin-user-login-icon layui-icon layui-icon-vercode"
@@ -135,6 +135,8 @@
 <script src="./layui/layui.js" th:src="@{/layui/layui.js}" charset="utf-8"></script>
 <script th:inline="javascript" charset="utf-8">
     var ctxPath = /*[[@{/}]]*/'';
+    // 是否启用登录验证码
+    var enableLoginCaptcha = [[${enableLoginCaptcha}]];
     layui.use(['form', 'jquery'], function () {
         var form = layui.form, $ = layui.$;
         //自定义验证规则
@@ -150,7 +152,7 @@
                 }
             },
             captcha: function (value) {
-                if (value.length === 0) {
+                if (enableLoginCaptcha === true && value.length === 0) {
                     return '图形验证码不能为空！';
                 }
             }

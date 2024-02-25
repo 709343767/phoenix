@@ -2,6 +2,7 @@ package com.gitee.pifeng.monitoring.ui.config.springsecurity;
 
 import com.gitee.pifeng.monitoring.ui.exception.VerificationCodeException;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.stereotype.Component;
@@ -20,6 +21,7 @@ import java.io.IOException;
  * @custom.date 2023/3/21 13:07
  */
 @Component
+@ConditionalOnBean(SpringSecurityConfig.class)
 public class SpringSecurityAuthenticationFailureHandler extends SimpleUrlAuthenticationFailureHandler {
 
     /**

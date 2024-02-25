@@ -1,4 +1,4 @@
-package com.gitee.pifeng.monitoring.ui.thirdauth.common.constant;
+package com.gitee.pifeng.monitoring.ui.property.auth.thirdauth;
 
 /**
  * <p>
@@ -14,4 +14,5 @@ public enum ThirdAuthTypeEnums {
      * CAS认证
      */
     CAS
+
 }

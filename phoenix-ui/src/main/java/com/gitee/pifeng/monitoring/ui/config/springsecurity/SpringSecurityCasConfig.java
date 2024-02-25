@@ -1,7 +1,7 @@
 package com.gitee.pifeng.monitoring.ui.config.springsecurity;
 
 import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorUserService;
-import com.gitee.pifeng.monitoring.ui.thirdauth.cas.CasConfigurationProperties;
+import com.gitee.pifeng.monitoring.ui.property.auth.thirdauth.cas.CasConfigurationProperties;
 import org.jasig.cas.client.session.SingleSignOutFilter;
 import org.jasig.cas.client.validation.Cas20ServiceTicketValidator;
 import org.jasig.cas.client.validation.Cas30ServiceTicketValidator;
@@ -44,7 +44,7 @@ import javax.sql.DataSource;
 @EnableJdbcHttpSession
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 // 开启了第三方认证，而且第三方认证为cas
-@ConditionalOnExpression("${third-auth.enable:false}&&'cas'.equalsIgnoreCase('${third-auth.type}')")
+@ConditionalOnExpression("'third'.equalsIgnoreCase('${phoenix.auth.type}')&&'cas'.equalsIgnoreCase('${phoenix.auth.third-auth.type}')")
 public class SpringSecurityCasConfig extends BaseWebSecurityConfigurerAdapter {
 
     @Autowired

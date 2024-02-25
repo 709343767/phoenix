@@ -1,4 +1,4 @@
-package com.gitee.pifeng.monitoring.ui.thirdauth.cas;
+package com.gitee.pifeng.monitoring.ui.property.auth.thirdauth.cas;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -14,7 +14,7 @@ import javax.validation.constraints.NotNull;
  * @custom.date 2022/3/11 16:51
  */
 @Data
-@ConfigurationProperties(prefix = "cas", ignoreUnknownFields = false)
+@ConfigurationProperties(prefix = "phoenix.auth.third-auth.cas", ignoreUnknownFields = false)
 public class CasConfigurationProperties {
 
     /**
@@ -50,4 +50,5 @@ public class CasConfigurationProperties {
      * CAS协议验证类型
      */
     private ValidationTypeEnums validationType = ValidationTypeEnums.CAS3;
+
 }

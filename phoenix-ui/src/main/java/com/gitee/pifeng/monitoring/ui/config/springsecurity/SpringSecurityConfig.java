@@ -34,8 +34,8 @@ import javax.sql.DataSource;
 @EnableWebSecurity
 @EnableJdbcHttpSession
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-// 未开启第三方认证
-@ConditionalOnExpression("!${third-auth.enable:false}")
+// 未开启第三方认证，自己系统认证
+@ConditionalOnExpression("'self'.equalsIgnoreCase('${phoenix.auth.type}')")
 public class SpringSecurityConfig extends BaseWebSecurityConfigurerAdapter {
 
     /**

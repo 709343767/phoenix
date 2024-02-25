@@ -2,7 +2,7 @@ package com.gitee.pifeng.monitoring.ui;
 
 import com.gitee.pifeng.monitoring.common.web.core.CustomizationBeanHandler;
 import com.gitee.pifeng.monitoring.common.web.core.UniqueBeanNameGenerator;
-import com.gitee.pifeng.monitoring.ui.thirdauth.common.property.ThirdAuthProperties;
+import com.gitee.pifeng.monitoring.ui.property.PhoenixProperties;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -21,11 +21,11 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  * @custom.date 2021年3月29日 下午19:13:26
  */
 @Indexed
-@SpringBootApplication
-@EnableConfigurationProperties(ThirdAuthProperties.class)
-@ComponentScan(nameGenerator = UniqueBeanNameGenerator.class)
-@EnableTransactionManagement
 @EnableRetry
+@SpringBootApplication
+@EnableTransactionManagement
+@EnableConfigurationProperties(PhoenixProperties.class)
+@ComponentScan(nameGenerator = UniqueBeanNameGenerator.class)
 public class UiApplication extends CustomizationBeanHandler {
 
     public static void main(String[] args) {

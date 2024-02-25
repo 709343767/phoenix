@@ -1,5 +1,6 @@
 package com.gitee.pifeng.monitoring.ui.config.springsecurity;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.security.authentication.AuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 
@@ -14,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
  * @custom.date 2023/4/18 8:25
  */
 @Component
+@ConditionalOnBean(SpringSecurityConfig.class)
 public class SpringSecurityWebAuthenticationDetailsSource implements AuthenticationDetailsSource<HttpServletRequest, SpringSecurityWebAuthenticationDetails> {
 
     @Override
