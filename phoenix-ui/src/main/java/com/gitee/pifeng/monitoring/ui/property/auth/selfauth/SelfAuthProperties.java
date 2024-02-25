@@ -6,7 +6,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 
 /**
  * <p>
- * 第三方认证属性
+ * 本平台认证属性
  * </p>
  *
  * @author 皮锋
