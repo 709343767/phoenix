@@ -16,8 +16,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class LoginCaptchaProperties {
 
     /**
-     * 是否启用登录验证码
+     * 是否启用登录验证码，默认启用
      */
-    private Boolean enable;
+    private Boolean enable = true;
 
 }

@@ -44,7 +44,7 @@ import javax.sql.DataSource;
 @EnableJdbcHttpSession
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 // 开启了第三方认证，而且第三方认证为cas
-@ConditionalOnExpression("'third'.equalsIgnoreCase('${phoenix.auth.type}')&&'cas'.equalsIgnoreCase('${phoenix.auth.third-auth.type}')")
+@ConditionalOnExpression("'third'.equalsIgnoreCase('${phoenix.auth.type:self}')&&'cas'.equalsIgnoreCase('${phoenix.auth.third-auth.type}')")
 public class SpringSecurityCasConfig extends BaseWebSecurityConfigurerAdapter {
 
     @Autowired
