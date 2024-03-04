@@ -132,6 +132,7 @@ public class MonitorLogExceptionController {
     @GetMapping("/monitor-log-exception-detail")
     @Parameters(value = {
             @Parameter(name = "id", description = "异常日志ID", required = true, in = ParameterIn.QUERY)})
+    @OperateLog(operModule = UiModuleConstants.LOG + "#异常日志", operType = OperateTypeConstants.PAGE, operDesc = "访问异常日志详情页面")
     public ModelAndView monitorLogExceptionDetail(Long id) {
         ModelAndView mv = new ModelAndView("log/log-exception-detail");
         MonitorLogExceptionVo monitorLogExceptionInfo = this.monitorLogExceptionService.getMonitorLogExceptionInfo(id);

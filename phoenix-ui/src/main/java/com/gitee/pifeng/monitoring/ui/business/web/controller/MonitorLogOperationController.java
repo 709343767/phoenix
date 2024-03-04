@@ -144,6 +144,7 @@ public class MonitorLogOperationController {
     @GetMapping("/monitor-log-operation-detail")
     @Parameters(value = {
             @Parameter(name = "id", description = "操作日志ID", required = true, in = ParameterIn.QUERY)})
+    @OperateLog(operModule = UiModuleConstants.LOG + "#操作日志", operType = OperateTypeConstants.PAGE, operDesc = "访问操作日志详情页面")
     public ModelAndView monitorLogOperationDetail(Long id) {
         ModelAndView mv = new ModelAndView("log/log-operation-detail");
         MonitorLogOperationVo monitorLogOperationInfo = this.monitorLogOperationService.getMonitorLogOperationInfo(id);

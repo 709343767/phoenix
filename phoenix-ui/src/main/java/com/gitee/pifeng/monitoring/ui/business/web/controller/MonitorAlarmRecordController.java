@@ -231,6 +231,7 @@ public class MonitorAlarmRecordController {
     @GetMapping("/monitor-alarm-record-detail")
     @Parameters(value = {
             @Parameter(name = "id", description = "告警记录ID", required = true, in = ParameterIn.QUERY)})
+    @OperateLog(operModule = UiModuleConstants.ALARM, operType = OperateTypeConstants.PAGE, operDesc = "访问告警记录详情页面")
     public ModelAndView monitorAlarmRecordDetail(Long id) {
         ModelAndView mv = new ModelAndView("alarm/alarm-record-detail");
         MonitorAlarmRecordVo monitorAlarmRecordInfo = this.monitorAlarmRecordService.getMonitorAlarmRecordDetail(id);
