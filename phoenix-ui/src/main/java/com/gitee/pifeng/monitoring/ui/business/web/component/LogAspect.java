@@ -141,7 +141,7 @@ public class LogAspect {
         builder.userId(SpringSecurityUtils.getCurrentMonitorUserRealm() == null ? null : SpringSecurityUtils.getCurrentMonitorUserRealm().getId());
         builder.username(SpringSecurityUtils.getCurrentMonitorUserRealm() == null ? null : SpringSecurityUtils.getCurrentMonitorUserRealm().getUsrname());
         builder.operMethod(methodName);
-        builder.uri(request.getRequestURI());
+        builder.uri(request.getMethod() + " " + request.getRequestURI());
         builder.ip(AccessObjectUtils.getClientAddress(request));
         builder.insertTime(new Date());
         // 返回值
@@ -206,7 +206,7 @@ public class LogAspect {
         builder.userId(SpringSecurityUtils.getCurrentMonitorUserRealm() == null ? null : SpringSecurityUtils.getCurrentMonitorUserRealm().getId());
         builder.username(SpringSecurityUtils.getCurrentMonitorUserRealm() == null ? null : SpringSecurityUtils.getCurrentMonitorUserRealm().getUsrname());
         builder.operMethod(methodName);
-        builder.uri(request.getRequestURI());
+        builder.uri(request.getMethod() + " " + request.getRequestURI());
         builder.ip(AccessObjectUtils.getClientAddress(request));
         builder.insertTime(new Date());
         MonitorLogException monitorLogException = builder.build();

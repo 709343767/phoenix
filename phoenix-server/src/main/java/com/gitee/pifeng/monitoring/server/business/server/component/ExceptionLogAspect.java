@@ -127,7 +127,7 @@ public class ExceptionLogAspect {
         builder.userId(-1L);
         builder.username("“phoenix-server”服务");
         builder.operMethod(methodName);
-        builder.uri(request != null ? request.getRequestURI() : null);
+        builder.uri(request != null ? request.getMethod() + " " + request.getRequestURI() : null);
         builder.ip(request != null ? AccessObjectUtils.getClientAddress(request) : null);
         builder.insertTime(new Date());
         MonitorLogException monitorLogException = builder.build();
