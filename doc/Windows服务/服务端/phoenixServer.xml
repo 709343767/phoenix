@@ -222,7 +222,7 @@
       Default value: Directory, which contains the executor
     -->
 
-    <logpath>%BASE%\serverLogs</logpath>
+    <logpath>%BASE%\serviceLogs</logpath>
 
 
     <!--
