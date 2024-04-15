@@ -90,7 +90,8 @@
   ├── phoenix-agent（监控代理端）  
   ├── phoenix-server（监控服务端）  
   ├── phoenix-ui（监控UI端）  
-  └── doc（文档）
+  ├── doc（文档）  
+  └── script（Maven打包脚本）  
 
   phoenix：监控平台父工程，管理平台的依赖、构建、插件等；  
   phoenix-common：监控公共模块，提供平台所有的公共代码，包含一个监控核心公共模块（phoenix-common-core）和一个监控WEB公共模块（phoenix-common-web）；  
