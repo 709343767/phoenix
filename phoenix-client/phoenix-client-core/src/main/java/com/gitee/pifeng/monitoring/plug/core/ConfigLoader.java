@@ -11,6 +11,7 @@ import com.gitee.pifeng.monitoring.common.util.server.IpAddressUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.File;
 import java.util.Properties;
 
 /**
@@ -57,6 +58,7 @@ public class ConfigLoader {
      * <p>
      * 加载监控配置信息
      * </p>
+     * 指定的filepath > 当前工作目录/config/ > 当前工作目录/ > 指定的classpath > classpath:/config/ > classpath:/
      *
      * @param configPath 配置文件路径
      * @param configName 配置文件名称
@@ -79,11 +81,39 @@ public class ConfigLoader {
         }
         Properties properties;
         try {
-            properties = PropertiesUtils.loadProperties(configPath + configName);
-            log.info("监控配置项：{}", properties);
-        } catch (Exception e) {
-            throw new NotFoundConfigFileException("监控程序找不到监控配置文件！");
+            if (!StringUtils.startsWith(configPath, "filepath:")) {
+                throw new IllegalArgumentException();
+            }
+            String path = StringUtils.removeStart(configPath, "filepath:");
+            properties = PropertiesUtils.loadPropertiesInFilepath(StringUtils.replace(path + configName, "/", File.separator));
+        } catch (Exception e1) {
+            try {
+                properties = PropertiesUtils.loadPropertiesInFilepath("config" + File.separator + configName);
+            } catch (Exception e2) {
+                try {
+                    properties = PropertiesUtils.loadPropertiesInFilepath(configName);
+                } catch (Exception e3) {
+                    try {
+                        if (!StringUtils.startsWith(configPath, "classpath:")) {
+                            throw new IllegalArgumentException();
+                        }
+                        String path = StringUtils.removeStart(configPath, "classpath:");
+                        properties = PropertiesUtils.loadPropertiesInClasspath(path + configName);
+                    } catch (Exception e4) {
+                        try {
+                            properties = PropertiesUtils.loadPropertiesInClasspath("config/" + configName);
+                        } catch (Exception e5) {
+                            try {
+                                properties = PropertiesUtils.loadPropertiesInClasspath(configName);
+                            } catch (Exception e6) {
+                                throw new NotFoundConfigFileException("监控程序找不到监控配置文件！");
+                            }
+                        }
+                    }
+                }
+            }
         }
+        log.info("监控配置项：{}", properties);
         // 解析配置文件
         analysis(properties);
         log.info("加载监控配置成功！");

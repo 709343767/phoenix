@@ -23,8 +23,8 @@ public @interface EnableMonitoring {
     /**
      * <p>
      * 设置配置文件路径<br>
-     * 例如：configFilePath = "classpath:conf/"
      * </p>
+     * 例如：configFilePath = "classpath:conf/" 或者 configFilePath = "filepath:conf/"
      *
      * @return 配置文件路径
      * @author 皮锋

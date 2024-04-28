@@ -8,7 +8,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
-import java.io.File;
 
 /**
  * <p>
@@ -72,18 +71,14 @@ public class MonitoringPlugInitializeListener implements ServletContextListener 
                 + "</listener>\r\n";
         // 返回值
         String[] result = new String[2];
-        if (!StringUtils.containsIgnoreCase(configLocation, "classpath:")) {
+        if (!StringUtils.startsWith(configLocation, "classpath:") && !StringUtils.startsWith(configLocation, "filepath:")) {
             throw new BadListenerConfigException(expMsg);
         }
-        String[] temp = configLocation.split(":");
-        if (temp.length != 2) {
-            throw new BadListenerConfigException(expMsg);
-        }
-        String[] pathAndName = temp[1].split("/");
+        String[] pathAndName = configLocation.split("/");
         // 配置文件路径
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < pathAndName.length - 1; i++) {
-            builder.append(pathAndName[i]).append(File.separator);
+            builder.append(pathAndName[i]).append("/");
         }
         String path = builder.toString();
         // 配置文件名字

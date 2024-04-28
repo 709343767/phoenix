@@ -69,21 +69,13 @@ public class MonitoringPlugAutoConfiguration implements ImportAware {
      */
     @SneakyThrows
     private String analysisConfigFilePath(String configFilePath) {
-        // 异常信息
-        String expMsg = "\r\n@EnableMonitoring注解参数有误，请参考如下配置：\r\n"
-                + "@EnableMonitoring(configFilePath = \"classpath:conf/\", configFileName = \"monitoring.properties\")\r\n";
-        if (!StringUtils.containsIgnoreCase(configFilePath, "classpath:")) {
+        if (!StringUtils.startsWith(configFilePath, "classpath:") && !StringUtils.startsWith(configFilePath, "filepath:")) {
+            // 异常信息
+            String expMsg = "\r\n@EnableMonitoring 注解参数有误，请参考如下配置：\r\n"
+                    + "@EnableMonitoring(configFilePath = \"classpath:conf/\", configFileName = \"monitoring.properties\", usingMonitoringConfigFile = true)\r\n";
             throw new BadAnnotateParamException(expMsg);
         }
-        // 如果configFilePath="classpath:" 或者 configFilePath="classpath:/"
-        if (StringUtils.equals(configFilePath, "classpath:") || StringUtils.equals(configFilePath, "classpath:/")) {
-            return "";
-        }
-        String[] temp = configFilePath.split(":");
-        if (temp.length != 2) {
-            throw new BadAnnotateParamException(expMsg);
-        }
-        return temp[1];
+        return configFilePath;
     }
 
 }

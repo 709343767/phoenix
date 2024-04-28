@@ -1,9 +1,11 @@
 package com.gitee.pifeng.monitoring.common.init;
 
 import cn.hutool.setting.dialect.Props;
+import com.gitee.pifeng.monitoring.common.exception.NotFoundConfigFileException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.File;
 import java.nio.charset.StandardCharsets;
 
 /**
@@ -26,13 +28,35 @@ public class InitSecure {
      * <p>
      * 读取“monitoring-secure.properties”文件
      * </p>
+     * 当前工作目录/config/ > 当前工作目录/ > classpath:/config/ > classpath:/
      *
      * @return 加解密配置属性
      * @author 皮锋
      * @custom.date 2021/11/22 12:37
      */
     private static Props init() {
-        Props props = new Props("monitoring-secure.properties", StandardCharsets.UTF_8);
+        Props props;
+        try {
+            //从文件路径相对于当前工作目录下的config路径读取
+            props = new Props(new File("config" + File.separator + "monitoring-secure.properties"), StandardCharsets.UTF_8);
+        } catch (Exception e1) {
+            try {
+                // 从文件文件路径相对于当前工作目录读取
+                props = new Props(new File("monitoring-secure.properties"), StandardCharsets.UTF_8);
+            } catch (Exception e2) {
+                try {
+                    // 从 classpath:/config 路径下读取
+                    props = new Props("config/monitoring-secure.properties", StandardCharsets.UTF_8);
+                } catch (Exception e3) {
+                    try {
+                        // 从 classpath:/ 路径下读取
+                        props = new Props("monitoring-secure.properties", StandardCharsets.UTF_8);
+                    } catch (Exception e4) {
+                        throw new NotFoundConfigFileException("监控程序找不到监控加解密配置文件！");
+                    }
+                }
+            }
+        }
         // 加解密类型
         String secretType = props.getStr("secret.type");
         log.info("初始化加解密配置成功！加解密类型：{}", StringUtils.isNotBlank(secretType) ? secretType : "无");
