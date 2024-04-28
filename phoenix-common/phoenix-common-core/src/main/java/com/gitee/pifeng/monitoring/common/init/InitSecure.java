@@ -28,7 +28,7 @@ public class InitSecure {
      * <p>
      * 读取“monitoring-secure.properties”文件
      * </p>
-     * 当前工作目录/config/ > 当前工作目录/ > classpath:/config/ > classpath:/
+     * 当前工作目录/config/ &gt; 当前工作目录/ &gt; classpath:/config/ &gt; classpath:/
      *
      * @return 加解密配置属性
      * @author 皮锋

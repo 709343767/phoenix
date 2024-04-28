@@ -58,7 +58,7 @@ public class ConfigLoader {
      * <p>
      * 加载监控配置信息
      * </p>
-     * 指定的filepath > 当前工作目录/config/ > 当前工作目录/ > 指定的classpath > classpath:/config/ > classpath:/
+     * 指定的filepath &gt; 当前工作目录/config/ &gt; 当前工作目录/ &gt; 指定的classpath &gt; classpath:/config/ &gt; classpath:/
      *
      * @param configPath 配置文件路径
      * @param configName 配置文件名称
