@@ -153,7 +153,7 @@
   
 ## 演示地址
 
-[https://124.222.235.43:8443/phoenix-ui/index](https://124.222.235.43:8443/phoenix-ui/index)     
+[http://124.222.235.43/phoenix-ui/index](http://124.222.235.43/phoenix-ui/index)     
 账号：guest  
 密码：guest123  
 注意：1.演示项目只提供非管理员账号，只有查看权限！  
