@@ -72,8 +72,6 @@
                        'TCP'
                    WHEN 'HTTP4SERVICE' THEN
                        'HTTP'
-                   WHEN 'DOCKER' THEN
-                       'DOCKER'
                    END  AS types
         FROM (SELECT t.types,
                      count(mar.ID) AS totals
@@ -96,9 +94,6 @@
                     FROM DUAL
                     UNION
                     SELECT 'HTTP4SERVICE' types
-                    FROM DUAL
-                    UNION
-                    SELECT 'DOCKER' types
                     FROM DUAL) t
                        LEFT JOIN MONITOR_ALARM_RECORD mar ON (mar.`TYPE` = t.types)
               GROUP BY t.types) d

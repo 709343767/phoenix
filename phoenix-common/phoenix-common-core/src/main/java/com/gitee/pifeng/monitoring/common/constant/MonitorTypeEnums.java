@@ -36,11 +36,6 @@ public enum MonitorTypeEnums {
     HTTP4SERVICE,
 
     /**
-     * docker
-     */
-    DOCKER,
-
-    /**
      * 应用实例
      */
     INSTANCE,
