@@ -3,6 +3,7 @@ package com.gitee.pifeng.monitoring.common.util;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Maps;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -61,6 +62,25 @@ public class MapUtils {
             return null;
         }
         return JSONObject.toJSONString(map);
+    }
+
+    /**
+     * <p>
+     * 使用比较器按照value值对Map进行排序
+     * </p>
+     *
+     * @param <K> 泛型对象，map的key
+     * @param <V> 泛型对象，map的value
+     * @param map 需要排序的map
+     * @return 排序后的map
+     * @author 皮锋
+     * @custom.date 2024/2/6 9:45
+     */
+    public static <K, V extends Comparable<? super V>> Map<K, V> sortByValue(Map<K, V> map) {
+        Map<K, V> result = new LinkedHashMap<>();
+        map.entrySet().stream().sorted(Map.Entry.comparingByValue())
+                .forEachOrdered(entry -> result.put(entry.getKey(), entry.getValue()));
+        return result;
     }
 
 }

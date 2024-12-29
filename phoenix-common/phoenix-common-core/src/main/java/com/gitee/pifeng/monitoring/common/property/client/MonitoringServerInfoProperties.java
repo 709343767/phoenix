@@ -22,17 +22,17 @@ public class MonitoringServerInfoProperties {
     /**
      * 是否采集服务器信息
      */
-    private boolean enable;
+    private Boolean enable;
 
     /**
      * 是否使用 Sigar 采集服务器信息
      */
-    private boolean userSigarEnable;
+    private Boolean userSigarEnable;
 
     /**
      * 发送服务器信息的频率
      */
-    private long rate;
+    private Long rate;
 
     /**
      * 服务器本机IP地址

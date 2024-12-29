@@ -1,0 +1,144 @@
+{
+  "hints": [],
+  "groups": [
+    {
+      "sourceType": "com.gitee.pifeng.monitoring.common.property.client.MonitoringProperties",
+      "name": "phoenix.monitoring",
+      "type": "com.gitee.pifeng.monitoring.common.property.client.MonitoringProperties"
+    },
+    {
+      "sourceType": "com.gitee.pifeng.monitoring.common.property.client.MonitoringCommProperties",
+      "name": "phoenix.monitoring.comm",
+      "type": "com.gitee.pifeng.monitoring.common.property.client.MonitoringCommProperties"
+    },
+    {
+      "sourceType": "com.gitee.pifeng.monitoring.common.property.client.MonitoringCommHttpProperties",
+      "name": "phoenix.monitoring.comm.http",
+      "type": "com.gitee.pifeng.monitoring.common.property.client.MonitoringCommHttpProperties"
+    },
+    {
+      "sourceType": "com.gitee.pifeng.monitoring.common.property.client.MonitoringInstanceProperties",
+      "name": "phoenix.monitoring.instance",
+      "type": "com.gitee.pifeng.monitoring.common.property.client.MonitoringInstanceProperties"
+    },
+    {
+      "sourceType": "com.gitee.pifeng.monitoring.common.property.client.MonitoringHeartbeatProperties",
+      "name": "phoenix.monitoring.heartbeat",
+      "type": "com.gitee.pifeng.monitoring.common.property.client.MonitoringHeartbeatProperties"
+    },
+    {
+      "sourceType": "com.gitee.pifeng.monitoring.common.property.client.MonitoringServerInfoProperties",
+      "name": "phoenix.monitoring.server-info",
+      "type": "com.gitee.pifeng.monitoring.common.property.client.MonitoringServerInfoProperties"
+    },
+    {
+      "sourceType": "com.gitee.pifeng.monitoring.common.property.client.MonitoringJvmInfoProperties",
+      "name": "phoenix.monitoring.jvm-info",
+      "type": "com.gitee.pifeng.monitoring.common.property.client.MonitoringJvmInfoProperties"
+    }
+  ],
+  "properties": [
+    {
+      "sourceType": "com.gitee.pifeng.monitoring.common.property.client.MonitoringCommProperties",
+      "name": "phoenix.monitoring.comm.comm-framework-type",
+      "description": "缺省[与服务端 或者 代理端通信的通信框架类型，默认：apacheHttpComponents].",
+      "type": "com.gitee.pifeng.monitoring.common.constant.CommFrameworkTypeEnums"
+    },
+    {
+      "sourceType": "com.gitee.pifeng.monitoring.common.property.client.MonitoringCommHttpProperties",
+      "name": "phoenix.monitoring.comm.http.url",
+      "description": "必填[http通信url].",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.gitee.pifeng.monitoring.common.property.client.MonitoringCommHttpProperties",
+      "name": "phoenix.monitoring.comm.http.connect-timeout",
+      "description": "缺省[连接超时时间（毫秒），默认：15秒].",
+      "type": "java.lang.Integer"
+    },
+    {
+      "sourceType": "com.gitee.pifeng.monitoring.common.property.client.MonitoringCommHttpProperties",
+      "name": "phoenix.monitoring.comm.http.socket-timeout",
+      "description": "缺省[等待数据超时时间（毫秒），默认：15秒].",
+      "type": "java.lang.Integer"
+    },
+    {
+      "sourceType": "com.gitee.pifeng.monitoring.common.property.client.MonitoringCommHttpProperties",
+      "name": "phoenix.monitoring.comm.http.connection-request-timeout",
+      "description": "缺省[从连接池获取连接的等待超时时间（毫秒），默认：15秒].",
+      "type": "java.lang.Integer"
+    },
+    {
+      "sourceType": "com.gitee.pifeng.monitoring.common.property.client.MonitoringInstanceProperties",
+      "name": "phoenix.monitoring.instance.order",
+      "description": "缺省[实例次序（整数），默认为1].",
+      "type": "java.lang.Integer"
+    },
+    {
+      "sourceType": "com.gitee.pifeng.monitoring.common.property.client.MonitoringInstanceProperties",
+      "name": "phoenix.monitoring.instance.endpoint",
+      "description": "缺省[实例端点类型（server、agent、client、ui），默认：client].",
+      "type": "com.gitee.pifeng.monitoring.common.constant.EndpointTypeEnums"
+    },
+    {
+      "sourceType": "com.gitee.pifeng.monitoring.common.property.client.MonitoringInstanceProperties",
+      "name": "phoenix.monitoring.instance.name",
+      "description": "必填[实例名称，一般为项目名].",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.gitee.pifeng.monitoring.common.property.client.MonitoringInstanceProperties",
+      "name": "phoenix.monitoring.instance.desc",
+      "description": "缺省[实例描述，默认没有描述信息].",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.gitee.pifeng.monitoring.common.property.client.MonitoringInstanceProperties",
+      "name": "phoenix.monitoring.instance.language",
+      "description": "缺省[程序语言，默认：Java].",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.gitee.pifeng.monitoring.common.property.client.MonitoringHeartbeatProperties",
+      "name": "phoenix.monitoring.heartbeat.rate",
+      "description": "缺省[与服务端或者代理端发心跳包的频率（秒），默认30秒，最小不能小于30秒].",
+      "type": "java.lang.Long"
+    },
+    {
+      "sourceType": "com.gitee.pifeng.monitoring.common.property.client.MonitoringServerInfoProperties",
+      "name": "phoenix.monitoring.server-info.enable",
+      "description": "缺省[是否采集服务器信息，默认false].",
+      "type": "java.lang.Boolean"
+    },
+    {
+      "sourceType": "com.gitee.pifeng.monitoring.common.property.client.MonitoringServerInfoProperties",
+      "name": "phoenix.monitoring.server-info.user-sigar-enable",
+      "description": "缺省[是否使用sigar采集服务器信息，默认：false].",
+      "type": "java.lang.Boolean"
+    },
+    {
+      "sourceType": "com.gitee.pifeng.monitoring.common.property.client.MonitoringServerInfoProperties",
+      "name": "phoenix.monitoring.server-info.rate",
+      "description": "缺省[与服务端或者代理端发服务器信息包的频率（秒），默认60秒，最小不能小于30秒].",
+      "type": "java.lang.Long"
+    },
+    {
+      "sourceType": "com.gitee.pifeng.monitoring.common.property.client.MonitoringServerInfoProperties",
+      "name": "phoenix.monitoring.server-info.ip",
+      "description": "缺省[服务器本机ip地址，默认：自动获取].",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.gitee.pifeng.monitoring.common.property.client.MonitoringJvmInfoProperties",
+      "name": "phoenix.monitoring.jvm-info.enable",
+      "description": "缺省[是否采集Java虚拟机信息，默认false].",
+      "type": "java.lang.Boolean"
+    },
+    {
+      "sourceType": "com.gitee.pifeng.monitoring.common.property.client.MonitoringJvmInfoProperties",
+      "name": "phoenix.monitoring.jvm-info.rate",
+      "description": "缺省[与服务端或者代理端发送Java虚拟机信息的频率（秒），默认60秒，最小不能小于30秒].",
+      "type": "java.lang.Long"
+    }
+  ]
+}

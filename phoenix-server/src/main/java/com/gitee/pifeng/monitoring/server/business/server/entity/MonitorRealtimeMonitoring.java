@@ -39,10 +39,22 @@ public class MonitorRealtimeMonitoring {
     private String type;
 
     /**
+     * 监控子类型
+     */
+    @TableField("SUB_TYPE")
+    private String subType;
+
+    /**
      * 监控编号
      */
     @TableField("CODE")
     private String code;
+
+    /**
+     * 被告警主体唯一ID
+     */
+    @TableField("ALERTED_ENTITY_ID")
+    private String alertedEntityId;
 
     /**
      * 是否已经发送了告警（1：是，0：否）

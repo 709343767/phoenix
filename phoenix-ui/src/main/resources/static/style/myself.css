@@ -73,6 +73,23 @@
     width: 14px;
 }
 
+.layui-form-item-my {
+    margin-left: 40px;
+}
+
+.layui-tab-content-my {
+    padding: 0 !important;
+}
+
+.layui-table-page-my {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    height: 37px !important;
+    padding: 0 !important;
+    color: #666 !important;
+}
+
 .layuiadmin-big-font-my {
     line-height: 12px !important;
     font-size: 25px !important;
@@ -172,6 +189,15 @@
 body .layui-layer-class-my .layui-layer-btn .layui-layer-btn1 {
     background: #009688;
     color: #fff;
+}
+
+.config-strong {
+    width: 100%;
+    color: red;
+    display: table-cell;
+    position: relative;
+    padding: 9px 15px;
+    line-height: 20px;
 }
 
 /* 在大屏幕上应用样式 */

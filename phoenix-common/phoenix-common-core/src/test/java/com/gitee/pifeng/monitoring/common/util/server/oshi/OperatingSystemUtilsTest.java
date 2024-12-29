@@ -29,7 +29,7 @@ public class OperatingSystemUtilsTest {
     public void testGetOperatingSystemInfo() {
         OperatingSystem operatingSystem = OperatingSystemUtils.getOperatingSystemInfo();
         assertNotNull(operatingSystem);
-        log.info("操作系统信息：" + operatingSystem.toString());
+        log.info("操作系统信息：" + operatingSystem);
     }
 
 }

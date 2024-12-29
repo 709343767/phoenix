@@ -3,15 +3,14 @@ package com.gitee.pifeng.monitoring.server.business.server.service.impl;
 import cn.hutool.core.util.ArrayUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
-import com.gitee.pifeng.monitoring.common.constant.MonitorTypeEnums;
 import com.gitee.pifeng.monitoring.common.constant.ZeroOrOneConstants;
 import com.gitee.pifeng.monitoring.common.constant.alarm.AlarmLevelEnums;
 import com.gitee.pifeng.monitoring.common.constant.alarm.AlarmWayEnums;
+import com.gitee.pifeng.monitoring.common.constant.alarm.NoTSendAlarmReasonEnums;
+import com.gitee.pifeng.monitoring.common.constant.monitortype.MonitorTypeEnums;
 import com.gitee.pifeng.monitoring.common.domain.Alarm;
 import com.gitee.pifeng.monitoring.common.domain.Result;
 import com.gitee.pifeng.monitoring.common.dto.AlarmPackage;
-import com.gitee.pifeng.monitoring.common.threadpool.ThreadPoolShutdownHelper;
-import com.gitee.pifeng.monitoring.common.util.server.ProcessorsUtils;
 import com.gitee.pifeng.monitoring.server.business.server.core.MonitoringConfigPropertiesLoader;
 import com.gitee.pifeng.monitoring.server.business.server.dao.IMonitorAlarmDefinitionDao;
 import com.gitee.pifeng.monitoring.server.business.server.dao.IMonitorAlarmRecordDao;
@@ -22,18 +21,15 @@ import com.gitee.pifeng.monitoring.server.business.server.service.IRealtimeMonit
 import com.gitee.pifeng.monitoring.server.business.server.service.ITemplateMsgSendFacadeService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.concurrent.BasicThreadFactory;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.annotation.Order;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.PreDestroy;
+import java.time.LocalTime;
 import java.util.Date;
-import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 /**
  * <p>
@@ -80,33 +76,9 @@ public class AlarmServiceImpl implements IAlarmService {
     /**
      * 线程池
      */
-    public final ThreadPoolExecutor seService = new ThreadPoolExecutor(
-            1,
-            // 线程数 = Ncpu /（1 - 阻塞系数），IO密集型阻塞系数相对较大
-            (int) (ProcessorsUtils.getAvailableProcessors() / (1 - 0.8)),
-            60L,
-            TimeUnit.SECONDS,
-            // 2^16
-            new LinkedBlockingQueue<>(65536),
-            new BasicThreadFactory.Builder()
-                    // 设置线程名
-                    .namingPattern("phoenix-server-alarm-pool-thread")
-                    // 设置为守护线程
-                    .daemon(true)
-                    .build(),
-            new ThreadPoolExecutor.AbortPolicy());
-
-    /**
-     * 在程序关闭前优雅关闭线程池
-     *
-     * @author 皮锋
-     * @custom.date 2023/6/4 22:00
-     */
-    @Order
-    @PreDestroy
-    public void shutdownThreadPoolGracefully() {
-        new ThreadPoolShutdownHelper().shutdownGracefully(this.seService, "phoenix-server-alarm-pool-thread");
-    }
+    @Autowired
+    @Qualifier("alarmThreadPoolExecutor")
+    private ThreadPoolExecutor alarmThreadPoolExecutor;
 
     /**
      * <p>
@@ -185,12 +157,12 @@ public class AlarmServiceImpl implements IAlarmService {
         // 不管发不发送告警信息，先把告警记录存入数据库，AopContext.currentProxy()调用是为了让事务生效
         ((IAlarmService) AopContext.currentProxy()).insertMonitorAlarmRecordToDb(alarm, alarmUuid);
         // 是否发送告警信息
-        if (!this.isSendAlarm(result, alarm)) {
+        if (!this.isSendAlarm(result, alarm, alarmUuid)) {
             return;
         }
         // 注意：走到此处，就确定发送告警了，不管发送是否成功，result都是返回成功，代表处理此次告警成功了，发送告警和处理告警是两回事，
         // 因此采用异步的方式发送告警，防止阻塞此方法
-        this.seService.execute(() -> {
+        this.alarmThreadPoolExecutor.execute(() -> {
             // 发送告警以及把告警记录计入数据库
             this.sendAlarm(alarm, alarmUuid);
         });
@@ -296,7 +268,7 @@ public class AlarmServiceImpl implements IAlarmService {
                     monitorAlarmRecord.setNumber(StringUtils.join(phones, ";"));
                     break;
                 case MAIL:
-                    String[] mails = this.monitoringConfigPropertiesLoader.getMonitoringProperties().getAlarmProperties().getMailProperties().getEmills();
+                    String[] mails = this.monitoringConfigPropertiesLoader.getMonitoringProperties().getAlarmProperties().getMailProperties().getEmails();
                     monitorAlarmRecord.setNumber(StringUtils.join(mails, ";"));
                     break;
                 default:
@@ -315,20 +287,47 @@ public class AlarmServiceImpl implements IAlarmService {
      * 是否发送告警信息
      * </p>
      *
-     * @param result {@link Result} 返回结果
-     * @param alarm  告警信息
+     * @param result    {@link Result} 返回结果
+     * @param alarm     告警信息
+     * @param alarmUuid 告警代码
      * @return 是 或 否
      * @author 皮锋
      * @custom.date 2020/9/14 12:37
      */
-    private boolean isSendAlarm(Result result, Alarm alarm) {
+    private boolean isSendAlarm(Result result, Alarm alarm, String alarmUuid) {
         // 告警开关是否打开
         boolean isEnable = this.monitoringConfigPropertiesLoader.getMonitoringProperties().getAlarmProperties().isEnable();
         // 告警开关没有打开，不做处理，直接返回
         if (!isEnable) {
             String expMsg = "告警开关没有打开，不发送告警信息！";
             this.wrapFailResult(result, expMsg);
+            // 写入不发送告警原因
+            MonitorAlarmRecord monitorAlarmRecord = new MonitorAlarmRecord();
+            monitorAlarmRecord.setNotSendReason(NoTSendAlarmReasonEnums.ALARM_SWITCH_OFF.getMsg());
+            monitorAlarmRecord.setUpdateTime(new Date());
+            LambdaUpdateWrapper<MonitorAlarmRecord> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+            lambdaUpdateWrapper.eq(MonitorAlarmRecord::getCode, alarmUuid);
+            this.monitorAlarmRecordDao.update(monitorAlarmRecord, lambdaUpdateWrapper);
             return false;
+        }
+        // 是否开启告警静默
+        boolean silenceEnable = this.monitoringConfigPropertiesLoader.getMonitoringProperties().getAlarmProperties().isSilenceEnable();
+        if (silenceEnable && !alarm.isIgnoreSilence()) {
+            LocalTime currentTime = LocalTime.now();
+            LocalTime silenceStartTime = this.monitoringConfigPropertiesLoader.getMonitoringProperties().getAlarmProperties().getSilenceStartTime();
+            LocalTime silenceEndTime = this.monitoringConfigPropertiesLoader.getMonitoringProperties().getAlarmProperties().getSilenceEndTime();
+            if (!currentTime.isBefore(silenceStartTime) || !currentTime.isAfter(silenceEndTime)) {
+                String expMsg = "告警静默时间段，不发送告警信息！";
+                this.wrapFailResult(result, expMsg);
+                // 写入不发送告警原因
+                MonitorAlarmRecord monitorAlarmRecord = new MonitorAlarmRecord();
+                monitorAlarmRecord.setNotSendReason(NoTSendAlarmReasonEnums.SILENCE_ALARM_PERIOD.getMsg());
+                monitorAlarmRecord.setUpdateTime(new Date());
+                LambdaUpdateWrapper<MonitorAlarmRecord> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+                lambdaUpdateWrapper.eq(MonitorAlarmRecord::getCode, alarmUuid);
+                this.monitorAlarmRecordDao.update(monitorAlarmRecord, lambdaUpdateWrapper);
+                return false;
+            }
         }
         // 是否是测试告警信息
         boolean isTest = alarm.isTest();
@@ -336,6 +335,13 @@ public class AlarmServiceImpl implements IAlarmService {
         if (isTest) {
             String expMsg = "当前为测试信息，不发送告警信息！";
             this.wrapFailResult(result, expMsg);
+            // 写入不发送告警原因
+            MonitorAlarmRecord monitorAlarmRecord = new MonitorAlarmRecord();
+            monitorAlarmRecord.setNotSendReason(NoTSendAlarmReasonEnums.TEST_MSG.getMsg());
+            monitorAlarmRecord.setUpdateTime(new Date());
+            LambdaUpdateWrapper<MonitorAlarmRecord> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+            lambdaUpdateWrapper.eq(MonitorAlarmRecord::getCode, alarmUuid);
+            this.monitorAlarmRecordDao.update(monitorAlarmRecord, lambdaUpdateWrapper);
             return false;
         }
         // 告警级别
@@ -346,6 +352,13 @@ public class AlarmServiceImpl implements IAlarmService {
         if (!AlarmLevelEnums.isAlarm(configAlarmLevelEnum, levelEnum)) {
             String expMsg = "小于配置的告警级别，不发送告警信息！";
             this.wrapFailResult(result, expMsg);
+            // 写入不发送告警原因
+            MonitorAlarmRecord monitorAlarmRecord = new MonitorAlarmRecord();
+            monitorAlarmRecord.setNotSendReason(NoTSendAlarmReasonEnums.LESS_THAN_THE_CONFIGURED_ALARM_LEVEL.getMsg());
+            monitorAlarmRecord.setUpdateTime(new Date());
+            LambdaUpdateWrapper<MonitorAlarmRecord> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+            lambdaUpdateWrapper.eq(MonitorAlarmRecord::getCode, alarmUuid);
+            this.monitorAlarmRecordDao.update(monitorAlarmRecord, lambdaUpdateWrapper);
             return false;
         }
         // 告警内容标题
@@ -354,6 +367,13 @@ public class AlarmServiceImpl implements IAlarmService {
         if (StringUtils.isBlank(alarmTitle)) {
             String expMsg = "告警标题为空，不发送告警信息！";
             this.wrapFailResult(result, expMsg);
+            // 写入不发送告警原因
+            MonitorAlarmRecord monitorAlarmRecord = new MonitorAlarmRecord();
+            monitorAlarmRecord.setNotSendReason(NoTSendAlarmReasonEnums.ALARM_TITLE_EMPTY.getMsg());
+            monitorAlarmRecord.setUpdateTime(new Date());
+            LambdaUpdateWrapper<MonitorAlarmRecord> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+            lambdaUpdateWrapper.eq(MonitorAlarmRecord::getCode, alarmUuid);
+            this.monitorAlarmRecordDao.update(monitorAlarmRecord, lambdaUpdateWrapper);
             return false;
         }
         // 告警内容
@@ -362,6 +382,13 @@ public class AlarmServiceImpl implements IAlarmService {
         if (StringUtils.isBlank(msg)) {
             String expMsg = "告警内容为空，不发送告警信息！";
             this.wrapFailResult(result, expMsg);
+            // 写入不发送告警原因
+            MonitorAlarmRecord monitorAlarmRecord = new MonitorAlarmRecord();
+            monitorAlarmRecord.setNotSendReason(NoTSendAlarmReasonEnums.ALARM_CONTENT_EMPTY.getMsg());
+            monitorAlarmRecord.setUpdateTime(new Date());
+            LambdaUpdateWrapper<MonitorAlarmRecord> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+            lambdaUpdateWrapper.eq(MonitorAlarmRecord::getCode, alarmUuid);
+            this.monitorAlarmRecordDao.update(monitorAlarmRecord, lambdaUpdateWrapper);
             return false;
         }
         // 告警方式
@@ -370,6 +397,13 @@ public class AlarmServiceImpl implements IAlarmService {
         if (ArrayUtil.isEmpty(alarmWayEnums)) {
             String expMsg = "没有配置告警方式，不发送告警信息！";
             this.wrapFailResult(result, expMsg);
+            // 写入不发送告警原因
+            MonitorAlarmRecord monitorAlarmRecord = new MonitorAlarmRecord();
+            monitorAlarmRecord.setNotSendReason(NoTSendAlarmReasonEnums.NO_ALARM_MODE_CONFIGURED.getMsg());
+            monitorAlarmRecord.setUpdateTime(new Date());
+            LambdaUpdateWrapper<MonitorAlarmRecord> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+            lambdaUpdateWrapper.eq(MonitorAlarmRecord::getCode, alarmUuid);
+            this.monitorAlarmRecordDao.update(monitorAlarmRecord, lambdaUpdateWrapper);
             return false;
         }
         return true;
@@ -391,6 +425,41 @@ public class AlarmServiceImpl implements IAlarmService {
         }
         result.setSuccess(false);
         result.setMsg(msg);
+    }
+
+    /**
+     * <p>
+     * 根据 Wrapper 条件，查询总记录数
+     * </p>
+     *
+     * @param monitorAlarmRecordLambdaQueryWrapper Wrapper 条件
+     * @return 总记录数
+     * @author 皮锋
+     * @custom.date 2024/5/3 11:28
+     */
+    @Override
+    public int selectCount(LambdaQueryWrapper<MonitorAlarmRecord> monitorAlarmRecordLambdaQueryWrapper) {
+        Integer count = this.monitorAlarmRecordDao.selectCount(monitorAlarmRecordLambdaQueryWrapper);
+        if (count == null) {
+            return 0;
+        }
+        return count;
+    }
+
+    /**
+     * <p>
+     * 根据条件获取静默告警记录数
+     * </p>
+     *
+     * @param startTime 开始时间
+     * @param endTime   结束时间
+     * @return 记录数
+     * @author 皮锋
+     * @custom.date 2024/11/4 12:19
+     */
+    @Override
+    public int getSilenceAlarmCount(Date startTime, Date endTime) {
+        return this.monitorAlarmRecordDao.getSilenceAlarmCount(startTime, endTime);
     }
 
 }

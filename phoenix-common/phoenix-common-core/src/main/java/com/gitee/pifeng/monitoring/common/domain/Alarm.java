@@ -1,9 +1,10 @@
 package com.gitee.pifeng.monitoring.common.domain;
 
 import com.gitee.pifeng.monitoring.common.abs.AbstractSuperBean;
-import com.gitee.pifeng.monitoring.common.constant.MonitorTypeEnums;
 import com.gitee.pifeng.monitoring.common.constant.alarm.AlarmLevelEnums;
 import com.gitee.pifeng.monitoring.common.constant.alarm.AlarmReasonEnums;
+import com.gitee.pifeng.monitoring.common.constant.monitortype.MonitorSubTypeEnums;
+import com.gitee.pifeng.monitoring.common.constant.monitortype.MonitorTypeEnums;
 import lombok.*;
 import lombok.experimental.Accessors;
 
@@ -27,7 +28,7 @@ import java.nio.charset.Charset;
 public final class Alarm extends AbstractSuperBean {
 
     /**
-     * 告警级别，默认为：WARN(警告)<br>
+     * 告警级别，默认为：WARN(警告)。<br>
      * 注意：如果是自定义业务告警（MonitorTypeEnums.CUSTOM），并且设置了告警编码，会根据告警编码查询数据库中对应的告警级别，
      * 数据库中对应的告警级别 会 覆盖直接设置的告警级别。
      *
@@ -39,7 +40,7 @@ public final class Alarm extends AbstractSuperBean {
     private AlarmLevelEnums alarmLevel = AlarmLevelEnums.WARN;
 
     /**
-     * 告警原因，默认为：IGNORE(忽略)
+     * 告警原因，默认为：IGNORE(忽略)。
      *
      * @see AlarmReasonEnums
      */
@@ -47,7 +48,7 @@ public final class Alarm extends AbstractSuperBean {
     private AlarmReasonEnums alarmReason = AlarmReasonEnums.IGNORE;
 
     /**
-     * 监控类型，默认为：CUSTOM(自定义)
+     * 监控类型，默认为：CUSTOM(自定义)。
      *
      * @see MonitorTypeEnums
      */
@@ -55,14 +56,22 @@ public final class Alarm extends AbstractSuperBean {
     private MonitorTypeEnums monitorType = MonitorTypeEnums.CUSTOM;
 
     /**
-     * 字符集，如果当前字符集不是UTF-8，请指明字符集
+     * 监控子类型，默认为：EMPTY(空)。
+     *
+     * @see MonitorSubTypeEnums
+     */
+    @Builder.Default
+    private MonitorSubTypeEnums monitorSubType = MonitorSubTypeEnums.EMPTY;
+
+    /**
+     * 字符集，如果当前字符集不是UTF-8，请指明字符集。
      *
      * @see Charset
      */
     private Charset charset;
 
     /**
-     * 是否是测试告警，测试告警服务端不发送告警消息
+     * 是否是测试告警，测试告警服务端不发送告警消息。
      */
     private boolean isTest;
 
@@ -93,5 +102,15 @@ public final class Alarm extends AbstractSuperBean {
      * 注意：如果是自定义业务告警（MonitorTypeEnums.CUSTOM），编码在数据库中对应的告警级别、告警标题、告警内容 会 覆盖直接设置的告警级别、告警标题、告警内容。
      */
     private String code;
+
+    /**
+     * 被告警主体唯一ID。
+     */
+    private String alertedEntityId;
+
+    /**
+     * 是否无视静默告警，如果无视，则即使在静默告警时间段，也会发送告警，默认不无视。
+     */
+    private boolean isIgnoreSilence;
 
 }

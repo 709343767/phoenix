@@ -1,17 +1,21 @@
 package com.gitee.pifeng.monitoring.server.business.server.monitor;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.gitee.pifeng.monitoring.common.constant.MonitorTypeEnums;
+import com.gitee.pifeng.monitoring.common.constant.ZeroOrOneConstants;
 import com.gitee.pifeng.monitoring.common.constant.alarm.AlarmLevelEnums;
 import com.gitee.pifeng.monitoring.common.constant.alarm.AlarmReasonEnums;
+import com.gitee.pifeng.monitoring.common.constant.monitortype.MonitorSubTypeEnums;
+import com.gitee.pifeng.monitoring.common.constant.monitortype.MonitorTypeEnums;
 import com.gitee.pifeng.monitoring.common.domain.Alarm;
 import com.gitee.pifeng.monitoring.common.dto.AlarmPackage;
-import com.gitee.pifeng.monitoring.common.threadpool.ThreadPoolShutdownHelper;
 import com.gitee.pifeng.monitoring.common.util.CollectionUtils;
 import com.gitee.pifeng.monitoring.common.util.DateTimeUtils;
+import com.gitee.pifeng.monitoring.common.util.LayUiUtils;
 import com.gitee.pifeng.monitoring.common.util.Md5Utils;
 import com.gitee.pifeng.monitoring.common.util.server.NetUtils;
-import com.gitee.pifeng.monitoring.common.util.server.ProcessorsUtils;
 import com.gitee.pifeng.monitoring.plug.core.EnumPoolingHttpClient;
 import com.gitee.pifeng.monitoring.server.business.server.core.MonitoringConfigPropertiesLoader;
 import com.gitee.pifeng.monitoring.server.business.server.core.ServerPackageConstructor;
@@ -22,23 +26,22 @@ import com.gitee.pifeng.monitoring.server.business.server.service.IHttpHistorySe
 import com.gitee.pifeng.monitoring.server.business.server.service.IHttpService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.concurrent.BasicThreadFactory;
 import org.apache.http.HttpStatus;
+import org.quartz.DisallowConcurrentExecution;
 import org.quartz.JobExecutionContext;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.lang.NonNull;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PreDestroy;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.ThreadPoolExecutor;
 
 /**
@@ -52,6 +55,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 @Slf4j
 @Component
 @Order(8)
+@DisallowConcurrentExecution
 public class HttpMonitorJob extends QuartzJobBean {
 
     /**
@@ -87,27 +91,9 @@ public class HttpMonitorJob extends QuartzJobBean {
     /**
      * 线程池
      */
-    private final ScheduledExecutorService seService = new ScheduledThreadPoolExecutor(
-            // 线程数 = Ncpu /（1 - 阻塞系数），IO密集型阻塞系数相对较大
-            (int) (ProcessorsUtils.getAvailableProcessors() / (1 - 0.8)),
-            new BasicThreadFactory.Builder()
-                    // 设置线程名
-                    .namingPattern("phoenix-server-http-monitor-pool-thread-%d")
-                    // 设置为守护线程
-                    .daemon(true)
-                    .build(),
-            new ThreadPoolExecutor.AbortPolicy());
-
-    /**
-     * 在程序关闭前优雅关闭线程池
-     *
-     * @author 皮锋
-     * @custom.date 2023/6/4 22:00
-     */
-    @PreDestroy
-    public void shutdownThreadPoolGracefully() {
-        new ThreadPoolShutdownHelper().shutdownGracefully(this.seService, "phoenix-server-http-monitor-pool-thread");
-    }
+    @Autowired
+    @Qualifier("httpMonitorThreadPoolExecutor")
+    private ThreadPoolExecutor httpMonitorThreadPoolExecutor;
 
     /**
      * <p>
@@ -121,8 +107,13 @@ public class HttpMonitorJob extends QuartzJobBean {
     @Override
     protected void executeInternal(@NonNull JobExecutionContext jobExecutionContext) {
         // 是否监控HTTP服务
-        boolean isMonitoringEnable = this.monitoringConfigPropertiesLoader.getMonitoringProperties().getHttpProperties().isEnable();
-        if (!isMonitoringEnable) {
+        boolean isEnable = this.monitoringConfigPropertiesLoader.getMonitoringProperties().getHttpProperties().isEnable();
+        if (!isEnable) {
+            return;
+        }
+        // 是否监控HTTP状态
+        boolean isStatusEnable = this.monitoringConfigPropertiesLoader.getMonitoringProperties().getHttpProperties().getHttpStatusProperties().isEnable();
+        if (!isStatusEnable) {
             return;
         }
         synchronized (HttpMonitorJob.class) {
@@ -135,9 +126,15 @@ public class HttpMonitorJob extends QuartzJobBean {
                 List<List<MonitorHttp>> subMonitorHttpLists = CollectionUtils.split(monitorHttps, 10);
                 for (List<MonitorHttp> subMonitorHttps : subMonitorHttpLists) {
                     // 使用多线程，加快处理速度
-                    this.seService.execute(() -> {
+                    this.httpMonitorThreadPoolExecutor.execute(() -> {
                         // 循环处理每一个HTTP信息
                         for (MonitorHttp monitorHttp : subMonitorHttps) {
+                            // 是否开启监控（0：不开启监控；1：开启监控）
+                            String isEnableMonitor = monitorHttp.getIsEnableMonitor();
+                            // 没有开启监控，直接跳过
+                            if (!StringUtils.equals(ZeroOrOneConstants.ONE, isEnableMonitor)) {
+                                continue;
+                            }
                             // 请求方法
                             String method = monitorHttp.getMethod();
                             // GET请求
@@ -174,9 +171,25 @@ public class HttpMonitorJob extends QuartzJobBean {
             EnumPoolingHttpClient httpClient = EnumPoolingHttpClient.getInstance();
             // URL地址（目的地）
             String urlTarget = monitorHttp.getUrlTarget();
-            // 请求参数
-            String parameter = monitorHttp.getParameter();
-            Map<String, Object> stringObjectMap = httpClient.sendHttpPost(urlTarget, parameter);
+            // 媒体类型
+            String contentType = monitorHttp.getContentType();
+            // 请求头参数（LayUiTable数据中，过滤出选中的数据）
+            String headerParameter = LayUiUtils.filterCheckedWithLayUiTable(monitorHttp.getHeaderParameter());
+            // 请求体参数
+            String bodyParameter = monitorHttp.getBodyParameter();
+            if (StringUtils.isNotBlank(bodyParameter)) {
+                JSONObject bodyParameterJson = JSON.parseObject(bodyParameter);
+                if (bodyParameterJson != null) {
+                    if (StringUtils.equalsIgnoreCase(MediaType.APPLICATION_FORM_URLENCODED_VALUE, contentType)) {
+                        JSONArray bodyApplicationFormUrlencodedParameterJsons = bodyParameterJson.getJSONArray("bodyApplicationFormUrlencodedParameter");
+                        // LayUiTable数据中，过滤出选中的数据
+                        bodyParameter = LayUiUtils.filterCheckedWithLayUiTable(bodyApplicationFormUrlencodedParameterJsons.toJSONString());
+                    } else if (StringUtils.equalsIgnoreCase(MediaType.APPLICATION_JSON_VALUE, contentType)) {
+                        bodyParameter = String.valueOf(bodyParameterJson.get("bodyApplicationJsonParameter"));
+                    }
+                }
+            }
+            Map<String, Object> stringObjectMap = httpClient.sendHttpPost(urlTarget, contentType, headerParameter, bodyParameter);
             // 状态码
             int statusCode = Integer.parseInt(String.valueOf(stringObjectMap.get("statusCode")));
             // 响应时间
@@ -213,7 +226,9 @@ public class HttpMonitorJob extends QuartzJobBean {
             EnumPoolingHttpClient httpClient = EnumPoolingHttpClient.getInstance();
             // URL地址（目的地）
             String urlTarget = monitorHttp.getUrlTarget();
-            Map<String, Object> stringObjectMap = httpClient.sendHttpGet(urlTarget);
+            // 请求头参数（LayUiTable数据中，过滤出选中的数据）
+            String headerParameter = LayUiUtils.filterCheckedWithLayUiTable(monitorHttp.getHeaderParameter());
+            Map<String, Object> stringObjectMap = httpClient.sendHttpGet(urlTarget, headerParameter);
             // 状态码
             int statusCode = Integer.parseInt(String.valueOf(stringObjectMap.get("statusCode")));
             // 响应时间
@@ -273,7 +288,9 @@ public class HttpMonitorJob extends QuartzJobBean {
         monitorHttpHistory.setHostnameSource(monitorHttp.getHostnameSource());
         monitorHttpHistory.setUrlTarget(monitorHttp.getUrlTarget());
         monitorHttpHistory.setMethod(monitorHttp.getMethod());
-        monitorHttpHistory.setParameter(monitorHttp.getParameter());
+        monitorHttpHistory.setContentType(monitorHttp.getContentType());
+        monitorHttpHistory.setHeaderParameter(monitorHttp.getHeaderParameter());
+        monitorHttpHistory.setBodyParameter(monitorHttp.getBodyParameter());
         monitorHttpHistory.setDescr(monitorHttp.getDescr());
         monitorHttpHistory.setAvgTime(monitorHttp.getAvgTime());
         monitorHttpHistory.setStatus(monitorHttp.getStatus());
@@ -316,7 +333,9 @@ public class HttpMonitorJob extends QuartzJobBean {
         monitorHttpHistory.setHostnameSource(monitorHttp.getHostnameSource());
         monitorHttpHistory.setUrlTarget(monitorHttp.getUrlTarget());
         monitorHttpHistory.setMethod(monitorHttp.getMethod());
-        monitorHttpHistory.setParameter(monitorHttp.getParameter());
+        monitorHttpHistory.setContentType(monitorHttp.getContentType());
+        monitorHttpHistory.setHeaderParameter(monitorHttp.getHeaderParameter());
+        monitorHttpHistory.setBodyParameter(monitorHttp.getBodyParameter());
         monitorHttpHistory.setDescr(monitorHttp.getDescr());
         monitorHttpHistory.setAvgTime(monitorHttp.getAvgTime());
         monitorHttpHistory.setStatus(monitorHttp.getStatus());
@@ -339,21 +358,50 @@ public class HttpMonitorJob extends QuartzJobBean {
      * @custom.date 2022/4/13 13:14
      */
     private void sendAlarmInfo(String title, AlarmLevelEnums alarmLevelEnum, AlarmReasonEnums alarmReasonEnum, MonitorHttp monitorHttp) {
+        // 告警是否打开
+        boolean alarmEnable = this.monitoringConfigPropertiesLoader.getMonitoringProperties().getHttpProperties().getHttpStatusProperties().isAlarmEnable();
+        if (!alarmEnable) {
+            return;
+        }
+        // 是否开启告警（0：不开启告警；1：开启告警）
+        String isEnableAlarm = monitorHttp.getIsEnableAlarm();
+        // 没有开启告警，直接结束
+        if (!StringUtils.equals(ZeroOrOneConstants.ONE, isEnableAlarm)) {
+            return;
+        }
         StringBuilder builder = new StringBuilder();
         // 请求方法
         String method = monitorHttp.getMethod();
-        // 请求参数
-        String parameter = monitorHttp.getParameter();
+        // 媒体类型
+        String contentType = monitorHttp.getContentType();
+        // 请求头参数
+        String headerParameter = monitorHttp.getHeaderParameter();
+        headerParameter = LayUiUtils.jsonArrayStr2ArrayStrWithLayUiTable(headerParameter, true);
+        // 请求体参数
+        String bodyParameter = monitorHttp.getBodyParameter();
         // 主机名（来源）
         String hostnameSource = monitorHttp.getHostnameSource();
         // URL地址（目的地）
         String urlTarget = monitorHttp.getUrlTarget();
         builder.append("源主机：").append(hostnameSource)
                 .append("，<br>目标URL：").append(urlTarget)
-                .append("，<br>请求方法：").append(method);
+                .append("，<br>请求方法：").append(method)
+                .append("，<br>请求头：").append(headerParameter);
         // POST请求
-        if (StringUtils.equalsIgnoreCase(HttpMethod.POST.name(), method) && StringUtils.isNotBlank(parameter)) {
-            builder.append("，<br>请求参数：").append(parameter);
+        if (StringUtils.equalsIgnoreCase(HttpMethod.POST.name(), method)) {
+            builder.append("，<br>媒体类型：").append(contentType);
+            if (StringUtils.isNotBlank(bodyParameter)) {
+                JSONObject bodyParameterJson = JSON.parseObject(bodyParameter);
+                if (StringUtils.equalsIgnoreCase(contentType, MediaType.APPLICATION_FORM_URLENCODED_VALUE)) {
+                    JSONArray bodyApplicationFormUrlencodedParameterJsons = bodyParameterJson.getJSONArray("bodyApplicationFormUrlencodedParameter");
+                    String bodyApplicationFormUrlencodedParameterJsonStr = bodyApplicationFormUrlencodedParameterJsons.toJSONString();
+                    bodyParameter = LayUiUtils.jsonArrayStr2ArrayStrWithLayUiTable(bodyApplicationFormUrlencodedParameterJsonStr, true);
+                    builder.append("，<br>请求体：").append(bodyParameter);
+                } else if (StringUtils.equalsIgnoreCase(contentType, MediaType.APPLICATION_JSON_VALUE)) {
+                    String bodyJsonParameter = String.valueOf(bodyParameterJson.get("bodyApplicationJsonParameter"));
+                    builder.append("，<br>请求体：").append(bodyJsonParameter);
+                }
+            }
         }
         if (StringUtils.isNotBlank(monitorHttp.getDescr())) {
             builder.append("，<br>描述：").append(monitorHttp.getDescr());
@@ -367,8 +415,11 @@ public class HttpMonitorJob extends QuartzJobBean {
                 .alarmLevel(alarmLevelEnum)
                 .alarmReason(alarmReasonEnum)
                 .monitorType(MonitorTypeEnums.HTTP4SERVICE)
+                .monitorSubType(MonitorSubTypeEnums.SERVICE_STATUS)
+                .alertedEntityId(String.valueOf(monitorHttp.getId()))
                 .build();
         AlarmPackage alarmPackage = this.serverPackageConstructor.structureAlarmPackage(alarm);
         this.alarmService.dealAlarmPackage(alarmPackage);
     }
+
 }

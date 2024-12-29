@@ -1,6 +1,8 @@
 package com.gitee.pifeng.monitoring.ui.business.web.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.gitee.pifeng.monitoring.common.inf.ISuperBean;
 import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorServer;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -29,6 +31,7 @@ import java.util.Date;
 @Schema(description = "服务器信息表现层对象")
 public class MonitorServerVo implements ISuperBean {
 
+    @JsonSerialize(using = ToStringSerializer.class)
     @Schema(description = "主键ID")
     private Long id;
 
@@ -43,6 +46,12 @@ public class MonitorServerVo implements ISuperBean {
 
     @Schema(description = "服务器状态（0：离线，1：在线）")
     private String isOnline;
+
+    @Schema(description = "是否开启监控（0：不开启监控；1：开启监控）")
+    private String isEnableMonitor;
+
+    @Schema(description = "是否开启告警（0：不开启告警；1：开启告警）")
+    private String isEnableAlarm;
 
     @Schema(description = "离线次数")
     private Integer offlineCount;

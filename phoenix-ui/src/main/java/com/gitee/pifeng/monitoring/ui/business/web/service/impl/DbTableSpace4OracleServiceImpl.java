@@ -19,7 +19,6 @@ import com.gitee.pifeng.monitoring.ui.business.web.vo.DbTableSpaceFile4OracleVo;
 import com.gitee.pifeng.monitoring.ui.constant.UrlConstants;
 import com.gitee.pifeng.monitoring.ui.core.UiPackageConstructor;
 import com.google.common.collect.Lists;
-import org.hyperic.sigar.SigarException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -60,8 +59,8 @@ public class DbTableSpace4OracleServiceImpl implements IDbTableSpace4OracleServi
      * @param size    每页显示条数
      * @param id      数据库ID
      * @return 简单分页模型
-     * @throws NetException   自定义获取网络信息异常
-     * @throws IOException    IO异常
+     * @throws NetException 自定义获取网络信息异常
+     * @throws IOException  IO异常
      * @author 皮锋
      * @custom.date 2020/12/31 16:15
      */
@@ -111,7 +110,7 @@ public class DbTableSpace4OracleServiceImpl implements IDbTableSpace4OracleServi
             dbTableSpace4OracleVos.add(dbTableSpace4OracleVo);
         }
         // 按文件ID排序
-        dbTableSpace4OracleVos.sort(Comparator.comparing(DbTableSpaceFile4OracleVo::getFileId));
+        // dbTableSpace4OracleVos.sort(Comparator.comparing(DbTableSpaceFile4OracleVo::getFileId));
         // 设置返回对象
         Page<DbTableSpaceFile4OracleVo> dbTableSpace4OracleVoPage = new Page<>();
         dbTableSpace4OracleVoPage.setRecords(dbTableSpace4OracleVos);
@@ -130,8 +129,8 @@ public class DbTableSpace4OracleServiceImpl implements IDbTableSpace4OracleServi
      * @param size    每页显示条数
      * @param id      数据库ID
      * @return 简单分页模型
-     * @throws NetException   自定义获取网络信息异常
-     * @throws IOException    IO异常
+     * @throws NetException 自定义获取网络信息异常
+     * @throws IOException  IO异常
      * @author 皮锋
      * @custom.date 2020/12/31 16:15
      */

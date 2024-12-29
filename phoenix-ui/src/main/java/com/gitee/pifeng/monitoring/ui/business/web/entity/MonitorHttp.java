@@ -1,6 +1,8 @@
 package com.gitee.pifeng.monitoring.ui.business.web.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Data;
@@ -28,6 +30,7 @@ public class MonitorHttp implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @JsonSerialize(using = ToStringSerializer.class)
     @Schema(description = "主键ID")
     @TableId(value = "ID", type = IdType.AUTO)
     private Long id;
@@ -44,14 +47,23 @@ public class MonitorHttp implements Serializable {
     @TableField("METHOD")
     private String method;
 
-    @Schema(description = "请求参数")
-    @TableField("PARAMETER")
-    private String parameter;
+    @Schema(description = "媒体类型")
+    @TableField("CONTENT_TYPE")
+    private String contentType;
+
+    @Schema(description = "请求头参数")
+    @TableField("HEADER_PARAMETER")
+    private String headerParameter;
+
+    @Schema(description = "请求体参数")
+    @TableField("BODY_PARAMETER")
+    private String bodyParameter;
 
     @Schema(description = "描述")
     @TableField("DESCR")
     private String descr;
 
+    @JsonSerialize(using = ToStringSerializer.class)
     @Schema(description = "平均响应时间（毫秒）")
     @TableField("AVG_TIME")
     private Long avgTime;
@@ -59,6 +71,14 @@ public class MonitorHttp implements Serializable {
     @Schema(description = "状态")
     @TableField("STATUS")
     private Integer status;
+
+    @Schema(description = "是否开启监控（0：不开启监控；1：开启监控）")
+    @TableField("IS_ENABLE_MONITOR")
+    private String isEnableMonitor;
+
+    @Schema(description = "是否开启告警（0：不开启告警；1：开启告警）")
+    @TableField("IS_ENABLE_ALARM")
+    private String isEnableAlarm;
 
     @Schema(description = "异常信息")
     @TableField("EXC_MESSAGE")

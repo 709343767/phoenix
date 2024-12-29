@@ -8,7 +8,7 @@
     <parent>
         <artifactId>phoenix-common</artifactId>
         <groupId>com.gitee.pifeng</groupId>
-        <version>1.2.5.RELEASE-CR1</version>
+        <version>1.2.6.RELEASE</version>
         <relativePath>..</relativePath>
     </parent>
 
@@ -29,6 +29,11 @@
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
+        </dependency>
+        <!-- FindBugs注解依赖 -->
+        <dependency>
+            <groupId>com.google.code.findbugs</groupId>
+            <artifactId>annotations</artifactId>
         </dependency>
         <!-- liferay.portal工具依赖 -->
         <dependency>

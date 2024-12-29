@@ -15,6 +15,7 @@ import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.hyperic.sigar.SigarException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -87,6 +88,7 @@ public class DbSession4MysqlController {
      */
     @Operation(summary = "结束会话")
     @DeleteMapping("/destroy-session")
+    @PreAuthorize("hasAuthority('超级管理员')")
     @Parameters(value = {
             @Parameter(name = "id", description = "数据库ID", required = true, in = ParameterIn.QUERY)})
     @ResponseBody

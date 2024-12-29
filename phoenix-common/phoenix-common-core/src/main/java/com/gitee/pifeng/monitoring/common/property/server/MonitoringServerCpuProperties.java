@@ -20,6 +20,16 @@ import lombok.*;
 public class MonitoringServerCpuProperties implements ISuperBean {
 
     /**
+     * 是否监控服务器CPU
+     */
+    private boolean enable;
+
+    /**
+     * 告警是否打开
+     */
+    private boolean alarmEnable;
+
+    /**
      * 过载阈值
      */
     private double overloadThreshold;

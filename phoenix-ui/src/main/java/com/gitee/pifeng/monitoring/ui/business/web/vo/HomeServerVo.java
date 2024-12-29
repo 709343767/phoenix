@@ -42,6 +42,9 @@ public class HomeServerVo implements ISuperBean {
     @Schema(description = "服务器离线数量")
     private Integer serverOffLineSum;
 
+    @Schema(description = "服务器未知状态数量")
+    private Integer serverUnknownLineSum;
+
     @Schema(description = "服务器在线率")
     private String serverOnLineRate;
 

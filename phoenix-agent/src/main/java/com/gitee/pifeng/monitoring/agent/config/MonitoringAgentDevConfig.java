@@ -4,6 +4,7 @@ import com.gitee.pifeng.monitoring.common.property.client.MonitoringProperties;
 import com.gitee.pifeng.monitoring.plug.Monitor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
 
 /**
@@ -28,7 +29,8 @@ public class MonitoringAgentDevConfig {
      * @custom.date 2021/5/13 20:17
      */
     @Bean
-    public MonitoringProperties init() {
+    @Primary
+    public MonitoringProperties initMonitoring() {
         return Monitor.start(null, "monitoring-dev.properties");
     }
 

@@ -8,12 +8,13 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.gitee.pifeng.monitoring.common.constant.MonitorTypeEnums;
 import com.gitee.pifeng.monitoring.common.constant.ZeroOrOneConstants;
+import com.gitee.pifeng.monitoring.common.constant.monitortype.MonitorTypeEnums;
 import com.gitee.pifeng.monitoring.common.util.DataSizeUtils;
 import com.gitee.pifeng.monitoring.ui.business.web.dao.*;
 import com.gitee.pifeng.monitoring.ui.business.web.entity.*;
 import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorLinkService;
+import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorRealtimeMonitoringService;
 import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorServerService;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.HomeServerVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.LayUiAdminResultVo;
@@ -45,6 +46,18 @@ import java.util.Map;
  */
 @Service
 public class MonitorServerServiceImpl extends ServiceImpl<IMonitorServerDao, MonitorServer> implements IMonitorServerService {
+
+    /**
+     * 链路 服务类
+     */
+    @Autowired
+    private IMonitorLinkService monitorLinkService;
+
+    /**
+     * 实时监控服务类
+     */
+    @Autowired
+    private IMonitorRealtimeMonitoringService monitorRealtimeMonitoringService;
 
     /**
      * 服务器数据访问对象
@@ -143,12 +156,6 @@ public class MonitorServerServiceImpl extends ServiceImpl<IMonitorServerDao, Mon
     private IMonitorServerLoadAverageHistoryDao monitorServerLoadAverageHistoryDao;
 
     /**
-     * 链路 服务类
-     */
-    @Autowired
-    private IMonitorLinkService monitorLinkService;
-
-    /**
      * <p>
      * 获取home页的服务器信息
      * </p>
@@ -170,6 +177,7 @@ public class MonitorServerServiceImpl extends ServiceImpl<IMonitorServerDao, Mon
                 .otherSum(NumberUtil.parseInt(serverOsTypeMap.get("otherSum").toString()))
                 .serverOnLineSum(NumberUtil.parseInt(serverOnlineRateMap.get("serverOnLineSum").toString()))
                 .serverOffLineSum(NumberUtil.parseInt(serverOnlineRateMap.get("serverOffLineSum").toString()))
+                .serverUnknownLineSum(NumberUtil.parseInt(serverOnlineRateMap.get("serverUnknownLineSum").toString()))
                 .serverOnLineRate(NumberUtil.round(serverOnlineRateMap.get("serverOnLineRate").toString(), 2).toString())
                 .build();
     }
@@ -245,8 +253,13 @@ public class MonitorServerServiceImpl extends ServiceImpl<IMonitorServerDao, Mon
     @Retryable
     public LayUiAdminResultVo deleteMonitorServer(List<MonitorServerVo> monitorServerVos) {
         List<String> ips = Lists.newArrayList();
+        List<String> ids = Lists.newArrayList();
         for (MonitorServerVo monitorServerVo : monitorServerVos) {
             ips.add(monitorServerVo.getIp());
+            Long id = monitorServerVo.getId();
+            if (id != null) {
+                ids.add(String.valueOf(id));
+            }
         }
         // 服务器操作系统表
         LambdaUpdateWrapper<MonitorServerOs> serverOsLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
@@ -314,6 +327,8 @@ public class MonitorServerServiceImpl extends ServiceImpl<IMonitorServerDao, Mon
         this.monitorServerDao.delete(serverLambdaUpdateWrapper);
         // 注意：删除服务器相关链路信息，这个不要忘记了
         this.monitorLinkService.deleteMonitorLinks(ips, MonitorTypeEnums.SERVER);
+        // 注意：删除服务器相关实时监控信息，这个不要忘记了
+        this.monitorRealtimeMonitoringService.delete(MonitorTypeEnums.SERVER, null, ids);
         return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);
     }
 
@@ -409,10 +424,68 @@ public class MonitorServerServiceImpl extends ServiceImpl<IMonitorServerDao, Mon
         if (StringUtils.isBlank(monitorServer.getMonitorGroup())) {
             monitorServer.setMonitorGroup(null);
         }
+        if (StringUtils.isBlank(monitorServer.getIsEnableMonitor())) {
+            monitorServer.setIsEnableMonitor(ZeroOrOneConstants.ZERO);
+        }
+        if (StringUtils.isBlank(monitorServer.getIsEnableAlarm())) {
+            monitorServer.setIsEnableAlarm(ZeroOrOneConstants.ZERO);
+        }
         LambdaUpdateWrapper<MonitorServer> serverLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
         serverLambdaUpdateWrapper.eq(MonitorServer::getId, monitorServer.getId());
         serverLambdaUpdateWrapper.eq(MonitorServer::getIp, monitorServer.getIp());
         this.monitorServerDao.update(monitorServer, serverLambdaUpdateWrapper);
+        return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);
+    }
+
+    /**
+     * <p>
+     * 设置是否开启监控（0：不开启监控；1：开启监控）
+     * </p>
+     *
+     * @param id              主键ID
+     * @param ip              IP地址
+     * @param isEnableMonitor 是否开启监控（0：不开启监控；1：开启监控）
+     * @return 如果编辑成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @author 皮锋
+     * @custom.date 2024/12/10 21:20
+     */
+    @Override
+    public LayUiAdminResultVo setIsEnableMonitor(Long id, String ip, String isEnableMonitor) {
+        LambdaUpdateWrapper<MonitorServer> serverLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+        // 设置更新条件
+        serverLambdaUpdateWrapper.eq(MonitorServer::getId, id);
+        serverLambdaUpdateWrapper.eq(MonitorServer::getIp, ip);
+        // 设置更新字段
+        serverLambdaUpdateWrapper.set(MonitorServer::getIsEnableMonitor, isEnableMonitor);
+        // 如果不监控，状态改为未知
+        if (StringUtils.equals(isEnableMonitor, ZeroOrOneConstants.ZERO)) {
+            serverLambdaUpdateWrapper.set(MonitorServer::getIsOnline, null);
+        }
+        this.monitorServerDao.update(null, serverLambdaUpdateWrapper);
+        return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);
+    }
+
+    /**
+     * <p>
+     * 设置是否开启告警（0：不开启告警；1：开启告警）
+     * </p>
+     *
+     * @param id            主键ID
+     * @param ip            IP地址
+     * @param isEnableAlarm 是否开启告警（0：不开启告警；1：开启告警）
+     * @return 如果设置成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @author 皮锋
+     * @custom.date 2024/12/10 21:37
+     */
+    @Override
+    public LayUiAdminResultVo setIsEnableAlarm(Long id, String ip, String isEnableAlarm) {
+        LambdaUpdateWrapper<MonitorServer> serverLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+        // 设置更新条件
+        serverLambdaUpdateWrapper.eq(MonitorServer::getId, id);
+        serverLambdaUpdateWrapper.eq(MonitorServer::getIp, ip);
+        // 设置更新字段
+        serverLambdaUpdateWrapper.set(MonitorServer::getIsEnableAlarm, isEnableAlarm);
+        this.monitorServerDao.update(null, serverLambdaUpdateWrapper);
         return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);
     }
 

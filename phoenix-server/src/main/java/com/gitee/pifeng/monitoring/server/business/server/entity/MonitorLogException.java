@@ -33,6 +33,12 @@ public class MonitorLogException {
     private Long id;
 
     /**
+     * 应用实例ID
+     */
+    @TableField("INSTANCE_ID")
+    private String instanceId;
+
+    /**
      * 请求参数
      */
     @TableField("REQ_PARAM")
@@ -79,6 +85,12 @@ public class MonitorLogException {
      */
     @TableField("IP")
     private String ip;
+
+    /**
+     * 是否告警(0：否，1：是)
+     */
+    @TableField("IS_ALARM")
+    private String isAlarm;
 
     /**
      * 插入时间

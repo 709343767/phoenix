@@ -42,7 +42,8 @@ layui.define(['laytpl', 'layer', 'element', 'util'], function (exports) {
         , extend: [
             'echarts', //echarts 核心包
             'echartsTheme', //echarts 主题
-            'dropMenu' //LayUI.dropMenu下拉菜单组件
+            'lay', //lay基础DOM操作
+            'dropdown' //下拉菜单组件
         ]
 
         //主题配置

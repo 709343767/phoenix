@@ -1,9 +1,8 @@
 package com.gitee.pifeng.monitoring.ui.business.web.vo;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.gitee.pifeng.monitoring.common.inf.ISuperBean;
 import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorServerMemoryHistory;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -32,54 +31,49 @@ import java.util.Date;
 @Schema(description = "服务器内存历史记录表现层对象")
 public class MonitorServerMemoryHistoryVo implements ISuperBean {
 
+    @JsonSerialize(using = ToStringSerializer.class)
     @Schema(description = "主键ID")
-    @TableId(value = "ID", type = IdType.AUTO)
     private Long id;
 
     @Schema(description = "IP地址")
-    @TableField("IP")
     private String ip;
 
+    @JsonSerialize(using = ToStringSerializer.class)
     @Schema(description = "物理内存总量（单位：byte）")
-    @TableField("MEM_TOTAL")
     private Long memTotal;
 
+    @JsonSerialize(using = ToStringSerializer.class)
     @Schema(description = "物理内存使用量（单位：byte）")
-    @TableField("MEM_USED")
     private Long memUsed;
 
+    @JsonSerialize(using = ToStringSerializer.class)
     @Schema(description = "物理内存剩余量（单位：byte）")
-    @TableField("MEM_FREE")
     private Long memFree;
 
     @Schema(description = "物理内存使用率")
-    @TableField("MEN_USED_PERCENT")
     private Double menUsedPercent;
 
+    @JsonSerialize(using = ToStringSerializer.class)
     @Schema(description = "交换区总量（单位：byte）")
-    @TableField("SWAP_TOTAL")
     private Long swapTotal;
 
+    @JsonSerialize(using = ToStringSerializer.class)
     @Schema(description = "交换区使用量（单位：byte）")
-    @TableField("SWAP_USED")
     private Long swapUsed;
 
+    @JsonSerialize(using = ToStringSerializer.class)
     @Schema(description = "交换区剩余量（单位：byte）")
-    @TableField("SWAP_FREE")
     private Long swapFree;
 
     @Schema(description = "交换区使用率")
-    @TableField("SWAP_USED_PERCENT")
     private Double swapUsedPercent;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @Schema(description = "新增时间")
-    @TableField("INSERT_TIME")
     private Date insertTime;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @Schema(description = "更新时间")
-    @TableField("UPDATE_TIME")
     private Date updateTime;
 
     /**

@@ -8,14 +8,13 @@
                tmp.dbConnectSum                                               AS dbConnectSum,
                tmp.dbDisconnectSum                                            AS dbDisconnectSum,
                tmp.dbUnsentSum                                                AS dbUnsentSum,
-               IFNULL(round(tmp.dbConnectSum * 100 / tmp.dbSum, 2), '100.00') AS dbConnectRate
-        FROM (
-                 SELECT COUNT(ID)                                                       AS dbSum,
-                        IFNULL(SUM(CASE WHEN mar.IS_ONLINE = '1' THEN 1 ELSE 0 END), 0) AS dbConnectSum,
-                        IFNULL(SUM(CASE WHEN mar.IS_ONLINE = '0' THEN 1 ELSE 0 END), 0) AS dbDisconnectSum,
-                        IFNULL(SUM(CASE WHEN mar.IS_ONLINE is null OR mar.IS_ONLINE = '' THEN 1 ELSE 0 END),
-                               0)                                                       AS dbUnsentSum
-                 FROM MONITOR_DB mar) tmp
+               IFNULL(ROUND(tmp.dbConnectSum * 100 / tmp.dbSum, 2), '100.00') AS dbConnectRate
+        FROM (SELECT COUNT(mar.ID)                                                   AS dbSum,
+                     IFNULL(SUM(CASE WHEN mar.IS_ONLINE = '1' THEN 1 ELSE 0 END), 0) AS dbConnectSum,
+                     IFNULL(SUM(CASE WHEN mar.IS_ONLINE = '0' THEN 1 ELSE 0 END), 0) AS dbDisconnectSum,
+                     IFNULL(SUM(CASE WHEN mar.IS_ONLINE IS NULL OR mar.IS_ONLINE = '' THEN 1 ELSE 0 END),
+                            0)                                                       AS dbUnsentSum
+              FROM MONITOR_DB mar) tmp
     </select>
 
 </mapper>

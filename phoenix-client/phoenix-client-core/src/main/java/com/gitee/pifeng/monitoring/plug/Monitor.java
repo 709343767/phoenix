@@ -1,6 +1,7 @@
 package com.gitee.pifeng.monitoring.plug;
 
 import com.alibaba.fastjson.JSON;
+import com.gitee.pifeng.monitoring.common.constant.EndpointTypeEnums;
 import com.gitee.pifeng.monitoring.common.constant.ThreadTypeEnums;
 import com.gitee.pifeng.monitoring.common.domain.Alarm;
 import com.gitee.pifeng.monitoring.common.domain.Result;
@@ -21,6 +22,7 @@ import com.gitee.pifeng.monitoring.plug.scheduler.JvmTaskScheduler;
 import com.gitee.pifeng.monitoring.plug.scheduler.ServerTaskScheduler;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.util.concurrent.ScheduledExecutorService;
@@ -64,7 +66,7 @@ public class Monitor {
      */
     @SneakyThrows
     public static MonitoringProperties start() {
-        return run(null, null);
+        return run(null, null, null);
     }
 
     /**
@@ -80,7 +82,23 @@ public class Monitor {
      */
     @SneakyThrows
     public static MonitoringProperties start(final String configPath, final String configName) {
-        return run(configPath, configName);
+        return run(configPath, configName, null);
+    }
+
+    /**
+     * <p>
+     * 开启监控
+     * </p>
+     *
+     * @param monitoringProperties 监控属性
+     * @return {@link MonitoringProperties}
+     * @author 皮锋
+     * @custom.date 2024/4/7 10:43
+     */
+    @SneakyThrows
+    public static MonitoringProperties start(MonitoringProperties monitoringProperties) {
+        run(null, null, monitoringProperties);
+        return monitoringProperties;
     }
 
     /**
@@ -88,8 +106,9 @@ public class Monitor {
      * 运行监控
      * </p>
      *
-     * @param configPath 配置文件路径
-     * @param configName 配置文件名字
+     * @param configPath           配置文件路径
+     * @param configName           配置文件名字
+     * @param monitoringProperties 监控属性
      * @return {@link MonitoringProperties}
      * @throws NotFoundConfigFileException  找不到配置文件异常
      * @throws ErrorConfigParamException    错误的配置参数异常
@@ -97,17 +116,31 @@ public class Monitor {
      * @author 皮锋
      * @custom.date 2020年3月5日 下午4:07:10
      */
-    private static MonitoringProperties run(final String configPath, final String configName)
+    private static MonitoringProperties run(final String configPath, final String configName, MonitoringProperties monitoringProperties)
             throws NotFoundConfigFileException, ErrorConfigParamException, NotFoundConfigParamException {
         // 1.打印banner信息
         InitBanner.declare();
         // 2.加载配置信息
-        MonitoringProperties monitoringProperties = ConfigLoader.load(configPath, configName);
-        // 3.开始定时发送心跳包
+        if (monitoringProperties == null) {
+            monitoringProperties = ConfigLoader.load(configPath, configName);
+        } else {
+            monitoringProperties = ConfigLoader.verify(monitoringProperties);
+        }
+        // 3.验证许可证信息
+        boolean isVerifyPassed = LicenseChecker.verify();
+        if (!isVerifyPassed) {
+            String endpoint = monitoringProperties.getInstance().getEndpoint();
+            String clientNameEn = EndpointTypeEnums.CLIENT.getNameEn();
+            if (!StringUtils.equalsIgnoreCase(endpoint, clientNameEn)) {
+                // 立即终止JVM，状态码为1
+                Runtime.getRuntime().halt(1);
+            }
+        }
+        // 4.开始定时发送心跳包
         ExecutorObject heartbeatExecutorObject = HeartbeatTaskScheduler.run();
-        // 4.开始定时发送服务器信息包
+        // 5.开始定时发送服务器信息包
         ExecutorObject serverExecutorObject = ServerTaskScheduler.run();
-        // 5.开始定时发送Java虚拟机信息包
+        // 6.开始定时发送Java虚拟机信息包
         ExecutorObject jvmExecutorObject = JvmTaskScheduler.run();
         // 最后：添加关闭钩子，在jvm退出前做一些操作
         ShutdownHook.addShutdownHook(heartbeatExecutorObject, serverExecutorObject, jvmExecutorObject);

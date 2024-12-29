@@ -6,7 +6,9 @@ import com.gitee.pifeng.monitoring.ui.property.PhoenixProperties;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.retry.annotation.EnableRetry;
 import org.springframework.stereotype.Indexed;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -22,10 +24,12 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  */
 @Indexed
 @EnableRetry
+@EnableCaching
 @SpringBootApplication
 @EnableTransactionManagement
 @EnableConfigurationProperties(PhoenixProperties.class)
 @ComponentScan(nameGenerator = UniqueBeanNameGenerator.class)
+@EnableAspectJAutoProxy(proxyTargetClass = true, exposeProxy = true)
 public class UiApplication extends CustomizationBeanHandler {
 
     public static void main(String[] args) {

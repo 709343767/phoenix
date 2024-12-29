@@ -345,4 +345,44 @@ public class QuartzConfig {
                 .build();
     }
     //////////////////////////////////////////clearHistoryData end//////////////////////////////////////////////////////
+
+    ////////////////////////////////////////////alarmMonitor start//////////////////////////////////////////////////////
+
+    /**
+     * <p>
+     * 告警监控 JobDetail 配置
+     * </p>
+     *
+     * @return 传递给定作业实例的详细信息属性
+     * @author 皮锋
+     * @custom.date 2024/5/3 13:03
+     */
+    @Bean
+    public JobDetail alarmMonitorJobDetail() {
+        return JobBuilder.newJob(AlarmMonitorJob.class)
+                .withIdentity("alarmMonitorJob", JOB_DETAIL_GROUP)
+                .storeDurably()
+                .build();
+    }
+
+    /**
+     * <p>
+     * 告警监控 Trigger 配置
+     * </p>
+     *
+     * @return 具有所有触发器通用属性的基本接口
+     * @author 皮锋
+     * @custom.date 2024/5/3 13:04
+     */
+    @Bean
+    public Trigger alarmMonitorTrigger() {
+        return TriggerBuilder.newTrigger()
+                .forJob(this.alarmMonitorJobDetail())
+                .withIdentity("alarmMonitorTrigger", TRIGGER_GROUP)
+                // 每天早上8:30执行一次
+                .withSchedule(CronScheduleBuilder.cronSchedule("0 30 8 * * ?"))
+                .build();
+    }
+    ////////////////////////////////////////////alarmMonitor start//////////////////////////////////////////////////////
+
 }

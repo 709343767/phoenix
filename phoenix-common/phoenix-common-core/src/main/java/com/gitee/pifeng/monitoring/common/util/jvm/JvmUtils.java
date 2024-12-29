@@ -5,12 +5,10 @@ import cn.hutool.core.date.DateUtil;
 import com.gitee.pifeng.monitoring.common.domain.Jvm;
 import com.gitee.pifeng.monitoring.common.domain.jvm.*;
 import com.google.common.collect.Lists;
+import org.apache.commons.lang3.StringUtils;
 
 import java.lang.management.*;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * <p>
@@ -102,11 +100,25 @@ public class JvmUtils {
      * @custom.date 2020/8/14 10:33
      */
     public static ThreadDomain getThreadInfo() {
+        // 获取所有线程的 ID
+        long[] threadIds = THREADMX_BEAN.getAllThreadIds();
+        // 所有线程信息
+        List<String> threadInfos = Lists.newArrayList();
+        // 遍历所有线程
+        for (long threadId : threadIds) {
+            ThreadInfo threadInfo = THREADMX_BEAN.getThreadInfo(threadId);
+            if (threadInfo != null) {
+                threadInfos.add(StringUtils.trim(threadInfo.toString()));
+            }
+        }
+        // 按字母顺序排序
+        threadInfos.sort(Comparator.naturalOrder());
         return ThreadDomain.builder()
                 .threadCount(THREADMX_BEAN.getThreadCount())
                 .peakThreadCount(THREADMX_BEAN.getPeakThreadCount())
                 .daemonThreadCount(THREADMX_BEAN.getDaemonThreadCount())
                 .totalStartedThreadCount(THREADMX_BEAN.getTotalStartedThreadCount())
+                .threadInfos(threadInfos)
                 .build();
     }
 

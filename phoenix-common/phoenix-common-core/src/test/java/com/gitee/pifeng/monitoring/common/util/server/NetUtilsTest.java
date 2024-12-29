@@ -52,6 +52,21 @@ public class NetUtilsTest {
 
     /**
      * <p>
+     * 测试获取本机子网掩码
+     * </p>
+     *
+     * @author 皮锋
+     * @custom.date 2024/11/15 10:43
+     */
+    @Test
+    public void testGetLocalSubnetMask() {
+        String subnetMask = NetUtils.getLocalSubnetMask();
+        assertNotNull(subnetMask);
+        log.info(subnetMask);
+    }
+
+    /**
+     * <p>
      * 测试检测IP地址是否能ping通
      * </p>
      *

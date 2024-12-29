@@ -107,8 +107,9 @@
         base: ctxPath //静态资源所在路径
     }).extend({
         index: 'lib/index' //主入口模块
-    }).use(['index', 'table'], function () {
-        var $ = layui.$, admin = layui.admin, form = layui.form, table = layui.table, device = layui.device();
+    }).use(['index', 'admin', 'form', 'table', 'layer'], function () {
+        var $ = layui.$, admin = layui.admin, form = layui.form, table = layui.table, device = layui.device(),
+            layer = layui.layer;
         table.render({
             elem: '#alarm-definition-list-table',
             url: ctxPath + 'monitor-alarm-definition/get-monitor-alarm-definition-list',
@@ -165,7 +166,8 @@
             cols: [
                 [{
                     type: 'checkbox',
-                    hide: !authority
+                    hide: !authority,
+                    fixed: (device.ios || device.android) ? false : 'left',
                 }, {
                     field: 'id',
                     title: 'ID',
@@ -300,7 +302,7 @@
                         // 高度
                         height = document.body.clientHeight * 0.62 + 'px';
                     }
-                    layer.open({
+                    var infoLayerAddIndex = layer.open({
                         type: 2,
                         title: '添加告警定义',
                         content: ctxPath + 'monitor-alarm-definition/add-monitor-alarm-definition-form',
@@ -342,6 +344,9 @@
                             submit.trigger('click');
                         }
                     });
+                    if (device.ios || device.android) {
+                        layer.full(infoLayerAddIndex);
+                    }
                     break;
             }
         });
@@ -391,7 +396,7 @@
                     // 高度
                     height = document.body.clientHeight * 0.62 + 'px';
                 }
-                layer.open({
+                var infoLayerEditIndex = layer.open({
                     type: 2,
                     title: '编辑告警定义',
                     content: ctxPath + 'monitor-alarm-definition/edit-monitor-alarm-definition-form?id=' + data.id,
@@ -431,6 +436,9 @@
                         submit.trigger('click');
                     }
                 });
+                if (device.ios || device.android) {
+                    layer.full(infoLayerEditIndex);
+                }
             }
         });
     });

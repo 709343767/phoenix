@@ -23,4 +23,8 @@ public class MonitoringUniversalException extends RuntimeException {
         super(message);
     }
 
+    public MonitoringUniversalException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
 }

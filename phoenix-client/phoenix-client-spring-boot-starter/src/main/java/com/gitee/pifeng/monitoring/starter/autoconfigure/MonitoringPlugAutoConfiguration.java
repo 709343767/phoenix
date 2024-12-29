@@ -1,10 +1,13 @@
 package com.gitee.pifeng.monitoring.starter.autoconfigure;
 
 import com.gitee.pifeng.monitoring.common.exception.BadAnnotateParamException;
+import com.gitee.pifeng.monitoring.common.property.client.MonitoringProperties;
 import com.gitee.pifeng.monitoring.plug.Monitor;
 import com.gitee.pifeng.monitoring.starter.annotation.EnableMonitoring;
+import com.gitee.pifeng.monitoring.starter.property.MonitoringSpringBootProperties;
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.annotation.Configuration;
@@ -29,6 +32,12 @@ import org.springframework.core.type.AnnotationMetadata;
 public class MonitoringPlugAutoConfiguration implements ImportAware {
 
     /**
+     * 监控属性
+     */
+    @Autowired
+    private MonitoringSpringBootProperties monitoringSpringBootProperties;
+
+    /**
      * <p>
      * 开启监控
      * </p>
@@ -42,18 +51,27 @@ public class MonitoringPlugAutoConfiguration implements ImportAware {
         AnnotationAttributes attributes = AnnotationAttributes.fromMap(importMetadata.getAnnotationAttributes(EnableMonitoring.class.getName(), true));
         // 配置文件路径
         assert attributes != null;
-        String configFilePath = attributes.getString("configFilePath");
-        // 配置文件名字
-        String configFileName = attributes.getString("configFileName");
-        // 开启监控
-        if (StringUtils.isBlank(configFilePath) && StringUtils.isBlank(configFileName)) {
-            Monitor.start();
-        } else if (StringUtils.isNotBlank(configFilePath)) {
-            // 解析配置文件路径
-            String path = this.analysisConfigFilePath(configFilePath);
-            Monitor.start(path, configFileName);
-        } else {
-            Monitor.start(configFilePath, configFileName);
+        // 是否使用独立的监控配置文件
+        boolean usingMonitoringConfigFile = attributes.getBoolean("usingMonitoringConfigFile");
+        if (usingMonitoringConfigFile) {
+            String configFilePath = attributes.getString("configFilePath");
+            // 配置文件名字
+            String configFileName = attributes.getString("configFileName");
+            // 开启监控
+            if (StringUtils.isBlank(configFilePath) && StringUtils.isBlank(configFileName)) {
+                Monitor.start();
+            } else if (StringUtils.isNotBlank(configFilePath)) {
+                // 解析配置文件路径
+                String path = this.analysisConfigFilePath(configFilePath);
+                Monitor.start(path, configFileName);
+            } else {
+                Monitor.start(configFilePath, configFileName);
+            }
+        }
+        // 共用springboot的 application.yml 配置文件
+        else {
+            MonitoringProperties monitoringProperties = this.monitoringSpringBootProperties;
+            Monitor.start(monitoringProperties);
         }
     }
 

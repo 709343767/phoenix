@@ -3,7 +3,9 @@ package com.gitee.pifeng.monitoring.plug.core;
 import com.gitee.pifeng.monitoring.common.exception.NetException;
 import com.gitee.pifeng.monitoring.common.util.Md5Utils;
 import com.gitee.pifeng.monitoring.common.util.server.NetUtils;
+import com.gitee.pifeng.monitoring.common.util.server.oshi.BaseboardUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * <p>
@@ -20,11 +22,9 @@ public class InstanceGenerator {
      * <p>
      * 应用实例ID
      * </p>
-     * ThreadLocal是JDK包提供的，它提供线程本地变量，如果创建一个ThreadLocal变量，
-     * 那么访问这个变量的每个线程都会有这个变量的一个副本，在实际多线程操作的时候，
-     * 操作的是自己本地内存中的变量，从而规避了线程安全问题。
+     * 使用 volatile 关键字确保在多线程环境下的可见性。
      */
-    private static final ThreadLocal<String> INSTANCE_ID_THREAD_LOCAL = new ThreadLocal<>();
+    private static volatile String instanceId;
 
     /**
      * <p>
@@ -41,6 +41,7 @@ public class InstanceGenerator {
      * <p>
      * 获取应用实例ID
      * </p>
+     * 使用双重检查锁定来确保在多线程环境下只有一个应用实例ID被创建。
      *
      * @return 应用实例ID
      * @throws NetException 获取网络信息异常
@@ -48,34 +49,33 @@ public class InstanceGenerator {
      * @custom.date 2020年3月4日 下午11:12:46
      */
     public static String getInstanceId() throws NetException {
-        String instanceId = INSTANCE_ID_THREAD_LOCAL.get();
-        if (instanceId != null) {
-            return instanceId;
+        // 第一次检查
+        if (instanceId == null) {
+            synchronized (InstanceGenerator.class) {
+                // 第二次检查
+                if (instanceId == null) {
+                    // 实例次序（不能重复）
+                    int order = ConfigLoader.getMonitoringProperties().getInstance().getOrder();
+                    // 实例名称
+                    String instanceName = ConfigLoader.getMonitoringProperties().getInstance().getName();
+                    // 获取主板序列号
+                    String baseboardSerialNumber = BaseboardUtils.getBaseboardSerialNumber();
+                    // 能获取到主板号
+                    String unknown = "未知";
+                    if (!StringUtils.equals(baseboardSerialNumber, unknown)) {
+                        instanceId = Md5Utils.encrypt(baseboardSerialNumber + order + instanceName);
+                    }
+                    // 不能获取到主板号
+                    else {
+                        String mac = NetUtils.getLocalMac();
+                        // 如果配置了服务器IP，用配置的，如果没有配置服务器IP，则自己获取
+                        String ip = ConfigLoader.getMonitoringProperties().getServerInfo().getIp() == null ? NetUtils.getLocalIp() : ConfigLoader.getMonitoringProperties().getServerInfo().getIp();
+                        instanceId = Md5Utils.encrypt(mac + ip + order + instanceName);
+                    }
+                }
+            }
         }
-        String mac = NetUtils.getLocalMac();
-        // 如果配置了服务器IP，用配置的，如果没有配置服务器IP，则自己获取
-        String ip = ConfigLoader.getMonitoringProperties().getServerInfoProperties().getIp() == null ? NetUtils.getLocalIp() : ConfigLoader.getMonitoringProperties().getServerInfoProperties().getIp();
-        // 实例次序（不能重复）
-        int order = ConfigLoader.getMonitoringProperties().getOwnProperties().getInstanceOrder();
-        // 实例名称
-        String instanceName = ConfigLoader.getMonitoringProperties().getOwnProperties().getInstanceName();
-        // 实例ID
-        instanceId = Md5Utils.encrypt(mac + ip + order + instanceName);
-        INSTANCE_ID_THREAD_LOCAL.set(instanceId);
         return instanceId;
-    }
-
-    /**
-     * <p>
-     * 回收本地线程
-     * </p>
-     *
-     * @author 皮锋
-     * @custom.date 2021/10/19 16:49
-     */
-    public static void remove() {
-        INSTANCE_ID_THREAD_LOCAL.remove();
-        log.info("回收应用实例生成器本地线程成功！");
     }
 
 }

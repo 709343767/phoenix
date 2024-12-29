@@ -1,22 +1,28 @@
 package com.gitee.pifeng.monitoring.ui.business.web.service.impl;
 
 import cn.hutool.core.util.NumberUtil;
+import cn.hutool.json.JSONUtil;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.gitee.pifeng.monitoring.common.constant.ZeroOrOneConstants;
+import com.gitee.pifeng.monitoring.common.constant.monitortype.MonitorTypeEnums;
 import com.gitee.pifeng.monitoring.common.domain.Result;
 import com.gitee.pifeng.monitoring.common.dto.BaseRequestPackage;
 import com.gitee.pifeng.monitoring.common.dto.BaseResponsePackage;
+import com.gitee.pifeng.monitoring.common.util.LayUiUtils;
 import com.gitee.pifeng.monitoring.plug.core.Sender;
 import com.gitee.pifeng.monitoring.ui.business.web.dao.IMonitorHttpDao;
 import com.gitee.pifeng.monitoring.ui.business.web.dao.IMonitorHttpHistoryDao;
 import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorHttp;
 import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorHttpHistory;
 import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorHttpService;
+import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorRealtimeMonitoringService;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.HomeHttpVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.LayUiAdminResultVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.MonitorHttpVo;
@@ -25,7 +31,9 @@ import com.gitee.pifeng.monitoring.ui.constant.WebResponseConstants;
 import com.gitee.pifeng.monitoring.ui.core.UiPackageConstructor;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
+import org.hyperic.sigar.SigarException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -52,6 +60,12 @@ public class MonitorHttpServiceImpl extends ServiceImpl<IMonitorHttpDao, Monitor
      */
     @Autowired
     private UiPackageConstructor uiPackageConstructor;
+
+    /**
+     * 实时监控服务类
+     */
+    @Autowired
+    private IMonitorRealtimeMonitoringService monitorRealtimeMonitoringService;
 
     /**
      * HTTP信息历史记录数据访问对象
@@ -157,6 +171,8 @@ public class MonitorHttpServiceImpl extends ServiceImpl<IMonitorHttpDao, Monitor
         LambdaUpdateWrapper<MonitorHttp> monitorHttpLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
         monitorHttpLambdaUpdateWrapper.in(MonitorHttp::getId, ids);
         this.baseMapper.delete(monitorHttpLambdaUpdateWrapper);
+        // 注意：删除实时监控信息，这个不要忘记了
+        this.monitorRealtimeMonitoringService.delete(MonitorTypeEnums.HTTP4SERVICE, null, ids);
         return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);
     }
 
@@ -188,6 +204,12 @@ public class MonitorHttpServiceImpl extends ServiceImpl<IMonitorHttpDao, Monitor
         }
         if (StringUtils.isBlank(monitorHttpVo.getMonitorGroup())) {
             monitorHttp.setMonitorGroup(null);
+        }
+        if (StringUtils.isBlank(monitorHttpVo.getIsEnableMonitor())) {
+            monitorHttp.setIsEnableMonitor(ZeroOrOneConstants.ZERO);
+        }
+        if (StringUtils.isBlank(monitorHttpVo.getIsEnableAlarm())) {
+            monitorHttp.setIsEnableAlarm(ZeroOrOneConstants.ZERO);
         }
         int result = this.baseMapper.insert(monitorHttp);
         if (result == 1) {
@@ -226,11 +248,65 @@ public class MonitorHttpServiceImpl extends ServiceImpl<IMonitorHttpDao, Monitor
         if (StringUtils.isBlank(monitorHttpVo.getMonitorGroup())) {
             monitorHttp.setMonitorGroup(null);
         }
+        if (StringUtils.isBlank(monitorHttpVo.getIsEnableMonitor())) {
+            monitorHttp.setIsEnableMonitor(ZeroOrOneConstants.ZERO);
+        }
+        if (StringUtils.isBlank(monitorHttpVo.getIsEnableAlarm())) {
+            monitorHttp.setIsEnableAlarm(ZeroOrOneConstants.ZERO);
+        }
         int result = this.baseMapper.updateById(monitorHttp);
         if (result == 1) {
             return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);
         }
         return LayUiAdminResultVo.ok(WebResponseConstants.FAIL);
+    }
+
+    /**
+     * <p>
+     * 设置是否开启监控（0：不开启监控；1：开启监控）
+     * </p>
+     *
+     * @param id              主键ID
+     * @param isEnableMonitor 是否开启监控（0：不开启监控；1：开启监控）
+     * @return 如果设置成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @author 皮锋
+     * @custom.date 2024/12/10 21:20
+     */
+    @Override
+    public LayUiAdminResultVo setIsEnableMonitor(Long id, String isEnableMonitor) {
+        LambdaUpdateWrapper<MonitorHttp> httpLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+        // 设置更新条件
+        httpLambdaUpdateWrapper.eq(MonitorHttp::getId, id);
+        // 设置更新字段
+        httpLambdaUpdateWrapper.set(MonitorHttp::getIsEnableMonitor, isEnableMonitor);
+        // 如果不监控，状态设置为未知
+        if (StringUtils.equals(isEnableMonitor, ZeroOrOneConstants.ZERO)) {
+            httpLambdaUpdateWrapper.set(MonitorHttp::getStatus, null);
+        }
+        this.baseMapper.update(null, httpLambdaUpdateWrapper);
+        return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);
+    }
+
+    /**
+     * <p>
+     * 设置是否开启告警（0：不开启告警；1：开启告警）
+     * </p>
+     *
+     * @param id            主键ID
+     * @param isEnableAlarm 是否开启告警（0：不开启告警；1：开启告警）
+     * @return 如果设置成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @author 皮锋
+     * @custom.date 2024/12/10 21:37
+     */
+    @Override
+    public LayUiAdminResultVo setIsEnableAlarm(Long id, String isEnableAlarm) {
+        LambdaUpdateWrapper<MonitorHttp> httpLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+        // 设置更新条件
+        httpLambdaUpdateWrapper.eq(MonitorHttp::getId, id);
+        // 设置更新字段
+        httpLambdaUpdateWrapper.set(MonitorHttp::getIsEnableAlarm, isEnableAlarm);
+        this.baseMapper.update(null, httpLambdaUpdateWrapper);
+        return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);
     }
 
     /**
@@ -262,17 +338,37 @@ public class MonitorHttpServiceImpl extends ServiceImpl<IMonitorHttpDao, Monitor
      *
      * @param monitorHttpVo HTTP信息
      * @return layUiAdmin响应对象：HTTP连通性
-     * @throws IOException IO异常
+     * @throws SigarException Sigar异常
+     * @throws IOException    IO异常
      * @author 皮锋
      * @custom.date 2022/10/9 22:23
      */
     @Override
-    public LayUiAdminResultVo testMonitorHttp(MonitorHttpVo monitorHttpVo) throws IOException {
+    public LayUiAdminResultVo testMonitorHttp(MonitorHttpVo monitorHttpVo) throws SigarException, IOException {
         // 封装请求数据
         JSONObject extraMsg = new JSONObject();
         extraMsg.put("method", monitorHttpVo.getMethod());
         extraMsg.put("urlTarget", monitorHttpVo.getUrlTarget());
-        extraMsg.put("parameter", monitorHttpVo.getParameter());
+        // 媒体类型
+        String contentType = monitorHttpVo.getContentType();
+        extraMsg.put("contentType", contentType);
+        // 请求头参数（LayUiTable数据中，过滤出选中的数据）
+        String headerParameter = LayUiUtils.filterCheckedWithLayUiTable(monitorHttpVo.getHeaderParameter());
+        extraMsg.put("headerParameter", headerParameter);
+        String bodyParameter = monitorHttpVo.getBodyParameter();
+        if (StringUtils.isNotBlank(bodyParameter)) {
+            JSONObject bodyParameterJson = JSON.parseObject(bodyParameter);
+            if (bodyParameterJson != null) {
+                if (StringUtils.equalsIgnoreCase(MediaType.APPLICATION_FORM_URLENCODED_VALUE, contentType)) {
+                    JSONArray bodyApplicationFormUrlencodedParameterJsons = bodyParameterJson.getJSONArray("bodyApplicationFormUrlencodedParameter");
+                    // LayUiTable数据中，过滤出选中的数据
+                    bodyParameter = LayUiUtils.filterCheckedWithLayUiTable(bodyApplicationFormUrlencodedParameterJsons.toJSONString());
+                } else if (StringUtils.equalsIgnoreCase(MediaType.APPLICATION_JSON_VALUE, contentType)) {
+                    bodyParameter = String.valueOf(bodyParameterJson.get("bodyApplicationJsonParameter"));
+                }
+            }
+        }
+        extraMsg.put("bodyParameter", bodyParameter);
         BaseRequestPackage baseRequestPackage = this.uiPackageConstructor.structureBaseRequestPackage(extraMsg);
         // 从服务端获取数据
         String resultStr = Sender.send(UrlConstants.TEST_MONITOR_HTTP_URL, baseRequestPackage.toJsonString());
@@ -285,6 +381,44 @@ public class MonitorHttpServiceImpl extends ServiceImpl<IMonitorHttpDao, Monitor
             msg = WebResponseConstants.SUCCESS;
         }
         return LayUiAdminResultVo.ok(msg);
+    }
+
+    /**
+     * <p>
+     * 根据主键ID获取HTTP信息
+     * </p>
+     *
+     * @param id 主键ID
+     * @return HTTP信息表现层对象
+     * @author 皮锋
+     * @custom.date 2024/09/27 21:34
+     */
+    @Override
+    public MonitorHttpVo getMonitorHttpVoById(Long id) {
+        MonitorHttp monitorHttp = this.baseMapper.selectById(id);
+        MonitorHttpVo monitorHttpVo = MonitorHttpVo.builder().build().convertFor(monitorHttp);
+        // 请求头参数
+        String headerParameter = monitorHttp.getHeaderParameter();
+        headerParameter = LayUiUtils.jsonArrayStr2ArrayStrWithLayUiTable(headerParameter, true);
+        headerParameter = StringUtils.length(headerParameter) > 2 ? JSONUtil.formatJsonStr(headerParameter) : headerParameter;
+        // 媒体类型
+        String contentType = monitorHttp.getContentType();
+        // 请求体参数
+        String bodyParameter = monitorHttp.getBodyParameter();
+        if (StringUtils.isNotBlank(bodyParameter)) {
+            JSONObject bodyParameterJson = JSON.parseObject(bodyParameter);
+            if (StringUtils.equalsAnyIgnoreCase(MediaType.APPLICATION_FORM_URLENCODED_VALUE, contentType)) {
+                JSONArray bodyApplicationFormUrlencodedParameterJsons = bodyParameterJson.getJSONArray("bodyApplicationFormUrlencodedParameter");
+                String bodyApplicationFormUrlencodedParameterJsonStr = bodyApplicationFormUrlencodedParameterJsons.toJSONString();
+                bodyParameter = JSONUtil.formatJsonStr(LayUiUtils.jsonArrayStr2ArrayStrWithLayUiTable(bodyApplicationFormUrlencodedParameterJsonStr, true));
+            } else if (StringUtils.equalsAnyIgnoreCase(MediaType.APPLICATION_JSON_VALUE, contentType)) {
+                bodyParameter = String.valueOf(bodyParameterJson.get("bodyApplicationJsonParameter"));
+            }
+        }
+        // 设置请求参数
+        monitorHttpVo.setHeaderParameter(headerParameter);
+        monitorHttpVo.setBodyParameter(bodyParameter);
+        return monitorHttpVo;
     }
 
 }

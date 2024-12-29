@@ -45,7 +45,7 @@ public class ServerThread implements Runnable {
         TimeInterval timer = DateUtil.timer();
         try {
             // 获取服务器信息
-            Server server = ConfigLoader.getMonitoringProperties().getServerInfoProperties().isUserSigarEnable() ? ServerUtils.getSigarServerInfo() : ServerUtils.getOshiServerInfo();
+            Server server = ConfigLoader.getMonitoringProperties().getServerInfo().getUserSigarEnable() ? ServerUtils.getSigarServerInfo() : ServerUtils.getOshiServerInfo();
             // 构建服务器数据包
             ServerPackage serverPackage = this.clientPackageConstructor.structureServerPackage(server);
             // 发送请求

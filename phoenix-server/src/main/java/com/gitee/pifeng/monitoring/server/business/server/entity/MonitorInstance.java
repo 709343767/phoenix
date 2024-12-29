@@ -87,6 +87,18 @@ public class MonitorInstance {
     private String isOnline;
 
     /**
+     * 是否开启监控（0：不开启监控；1：开启监控）
+     */
+    @TableField("IS_ENABLE_MONITOR")
+    private String isEnableMonitor;
+
+    /**
+     * 是否开启告警（0：不开启告警；1：开启告警）
+     */
+    @TableField("IS_ENABLE_ALARM")
+    private String isEnableAlarm;
+
+    /**
      * 是否收到离线通知（0：否，1：是）
      */
     @TableField("IS_OFFLINE_NOTICE")

@@ -1,6 +1,8 @@
 package com.gitee.pifeng.monitoring.ui.business.web.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.gitee.pifeng.monitoring.common.inf.ISuperBean;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
@@ -27,9 +29,11 @@ import java.util.Date;
 @Schema(description = "Oracle数据库会话表现层对象")
 public class DbSession4OracleVo implements ISuperBean {
 
+    @JsonSerialize(using = ToStringSerializer.class)
     @Schema(description = "会话ID")
     private Long sid;
 
+    @JsonSerialize(using = ToStringSerializer.class)
     @Schema(description = "serial#")
     private Long serial;
 

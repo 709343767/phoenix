@@ -22,4 +22,9 @@ public class MonitoringHttpProperties {
      */
     private boolean enable;
 
+    /**
+     * HTTP状态配置属性
+     */
+    private MonitoringHttpStatusProperties httpStatusProperties;
+
 }

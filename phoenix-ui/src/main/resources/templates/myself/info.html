@@ -92,9 +92,10 @@
         base: ctxPath //静态资源所在路径
     }).extend({
         index: 'lib/index' //主入口模块
-    }).use(['index', 'form', 'element', 'layer'], function () {
+    }).use(['index', 'admin', 'form', 'element', 'layer'], function () {
         var admin = layui.admin;
         var form = layui.form;
+        var layer = layui.layer;
         form.render();
         //自定义验证规则
         form.verify({

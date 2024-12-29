@@ -29,5 +29,14 @@
                 <include>**</include>
             </includes>
         </fileSet>
+        <fileSet>
+            <!--源目录-->
+            <directory>..</directory>
+            <!--放在哪-->
+            <outputDirectory>/phoenixUI</outputDirectory>
+            <includes>
+                <include>license.txt</include>
+            </includes>
+        </fileSet>
     </fileSets>
 </assembly>

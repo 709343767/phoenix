@@ -36,7 +36,7 @@ public class ShutdownHook {
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             try {
                 // 第一步：如果不是服务端，jvm关闭前先发送下线数据包
-                String instanceEndpoint = ConfigLoader.getMonitoringProperties().getOwnProperties().getInstanceEndpoint();
+                String instanceEndpoint = ConfigLoader.getMonitoringProperties().getInstance().getEndpoint();
                 if (!StringUtils.equalsIgnoreCase(instanceEndpoint, EndpointTypeEnums.SERVER.getNameEn())) {
                     Result result = new OfflineThread().call();
                     log.info("下线数据包发送结果：{}", result.toJsonString());
@@ -61,9 +61,7 @@ public class ShutdownHook {
                 }
                 // 2.优雅关闭所有公共线程池
                 threadShutdownHook.shutdownAllPublicThreadPoolGracefully();
-                // 3.回收应用实例生成器本地线程
-                InstanceGenerator.remove();
-                // 4.关闭HTTP连接池释放掉连接
+                // 3.关闭HTTP连接池释放掉连接
                 EnumPoolingHttpClient.getInstance().close();
             } catch (Exception e) {
                 log.error(e.getMessage(), e);

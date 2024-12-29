@@ -6,6 +6,7 @@ import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorHttp;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.HomeHttpVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.LayUiAdminResultVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.MonitorHttpVo;
+import org.hyperic.sigar.SigarException;
 
 import java.io.IOException;
 import java.util.List;
@@ -80,6 +81,32 @@ public interface IMonitorHttpService extends IService<MonitorHttp> {
 
     /**
      * <p>
+     * 设置是否开启监控（0：不开启监控；1：开启监控）
+     * </p>
+     *
+     * @param id              主键ID
+     * @param isEnableMonitor 是否开启监控（0：不开启监控；1：开启监控）
+     * @return 如果设置成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @author 皮锋
+     * @custom.date 2024/12/10 21:20
+     */
+    LayUiAdminResultVo setIsEnableMonitor(Long id, String isEnableMonitor);
+
+    /**
+     * <p>
+     * 设置是否开启告警（0：不开启告警；1：开启告警）
+     * </p>
+     *
+     * @param id            主键ID
+     * @param isEnableAlarm 是否开启告警（0：不开启告警；1：开启告警）
+     * @return 如果设置成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @author 皮锋
+     * @custom.date 2024/12/10 21:37
+     */
+    LayUiAdminResultVo setIsEnableAlarm(Long id, String isEnableAlarm);
+
+    /**
+     * <p>
      * 获取home页的HTTP信息
      * </p>
      *
@@ -96,10 +123,23 @@ public interface IMonitorHttpService extends IService<MonitorHttp> {
      *
      * @param monitorHttpVo HTTP信息
      * @return layUiAdmin响应对象：HTTP连通性
-     * @throws IOException IO异常
+     * @throws SigarException Sigar异常
+     * @throws IOException    IO异常
      * @author 皮锋
      * @custom.date 2022/10/9 22:23
      */
-    LayUiAdminResultVo testMonitorHttp(MonitorHttpVo monitorHttpVo) throws IOException;
+    LayUiAdminResultVo testMonitorHttp(MonitorHttpVo monitorHttpVo) throws SigarException, IOException;
+
+    /**
+     * <p>
+     * 根据主键ID获取HTTP信息
+     * </p>
+     *
+     * @param id 主键ID
+     * @return HTTP信息表现层对象
+     * @author 皮锋
+     * @custom.date 2024/09/27 21:34
+     */
+    MonitorHttpVo getMonitorHttpVoById(Long id);
 
 }

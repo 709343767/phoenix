@@ -1,6 +1,8 @@
 package com.gitee.pifeng.monitoring.ui.business.web.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.gitee.pifeng.monitoring.common.inf.ISuperBean;
 import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorLogException;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -29,6 +31,7 @@ import java.util.Date;
 @Schema(description = "MonitorLogException对象")
 public class MonitorLogExceptionVo implements ISuperBean {
 
+    @JsonSerialize(using = ToStringSerializer.class)
     @Schema(description = "主键ID")
     private Long id;
 
@@ -41,6 +44,7 @@ public class MonitorLogExceptionVo implements ISuperBean {
     @Schema(description = "异常信息")
     private String excMessage;
 
+    @JsonSerialize(using = ToStringSerializer.class)
     @Schema(description = "操作用户ID")
     private Long userId;
 
@@ -59,6 +63,15 @@ public class MonitorLogExceptionVo implements ISuperBean {
     @Schema(description = "插入时间")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date insertTime;
+
+    @Schema(description = "应用实例ID")
+    private String instanceId;
+
+    @Schema(description = "应用实例名")
+    private String instanceName;
+
+    @Schema(description = "是否告警(0：否，1：是)")
+    private String isAlarm;
 
     /**
      * <p>

@@ -1,7 +1,7 @@
 /** layuiAdmin.std-v2020.4.1 LPPL License By 皮锋 */
 ;layui.define(function (e) {
     layui.use(['index', 'table'], function () {
-        var $ = layui.$, table = layui.table, device = layui.device();
+        var table = layui.table;
         table.render({
             elem: '#list-table-space-all',
             url: ctxPath + 'db-tablespace4oracle/get-tablespace-list-all?id=' + id,

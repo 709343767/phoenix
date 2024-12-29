@@ -100,6 +100,34 @@ public interface IMonitorInstanceService extends IService<MonitorInstance> {
 
     /**
      * <p>
+     * 设置是否开启监控（0：不开启监控；1：开启监控）
+     * </p>
+     *
+     * @param id              主键ID
+     * @param instanceId      应用实例ID
+     * @param isEnableMonitor 是否开启监控（0：不开启监控；1：开启监控）
+     * @return 如果设置成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @author 皮锋
+     * @custom.date 2024/12/10 21:20
+     */
+    LayUiAdminResultVo setIsEnableMonitor(Long id, String instanceId, String isEnableMonitor);
+
+    /**
+     * <p>
+     * 设置是否开启告警（0：不开启告警；1：开启告警）
+     * </p>
+     *
+     * @param id            主键ID
+     * @param instanceId    应用实例ID
+     * @param isEnableAlarm 是否开启告警（0：不开启告警；1：开启告警）
+     * @return 如果设置成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @author 皮锋
+     * @custom.date 2024/12/10 21:37
+     */
+    LayUiAdminResultVo setIsEnableAlarm(Long id, String instanceId, String isEnableAlarm);
+
+    /**
+     * <p>
      * 获取应用程序信息(Map形式)
      * </p>
      *

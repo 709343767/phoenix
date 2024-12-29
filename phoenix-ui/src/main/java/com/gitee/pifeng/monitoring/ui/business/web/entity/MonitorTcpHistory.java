@@ -3,6 +3,8 @@ package com.gitee.pifeng.monitoring.ui.business.web.entity;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -28,10 +30,12 @@ public class MonitorTcpHistory implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @JsonSerialize(using = ToStringSerializer.class)
     @Schema(description = "主键ID")
     @TableId("ID")
     private Long id;
 
+    @JsonSerialize(using = ToStringSerializer.class)
     @Schema(description = "TCP主表ID")
     @TableField("TCP_ID")
     private Long tcpId;
@@ -56,6 +60,7 @@ public class MonitorTcpHistory implements Serializable {
     @TableField("STATUS")
     private String status;
 
+    @JsonSerialize(using = ToStringSerializer.class)
     @Schema(description = "平均响应时间（毫秒）")
     @TableField("AVG_TIME")
     private Long avgTime;

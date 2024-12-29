@@ -20,6 +20,16 @@ import lombok.*;
 public class MonitoringServerDiskProperties implements ISuperBean {
 
     /**
+     * 是否监控服务器磁盘
+     */
+    private boolean enable;
+
+    /**
+     * 告警是否打开
+     */
+    private boolean alarmEnable;
+
+    /**
      * 过载阈值
      */
     private double overloadThreshold;

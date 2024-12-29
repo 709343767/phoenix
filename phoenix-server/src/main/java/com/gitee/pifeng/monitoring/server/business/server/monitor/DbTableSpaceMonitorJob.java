@@ -6,19 +6,18 @@ import cn.hutool.db.Entity;
 import cn.hutool.db.handler.EntityListHandler;
 import cn.hutool.db.sql.SqlExecutor;
 import com.baomidou.mybatisplus.annotation.DbType;
-import com.gitee.pifeng.monitoring.common.constant.MonitorTypeEnums;
 import com.gitee.pifeng.monitoring.common.constant.ZeroOrOneConstants;
 import com.gitee.pifeng.monitoring.common.constant.alarm.AlarmLevelEnums;
 import com.gitee.pifeng.monitoring.common.constant.alarm.AlarmReasonEnums;
+import com.gitee.pifeng.monitoring.common.constant.monitortype.MonitorSubTypeEnums;
+import com.gitee.pifeng.monitoring.common.constant.monitortype.MonitorTypeEnums;
 import com.gitee.pifeng.monitoring.common.constant.sql.Oracle;
 import com.gitee.pifeng.monitoring.common.domain.Alarm;
 import com.gitee.pifeng.monitoring.common.dto.AlarmPackage;
 import com.gitee.pifeng.monitoring.common.exception.NetException;
-import com.gitee.pifeng.monitoring.common.threadpool.ThreadPoolShutdownHelper;
 import com.gitee.pifeng.monitoring.common.util.CollectionUtils;
 import com.gitee.pifeng.monitoring.common.util.DateTimeUtils;
 import com.gitee.pifeng.monitoring.common.util.Md5Utils;
-import com.gitee.pifeng.monitoring.common.util.server.ProcessorsUtils;
 import com.gitee.pifeng.monitoring.server.business.server.core.MonitoringConfigPropertiesLoader;
 import com.gitee.pifeng.monitoring.server.business.server.core.ServerPackageConstructor;
 import com.gitee.pifeng.monitoring.server.business.server.domain.DbTableSpace;
@@ -29,23 +28,21 @@ import com.gitee.pifeng.monitoring.server.util.db.DbUtils;
 import lombok.Cleanup;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.concurrent.BasicThreadFactory;
+import org.quartz.DisallowConcurrentExecution;
 import org.quartz.JobExecutionContext;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.annotation.Order;
 import org.springframework.lang.NonNull;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PreDestroy;
 import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.ThreadPoolExecutor;
 
 /**
@@ -59,6 +56,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 @Slf4j
 @Component
 @Order(5)
+@DisallowConcurrentExecution
 public class DbTableSpaceMonitorJob extends QuartzJobBean {
 
     /**
@@ -88,27 +86,9 @@ public class DbTableSpaceMonitorJob extends QuartzJobBean {
     /**
      * 线程池
      */
-    private final ScheduledExecutorService seService = new ScheduledThreadPoolExecutor(
-            // 线程数 = Ncpu /（1 - 阻塞系数），IO密集型阻塞系数相对较大
-            (int) (ProcessorsUtils.getAvailableProcessors() / (1 - 0.8)),
-            new BasicThreadFactory.Builder()
-                    // 设置线程名
-                    .namingPattern("phoenix-server-db-tbs-monitor-pool-thread-%d")
-                    // 设置为守护线程
-                    .daemon(true)
-                    .build(),
-            new ThreadPoolExecutor.AbortPolicy());
-
-    /**
-     * 在程序关闭前优雅关闭线程池
-     *
-     * @author 皮锋
-     * @custom.date 2023/6/4 22:00
-     */
-    @PreDestroy
-    public void shutdownThreadPoolGracefully() {
-        new ThreadPoolShutdownHelper().shutdownGracefully(this.seService, "phoenix-server-db-tbs-monitor-pool-thread");
-    }
+    @Autowired
+    @Qualifier("dbTbsMonitorThreadPoolExecutor")
+    private ThreadPoolExecutor dbTbsMonitorThreadPoolExecutor;
 
     /**
      * <p>
@@ -126,6 +106,11 @@ public class DbTableSpaceMonitorJob extends QuartzJobBean {
         if (!isEnable) {
             return;
         }
+        // 是否监控数据库表空间
+        boolean isTableSpaceEnable = this.monitoringConfigPropertiesLoader.getMonitoringProperties().getDbProperties().getDbTableSpaceProperties().isEnable();
+        if (!isTableSpaceEnable) {
+            return;
+        }
         synchronized (DbTableSpaceMonitorJob.class) {
             try {
                 // 查询数据库中的所有数据库信息
@@ -136,9 +121,15 @@ public class DbTableSpaceMonitorJob extends QuartzJobBean {
                 List<List<MonitorDb>> subMonitorDbLists = CollectionUtils.split(monitorDbs, 10);
                 for (List<MonitorDb> subMonitorDbs : subMonitorDbLists) {
                     // 使用多线程，加快处理速度
-                    this.seService.execute(() -> {
+                    this.dbTbsMonitorThreadPoolExecutor.execute(() -> {
                         for (MonitorDb monitorDb : subMonitorDbs) {
                             try {
+                                // 是否开启监控（0：不开启监控；1：开启监控）
+                                String isEnableMonitor = monitorDb.getIsEnableMonitor();
+                                // 没有开启监控，直接跳过
+                                if (!StringUtils.equals(ZeroOrOneConstants.ONE, isEnableMonitor)) {
+                                    continue;
+                                }
                                 // 数据库是否在线（可连接）
                                 boolean isOnline = ZeroOrOneConstants.ONE.equals(monitorDb.getIsOnline());
                                 // 数据库在线（可连接）
@@ -231,9 +222,18 @@ public class DbTableSpaceMonitorJob extends QuartzJobBean {
      * @author 皮锋
      * @custom.date 2020/12/20 21:25
      */
-    private void sendAlarmInfo(String title, MonitorDb monitorDb, DbTableSpace dbTableSpace, AlarmLevelEnums
-            alarmLevelEnum, AlarmReasonEnums alarmReasonEnum)
-            throws NetException {
+    private void sendAlarmInfo(String title, MonitorDb monitorDb, DbTableSpace dbTableSpace, AlarmLevelEnums alarmLevelEnum, AlarmReasonEnums alarmReasonEnum) throws NetException {
+        // 告警是否打开
+        boolean alarmEnable = this.monitoringConfigPropertiesLoader.getMonitoringProperties().getDbProperties().getDbTableSpaceProperties().isAlarmEnable();
+        if (!alarmEnable) {
+            return;
+        }
+        // 是否开启告警（0：不开启告警；1：开启告警）
+        String isEnableAlarm = monitorDb.getIsEnableAlarm();
+        // 没有开启告警，直接结束
+        if (!StringUtils.equals(ZeroOrOneConstants.ONE, isEnableAlarm)) {
+            return;
+        }
         StringBuilder builder = new StringBuilder();
         builder.append("连接名：").append(monitorDb.getConnName())
                 .append("，<br>url：").append(monitorDb.getUrl())
@@ -256,6 +256,8 @@ public class DbTableSpaceMonitorJob extends QuartzJobBean {
                 .alarmLevel(alarmLevelEnum)
                 .alarmReason(alarmReasonEnum)
                 .monitorType(MonitorTypeEnums.DATABASE)
+                .monitorSubType(MonitorSubTypeEnums.DATABASE__TABLE_SPACE)
+                .alertedEntityId(String.valueOf(monitorDb.getId()))
                 .build();
         AlarmPackage alarmPackage = this.serverPackageConstructor.structureAlarmPackage(alarm);
         this.alarmService.dealAlarmPackage(alarmPackage);

@@ -9,6 +9,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gitee.pifeng.monitoring.common.constant.ZeroOrOneConstants;
+import com.gitee.pifeng.monitoring.common.constant.monitortype.MonitorTypeEnums;
 import com.gitee.pifeng.monitoring.common.domain.Result;
 import com.gitee.pifeng.monitoring.common.dto.BaseRequestPackage;
 import com.gitee.pifeng.monitoring.common.dto.BaseResponsePackage;
@@ -19,6 +20,7 @@ import com.gitee.pifeng.monitoring.ui.business.web.dao.IMonitorNetHistoryDao;
 import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorNet;
 import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorNetHistory;
 import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorNetService;
+import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorRealtimeMonitoringService;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.HomeNetVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.LayUiAdminResultVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.MonitorNetVo;
@@ -27,7 +29,9 @@ import com.gitee.pifeng.monitoring.ui.constant.WebResponseConstants;
 import com.gitee.pifeng.monitoring.ui.core.UiPackageConstructor;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -54,6 +58,12 @@ public class MonitorNetServiceImpl extends ServiceImpl<IMonitorNetDao, MonitorNe
      */
     @Autowired
     private UiPackageConstructor uiPackageConstructor;
+
+    /**
+     * 实时监控服务类
+     */
+    @Autowired
+    private IMonitorRealtimeMonitoringService monitorRealtimeMonitoringService;
 
     /**
      * 网络信息数据访问对象
@@ -172,6 +182,8 @@ public class MonitorNetServiceImpl extends ServiceImpl<IMonitorNetDao, MonitorNe
         LambdaUpdateWrapper<MonitorNet> monitorNetLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
         monitorNetLambdaUpdateWrapper.in(MonitorNet::getId, ids);
         this.monitorNetDao.delete(monitorNetLambdaUpdateWrapper);
+        // 注意：删除实时监控信息，这个不要忘记了
+        this.monitorRealtimeMonitoringService.delete(MonitorTypeEnums.NET, null, ids);
         return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);
     }
 
@@ -198,13 +210,19 @@ public class MonitorNetServiceImpl extends ServiceImpl<IMonitorNetDao, MonitorNe
             return LayUiAdminResultVo.ok(WebResponseConstants.EXIST);
         }
         MonitorNet monitorNet = monitorNetVo.convertTo();
-        monitorNet.setIpSource(this.getSourceIp());
+        monitorNet.setIpSource(((IMonitorNetService) AopContext.currentProxy()).getSourceIp());
         monitorNet.setUpdateTime(new Date());
         if (StringUtils.isBlank(monitorNetVo.getMonitorEnv())) {
             monitorNet.setMonitorEnv(null);
         }
         if (StringUtils.isBlank(monitorNetVo.getMonitorGroup())) {
             monitorNet.setMonitorGroup(null);
+        }
+        if (StringUtils.isBlank(monitorNetVo.getIsEnableMonitor())) {
+            monitorNet.setIsEnableMonitor(ZeroOrOneConstants.ZERO);
+        }
+        if (StringUtils.isBlank(monitorNetVo.getIsEnableAlarm())) {
+            monitorNet.setIsEnableAlarm(ZeroOrOneConstants.ZERO);
         }
         int result = this.monitorNetDao.updateById(monitorNet);
         if (result == 1) {
@@ -235,7 +253,7 @@ public class MonitorNetServiceImpl extends ServiceImpl<IMonitorNetDao, MonitorNe
             return LayUiAdminResultVo.ok(WebResponseConstants.EXIST);
         }
         MonitorNet monitorNet = monitorNetVo.convertTo();
-        monitorNet.setIpSource(this.getSourceIp());
+        monitorNet.setIpSource(((IMonitorNetService) AopContext.currentProxy()).getSourceIp());
         monitorNet.setInsertTime(new Date());
         monitorNet.setOfflineCount(0);
         if (StringUtils.isBlank(monitorNetVo.getMonitorEnv())) {
@@ -244,11 +262,65 @@ public class MonitorNetServiceImpl extends ServiceImpl<IMonitorNetDao, MonitorNe
         if (StringUtils.isBlank(monitorNetVo.getMonitorGroup())) {
             monitorNet.setMonitorGroup(null);
         }
+        if (StringUtils.isBlank(monitorNetVo.getIsEnableMonitor())) {
+            monitorNet.setIsEnableMonitor(ZeroOrOneConstants.ZERO);
+        }
+        if (StringUtils.isBlank(monitorNetVo.getIsEnableAlarm())) {
+            monitorNet.setIsEnableAlarm(ZeroOrOneConstants.ZERO);
+        }
         int result = this.monitorNetDao.insert(monitorNet);
         if (result == 1) {
             return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);
         }
         return LayUiAdminResultVo.ok(WebResponseConstants.FAIL);
+    }
+
+    /**
+     * <p>
+     * 设置是否开启监控（0：不开启监控；1：开启监控）
+     * </p>
+     *
+     * @param id              主键ID
+     * @param isEnableMonitor 是否开启监控（0：不开启监控；1：开启监控）
+     * @return 如果设置成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @author 皮锋
+     * @custom.date 2024/12/10 21:20
+     */
+    @Override
+    public LayUiAdminResultVo setIsEnableMonitor(Long id, String isEnableMonitor) {
+        LambdaUpdateWrapper<MonitorNet> netLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+        // 设置更新条件
+        netLambdaUpdateWrapper.eq(MonitorNet::getId, id);
+        // 设置更新字段
+        netLambdaUpdateWrapper.set(MonitorNet::getIsEnableMonitor, isEnableMonitor);
+        // 如果不监控，状态设置为未知
+        if (StringUtils.equals(isEnableMonitor, ZeroOrOneConstants.ZERO)) {
+            netLambdaUpdateWrapper.set(MonitorNet::getStatus, null);
+        }
+        this.monitorNetDao.update(null, netLambdaUpdateWrapper);
+        return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);
+    }
+
+    /**
+     * <p>
+     * 设置是否开启告警（0：不开启告警；1：开启告警）
+     * </p>
+     *
+     * @param id            主键ID
+     * @param isEnableAlarm 是否开启告警（0：不开启告警；1：开启告警）
+     * @return 如果设置成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @author 皮锋
+     * @custom.date 2024/12/10 21:37
+     */
+    @Override
+    public LayUiAdminResultVo setIsEnableAlarm(Long id, String isEnableAlarm) {
+        LambdaUpdateWrapper<MonitorNet> netLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+        // 设置更新条件
+        netLambdaUpdateWrapper.eq(MonitorNet::getId, id);
+        // 设置更新字段
+        netLambdaUpdateWrapper.set(MonitorNet::getIsEnableAlarm, isEnableAlarm);
+        this.monitorNetDao.update(null, netLambdaUpdateWrapper);
+        return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);
     }
 
     /**
@@ -261,6 +333,7 @@ public class MonitorNetServiceImpl extends ServiceImpl<IMonitorNetDao, MonitorNe
      * @custom.date 2021/10/6 22:19
      */
     @Override
+    @Cacheable(value = "sourceIp", key = "'sourceIp'", sync = true)
     public String getSourceIp() {
         try {
             BaseRequestPackage baseRequestPackage = this.uiPackageConstructor.structureBaseRequestPackage(null);

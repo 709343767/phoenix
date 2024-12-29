@@ -86,8 +86,8 @@
         base: ctxPath //静态资源所在路径
     }).extend({
         index: 'lib/index' //主入口模块
-    }).use(['index', 'table'], function () {
-        var admin = layui.admin, form = layui.form, table = layui.table, device = layui.device();
+    }).use(['index', 'admin', 'form', 'table', 'layer'], function () {
+        var admin = layui.admin, form = layui.form, table = layui.table, device = layui.device(), layer = layui.layer;
         table.render({
             elem: '#user-list-table',
             url: ctxPath + 'user/get-monitor-user-list',
@@ -232,7 +232,7 @@
                         // 高度
                         height = document.body.clientHeight * 0.6 + 'px';
                     }
-                    layer.open({
+                    var infoLayerAddIndex = layer.open({
                         type: 2,
                         title: '添加用户',
                         content: ctxPath + 'user/add-user-form',
@@ -276,6 +276,9 @@
                             submit.trigger('click');
                         }
                     });
+                    if (device.ios || device.android) {
+                        layer.full(infoLayerAddIndex);
+                    }
                     break;
             }
         });
@@ -325,7 +328,7 @@
                     // 高度
                     height = document.body.clientHeight * 0.6 + 'px';
                 }
-                layer.open({
+                var infoLayerEditIndex = layer.open({
                     type: 2,
                     title: '编辑用户',
                     content: ctxPath + 'user/edit-user-form?userId=' + data.id,
@@ -367,6 +370,9 @@
                         submit.trigger('click');
                     }
                 });
+                if (device.ios || device.android) {
+                    layer.full(infoLayerEditIndex);
+                }
             }
         });
     });

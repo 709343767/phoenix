@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Data;
@@ -31,6 +33,7 @@ public class MonitorServerDiskHistory implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @JsonSerialize(using = ToStringSerializer.class)
     @Schema(description = "主键ID")
     @TableId(value = "ID", type = IdType.AUTO)
     private Long id;
@@ -63,14 +66,17 @@ public class MonitorServerDiskHistory implements Serializable {
     @TableField("TOTAL")
     private Long total;
 
+    @JsonSerialize(using = ToStringSerializer.class)
     @Schema(description = "磁盘剩余大小（单位：byte）")
     @TableField("FREE")
     private Long free;
 
+    @JsonSerialize(using = ToStringSerializer.class)
     @Schema(description = "磁盘已用大小（单位：byte）")
     @TableField("USED")
     private Long used;
 
+    @JsonSerialize(using = ToStringSerializer.class)
     @Schema(description = "磁盘可用大小（单位：byte）")
     @TableField("AVAIL")
     private Long avail;

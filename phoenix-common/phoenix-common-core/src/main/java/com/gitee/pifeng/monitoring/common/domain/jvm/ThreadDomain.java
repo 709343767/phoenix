@@ -4,6 +4,8 @@ import com.gitee.pifeng.monitoring.common.abs.AbstractSuperBean;
 import lombok.*;
 import lombok.experimental.Accessors;
 
+import java.util.List;
+
 /**
  * <p>
  * 线程信息
@@ -40,5 +42,10 @@ public class ThreadDomain extends AbstractSuperBean {
      * 当前活动守护线程数
      */
     private int daemonThreadCount;
+
+    /**
+     * 所有线程信息
+     */
+    private List<String> threadInfos;
 
 }

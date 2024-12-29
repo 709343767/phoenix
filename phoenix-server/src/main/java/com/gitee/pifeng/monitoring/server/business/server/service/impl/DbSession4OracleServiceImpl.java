@@ -4,8 +4,8 @@ import cn.hutool.db.Entity;
 import cn.hutool.db.handler.EntityListHandler;
 import cn.hutool.db.sql.SqlExecutor;
 import com.gitee.pifeng.monitoring.common.constant.sql.Oracle;
-import com.gitee.pifeng.monitoring.server.util.db.DbUtils;
 import com.gitee.pifeng.monitoring.server.business.server.service.IDbSession4OracleService;
+import com.gitee.pifeng.monitoring.server.util.db.DbUtils;
 import lombok.Cleanup;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -66,7 +66,7 @@ public class DbSession4OracleServiceImpl implements IDbSession4OracleService {
         Connection connection = DbUtils.getConnection(url, username, password);
         for (int i = 0; i < sids.size(); i++) {
             try {
-                String sql = Oracle.KILL_SESSION.replace("sid", String.valueOf(sids.get(i))).replace("serial#", String.valueOf(serials.get(i)));
+                String sql = Oracle.KILL_SESSION.replace("SID", String.valueOf(sids.get(i))).replace("SERIAL#", String.valueOf(serials.get(i)));
                 SqlExecutor.execute(connection, sql);
             } catch (SQLException e) {
                 log.error("结束会话异常！", e);

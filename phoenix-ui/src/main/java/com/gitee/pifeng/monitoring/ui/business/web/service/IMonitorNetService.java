@@ -92,6 +92,32 @@ public interface IMonitorNetService extends IService<MonitorNet> {
 
     /**
      * <p>
+     * 设置是否开启监控（0：不开启监控；1：开启监控）
+     * </p>
+     *
+     * @param id              主键ID
+     * @param isEnableMonitor 是否开启监控（0：不开启监控；1：开启监控）
+     * @return 如果设置成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @author 皮锋
+     * @custom.date 2024/12/10 21:20
+     */
+    LayUiAdminResultVo setIsEnableMonitor(Long id, String isEnableMonitor);
+
+    /**
+     * <p>
+     * 设置是否开启告警（0：不开启告警；1：开启告警）
+     * </p>
+     *
+     * @param id            主键ID
+     * @param isEnableAlarm 是否开启告警（0：不开启告警；1：开启告警）
+     * @return 如果设置成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @author 皮锋
+     * @custom.date 2024/12/10 21:37
+     */
+    LayUiAdminResultVo setIsEnableAlarm(Long id, String isEnableAlarm);
+
+    /**
+     * <p>
      * 获取被监控网络源IP地址，获取失败则返回null。
      * </p>
      *

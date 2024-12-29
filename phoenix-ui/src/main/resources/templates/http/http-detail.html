@@ -41,8 +41,20 @@
                         <div class="layui-col-md12">
                             <label class="label-font-weight">请求方法：</label>[[${monitorHttpVo.method}]]
                         </div>
+                        <div class="layui-col-md12" th:if="${monitorHttpVo.method!='GET'}">
+                            <label class="label-font-weight">媒体类型：</label>[[${monitorHttpVo.contentType}]]
+                        </div>
                         <div class="layui-col-md12">
-                            <label class="label-font-weight">请求参数：</label>[[${monitorHttpVo.parameter}]]
+                            <label class="label-font-weight">请求头：</label>
+                            <span style="white-space:pre-wrap;word-wrap:break-word;"
+                                  th:utext="${#strings.replace(#strings.replace(#strings.replace(monitorHttpVo.headerParameter,'\r\n','<br>'),'\\n','<br>'),'\n','<br>')}">
+                            </span>
+                        </div>
+                        <div class="layui-col-md12" th:if="${monitorHttpVo.method!='GET'}">
+                            <label class="label-font-weight">请求体：</label>
+                            <span style="white-space:pre-wrap;word-wrap:break-word;"
+                                  th:utext="${#strings.replace(#strings.replace(#strings.replace(monitorHttpVo.bodyParameter,'\r\n','<br>'),'\\n','<br>'),'\n','<br>')}">
+                            </span>
                         </div>
                         <div class="layui-col-md12">
                             <label class="label-font-weight">平均响应时间（毫秒）：</label>[[${monitorHttpVo.avgTime}]]

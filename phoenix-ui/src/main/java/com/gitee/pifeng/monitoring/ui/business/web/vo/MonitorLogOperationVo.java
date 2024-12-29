@@ -1,6 +1,8 @@
 package com.gitee.pifeng.monitoring.ui.business.web.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.gitee.pifeng.monitoring.common.inf.ISuperBean;
 import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorLogOperation;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -29,6 +31,7 @@ import java.util.Date;
 @Schema(description = "MonitorLogOperation对象")
 public class MonitorLogOperationVo implements ISuperBean {
 
+    @JsonSerialize(using = ToStringSerializer.class)
     @Schema(description = "主键ID")
     private Long id;
 
@@ -47,6 +50,7 @@ public class MonitorLogOperationVo implements ISuperBean {
     @Schema(description = "返回参数")
     private String respParam;
 
+    @JsonSerialize(using = ToStringSerializer.class)
     @Schema(description = "操作用户ID")
     private Long userId;
 

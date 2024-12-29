@@ -1,6 +1,8 @@
 package com.gitee.pifeng.monitoring.ui.business.web.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.gitee.pifeng.monitoring.common.inf.ISuperBean;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
@@ -46,6 +48,7 @@ public class HttpAvgTimeChartVo implements ISuperBean {
     @Data
     public static class All {
 
+        @JsonSerialize(using = ToStringSerializer.class)
         @Schema(description = "平均响应时间（毫秒）")
         private Long avgTime;
 
@@ -69,6 +72,7 @@ public class HttpAvgTimeChartVo implements ISuperBean {
     @Data
     public static class Exc {
 
+        @JsonSerialize(using = ToStringSerializer.class)
         @Schema(description = "平均响应时间（毫秒）")
         private Long avgTime;
 

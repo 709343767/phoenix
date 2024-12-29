@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -29,10 +31,12 @@ public class MonitorHttpHistory implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @JsonSerialize(using = ToStringSerializer.class)
     @Schema(description = "主键ID")
     @TableId(value = "ID", type = IdType.AUTO)
     private Long id;
 
+    @JsonSerialize(using = ToStringSerializer.class)
     @Schema(description = "HTTP主表ID")
     @TableField("HTTP_ID")
     private Long httpId;
@@ -49,14 +53,23 @@ public class MonitorHttpHistory implements Serializable {
     @TableField("METHOD")
     private String method;
 
-    @Schema(description = "请求参数")
-    @TableField("PARAMETER")
-    private String parameter;
+    @Schema(description = "媒体类型")
+    @TableField("CONTENT_TYPE")
+    private String contentType;
+
+    @Schema(description = "请求头参数")
+    @TableField("HEADER_PARAMETER")
+    private String headerParameter;
+
+    @Schema(description = "请求体参数")
+    @TableField("BODY_PARAMETER")
+    private String bodyParameter;
 
     @Schema(description = "描述")
     @TableField("DESCR")
     private String descr;
 
+    @JsonSerialize(using = ToStringSerializer.class)
     @Schema(description = "平均响应时间（毫秒）")
     @TableField("AVG_TIME")
     private Long avgTime;

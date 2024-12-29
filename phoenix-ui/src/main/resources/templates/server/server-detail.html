@@ -22,6 +22,8 @@
         var id = [[${id}]];
         // IP地址
         var ip = [[${ip}]];
+        // 服务器15分钟过载阈值
+        var serverOverloadThreshold15minutes = [[${monitorConfigPageFormInfo.serverOverloadThreshold15minutes}]];
     </script>
 </head>
 <body>
@@ -43,7 +45,7 @@
                                         <select name="time" id="time" lay-filter="time">
                                             <option value="hour">1小时</option>
                                             <option value="day">1天</option>
-                                            <!--<option value="week">1周</option>-->
+                                            <option value="week">1周</option>
                                             <!--<option value="month">1月</option>-->
                                             <!--<option value="halfYear">6月</option>-->
                                             <!--<option value="year">1年</option>-->
@@ -76,11 +78,11 @@
                             <div class="layui-row layui-col-space5">
                                 <div class="layadmin-dataview-my-330px" id="get-server-cpu-info">
                                 </div>
+                                <div class="layadmin-dataview-my-330px" id="get-server-load-average-info">
+                                </div>
                                 <div class="layadmin-dataview-my-330px" id="get-server-memory-info">
                                 </div>
                                 <div class="layadmin-dataview-my-330px" id="get-server-process-info">
-                                </div>
-                                <div class="layadmin-dataview-my-330px" id="get-server-load-average-info">
                                 </div>
                             </div>
                         </div>
@@ -143,7 +145,7 @@
                             </div>
                         </div>
                         <div class="layui-colla-item">
-                            <h2 class="layui-colla-title">CPU</h2>
+                            <h2 class="layui-colla-title">CPU<span id="cpuHead"></span></h2>
                             <div class="layui-colla-content layui-show">
                                 <div class="layui-row layui-col-space10" id="cpu">
                                 </div>
@@ -171,7 +173,7 @@
                             </div>
                         </div>
                         <div class="layui-colla-item">
-                            <h2 class="layui-colla-title">进程(内存占用倒序前20个)</h2>
+                            <h2 class="layui-colla-title">进程（内存占用倒序前20个）</h2>
                             <div class="layui-colla-content layui-show">
                                 <div class="layui-row layui-col-space10" id="process"
                                      style="word-wrap:break-word;">

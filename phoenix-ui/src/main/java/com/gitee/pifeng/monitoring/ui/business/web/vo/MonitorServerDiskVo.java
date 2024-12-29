@@ -1,6 +1,8 @@
 package com.gitee.pifeng.monitoring.ui.business.web.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.gitee.pifeng.monitoring.common.inf.ISuperBean;
 import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorServerDisk;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -29,6 +31,7 @@ import java.util.Date;
 @Schema(description = "服务器磁盘信息表现层对象")
 public class MonitorServerDiskVo implements ISuperBean {
 
+    @JsonSerialize(using = ToStringSerializer.class)
     @Schema(description = "主键ID")
     private Long id;
 
@@ -50,15 +53,19 @@ public class MonitorServerDiskVo implements ISuperBean {
     @Schema(description = "磁盘类型，比如 FAT32、NTFS")
     private String sysTypeName;
 
+    @JsonSerialize(using = ToStringSerializer.class)
     @Schema(description = "磁盘总大小（单位：byte）")
     private Long total;
 
+    @JsonSerialize(using = ToStringSerializer.class)
     @Schema(description = "磁盘剩余大小（单位：byte）")
     private Long free;
 
+    @JsonSerialize(using = ToStringSerializer.class)
     @Schema(description = "磁盘已用大小（单位：byte）")
     private Long used;
 
+    @JsonSerialize(using = ToStringSerializer.class)
     @Schema(description = "磁盘可用大小（单位：byte）")
     private Long avail;
 

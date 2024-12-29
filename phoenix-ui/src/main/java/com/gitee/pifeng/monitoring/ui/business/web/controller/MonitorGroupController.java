@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -152,6 +153,7 @@ public class MonitorGroupController {
      */
     @Operation(summary = "编辑分组信息")
     @PutMapping("/edit-monitor-group")
+    @PreAuthorize("hasAuthority('超级管理员')")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.CONFIG_MANAGE + "#分组管理", operType = OperateTypeConstants.UPDATE, operDesc = "编辑分组信息")
     public LayUiAdminResultVo editMonitorGroup(MonitorGroupVo monitorGroupVo) {
@@ -170,6 +172,7 @@ public class MonitorGroupController {
      */
     @Operation(summary = "删除分组信息")
     @DeleteMapping("/delete-monitor-group")
+    @PreAuthorize("hasAuthority('超级管理员')")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.CONFIG_MANAGE + "#分组管理", operType = OperateTypeConstants.DELETE, operDesc = "删除分组信息")
     public LayUiAdminResultVo deleteMonitorGroup(@RequestBody List<MonitorGroupVo> monitorGroupVos) {

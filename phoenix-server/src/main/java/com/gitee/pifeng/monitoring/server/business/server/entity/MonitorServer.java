@@ -57,6 +57,18 @@ public class MonitorServer {
     private String isOnline;
 
     /**
+     * 是否开启监控（0：不开启监控；1：开启监控）
+     */
+    @TableField("IS_ENABLE_MONITOR")
+    private String isEnableMonitor;
+
+    /**
+     * 是否开启告警（0：不开启告警；1：开启告警）
+     */
+    @TableField("IS_ENABLE_ALARM")
+    private String isEnableAlarm;
+
+    /**
      * 离线次数
      */
     @TableField("OFFLINE_COUNT")

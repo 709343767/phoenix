@@ -48,6 +48,16 @@
                     </div>
                 </div>
                 <div class="layui-inline">
+                    <label class="layui-form-label">告警方式</label>
+                    <div class="layui-input-block" style="width: 182px;">
+                        <select name="way">
+                            <option value="">所有</option>
+                            <option value="SMS">短信</option>
+                            <option value="MAIL">邮件</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
                     <label class="layui-form-label">告警级别</label>
                     <div class="layui-input-block" style="width: 182px;">
                         <select name="level">
@@ -150,9 +160,9 @@
         base: ctxPath //静态资源所在路径
     }).extend({
         index: 'lib/index' //主入口模块
-    }).use(['index', 'table', 'laydate'], function () {
+    }).use(['index', 'admin', 'form', 'table', 'laydate', 'layer'], function () {
         var $ = layui.$, admin = layui.admin, form = layui.form, table = layui.table, device = layui.device(),
-            laydate = layui.laydate;
+            laydate = layui.laydate, layer = layui.layer;
         //日期选择器
         laydate.render({
             elem: '#insertDate'
@@ -248,7 +258,8 @@
             cols: [
                 [{
                     type: 'checkbox',
-                    hide: !authority
+                    hide: !authority,
+                    fixed: (device.ios || device.android) ? false : 'left',
                 }, {
                     field: 'id',
                     width: 80,
@@ -291,6 +302,11 @@
                     title: '号码',
                     sort: !0
                 }, {
+                    field: 'notSendReason',
+                    width: 200,
+                    title: '不提醒原因',
+                    sort: !0
+                }, {
                     field: 'insertTime',
                     minWidth: 170,
                     title: '记录时间',
@@ -326,6 +342,7 @@
         form.on('submit(alarm-record-list-table-export)', function (data) {
             var field = data.field;
             var type = field.type;
+            var way = field.way;
             var level = field.level;
             var status = field.status;
             var content = field.content;
@@ -333,9 +350,60 @@
             var number = field.number;
             var insertDate = field.insertDate;
             var updateDate = field.updateDate;
-            window.location.href = ctxPath + 'monitor-alarm-record/export-monitor-alarm-record-list?' +
+            var exportUrl = ctxPath + 'monitor-alarm-record/export-monitor-alarm-record-list?' +
                 'content=' + content + '&level=' + level + '&status=' + status + '&title=' + title +
-                '&type=' + type + '&number=' + number + '&insertDate=' + insertDate + '&updateDate=' + updateDate;
+                '&type=' + type + '&way=' + way + '&number=' + number + '&insertDate=' + insertDate +
+                '&updateDate=' + updateDate;
+            // 弹出loading框
+            var exportLoadingIndex = layer.load(1, {
+                shade: [0.1, '#fff'] //0.1透明度的白色背景
+            });
+            // 发送导出请求
+            window.fetch(exportUrl, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            }).then(response => {
+                if (response.ok) {
+                    // 从响应头中获取文件名
+                    var contentDisposition = response.headers.get('content-disposition');
+                    var filename = '告警记录.xlsx'; // 默认文件名
+                    // 响应头中的Content-Disposition字段提取文件名
+                    if (contentDisposition) {
+                        var match = contentDisposition.match(/filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/);
+                        if (match && match[1]) {
+                            filename = window.decodeURIComponent(match[1].replace(/['"]/g, ''));
+                        }
+                    }
+                    // 创建一个Blob对象来处理二进制数据
+                    return response.blob().then(blob => ({blob, filename}));
+                } else {
+                    layer.msg('导出请求失败！', {icon: 5, shift: 6});
+                    // 关闭loading框
+                    layer.close(exportLoadingIndex);
+                    throw new Error('导出请求失败！');
+                }
+            }).then(({blob, filename}) => {
+                // 创建一个URL对象
+                var url = window.URL.createObjectURL(blob);
+                // 创建一个<a>标签来触发下载
+                var a = document.createElement('a');
+                a.href = url;
+                a.download = filename; // 使用从响应头中获取的文件名
+                document.body.appendChild(a);
+                a.click();
+                // 清理
+                a.remove();
+                window.URL.revokeObjectURL(url);
+                // 关闭loading框
+                layer.close(exportLoadingIndex);
+            }).catch(error => {
+                layer.msg('导出请求失败！', {icon: 5, shift: 6});
+                // 关闭loading框
+                layer.close(exportLoadingIndex);
+                console.error('导出请求失败：', error);
+            });
         });
         // 点击表头排序
         table.on('sort(alarm-record-list-table)', function (obj) {

@@ -33,6 +33,9 @@ public class HomeInstanceVo implements ISuperBean {
     @Schema(description = "应用实例离线数量")
     private Integer instanceOffLineSum;
 
+    @Schema(description = "应用实例未知状态数量")
+    private Integer instanceUnknownLineSum;
+
     @Schema(description = "应用实例在线率")
     private String instanceOnLineRate;
 

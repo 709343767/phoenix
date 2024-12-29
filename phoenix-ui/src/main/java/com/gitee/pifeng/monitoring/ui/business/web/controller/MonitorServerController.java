@@ -19,6 +19,7 @@ import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -140,6 +141,7 @@ public class MonitorServerController {
      */
     @Operation(summary = "删除服务器")
     @DeleteMapping("/delete-monitor-server")
+    @PreAuthorize("hasAuthority('超级管理员')")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.SERVER, operType = OperateTypeConstants.DELETE, operDesc = "删除服务器")
     public LayUiAdminResultVo deleteMonitorServer(@RequestBody List<MonitorServerVo> monitorServerVos) {
@@ -162,6 +164,7 @@ public class MonitorServerController {
             @Parameter(name = "ip", description = "服务器IP", required = true, in = ParameterIn.QUERY),
             @Parameter(name = "time", description = "时间", required = true, in = ParameterIn.QUERY)})
     @DeleteMapping("/clear-monitor-server-history")
+    @PreAuthorize("hasAuthority('超级管理员')")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.SERVER, operType = OperateTypeConstants.DELETE, operDesc = "清理服务器监控历史数据")
     public LayUiAdminResultVo clearMonitorServerHistory(String ip, String time) {
@@ -189,6 +192,9 @@ public class MonitorServerController {
         ModelAndView mv = new ModelAndView("server/server-detail");
         mv.addObject("id", id);
         mv.addObject("ip", ip);
+        // 监控配置
+        MonitorConfigPageFormVo monitorConfigPageFormInfo = this.monitorConfigService.getMonitorConfigPageFormInfo();
+        mv.addObject("monitorConfigPageFormInfo", monitorConfigPageFormInfo);
         // 获取服务器网卡地址
         List<String> netcardAddresses = this.monitorServerService.getNetcardAddress(ip);
         mv.addObject("netcardAddresses", netcardAddresses);
@@ -247,6 +253,8 @@ public class MonitorServerController {
         mv.addObject("serverSummary", monitorServerVo.getServerSummary());
         mv.addObject("env", monitorServerVo.getMonitorEnv());
         mv.addObject("group", monitorServerVo.getMonitorGroup());
+        mv.addObject("isEnableMonitor", monitorServerVo.getIsEnableMonitor());
+        mv.addObject("isEnableAlarm", monitorServerVo.getIsEnableAlarm());
         return mv;
     }
 
@@ -262,10 +270,65 @@ public class MonitorServerController {
      */
     @Operation(summary = "编辑服务器信息")
     @PutMapping("/edit-monitor-server")
+    @PreAuthorize("hasAuthority('超级管理员')")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.SERVER, operType = OperateTypeConstants.UPDATE, operDesc = "编辑服务器信息")
     public LayUiAdminResultVo editMonitorServer(MonitorServerVo monitorServerVo) {
         return this.monitorServerService.editMonitorServer(monitorServerVo);
+    }
+
+    /**
+     * <p>
+     * 设置是否开启监控（0：不开启监控；1：开启监控）
+     * </p>
+     *
+     * @param id              主键ID
+     * @param ip              IP地址
+     * @param isEnableMonitor 是否开启监控（0：不开启监控；1：开启监控）
+     * @return 如果设置成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @author 皮锋
+     * @custom.date 2024/12/10 21:20
+     */
+    @Operation(summary = "设置是否开启监控（0：不开启监控；1：开启监控）")
+    @Parameters(value = {
+            @Parameter(name = "id", description = "主键ID", required = true, in = ParameterIn.QUERY),
+            @Parameter(name = "ip", description = "IP地址", required = true, in = ParameterIn.QUERY),
+            @Parameter(name = "isEnableMonitor", description = "是否开启监控（0：不开启监控；1：开启监控）", in = ParameterIn.QUERY)})
+    @PutMapping("/set-is-enable-monitor")
+    @PreAuthorize("hasAuthority('超级管理员')")
+    @ResponseBody
+    @OperateLog(operModule = UiModuleConstants.SERVER, operType = OperateTypeConstants.UPDATE, operDesc = "设置是否开启监控（0：不开启监控；1：开启监控）")
+    public LayUiAdminResultVo setIsEnableMonitor(@RequestParam(value = "id") Long id,
+                                                 @RequestParam(value = "ip") String ip,
+                                                 @RequestParam(value = "isEnableMonitor") String isEnableMonitor) {
+        return this.monitorServerService.setIsEnableMonitor(id, ip, isEnableMonitor);
+    }
+
+    /**
+     * <p>
+     * 设置是否开启告警（0：不开启告警；1：开启告警）
+     * </p>
+     *
+     * @param id            主键ID
+     * @param ip            IP地址
+     * @param isEnableAlarm 是否开启告警（0：不开启告警；1：开启告警）
+     * @return 如果设置成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @author 皮锋
+     * @custom.date 2024/12/10 21:37
+     */
+    @Operation(summary = "设置是否开启告警（0：不开启告警；1：开启告警）")
+    @Parameters(value = {
+            @Parameter(name = "id", description = "主键ID", required = true, in = ParameterIn.QUERY),
+            @Parameter(name = "ip", description = "IP地址", required = true, in = ParameterIn.QUERY),
+            @Parameter(name = "isEnableAlarm", description = "是否开启告警（0：不开启告警；1：开启告警）", in = ParameterIn.QUERY)})
+    @PutMapping("/set-is-enable-alarm")
+    @PreAuthorize("hasAuthority('超级管理员')")
+    @ResponseBody
+    @OperateLog(operModule = UiModuleConstants.SERVER, operType = OperateTypeConstants.UPDATE, operDesc = "设置是否开启告警（0：不开启告警；1：开启告警）")
+    public LayUiAdminResultVo setIsEnableAlarm(@RequestParam(value = "id") Long id,
+                                               @RequestParam(value = "ip") String ip,
+                                               @RequestParam(value = "isEnableAlarm") String isEnableAlarm) {
+        return this.monitorServerService.setIsEnableAlarm(id, ip, isEnableAlarm);
     }
 
     /**

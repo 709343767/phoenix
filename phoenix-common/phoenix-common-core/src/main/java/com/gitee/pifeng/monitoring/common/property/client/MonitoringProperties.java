@@ -1,5 +1,6 @@
 package com.gitee.pifeng.monitoring.common.property.client;
 
+import com.gitee.pifeng.monitoring.common.inf.ISuperBean;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -17,31 +18,31 @@ import lombok.experimental.Accessors;
 @ToString
 @NoArgsConstructor
 @Accessors(chain = true)
-public class MonitoringProperties {
+public class MonitoringProperties implements ISuperBean {
 
     /**
-     * 与服务端相关的监控属性
+     * 与通信相关的监控属性
      */
-    private MonitoringServerProperties serverProperties;
+    private MonitoringCommProperties comm;
 
     /**
-     * 与自己相关的监控属性
+     * 应用程序监控属性
      */
-    private MonitoringOwnProperties ownProperties;
+    private MonitoringInstanceProperties instance;
 
     /**
      * 心跳属性
      */
-    private MonitoringHeartbeatProperties heartbeatProperties;
+    private MonitoringHeartbeatProperties heartbeat;
 
     /**
      * 服务器信息属性
      */
-    private MonitoringServerInfoProperties serverInfoProperties;
+    private MonitoringServerInfoProperties serverInfo;
 
     /**
      * Java虚拟机信息属性
      */
-    private MonitoringJvmInfoProperties jvmInfoProperties;
+    private MonitoringJvmInfoProperties jvmInfo;
 
 }

@@ -2,9 +2,11 @@ package com.gitee.pifeng.monitoring.server.business.server.monitor;
 
 import cn.hutool.core.util.NumberUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.gitee.pifeng.monitoring.common.constant.MonitorTypeEnums;
+import com.gitee.pifeng.monitoring.common.constant.ZeroOrOneConstants;
 import com.gitee.pifeng.monitoring.common.constant.alarm.AlarmLevelEnums;
 import com.gitee.pifeng.monitoring.common.constant.alarm.AlarmReasonEnums;
+import com.gitee.pifeng.monitoring.common.constant.monitortype.MonitorSubTypeEnums;
+import com.gitee.pifeng.monitoring.common.constant.monitortype.MonitorTypeEnums;
 import com.gitee.pifeng.monitoring.common.domain.Alarm;
 import com.gitee.pifeng.monitoring.common.dto.AlarmPackage;
 import com.gitee.pifeng.monitoring.common.exception.NetException;
@@ -86,7 +88,22 @@ public class ServerDiskMonitor implements IServerMonitoringListener {
         if (!isEnable) {
             return;
         }
+        // 是否监控服务器磁盘
+        boolean isDiskEnable = this.monitoringConfigPropertiesLoader.getMonitoringProperties().getServerProperties().getServerDiskProperties().isEnable();
+        if (!isDiskEnable) {
+            return;
+        }
         String ip = String.valueOf(obj[0]);
+        MonitorServer monitorServer = this.serverService.getOne(new LambdaQueryWrapper<MonitorServer>().eq(MonitorServer::getIp, ip));
+        if (monitorServer == null) {
+            return;
+        }
+        // 是否开启监控（0：不开启监控；1：开启监控）
+        String isEnableMonitor = monitorServer.getIsEnableMonitor();
+        // 没有开启监控，直接结束
+        if (!StringUtils.equals(ZeroOrOneConstants.ONE, isEnableMonitor)) {
+            return;
+        }
         // 查询此IP的服务器磁盘信息
         List<MonitorServerDisk> monitorServerDisks = this.serverDiskService.list(new LambdaQueryWrapper<MonitorServerDisk>().eq(MonitorServerDisk::getIp, ip));
         if (CollectionUtils.isEmpty(monitorServerDisks)) {
@@ -105,10 +122,10 @@ public class ServerDiskMonitor implements IServerMonitoringListener {
             // 磁盘资源利用率大于等于配置的过载阈值
             if (usePercent >= overloadThreshold) {
                 // 处理磁盘空间不足
-                this.dealDiskOverLoad(ip, devName, dirName, usePercent);
+                this.dealDiskOverLoad(monitorServer, devName, dirName, usePercent);
             } else {
                 // 处理磁盘空间正常
-                this.dealDiskNotOverLoad(ip, devName, dirName, usePercent);
+                this.dealDiskNotOverLoad(monitorServer, devName, dirName, usePercent);
             }
         });
     }
@@ -118,24 +135,18 @@ public class ServerDiskMonitor implements IServerMonitoringListener {
      * 处理磁盘空间正常
      * </p>
      *
-     * @param ip         IP地址
-     * @param devName    分区的盘符名称
-     * @param dirName    分区的盘符路径
-     * @param usePercent 磁盘资源的利用率
+     * @param monitorServer 服务器信息
+     * @param devName       分区的盘符名称
+     * @param dirName       分区的盘符路径
+     * @param usePercent    磁盘资源的利用率
      * @author 皮锋
      * @custom.date 2021/2/4 15:15
      */
-    private void dealDiskNotOverLoad(String ip, String devName, String dirName, double usePercent) {
-        MonitorServer monitorServer = this.serverService.getOne(new LambdaQueryWrapper<MonitorServer>().eq(MonitorServer::getIp, ip));
-        if (monitorServer == null) {
-            return;
-        }
-        String serverName = monitorServer.getServerName();
-        String serverSummary = monitorServer.getServerSummary();
+    private void dealDiskNotOverLoad(MonitorServer monitorServer, String devName, String dirName, double usePercent) {
         // 发送告警信息
         try {
             // 不用担心头次检测到磁盘正常（非异常转正常）会发送告警，最终是否发送告警由“实时监控服务”决定
-            this.sendAlarmInfo("服务器磁盘空间恢复正常", ip, serverName, serverSummary, devName, dirName, usePercent, AlarmLevelEnums.INFO, AlarmReasonEnums.ABNORMAL_2_NORMAL);
+            this.sendAlarmInfo("服务器磁盘空间恢复正常", monitorServer, devName, dirName, usePercent, AlarmLevelEnums.INFO, AlarmReasonEnums.ABNORMAL_2_NORMAL);
         } catch (Exception e) {
             log.error("服务器磁盘空间恢复正常告警异常！", e);
         }
@@ -146,25 +157,19 @@ public class ServerDiskMonitor implements IServerMonitoringListener {
      * 处理磁盘空间不足
      * </p>
      *
-     * @param ip         IP地址
-     * @param devName    分区的盘符名称
-     * @param dirName    分区的盘符路径
-     * @param usePercent 磁盘资源的利用率
+     * @param monitorServer 服务器信息
+     * @param devName       分区的盘符名称
+     * @param dirName       分区的盘符路径
+     * @param usePercent    磁盘资源的利用率
      * @author 皮锋
      * @custom.date 2021/2/4 15:10
      */
-    private void dealDiskOverLoad(String ip, String devName, String dirName, double usePercent) {
-        MonitorServer monitorServer = this.serverService.getOne(new LambdaQueryWrapper<MonitorServer>().eq(MonitorServer::getIp, ip));
-        if (monitorServer == null) {
-            return;
-        }
-        String serverName = monitorServer.getServerName();
-        String serverSummary = monitorServer.getServerSummary();
+    private void dealDiskOverLoad(MonitorServer monitorServer, String devName, String dirName, double usePercent) {
         // 告警级别
         AlarmLevelEnums alarmLevelEnum = this.monitoringConfigPropertiesLoader.getMonitoringProperties().getServerProperties().getServerDiskProperties().getLevelEnum();
         // 发送告警信息
         try {
-            this.sendAlarmInfo("服务器磁盘空间不足", ip, serverName, serverSummary, devName, dirName, usePercent, alarmLevelEnum, AlarmReasonEnums.NORMAL_2_ABNORMAL);
+            this.sendAlarmInfo("服务器磁盘空间不足", monitorServer, devName, dirName, usePercent, alarmLevelEnum, AlarmReasonEnums.NORMAL_2_ABNORMAL);
         } catch (Exception e) {
             log.error("服务器磁盘空间不足告警异常！", e);
         }
@@ -176,9 +181,7 @@ public class ServerDiskMonitor implements IServerMonitoringListener {
      * </p>
      *
      * @param title           告警标题
-     * @param ip              IP地址
-     * @param serverName      服务器名
-     * @param serverSummary   服务器摘要
+     * @param monitorServer   服务器信息
      * @param devName         分区的盘符名称
      * @param dirName         分区的盘符路径
      * @param usePercent      磁盘资源的利用率
@@ -188,9 +191,23 @@ public class ServerDiskMonitor implements IServerMonitoringListener {
      * @author 皮锋
      * @custom.date 2020/3/25 14:46
      */
-    private void sendAlarmInfo(String title, String ip, String serverName, String serverSummary, String devName, String dirName,
+    private void sendAlarmInfo(String title, MonitorServer monitorServer, String devName, String dirName,
                                double usePercent, AlarmLevelEnums alarmLevelEnum, AlarmReasonEnums alarmReasonEnum)
             throws NetException {
+        // 告警是否打开
+        boolean alarmEnable = this.monitoringConfigPropertiesLoader.getMonitoringProperties().getServerProperties().getServerDiskProperties().isAlarmEnable();
+        if (!alarmEnable) {
+            return;
+        }
+        // 是否开启告警（0：不开启告警；1：开启告警）
+        String isEnableAlarm = monitorServer.getIsEnableAlarm();
+        // 没有开启告警，直接结束
+        if (!StringUtils.equals(ZeroOrOneConstants.ONE, isEnableAlarm)) {
+            return;
+        }
+        String ip = monitorServer.getIp();
+        String serverName = monitorServer.getServerName();
+        String serverSummary = monitorServer.getServerSummary();
         StringBuilder msgBuilder = new StringBuilder();
         msgBuilder.append("IP地址：").append(ip).append("，<br>服务器：").append(serverName);
         if (StringUtils.isNotBlank(serverSummary)) {
@@ -208,6 +225,8 @@ public class ServerDiskMonitor implements IServerMonitoringListener {
                 .alarmLevel(alarmLevelEnum)
                 .alarmReason(alarmReasonEnum)
                 .monitorType(MonitorTypeEnums.SERVER)
+                .monitorSubType(MonitorSubTypeEnums.SERVER__DISK)
+                .alertedEntityId(String.valueOf(monitorServer.getId()))
                 .build();
         AlarmPackage alarmPackage = this.serverPackageConstructor.structureAlarmPackage(alarm);
         this.alarmService.dealAlarmPackage(alarmPackage);

@@ -1,6 +1,8 @@
 package com.gitee.pifeng.monitoring.ui.business.web.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.gitee.pifeng.monitoring.common.inf.ISuperBean;
 import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorJvmMemory;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -29,6 +31,7 @@ import java.util.Date;
 @Schema(description = "java虚拟机内存信息表现层对象")
 public class MonitorJvmMemoryVo implements ISuperBean {
 
+    @JsonSerialize(using = ToStringSerializer.class)
     @Schema(description = "主键ID")
     private Long id;
 
@@ -38,12 +41,15 @@ public class MonitorJvmMemoryVo implements ISuperBean {
     @Schema(description = "内存类型")
     private String memoryType;
 
+    @JsonSerialize(using = ToStringSerializer.class)
     @Schema(description = "初始内存量（单位：byte）")
     private Long init;
 
+    @JsonSerialize(using = ToStringSerializer.class)
     @Schema(description = "已用内存量（单位：byte）")
     private Long used;
 
+    @JsonSerialize(using = ToStringSerializer.class)
     @Schema(description = "提交内存量（单位：byte）")
     private Long committed;
 

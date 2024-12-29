@@ -94,6 +94,16 @@
             <script type="text/html" id="imgTpl">
                 <img style="display: inline-block; width: 50%; height: 100%;" src={{ d.avatar }}>
             </script>
+            <script id="isEnableMonitorTpl" type="text/html">
+                <input type="checkbox" name="isEnableMonitor" value="{{ d.id }}" lay-skin="switch"
+                       lay-text="是|否" lay-filter="isEnableMonitorFilter" {{ d.isEnableMonitor=='1'?'checked':'' }}
+                       sec:authorize="hasAuthority('超级管理员')">
+            </script>
+            <script id="isEnableAlarmTpl" type="text/html">
+                <input type="checkbox" name="isEnableAlarm" value="{{ d.id }}" lay-skin="switch"
+                       lay-text="是|否" lay-filter="isEnableAlarmFilter" {{ d.isEnableAlarm=='1'?'checked':'' }}
+                       sec:authorize="hasAuthority('超级管理员')">
+            </script>
             <script type="text/html" id="list-table-toolbar">
                 <div class="layui-btn-group" sec:authorize="hasAuthority('超级管理员')">
                     <button class="layui-btn layui-btn-sm layui-btn-danger" lay-event="batchdel">
@@ -139,8 +149,101 @@
         base: ctxPath //静态资源所在路径
     }).extend({
         index: 'lib/index' //主入口模块
-    }).use(['index', 'table'], function () {
-        var $ = layui.$, admin = layui.admin, form = layui.form, table = layui.table, device = layui.device();
+    }).use(['index', 'admin', 'form', 'table', 'layer'], function () {
+        var $ = layui.$, admin = layui.admin, form = layui.form, table = layui.table, device = layui.device(),
+            layer = layui.layer;
+        // 列定义
+        const allColumns = [
+            [{
+                type: 'checkbox',
+                hide: !authority,
+                fixed: (device.ios || device.android) ? false : 'left',
+            }, {
+                field: 'id',
+                width: 80,
+                title: 'ID',
+                sort: !0,
+                hide: true
+            }, {
+                field: 'hostnameSource',
+                title: '源主机',
+                minWidth: 140,
+                sort: !0
+            }, {
+                field: 'hostnameTarget',
+                title: '目标主机',
+                minWidth: 140,
+                sort: !0
+            }, {
+                field: 'portTarget',
+                title: '目标端口',
+                minWidth: 120,
+                sort: !0
+            }, {
+                field: 'status',
+                title: '状态',
+                minWidth: 80,
+                sort: !0
+            }, {
+                field: 'avgTime',
+                title: 'Telnet耗时(ms)',
+                minWidth: 140,
+                toolbar: '#avgTimeTpl',
+                sort: !0
+            }, {
+                field: 'offlineCount',
+                title: '异常次数',
+                minWidth: 110,
+                sort: !0
+            }, {
+                field: 'monitorEnv',
+                title: '环境',
+                minWidth: 120,
+                sort: !0
+            }, {
+                field: 'monitorGroup',
+                title: '分组',
+                minWidth: 120,
+                sort: !0
+            }, {
+                field: 'descr',
+                title: '描述',
+                minWidth: 210,
+                sort: !0
+            }, {
+                field: 'insertTime',
+                title: '新增时间',
+                minWidth: 170,
+                sort: !0
+            }, {
+                field: 'updateTime',
+                title: '更新时间',
+                minWidth: 170,
+                sort: !0
+            }, {
+                field: 'isEnableMonitor',
+                title: '是否监控',
+                width: 90,
+                templet: '#isEnableMonitorTpl',
+                unresize: true,
+                permission: authority
+            }, {
+                field: 'isEnableAlarm',
+                title: '是否告警',
+                width: 90,
+                templet: '#isEnableAlarmTpl',
+                unresize: true,
+                permission: authority
+            }, {
+                title: '操作',
+                hide: !authority,
+                width: 200,
+                align: 'center',
+                fixed: (device.ios || device.android) ? false : 'right',
+                toolbar: '#list-table-toolbar-detail',
+                permission: authority
+            }]
+        ];
         table.render({
             elem: '#list-table',
             url: ctxPath + 'monitor-tcp/get-monitor-tcp-list',
@@ -184,87 +287,14 @@
                     }
                 }
             },
-            cols: [
-                [{
-                    type: 'checkbox',
-                    hide: !authority
-                }, {
-                    field: 'id',
-                    width: 80,
-                    title: 'ID',
-                    sort: !0,
-                    hide: true
-                }, {
-                    field: 'hostnameSource',
-                    title: '源主机',
-                    minWidth: 140,
-                    sort: !0
-                }, {
-                    field: 'hostnameTarget',
-                    title: '目标主机',
-                    minWidth: 140,
-                    sort: !0
-                }, {
-                    field: 'portTarget',
-                    title: '目标端口',
-                    minWidth: 120,
-                    sort: !0
-                }, {
-                    field: 'status',
-                    title: '状态',
-                    minWidth: 80,
-                    sort: !0
-                }, {
-                    field: 'avgTime',
-                    title: 'Telnet耗时(ms)',
-                    minWidth: 140,
-                    toolbar: '#avgTimeTpl',
-                    sort: !0
-                }, {
-                    field: 'offlineCount',
-                    title: '异常次数',
-                    minWidth: 110,
-                    sort: !0
-                }, {
-                    field: 'monitorEnv',
-                    title: '环境',
-                    minWidth: 120,
-                    sort: !0
-                }, {
-                    field: 'monitorGroup',
-                    title: '分组',
-                    minWidth: 120,
-                    sort: !0
-                }, {
-                    field: 'descr',
-                    title: '描述',
-                    minWidth: 210,
-                    sort: !0
-                }, {
-                    field: 'insertTime',
-                    title: '新增时间',
-                    minWidth: 170,
-                    sort: !0
-                }, {
-                    field: 'updateTime',
-                    title: '更新时间',
-                    minWidth: 170,
-                    sort: !0
-                }, {
-                    title: '操作',
-                    hide: !authority,
-                    width: 200,
-                    align: 'center',
-                    fixed: (device.ios || device.android) ? false : 'right',
-                    toolbar: '#list-table-toolbar-detail'
-                }]
-            ],
+            // 如果没有 permission 属性或者 permission 不是 false，则保留该列
+            cols: allColumns.map(columnsGroup => columnsGroup.filter(col => !('permission' in col) || col.permission !== false)),
             page: !0,
             limit: 15,
             limits: [10, 15, 20, 30, 40, 50, 60, 70, 80, 90, 100],
             height: 'full-180'
         });
-        //监听搜索
+        // 监听搜索
         form.on('submit(list-table-search)', function (data) {
             var field = data.field;
             //执行重载
@@ -278,7 +308,7 @@
                 initSort: obj
             });
         });
-        //头工具栏事件
+        // 头工具栏事件
         table.on('toolbar(list-table)', function (obj) {
             switch (obj.event) {
                 case 'batchdel':
@@ -334,9 +364,9 @@
                         // 宽度
                         width = document.body.clientWidth * 0.3 + 'px';
                         // 高度
-                        height = document.body.clientHeight * 0.55 + 'px';
+                        height = document.body.clientHeight * 0.65 + 'px';
                     }
-                    layer.open({
+                    var infoLayerAddIndex = layer.open({
                         type: 2,
                         title: '添加TCP信息',
                         content: ctxPath + 'monitor-tcp/add-monitor-tcp-form',
@@ -420,10 +450,13 @@
                             return false;
                         }
                     });
+                    if (device.ios || device.android) {
+                        layer.full(infoLayerAddIndex);
+                    }
                     break;
             }
         });
-        //监听工具条
+        // 监听工具条
         table.on('tool(list-table)', function (obj) {
             var data = obj.data;
             if (obj.event === 'del') {
@@ -475,9 +508,9 @@
                     // 宽度
                     width = document.body.clientWidth * 0.3 + 'px';
                     // 高度
-                    height = document.body.clientHeight * 0.55 + 'px';
+                    height = document.body.clientHeight * 0.65 + 'px';
                 }
-                layer.open({
+                var infoLayerEditIndex = layer.open({
                     type: 2,
                     title: '编辑TCP信息',
                     content: ctxPath + 'monitor-tcp/edit-monitor-tcp-form?id=' + data.id,
@@ -561,6 +594,9 @@
                         return false;
                     }
                 });
+                if (device.ios || device.android) {
+                    layer.full(infoLayerEditIndex);
+                }
             } else if (obj.event === 'avgTimeHistory') {
                 // 宽度
                 var width;
@@ -610,7 +646,7 @@
                     // 高度
                     height = document.body.clientHeight * 0.45 + 'px';
                 }
-                layer.open({
+                var infoLayerClearIndex = layer.open({
                     type: 2,
                     title: '请选择要清理的历史数据',
                     content: ctxPath + 'monitor-tcp/tcp-clear?id=' + data.id,
@@ -659,7 +695,66 @@
                         submit.trigger('click');
                     }
                 });
+                if (device.ios || device.android) {
+                    layer.full(infoLayerClearIndex);
+                }
             }
+        });
+        // 是否监控操作
+        form.on('switch(isEnableMonitorFilter)', function (obj) {
+            var id = this.value;
+            admin.req({
+                type: 'put',
+                url: ctxPath + 'monitor-tcp/set-is-enable-monitor',
+                data: {
+                    id: id,
+                    isEnableMonitor: (obj.elem.checked ? '1' : '0')
+                },
+                dataType: 'json',
+                headers: {
+                    [[${_csrf.headerName}]]: [[${_csrf.token}]]
+                },
+                success: function (result) {
+                    var data = result.data;
+                    if (data === webConst.SUCCESS) {
+                        // table.reload('list-table'); //数据刷新
+                        layer.msg('设置成功！', {icon: 6});
+                    } else {
+                        layer.msg('设置失败！', {icon: 5, shift: 6});
+                    }
+                },
+                error: function () {
+                    layer.msg('系统错误！', {icon: 5, shift: 6});
+                }
+            });
+        });
+        // 是否告警操作
+        form.on('switch(isEnableAlarmFilter)', function (obj) {
+            var id = this.value;
+            admin.req({
+                type: 'put',
+                url: ctxPath + 'monitor-tcp/set-is-enable-alarm',
+                data: {
+                    id: id,
+                    isEnableAlarm: (obj.elem.checked ? '1' : '0')
+                },
+                dataType: 'json',
+                headers: {
+                    [[${_csrf.headerName}]]: [[${_csrf.token}]]
+                },
+                success: function (result) {
+                    var data = result.data;
+                    if (data === webConst.SUCCESS) {
+                        // table.reload('list-table'); //数据刷新
+                        layer.msg('设置成功！', {icon: 6});
+                    } else {
+                        layer.msg('设置失败！', {icon: 5, shift: 6});
+                    }
+                },
+                error: function () {
+                    layer.msg('系统错误！', {icon: 5, shift: 6});
+                }
+            });
         });
     });
 </script>

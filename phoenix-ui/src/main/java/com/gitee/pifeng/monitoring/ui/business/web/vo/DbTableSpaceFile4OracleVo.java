@@ -1,5 +1,7 @@
 package com.gitee.pifeng.monitoring.ui.business.web.vo;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.gitee.pifeng.monitoring.common.inf.ISuperBean;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
@@ -24,6 +26,7 @@ import lombok.experimental.Accessors;
 @Schema(description = "Oracle数据库表空间表现层对象(按文件)")
 public class DbTableSpaceFile4OracleVo implements ISuperBean {
 
+    @JsonSerialize(using = ToStringSerializer.class)
     @Schema(description = "文件ID")
     private Long fileId;
 

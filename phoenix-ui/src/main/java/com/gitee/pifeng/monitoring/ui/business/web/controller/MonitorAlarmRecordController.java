@@ -22,6 +22,7 @@ import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -76,6 +77,7 @@ public class MonitorAlarmRecordController {
      * @param current    当前页
      * @param size       每页显示条数
      * @param type       告警类型
+     * @param way        告警方式
      * @param level      告警级别
      * @param status     告警状态
      * @param title      告警标题
@@ -92,6 +94,7 @@ public class MonitorAlarmRecordController {
             @Parameter(name = "current", description = "当前页", required = true, in = ParameterIn.QUERY),
             @Parameter(name = "size", description = "每页显示条数", required = true, in = ParameterIn.QUERY),
             @Parameter(name = "type", description = "告警类型", in = ParameterIn.QUERY),
+            @Parameter(name = "way", description = "告警方式", in = ParameterIn.QUERY),
             @Parameter(name = "level", description = "告警级别", in = ParameterIn.QUERY),
             @Parameter(name = "status", description = "告警状态", in = ParameterIn.QUERY),
             @Parameter(name = "title", description = "告警标题", in = ParameterIn.QUERY),
@@ -105,6 +108,7 @@ public class MonitorAlarmRecordController {
     public LayUiAdminResultVo getMonitorAlarmRecordList(@RequestParam(value = "current") Long current,
                                                         @RequestParam(value = "size") Long size,
                                                         @RequestParam(value = "type", required = false) String type,
+                                                        @RequestParam(value = "way", required = false) String way,
                                                         @RequestParam(value = "level", required = false) String level,
                                                         @RequestParam(value = "status", required = false) String status,
                                                         @RequestParam(value = "title", required = false) String title,
@@ -112,7 +116,7 @@ public class MonitorAlarmRecordController {
                                                         @RequestParam(value = "number", required = false) String number,
                                                         @RequestParam(value = "insertDate", required = false) String insertDate,
                                                         @RequestParam(value = "updateDate", required = false) String updateDate) {
-        Page<MonitorAlarmRecordVo> page = this.monitorAlarmRecordService.getMonitorAlarmRecordList(current, size, type, level, status, title, content, number, insertDate, updateDate);
+        Page<MonitorAlarmRecordVo> page = this.monitorAlarmRecordService.getMonitorAlarmRecordList(current, size, type, way, level, status, title, content, number, insertDate, updateDate);
         return LayUiAdminResultVo.ok(page);
     }
 
@@ -128,6 +132,7 @@ public class MonitorAlarmRecordController {
      */
     @Operation(summary = "删除告警记录")
     @DeleteMapping("/delete-monitor-alarm-record")
+    @PreAuthorize("hasAuthority('超级管理员')")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.ALARM, operType = OperateTypeConstants.DELETE, operDesc = "删除告警记录")
     public LayUiAdminResultVo deleteMonitorAlarmRecord(@RequestBody List<MonitorAlarmRecordVo> monitorAlarmRecordVos) {
@@ -145,6 +150,7 @@ public class MonitorAlarmRecordController {
      */
     @Operation(summary = "清空告警记录")
     @DeleteMapping("/cleanup-monitor-alarm-record")
+    @PreAuthorize("hasAuthority('超级管理员')")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.ALARM, operType = OperateTypeConstants.DELETE, operDesc = "清空告警记录")
     public LayUiAdminResultVo cleanupMonitorAlarmRecord() {
@@ -157,6 +163,7 @@ public class MonitorAlarmRecordController {
      * </p>
      *
      * @param type       告警类型
+     * @param way        告警方式
      * @param level      告警级别
      * @param status     告警状态
      * @param title      告警标题
@@ -170,6 +177,7 @@ public class MonitorAlarmRecordController {
     @Operation(summary = "导出告警记录列表")
     @Parameters(value = {
             @Parameter(name = "type", description = "告警类型", in = ParameterIn.QUERY),
+            @Parameter(name = "way", description = "告警方式", in = ParameterIn.QUERY),
             @Parameter(name = "level", description = "告警级别", in = ParameterIn.QUERY),
             @Parameter(name = "status", description = "告警状态", in = ParameterIn.QUERY),
             @Parameter(name = "title", description = "告警标题", in = ParameterIn.QUERY),
@@ -181,6 +189,7 @@ public class MonitorAlarmRecordController {
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.ALARM, operType = OperateTypeConstants.EXPORT, operDesc = "导出告警记录列表")
     public void exportMonitorAlarmRecordList(@RequestParam(value = "type", required = false) String type,
+                                             @RequestParam(value = "way", required = false) String way,
                                              @RequestParam(value = "level", required = false) String level,
                                              @RequestParam(value = "status", required = false) String status,
                                              @RequestParam(value = "title", required = false) String title,
@@ -189,7 +198,7 @@ public class MonitorAlarmRecordController {
                                              @RequestParam(value = "insertDate", required = false) String insertDate,
                                              @RequestParam(value = "updateDate", required = false) String updateDate) {
         String name = "告警记录";
-        List<MonitorAlarmRecordVo> monitorAlarmRecordVos = this.monitorAlarmRecordService.getMonitorAlarmRecordList(type, level, status, title, content, number, insertDate, updateDate);
+        List<MonitorAlarmRecordVo> monitorAlarmRecordVos = this.monitorAlarmRecordService.getMonitorAlarmRecordList(type, way, level, status, title, content, number, insertDate, updateDate);
         for (MonitorAlarmRecordVo monitorAlarmRecordVo : monitorAlarmRecordVos) {
             // 单独处理下告警内容
             String alarmRecordVoContent = monitorAlarmRecordVo.getContent() != null ? monitorAlarmRecordVo.getContent() : "";

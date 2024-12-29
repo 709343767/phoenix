@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -85,6 +86,7 @@ public class MonitorHttpHistoryController {
             @Parameter(name = "id", description = "HTTP ID", required = true, in = ParameterIn.QUERY),
             @Parameter(name = "time", description = "时间", required = true, in = ParameterIn.QUERY)})
     @DeleteMapping("/clear-monitor-http-history")
+    @PreAuthorize("hasAuthority('超级管理员')")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.HTTP4SERVICE, operType = OperateTypeConstants.DELETE, operDesc = "清理HTTP监控历史数据")
     public LayUiAdminResultVo clearMonitorHttpHistory(Long id, String time) {

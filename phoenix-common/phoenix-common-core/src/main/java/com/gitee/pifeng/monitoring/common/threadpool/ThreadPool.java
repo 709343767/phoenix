@@ -13,9 +13,7 @@ import java.util.concurrent.*;
  *      <dt>ThreadPoolExecutor构造方法：</dt>
  *      <dd>
  *          <ul>
- *              <li>参数：corePoolSize。the number of threads to keep in the pool, even if they are idle,
- *                  unless {@code allowCoreThreadTimeOut} is set。
- *                  线程池中保持的线程数量，尽管这些线程是空闲的，除非设置allowCoreThreadTimeOut参数为true，
+ *              <li>参数：corePoolSize。即使线程处于空闲状态，也要保留在池中的线程数量，除非设置allowCoreThreadTimeOut参数为true，
  *                  则在空闲时间超过keepAliveTime时，会被终止掉。allowCoreThreadTimeOut默认为false。</li>
  *              <li>参数：maximumPoolSize。线程池中允许的最大线程数量。</li>
  *              <li>参数：keepAliveTime。保持活跃的时间，也就是当线程池中的线程数量超过corePoolSize时，
@@ -26,7 +24,7 @@ import java.util.concurrent.*;
  *                  一般我们需要根据自己的实际业务需求选择合适的工作队列。<br>
  *                  1.SynchronousQueue：直接传递。对于一个好的默认的工作队列选择是SynchronousQueue，该队列传递任务到线程而不持有它们。
  *                  在这一点上，试图向该队列压入一个任务，如果没有可用的线程立刻运行任务，那么就会入列失败，所以一个新的线程就会被创建。
- *                  当处理那些内部依赖的任务集合时，这个选择可以避免锁住。直接接传递通常需要无边界的最大线程数来避免新提交任务被拒绝处理。
+ *                  当处理那些内部依赖的任务集合时，这个选择可以避免锁住。直接传递通常需要无边界的最大线程数来避免新提交任务被拒绝处理。
  *                  当任务以平均快于被处理的速度提交到线程池时，它依次地确认无边界线程增长的可能性；<br>
  *                  2.LinkedBlockingQueue：无界队列。没有预先定义容量的无界队列，在核心线程数都繁忙的时候会使新提交的任务在队列中等待被执行，
  *                  所以将不会创建更多的线程，因此，最大线程数的值将不起作用。当每个任务之间是相互独立的时比较适合该队列，所以任务之间不能互相影响执行。
@@ -68,13 +66,12 @@ public class ThreadPool {
      * handler：拒绝策略。一般用来做日志记录等。<br>
      */
     public static final ThreadPoolExecutor COMMON_CPU_INTENSIVE_THREAD_POOL = new ThreadPoolExecutor(
-            1,
             // 线程数 = Ncpu /（1 - 阻塞系数），CPU密集型阻塞系数相对较小
+            (int) (ProcessorsUtils.getAvailableProcessors() / (1 - 0.2)),
             (int) (ProcessorsUtils.getAvailableProcessors() / (1 - 0.2)),
             60L,
             TimeUnit.SECONDS,
-            // 2^16
-            new LinkedBlockingQueue<>(65536),
+            new LinkedBlockingQueue<>(Integer.MAX_VALUE),
             new BasicThreadFactory.Builder()
                     // 设置线程名
                     .namingPattern("phoenix-common-cpu-intensive-thread-%d")
@@ -93,13 +90,12 @@ public class ThreadPool {
      * handler：拒绝策略。一般用来做日志记录等。<br>
      */
     public static final ThreadPoolExecutor COMMON_IO_INTENSIVE_THREAD_POOL = new ThreadPoolExecutor(
-            1,
             // 线程数 = Ncpu /（1 - 阻塞系数），IO密集型阻塞系数相对较大
+            (int) (ProcessorsUtils.getAvailableProcessors() / (1 - 0.8)),
             (int) (ProcessorsUtils.getAvailableProcessors() / (1 - 0.8)),
             60L,
             TimeUnit.SECONDS,
-            // 2^16
-            new LinkedBlockingQueue<>(65536),
+            new LinkedBlockingQueue<>(Integer.MAX_VALUE),
             new BasicThreadFactory.Builder()
                     // 设置线程名
                     .namingPattern("phoenix-common-io-intensive-thread-%d")

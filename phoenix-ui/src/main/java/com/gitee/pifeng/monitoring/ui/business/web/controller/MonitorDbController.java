@@ -17,8 +17,10 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.apache.commons.lang3.StringUtils;
 import org.hyperic.sigar.SigarException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -171,13 +173,64 @@ public class MonitorDbController {
      */
     @Operation(summary = "编辑数据库信息")
     @PutMapping("/edit-monitor-db")
+    @PreAuthorize("hasAuthority('超级管理员')")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.DATABASE, operType = OperateTypeConstants.UPDATE, operDesc = "编辑数据库信息")
     public LayUiAdminResultVo editMonitorDb(MonitorDbVo monitorDbVo) throws SigarException, IOException {
         LayUiAdminResultVo layUiAdminResultVo = this.monitorDbService.editMonitorDb(monitorDbVo);
         // 测试数据库连通性
-        this.monitorDbService.testMonitorDb(monitorDbVo);
+        if (StringUtils.isNotBlank(monitorDbVo.getPassword())) {
+            this.monitorDbService.testMonitorDb(monitorDbVo);
+        }
         return layUiAdminResultVo;
+    }
+
+    /**
+     * <p>
+     * 设置是否开启监控（0：不开启监控；1：开启监控）
+     * </p>
+     *
+     * @param id              主键ID
+     * @param isEnableMonitor 是否开启监控（0：不开启监控；1：开启监控）
+     * @return 如果设置成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @author 皮锋
+     * @custom.date 2024/12/10 21:20
+     */
+    @Operation(summary = "设置是否开启监控（0：不开启监控；1：开启监控）")
+    @Parameters(value = {
+            @Parameter(name = "id", description = "主键ID", required = true, in = ParameterIn.QUERY),
+            @Parameter(name = "isEnableMonitor", description = "是否开启监控（0：不开启监控；1：开启监控）", in = ParameterIn.QUERY)})
+    @PutMapping("/set-is-enable-monitor")
+    @PreAuthorize("hasAuthority('超级管理员')")
+    @ResponseBody
+    @OperateLog(operModule = UiModuleConstants.DATABASE, operType = OperateTypeConstants.UPDATE, operDesc = "设置是否开启监控（0：不开启监控；1：开启监控）")
+    public LayUiAdminResultVo setIsEnableMonitor(@RequestParam(value = "id") Long id,
+                                                 @RequestParam(value = "isEnableMonitor") String isEnableMonitor) {
+        return this.monitorDbService.setIsEnableMonitor(id, isEnableMonitor);
+    }
+
+    /**
+     * <p>
+     * 设置是否开启告警（0：不开启告警；1：开启告警）
+     * </p>
+     *
+     * @param id            主键ID
+     * @param isEnableAlarm 是否开启告警（0：不开启告警；1：开启告警）
+     * @return 如果设置成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @author 皮锋
+     * @custom.date 2024/12/10 21:37
+     */
+    @Operation(summary = "设置是否开启告警（0：不开启告警；1：开启告警）")
+    @Parameters(value = {
+            @Parameter(name = "id", description = "主键ID", required = true, in = ParameterIn.QUERY),
+            @Parameter(name = "isEnableAlarm", description = "是否开启告警（0：不开启告警；1：开启告警）", in = ParameterIn.QUERY)})
+    @PutMapping("/set-is-enable-alarm")
+    @PreAuthorize("hasAuthority('超级管理员')")
+    @ResponseBody
+    @OperateLog(operModule = UiModuleConstants.DATABASE, operType = OperateTypeConstants.UPDATE, operDesc = "设置是否开启告警（0：不开启告警；1：开启告警）")
+    public LayUiAdminResultVo setIsEnableAlarm(@RequestParam(value = "id") Long id,
+                                               @RequestParam(value = "isEnableAlarm") String isEnableAlarm) {
+        return this.monitorDbService.setIsEnableAlarm(id, isEnableAlarm);
     }
 
     /**
@@ -238,6 +291,7 @@ public class MonitorDbController {
      */
     @Operation(summary = "删除数据库信息")
     @DeleteMapping("/delete-monitor-db")
+    @PreAuthorize("hasAuthority('超级管理员')")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.DATABASE, operType = OperateTypeConstants.DELETE, operDesc = "删除数据库信息")
     public LayUiAdminResultVo deleteMonitorDb(@RequestBody List<MonitorDbVo> monitorDbVos) {

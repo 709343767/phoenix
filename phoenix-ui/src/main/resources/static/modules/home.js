@@ -1,6 +1,6 @@
 /** layuiAdmin.std-v2020.4.1 LPPL License By 皮锋 */
 ;layui.define(function (e) {
-    layui.use(['admin', 'carousel'], function () {
+    layui.use(['admin', 'carousel', 'element'], function () {
         var e = layui.$, a = (layui.admin, layui.carousel), l = layui.element, t = layui.device();
         //轮播切换
         e('.layadmin-carousel').each(function () {
@@ -366,7 +366,7 @@
                     //    '             </p>';
                     //$('#server-card-list-1').empty().append(htmlServer1);
                     // 服务器在线率
-                    var htmlServer2 = '<p class="layuiadmin-big-font">' + homeServerVo.serverSum +
+                    var htmlServer2 = '<p class="layuiadmin-big-font layuiadmin-big-font-my">' + homeServerVo.serverSum +
                         '                   <i class="home-i">' + homeServerVo.serverOnLineRate + '<img src="' + ctxPath + 'images/icon16/percentage-16.png"></i>' +
                         '               </p>' +
                         '               <p>在线' +
@@ -378,10 +378,15 @@
                         '                   <span class="layuiadmin-span-color">' + homeServerVo.serverOffLineSum +
                         '                       <i class="layui-inline layui-icon"><img src="' + ctxPath + 'images/icon16/off-line-16.png"></i>' +
                         '                   </span>' +
+                        '               </p>' +
+                        '               <p>未知' +
+                        '                   <span class="layuiadmin-span-color">' + homeServerVo.serverUnknownLineSum +
+                        '                       <i class="layui-inline layui-icon"><img src="' + ctxPath + 'images/icon16/unknown-line-16.png"></i>' +
+                        '                   </span>' +
                         '               </p>';
                     $('#server-card-list-2').empty().append(htmlServer2);
                     // 应用程序
-                    var htmlInstance = '<p class="layuiadmin-big-font">' + homeInstanceVo.instanceSum +
+                    var htmlInstance = '<p class="layuiadmin-big-font layuiadmin-big-font-my">' + homeInstanceVo.instanceSum +
                         '                   <i class="home-i">' + homeInstanceVo.instanceOnLineRate + '<img src="' + ctxPath + 'images/icon16/percentage-16.png"></i>' +
                         '               </p>' +
                         '               <p>在线' +
@@ -392,6 +397,11 @@
                         '               <p>离线' +
                         '                   <span class="layuiadmin-span-color">' + homeInstanceVo.instanceOffLineSum +
                         '                       <i class="layui-inline layui-icon"><img src="' + ctxPath + 'images/icon16/off-line-16.png"></i>' +
+                        '                   </span>' +
+                        '               </p>' +
+                        '               <p>未知' +
+                        '                   <span class="layuiadmin-span-color">' + homeInstanceVo.instanceUnknownLineSum +
+                        '                       <i class="layui-inline layui-icon"><img src="' + ctxPath + 'images/icon16/unknown-line-16.png"></i>' +
                         '                   </span>' +
                         '               </p>';
                     $('#instance-card-list').empty().append(htmlInstance);

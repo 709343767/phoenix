@@ -30,75 +30,76 @@ public class Oracle {
      * 会话列表
      */
     public static final String SESSION_LIST = "SELECT " +
-            "s.SID AS SID, " +
-            "s.SERIAL# AS SERIAL# , " +
-            "s.USERNAME AS USERNAME, " +
-            "s.SCHEMANAME AS SCHEMANAME, " +
-            "s.TYPE AS TYPE, " +
-            "s.STATE AS STATE, " +
-            "s.LOGON_TIME AS LOGONTIME, " +
-            "s.MACHINE AS MACHINE, " +
-            "s.OSUSER AS OSUSER, " +
-            "s.PROGRAM AS PROGRAM, " +
-            "s.EVENT AS EVENT, " +
-            "s.SECONDS_IN_WAIT AS WAITTIME, " +
-            "to_char(substr(sq.SQL_FULLTEXT, 0, 2000)) AS SQL " +
+            "S.SID AS SID, " +
+            "S.SERIAL# AS SERIAL# , " +
+            "S.USERNAME AS USERNAME, " +
+            "S.SCHEMANAME AS SCHEMANAME, " +
+            "S.TYPE AS TYPE, " +
+            "S.STATE AS STATE, " +
+            "S.LOGON_TIME AS LOGONTIME, " +
+            "S.MACHINE AS MACHINE, " +
+            "S.OSUSER AS OSUSER, " +
+            "S.PROGRAM AS PROGRAM, " +
+            "S.EVENT AS EVENT, " +
+            "S.SECONDS_IN_WAIT AS WAITTIME, " +
+            "TO_CHAR(SUBSTR(SQ.SQL_FULLTEXT, 0, 2000)) AS SQL " +
             "FROM " +
-            "GV$SESSION s, " +
-            "GV$sql sq " +
+            "GV$SESSION S, " +
+            "GV$SQL SQ " +
             "WHERE " +
-            "s.sql_address = sq.address(+) " +
-            "AND s.sql_hash_value = sq.hash_value(+) " +
-            "AND s.sql_child_number = sq.child_number(+) " +
-            "AND s.TYPE = 'USER' " +
+            "S.SQL_ADDRESS = SQ.ADDRESS(+) " +
+            "AND S.SQL_HASH_VALUE = SQ.HASH_VALUE(+) " +
+            "AND S.SQL_CHILD_NUMBER = SQ.CHILD_NUMBER(+) " +
+            "AND S.TYPE = 'USER' " +
             "ORDER BY " +
-            "s.SID ASC";
+            "S.SID ASC";
 
     /**
      * 结束会话
      */
-    public static final String KILL_SESSION = "alter system kill session 'sid, serial#' immediate";
+    public static final String KILL_SESSION = "ALTER SYSTEM KILL SESSION 'SID, SERIAL#' IMMEDIATE";
 
     /**
      * 查询表空间（按文件）
      */
     public static final String TABLE_SPACE_SELECT_FILE = "SELECT " +
-            "a.file_id fileId, " +
-            "a.file_name fileName, " +
-            "a.tablespace_name tablespaceName, " +
-            "a.bytes total, " +
-            "(a.bytes-sum(nvl(b.bytes, 0))) used, " +
-            "sum(nvl(b.bytes, 0)) free, " +
-            "sum(nvl(b.bytes, 0))/(a.bytes)* 100 freePer " +
+            "A.FILE_ID FILEID, " +
+            "A.FILE_NAME FILENAME, " +
+            "A.TABLESPACE_NAME TABLESPACENAME, " +
+            "A.BYTES TOTAL, " +
+            "(A.BYTES-SUM(NVL(B.BYTES, 0))) USED, " +
+            "SUM(NVL(B.BYTES, 0)) FREE, " +
+            "SUM(NVL(B.BYTES, 0))/(A.BYTES)* 100 FREEPER " +
             "FROM " +
-            "dba_data_files a, " +
-            "dba_free_space b " +
+            "DBA_DATA_FILES A, " +
+            "DBA_FREE_SPACE B " +
             "WHERE " +
-            "a.file_id = b.file_id(+) " +
+            "A.FILE_ID = B.FILE_ID(+) " +
             "GROUP BY " +
-            "a.tablespace_name, " +
-            "a.file_name, " +
-            "a.file_id, " +
-            "a.bytes " +
+            "A.TABLESPACE_NAME, " +
+            "A.FILE_NAME, " +
+            "A.FILE_ID, " +
+            "A.BYTES " +
             "ORDER BY " +
-            "a.tablespace_name";
+            "A.TABLESPACE_NAME, " +
+            "A.FILE_ID";
 
     /**
      * 查询表空间（汇总）
      */
     public static final String TABLE_SPACE_SELECT_ALL = "SELECT " +
-            "a.tablespace_name tablespaceName, " +
-            "a.bytes total, " +
-            "b.bytes used, " +
-            "c.bytes free, " +
-            "(b.bytes * 100) / a.bytes usedRate, " +
-            "(c.bytes * 100) / a.bytes freeRate " +
+            "A.TABLESPACE_NAME TABLESPACENAME, " +
+            "A.BYTES TOTAL, " +
+            "B.BYTES USED, " +
+            "C.BYTES FREE, " +
+            "(B.BYTES * 100) / A.BYTES USEDRATE, " +
+            "(C.BYTES * 100) / A.BYTES FREERATE " +
             "FROM " +
-            "sys.sm$ts_avail a, " +
-            "sys.sm$ts_used b, " +
-            "sys.sm$ts_free c " +
+            "SYS.SM$TS_AVAIL A, " +
+            "SYS.SM$TS_USED B, " +
+            "SYS.SM$TS_FREE C " +
             "WHERE " +
-            "a.tablespace_name = b.tablespace_name " +
-            "AND a.tablespace_name = c.tablespace_name";
+            "A.TABLESPACE_NAME = B.TABLESPACE_NAME " +
+            "AND A.TABLESPACE_NAME = C.TABLESPACE_NAME";
 
 }

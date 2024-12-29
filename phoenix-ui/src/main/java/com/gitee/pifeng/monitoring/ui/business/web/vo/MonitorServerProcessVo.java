@@ -1,6 +1,8 @@
 package com.gitee.pifeng.monitoring.ui.business.web.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.gitee.pifeng.monitoring.common.inf.ISuperBean;
 import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorServerProcess;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -29,6 +31,7 @@ import java.util.Date;
 @Schema(description = "服务器进程表现层对象")
 public class MonitorServerProcessVo implements ISuperBean {
 
+    @JsonSerialize(using = ToStringSerializer.class)
     @Schema(description = "主键ID")
     private Long id;
 
@@ -69,6 +72,7 @@ public class MonitorServerProcessVo implements ISuperBean {
     @Schema(description = "进程的位数")
     private String bitness;
 
+    @JsonSerialize(using = ToStringSerializer.class)
     @Schema(description = "占用内存大小（单位：byte）")
     private Long memorySize;
 

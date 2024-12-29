@@ -2,10 +2,11 @@ package com.gitee.pifeng.monitoring.server.business.server.monitor;
 
 import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.gitee.pifeng.monitoring.common.constant.MonitorTypeEnums;
 import com.gitee.pifeng.monitoring.common.constant.ZeroOrOneConstants;
 import com.gitee.pifeng.monitoring.common.constant.alarm.AlarmLevelEnums;
 import com.gitee.pifeng.monitoring.common.constant.alarm.AlarmReasonEnums;
+import com.gitee.pifeng.monitoring.common.constant.monitortype.MonitorSubTypeEnums;
+import com.gitee.pifeng.monitoring.common.constant.monitortype.MonitorTypeEnums;
 import com.gitee.pifeng.monitoring.common.domain.Alarm;
 import com.gitee.pifeng.monitoring.common.dto.AlarmPackage;
 import com.gitee.pifeng.monitoring.common.dto.OfflinePackage;
@@ -23,6 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.JoinPoint;
 import org.joda.time.DateTime;
+import org.quartz.DisallowConcurrentExecution;
 import org.quartz.JobExecutionContext;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +48,7 @@ import java.util.List;
 @Slf4j
 @Component
 @Order(1)
+@DisallowConcurrentExecution
 public class InstanceMonitorJob extends QuartzJobBean implements CommandLineRunner, DisposableBean, IOfflineListener {
 
     /**
@@ -76,7 +79,7 @@ public class InstanceMonitorJob extends QuartzJobBean implements CommandLineRunn
      * {@link InstanceMonitorJob#run(String...)}这个方法是否已经运行，<br>
      * 静态变量是类级别的变量，因此所有该类的实例对象共享。
      */
-    private static boolean commandLineRunnerHasRun = false;
+    private static volatile boolean commandLineRunnerHasRun = false;
 
     /**
      * <p>
@@ -119,39 +122,57 @@ public class InstanceMonitorJob extends QuartzJobBean implements CommandLineRunn
         if (!commandLineRunnerHasRun) {
             return;
         }
-        try {
-            // 查询数据库中的所有应用实例信息
-            List<MonitorInstance> monitorInstances = this.instanceService.list(new LambdaQueryWrapper<>());
-            // 循环所有应用实例
-            for (MonitorInstance monitorInstance : monitorInstances) {
-                // 允许的误差时间
-                int thresholdSecond = monitorInstance.getConnFrequency() * this.monitoringConfigPropertiesLoader.getMonitoringProperties().getThreshold();
-                // 最后一次通过心跳包更新的时间
-                Date dateTime = monitorInstance.getUpdateTime() == null ? monitorInstance.getInsertTime() : monitorInstance.getUpdateTime();
-                // 判决时间（在允许的误差时间内，再增加30秒误差）
-                DateTime judgeDateTime = new DateTime(dateTime).plusSeconds(thresholdSecond).plusSeconds(30);
-                // 注册上来的服务失去响应
-                if (judgeDateTime.isBeforeNow()) {
-                    // 离线
-                    this.offLine(monitorInstance, false);
-                }
-                // 注册上来的服务恢复响应
-                else {
-                    // 没有收到离线通知（对于收到下线信息包而离线的应用，其最后心跳时间可能还小于判决时间）
-                    if (StringUtils.equals(monitorInstance.getIsOfflineNotice(), ZeroOrOneConstants.ZERO)) {
-                        // 恢复在线
-                        this.onLine(monitorInstance);
+        // 是否监控应用实例
+        boolean isEnable = this.monitoringConfigPropertiesLoader.getMonitoringProperties().getInstanceProperties().isEnable();
+        if (!isEnable) {
+            return;
+        }
+        // 是否监控应用实例状态
+        boolean isStatusEnable = this.monitoringConfigPropertiesLoader.getMonitoringProperties().getInstanceProperties().getInstanceStatusProperties().isEnable();
+        if (!isStatusEnable) {
+            return;
+        }
+        synchronized (InstanceMonitorJob.class) {
+            try {
+                // 查询数据库中的所有应用实例信息
+                List<MonitorInstance> monitorInstances = this.instanceService.list(new LambdaQueryWrapper<>());
+                // 循环所有应用实例
+                for (MonitorInstance monitorInstance : monitorInstances) {
+                    // 是否开启监控（0：不开启监控；1：开启监控）
+                    String isEnableMonitor = monitorInstance.getIsEnableMonitor();
+                    // 没有开启监控，直接跳过
+                    if (!StringUtils.equals(ZeroOrOneConstants.ONE, isEnableMonitor)) {
+                        continue;
+                    }
+                    // 允许的误差时间
+                    int thresholdSecond = monitorInstance.getConnFrequency() * this.monitoringConfigPropertiesLoader.getMonitoringProperties().getThreshold();
+                    // 最后一次通过心跳包更新的时间
+                    Date dateTime = monitorInstance.getUpdateTime() == null ? monitorInstance.getInsertTime() : monitorInstance.getUpdateTime();
+                    // 判决时间（在允许的误差时间内，再增加30秒误差）
+                    DateTime judgeDateTime = new DateTime(dateTime).plusSeconds(thresholdSecond).plusSeconds(30);
+                    // 注册上来的服务失去响应
+                    if (judgeDateTime.isBeforeNow()) {
+                        // 离线
+                        this.offLine(monitorInstance, false);
+                    }
+                    // 注册上来的服务恢复响应
+                    else {
+                        // 没有收到离线通知（对于收到下线信息包而离线的应用，其最后心跳时间可能还小于判决时间）
+                        if (StringUtils.equals(monitorInstance.getIsOfflineNotice(), ZeroOrOneConstants.ZERO)) {
+                            // 恢复在线
+                            this.onLine(monitorInstance);
+                        }
                     }
                 }
+            } catch (Exception e) {
+                log.error("定时扫描“MONITOR_INSTANCE”表中的所有应用实例异常！", e);
             }
-        } catch (Exception e) {
-            log.error("定时扫描“MONITOR_INSTANCE”表中的所有应用实例异常！", e);
         }
     }
 
     /**
      * <p>
-     * 在bean被销毁之前，通知此应用程序离线
+     * 在bean被销毁之前，通知此应用实例离线
      * </p>
      *
      * @author 皮锋
@@ -159,12 +180,31 @@ public class InstanceMonitorJob extends QuartzJobBean implements CommandLineRunn
      */
     @Override
     public void destroy() {
+        if (!commandLineRunnerHasRun) {
+            return;
+        }
+        // 是否监控应用实例
+        boolean isEnable = this.monitoringConfigPropertiesLoader.getMonitoringProperties().getInstanceProperties().isEnable();
+        if (!isEnable) {
+            return;
+        }
+        // 是否监控应用实例状态
+        boolean isStatusEnable = this.monitoringConfigPropertiesLoader.getMonitoringProperties().getInstanceProperties().getInstanceStatusProperties().isEnable();
+        if (!isStatusEnable) {
+            return;
+        }
         // 应用ID
         String instanceId = InstanceGenerator.getInstanceId();
         // 从数据库中查询到此实例
         LambdaQueryWrapper<MonitorInstance> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         lambdaQueryWrapper.eq(MonitorInstance::getInstanceId, instanceId);
         MonitorInstance monitorInstance = this.instanceService.getOne(lambdaQueryWrapper);
+        // 是否开启监控（0：不开启监控；1：开启监控）
+        String isEnableMonitor = monitorInstance.getIsEnableMonitor();
+        // 没有开启监控，直接跳过
+        if (!StringUtils.equals(ZeroOrOneConstants.ONE, isEnableMonitor)) {
+            return;
+        }
         // 离线
         this.offLine(monitorInstance, true);
         log.info("应用程序下线！");
@@ -182,9 +222,22 @@ public class InstanceMonitorJob extends QuartzJobBean implements CommandLineRunn
      */
     @Override
     public void notifyOffline(OfflinePackage offlinePackage) {
+        if (!commandLineRunnerHasRun) {
+            return;
+        }
+        // 是否监控应用实例
+        boolean isEnable = this.monitoringConfigPropertiesLoader.getMonitoringProperties().getInstanceProperties().isEnable();
+        if (!isEnable) {
+            return;
+        }
+        // 是否监控应用实例状态
+        boolean isStatusEnable = this.monitoringConfigPropertiesLoader.getMonitoringProperties().getInstanceProperties().getInstanceStatusProperties().isEnable();
+        if (!isStatusEnable) {
+            return;
+        }
         // 离线类型
         List<MonitorTypeEnums> monitorTypes = offlinePackage.getMonitorTypes();
-        // 是应用程序离线
+        // 是应用实例离线
         if (CollectionUtil.contains(monitorTypes, MonitorTypeEnums.INSTANCE)) {
             // 应用实例ID
             String instanceId = offlinePackage.getInstanceId();
@@ -192,6 +245,12 @@ public class InstanceMonitorJob extends QuartzJobBean implements CommandLineRunn
             LambdaQueryWrapper<MonitorInstance> lambdaQueryWrapper = new LambdaQueryWrapper<>();
             lambdaQueryWrapper.eq(MonitorInstance::getInstanceId, instanceId);
             MonitorInstance monitorInstance = this.instanceService.getOne(lambdaQueryWrapper);
+            // 是否开启监控（0：不开启监控；1：开启监控）
+            String isEnableMonitor = monitorInstance.getIsEnableMonitor();
+            // 没有开启监控，直接跳过
+            if (!StringUtils.equals(ZeroOrOneConstants.ONE, isEnableMonitor)) {
+                return;
+            }
             // 离线
             this.offLine(monitorInstance, true);
         }
@@ -213,14 +272,14 @@ public class InstanceMonitorJob extends QuartzJobBean implements CommandLineRunn
         if (!isOnline) {
             try {
                 if (StringUtils.isBlank(instance.getIsOnline())) {
-                    // 发送发现新的应用程序通知信息
+                    // 发送发现新的应用实例通知信息
                     this.sendAlarmInfo("发现新应用程序", AlarmLevelEnums.INFO, AlarmReasonEnums.DISCOVERY, instance);
                 } else {
                     // 发送在线通知信息
                     this.sendAlarmInfo("应用程序上线", AlarmLevelEnums.INFO, AlarmReasonEnums.ABNORMAL_2_NORMAL, instance);
                 }
             } catch (Exception e) {
-                log.error("应用实例告警异常！", e);
+                log.error("应用程序告警异常！", e);
             }
             instance.setIsOnline(ZeroOrOneConstants.ONE);
             instance.setIsOfflineNotice(ZeroOrOneConstants.ZERO);
@@ -249,7 +308,7 @@ public class InstanceMonitorJob extends QuartzJobBean implements CommandLineRunn
                 // 发送离线告警信息
                 this.sendAlarmInfo("应用程序离线", AlarmLevelEnums.FATAL, AlarmReasonEnums.NORMAL_2_ABNORMAL, instance);
             } catch (Exception e) {
-                log.error("应用实例告警异常！", e);
+                log.error("应用程序告警异常！", e);
             }
             // 离线次数 +1
             int offlineCount = instance.getOfflineCount() == null ? 0 : instance.getOfflineCount();
@@ -275,6 +334,17 @@ public class InstanceMonitorJob extends QuartzJobBean implements CommandLineRunn
      * @custom.date 2020/3/13 11:20
      */
     private void sendAlarmInfo(String title, AlarmLevelEnums alarmLevelEnum, AlarmReasonEnums alarmReasonEnum, MonitorInstance instance) throws NetException {
+        // 告警是否打开
+        boolean alarmEnable = this.monitoringConfigPropertiesLoader.getMonitoringProperties().getInstanceProperties().getInstanceStatusProperties().isAlarmEnable();
+        if (!alarmEnable) {
+            return;
+        }
+        // 是否开启告警（0：不开启告警；1：开启告警）
+        String isEnableAlarm = instance.getIsEnableAlarm();
+        // 没有开启告警，直接结束
+        if (!StringUtils.equals(ZeroOrOneConstants.ONE, isEnableAlarm)) {
+            return;
+        }
         StringBuilder builder = new StringBuilder();
         builder.append("应用ID：").append(instance.getInstanceId())
                 .append("，<br>应用名称：").append(instance.getInstanceName());
@@ -301,6 +371,8 @@ public class InstanceMonitorJob extends QuartzJobBean implements CommandLineRunn
                 .alarmLevel(alarmLevelEnum)
                 .alarmReason(alarmReasonEnum)
                 .monitorType(MonitorTypeEnums.INSTANCE)
+                .monitorSubType(MonitorSubTypeEnums.SERVICE_STATUS)
+                .alertedEntityId(String.valueOf(instance.getId()))
                 .build();
         AlarmPackage alarmPackage = this.serverPackageConstructor.structureAlarmPackage(alarm);
         this.alarmService.dealAlarmPackage(alarmPackage);

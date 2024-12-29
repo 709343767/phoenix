@@ -1,6 +1,6 @@
 package com.gitee.pifeng.monitoring.common.dto;
 
-import com.gitee.pifeng.monitoring.common.constant.MonitorTypeEnums;
+import com.gitee.pifeng.monitoring.common.constant.monitortype.MonitorTypeEnums;
 import lombok.*;
 import lombok.experimental.Accessors;
 

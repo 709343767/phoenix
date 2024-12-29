@@ -34,7 +34,7 @@ CREATE TABLE `MONITOR_ALARM_DEFINITION`
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_general_ci COMMENT = '告警定义表'
-  ROW_FORMAT = Dynamic;
+  ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for MONITOR_ALARM_RECORD
@@ -42,18 +42,19 @@ CREATE TABLE `MONITOR_ALARM_DEFINITION`
 DROP TABLE IF EXISTS `MONITOR_ALARM_RECORD`;
 CREATE TABLE `MONITOR_ALARM_RECORD`
 (
-    `ID`             bigint(20) UNSIGNED                                           NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-    `CODE`           varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT '告警代码，使用UUID',
-    `ALARM_DEF_CODE` varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NULL DEFAULT NULL COMMENT '告警定义编码',
-    `TYPE`           varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT '告警类型（SERVER、NET、TCP4SERVICE、HTTP4SERVICE、DOCKER、INSTANCE、DATABASE、CUSTOM）',
-    `WAY`            varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NULL DEFAULT NULL COMMENT '告警方式（SMS、MAIL、...）',
-    `LEVEL`          varchar(5) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci   NOT NULL COMMENT '告警级别（INFO、WARM、ERROR、FATAL）',
-    `TITLE`          varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '告警标题',
-    `CONTENT`        longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci     NULL COMMENT '告警内容',
-    `STATUS`         varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci   NULL DEFAULT NULL COMMENT '告警发送状态（0：失败；1：成功）',
-    `NUMBER`         varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '被告警人号码（手机号码、电子邮箱、...）',
-    `INSERT_TIME`    datetime                                                      NOT NULL COMMENT '告警时间',
-    `UPDATE_TIME`    datetime                                                      NULL DEFAULT NULL COMMENT '告警结果获取时间',
+    `ID`              bigint(20) UNSIGNED                                           NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `CODE`            varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT '告警代码，使用UUID',
+    `ALARM_DEF_CODE`  varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NULL DEFAULT NULL COMMENT '告警定义编码',
+    `TYPE`            varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT '告警类型（SERVER、NET、TCP4SERVICE、HTTP4SERVICE、DOCKER、INSTANCE、DATABASE、CUSTOM）',
+    `WAY`             varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NULL DEFAULT NULL COMMENT '告警方式（SMS、MAIL、...）',
+    `LEVEL`           varchar(5) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci   NOT NULL COMMENT '告警级别（INFO、WARM、ERROR、FATAL）',
+    `TITLE`           varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '告警标题',
+    `CONTENT`         longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci     NULL COMMENT '告警内容',
+    `STATUS`          varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci   NULL DEFAULT NULL COMMENT '告警发送状态（0：失败；1：成功）',
+    `NOT_SEND_REASON` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NULL DEFAULT NULL COMMENT '不发送告警原因',
+    `NUMBER`          varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '被告警人号码（手机号码、电子邮箱、...）',
+    `INSERT_TIME`     datetime                                                      NOT NULL COMMENT '告警时间',
+    `UPDATE_TIME`     datetime                                                      NULL DEFAULT NULL COMMENT '告警结果获取时间',
     PRIMARY KEY (`ID`) USING BTREE,
     INDEX `NX_CODE` (`CODE`) USING BTREE COMMENT '索引_告警记录编码',
     INDEX `NX_INSERT_TIME` (`INSERT_TIME`) USING BTREE COMMENT '索引_插入时间',
@@ -65,7 +66,7 @@ CREATE TABLE `MONITOR_ALARM_RECORD`
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_general_ci COMMENT = '告警记录表'
-  ROW_FORMAT = Dynamic;
+  ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for MONITOR_CONFIG
@@ -81,7 +82,7 @@ CREATE TABLE `MONITOR_CONFIG`
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_general_ci COMMENT = '监控配置表'
-  ROW_FORMAT = Dynamic;
+  ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for MONITOR_DB
@@ -89,20 +90,22 @@ CREATE TABLE `MONITOR_CONFIG`
 DROP TABLE IF EXISTS `MONITOR_DB`;
 CREATE TABLE `MONITOR_DB`
 (
-    `ID`            bigint(20) UNSIGNED                                            NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-    `CONN_NAME`     varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT '连接名称',
-    `URL`           varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '数据库URL',
-    `USERNAME`      varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci   NULL DEFAULT NULL COMMENT '用户名',
-    `PASSWORD`      varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NULL DEFAULT NULL COMMENT '密码',
-    `DB_TYPE`       varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci   NOT NULL COMMENT '数据库类型',
-    `DRIVER_CLASS`  varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NULL DEFAULT NULL COMMENT '驱动类',
-    `DB_DESC`       varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '描述',
-    `IS_ONLINE`     varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci    NULL DEFAULT NULL COMMENT '数据库状态（0：离线，1：在线）',
-    `OFFLINE_COUNT` int(8)                                                         NULL DEFAULT NULL COMMENT '离线次数',
-    `MONITOR_ENV`   varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NULL DEFAULT NULL COMMENT '监控环境',
-    `MONITOR_GROUP` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NULL DEFAULT NULL COMMENT '监控分组',
-    `INSERT_TIME`   datetime                                                       NOT NULL COMMENT '插入时间',
-    `UPDATE_TIME`   datetime                                                       NULL DEFAULT NULL COMMENT '更新时间',
+    `ID`                bigint(20) UNSIGNED                                            NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `CONN_NAME`         varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT '连接名称',
+    `URL`               varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '数据库URL',
+    `USERNAME`          varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci   NULL DEFAULT NULL COMMENT '用户名',
+    `PASSWORD`          varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NULL DEFAULT NULL COMMENT '密码',
+    `DB_TYPE`           varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci   NOT NULL COMMENT '数据库类型',
+    `DRIVER_CLASS`      varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NULL DEFAULT NULL COMMENT '驱动类',
+    `DB_DESC`           varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '描述',
+    `IS_ONLINE`         varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci    NULL DEFAULT NULL COMMENT '数据库状态（0：离线，1：在线）',
+    `IS_ENABLE_MONITOR` varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci    NULL DEFAULT NULL COMMENT '是否开启监控（0：不开启监控；1：开启监控）',
+    `IS_ENABLE_ALARM`   varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci    NULL DEFAULT NULL COMMENT '是否开启告警（0：不开启告警；1：开启告警）',
+    `OFFLINE_COUNT`     int(8)                                                         NULL DEFAULT NULL COMMENT '离线次数',
+    `MONITOR_ENV`       varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NULL DEFAULT NULL COMMENT '监控环境',
+    `MONITOR_GROUP`     varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NULL DEFAULT NULL COMMENT '监控分组',
+    `INSERT_TIME`       datetime                                                       NOT NULL COMMENT '插入时间',
+    `UPDATE_TIME`       datetime                                                       NULL DEFAULT NULL COMMENT '更新时间',
     PRIMARY KEY (`ID`) USING BTREE,
     INDEX `MONITOR_DB_ENV_FK` (`MONITOR_ENV`) USING BTREE COMMENT '索引_监控环境',
     INDEX `MONITOR_DB_GROUP_FK` (`MONITOR_GROUP`) USING BTREE COMMENT '索引_监控分组',
@@ -111,7 +114,7 @@ CREATE TABLE `MONITOR_DB`
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_general_ci COMMENT = '数据库表'
-  ROW_FORMAT = Dynamic;
+  ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for MONITOR_ENV
@@ -131,7 +134,7 @@ CREATE TABLE `MONITOR_ENV`
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_general_ci COMMENT = '监控环境表'
-  ROW_FORMAT = Dynamic;
+  ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for MONITOR_GROUP
@@ -151,7 +154,7 @@ CREATE TABLE `MONITOR_GROUP`
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_general_ci COMMENT = '监控分组表'
-  ROW_FORMAT = Dynamic;
+  ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for MONITOR_HTTP
@@ -159,20 +162,24 @@ CREATE TABLE `MONITOR_GROUP`
 DROP TABLE IF EXISTS `MONITOR_HTTP`;
 CREATE TABLE `MONITOR_HTTP`
 (
-    `ID`              bigint(20) UNSIGNED                                           NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-    `HOSTNAME_SOURCE` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT '主机名（来源）',
-    `URL_TARGET`      varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'URL地址（目的地）',
-    `METHOD`          varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NULL DEFAULT NULL COMMENT '请求方法',
-    `PARAMETER`       varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '请求参数',
-    `DESCR`           varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '描述',
-    `AVG_TIME`        bigint(20)                                                    NULL DEFAULT NULL COMMENT '平均响应时间（毫秒）',
-    `STATUS`          int(8)                                                        NULL DEFAULT NULL COMMENT '状态',
-    `EXC_MESSAGE`     longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci     NULL COMMENT '异常信息',
-    `OFFLINE_COUNT`   int(8)                                                        NULL DEFAULT NULL COMMENT '离线次数',
-    `MONITOR_ENV`     varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '监控环境',
-    `MONITOR_GROUP`   varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '监控分组',
-    `INSERT_TIME`     datetime                                                      NOT NULL COMMENT '新增时间',
-    `UPDATE_TIME`     datetime                                                      NULL DEFAULT NULL COMMENT '更新时间',
+    `ID`                bigint(20) UNSIGNED                                           NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `HOSTNAME_SOURCE`   varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT '主机名（来源）',
+    `URL_TARGET`        varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'URL地址（目的地）',
+    `METHOD`            varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NULL DEFAULT NULL COMMENT '请求方法',
+    `CONTENT_TYPE`      varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '媒体类型',
+    `HEADER_PARAMETER`  longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci     NULL COMMENT '请求头参数',
+    `BODY_PARAMETER`    longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci     NULL COMMENT '请求体参数',
+    `DESCR`             varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '描述',
+    `AVG_TIME`          bigint(20)                                                    NULL DEFAULT NULL COMMENT '平均响应时间（毫秒）',
+    `STATUS`            int(8)                                                        NULL DEFAULT NULL COMMENT '状态',
+    `IS_ENABLE_MONITOR` varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci   NULL DEFAULT NULL COMMENT '是否开启监控（0：不开启监控；1：开启监控）',
+    `IS_ENABLE_ALARM`   varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci   NULL DEFAULT NULL COMMENT '是否开启告警（0：不开启告警；1：开启告警）',
+    `EXC_MESSAGE`       longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci     NULL COMMENT '异常信息',
+    `OFFLINE_COUNT`     int(8)                                                        NULL DEFAULT NULL COMMENT '离线次数',
+    `MONITOR_ENV`       varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '监控环境',
+    `MONITOR_GROUP`     varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '监控分组',
+    `INSERT_TIME`       datetime                                                      NOT NULL COMMENT '新增时间',
+    `UPDATE_TIME`       datetime                                                      NULL DEFAULT NULL COMMENT '更新时间',
     PRIMARY KEY (`ID`) USING BTREE,
     INDEX `NX_HOSTNAME_SOURCE` (`HOSTNAME_SOURCE`) USING BTREE COMMENT '索引_主机名（来源）',
     INDEX `NX_URL_TARGET` (`URL_TARGET`) USING BTREE COMMENT '索引_URL（目的地）',
@@ -183,7 +190,7 @@ CREATE TABLE `MONITOR_HTTP`
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_general_ci COMMENT = 'HTTP信息表'
-  ROW_FORMAT = Dynamic;
+  ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for MONITOR_HTTP_HISTORY
@@ -191,19 +198,21 @@ CREATE TABLE `MONITOR_HTTP`
 DROP TABLE IF EXISTS `MONITOR_HTTP_HISTORY`;
 CREATE TABLE `MONITOR_HTTP_HISTORY`
 (
-    `ID`              bigint(20) UNSIGNED                                           NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-    `HTTP_ID`         bigint(20)                                                    NOT NULL COMMENT 'HTTP主表ID',
-    `HOSTNAME_SOURCE` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT '主机名（来源）',
-    `URL_TARGET`      varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'URL地址（目的地）',
-    `METHOD`          varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NULL DEFAULT NULL COMMENT '请求方法',
-    `PARAMETER`       varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '请求参数',
-    `DESCR`           varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '描述',
-    `AVG_TIME`        bigint(20)                                                    NULL DEFAULT NULL COMMENT '平均响应时间（毫秒）',
-    `STATUS`          int(8)                                                        NULL DEFAULT NULL COMMENT '状态',
-    `EXC_MESSAGE`     longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci     NULL COMMENT '异常信息',
-    `OFFLINE_COUNT`   int(8)                                                        NULL DEFAULT NULL COMMENT '离线次数',
-    `INSERT_TIME`     datetime                                                      NOT NULL COMMENT '新增时间',
-    `UPDATE_TIME`     datetime                                                      NULL DEFAULT NULL COMMENT '更新时间',
+    `ID`               bigint(20) UNSIGNED                                           NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `HTTP_ID`          bigint(20)                                                    NOT NULL COMMENT 'HTTP主表ID',
+    `HOSTNAME_SOURCE`  varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT '主机名（来源）',
+    `URL_TARGET`       varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'URL地址（目的地）',
+    `METHOD`           varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NULL DEFAULT NULL COMMENT '请求方法',
+    `CONTENT_TYPE`     varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '媒体类型',
+    `HEADER_PARAMETER` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci     NULL COMMENT '请求头参数',
+    `BODY_PARAMETER`   longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci     NULL COMMENT '请求体参数',
+    `DESCR`            varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '描述',
+    `AVG_TIME`         bigint(20)                                                    NULL DEFAULT NULL COMMENT '平均响应时间（毫秒）',
+    `STATUS`           int(8)                                                        NULL DEFAULT NULL COMMENT '状态',
+    `EXC_MESSAGE`      longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci     NULL COMMENT '异常信息',
+    `OFFLINE_COUNT`    int(8)                                                        NULL DEFAULT NULL COMMENT '离线次数',
+    `INSERT_TIME`      datetime                                                      NOT NULL COMMENT '新增时间',
+    `UPDATE_TIME`      datetime                                                      NULL DEFAULT NULL COMMENT '更新时间',
     PRIMARY KEY (`ID`) USING BTREE,
     INDEX `NX_HOSTNAME_SOURCE` (`HOSTNAME_SOURCE`) USING BTREE COMMENT '索引_主机名（来源）',
     INDEX `NX_URL_TARGET` (`URL_TARGET`) USING BTREE COMMENT '索引_URL（目的地）',
@@ -212,7 +221,7 @@ CREATE TABLE `MONITOR_HTTP_HISTORY`
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_general_ci COMMENT = 'HTTP信息历史记录表'
-  ROW_FORMAT = Dynamic;
+  ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for MONITOR_INSTANCE
@@ -230,6 +239,8 @@ CREATE TABLE `MONITOR_INSTANCE`
     `APP_SERVER_TYPE`   varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NULL DEFAULT NULL COMMENT '应用服务器类型',
     `IP`                varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT 'IP地址',
     `IS_ONLINE`         varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci   NULL DEFAULT NULL COMMENT '应用状态（0：离线，1：在线）',
+    `IS_ENABLE_MONITOR` varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci   NULL DEFAULT NULL COMMENT '是否开启监控（0：不开启监控；1：开启监控）',
+    `IS_ENABLE_ALARM`   varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci   NULL DEFAULT NULL COMMENT '是否开启告警（0：不开启告警；1：开启告警）',
     `IS_OFFLINE_NOTICE` varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci   NULL DEFAULT NULL COMMENT '是否收到离线通知（0：否，1：是）',
     `OFFLINE_COUNT`     int(8)                                                        NULL DEFAULT NULL COMMENT '离线次数',
     `CONN_FREQUENCY`    int(8)                                                        NOT NULL COMMENT '连接频率',
@@ -267,7 +278,7 @@ CREATE TABLE `MONITOR_JVM_CLASS_LOADING`
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_general_ci COMMENT = 'java虚拟机类加载信息表'
-  ROW_FORMAT = Dynamic;
+  ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for MONITOR_JVM_GARBAGE_COLLECTOR
@@ -288,7 +299,7 @@ CREATE TABLE `MONITOR_JVM_GARBAGE_COLLECTOR`
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_general_ci COMMENT = 'java虚拟机GC信息表'
-  ROW_FORMAT = Dynamic;
+  ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for MONITOR_JVM_MEMORY
@@ -310,7 +321,7 @@ CREATE TABLE `MONITOR_JVM_MEMORY`
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_general_ci COMMENT = 'java虚拟机内存信息表'
-  ROW_FORMAT = Dynamic;
+  ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for MONITOR_JVM_MEMORY_HISTORY
@@ -335,7 +346,7 @@ CREATE TABLE `MONITOR_JVM_MEMORY_HISTORY`
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_general_ci COMMENT = 'java虚拟机内存历史记录表'
-  ROW_FORMAT = Dynamic;
+  ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for MONITOR_JVM_RUNTIME
@@ -367,7 +378,7 @@ CREATE TABLE `MONITOR_JVM_RUNTIME`
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_general_ci COMMENT = 'java虚拟机运行时信息表'
-  ROW_FORMAT = Dynamic;
+  ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for MONITOR_JVM_THREAD
@@ -381,6 +392,7 @@ CREATE TABLE `MONITOR_JVM_THREAD`
     `PEAK_THREAD_COUNT`          int(8)                                                       NULL DEFAULT NULL COMMENT '线程峰值',
     `TOTAL_STARTED_THREAD_COUNT` int(8)                                                       NULL DEFAULT NULL COMMENT '已创建并已启动的线程总数',
     `DAEMON_THREAD_COUNT`        int(8)                                                       NULL DEFAULT NULL COMMENT '当前活动守护线程数',
+    `THREAD_INFOS`               longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci    NULL DEFAULT NULL COMMENT '所有线程信息',
     `INSERT_TIME`                datetime                                                     NOT NULL COMMENT '新增时间',
     `UPDATE_TIME`                datetime                                                     NULL DEFAULT NULL COMMENT '更新时间',
     PRIMARY KEY (`ID`) USING BTREE,
@@ -388,7 +400,7 @@ CREATE TABLE `MONITOR_JVM_THREAD`
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_general_ci COMMENT = 'java虚拟机线程信息表'
-  ROW_FORMAT = Dynamic;
+  ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for MONITOR_LINK
@@ -408,7 +420,7 @@ CREATE TABLE `MONITOR_LINK`
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_general_ci COMMENT = '链路表'
-  ROW_FORMAT = Dynamic;
+  ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for MONITOR_LOG_EXCEPTION
@@ -417,21 +429,25 @@ DROP TABLE IF EXISTS `MONITOR_LOG_EXCEPTION`;
 CREATE TABLE `MONITOR_LOG_EXCEPTION`
 (
     `ID`          bigint(20) UNSIGNED                                           NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-    `REQ_PARAM`   text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci         NULL COMMENT '请求参数',
+    `INSTANCE_ID` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT '应用实例ID',
     `EXC_NAME`    varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '异常名称',
     `EXC_MESSAGE` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci     NULL COMMENT '异常信息',
     `USER_ID`     bigint(20)                                                    NULL DEFAULT NULL COMMENT '操作用户ID',
     `USERNAME`    varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '操作用户名',
     `OPER_METHOD` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '操作方法',
+    `REQ_PARAM`   longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci     NULL COMMENT '请求参数',
     `URI`         varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '请求URI',
     `IP`          varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '请求IP',
+    `IS_ALARM`    varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci   NULL DEFAULT NULL COMMENT '是否告警(0：否，1：是)',
     `INSERT_TIME` datetime                                                      NOT NULL COMMENT '插入时间',
     PRIMARY KEY (`ID`) USING BTREE,
-    INDEX `NX_INSERT_TIME` (`INSERT_TIME`) USING BTREE COMMENT '索引_插入时间'
+    INDEX `NX_INSERT_TIME` (`INSERT_TIME`) USING BTREE COMMENT '索引_插入时间',
+    INDEX `NX_INSTANCE_ID` (`INSTANCE_ID`) USING BTREE COMMENT '索引_应用实例ID',
+    INDEX `NX_IS_ALARM` (`IS_ALARM`) USING BTREE COMMENT '索引_是否告警'
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_general_ci COMMENT = '异常日志表'
-  ROW_FORMAT = Dynamic;
+  ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for MONITOR_LOG_OPERATION
@@ -456,7 +472,7 @@ CREATE TABLE `MONITOR_LOG_OPERATION`
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_general_ci COMMENT = '操作日志表'
-  ROW_FORMAT = Dynamic;
+  ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for MONITOR_NET
@@ -464,18 +480,20 @@ CREATE TABLE `MONITOR_LOG_OPERATION`
 DROP TABLE IF EXISTS `MONITOR_NET`;
 CREATE TABLE `MONITOR_NET`
 (
-    `ID`            bigint(20) UNSIGNED                                           NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-    `IP_SOURCE`     varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT 'IP地址（来源）',
-    `IP_TARGET`     varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT 'IP地址（目的地）',
-    `IP_DESC`       varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'IP地址描述',
-    `STATUS`        varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci   NULL DEFAULT NULL COMMENT '状态（0：网络不通，1：网络正常）',
-    `AVG_TIME`      double                                                        NULL DEFAULT NULL COMMENT '平均响应时间（毫秒）',
-    `PING_DETAIL`   text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci         NULL DEFAULT NULL COMMENT 'ping详情',
-    `OFFLINE_COUNT` int(8)                                                        NULL DEFAULT NULL COMMENT '离线次数',
-    `MONITOR_ENV`   varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '监控环境',
-    `MONITOR_GROUP` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '监控分组',
-    `INSERT_TIME`   datetime                                                      NOT NULL COMMENT '新增时间',
-    `UPDATE_TIME`   datetime                                                      NULL DEFAULT NULL COMMENT '更新时间',
+    `ID`                bigint(20) UNSIGNED                                           NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `IP_SOURCE`         varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT 'IP地址（来源）',
+    `IP_TARGET`         varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT 'IP地址（目的地）',
+    `IP_DESC`           varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'IP地址描述',
+    `STATUS`            varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci   NULL DEFAULT NULL COMMENT '状态（0：网络不通，1：网络正常）',
+    `IS_ENABLE_MONITOR` varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci   NULL DEFAULT NULL COMMENT '是否开启监控（0：不开启监控；1：开启监控）',
+    `IS_ENABLE_ALARM`   varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci   NULL DEFAULT NULL COMMENT '是否开启告警（0：不开启告警；1：开启告警）',
+    `AVG_TIME`          double                                                        NULL DEFAULT NULL COMMENT '平均响应时间（毫秒）',
+    `PING_DETAIL`       text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci         NULL DEFAULT NULL COMMENT 'ping详情',
+    `OFFLINE_COUNT`     int(8)                                                        NULL DEFAULT NULL COMMENT '离线次数',
+    `MONITOR_ENV`       varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '监控环境',
+    `MONITOR_GROUP`     varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '监控分组',
+    `INSERT_TIME`       datetime                                                      NOT NULL COMMENT '新增时间',
+    `UPDATE_TIME`       datetime                                                      NULL DEFAULT NULL COMMENT '更新时间',
     PRIMARY KEY (`ID`) USING BTREE,
     INDEX `NX_IP_SOURCE` (`IP_SOURCE`) USING BTREE COMMENT '索引_IP地址（来源）',
     INDEX `NX_IP_TARGET` (`IP_TARGET`) USING BTREE COMMENT '索引_IP地址（目的地）',
@@ -486,7 +504,7 @@ CREATE TABLE `MONITOR_NET`
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_general_ci COMMENT = '网络信息表'
-  ROW_FORMAT = Dynamic;
+  ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for MONITOR_NET_HISTORY
@@ -521,18 +539,22 @@ CREATE TABLE `MONITOR_NET_HISTORY`
 DROP TABLE IF EXISTS `MONITOR_REALTIME_MONITORING`;
 CREATE TABLE `MONITOR_REALTIME_MONITORING`
 (
-    `ID`            bigint(20) UNSIGNED                                          NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-    `TYPE`          varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '监控类型（SERVER、NET、TCP4SERVICE、HTTP4SERVICE、DOCKER、INSTANCE、DATABASE、CUSTOM）',
-    `CODE`          varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '监控编号',
-    `IS_SENT_ALARM` varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT '是否已经发送了告警（1：是，0：否）',
-    `INSERT_TIME`   datetime                                                     NOT NULL COMMENT '插入时间',
-    `UPDATE_TIME`   datetime                                                     NULL DEFAULT NULL COMMENT '更新时间',
+    `ID`                bigint(20) UNSIGNED                                          NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `TYPE`              varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '监控类型（SERVER、NET、TCP4SERVICE、HTTP4SERVICE、DOCKER、INSTANCE、DATABASE、CUSTOM）',
+    `SUB_TYPE`          varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '监控子类型',
+    `CODE`              varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '监控编号',
+    `ALERTED_ENTITY_ID` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '被告警主体唯一ID',
+    `IS_SENT_ALARM`     varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT '是否已经发送了告警（1：是，0：否）',
+    `INSERT_TIME`       datetime                                                     NOT NULL COMMENT '插入时间',
+    `UPDATE_TIME`       datetime                                                     NULL DEFAULT NULL COMMENT '更新时间',
     PRIMARY KEY (`ID`) USING BTREE,
-    INDEX `NX_TYPE_CODE` (`TYPE`, `CODE`) USING BTREE COMMENT '索引_类型_编码'
+    INDEX `NX_TYPE_CODE` (`TYPE`, `CODE`) USING BTREE COMMENT '索引_类型_编码',
+    INDEX `NX_TYPE_SUB_TYPE_ALERTED_ENTITY_ID` (`TYPE`, `SUB_TYPE`, `ALERTED_ENTITY_ID`) USING BTREE COMMENT '索引_类型_子类型_被告警主体唯一ID',
+    INDEX `NX_TYPE_ALERTED_ENTITY_ID` (`TYPE`, `ALERTED_ENTITY_ID`) USING BTREE COMMENT '索引_类型_被告警主体唯一ID'
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_general_ci COMMENT = '实时监控表'
-  ROW_FORMAT = Dynamic;
+  ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for MONITOR_ROLE
@@ -548,7 +570,7 @@ CREATE TABLE `MONITOR_ROLE`
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_general_ci COMMENT = '监控用户角色表'
-  ROW_FORMAT = Dynamic;
+  ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for MONITOR_SERVER
@@ -556,17 +578,19 @@ CREATE TABLE `MONITOR_ROLE`
 DROP TABLE IF EXISTS `MONITOR_SERVER`;
 CREATE TABLE `MONITOR_SERVER`
 (
-    `ID`             bigint(20) UNSIGNED                                           NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-    `IP`             varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT 'IP地址',
-    `SERVER_NAME`    varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NULL DEFAULT NULL COMMENT '服务器名',
-    `SERVER_SUMMARY` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '服务器摘要',
-    `IS_ONLINE`      varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci   NULL DEFAULT NULL COMMENT '服务器状态（0：离线，1：在线）',
-    `OFFLINE_COUNT`  int(8)                                                        NULL DEFAULT NULL COMMENT '离线次数',
-    `CONN_FREQUENCY` int(8)                                                        NOT NULL COMMENT '连接频率',
-    `MONITOR_ENV`    varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '监控环境',
-    `MONITOR_GROUP`  varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '监控分组',
-    `INSERT_TIME`    datetime                                                      NOT NULL COMMENT '新增时间',
-    `UPDATE_TIME`    datetime                                                      NULL DEFAULT NULL COMMENT '更新时间',
+    `ID`                bigint(20) UNSIGNED                                           NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `IP`                varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT 'IP地址',
+    `SERVER_NAME`       varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NULL DEFAULT NULL COMMENT '服务器名',
+    `SERVER_SUMMARY`    varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '服务器摘要',
+    `IS_ONLINE`         varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci   NULL DEFAULT NULL COMMENT '服务器状态（0：离线，1：在线）',
+    `IS_ENABLE_MONITOR` varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci   NULL DEFAULT NULL COMMENT '是否开启监控（0：不开启监控；1：开启监控）',
+    `IS_ENABLE_ALARM`   varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci   NULL DEFAULT NULL COMMENT '是否开启告警（0：不开启告警；1：开启告警）',
+    `OFFLINE_COUNT`     int(8)                                                        NULL DEFAULT NULL COMMENT '离线次数',
+    `CONN_FREQUENCY`    int(8)                                                        NOT NULL COMMENT '连接频率',
+    `MONITOR_ENV`       varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '监控环境',
+    `MONITOR_GROUP`     varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '监控分组',
+    `INSERT_TIME`       datetime                                                      NOT NULL COMMENT '新增时间',
+    `UPDATE_TIME`       datetime                                                      NULL DEFAULT NULL COMMENT '更新时间',
     PRIMARY KEY (`ID`) USING BTREE,
     INDEX `NX_IP` (`IP`) USING BTREE COMMENT '索引_IP',
     INDEX `MONITOR_SERVER_ENV_FK` (`MONITOR_ENV`) USING BTREE COMMENT '索引_监控环境',
@@ -603,7 +627,7 @@ CREATE TABLE `MONITOR_SERVER_CPU`
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_general_ci COMMENT = '服务器CPU表'
-  ROW_FORMAT = Dynamic;
+  ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for MONITOR_SERVER_CPU_HISTORY
@@ -632,7 +656,7 @@ CREATE TABLE `MONITOR_SERVER_CPU_HISTORY`
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_general_ci COMMENT = '服务器CPU历史记录表'
-  ROW_FORMAT = Dynamic;
+  ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for MONITOR_SERVER_DISK
@@ -659,7 +683,7 @@ CREATE TABLE `MONITOR_SERVER_DISK`
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_general_ci COMMENT = '服务器磁盘表'
-  ROW_FORMAT = Dynamic;
+  ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for MONITOR_SERVER_DISK_HISTORY
@@ -688,7 +712,7 @@ CREATE TABLE `MONITOR_SERVER_DISK_HISTORY`
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_general_ci COMMENT = '服务器磁盘历史记录表'
-  ROW_FORMAT = Dynamic;
+  ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for MONITOR_SERVER_LOAD_AVERAGE
@@ -709,7 +733,7 @@ CREATE TABLE `MONITOR_SERVER_LOAD_AVERAGE`
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_general_ci COMMENT = '服务器平均负载表'
-  ROW_FORMAT = Dynamic;
+  ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for MONITOR_SERVER_LOAD_AVERAGE_HISTORY
@@ -732,7 +756,7 @@ CREATE TABLE `MONITOR_SERVER_LOAD_AVERAGE_HISTORY`
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_general_ci COMMENT = '服务器平均负载历史记录表'
-  ROW_FORMAT = Dynamic;
+  ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for MONITOR_SERVER_MEMORY
@@ -757,7 +781,7 @@ CREATE TABLE `MONITOR_SERVER_MEMORY`
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_general_ci COMMENT = '服务器内存表'
-  ROW_FORMAT = Dynamic;
+  ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for MONITOR_SERVER_MEMORY_HISTORY
@@ -784,7 +808,7 @@ CREATE TABLE `MONITOR_SERVER_MEMORY_HISTORY`
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_general_ci COMMENT = '服务器内存历史记录表'
-  ROW_FORMAT = Dynamic;
+  ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for MONITOR_SERVER_NETCARD
@@ -819,7 +843,7 @@ CREATE TABLE `MONITOR_SERVER_NETCARD`
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_general_ci COMMENT = '服务器网卡表'
-  ROW_FORMAT = Dynamic;
+  ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for MONITOR_SERVER_NETCARD_HISTORY
@@ -857,7 +881,7 @@ CREATE TABLE `MONITOR_SERVER_NETCARD_HISTORY`
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_general_ci COMMENT = '服务器网卡历史记录表'
-  ROW_FORMAT = Dynamic;
+  ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for MONITOR_SERVER_OS
@@ -881,7 +905,7 @@ CREATE TABLE `MONITOR_SERVER_OS`
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_general_ci COMMENT = '服务器操作系统表'
-  ROW_FORMAT = Dynamic;
+  ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for MONITOR_SERVER_POWER_SOURCES
@@ -919,7 +943,7 @@ CREATE TABLE `MONITOR_SERVER_POWER_SOURCES`
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_general_ci COMMENT = '服务器电池表'
-  ROW_FORMAT = Dynamic;
+  ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for MONITOR_SERVER_PROCESS
@@ -948,7 +972,7 @@ CREATE TABLE `MONITOR_SERVER_PROCESS`
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_general_ci COMMENT = '服务器进程表'
-  ROW_FORMAT = Dynamic;
+  ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for MONITOR_SERVER_PROCESS_HISTORY
@@ -968,7 +992,7 @@ CREATE TABLE `MONITOR_SERVER_PROCESS_HISTORY`
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_general_ci COMMENT = '服务器进程历史记录表'
-  ROW_FORMAT = Dynamic;
+  ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for MONITOR_SERVER_SENSORS
@@ -988,7 +1012,7 @@ CREATE TABLE `MONITOR_SERVER_SENSORS`
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_general_ci COMMENT = '服务器传感器表'
-  ROW_FORMAT = Dynamic;
+  ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for MONITOR_TCP
@@ -996,18 +1020,20 @@ CREATE TABLE `MONITOR_SERVER_SENSORS`
 DROP TABLE IF EXISTS `MONITOR_TCP`;
 CREATE TABLE `MONITOR_TCP`
 (
-    `ID`              bigint(20) UNSIGNED                                           NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-    `HOSTNAME_SOURCE` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT '主机名（来源）',
-    `HOSTNAME_TARGET` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT '主机名（目的地）',
-    `PORT_TARGET`     int(8)                                                        NOT NULL COMMENT '端口号',
-    `DESCR`           varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '描述',
-    `AVG_TIME`        bigint(20)                                                    NULL DEFAULT NULL COMMENT '平均响应时间（毫秒）',
-    `STATUS`          varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci   NULL DEFAULT NULL COMMENT '状态（0：不通，1：正常）',
-    `OFFLINE_COUNT`   int(8)                                                        NULL DEFAULT NULL COMMENT '离线次数',
-    `MONITOR_ENV`     varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '监控环境',
-    `MONITOR_GROUP`   varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '监控分组',
-    `INSERT_TIME`     datetime                                                      NOT NULL COMMENT '新增时间',
-    `UPDATE_TIME`     datetime                                                      NULL DEFAULT NULL COMMENT '更新时间',
+    `ID`                bigint(20) UNSIGNED                                           NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `HOSTNAME_SOURCE`   varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT '主机名（来源）',
+    `HOSTNAME_TARGET`   varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT '主机名（目的地）',
+    `PORT_TARGET`       int(8)                                                        NOT NULL COMMENT '端口号',
+    `DESCR`             varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '描述',
+    `AVG_TIME`          bigint(20)                                                    NULL DEFAULT NULL COMMENT '平均响应时间（毫秒）',
+    `STATUS`            varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci   NULL DEFAULT NULL COMMENT '状态（0：不通，1：正常）',
+    `IS_ENABLE_MONITOR` varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci   NULL DEFAULT NULL COMMENT '是否开启监控（0：不开启监控；1：开启监控）',
+    `IS_ENABLE_ALARM`   varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci   NULL DEFAULT NULL COMMENT '是否开启告警（0：不开启告警；1：开启告警）',
+    `OFFLINE_COUNT`     int(8)                                                        NULL DEFAULT NULL COMMENT '离线次数',
+    `MONITOR_ENV`       varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '监控环境',
+    `MONITOR_GROUP`     varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '监控分组',
+    `INSERT_TIME`       datetime                                                      NOT NULL COMMENT '新增时间',
+    `UPDATE_TIME`       datetime                                                      NULL DEFAULT NULL COMMENT '更新时间',
     PRIMARY KEY (`ID`) USING BTREE,
     INDEX `NX_HOSTNAME_SOURCE` (`HOSTNAME_SOURCE`) USING BTREE COMMENT '索引_主机名（来源）',
     INDEX `NX_HOSTNAME_TARGET` (`HOSTNAME_TARGET`) USING BTREE COMMENT '索引_主机名（目的地）',
@@ -1019,7 +1045,7 @@ CREATE TABLE `MONITOR_TCP`
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_general_ci COMMENT = 'TCP信息表'
-  ROW_FORMAT = Dynamic;
+  ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for MONITOR_TCP_HISTORY
@@ -1071,7 +1097,7 @@ CREATE TABLE `MONITOR_USER`
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_general_ci COMMENT = '监控用户表'
-  ROW_FORMAT = Dynamic;
+  ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for QRTZ_BLOB_TRIGGERS
@@ -1089,7 +1115,7 @@ CREATE TABLE `QRTZ_BLOB_TRIGGERS`
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_general_ci
-  ROW_FORMAT = Dynamic;
+  ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for QRTZ_CALENDARS
@@ -1104,7 +1130,7 @@ CREATE TABLE `QRTZ_CALENDARS`
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_general_ci
-  ROW_FORMAT = Dynamic;
+  ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for QRTZ_CRON_TRIGGERS
@@ -1122,7 +1148,7 @@ CREATE TABLE `QRTZ_CRON_TRIGGERS`
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_general_ci
-  ROW_FORMAT = Dynamic;
+  ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for QRTZ_FIRED_TRIGGERS
@@ -1153,7 +1179,7 @@ CREATE TABLE `QRTZ_FIRED_TRIGGERS`
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_general_ci
-  ROW_FORMAT = Dynamic;
+  ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for QRTZ_JOB_DETAILS
@@ -1177,7 +1203,7 @@ CREATE TABLE `QRTZ_JOB_DETAILS`
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_general_ci
-  ROW_FORMAT = Dynamic;
+  ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for QRTZ_LOCKS
@@ -1191,7 +1217,7 @@ CREATE TABLE `QRTZ_LOCKS`
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_general_ci
-  ROW_FORMAT = Dynamic;
+  ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for QRTZ_PAUSED_TRIGGER_GRPS
@@ -1205,7 +1231,7 @@ CREATE TABLE `QRTZ_PAUSED_TRIGGER_GRPS`
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_general_ci
-  ROW_FORMAT = Dynamic;
+  ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for QRTZ_SCHEDULER_STATE
@@ -1221,7 +1247,7 @@ CREATE TABLE `QRTZ_SCHEDULER_STATE`
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_general_ci
-  ROW_FORMAT = Dynamic;
+  ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for QRTZ_SIMPLE_TRIGGERS
@@ -1240,7 +1266,7 @@ CREATE TABLE `QRTZ_SIMPLE_TRIGGERS`
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_general_ci
-  ROW_FORMAT = Dynamic;
+  ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for QRTZ_SIMPROP_TRIGGERS
@@ -1267,7 +1293,7 @@ CREATE TABLE `QRTZ_SIMPROP_TRIGGERS`
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_general_ci
-  ROW_FORMAT = Dynamic;
+  ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for QRTZ_TRIGGERS
@@ -1309,7 +1335,7 @@ CREATE TABLE `QRTZ_TRIGGERS`
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_general_ci
-  ROW_FORMAT = Dynamic;
+  ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for SPRING_SESSION
@@ -1331,7 +1357,7 @@ CREATE TABLE `SPRING_SESSION`
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_general_ci
-  ROW_FORMAT = Dynamic;
+  ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for SPRING_SESSION_ATTRIBUTES
@@ -1347,7 +1373,7 @@ CREATE TABLE `SPRING_SESSION_ATTRIBUTES`
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_general_ci
-  ROW_FORMAT = Dynamic;
+  ROW_FORMAT = DYNAMIC;
 
 SET FOREIGN_KEY_CHECKS = 1;
 

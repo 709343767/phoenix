@@ -1,7 +1,7 @@
 //tag input
 $(function () {
     // 收件人邮箱
-    $('textarea[name="alarmMailEmills"]').tagsInput({
+    $('textarea[name="alarmMailboxEmails"]').tagsInput({
         width: 'auto',
         'delimiter': ';',
         onChange: function (elem, elem_tags) {

@@ -11,6 +11,7 @@ import org.hyperic.sigar.NetInterfaceStat;
 import org.hyperic.sigar.SigarException;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * <p>
@@ -86,7 +87,7 @@ public class NetInterfaceUtils extends InitSigar {
                 long txBytesStart = netStat.getTxBytes();
                 // 休眠一秒
                 try {
-                    Thread.sleep(1000);
+                    TimeUnit.SECONDS.sleep(1);
                 } catch (InterruptedException e) {
                     log.error("线程中断异常！", e);
                 }
@@ -94,11 +95,11 @@ public class NetInterfaceUtils extends InitSigar {
                 NetInterfaceStat statEnd = SIGAR.getNetInterfaceStat(info);
                 long rxBytesEnd = statEnd.getRxBytes();
                 long txBytesEnd = statEnd.getTxBytes();
+                // 计算时间差（单位：秒）
+                double elapsedTimeInSeconds = (double) (end - start) / 1000;
                 // 1Byte=8bit
-                // double rxBps = (((double) (rxBytesEnd - rxBytesStart) * 8) / ((double) (end - start) / 1000)) / 8;
-                // double txBps = (((double) (txBytesEnd - txBytesStart) * 8) / ((double) (end - start) / 1000)) / 8;
-                double rxBps = (double) (rxBytesEnd - rxBytesStart) / ((double) (end - start) / 1000);
-                double txBps = (double) (txBytesEnd - txBytesStart) / ((double) (end - start) / 1000);
+                double rxBps = (double) (rxBytesEnd - rxBytesStart) / elapsedTimeInSeconds;
+                double txBps = (double) (txBytesEnd - txBytesStart) / elapsedTimeInSeconds;
                 netInterfaceDomain.setDownloadBps(rxBps)
                         .setUploadBps(txBps);
                 // 网卡状态

@@ -1,6 +1,8 @@
 package com.gitee.pifeng.monitoring.ui.business.web.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.gitee.pifeng.monitoring.common.inf.ISuperBean;
 import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorNet;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -29,6 +31,7 @@ import java.util.Date;
 @Schema(description = "网络信息表现层对象")
 public class MonitorNetVo implements ISuperBean {
 
+    @JsonSerialize(using = ToStringSerializer.class)
     @Schema(description = "主键ID")
     private Long id;
 
@@ -51,6 +54,12 @@ public class MonitorNetVo implements ISuperBean {
 
     @Schema(description = "状态（0：网络不通，1：网络正常）")
     private String status;
+
+    @Schema(description = "是否开启监控（0：不开启监控；1：开启监控）")
+    private String isEnableMonitor;
+
+    @Schema(description = "是否开启告警（0：不开启告警；1：开启告警）")
+    private String isEnableAlarm;
 
     @Schema(description = "平均响应时间（毫秒）")
     private Double avgTime;

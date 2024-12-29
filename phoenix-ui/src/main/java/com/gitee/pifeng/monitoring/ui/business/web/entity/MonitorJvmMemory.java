@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Data;
@@ -31,6 +33,7 @@ public class MonitorJvmMemory implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @JsonSerialize(using = ToStringSerializer.class)
     @Schema(description = "主键ID")
     @TableId(value = "ID", type = IdType.AUTO)
     private Long id;
@@ -43,14 +46,17 @@ public class MonitorJvmMemory implements Serializable {
     @TableField("MEMORY_TYPE")
     private String memoryType;
 
+    @JsonSerialize(using = ToStringSerializer.class)
     @Schema(description = "初始内存量（单位：byte）")
     @TableField("INIT")
     private Long init;
 
+    @JsonSerialize(using = ToStringSerializer.class)
     @Schema(description = "已用内存量（单位：byte）")
     @TableField("USED")
     private Long used;
 
+    @JsonSerialize(using = ToStringSerializer.class)
     @Schema(description = "提交内存量（单位：byte）")
     @TableField("COMMITTED")
     private Long committed;

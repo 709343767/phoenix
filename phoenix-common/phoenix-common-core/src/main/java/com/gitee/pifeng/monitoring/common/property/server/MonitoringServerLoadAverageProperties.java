@@ -19,6 +19,16 @@ import lombok.*;
 public class MonitoringServerLoadAverageProperties {
 
     /**
+     * 是否监控服务器平均负载
+     */
+    private boolean enable;
+
+    /**
+     * 告警是否打开
+     */
+    private boolean alarmEnable;
+
+    /**
      * 15分钟过载阈值
      */
     private double overloadThreshold15minutes;

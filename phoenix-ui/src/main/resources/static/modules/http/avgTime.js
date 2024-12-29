@@ -1,6 +1,6 @@
 /** layuiAdmin.std-v2020.4.1 LPPL License By 皮锋 */
 ;layui.define(function (e) {
-    layui.use(['admin', 'element', 'form', 'layer', 'laydate', 'util'], function () {
+    layui.use(['admin', 'form', 'laydate', 'util'], function () {
         var admin = layui.admin, form = layui.form, laydate = layui.laydate, util = layui.util;
         // 基于准备好的dom，初始化echarts实例
         var getAvgTimeInfoChart = echarts.init(document.getElementById('get-avg-time-info'), 'infographic');

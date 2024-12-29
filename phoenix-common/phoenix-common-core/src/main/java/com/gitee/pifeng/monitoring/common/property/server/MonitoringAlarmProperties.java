@@ -5,6 +5,8 @@ import com.gitee.pifeng.monitoring.common.constant.alarm.AlarmWayEnums;
 import com.gitee.pifeng.monitoring.common.inf.ISuperBean;
 import lombok.*;
 
+import java.time.LocalTime;
+
 /**
  * <p>
  * 告警配置属性
@@ -29,6 +31,21 @@ public class MonitoringAlarmProperties implements ISuperBean {
      * 告警级别，四级：INFO &#60; WARN &#60; ERROR &#60; FATAL
      */
     private AlarmLevelEnums levelEnum;
+
+    /**
+     * 是否开启告警静默
+     */
+    private boolean silenceEnable;
+
+    /**
+     * 静默开始时间
+     */
+    private LocalTime silenceStartTime;
+
+    /**
+     * 静默结束时间
+     */
+    private LocalTime silenceEndTime;
 
     /**
      * 告警方式

@@ -20,6 +20,7 @@ import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.hyperic.sigar.SigarException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -134,6 +135,7 @@ public class MonitorNetworkController {
      */
     @Operation(summary = "删除网络")
     @DeleteMapping("/delete-monitor-network")
+    @PreAuthorize("hasAuthority('超级管理员')")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.NET, operType = OperateTypeConstants.DELETE, operDesc = "删除网络")
     public LayUiAdminResultVo deleteMonitorNet(@RequestBody List<MonitorNetVo> monitorNetVos) {
@@ -207,6 +209,7 @@ public class MonitorNetworkController {
      */
     @Operation(summary = "编辑网络信息")
     @PutMapping("/edit-monitor-network")
+    @PreAuthorize("hasAuthority('超级管理员')")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.NET, operType = OperateTypeConstants.UPDATE, operDesc = "编辑网络信息")
     public LayUiAdminResultVo editMonitorNetwork(MonitorNetVo monitorNetVo) throws SigarException, IOException {
@@ -239,6 +242,54 @@ public class MonitorNetworkController {
         // 测试网络连通性
         this.monitorNetService.testMonitorNetwork(monitorNetVo);
         return layUiAdminResultVo;
+    }
+
+    /**
+     * <p>
+     * 设置是否开启监控（0：不开启监控；1：开启监控）
+     * </p>
+     *
+     * @param id              主键ID
+     * @param isEnableMonitor 是否开启监控（0：不开启监控；1：开启监控）
+     * @return 如果设置成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @author 皮锋
+     * @custom.date 2024/12/10 21:20
+     */
+    @Operation(summary = "设置是否开启监控（0：不开启监控；1：开启监控）")
+    @Parameters(value = {
+            @Parameter(name = "id", description = "主键ID", required = true, in = ParameterIn.QUERY),
+            @Parameter(name = "isEnableMonitor", description = "是否开启监控（0：不开启监控；1：开启监控）", in = ParameterIn.QUERY)})
+    @PutMapping("/set-is-enable-monitor")
+    @PreAuthorize("hasAuthority('超级管理员')")
+    @ResponseBody
+    @OperateLog(operModule = UiModuleConstants.NET, operType = OperateTypeConstants.UPDATE, operDesc = "设置是否开启监控（0：不开启监控；1：开启监控）")
+    public LayUiAdminResultVo setIsEnableMonitor(@RequestParam(value = "id") Long id,
+                                                 @RequestParam(value = "isEnableMonitor") String isEnableMonitor) {
+        return this.monitorNetService.setIsEnableMonitor(id, isEnableMonitor);
+    }
+
+    /**
+     * <p>
+     * 设置是否开启告警（0：不开启告警；1：开启告警）
+     * </p>
+     *
+     * @param id            主键ID
+     * @param isEnableAlarm 是否开启告警（0：不开启告警；1：开启告警）
+     * @return 如果设置成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @author 皮锋
+     * @custom.date 2024/12/10 21:37
+     */
+    @Operation(summary = "设置是否开启告警（0：不开启告警；1：开启告警）")
+    @Parameters(value = {
+            @Parameter(name = "id", description = "主键ID", required = true, in = ParameterIn.QUERY),
+            @Parameter(name = "isEnableAlarm", description = "是否开启告警（0：不开启告警；1：开启告警）", in = ParameterIn.QUERY)})
+    @PutMapping("/set-is-enable-alarm")
+    @PreAuthorize("hasAuthority('超级管理员')")
+    @ResponseBody
+    @OperateLog(operModule = UiModuleConstants.NET, operType = OperateTypeConstants.UPDATE, operDesc = "设置是否开启告警（0：不开启告警；1：开启告警）")
+    public LayUiAdminResultVo setIsEnableAlarm(@RequestParam(value = "id") Long id,
+                                               @RequestParam(value = "isEnableAlarm") String isEnableAlarm) {
+        return this.monitorNetService.setIsEnableAlarm(id, isEnableAlarm);
     }
 
     /**

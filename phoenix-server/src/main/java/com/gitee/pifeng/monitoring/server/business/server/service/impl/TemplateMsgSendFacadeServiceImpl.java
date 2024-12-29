@@ -71,7 +71,7 @@ public class TemplateMsgSendFacadeServiceImpl implements ITemplateMsgSendFacadeS
                 break;
             case MAIL:
                 Mail mail = Mail.builder()
-                        .email(this.monitoringConfigPropertiesLoader.getMonitoringProperties().getAlarmProperties().getMailProperties().getEmills())
+                        .email(this.monitoringConfigPropertiesLoader.getMonitoringProperties().getAlarmProperties().getMailProperties().getEmails())
                         .title(alarmTitle)
                         .content(alarmContent)
                         .level(alarmLevel != null ? alarmLevel.name() : null)

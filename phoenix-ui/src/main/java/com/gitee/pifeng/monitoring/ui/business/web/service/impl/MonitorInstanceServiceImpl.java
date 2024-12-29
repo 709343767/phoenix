@@ -8,11 +8,13 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.gitee.pifeng.monitoring.common.constant.MonitorTypeEnums;
+import com.gitee.pifeng.monitoring.common.constant.ZeroOrOneConstants;
+import com.gitee.pifeng.monitoring.common.constant.monitortype.MonitorTypeEnums;
 import com.gitee.pifeng.monitoring.ui.business.web.dao.*;
 import com.gitee.pifeng.monitoring.ui.business.web.entity.*;
 import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorInstanceService;
 import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorLinkService;
+import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorRealtimeMonitoringService;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.HomeInstanceVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.LayUiAdminResultVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.MonitorInstanceVo;
@@ -42,6 +44,18 @@ import java.util.Map;
  */
 @Service
 public class MonitorInstanceServiceImpl extends ServiceImpl<IMonitorInstanceDao, MonitorInstance> implements IMonitorInstanceService {
+
+    /**
+     * 链路 服务类
+     */
+    @Autowired
+    private IMonitorLinkService monitorLinkService;
+
+    /**
+     * 实时监控服务类
+     */
+    @Autowired
+    private IMonitorRealtimeMonitoringService monitorRealtimeMonitoringService;
 
     /**
      * 应用实例数据访问对象
@@ -86,12 +100,6 @@ public class MonitorInstanceServiceImpl extends ServiceImpl<IMonitorInstanceDao,
     private IMonitorJvmThreadDao monitorJvmThreadDao;
 
     /**
-     * 链路 服务类
-     */
-    @Autowired
-    private IMonitorLinkService monitorLinkService;
-
-    /**
      * <p>
      * 获取home页的应用实例信息
      * </p>
@@ -108,6 +116,7 @@ public class MonitorInstanceServiceImpl extends ServiceImpl<IMonitorInstanceDao,
                 .instanceSum(NumberUtil.parseInt(map.get("instanceSum").toString()))
                 .instanceOnLineSum(NumberUtil.parseInt(map.get("instanceOnLineSum").toString()))
                 .instanceOffLineSum(NumberUtil.parseInt(map.get("instanceOffLineSum").toString()))
+                .instanceUnknownLineSum(NumberUtil.parseInt(map.get("instanceUnknownLineSum").toString()))
                 .instanceOnLineRate(NumberUtil.round(map.get("instanceOnLineRate").toString(), 2).toString())
                 .build();
     }
@@ -140,7 +149,11 @@ public class MonitorInstanceServiceImpl extends ServiceImpl<IMonitorInstanceDao,
             lambdaQueryWrapper.eq(MonitorInstance::getEndpoint, endpoint);
         }
         if (StringUtils.isNotBlank(isOnline)) {
-            lambdaQueryWrapper.eq(MonitorInstance::getIsOnline, isOnline);
+            if (StringUtils.equals(isOnline, ZeroOrOneConstants.MINUS_ONE)) {
+                lambdaQueryWrapper.isNull(MonitorInstance::getIsOnline);
+            } else {
+                lambdaQueryWrapper.eq(MonitorInstance::getIsOnline, isOnline);
+            }
         }
         if (StringUtils.isNotBlank(monitorEnv)) {
             lambdaQueryWrapper.like(MonitorInstance::getMonitorEnv, monitorEnv);
@@ -189,40 +202,47 @@ public class MonitorInstanceServiceImpl extends ServiceImpl<IMonitorInstanceDao,
     @Override
     @Retryable
     public LayUiAdminResultVo deleteMonitorInstance(List<MonitorInstanceVo> monitorInstanceVos) {
-        List<String> instances = Lists.newArrayList();
+        List<String> instanceIds = Lists.newArrayList();
+        List<String> ids = Lists.newArrayList();
         for (MonitorInstanceVo monitorInstanceVo : monitorInstanceVos) {
-            instances.add(monitorInstanceVo.getInstanceId());
+            instanceIds.add(monitorInstanceVo.getInstanceId());
+            Long id = monitorInstanceVo.getId();
+            if (id != null) {
+                ids.add(String.valueOf(id));
+            }
         }
         // java虚拟机类加载信息表
         LambdaUpdateWrapper<MonitorJvmClassLoading> monitorJvmClassLoadingLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
-        monitorJvmClassLoadingLambdaUpdateWrapper.in(MonitorJvmClassLoading::getInstanceId, instances);
+        monitorJvmClassLoadingLambdaUpdateWrapper.in(MonitorJvmClassLoading::getInstanceId, instanceIds);
         this.monitorJvmClassLoadingDao.delete(monitorJvmClassLoadingLambdaUpdateWrapper);
         // java虚拟机GC信息表
         LambdaUpdateWrapper<MonitorJvmGarbageCollector> monitorJvmGarbageCollectorLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
-        monitorJvmGarbageCollectorLambdaUpdateWrapper.in(MonitorJvmGarbageCollector::getInstanceId, instances);
+        monitorJvmGarbageCollectorLambdaUpdateWrapper.in(MonitorJvmGarbageCollector::getInstanceId, instanceIds);
         this.monitorJvmGarbageCollectorDao.delete(monitorJvmGarbageCollectorLambdaUpdateWrapper);
         // java虚拟机内存历史记录表
         LambdaUpdateWrapper<MonitorJvmMemoryHistory> jvmMemoryHistoryLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
-        jvmMemoryHistoryLambdaUpdateWrapper.in(MonitorJvmMemoryHistory::getInstanceId, instances);
+        jvmMemoryHistoryLambdaUpdateWrapper.in(MonitorJvmMemoryHistory::getInstanceId, instanceIds);
         this.monitorJvmMemoryHistoryDao.delete(jvmMemoryHistoryLambdaUpdateWrapper);
         // java虚拟机内存信息表
         LambdaUpdateWrapper<MonitorJvmMemory> monitorJvmMemoryLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
-        monitorJvmMemoryLambdaUpdateWrapper.in(MonitorJvmMemory::getInstanceId, instances);
+        monitorJvmMemoryLambdaUpdateWrapper.in(MonitorJvmMemory::getInstanceId, instanceIds);
         this.monitorJvmMemoryDao.delete(monitorJvmMemoryLambdaUpdateWrapper);
         // java虚拟机运行时信息表
         LambdaUpdateWrapper<MonitorJvmRuntime> monitorJvmRuntimeLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
-        monitorJvmRuntimeLambdaUpdateWrapper.in(MonitorJvmRuntime::getInstanceId, instances);
+        monitorJvmRuntimeLambdaUpdateWrapper.in(MonitorJvmRuntime::getInstanceId, instanceIds);
         this.monitorJvmRuntimeDao.delete(monitorJvmRuntimeLambdaUpdateWrapper);
         // java虚拟机线程信息表
         LambdaUpdateWrapper<MonitorJvmThread> monitorJvmThreadLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
-        monitorJvmThreadLambdaUpdateWrapper.in(MonitorJvmThread::getInstanceId, instances);
+        monitorJvmThreadLambdaUpdateWrapper.in(MonitorJvmThread::getInstanceId, instanceIds);
         this.monitorJvmThreadDao.delete(monitorJvmThreadLambdaUpdateWrapper);
         // 应用程序
         LambdaUpdateWrapper<MonitorInstance> monitorInstanceLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
-        monitorInstanceLambdaUpdateWrapper.in(MonitorInstance::getInstanceId, instances);
+        monitorInstanceLambdaUpdateWrapper.in(MonitorInstance::getInstanceId, instanceIds);
         this.monitorInstanceDao.delete(monitorInstanceLambdaUpdateWrapper);
         // 注意：删除应用程序相关链路信息，这个不要忘记了
-        this.monitorLinkService.deleteMonitorLinks(instances, MonitorTypeEnums.INSTANCE);
+        this.monitorLinkService.deleteMonitorLinks(instanceIds, MonitorTypeEnums.INSTANCE);
+        // 注意：删除实时监控信息，这个不要忘记了
+        this.monitorRealtimeMonitoringService.delete(MonitorTypeEnums.INSTANCE, null, ids);
         return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);
     }
 
@@ -296,9 +316,67 @@ public class MonitorInstanceServiceImpl extends ServiceImpl<IMonitorInstanceDao,
         if (StringUtils.isBlank(monitorInstance.getMonitorGroup())) {
             monitorInstance.setMonitorGroup(null);
         }
+        if (StringUtils.isBlank(monitorInstance.getIsEnableMonitor())) {
+            monitorInstance.setIsEnableMonitor(ZeroOrOneConstants.ZERO);
+        }
+        if (StringUtils.isBlank(monitorInstance.getIsEnableAlarm())) {
+            monitorInstance.setIsEnableAlarm(ZeroOrOneConstants.ZERO);
+        }
         LambdaUpdateWrapper<MonitorInstance> monitorInstanceLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
         monitorInstanceLambdaUpdateWrapper.eq(MonitorInstance::getInstanceId, monitorInstance.getInstanceId());
         this.monitorInstanceDao.update(monitorInstance, monitorInstanceLambdaUpdateWrapper);
+        return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);
+    }
+
+    /**
+     * <p>
+     * 设置是否开启监控（0：不开启监控；1：开启监控）
+     * </p>
+     *
+     * @param id              主键ID
+     * @param instanceId      应用实例ID
+     * @param isEnableMonitor 是否开启监控（0：不开启监控；1：开启监控）
+     * @return 如果设置成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @author 皮锋
+     * @custom.date 2024/12/10 21:20
+     */
+    @Override
+    public LayUiAdminResultVo setIsEnableMonitor(Long id, String instanceId, String isEnableMonitor) {
+        LambdaUpdateWrapper<MonitorInstance> instanceLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+        // 设置更新条件
+        instanceLambdaUpdateWrapper.eq(MonitorInstance::getId, id);
+        instanceLambdaUpdateWrapper.eq(MonitorInstance::getInstanceId, instanceId);
+        // 设置更新字段
+        instanceLambdaUpdateWrapper.set(MonitorInstance::getIsEnableMonitor, isEnableMonitor);
+        // 如果不监控，应用状态设置为未知
+        if (StringUtils.equals(isEnableMonitor, ZeroOrOneConstants.ZERO)) {
+            instanceLambdaUpdateWrapper.set(MonitorInstance::getIsOnline, null);
+        }
+        this.monitorInstanceDao.update(null, instanceLambdaUpdateWrapper);
+        return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);
+    }
+
+    /**
+     * <p>
+     * 设置是否开启告警（0：不开启告警；1：开启告警）
+     * </p>
+     *
+     * @param id            主键ID
+     * @param instanceId    应用实例ID
+     * @param isEnableAlarm 是否开启告警（0：不开启告警；1：开启告警）
+     * @return 如果设置成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @author 皮锋
+     * @custom.date 2024/12/10 21:37
+     */
+    @Override
+    public LayUiAdminResultVo setIsEnableAlarm(Long id, String instanceId, String isEnableAlarm) {
+        LambdaUpdateWrapper<MonitorInstance> instanceLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+        // 设置更新条件
+        instanceLambdaUpdateWrapper.eq(MonitorInstance::getId, id);
+        instanceLambdaUpdateWrapper.eq(MonitorInstance::getInstanceId, instanceId);
+        // 设置更新字段
+        instanceLambdaUpdateWrapper.set(MonitorInstance::getIsEnableAlarm, isEnableAlarm);
+        this.monitorInstanceDao.update(null, instanceLambdaUpdateWrapper);
         return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);
     }
 

@@ -24,6 +24,11 @@ public class MonitoringDbProperties implements ISuperBean {
     private boolean enable;
 
     /**
+     * 数据库状态配置属性
+     */
+    private MonitoringDbStatusProperties dbStatusProperties;
+
+    /**
      * 数据库表空间配置属性
      */
     private MonitoringDbTableSpaceProperties dbTableSpaceProperties;

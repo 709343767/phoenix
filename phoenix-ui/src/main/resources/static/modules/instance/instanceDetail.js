@@ -1,7 +1,7 @@
 /** layuiAdmin.std-v2020.4.1 LPPL License By 皮锋 */
 ;layui.define(function (e) {
-    layui.use(['admin', 'element', 'form', 'layer'], function () {
-        var admin = layui.admin, $ = layui.$, form = layui.form, layer = layui.layer;
+    layui.use(['admin', 'form'], function () {
+        var admin = layui.admin, $ = layui.$, form = layui.form;
         // 基于准备好的dom，初始化echarts实例
         var getJvmMemoryHeapInfoChart = echarts.init(document.getElementById('get-jvm-memory-heap-info'), 'infographic');
         var getJvmMemoryNonHeapInfoChart = echarts.init(document.getElementById('get-jvm-memory-non-heap-info'), 'infographic');
@@ -62,6 +62,8 @@
                     var totalStartedThreadCount = isEmpty(data.totalStartedThreadCount) ? webConstCn.NOT_OBTAINED_CN : data.totalStartedThreadCount;
                     // 当前活动守护线程数
                     var daemonThreadCount = isEmpty(data.daemonThreadCount) ? webConstCn.NOT_OBTAINED_CN : data.daemonThreadCount;
+                    // 所有线程信息
+                    var threadInfoList = data.threadInfoList;
                     var html = '<div class="layui-col-md3">' +
                         '           <label class="label-font-weight">活动线程数：</label>' + threadCount +
                         '       </div>' +
@@ -74,6 +76,13 @@
                         '       <div class="layui-col-md3">' +
                         '           <label class="label-font-weight">启动的线程总数：</label>' + totalStartedThreadCount +
                         '       </div>';
+                    if (Array.isArray(threadInfoList)) {
+                        html += '<div class="layui-col-md12"><label class="label-font-weight">线程详情：</label>';
+                        for (let threadInfo of threadInfoList) {
+                            html += '<br>' + threadInfo;
+                        }
+                        html += '</div>';
+                    }
                     $('#thread').empty().append(html);
                 }
             });

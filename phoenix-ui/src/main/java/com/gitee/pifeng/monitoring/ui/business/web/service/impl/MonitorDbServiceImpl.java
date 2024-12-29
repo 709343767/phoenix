@@ -5,11 +5,13 @@ import cn.hutool.db.dialect.DriverUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gitee.pifeng.monitoring.common.constant.DbEnums;
 import com.gitee.pifeng.monitoring.common.constant.ZeroOrOneConstants;
+import com.gitee.pifeng.monitoring.common.constant.monitortype.MonitorTypeEnums;
 import com.gitee.pifeng.monitoring.common.domain.Result;
 import com.gitee.pifeng.monitoring.common.dto.BaseRequestPackage;
 import com.gitee.pifeng.monitoring.common.dto.BaseResponsePackage;
@@ -17,6 +19,7 @@ import com.gitee.pifeng.monitoring.plug.core.Sender;
 import com.gitee.pifeng.monitoring.ui.business.web.dao.IMonitorDbDao;
 import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorDb;
 import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorDbService;
+import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorRealtimeMonitoringService;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.HomeDbVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.LayUiAdminResultVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.MonitorDbVo;
@@ -26,9 +29,10 @@ import com.gitee.pifeng.monitoring.ui.constant.WebResponseConstants;
 import com.gitee.pifeng.monitoring.ui.core.UiPackageConstructor;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
-import org.hyperic.sigar.SigarException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.Date;
@@ -51,6 +55,12 @@ public class MonitorDbServiceImpl extends ServiceImpl<IMonitorDbDao, MonitorDb> 
      */
     @Autowired
     private UiPackageConstructor uiPackageConstructor;
+
+    /**
+     * 实时监控服务类
+     */
+    @Autowired
+    private IMonitorRealtimeMonitoringService monitorRealtimeMonitoringService;
 
     /**
      * 数据库表数据访问对象
@@ -85,7 +95,8 @@ public class MonitorDbServiceImpl extends ServiceImpl<IMonitorDbDao, MonitorDb> 
         lambdaQueryWrapper.select(MonitorDb::getId, MonitorDb::getConnName, MonitorDb::getUrl,
                 MonitorDb::getDbType, MonitorDb::getIsOnline, MonitorDb::getOfflineCount,
                 MonitorDb::getDbDesc, MonitorDb::getInsertTime, MonitorDb::getUpdateTime,
-                MonitorDb::getMonitorEnv, MonitorDb::getMonitorGroup);
+                MonitorDb::getMonitorEnv, MonitorDb::getMonitorGroup, MonitorDb::getIsEnableMonitor,
+                MonitorDb::getIsEnableAlarm);
         if (StringUtils.isNotBlank(connName)) {
             lambdaQueryWrapper.like(MonitorDb::getConnName, connName);
         }
@@ -173,6 +184,12 @@ public class MonitorDbServiceImpl extends ServiceImpl<IMonitorDbDao, MonitorDb> 
         if (StringUtils.isBlank(monitorDbVo.getMonitorGroup())) {
             monitorDb.setMonitorGroup(null);
         }
+        if (StringUtils.isBlank(monitorDbVo.getIsEnableMonitor())) {
+            monitorDb.setIsEnableMonitor(ZeroOrOneConstants.ZERO);
+        }
+        if (StringUtils.isBlank(monitorDbVo.getIsEnableAlarm())) {
+            monitorDb.setIsEnableAlarm(ZeroOrOneConstants.ZERO);
+        }
         monitorDb.setUpdateTime(new Date());
         // 更新
         int result = this.monitorDbDao.updateById(monitorDb);
@@ -180,6 +197,54 @@ public class MonitorDbServiceImpl extends ServiceImpl<IMonitorDbDao, MonitorDb> 
             return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);
         }
         return LayUiAdminResultVo.ok(WebResponseConstants.FAIL);
+    }
+
+    /**
+     * <p>
+     * 设置是否开启监控（0：不开启监控；1：开启监控）
+     * </p>
+     *
+     * @param id              主键ID
+     * @param isEnableMonitor 是否开启监控（0：不开启监控；1：开启监控）
+     * @return 如果设置成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @author 皮锋
+     * @custom.date 2024/12/10 21:20
+     */
+    @Override
+    public LayUiAdminResultVo setIsEnableMonitor(Long id, String isEnableMonitor) {
+        LambdaUpdateWrapper<MonitorDb> dbLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+        // 设置更新条件
+        dbLambdaUpdateWrapper.eq(MonitorDb::getId, id);
+        // 设置更新字段
+        dbLambdaUpdateWrapper.set(MonitorDb::getIsEnableMonitor, isEnableMonitor);
+        // 如果不监控，数据库状态设置为未知
+        if (StringUtils.equals(isEnableMonitor, ZeroOrOneConstants.ZERO)) {
+            dbLambdaUpdateWrapper.set(MonitorDb::getIsOnline, null);
+        }
+        this.monitorDbDao.update(null, dbLambdaUpdateWrapper);
+        return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);
+    }
+
+    /**
+     * <p>
+     * 设置是否开启告警（0：不开启告警；1：开启告警）
+     * </p>
+     *
+     * @param id            主键ID
+     * @param isEnableAlarm 是否开启告警（0：不开启告警；1：开启告警）
+     * @return 如果设置成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @author 皮锋
+     * @custom.date 2024/12/10 21:37
+     */
+    @Override
+    public LayUiAdminResultVo setIsEnableAlarm(Long id, String isEnableAlarm) {
+        LambdaUpdateWrapper<MonitorDb> dbLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+        // 设置更新条件
+        dbLambdaUpdateWrapper.eq(MonitorDb::getId, id);
+        // 设置更新字段
+        dbLambdaUpdateWrapper.set(MonitorDb::getIsEnableAlarm, isEnableAlarm);
+        this.monitorDbDao.update(null, dbLambdaUpdateWrapper);
+        return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);
     }
 
     /**
@@ -224,6 +289,12 @@ public class MonitorDbServiceImpl extends ServiceImpl<IMonitorDbDao, MonitorDb> 
         if (StringUtils.isBlank(monitorDbVo.getMonitorGroup())) {
             monitorDb.setMonitorGroup(null);
         }
+        if (StringUtils.isBlank(monitorDbVo.getIsEnableMonitor())) {
+            monitorDb.setIsEnableMonitor(ZeroOrOneConstants.ZERO);
+        }
+        if (StringUtils.isBlank(monitorDbVo.getIsEnableAlarm())) {
+            monitorDb.setIsEnableAlarm(ZeroOrOneConstants.ZERO);
+        }
         monitorDb.setOfflineCount(0);
         monitorDb.setInsertTime(new Date());
         int result = this.monitorDbDao.insert(monitorDb);
@@ -243,6 +314,7 @@ public class MonitorDbServiceImpl extends ServiceImpl<IMonitorDbDao, MonitorDb> 
      * @author 皮锋
      * @custom.date 2020/12/19 20:59
      */
+    @Transactional(rollbackFor = Throwable.class, isolation = Isolation.READ_COMMITTED)
     @Override
     public LayUiAdminResultVo deleteMonitorDb(List<MonitorDbVo> monitorDbVos) {
         List<Long> ids = Lists.newArrayList();
@@ -250,6 +322,8 @@ public class MonitorDbServiceImpl extends ServiceImpl<IMonitorDbDao, MonitorDb> 
             ids.add(monitorDbVo.getId());
         }
         this.monitorDbDao.deleteBatchIds(ids);
+        // 注意：删除实时监控信息，这个不要忘记了
+        this.monitorRealtimeMonitoringService.delete(MonitorTypeEnums.DATABASE, null, ids);
         return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);
     }
 
@@ -282,19 +356,26 @@ public class MonitorDbServiceImpl extends ServiceImpl<IMonitorDbDao, MonitorDb> 
      *
      * @param monitorDbVo 数据库信息
      * @return layUiAdmin响应对象：网络连通性
-     * @throws SigarException Sigar异常
-     * @throws IOException    IO异常
+     * @throws IOException IO异常
      * @author 皮锋
      * @custom.date 2022/10/9 10:16
      */
     @Override
-    public LayUiAdminResultVo testMonitorDb(MonitorDbVo monitorDbVo) throws SigarException, IOException {
+    public LayUiAdminResultVo testMonitorDb(MonitorDbVo monitorDbVo) throws IOException {
+        String password = monitorDbVo.getPassword();
+        // 如果密码为空，则从数据库查询
+        if (StringUtils.isBlank(password)) {
+            MonitorDb monitorDb = this.monitorDbDao.selectById(monitorDbVo.getId());
+            if (monitorDb != null) {
+                password = monitorDb.getPassword();
+            }
+        }
         // 封装请求数据
         JSONObject extraMsg = new JSONObject();
         extraMsg.put("url", StringUtils.trim(monitorDbVo.getUrl()));
         extraMsg.put("dbType", monitorDbVo.getDbType());
         extraMsg.put("username", monitorDbVo.getUsername());
-        extraMsg.put("password", monitorDbVo.getPassword());
+        extraMsg.put("password", password);
         BaseRequestPackage baseRequestPackage = this.uiPackageConstructor.structureBaseRequestPackage(extraMsg);
         // 从服务端获取数据
         String resultStr = Sender.send(UrlConstants.TEST_MONITOR_DB_URL, baseRequestPackage.toJsonString());

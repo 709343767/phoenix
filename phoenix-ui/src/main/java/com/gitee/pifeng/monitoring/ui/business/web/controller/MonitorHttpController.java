@@ -1,5 +1,7 @@
 package com.gitee.pifeng.monitoring.ui.business.web.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.gitee.pifeng.monitoring.common.exception.NetException;
 import com.gitee.pifeng.monitoring.ui.business.web.annotation.OperateLog;
@@ -21,6 +23,7 @@ import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.hyperic.sigar.SigarException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -145,6 +148,7 @@ public class MonitorHttpController {
      */
     @Operation(summary = "删除HTTP")
     @DeleteMapping("/delete-monitor-http")
+    @PreAuthorize("hasAuthority('超级管理员')")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.HTTP4SERVICE, operType = OperateTypeConstants.DELETE, operDesc = "删除HTTP")
     public LayUiAdminResultVo deleteMonitorHttp(@RequestBody List<MonitorHttpVo> monitorHttpVos) {
@@ -227,6 +231,8 @@ public class MonitorHttpController {
         mv.addObject("monitorGroups", monitorGroups);
         mv.addObject("env", monitorHttpVo.getMonitorEnv());
         mv.addObject("group", monitorHttpVo.getMonitorGroup());
+        JSONObject bodyParameterJson = JSON.parseObject(monitorHttpVo.getBodyParameter());
+        mv.addObject("bodyApplicationJsonParameter", bodyParameterJson != null ? bodyParameterJson.get("bodyApplicationJsonParameter") : null);
         return mv;
     }
 
@@ -245,6 +251,7 @@ public class MonitorHttpController {
      */
     @Operation(summary = "编辑HTTP信息")
     @PutMapping("/edit-monitor-http")
+    @PreAuthorize("hasAuthority('超级管理员')")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.HTTP4SERVICE, operType = OperateTypeConstants.UPDATE, operDesc = "编辑HTTP信息")
     public LayUiAdminResultVo editMonitorHttp(MonitorHttpVo monitorHttpVo) throws SigarException, IOException {
@@ -255,6 +262,54 @@ public class MonitorHttpController {
         // 测试HTTP连通性
         this.monitorHttpService.testMonitorHttp(monitorHttpVo);
         return layUiAdminResultVo;
+    }
+
+    /**
+     * <p>
+     * 设置是否开启监控（0：不开启监控；1：开启监控）
+     * </p>
+     *
+     * @param id              主键ID
+     * @param isEnableMonitor 是否开启监控（0：不开启监控；1：开启监控）
+     * @return 如果设置成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @author 皮锋
+     * @custom.date 2024/12/10 21:20
+     */
+    @Operation(summary = "设置是否开启监控（0：不开启监控；1：开启监控）")
+    @Parameters(value = {
+            @Parameter(name = "id", description = "主键ID", required = true, in = ParameterIn.QUERY),
+            @Parameter(name = "isEnableMonitor", description = "是否开启监控（0：不开启监控；1：开启监控）", in = ParameterIn.QUERY)})
+    @PutMapping("/set-is-enable-monitor")
+    @PreAuthorize("hasAuthority('超级管理员')")
+    @ResponseBody
+    @OperateLog(operModule = UiModuleConstants.HTTP4SERVICE, operType = OperateTypeConstants.UPDATE, operDesc = "设置是否开启监控（0：不开启监控；1：开启监控）")
+    public LayUiAdminResultVo setIsEnableMonitor(@RequestParam(value = "id") Long id,
+                                                 @RequestParam(value = "isEnableMonitor") String isEnableMonitor) {
+        return this.monitorHttpService.setIsEnableMonitor(id, isEnableMonitor);
+    }
+
+    /**
+     * <p>
+     * 设置是否开启告警（0：不开启告警；1：开启告警）
+     * </p>
+     *
+     * @param id            主键ID
+     * @param isEnableAlarm 是否开启告警（0：不开启告警；1：开启告警）
+     * @return 如果设置成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @author 皮锋
+     * @custom.date 2024/12/10 21:37
+     */
+    @Operation(summary = "设置是否开启告警（0：不开启告警；1：开启告警）")
+    @Parameters(value = {
+            @Parameter(name = "id", description = "主键ID", required = true, in = ParameterIn.QUERY),
+            @Parameter(name = "isEnableAlarm", description = "是否开启告警（0：不开启告警；1：开启告警）", in = ParameterIn.QUERY)})
+    @PutMapping("/set-is-enable-alarm")
+    @PreAuthorize("hasAuthority('超级管理员')")
+    @ResponseBody
+    @OperateLog(operModule = UiModuleConstants.HTTP4SERVICE, operType = OperateTypeConstants.UPDATE, operDesc = "设置是否开启告警（0：不开启告警；1：开启告警）")
+    public LayUiAdminResultVo setIsEnableAlarm(@RequestParam(value = "id") Long id,
+                                               @RequestParam(value = "isEnableAlarm") String isEnableAlarm) {
+        return this.monitorHttpService.setIsEnableAlarm(id, isEnableAlarm);
     }
 
     /**
@@ -316,8 +371,7 @@ public class MonitorHttpController {
     @OperateLog(operModule = UiModuleConstants.HTTP4SERVICE, operType = OperateTypeConstants.PAGE, operDesc = "访问HTTP服务详情页面")
     public ModelAndView httpDetail(Long id) {
         ModelAndView mv = new ModelAndView("http/http-detail");
-        MonitorHttp monitorHttp = this.monitorHttpService.getById(id);
-        MonitorHttpVo monitorHttpVo = MonitorHttpVo.builder().build().convertFor(monitorHttp);
+        MonitorHttpVo monitorHttpVo = this.monitorHttpService.getMonitorHttpVoById(id);
         mv.addObject("monitorHttpVo", monitorHttpVo);
         return mv;
     }

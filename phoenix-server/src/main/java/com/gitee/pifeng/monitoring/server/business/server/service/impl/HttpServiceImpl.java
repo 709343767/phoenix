@@ -32,25 +32,27 @@ public class HttpServiceImpl extends ServiceImpl<IMonitorHttpDao, MonitorHttp> i
      * 测试HTTP连通性
      * </p>
      *
-     * @param method    请求方法
-     * @param urlTarget 目标URL
-     * @param parameter 请求参数
+     * @param method          请求方法
+     * @param urlTarget       目标URL
+     * @param contentType     媒体类型
+     * @param headerParameter 请求头参数
+     * @param bodyParameter   请求头参数
      * @return HTTP状态码
      * @author 皮锋
      * @custom.date 2022/10/10 20:09
      */
     @Override
-    public String testMonitorHttp(String method, String urlTarget, String parameter) {
+    public String testMonitorHttp(String method, String urlTarget, String contentType, String headerParameter, String bodyParameter) {
         Map<String, Object> map;
         // HTTP线程池工具类
         EnumPoolingHttpClient httpClient = EnumPoolingHttpClient.getInstance();
         // GET请求
         if (StringUtils.equalsIgnoreCase(HttpMethod.GET.name(), method)) {
-            map = httpClient.sendHttpGet(urlTarget);
+            map = httpClient.sendHttpGet(urlTarget, headerParameter);
         }
         // POST请求
         else if (StringUtils.equalsIgnoreCase(HttpMethod.POST.name(), method)) {
-            map = httpClient.sendHttpPost(urlTarget, parameter);
+            map = httpClient.sendHttpPost(urlTarget, contentType, headerParameter, bodyParameter);
         } else {
             return ResultMsgConstants.FAILURE;
         }

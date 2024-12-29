@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Data;
@@ -31,6 +33,7 @@ public class MonitorServerNetcard implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @JsonSerialize(using = ToStringSerializer.class)
     @Schema(description = "主键ID")
     @TableId(value = "ID", type = IdType.AUTO)
     private Long id;
@@ -71,34 +74,42 @@ public class MonitorServerNetcard implements Serializable {
     @TableField("DESCRIPTION")
     private String description;
 
+    @JsonSerialize(using = ToStringSerializer.class)
     @Schema(description = "接收到的总字节数")
     @TableField("RX_BYTES")
     private Long rxBytes;
 
+    @JsonSerialize(using = ToStringSerializer.class)
     @Schema(description = "接收的总包数")
     @TableField("RX_PACKETS")
     private Long rxPackets;
 
+    @JsonSerialize(using = ToStringSerializer.class)
     @Schema(description = "接收到的错误包数")
     @TableField("RX_ERRORS")
     private Long rxErrors;
 
+    @JsonSerialize(using = ToStringSerializer.class)
     @Schema(description = "接收时丢弃的包数")
     @TableField("RX_DROPPED")
     private Long rxDropped;
 
+    @JsonSerialize(using = ToStringSerializer.class)
     @Schema(description = "发送的总字节数")
     @TableField("TX_BYTES")
     private Long txBytes;
 
+    @JsonSerialize(using = ToStringSerializer.class)
     @Schema(description = "发送的总包数")
     @TableField("TX_PACKETS")
     private Long txPackets;
 
+    @JsonSerialize(using = ToStringSerializer.class)
     @Schema(description = "发送时的错误包数")
     @TableField("TX_ERRORS")
     private Long txErrors;
 
+    @JsonSerialize(using = ToStringSerializer.class)
     @Schema(description = "发送时丢弃的包数")
     @TableField("TX_DROPPED")
     private Long txDropped;

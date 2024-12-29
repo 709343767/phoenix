@@ -1,7 +1,7 @@
 /** layuiAdmin.std-v2020.4.1 LPPL License By 皮锋 */
 ;layui.define(function (e) {
     layui.use(['index', 'table'], function () {
-        var $ = layui.$, admin = layui.admin, form = layui.form, table = layui.table, device = layui.device();
+        var $ = layui.$, table = layui.table, device = layui.device();
         table.render({
             elem: '#list-table-mongo-info',
             url: ctxPath + 'db-info4mongo/get-mongo-info-list?id=' + id,

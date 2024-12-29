@@ -11,6 +11,7 @@ import org.hyperic.sigar.NetFlags;
 import oshi.hardware.NetworkIF;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * <p>
@@ -27,6 +28,10 @@ public class NetInterfaceUtils extends InitOshi {
      * <p>
      * 获取网卡信息
      * </p>
+     *
+     * <a href="https://cloud.tencent.com/developer/article/2174827">
+     * 参考文档：href="https://cloud.tencent.com/developer/article/2174827
+     * </a>
      *
      * @return {@link NetDomain}
      * @author 皮锋
@@ -55,20 +60,20 @@ public class NetInterfaceUtils extends InitOshi {
                     continue;
                 }
                 // 网速
-                long start = System.currentTimeMillis();
                 long rxBytesStart = net.getBytesRecv();
                 long txBytesStart = net.getBytesSent();
+                long start = net.getTimeStamp();
                 // 休眠一秒
                 try {
-                    Thread.sleep(1000);
+                    TimeUnit.SECONDS.sleep(1);
                 } catch (InterruptedException e) {
                     log.error("线程中断异常！", e);
                 }
-                long end = System.currentTimeMillis();
                 // 更新此接口上的接口网络统计信息
                 net.updateAttributes();
                 long rxBytesEnd = net.getBytesRecv();
                 long txBytesEnd = net.getBytesSent();
+                long end = net.getTimeStamp();
                 // 网卡配置
                 netInterfaceDomain.setName(net.getName())
                         .setType("Ethernet")
@@ -86,9 +91,11 @@ public class NetInterfaceUtils extends InitOshi {
                         .setTxDropped(net.getCollisions())
                         .setTxErrors(net.getOutErrors())
                         .setTxPackets(net.getPacketsSent());
+                // 计算时间差（单位：秒）
+                double elapsedTimeInSeconds = (double) (end - start) / 1000;
                 // 1Byte=8bit
-                double rxBps = (double) (rxBytesEnd - rxBytesStart) / ((double) (end - start) / 1000);
-                double txBps = (double) (txBytesEnd - txBytesStart) / ((double) (end - start) / 1000);
+                double rxBps = (double) (rxBytesEnd - rxBytesStart) / elapsedTimeInSeconds;
+                double txBps = (double) (txBytesEnd - txBytesStart) / elapsedTimeInSeconds;
                 // 网速
                 netInterfaceDomain.setDownloadBps(rxBps)
                         .setUploadBps(txBps);

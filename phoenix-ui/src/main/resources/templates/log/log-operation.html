@@ -119,9 +119,9 @@
         base: ctxPath //静态资源所在路径
     }).extend({
         index: 'lib/index' //主入口模块
-    }).use(['index', 'table', 'laydate'], function () {
-        var $ = layui.$, admin = layui.admin, form = layui.form, table = layui.table, laydate = layui.laydate,
-            device = layui.device();
+    }).use(['index', 'admin', 'form', 'table', 'laydate', 'layer'], function () {
+        var admin = layui.admin, form = layui.form, table = layui.table, laydate = layui.laydate,
+            layer = layui.layer, device = layui.device();
         laydate.render({
             elem: '#insertTime',
             type: 'date',
@@ -153,7 +153,8 @@
             cols: [
                 [{
                     type: 'checkbox',
-                    hide: !authority
+                    hide: !authority,
+                    fixed: (device.ios || device.android) ? false : 'left',
                 }, {
                     field: 'id',
                     width: 100,

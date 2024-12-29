@@ -22,9 +22,9 @@
 <div class="layui-form" lay-filter="layuiadmin-form-useradmin" id="layuiadmin-form-useradmin"
      style="padding: 20px 20px 0 0;">
     <div class="layui-form-item">
-        <label class="layui-form-label">类型</label>
+        <label class="layui-form-label" for="dbType">类型</label>
         <div class="layui-input-block">
-            <select name="dbType" lay-filter="dbType">
+            <select id="dbType" lay-filter="dbType" name="dbType">
                 <option value="MySQL" th:selected="${monitorDbVo.dbType=='MySQL'}">MySQL</option>
                 <option value="Oracle" th:selected="${monitorDbVo.dbType=='Oracle'}">Oracle</option>
                 <option value="Redis" th:selected="${monitorDbVo.dbType=='Redis'}">Redis</option>
@@ -33,47 +33,47 @@
         </div>
     </div>
     <div class="layui-form-item" style="display: none;">
-        <label class="layui-form-label">数据库ID</label>
+        <label class="layui-form-label" for="id">数据库ID</label>
         <div class="layui-input-block">
-            <input type="hidden" name="id" autocomplete="off" readonly
+            <input autocomplete="off" id="id" name="id" readonly type="hidden"
                    class="layui-input" th:value="${monitorDbVo.id}">
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">连接名</label>
+        <label class="layui-form-label" for="connName">连接名</label>
         <div class="layui-input-block">
-            <input type="text" th:value="${monitorDbVo.connName}" name="connName" autocomplete="off"
+            <input autocomplete="off" id="connName" name="connName" th:value="${monitorDbVo.connName}" type="text"
                    class="layui-input" placeholder="请输入连接名" lay-verify="required" lay-verType="tips">
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label" id="urlLabel" th:text="${monitorDbVo.dbType=='Redis'?'地址':'URL'}">URL</label>
+        <label class="layui-form-label" for="url" id="urlLabel"
+               th:text="${monitorDbVo.dbType=='Redis'?'地址':'URL'}">URL</label>
         <div class="layui-input-block">
             <textarea th:text="${monitorDbVo.url}" id="url" name="url" class="layui-textarea" lay-verify="required"
                       th:placeholder="${monitorDbVo.dbType=='Redis'?'例如：127.0.0.1:6379':'请输入URL'}"
-                      autocomplete="off"
-                      lay-verType="tips"></textarea>
+                      autocomplete="off" lay-verType="tips"></textarea>
         </div>
     </div>
     <div class="layui-form-item" id="usernameDiv"
          th:style="${monitorDbVo.dbType=='Redis' || monitorDbVo.dbType=='Mongo' ?'display: none;':''}">
-        <label class="layui-form-label">用户名</label>
+        <label class="layui-form-label" for="username">用户名</label>
         <div class="layui-input-block">
-            <input type="text" name="username" autocomplete="off" placeholder="请输入用户名" lay-verify="username"
-                   class="layui-input" th:value="${monitorDbVo.username}" lay-verType="tips">
+            <input autocomplete="off" class="layui-input" id="username" lay-verType="tips" lay-verify="username"
+                   name="username" placeholder="请输入用户名" th:value="${monitorDbVo.username}" type="text">
         </div>
     </div>
     <div class="layui-form-item" id="passwordDiv" th:style="${monitorDbVo.dbType=='Mongo' ?'display: none;':''}">
-        <label class="layui-form-label">密码</label>
+        <label class="layui-form-label" for="password">密码</label>
         <div class="layui-input-block">
-            <input type="password" name="password" autocomplete="off"
-                   placeholder="密码不填则不修改，测试连通性需填写密码" class="layui-input">
+            <input autocomplete="off" class="layui-input" id="password" name="password"
+                   placeholder="密码不填则不修改" type="password">
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">环境</label>
+        <label class="layui-form-label" for="monitorEnv">环境</label>
         <div class="layui-input-block">
-            <select name="monitorEnv">
+            <select id="monitorEnv" name="monitorEnv">
                 <option value="">不设置</option>
                 <option th:each="monitorEnv:${monitorEnvs}" th:value="${monitorEnv}"
                         th:text="${monitorEnv}" th:selected="${monitorEnv==env}"></option>
@@ -81,9 +81,9 @@
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">分组</label>
+        <label class="layui-form-label" for="monitorGroup">分组</label>
         <div class="layui-input-block">
-            <select name="monitorGroup">
+            <select id="monitorGroup" name="monitorGroup">
                 <option value="">不设置</option>
                 <option th:each="monitorGroup:${monitorGroups}" th:value="${monitorGroup}"
                         th:text="${monitorGroup}" th:selected="${monitorGroup==group}"></option>
@@ -91,9 +91,25 @@
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">描述</label>
+        <label class="layui-form-label" for="isEnableMonitor">是否监控</label>
+        <div class="layui-input-inline">
+            <input id="isEnableMonitor" lay-skin="switch" lay-text="是|否"
+                   name="isEnableMonitor" th:checked="${monitorDbVo.isEnableMonitor=='1'}? true : false" type="checkbox"
+                   value="1">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label" for="isEnableAlarm">是否告警</label>
+        <div class="layui-input-inline">
+            <input id="isEnableAlarm" lay-skin="switch" lay-text="是|否"
+                   name="isEnableAlarm" th:checked="${monitorDbVo.isEnableAlarm=='1'}? true : false" type="checkbox"
+                   value="1">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label" for="dbDesc">描述</label>
         <div class="layui-input-block">
-            <textarea th:text="${monitorDbVo.dbDesc}" name="dbDesc" class="layui-textarea"
+            <textarea class="layui-textarea" id="dbDesc" name="dbDesc" th:text="${monitorDbVo.dbDesc}"
                       placeholder="请输入描述" autocomplete="off" lay-verType="tips"></textarea>
         </div>
     </div>

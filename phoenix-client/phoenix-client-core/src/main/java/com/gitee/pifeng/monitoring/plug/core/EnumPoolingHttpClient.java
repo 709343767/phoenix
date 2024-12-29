@@ -3,12 +3,20 @@ package com.gitee.pifeng.monitoring.plug.core;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.date.TimeInterval;
 import cn.hutool.core.util.CharsetUtil;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.gitee.pifeng.monitoring.common.constant.HttpMediaTypeConstants;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import lombok.Cleanup;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpStatus;
+import org.apache.http.NameValuePair;
 import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -34,6 +42,7 @@ import org.apache.http.impl.conn.ManagedHttpClientConnectionFactory;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.impl.conn.SystemDefaultDnsResolver;
 import org.apache.http.impl.io.DefaultHttpRequestWriterFactory;
+import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.ssl.SSLContexts;
 import org.apache.http.util.EntityUtils;
 
@@ -42,6 +51,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -49,7 +59,7 @@ import java.util.concurrent.TimeUnit;
  * <p>
  * HTTP线程池客户端
  * </p>
- * 参考：<a href="https://blog.csdn.net/lovomap151/article/details/78879904">...</a>
+ * 参考：<a href="https://blog.csdn.net/lovomap151/article/details/78879904">HttpClient连接池的简单实现</a>
  *
  * @author 皮锋
  * @custom.date 2021/12/5 18:33
@@ -145,9 +155,9 @@ public class EnumPoolingHttpClient {
         manager.setDefaultMaxPerRoute(200);
         // 在从连接池获取连接时，连接不活跃多长时间后需要进行一次验证，默认为2s
         manager.setValidateAfterInactivity(30 * 1000);
-        int connectTimeout = ConfigLoader.getMonitoringProperties().getServerProperties().getConnectTimeout();
-        int socketTimeout = ConfigLoader.getMonitoringProperties().getServerProperties().getSocketTimeout();
-        int connectionRequestTimeout = ConfigLoader.getMonitoringProperties().getServerProperties().getConnectionRequestTimeout();
+        int connectTimeout = ConfigLoader.getMonitoringProperties().getComm().getHttp().getConnectTimeout();
+        int socketTimeout = ConfigLoader.getMonitoringProperties().getComm().getHttp().getSocketTimeout();
+        int connectionRequestTimeout = ConfigLoader.getMonitoringProperties().getComm().getHttp().getConnectionRequestTimeout();
         //默认请求配置
         RequestConfig defaultRequestConfig = RequestConfig.custom()
                 // 设置连接超时时间，15s
@@ -156,6 +166,8 @@ public class EnumPoolingHttpClient {
                 .setSocketTimeout(socketTimeout)
                 // 设置从连接池获取连接的等待超时时间,15s
                 .setConnectionRequestTimeout(connectionRequestTimeout)
+                // 禁用自动重定向
+                .setRedirectsEnabled(false)
                 .build();
         log.info("http connect timeout:{}ms", connectTimeout);
         log.info("http socket timeout:{}ms", socketTimeout);
@@ -222,7 +234,7 @@ public class EnumPoolingHttpClient {
                 // 解决中文乱码问题
                 StringEntity entity = new StringEntity(json, StandardCharsets.UTF_8);
                 entity.setContentEncoding(CharsetUtil.UTF_8);
-                entity.setContentType("application/json");
+                entity.setContentType(HttpMediaTypeConstants.APPLICATION_JSON);
                 httpPost.setEntity(entity);
             }
             @Cleanup
@@ -246,8 +258,10 @@ public class EnumPoolingHttpClient {
      * 发送post请求
      * </p>
      *
-     * @param url  请求URL
-     * @param json JSON字符串格式的数据
+     * @param url             请求URL
+     * @param contentType     媒体类型
+     * @param headerParameter 请求头参数
+     * @param bodyParameter   请求体参数
      * @return 返回Map，key解释：<br>
      * 1.statusCode：状态码；<br>
      * 2.avgTime：平均时间（毫秒）；<br>
@@ -256,7 +270,7 @@ public class EnumPoolingHttpClient {
      * @author 皮锋
      * @custom.date 2022/4/15 13:03
      */
-    public Map<String, Object> sendHttpPost(String url, String json) {
+    public Map<String, Object> sendHttpPost(String url, String contentType, String headerParameter, String bodyParameter) {
         // http状态码
         int statusCode = 500;
         // 异常信息
@@ -268,12 +282,38 @@ public class EnumPoolingHttpClient {
         // 计时器
         TimeInterval timer = DateUtil.timer();
         try {
-            if (StringUtils.isNotBlank(json)) {
-                // 解决中文乱码问题
-                StringEntity entity = new StringEntity(json, StandardCharsets.UTF_8);
-                entity.setContentEncoding(CharsetUtil.UTF_8);
-                entity.setContentType("application/json");
-                httpPost.setEntity(entity);
+            // 设置请求头
+            httpPost.setHeader("Content-Type", contentType);
+            if (StringUtils.isNotBlank(headerParameter)) {
+                List<JSONObject> tempHeaderParameters = JSONArray.parseArray(headerParameter, JSONObject.class);
+                if (CollectionUtils.isNotEmpty(tempHeaderParameters)) {
+                    for (JSONObject param : tempHeaderParameters) {
+                        httpPost.setHeader(param.getString("key"), param.getString("value"));
+                    }
+                }
+            }
+            // 设置请求体
+            if (StringUtils.equalsIgnoreCase(HttpMediaTypeConstants.APPLICATION_FORM_URLENCODED, contentType)) {
+                // 创建表单参数列表
+                List<NameValuePair> params = Lists.newArrayList();
+                if (StringUtils.isNotBlank(bodyParameter)) {
+                    List<JSONObject> tempBodyParameters = JSONArray.parseArray(bodyParameter, JSONObject.class);
+                    if (CollectionUtils.isNotEmpty(tempBodyParameters)) {
+                        for (JSONObject param : tempBodyParameters) {
+                            params.add(new BasicNameValuePair(param.getString("key"), param.getString("value")));
+                        }
+                    }
+                }
+                // 设置表单参数
+                httpPost.setEntity(new UrlEncodedFormEntity(params, StandardCharsets.UTF_8));
+            } else if (StringUtils.equalsIgnoreCase(HttpMediaTypeConstants.APPLICATION_JSON, contentType)) {
+                if (StringUtils.isNotBlank(bodyParameter)) {
+                    // 解决中文乱码问题
+                    StringEntity entity = new StringEntity(bodyParameter, StandardCharsets.UTF_8);
+                    entity.setContentEncoding(CharsetUtil.UTF_8);
+                    entity.setContentType(contentType);
+                    httpPost.setEntity(entity);
+                }
             }
             @Cleanup
             CloseableHttpResponse response = HTTP_CLIENT.execute(httpPost);
@@ -281,7 +321,7 @@ public class EnumPoolingHttpClient {
             // 成功
             if (statusCode == HttpStatus.SC_OK) {
                 // 读取服务器返回过来的json字符串数据
-                result = EntityUtils.toString(response.getEntity(), CharsetUtil.UTF_8);
+                result = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);
             }
         } catch (Exception e) {
             if (log.isDebugEnabled()) {
@@ -300,6 +340,7 @@ public class EnumPoolingHttpClient {
         resultMap.put("avgTime", avgTime);
         resultMap.put("excMessage", excMessage);
         resultMap.put("result", result);
+        log.info("发送post（{}）请求结果：{}", url, JSON.toJSONString(resultMap));
         return resultMap;
     }
 
@@ -308,7 +349,8 @@ public class EnumPoolingHttpClient {
      * 发送get请求
      * </p>
      *
-     * @param url 请求URL
+     * @param url             请求URL
+     * @param headerParameter 请求头参数
      * @return 返回Map，key解释：<br>
      * 1.statusCode：状态码；<br>
      * 2.avgTime：平均时间（毫秒）；<br>
@@ -317,7 +359,7 @@ public class EnumPoolingHttpClient {
      * @author 皮锋
      * @custom.date 2022/4/13 12:38
      */
-    public Map<String, Object> sendHttpGet(String url) {
+    public Map<String, Object> sendHttpGet(String url, String headerParameter) {
         // http状态码
         int statusCode = 500;
         // 异常信息
@@ -329,6 +371,15 @@ public class EnumPoolingHttpClient {
         // 计时器
         TimeInterval timer = DateUtil.timer();
         try {
+            // 设置请求头
+            if (StringUtils.isNotBlank(headerParameter)) {
+                List<JSONObject> tempHeaderParameters = JSONArray.parseArray(headerParameter, JSONObject.class);
+                if (CollectionUtils.isNotEmpty(tempHeaderParameters)) {
+                    for (JSONObject param : tempHeaderParameters) {
+                        httpget.setHeader(param.getString("key"), param.getString("value"));
+                    }
+                }
+            }
             @Cleanup
             CloseableHttpResponse response = HTTP_CLIENT.execute(httpget);
             statusCode = response.getStatusLine().getStatusCode();
@@ -353,6 +404,7 @@ public class EnumPoolingHttpClient {
         resultMap.put("avgTime", avgTime);
         resultMap.put("excMessage", excMessage);
         resultMap.put("result", result);
+        log.info("发送get（{}）请求结果：{}", url, JSON.toJSONString(resultMap));
         return resultMap;
     }
 

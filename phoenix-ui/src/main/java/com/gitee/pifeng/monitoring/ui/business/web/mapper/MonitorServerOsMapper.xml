@@ -4,17 +4,16 @@
 
     <!-- 服务器类型统计 -->
     <select id="getServerOsTypeStatistics" resultType="java.util.Map" databaseId="mysql">
-        select tmp.serverSum                                 as serverSum,
-               tmp.windowsSum                                as windowsSum,
-               tmp.linuxSum                                  as linuxSum,
-               tmp.serverSum - tmp.windowsSum - tmp.linuxSum as otherSum
-        from (
-                 select count(1)  as serverSum,
-                        ifnull(sum(if(locate('Windows', ms.OS_NAME) or locate('windows', ms.OS_NAME), 1, 0)),
-                               0) as windowsSum,
-                        ifnull(sum(if(locate('Linux', ms.OS_NAME) or locate('linux', ms.OS_NAME), 1, 0)),
-                               0) as linuxSum
-                 from MONITOR_SERVER_OS ms) tmp
+        SELECT tmp.serverSum                                 AS serverSum,
+               tmp.windowsSum                                AS windowsSum,
+               tmp.linuxSum                                  AS linuxSum,
+               tmp.serverSum - tmp.windowsSum - tmp.linuxSum AS otherSum
+        FROM (SELECT COUNT(1)  AS serverSum,
+                     IFNULL(SUM(IF(LOCATE('Windows', ms.OS_NAME) OR LOCATE('windows', ms.OS_NAME), 1, 0)),
+                            0) AS windowsSum,
+                     IFNULL(SUM(IF(LOCATE('Linux', ms.OS_NAME) OR LOCATE('linux', ms.OS_NAME), 1, 0)),
+                            0) AS linuxSum
+              FROM MONITOR_SERVER_OS ms) tmp
     </select>
 
 </mapper>

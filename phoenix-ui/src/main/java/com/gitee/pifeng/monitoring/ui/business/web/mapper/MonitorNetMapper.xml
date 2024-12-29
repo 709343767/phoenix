@@ -8,14 +8,13 @@
                tmp.netConnectSum                                                AS netConnectSum,
                tmp.netDisconnectSum                                             AS netDisconnectSum,
                tmp.netUnsentSum                                                 AS netUnsentSum,
-               IFNULL(round(tmp.netConnectSum * 100 / tmp.netSum, 2), '100.00') AS netConnectRate
-        FROM (
-                 SELECT COUNT(ID)                                                    AS netSum,
-                        IFNULL(SUM(CASE WHEN mar.STATUS = '1' THEN 1 ELSE 0 END), 0) AS netConnectSum,
-                        IFNULL(SUM(CASE WHEN mar.STATUS = '0' THEN 1 ELSE 0 END), 0) AS netDisconnectSum,
-                        IFNULL(SUM(CASE WHEN mar.STATUS is null OR mar.STATUS = '' THEN 1 ELSE 0 END),
-                               0)                                                    AS netUnsentSum
-                 FROM MONITOR_NET mar) tmp
+               IFNULL(ROUND(tmp.netConnectSum * 100 / tmp.netSum, 2), '100.00') AS netConnectRate
+        FROM (SELECT COUNT(mar.ID)                                                  AS netSum,
+                     IFNULL(SUM(CASE WHEN mar.`STATUS` = '1' THEN 1 ELSE 0 END), 0) AS netConnectSum,
+                     IFNULL(SUM(CASE WHEN mar.`STATUS` = '0' THEN 1 ELSE 0 END), 0) AS netDisconnectSum,
+                     IFNULL(SUM(CASE WHEN mar.`STATUS` IS NULL OR mar.`STATUS` = '' THEN 1 ELSE 0 END),
+                            0)                                                      AS netUnsentSum
+              FROM MONITOR_NET mar) tmp
     </select>
 
 </mapper>

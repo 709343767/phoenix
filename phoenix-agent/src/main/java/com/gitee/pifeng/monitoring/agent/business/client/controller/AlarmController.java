@@ -39,7 +39,7 @@ public class AlarmController {
      * 监控代理程序接收监控客户端程序发的告警包，并返回结果
      * </p>
      *
-     * @param heartbeatPackage 告警包
+     * @param alarmPackage 告警包
      * @return {@link BaseResponsePackage}
      * @author 皮锋
      * @custom.date 2020年3月6日 下午3:00:54
@@ -48,8 +48,8 @@ public class AlarmController {
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(content = @Content(schema = @Schema(implementation = CiphertextPackage.class))),
             responses = @ApiResponse(content = {@Content(schema = @Schema(implementation = CiphertextPackage.class))}))
     @PostMapping("/accept-alarm-package")
-    public BaseResponsePackage acceptAlarmPackage(@RequestBody AlarmPackage heartbeatPackage) {
-        return this.alarmService.dealAlarmPackage(heartbeatPackage);
+    public BaseResponsePackage acceptAlarmPackage(@RequestBody AlarmPackage alarmPackage) {
+        return this.alarmService.dealAlarmPackage(alarmPackage);
     }
 
 }

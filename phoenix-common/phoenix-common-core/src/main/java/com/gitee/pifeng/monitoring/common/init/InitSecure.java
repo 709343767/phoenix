@@ -2,6 +2,7 @@ package com.gitee.pifeng.monitoring.common.init;
 
 import cn.hutool.setting.dialect.Props;
 import com.gitee.pifeng.monitoring.common.exception.NotFoundConfigFileException;
+import com.gitee.pifeng.monitoring.common.util.DirUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
@@ -37,12 +38,26 @@ public class InitSecure {
     private static Props init() {
         Props props;
         try {
-            //从文件路径相对于当前工作目录下的config路径读取
-            props = new Props(new File("config" + File.separator + "monitoring-secure.properties"), StandardCharsets.UTF_8);
+            String filePath;
+            try {
+                // 获取Jar同级目录
+                filePath = DirUtils.getJarDirectory() + File.separator + "config" + File.separator + "monitoring-secure.properties";
+            } catch (Exception e) {
+                filePath = "config" + File.separator + "monitoring-secure.properties";
+            }
+            // 从文件路径相对于当前工作目录下的config路径读取
+            props = new Props(new File(filePath), StandardCharsets.UTF_8);
         } catch (Exception e1) {
             try {
+                String filePath;
+                try {
+                    // 获取Jar同级目录
+                    filePath = DirUtils.getJarDirectory() + File.separator + "monitoring-secure.properties";
+                } catch (Exception e) {
+                    filePath = "monitoring-secure.properties";
+                }
                 // 从文件文件路径相对于当前工作目录读取
-                props = new Props(new File("monitoring-secure.properties"), StandardCharsets.UTF_8);
+                props = new Props(new File(filePath), StandardCharsets.UTF_8);
             } catch (Exception e2) {
                 try {
                     // 从 classpath:/config 路径下读取

@@ -6,8 +6,11 @@ import com.gitee.pifeng.monitoring.ui.business.web.dao.IMonitorJvmThreadDao;
 import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorJvmThread;
 import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorJvmThreadService;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.MonitorJvmThreadVo;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Arrays;
 
 /**
  * <p>
@@ -41,7 +44,12 @@ public class MonitorJvmThreadServiceImpl extends ServiceImpl<IMonitorJvmThreadDa
         LambdaQueryWrapper<MonitorJvmThread> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         lambdaQueryWrapper.eq(MonitorJvmThread::getInstanceId, instanceId);
         MonitorJvmThread monitorJvmThread = this.monitorJvmThreadDao.selectOne(lambdaQueryWrapper);
-        return MonitorJvmThreadVo.builder().build().convertFor(monitorJvmThread);
+        MonitorJvmThreadVo monitorJvmThreadVo = MonitorJvmThreadVo.builder().build().convertFor(monitorJvmThread);
+        String threadInfosStr = monitorJvmThread.getThreadInfos();
+        if (StringUtils.isNotBlank(threadInfosStr)) {
+            monitorJvmThreadVo.setThreadInfoList(Arrays.asList(threadInfosStr.split(";")));
+        }
+        return monitorJvmThreadVo;
     }
 
 }

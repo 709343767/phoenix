@@ -1,7 +1,7 @@
 package com.gitee.pifeng.monitoring.server.business.server.monitor;
 
 import cn.hutool.core.util.ArrayUtil;
-import com.gitee.pifeng.monitoring.common.constant.MonitorTypeEnums;
+import com.gitee.pifeng.monitoring.common.constant.monitortype.MonitorTypeEnums;
 import com.gitee.pifeng.monitoring.common.dto.HeartbeatPackage;
 import com.gitee.pifeng.monitoring.common.dto.ServerPackage;
 import com.gitee.pifeng.monitoring.common.util.server.NetUtils;

@@ -1,6 +1,8 @@
 package com.gitee.pifeng.monitoring.ui.business.web.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.gitee.pifeng.monitoring.common.inf.ISuperBean;
 import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorServerNetcard;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -29,6 +31,7 @@ import java.util.Date;
 @Schema(description = "服务器网卡信息表现层对象")
 public class MonitorServerNetcardVo implements ISuperBean {
 
+    @JsonSerialize(using = ToStringSerializer.class)
     @Schema(description = "主键ID")
     private Long id;
 
@@ -67,27 +70,35 @@ public class MonitorServerNetcardVo implements ISuperBean {
     @Schema(description = "更新时间")
     private Date updateTime;
 
+    @JsonSerialize(using = ToStringSerializer.class)
     @Schema(description = "接收到的总字节数")
     private Long rxBytes;
 
+    @JsonSerialize(using = ToStringSerializer.class)
     @Schema(description = "接收的总包数")
     private Long rxPackets;
 
+    @JsonSerialize(using = ToStringSerializer.class)
     @Schema(description = "接收到的错误包数")
     private Long rxErrors;
 
+    @JsonSerialize(using = ToStringSerializer.class)
     @Schema(description = "接收时丢弃的包数")
     private Long rxDropped;
 
+    @JsonSerialize(using = ToStringSerializer.class)
     @Schema(description = "发送的总字节数")
     private Long txBytes;
 
+    @JsonSerialize(using = ToStringSerializer.class)
     @Schema(description = "发送的总包数")
     private Long txPackets;
 
+    @JsonSerialize(using = ToStringSerializer.class)
     @Schema(description = "发送时的错误包数")
     private Long txErrors;
 
+    @JsonSerialize(using = ToStringSerializer.class)
     @Schema(description = "发送时丢弃的包数")
     private Long txDropped;
 

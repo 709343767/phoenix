@@ -22,4 +22,9 @@ public class MonitoringTcpProperties {
      */
     private boolean enable;
 
+    /**
+     * TCP状态配置属性
+     */
+    private MonitoringTcpStatusProperties tcpStatusProperties;
+
 }

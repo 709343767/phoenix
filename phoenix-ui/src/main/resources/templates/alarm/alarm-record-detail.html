@@ -25,64 +25,70 @@
         <!-- <div class="layui-card-header">折叠面板</div>-->
         <div class="layui-card-body">
             <div class="layui-collapse" lay-filter="component-panel">
-                <div class="layui-colla-item">
+                <div class="layui-colla-item" th:unless="${#strings.isEmpty(monitorAlarmRecordInfo.type)}">
                     <h2 class="layui-colla-title">告警类型</h2>
                     <div class="layui-colla-content layui-show">
                         <p th:text="${monitorAlarmRecordInfo.type}"></p>
                     </div>
                 </div>
-                <div class="layui-colla-item">
+                <div class="layui-colla-item" th:unless="${#strings.isEmpty(monitorAlarmRecordInfo.way)}">
                     <h2 class="layui-colla-title">告警方式</h2>
                     <div class="layui-colla-content layui-show">
                         <p th:text="${monitorAlarmRecordInfo.way}"></p>
                     </div>
                 </div>
-                <div class="layui-colla-item">
+                <div class="layui-colla-item" th:unless="${#strings.isEmpty(monitorAlarmRecordInfo.level)}">
                     <h2 class="layui-colla-title">告警级别</h2>
                     <div class="layui-colla-content layui-show">
                         <p th:text="${monitorAlarmRecordInfo.level}"></p>
                     </div>
                 </div>
-                <div class="layui-colla-item">
+                <div class="layui-colla-item" th:unless="${#strings.isEmpty(monitorAlarmRecordInfo.title)}">
                     <h2 class="layui-colla-title">告警标题</h2>
                     <div class="layui-colla-content layui-show">
                         <p style="white-space:pre-wrap;word-wrap:break-word;"
                            th:text="${monitorAlarmRecordInfo.title}"></p>
                     </div>
                 </div>
-                <div class="layui-colla-item">
+                <div class="layui-colla-item" th:unless="${#strings.isEmpty(monitorAlarmRecordInfo.content)}">
                     <h2 class="layui-colla-title">告警内容</h2>
                     <div class="layui-colla-content layui-show">
                         <p style="white-space:pre-wrap;word-wrap:break-word;"
                            th:utext="${monitorAlarmRecordInfo.content}"></p>
                     </div>
                 </div>
-                <div class="layui-colla-item">
+                <div class="layui-colla-item" th:unless="${#strings.isEmpty(monitorAlarmRecordInfo.alarmDefCode)}">
                     <h2 class="layui-colla-title">告警编码</h2>
                     <div class="layui-colla-content layui-show">
                         <p style="white-space:pre-wrap;word-wrap:break-word;"
                            th:utext="${monitorAlarmRecordInfo.alarmDefCode}"></p>
                     </div>
                 </div>
-                <div class="layui-colla-item">
+                <div class="layui-colla-item" th:unless="${#strings.isEmpty(monitorAlarmRecordInfo.status)}">
                     <h2 class="layui-colla-title">状态</h2>
                     <div class="layui-colla-content layui-show">
                         <p th:text="${monitorAlarmRecordInfo.status}"></p>
                     </div>
                 </div>
-                <div class="layui-colla-item">
+                <div class="layui-colla-item" th:unless="${#strings.isEmpty(monitorAlarmRecordInfo.number)}">
                     <h2 class="layui-colla-title">号码</h2>
                     <div class="layui-colla-content layui-show">
                         <p th:text="${monitorAlarmRecordInfo.number}"></p>
                     </div>
                 </div>
-                <div class="layui-colla-item">
+                <div class="layui-colla-item" th:unless="${#strings.isEmpty(monitorAlarmRecordInfo.notSendReason)}">
+                    <h2 class="layui-colla-title">不提醒原因</h2>
+                    <div class="layui-colla-content layui-show">
+                        <p th:text="${monitorAlarmRecordInfo.notSendReason}"></p>
+                    </div>
+                </div>
+                <div class="layui-colla-item" th:unless="${monitorAlarmRecordInfo.insertTime==null}">
                     <h2 class="layui-colla-title">记录时间</h2>
                     <div class="layui-colla-content layui-show">
                         <p th:text="${#dates.format(monitorAlarmRecordInfo.insertTime,'yyyy/MM/dd HH:mm:ss')}"></p>
                     </div>
                 </div>
-                <div class="layui-colla-item">
+                <div class="layui-colla-item" th:unless="${monitorAlarmRecordInfo.updateTime==null}">
                     <h2 class="layui-colla-title">告警时间</h2>
                     <div class="layui-colla-content layui-show">
                         <p th:text="${#dates.format(monitorAlarmRecordInfo.updateTime,'yyyy/MM/dd HH:mm:ss')}"></p>

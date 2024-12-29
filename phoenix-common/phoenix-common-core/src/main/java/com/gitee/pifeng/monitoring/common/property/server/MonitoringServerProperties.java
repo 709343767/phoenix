@@ -24,6 +24,11 @@ public class MonitoringServerProperties implements ISuperBean {
     private boolean enable;
 
     /**
+     * 服务器状态配置属性
+     */
+    private MonitoringServerStatusProperties serverStatusProperties;
+
+    /**
      * 服务器CPU配置属性
      */
     private MonitoringServerCpuProperties serverCpuProperties;

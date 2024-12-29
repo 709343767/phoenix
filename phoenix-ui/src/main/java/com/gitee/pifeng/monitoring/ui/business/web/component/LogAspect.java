@@ -1,8 +1,11 @@
 package com.gitee.pifeng.monitoring.ui.business.web.component;
 
 import com.alibaba.fastjson.JSON;
-import com.gitee.pifeng.monitoring.common.constant.MonitorTypeEnums;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.gitee.pifeng.monitoring.common.constant.ZeroOrOneConstants;
 import com.gitee.pifeng.monitoring.common.constant.alarm.AlarmLevelEnums;
+import com.gitee.pifeng.monitoring.common.constant.alarm.AlarmReasonEnums;
+import com.gitee.pifeng.monitoring.common.constant.monitortype.MonitorTypeEnums;
 import com.gitee.pifeng.monitoring.common.domain.Alarm;
 import com.gitee.pifeng.monitoring.common.util.DateTimeUtils;
 import com.gitee.pifeng.monitoring.common.util.ExceptionUtils;
@@ -10,15 +13,20 @@ import com.gitee.pifeng.monitoring.common.util.MapUtils;
 import com.gitee.pifeng.monitoring.common.web.util.AccessObjectUtils;
 import com.gitee.pifeng.monitoring.common.web.util.ContextUtils;
 import com.gitee.pifeng.monitoring.plug.Monitor;
+import com.gitee.pifeng.monitoring.plug.core.InstanceGenerator;
 import com.gitee.pifeng.monitoring.ui.business.web.annotation.OperateLog;
+import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorInstance;
 import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorLogException;
 import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorLogOperation;
+import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorInstanceService;
 import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorLogExceptionService;
 import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorLogOperationService;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.LayUiAdminResultVo;
 import com.gitee.pifeng.monitoring.ui.util.SpringSecurityUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.AfterThrowing;
@@ -34,6 +42,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -60,6 +69,12 @@ public class LogAspect {
      */
     @Autowired
     private IMonitorLogOperationService monitorLogOperationService;
+
+    /**
+     * 应用实例服务类
+     */
+    @Autowired
+    private IMonitorInstanceService monitorInstanceService;
 
     /**
      * <p>
@@ -208,24 +223,52 @@ public class LogAspect {
         builder.operMethod(methodName);
         builder.uri(request.getMethod() + " " + request.getRequestURI());
         builder.ip(AccessObjectUtils.getClientAddress(request));
+        builder.instanceId(InstanceGenerator.getInstanceId());
+        // 虽然设置的是发送告警，但是最终有没有发告警，此处保证不了呢
+        builder.isAlarm(ZeroOrOneConstants.ONE);
         builder.insertTime(new Date());
         MonitorLogException monitorLogException = builder.build();
         this.monitorLogExceptionService.save(monitorLogException);
+        // 根据应用ID查询应用信息
+        LambdaQueryWrapper<MonitorInstance> monitorInstanceLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        monitorInstanceLambdaQueryWrapper.eq(MonitorInstance::getInstanceId, monitorLogException.getInstanceId());
+        List<MonitorInstance> monitorInstances = this.monitorInstanceService.list(monitorInstanceLambdaQueryWrapper);
+        if (CollectionUtils.isEmpty(monitorInstances)) {
+            return;
+        }
+        MonitorInstance monitorInstance = monitorInstances.get(0);
+        // 拼接告警消息
+        StringBuilder msgBuilder = new StringBuilder();
+        msgBuilder.append("应用ID：").append(monitorInstance.getInstanceId())
+                .append("，<br>应用名称：").append(monitorInstance.getInstanceName());
+        // 应用实例描述
+        String instanceDesc = monitorInstance.getInstanceDesc();
+        if (StringUtils.isNotBlank(instanceDesc)) {
+            // 应用实例摘要
+            String instanceSummary = monitorInstance.getInstanceSummary();
+            // 如果应用实例摘要不为空，则把摘要当做描述。因为：摘要是用户通过UI界面设置的，优先级比描述高
+            if (StringUtils.isNotBlank(instanceSummary)) {
+                msgBuilder.append("，<br>应用描述：").append(instanceSummary);
+            } else {
+                msgBuilder.append("，<br>应用描述：").append(instanceDesc);
+            }
+        }
+        msgBuilder.append("，<br>异常名称：").append(monitorLogException.getExcName())
+                .append("，<br>异常信息：").append(monitorLogException.getExcMessage())
+                .append("，<br>操作用户：").append(monitorLogException.getUsername())
+                .append("，<br>操作方法：").append(monitorLogException.getOperMethod())
+                .append("，<br>请求参数：").append(monitorLogException.getReqParam())
+                .append("，<br>请求URI：").append(monitorLogException.getUri())
+                .append("，<br>请求IP：").append(monitorLogException.getIp())
+                .append("，<br>时间：").append(DateTimeUtils.dateToString(monitorLogException.getInsertTime()));
         // 发送告警
-        String msg = "请求参数：" + monitorLogException.getReqParam() +
-                "，<br>异常名称：" + monitorLogException.getExcName() +
-                "，<br>异常信息：" + monitorLogException.getExcMessage() +
-                "，<br>操作用户：" + monitorLogException.getUsername() +
-                "，<br>操作方法：" + monitorLogException.getOperMethod() +
-                "，<br>请求URI：" + monitorLogException.getUri() +
-                "，<br>请求IP：" + monitorLogException.getIp() +
-                "，<br>时间：" + DateTimeUtils.dateToString(monitorLogException.getInsertTime());
         Alarm alarm = Alarm.builder()
                 .alarmLevel(AlarmLevelEnums.ERROR)
+                .alarmReason(AlarmReasonEnums.IGNORE)
                 .monitorType(MonitorTypeEnums.INSTANCE)
                 .charset(StandardCharsets.UTF_8)
                 .title(excName)
-                .msg(msg)
+                .msg(msgBuilder.toString())
                 .build();
         Monitor.sendAlarm(alarm);
     }

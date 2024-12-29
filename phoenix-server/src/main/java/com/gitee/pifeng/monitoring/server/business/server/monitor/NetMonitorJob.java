@@ -1,19 +1,18 @@
 package com.gitee.pifeng.monitoring.server.business.server.monitor;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.gitee.pifeng.monitoring.common.constant.MonitorTypeEnums;
 import com.gitee.pifeng.monitoring.common.constant.ZeroOrOneConstants;
 import com.gitee.pifeng.monitoring.common.constant.alarm.AlarmLevelEnums;
 import com.gitee.pifeng.monitoring.common.constant.alarm.AlarmReasonEnums;
+import com.gitee.pifeng.monitoring.common.constant.monitortype.MonitorSubTypeEnums;
+import com.gitee.pifeng.monitoring.common.constant.monitortype.MonitorTypeEnums;
 import com.gitee.pifeng.monitoring.common.domain.Alarm;
 import com.gitee.pifeng.monitoring.common.dto.AlarmPackage;
 import com.gitee.pifeng.monitoring.common.exception.NetException;
-import com.gitee.pifeng.monitoring.common.threadpool.ThreadPoolShutdownHelper;
 import com.gitee.pifeng.monitoring.common.util.CollectionUtils;
 import com.gitee.pifeng.monitoring.common.util.DateTimeUtils;
 import com.gitee.pifeng.monitoring.common.util.Md5Utils;
 import com.gitee.pifeng.monitoring.common.util.server.NetUtils;
-import com.gitee.pifeng.monitoring.common.util.server.ProcessorsUtils;
 import com.gitee.pifeng.monitoring.server.business.server.core.MonitoringConfigPropertiesLoader;
 import com.gitee.pifeng.monitoring.server.business.server.core.ServerPackageConstructor;
 import com.gitee.pifeng.monitoring.server.business.server.entity.MonitorNet;
@@ -23,21 +22,19 @@ import com.gitee.pifeng.monitoring.server.business.server.service.INetHistorySer
 import com.gitee.pifeng.monitoring.server.business.server.service.INetService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.concurrent.BasicThreadFactory;
+import org.quartz.DisallowConcurrentExecution;
 import org.quartz.JobExecutionContext;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.annotation.Order;
 import org.springframework.lang.NonNull;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PreDestroy;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.ThreadPoolExecutor;
 
 /**
@@ -51,6 +48,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 @Slf4j
 @Component
 @Order(3)
+@DisallowConcurrentExecution
 public class NetMonitorJob extends QuartzJobBean {
 
     /**
@@ -86,27 +84,9 @@ public class NetMonitorJob extends QuartzJobBean {
     /**
      * 线程池
      */
-    private final ScheduledExecutorService seService = new ScheduledThreadPoolExecutor(
-            // 线程数 = Ncpu /（1 - 阻塞系数），IO密集型阻塞系数相对较大
-            (int) (ProcessorsUtils.getAvailableProcessors() / (1 - 0.8)),
-            new BasicThreadFactory.Builder()
-                    // 设置线程名
-                    .namingPattern("phoenix-server-net-monitor-pool-thread-%d")
-                    // 设置为守护线程
-                    .daemon(true)
-                    .build(),
-            new ThreadPoolExecutor.AbortPolicy());
-
-    /**
-     * 在程序关闭前优雅关闭线程池
-     *
-     * @author 皮锋
-     * @custom.date 2023/6/4 22:00
-     */
-    @PreDestroy
-    public void shutdownThreadPoolGracefully() {
-        new ThreadPoolShutdownHelper().shutdownGracefully(this.seService, "phoenix-server-net-monitor-pool-thread");
-    }
+    @Autowired
+    @Qualifier("netMonitorThreadPoolExecutor")
+    private ThreadPoolExecutor netMonitorThreadPoolExecutor;
 
     /**
      * 扫描数据库“MONITOR_NET”表中的所有网络信息，实时更新网络状态，发送告警。
@@ -118,8 +98,13 @@ public class NetMonitorJob extends QuartzJobBean {
     @Override
     protected void executeInternal(@NonNull JobExecutionContext jobExecutionContext) {
         // 是否监控网络
-        boolean isMonitoringEnable = this.monitoringConfigPropertiesLoader.getMonitoringProperties().getNetworkProperties().isEnable();
-        if (!isMonitoringEnable) {
+        boolean isEnable = this.monitoringConfigPropertiesLoader.getMonitoringProperties().getNetworkProperties().isEnable();
+        if (!isEnable) {
+            return;
+        }
+        // 是否监控网络状态
+        boolean isStatusEnable = this.monitoringConfigPropertiesLoader.getMonitoringProperties().getNetworkProperties().getNetworkStatusProperties().isEnable();
+        if (!isStatusEnable) {
             return;
         }
         synchronized (NetMonitorJob.class) {
@@ -132,9 +117,15 @@ public class NetMonitorJob extends QuartzJobBean {
                 List<List<MonitorNet>> subMonitorNetLists = CollectionUtils.split(monitorNets, 10);
                 for (List<MonitorNet> subMonitorNets : subMonitorNetLists) {
                     // 使用多线程，加快处理速度
-                    this.seService.execute(() -> {
+                    this.netMonitorThreadPoolExecutor.execute(() -> {
                         // 循环处理每一个网络信息
                         for (MonitorNet monitorNet : subMonitorNets) {
+                            // 是否开启监控（0：不开启监控；1：开启监控）
+                            String isEnableMonitor = monitorNet.getIsEnableMonitor();
+                            // 没有开启监控，直接跳过
+                            if (!StringUtils.equals(ZeroOrOneConstants.ONE, isEnableMonitor)) {
+                                continue;
+                            }
                             // 目标IP地址
                             String ipTarget = monitorNet.getIpTarget();
                             Map<String, Object> objectMap = NetUtils.isConnect(ipTarget);
@@ -264,6 +255,17 @@ public class NetMonitorJob extends QuartzJobBean {
      * @custom.date 2020/3/13 11:20
      */
     private void sendAlarmInfo(String title, AlarmLevelEnums alarmLevelEnum, AlarmReasonEnums alarmReasonEnum, MonitorNet net) throws NetException {
+        // 告警是否打开
+        boolean alarmEnable = this.monitoringConfigPropertiesLoader.getMonitoringProperties().getNetworkProperties().getNetworkStatusProperties().isAlarmEnable();
+        if (!alarmEnable) {
+            return;
+        }
+        // 是否开启告警（0：不开启告警；1：开启告警）
+        String isEnableAlarm = net.getIsEnableAlarm();
+        // 没有开启告警，直接结束
+        if (!StringUtils.equals(ZeroOrOneConstants.ONE, isEnableAlarm)) {
+            return;
+        }
         StringBuilder builder = new StringBuilder();
         builder.append("源IP：").append(net.getIpSource())
                 .append("，<br>目标IP：").append(net.getIpTarget());
@@ -279,6 +281,8 @@ public class NetMonitorJob extends QuartzJobBean {
                 .alarmLevel(alarmLevelEnum)
                 .alarmReason(alarmReasonEnum)
                 .monitorType(MonitorTypeEnums.NET)
+                .monitorSubType(MonitorSubTypeEnums.SERVICE_STATUS)
+                .alertedEntityId(String.valueOf(net.getId()))
                 .build();
         AlarmPackage alarmPackage = this.serverPackageConstructor.structureAlarmPackage(alarm);
         this.alarmService.dealAlarmPackage(alarmPackage);

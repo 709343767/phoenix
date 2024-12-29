@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Data;
@@ -31,6 +33,7 @@ public class MonitorTcp implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @JsonSerialize(using = ToStringSerializer.class)
     @Schema(description = "主键ID")
     @TableId("ID")
     private Long id;
@@ -55,6 +58,15 @@ public class MonitorTcp implements Serializable {
     @TableField("STATUS")
     private String status;
 
+    @Schema(description = "是否开启监控（0：不开启监控；1：开启监控）")
+    @TableField("IS_ENABLE_MONITOR")
+    private String isEnableMonitor;
+
+    @Schema(description = "是否开启告警（0：不开启告警；1：开启告警）")
+    @TableField("IS_ENABLE_ALARM")
+    private String isEnableAlarm;
+
+    @JsonSerialize(using = ToStringSerializer.class)
     @Schema(description = "平均响应时间（毫秒）")
     @TableField("AVG_TIME")
     private Long avgTime;

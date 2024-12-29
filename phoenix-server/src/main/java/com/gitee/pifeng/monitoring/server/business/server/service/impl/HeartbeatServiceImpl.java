@@ -85,6 +85,9 @@ public class HeartbeatServiceImpl implements IHeartbeatService {
         if (selectCountDb == 0) {
             entity.setInsertTime(currentTime);
             entity.setOfflineCount(0);
+            // 默认开启监控和告警
+            entity.setIsEnableMonitor(ZeroOrOneConstants.ONE);
+            entity.setIsEnableAlarm(ZeroOrOneConstants.ONE);
             this.instanceService.save(entity);
         }
         // 更新记录

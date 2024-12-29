@@ -23,16 +23,25 @@ public interface IMonitorLogExceptionService extends IService<MonitorLogExceptio
      * 获取异常日志列表
      * </p>
      *
-     * @param current    当前页
-     * @param size       每页显示条数
-     * @param excName    异常名称
-     * @param excMessage 异常信息
-     * @param insertTime 插入时间
+     * @param current      当前页
+     * @param size         每页显示条数
+     * @param instanceId   应用实例ID
+     * @param instanceName 应用实例名
+     * @param excName      异常名称
+     * @param excMessage   异常信息
+     * @param operMethod   操作方法
+     * @param uri          请求URI
+     * @param ip           请求IP
+     * @param insertTime   插入时间
      * @return 简单分页模型
      * @author 皮锋
      * @custom.date 2021/6/18 9:01
      */
-    Page<MonitorLogExceptionVo> getMonitorLogExceptionList(Long current, Long size, String excName, String excMessage, String insertTime);
+    Page<MonitorLogExceptionVo> getMonitorLogExceptionList(Long current, Long size,
+                                                           String instanceId, String instanceName,
+                                                           String excName, String excMessage,
+                                                           String uri, String ip,
+                                                           String operMethod, String insertTime);
 
     /**
      * <p>

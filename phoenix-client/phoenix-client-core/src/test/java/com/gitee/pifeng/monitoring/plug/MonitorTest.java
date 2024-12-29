@@ -1,9 +1,9 @@
 package com.gitee.pifeng.monitoring.plug;
 
 import cn.hutool.core.lang.Console;
-import com.gitee.pifeng.monitoring.common.constant.MonitorTypeEnums;
 import com.gitee.pifeng.monitoring.common.constant.ThreadTypeEnums;
 import com.gitee.pifeng.monitoring.common.constant.alarm.AlarmLevelEnums;
+import com.gitee.pifeng.monitoring.common.constant.monitortype.MonitorTypeEnums;
 import com.gitee.pifeng.monitoring.common.domain.Alarm;
 import com.gitee.pifeng.monitoring.common.domain.Result;
 import com.google.common.base.Charsets;
@@ -37,7 +37,8 @@ public class MonitorTest {
         // 业务埋点监控：定时监控业务运行情况
         ScheduledExecutorService service = Monitor.buryingPoint(() -> {
             // 封装告警信息
-            Alarm alarm = Alarm.builder().alarmLevel(AlarmLevelEnums.INFO)
+            Alarm alarm = Alarm.builder()
+                    .alarmLevel(AlarmLevelEnums.INFO)
                     .monitorType(MonitorTypeEnums.CUSTOM)
                     .title("测试发送告警信息")
                     .msg("测试发送告警信息")

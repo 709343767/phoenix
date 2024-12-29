@@ -8,14 +8,13 @@
                tmp.tcpConnectSum                                                AS tcpConnectSum,
                tmp.tcpDisconnectSum                                             AS tcpDisconnectSum,
                tmp.tcpUnsentSum                                                 AS tcpUnsentSum,
-               IFNULL(round(tmp.tcpConnectSum * 100 / tmp.tcpSum, 2), '100.00') AS tcpConnectRate
-        FROM (
-                 SELECT COUNT(ID)                                                      AS tcpSum,
-                        IFNULL(SUM(CASE WHEN mar.`STATUS` = '1' THEN 1 ELSE 0 END), 0) AS tcpConnectSum,
-                        IFNULL(SUM(CASE WHEN mar.`STATUS` = '0' THEN 1 ELSE 0 END), 0) AS tcpDisconnectSum,
-                        IFNULL(SUM(CASE WHEN mar.`STATUS` is null OR mar.`STATUS` = '' THEN 1 ELSE 0 END),
-                               0)                                                      AS tcpUnsentSum
-                 FROM MONITOR_TCP mar) tmp
+               IFNULL(ROUND(tmp.tcpConnectSum * 100 / tmp.tcpSum, 2), '100.00') AS tcpConnectRate
+        FROM (SELECT COUNT(mar.ID)                                                  AS tcpSum,
+                     IFNULL(SUM(CASE WHEN mar.`STATUS` = '1' THEN 1 ELSE 0 END), 0) AS tcpConnectSum,
+                     IFNULL(SUM(CASE WHEN mar.`STATUS` = '0' THEN 1 ELSE 0 END), 0) AS tcpDisconnectSum,
+                     IFNULL(SUM(CASE WHEN mar.`STATUS` IS NULL OR mar.`STATUS` = '' THEN 1 ELSE 0 END),
+                            0)                                                      AS tcpUnsentSum
+              FROM MONITOR_TCP mar) tmp
     </select>
 
 </mapper>

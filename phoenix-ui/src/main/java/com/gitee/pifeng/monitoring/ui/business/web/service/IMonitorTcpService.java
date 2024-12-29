@@ -6,6 +6,7 @@ import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorTcp;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.HomeTcpVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.LayUiAdminResultVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.MonitorTcpVo;
+import org.hyperic.sigar.SigarException;
 
 import java.io.IOException;
 import java.util.List;
@@ -80,6 +81,32 @@ public interface IMonitorTcpService extends IService<MonitorTcp> {
 
     /**
      * <p>
+     * 设置是否开启监控（0：不开启监控；1：开启监控）
+     * </p>
+     *
+     * @param id              主键ID
+     * @param isEnableMonitor 是否开启监控（0：不开启监控；1：开启监控）
+     * @return 如果设置成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @author 皮锋
+     * @custom.date 2024/12/10 21:20
+     */
+    LayUiAdminResultVo setIsEnableMonitor(Long id, String isEnableMonitor);
+
+    /**
+     * <p>
+     * 设置是否开启告警（0：不开启告警；1：开启告警）
+     * </p>
+     *
+     * @param id            主键ID
+     * @param isEnableAlarm 是否开启告警（0：不开启告警；1：开启告警）
+     * @return 如果设置成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @author 皮锋
+     * @custom.date 2024/12/10 21:37
+     */
+    LayUiAdminResultVo setIsEnableAlarm(Long id, String isEnableAlarm);
+
+    /**
+     * <p>
      * 获取home页的TCP信息
      * </p>
      *
@@ -96,10 +123,11 @@ public interface IMonitorTcpService extends IService<MonitorTcp> {
      *
      * @param monitorTcpVo TCP信息表现层对象
      * @return layUiAdmin响应对象：TCP连通性
-     * @throws IOException IO异常
+     * @throws SigarException Sigar异常
+     * @throws IOException    IO异常
      * @author 皮锋
      * @custom.date 2022/10/12 21:41
      */
-    LayUiAdminResultVo testMonitorTcp(MonitorTcpVo monitorTcpVo) throws IOException;
+    LayUiAdminResultVo testMonitorTcp(MonitorTcpVo monitorTcpVo) throws SigarException, IOException;
 
 }

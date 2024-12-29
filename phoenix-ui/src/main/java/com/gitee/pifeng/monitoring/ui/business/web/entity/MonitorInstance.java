@@ -1,6 +1,8 @@
 package com.gitee.pifeng.monitoring.ui.business.web.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Data;
@@ -28,6 +30,7 @@ public class MonitorInstance implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @JsonSerialize(using = ToStringSerializer.class)
     @Schema(description = "主键ID")
     @TableId(value = "ID", type = IdType.AUTO)
     private Long id;
@@ -67,6 +70,14 @@ public class MonitorInstance implements Serializable {
     @Schema(description = "应用状态（0：离线，1：在线）")
     @TableField("IS_ONLINE")
     private String isOnline;
+
+    @Schema(description = "是否开启监控（0：不开启监控；1：开启监控）")
+    @TableField("IS_ENABLE_MONITOR")
+    private String isEnableMonitor;
+
+    @Schema(description = "是否开启告警（0：不开启告警；1：开启告警）")
+    @TableField("IS_ENABLE_ALARM")
+    private String isEnableAlarm;
 
     @Schema(description = "是否收到离线通知（0：否，1：是）")
     @TableField("IS_OFFLINE_NOTICE")

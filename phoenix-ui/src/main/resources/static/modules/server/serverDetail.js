@@ -1,7 +1,7 @@
 /** layuiAdmin.std-v2020.4.1 LPPL License By 皮锋 */
 ;layui.define(function (e) {
-    layui.use(['admin', 'element', 'form', 'layer'], function () {
-        var admin = layui.admin, $ = layui.$, form = layui.form, layer = layui.layer, element = layui.element;
+    layui.use(['admin', 'element', 'form'], function () {
+        var admin = layui.admin, $ = layui.$, form = layui.form, element = layui.element;
         // 渲染进度条
         element.render('progress');
         // 基于准备好的dom，初始化echarts实例
@@ -668,13 +668,15 @@
                         var processId = obj.processId;
                         // 进程名
                         var name = obj.name;
-                        //执行进程的完整路径
-                        var path = (!isEmpty(obj.path) && obj.path.length > 200) ? obj.path.substr(0, 200) + ' ......' : obj.path;
+                        // 执行进程的完整路径
+                        // var path = (!isEmpty(obj.path) && obj.path.length > 200) ? obj.path.substr(0, 200) + ' ......' : obj.path;
+                        var path = obj.path == null ? '' : obj.path;
                         // 进程命令行
-                        var commandLine = (!isEmpty(obj.commandLine) && obj.commandLine.length > 200) ? obj.commandLine.substr(0, 200) + ' ......' : obj.commandLine;
-                        //进程当前的工作目录
-                        var currentWorkingDirectory = (!isEmpty(obj.currentWorkingDirectory) && obj.currentWorkingDirectory.length > 200) ? obj.currentWorkingDirectory.substr(0, 200) + ' ......' : obj.currentWorkingDirectory;
-                        currentWorkingDirectory = currentWorkingDirectory == null ? '' : currentWorkingDirectory;
+                        // var commandLine = (!isEmpty(obj.commandLine) && obj.commandLine.length > 200) ? obj.commandLine.substr(0, 200) + ' ......' : obj.commandLine;
+                        var commandLine = obj.commandLine == null ? '' : obj.commandLine;
+                        // 进程当前的工作目录
+                        // var currentWorkingDirectory = (!isEmpty(obj.currentWorkingDirectory) && obj.currentWorkingDirectory.length > 200) ? obj.currentWorkingDirectory.substr(0, 200) + ' ......' : obj.currentWorkingDirectory;
+                        var currentWorkingDirectory = obj.currentWorkingDirectory == null ? '' : obj.currentWorkingDirectory;
                         // 用户名
                         var user = obj.user;
                         //进程执行状态
@@ -766,6 +768,9 @@
                 success: function (result) {
                     var data = result.data;
                     var html = '';
+                    // 设置CPU核数
+                    var cpuCores = data.length;
+                    $('#cpuHead').empty().append('（' + cpuCores + '核）');
                     for (var i = 0; i < data.length; i++) {
                         var obj = data[i];
                         var cpuVendor = obj.cpuVendor;
@@ -904,10 +909,10 @@
                             '       <label class="label-font-weight">发送时丢弃的包数：</label>' + txDropped + ' 个' +
                             '    </div>' +
                             '    <div class="layui-col-md4">' +
-                            '       <label class="label-font-weight">下行带宽：</label>' + downloadSpeed +
+                            '       <label class="label-font-weight">下行带宽(↓)：</label>' + downloadSpeed +
                             '    </div>' +
                             '    <div class="layui-col-md4">' +
-                            '       <label class="label-font-weight">上行带宽：</label>' + uploadSpeed +
+                            '       <label class="label-font-weight">上行带宽(↑)：</label>' + uploadSpeed +
                             '    </div>';
                         if (i !== data.length - 1) {
                             html += '<hr class="layui-bg-gray hr-padding">';
@@ -1147,7 +1152,7 @@
                         },
                         grid: {
                             left: '5%',
-                            right: '10%'
+                            right: '7%'
                         },
                         xAxis: {
                             type: 'category',
@@ -1186,6 +1191,21 @@
                             data: memUsed,
                             type: 'line',
                             smooth: true,
+                            markLine: {
+                                data: [{
+                                    name: '(均值)',
+                                    type: 'average',
+                                    itemStyle: {
+                                        color: '#9400D3'
+                                    },
+                                    label: {
+                                        position: 'middle',
+                                        formatter: function (params) {
+                                            return params.value + ' GB' + params.name;
+                                        }
+                                    }
+                                }]
+                            },
                             areaStyle: {
                                 type: 'default',
                                 // 渐变色实现
@@ -1214,6 +1234,21 @@
                             data: swapUsed,
                             type: 'line',
                             smooth: true,
+                            markLine: {
+                                data: [{
+                                    name: '(均值)',
+                                    type: 'average',
+                                    itemStyle: {
+                                        color: '#228B22'
+                                    },
+                                    label: {
+                                        position: 'middle',
+                                        formatter: function (params) {
+                                            return params.value + ' GB' + params.name;
+                                        }
+                                    }
+                                }]
+                            },
                             areaStyle: {
                                 type: 'default',
                                 // 渐变色实现
@@ -1273,6 +1308,10 @@
                     var processNum = data.map(function (item) {
                         return item.processNum;
                     });
+                    // 最大进程数
+                    var maxProcessNum = data.length !== 0 ? Math.max(...processNum) : '没数据';
+                    // 最小进程数
+                    var minProcessNum = data.length !== 0 ? Math.min(...processNum) : '没数据';
                     // 新增时间
                     var insertTime = data.map(function (item) {
                         return item.insertTime.replace(' ', '\n');
@@ -1284,6 +1323,10 @@
                             textStyle: {
                                 color: '#696969',
                                 fontSize: 14
+                            },
+                            subtext: '最大进程数：' + maxProcessNum + '，最小进程数：' + minProcessNum,
+                            subtextStyle: {
+                                color: '#BEBEBE'
                             }
                         },
                         // 鼠标移到折线上展示数据
@@ -1333,7 +1376,7 @@
                         },
                         grid: {
                             left: '5%',
-                            right: '5%'
+                            right: '6%'
                         },
                         xAxis: {
                             type: 'category',
@@ -1358,6 +1401,21 @@
                             data: processNum,
                             type: 'line',
                             smooth: true,
+                            markLine: {
+                                data: [{
+                                    name: '(均值)',
+                                    type: 'average',
+                                    itemStyle: {
+                                        color: '#228B22'
+                                    },
+                                    label: {
+                                        position: 'end',
+                                        formatter: function (params) {
+                                            return Math.round(params.value) + '\n' + params.name;
+                                        }
+                                    }
+                                }]
+                            },
                             areaStyle: {
                                 type: 'default',
                                 // 渐变色实现
@@ -1441,6 +1499,10 @@
                     var lastCpuCombined = data.length !== 0 ? data[data.length - 1].cpuCombined.toFixed(2) + '%' : '没数据';
                     // 最新CPU剩余率
                     // var lastCpuIdle = data.length !== 0 ? (100 - data[data.length - 1].cpuCombined).toFixed(2) + '%' : '没数据';
+                    // 最大CPU总使用率
+                    var maxCpuCombined = data.length !== 0 ? Math.max(...cpuCombined).toFixed(2) + '%' : '没数据';
+                    // 最小CPU总使用率
+                    var minCpuCombined = data.length !== 0 ? Math.min(...cpuCombined).toFixed(2) + '%' : '没数据';
                     // 新增时间
                     var insertTime = data.map(function (item) {
                         return item.insertTime.replace(' ', '\n');
@@ -1454,7 +1516,7 @@
                                 fontSize: 14
                             },
                             // subtext: '剩余率：' + lastCpuIdle + '，总使用率：' + lastCpuCombined,
-                            subtext: '总使用率：' + lastCpuCombined,
+                            subtext: '总使用率：' + lastCpuCombined + '，最大使用率：' + maxCpuCombined + '，最小使用率：' + minCpuCombined,
                             subtextStyle: {
                                 color: '#BEBEBE'
                             }
@@ -1534,6 +1596,21 @@
                             data: cpuIdle,
                             type: 'line',
                             smooth: true,
+                            markLine: {
+                                data: [{
+                                    name: '(剩余率均值)',
+                                    type: 'average',
+                                    itemStyle: {
+                                        color: '#228B22'
+                                    },
+                                    label: {
+                                        position: 'middle',
+                                        formatter: function (params) {
+                                            return params.value + '%' + params.name;
+                                        }
+                                    }
+                                }]
+                            },
                             areaStyle: {
                                 type: 'default',
                                 // 渐变色实现
@@ -1561,6 +1638,21 @@
                             data: cpuCombined,
                             type: 'line',
                             smooth: true,
+                            markLine: {
+                                data: [{
+                                    name: '(总使用率均值)',
+                                    type: 'average',
+                                    itemStyle: {
+                                        color: '#B22222'
+                                    },
+                                    label: {
+                                        position: 'middle',
+                                        formatter: function (params) {
+                                            return params.value + '%' + params.name;
+                                        }
+                                    }
+                                }]
+                            },
                             areaStyle: {
                                 type: 'default',
                                 // 渐变色实现
@@ -1751,7 +1843,7 @@
                                 color: '#696969',
                                 fontSize: 14
                             },
-                            subtext: '上行带宽：' + lastUploadSpeed + '，下行带宽：' + lastDownloadSpeed,
+                            subtext: '↑ 上行带宽：' + lastUploadSpeed + '，↓ 下行带宽：' + lastDownloadSpeed,
                             subtextStyle: {
                                 color: '#BEBEBE'
                             }
@@ -1802,7 +1894,7 @@
                         },
                         grid: {
                             left: '5%',
-                            right: '5%'
+                            right: '8%'
                         },
                         xAxis: {
                             type: 'category',
@@ -1828,6 +1920,21 @@
                             data: downloadSpeed,
                             type: 'line',
                             smooth: true,
+                            markLine: {
+                                data: [{
+                                    name: '(均值)',
+                                    type: 'average',
+                                    itemStyle: {
+                                        color: '#228B22'
+                                    },
+                                    label: {
+                                        position: 'end',
+                                        formatter: function (params) {
+                                            return convertSize(params.value) + '/s' + '\n' + params.name;
+                                        }
+                                    }
+                                }]
+                            },
                             areaStyle: {
                                 type: 'default',
                                 // 渐变色实现
@@ -1855,6 +1962,21 @@
                             data: uploadSpeed,
                             type: 'line',
                             smooth: true,
+                            markLine: {
+                                data: [{
+                                    name: '(均值)',
+                                    type: 'average',
+                                    itemStyle: {
+                                        color: '#1E90FF'
+                                    },
+                                    label: {
+                                        position: 'end',
+                                        formatter: function (params) {
+                                            return convertSize(params.value) + '/s' + '\n' + params.name;
+                                        }
+                                    }
+                                }]
+                            },
                             areaStyle: {
                                 type: 'default',
                                 // 渐变色实现
@@ -1971,7 +2093,7 @@
                         },
                         grid: {
                             left: '5%',
-                            right: '5%'
+                            right: '7%'
                         },
                         xAxis: {
                             type: 'category',
@@ -2008,19 +2130,40 @@
                             smooth: true,
                             markLine: {
                                 data: [{
+                                    name: '(理想)',
                                     yAxis: logicalProcessorCount * 0.7,
                                     itemStyle: {
                                         color: '#2E8B57'
+                                    },
+                                    label: {
+                                        position: 'end',
+                                        formatter: function (params) {
+                                            return params.value + params.name;
+                                        }
                                     }
                                 }, {
+                                    name: '(过载)',
                                     yAxis: logicalProcessorCount,
                                     itemStyle: {
                                         color: '#FFB90F'
+                                    },
+                                    label: {
+                                        position: 'end',
+                                        formatter: function (params) {
+                                            return params.value + params.name;
+                                        }
                                     }
                                 }, {
+                                    name: '(严重)',
                                     yAxis: logicalProcessorCount * 5,
                                     itemStyle: {
                                         color: '#EE2C2C'
+                                    },
+                                    label: {
+                                        position: 'end',
+                                        formatter: function (params) {
+                                            return params.value + params.name;
+                                        }
                                     }
                                 }]
                             },
@@ -2053,19 +2196,40 @@
                             smooth: true,
                             markLine: {
                                 data: [{
+                                    name: '(理想)',
                                     yAxis: logicalProcessorCount * 0.7,
                                     itemStyle: {
                                         color: '#2E8B57'
+                                    },
+                                    label: {
+                                        position: 'end',
+                                        formatter: function (params) {
+                                            return params.value + params.name;
+                                        }
                                     }
                                 }, {
+                                    name: '(过载)',
                                     yAxis: logicalProcessorCount,
                                     itemStyle: {
                                         color: '#FFB90F'
+                                    },
+                                    label: {
+                                        position: 'end',
+                                        formatter: function (params) {
+                                            return params.value + params.name;
+                                        }
                                     }
                                 }, {
+                                    name: '(严重)',
                                     yAxis: logicalProcessorCount * 5,
                                     itemStyle: {
                                         color: '#EE2C2C'
+                                    },
+                                    label: {
+                                        position: 'end',
+                                        formatter: function (params) {
+                                            return params.value + params.name;
+                                        }
                                     }
                                 }]
                             },
@@ -2098,19 +2262,52 @@
                             smooth: true,
                             markLine: {
                                 data: [{
+                                    name: '(告警值)',
+                                    yAxis: logicalProcessorCount * serverOverloadThreshold15minutes,
+                                    itemStyle: {
+                                        color: '#FF7F50'
+                                    },
+                                    label: {
+                                        position: 'middle',
+                                        formatter: function (params) {
+                                            return params.value + params.name;
+                                        }
+                                    }
+                                }, {
+                                    name: '(理想)',
                                     yAxis: logicalProcessorCount * 0.7,
                                     itemStyle: {
                                         color: '#2E8B57'
+                                    },
+                                    label: {
+                                        position: 'end',
+                                        formatter: function (params) {
+                                            return params.value + params.name;
+                                        }
                                     }
                                 }, {
+                                    name: '(过载)',
                                     yAxis: logicalProcessorCount,
                                     itemStyle: {
                                         color: '#FFB90F'
+                                    },
+                                    label: {
+                                        position: 'end',
+                                        formatter: function (params) {
+                                            return params.value + params.name;
+                                        }
                                     }
                                 }, {
+                                    name: '(严重)',
                                     yAxis: logicalProcessorCount * 5,
                                     itemStyle: {
                                         color: '#EE2C2C'
+                                    },
+                                    label: {
+                                        position: 'end',
+                                        formatter: function (params) {
+                                            return params.value + params.name;
+                                        }
                                     }
                                 }]
                             },

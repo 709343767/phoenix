@@ -100,6 +100,34 @@ public interface IMonitorServerService extends IService<MonitorServer> {
 
     /**
      * <p>
+     * 设置是否开启监控（0：不开启监控；1：开启监控）
+     * </p>
+     *
+     * @param id              主键ID
+     * @param ip              IP地址
+     * @param isEnableMonitor 是否开启监控（0：不开启监控；1：开启监控）
+     * @return 如果设置成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @author 皮锋
+     * @custom.date 2024/12/10 21:20
+     */
+    LayUiAdminResultVo setIsEnableMonitor(Long id, String ip, String isEnableMonitor);
+
+    /**
+     * <p>
+     * 设置是否开启告警（0：不开启告警；1：开启告警）
+     * </p>
+     *
+     * @param id            主键ID
+     * @param ip            IP地址
+     * @param isEnableAlarm 是否开启告警（0：不开启告警；1：开启告警）
+     * @return 如果设置成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @author 皮锋
+     * @custom.date 2024/12/10 21:37
+     */
+    LayUiAdminResultVo setIsEnableAlarm(Long id, String ip, String isEnableAlarm);
+
+    /**
+     * <p>
      * 根据条件获取服务器信息
      * </p>
      *
@@ -121,4 +149,5 @@ public interface IMonitorServerService extends IService<MonitorServer> {
      * @custom.date 2022/12/21 14:29
      */
     Map<String, MonitorServerVo> getMonitorServer2Map();
+
 }

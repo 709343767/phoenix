@@ -1,15 +1,12 @@
 package com.gitee.pifeng.monitoring.plug.scheduler;
 
 import com.gitee.pifeng.monitoring.common.threadpool.ExecutorObject;
-import com.gitee.pifeng.monitoring.common.util.server.ProcessorsUtils;
 import com.gitee.pifeng.monitoring.plug.core.ConfigLoader;
 import com.gitee.pifeng.monitoring.plug.thread.HeartbeatThread;
-import org.apache.commons.lang3.concurrent.BasicThreadFactory;
 
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+
+import static com.gitee.pifeng.monitoring.plug.core.ThreadPoolAcquirer.HEARTBEAT_SCHEDULED_EXECUTOR_SERVICE;
 
 /**
  * <p>
@@ -43,20 +40,13 @@ public class HeartbeatTaskScheduler {
      * @custom.date 2020年3月5日 下午2:56:47
      */
     public static ExecutorObject run() {
-        final ScheduledExecutorService seService = new ScheduledThreadPoolExecutor(
-                // 线程数 = Ncpu /（1 - 阻塞系数），IO密集型阻塞系数相对较大
-                (int) (ProcessorsUtils.getAvailableProcessors() / (1 - 0.8)),
-                new BasicThreadFactory.Builder()
-                        // 设置线程名
-                        .namingPattern("phoenix-heartbeat-pool-thread-%d")
-                        // 设置为守护线程
-                        .daemon(true)
-                        .build(),
-                new ThreadPoolExecutor.AbortPolicy());
         // 心跳频率
-        long rate = ConfigLoader.getMonitoringProperties().getHeartbeatProperties().getRate();
-        seService.scheduleAtFixedRate(new HeartbeatThread(), 35, rate, TimeUnit.SECONDS);
-        return ExecutorObject.builder().scheduledExecutorService(seService).name("phoenix-heartbeat-pool-thread").build();
+        long rate = ConfigLoader.getMonitoringProperties().getHeartbeat().getRate();
+        HEARTBEAT_SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(new HeartbeatThread(), 35, rate, TimeUnit.SECONDS);
+        return ExecutorObject.builder()
+                .scheduledExecutorService(HEARTBEAT_SCHEDULED_EXECUTOR_SERVICE)
+                .name("phoenix-heartbeat-pool-thread")
+                .build();
     }
 
 }

@@ -22,23 +22,23 @@
 <div class="layui-form" lay-filter="layuiadmin-form-useradmin" id="layuiadmin-form-useradmin"
      style="padding: 20px 20px 0 0;">
     <div class="layui-form-item" style="display: none;">
-        <label class="layui-form-label">网络ID</label>
+        <label class="layui-form-label" for="id">网络ID</label>
         <div class="layui-input-block">
-            <input type="hidden" name="id" autocomplete="off" readonly
+            <input autocomplete="off" id="id" name="id" readonly type="hidden"
                    class="layui-input" th:value="${monitorNetVo.id}">
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">目标IP</label>
+        <label class="layui-form-label" for="ipTarget">目标IP</label>
         <div class="layui-input-block">
-            <input type="text" name="ipTarget" lay-verify="ip" autocomplete="off"
+            <input autocomplete="off" id="ipTarget" lay-verify="ip" name="ipTarget" type="text"
                    class="layui-input" lay-verType="tips" th:value="${monitorNetVo.ipTarget}">
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">环境</label>
+        <label class="layui-form-label" for="monitorEnv">环境</label>
         <div class="layui-input-block">
-            <select name="monitorEnv">
+            <select id="monitorEnv" name="monitorEnv">
                 <option value="">不设置</option>
                 <option th:each="monitorEnv:${monitorEnvs}" th:value="${monitorEnv}"
                         th:text="${monitorEnv}" th:selected="${monitorEnv==env}"></option>
@@ -46,9 +46,9 @@
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">分组</label>
+        <label class="layui-form-label" for="monitorGroup">分组</label>
         <div class="layui-input-block">
-            <select name="monitorGroup">
+            <select id="monitorGroup" name="monitorGroup">
                 <option value="">不设置</option>
                 <option th:each="monitorGroup:${monitorGroups}" th:value="${monitorGroup}"
                         th:text="${monitorGroup}" th:selected="${monitorGroup==group}"></option>
@@ -56,9 +56,25 @@
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">描述</label>
+        <label class="layui-form-label" for="isEnableMonitor">是否监控</label>
+        <div class="layui-input-inline">
+            <input id="isEnableMonitor" lay-skin="switch" lay-text="是|否"
+                   name="isEnableMonitor" th:checked="${monitorNetVo.isEnableMonitor=='1'}? true : false" type="checkbox"
+                   value="1">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label" for="isEnableAlarm">是否告警</label>
+        <div class="layui-input-inline">
+            <input id="isEnableAlarm" lay-skin="switch" lay-text="是|否"
+                   name="isEnableAlarm" th:checked="${monitorNetVo.isEnableAlarm=='1'}? true : false" type="checkbox"
+                   value="1">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label" for="ipDesc">描述</label>
         <div class="layui-input-block">
-            <textarea th:text="${monitorNetVo.ipDesc}" name="ipDesc" class="layui-textarea"
+            <textarea class="layui-textarea" id="ipDesc" name="ipDesc" th:text="${monitorNetVo.ipDesc}"
                       placeholder="请输入描述" autocomplete="off"></textarea>
         </div>
     </div>

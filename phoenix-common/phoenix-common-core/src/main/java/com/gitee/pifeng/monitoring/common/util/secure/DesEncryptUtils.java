@@ -12,7 +12,7 @@ import java.util.Base64;
  * </p>
  *
  * @author 皮锋
- * @custom.date 2021/8/1613:06
+ * @custom.date 2021/8/16 13:06
  */
 public class DesEncryptUtils extends InitSecure {
 

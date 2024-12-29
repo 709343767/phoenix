@@ -69,8 +69,10 @@ public class HttpController {
         JSONObject extraMsg = baseRequestPackage.getExtraMsg();
         String method = extraMsg.getString("method");
         String urlTarget = extraMsg.getString("urlTarget");
-        String parameter = extraMsg.getString("parameter");
-        String httpCode = this.httpService.testMonitorHttp(method, urlTarget, parameter);
+        String contentType = extraMsg.getString("contentType");
+        String headerParameter = extraMsg.getString("headerParameter");
+        String bodyParameter = extraMsg.getString("bodyParameter");
+        String httpCode = this.httpService.testMonitorHttp(method, urlTarget, contentType, headerParameter, bodyParameter);
         BaseResponsePackage baseResponsePackage = this.serverPackageConstructor.structureBaseResponsePackage(Result.builder().isSuccess(true).msg(httpCode).build());
         // 时间差（毫秒）
         String betweenDay = timer.intervalPretty();

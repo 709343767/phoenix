@@ -23,26 +23,23 @@
      style="padding: 20px 20px 0 0;">
     <div class="layui-form-item" style="display: none;">
         <label class="layui-form-label">ID</label>
-        <div class="layui-input-inline">
+        <div class="layui-input-block">
             <input type="hidden" name="id" lay-verify="required" autocomplete="off"
-                   readonly th:value="${monitorGroupVo.id}" class="layui-input" lay-verType="tips"
-                   style="width: 500px;">
+                   class="layui-input" lay-verType="tips" readonly th:value="${monitorGroupVo.id}">
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">分组名称</label>
-        <div class="layui-input-inline">
+        <div class="layui-input-block">
             <input type="text" name="groupName" lay-verify="required" placeholder="请输入分组名称" autocomplete="off"
-                   readonly th:value="${monitorGroupVo.groupName}" class="layui-input" lay-verType="tips"
-                   style="width: 500px;">
+                   class="layui-input" lay-verType="tips" readonly th:value="${monitorGroupVo.groupName}">
         </div>
     </div>
     <div class="layui-form-item layui-form-text">
         <label class="layui-form-label">分组描述</label>
         <div class="layui-input-block">
             <textarea name="groupDesc" class="layui-textarea" placeholder="请输入分组描述" autocomplete="off"
-                      th:text="${monitorGroupVo.groupDesc}" lay-verify="required" lay-verType="tips"
-                      style="width: 500px;"></textarea>
+                      lay-verType="tips" lay-verify="required" th:text="${monitorGroupVo.groupDesc}"></textarea>
         </div>
     </div>
     <div class="layui-form-item layui-hide">

@@ -4,14 +4,17 @@
 
     <!-- 应用实例在线率统计 -->
     <select id="getInstanceOnlineRateStatistics" resultType="java.util.Map" databaseId="mysql">
-        select tmp.instanceSum                                                           as instanceSum,
-               tmp.instanceOnLineSum                                                     as instanceOnLineSum,
-               tmp.instanceSum - tmp.instanceOnLineSum                                   as instanceOffLineSum,
-               ifnull(round(tmp.instanceOnLineSum / tmp.instanceSum, 2) * 100, '100.00') as instanceOnLineRate
-        from (
-                 select count(1)                     as instanceSum,
-                        ifnull(sum(mi.IS_ONLINE), 0) as instanceOnLineSum
-                 from MONITOR_INSTANCE mi) tmp
+        SELECT tmp.instanceSum                                                           AS instanceSum,
+               tmp.instanceOnLineSum                                                     AS instanceOnLineSum,
+               tmp.instanceOffLineSum                                                    AS instanceOffLineSum,
+               tmp.instanceUnknownLineSum                                                AS instanceUnknownLineSum,
+               IFNULL(ROUND(tmp.instanceOnLineSum * 100 / tmp.instanceSum, 2), '100.00') AS instanceOnLineRate
+        FROM (SELECT COUNT(1)                                                     AS instanceSum,
+                     IFNULL(SUM(CASE WHEN mi.IS_ONLINE = 1 THEN 1 ELSE 0 END), 0) AS instanceOnLineSum,
+                     IFNULL(SUM(CASE WHEN mi.IS_ONLINE = 0 THEN 1 ELSE 0 END), 0) AS instanceOffLineSum,
+                     IFNULL(SUM(CASE WHEN mi.IS_ONLINE IS NULL OR mi.IS_ONLINE = '' THEN 1 ELSE 0 END),
+                            0)                                                    AS instanceUnknownLineSum
+              FROM MONITOR_INSTANCE mi) tmp
     </select>
 
 </mapper>

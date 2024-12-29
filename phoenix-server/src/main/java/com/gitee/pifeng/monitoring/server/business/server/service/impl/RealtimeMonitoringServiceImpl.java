@@ -3,9 +3,10 @@ package com.gitee.pifeng.monitoring.server.business.server.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.gitee.pifeng.monitoring.common.constant.MonitorTypeEnums;
 import com.gitee.pifeng.monitoring.common.constant.ZeroOrOneConstants;
 import com.gitee.pifeng.monitoring.common.constant.alarm.AlarmReasonEnums;
+import com.gitee.pifeng.monitoring.common.constant.monitortype.MonitorSubTypeEnums;
+import com.gitee.pifeng.monitoring.common.constant.monitortype.MonitorTypeEnums;
 import com.gitee.pifeng.monitoring.common.domain.Alarm;
 import com.gitee.pifeng.monitoring.server.business.server.dao.IMonitorRealtimeMonitoringDao;
 import com.gitee.pifeng.monitoring.server.business.server.entity.MonitorRealtimeMonitoring;
@@ -45,12 +46,16 @@ public class RealtimeMonitoringServiceImpl extends ServiceImpl<IMonitorRealtimeM
             MonitorTypeEnums monitorTypeEnum = alarm.getMonitorType();
             // 告警原因
             AlarmReasonEnums alarmReasonEnum = alarm.getAlarmReason();
-            // 告警代码
-            String alarmCode = alarm.getCode();
             // 自定义业务告警 || 没有设置告警原因==>直接放过
             if (monitorTypeEnum == MonitorTypeEnums.CUSTOM || alarmReasonEnum == AlarmReasonEnums.IGNORE) {
                 return true;
             }
+            // 监控子类型
+            MonitorSubTypeEnums monitorSubType = alarm.getMonitorSubType();
+            // 被告警主体唯一ID
+            String alertedEntityId = alarm.getAlertedEntityId();
+            // 告警代码
+            String alarmCode = alarm.getCode();
             // 查询数据库中有没有此实时监控信息
             LambdaQueryWrapper<MonitorRealtimeMonitoring> lambdaQueryWrapper = new LambdaQueryWrapper<>();
             lambdaQueryWrapper.eq(MonitorRealtimeMonitoring::getType, monitorTypeEnum.name());
@@ -60,7 +65,9 @@ public class RealtimeMonitoringServiceImpl extends ServiceImpl<IMonitorRealtimeM
             if (monitorRealtimeMonitoringDb == null) {
                 MonitorRealtimeMonitoring monitorRealtimeMonitoring = MonitorRealtimeMonitoring.builder()
                         .type(monitorTypeEnum.name())
+                        .subType(monitorSubType.name())
                         .code(alarmCode)
+                        .alertedEntityId(alertedEntityId)
                         // 如果是“正常变异常”告警，把是否告警设置为true
                         .isSentAlarm(alarmReasonEnum == AlarmReasonEnums.NORMAL_2_ABNORMAL ? ZeroOrOneConstants.ONE : ZeroOrOneConstants.ZERO)
                         .insertTime(new Date())

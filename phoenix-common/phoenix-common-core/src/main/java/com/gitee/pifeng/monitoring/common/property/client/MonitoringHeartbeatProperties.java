@@ -19,9 +19,9 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class MonitoringHeartbeatProperties {
 
-	/**
-	 * 心跳频率
-	 */
-	private long rate;
+    /**
+     * 心跳频率
+     */
+    private Long rate;
 
 }

@@ -7,7 +7,7 @@
     <!-- 项目基本信息 -->
     <groupId>com.gitee.pifeng</groupId>
     <artifactId>phoenix</artifactId>
-    <version>1.2.5.RELEASE-CR1</version>
+    <version>1.2.6.RELEASE</version>
     <modules>
         <!-- 监控公共模块父工程 -->
         <module>phoenix-common</module>
@@ -52,6 +52,8 @@
         <jackson.version>2.15.2</jackson.version>
         <!-- guava基本工具版本 -->
         <guava.version>20.0</guava.version>
+        <!-- FindBugs注解依赖版本 -->
+        <findbugs.annotations.version>3.0.1</findbugs.annotations.version>
         <!-- liferay.portal工具版本 -->
         <com.liferay.portal.kernel.version>9.12.2</com.liferay.portal.kernel.version>
         <!-- joda-time时间日期版本 -->
@@ -61,7 +63,6 @@
         <commons-collections.version>3.2.2</commons-collections.version>
         <commons-net.version>3.8.0</commons-net.version>
         <commons-logging.version>1.2</commons-logging.version>
-        <!--<commons-logging.version>1.2</commons-logging.version>-->
         <!-- sigar版本 -->
         <sigar.version>1.6.4</sigar.version>
         <!-- oshi版本 -->
@@ -79,7 +80,7 @@
         <!-- servlet-api版本 -->
         <servlet-api.version>2.5</servlet-api.version>
         <!-- knife4j文档依赖 -->
-        <knife4j.version>4.1.0</knife4j.version>
+        <knife4j.version>4.4.0</knife4j.version>
         <!-- mybatis-plus-boot-starter版本 -->
         <mybatis-plus-boot-starter.version>3.1.2</mybatis-plus-boot-starter.version>
         <!-- mybatis-plus代码生成器版本 -->
@@ -229,6 +230,12 @@
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
                 <version>${guava.version}</version>
+            </dependency>
+            <!-- FindBugs注解依赖 -->
+            <dependency>
+                <groupId>com.google.code.findbugs</groupId>
+                <artifactId>annotations</artifactId>
+                <version>${findbugs.annotations.version}</version>
             </dependency>
             <!-- liferay.portal工具依赖 -->
             <dependency>

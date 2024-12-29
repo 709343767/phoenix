@@ -7,10 +7,10 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gitee.pifeng.monitoring.common.constant.DateTimeStylesEnums;
-import com.gitee.pifeng.monitoring.common.constant.MonitorTypeEnums;
 import com.gitee.pifeng.monitoring.common.constant.ZeroOrOneConstants;
 import com.gitee.pifeng.monitoring.common.constant.alarm.AlarmLevelEnums;
 import com.gitee.pifeng.monitoring.common.constant.alarm.AlarmWayEnums;
+import com.gitee.pifeng.monitoring.common.constant.monitortype.MonitorTypeEnums;
 import com.gitee.pifeng.monitoring.common.util.DateTimeUtils;
 import com.gitee.pifeng.monitoring.ui.business.web.dao.IMonitorAlarmRecordDao;
 import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorAlarmRecord;
@@ -22,7 +22,6 @@ import com.gitee.pifeng.monitoring.ui.constant.WebResponseConstants;
 import com.google.common.collect.Lists;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -44,12 +43,6 @@ import static com.gitee.pifeng.monitoring.common.util.CollectionUtils.distinctBy
 public class MonitorAlarmRecordServiceImpl extends ServiceImpl<IMonitorAlarmRecordDao, MonitorAlarmRecord> implements IMonitorAlarmRecordService {
 
     /**
-     * 告警记录数据访问对象
-     */
-    @Autowired
-    private IMonitorAlarmRecordDao monitorAlarmRecordDao;
-
-    /**
      * <p>
      * 获取home页的告警记录信息
      * </p>
@@ -60,7 +53,7 @@ public class MonitorAlarmRecordServiceImpl extends ServiceImpl<IMonitorAlarmReco
      */
     @Override
     public HomeAlarmRecordVo getHomeAlarmRecordInfo() {
-        Map<String, Object> map = this.monitorAlarmRecordDao.getAlarmRecordSuccessRateStatistics();
+        Map<String, Object> map = this.baseMapper.getAlarmRecordSuccessRateStatistics();
         return HomeAlarmRecordVo.builder()
                 .alarmRecordSum(NumberUtil.parseInt(map.get("alarmRecordSum").toString()))
                 .alarmRecordSuccessSum(NumberUtil.parseInt(map.get("alarmRecordSuccessSum").toString()))
@@ -78,6 +71,7 @@ public class MonitorAlarmRecordServiceImpl extends ServiceImpl<IMonitorAlarmReco
      * @param current    当前页
      * @param size       每页显示条数
      * @param type       告警类型
+     * @param way        告警方式
      * @param level      告警级别
      * @param status     告警状态
      * @param title      告警标题
@@ -90,8 +84,8 @@ public class MonitorAlarmRecordServiceImpl extends ServiceImpl<IMonitorAlarmReco
      * @custom.date 2020/8/3 11:07
      */
     @Override
-    public Page<MonitorAlarmRecordVo> getMonitorAlarmRecordList(Long current, Long size, String type, String level,
-                                                                String status, String title, String content,
+    public Page<MonitorAlarmRecordVo> getMonitorAlarmRecordList(Long current, Long size, String type, String way,
+                                                                String level, String status, String title, String content,
                                                                 String number, String insertDate, String updateDate) {
         // 查询数据库
         IPage<MonitorAlarmRecord> ipage = new Page<>(current, size);
@@ -100,6 +94,9 @@ public class MonitorAlarmRecordServiceImpl extends ServiceImpl<IMonitorAlarmReco
         lambdaQueryWrapper.orderByDesc(MonitorAlarmRecord::getInsertTime);
         if (StringUtils.isNotBlank(type)) {
             lambdaQueryWrapper.eq(MonitorAlarmRecord::getType, type);
+        }
+        if (StringUtils.isNotBlank(way)) {
+            lambdaQueryWrapper.eq(MonitorAlarmRecord::getWay, way);
         }
         if (StringUtils.isNotBlank(level)) {
             lambdaQueryWrapper.eq(MonitorAlarmRecord::getLevel, level);
@@ -131,7 +128,7 @@ public class MonitorAlarmRecordServiceImpl extends ServiceImpl<IMonitorAlarmReco
             Date endDateTime = DateUtil.endOfDay(startDateTime).toJdkDate();
             lambdaQueryWrapper.between(MonitorAlarmRecord::getUpdateTime, startDateTime, endDateTime);
         }
-        IPage<MonitorAlarmRecord> monitorAlarmRecordPage = this.monitorAlarmRecordDao.selectPage(ipage, lambdaQueryWrapper);
+        IPage<MonitorAlarmRecord> monitorAlarmRecordPage = this.baseMapper.selectPage(ipage, lambdaQueryWrapper);
         List<MonitorAlarmRecord> monitorAlarmRecords = monitorAlarmRecordPage.getRecords();
         // 转换成监控告警表现层对象
         List<MonitorAlarmRecordVo> monitorAlarmRecordVos = Lists.newLinkedList();
@@ -152,6 +149,7 @@ public class MonitorAlarmRecordServiceImpl extends ServiceImpl<IMonitorAlarmReco
      * </p>
      *
      * @param type       告警类型
+     * @param way        告警方式
      * @param level      告警级别
      * @param status     告警状态
      * @param title      告警标题
@@ -164,13 +162,16 @@ public class MonitorAlarmRecordServiceImpl extends ServiceImpl<IMonitorAlarmReco
      * @custom.date 2021/5/18 22:50
      */
     @Override
-    public List<MonitorAlarmRecordVo> getMonitorAlarmRecordList(String type, String level, String status, String title,
+    public List<MonitorAlarmRecordVo> getMonitorAlarmRecordList(String type, String way, String level, String status, String title,
                                                                 String content, String number, String insertDate, String updateDate) {
         LambdaQueryWrapper<MonitorAlarmRecord> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         // 倒叙查询
         lambdaQueryWrapper.orderByDesc(MonitorAlarmRecord::getInsertTime);
         if (StringUtils.isNotBlank(type)) {
             lambdaQueryWrapper.eq(MonitorAlarmRecord::getType, type);
+        }
+        if (StringUtils.isNotBlank(way)) {
+            lambdaQueryWrapper.eq(MonitorAlarmRecord::getWay, way);
         }
         if (StringUtils.isNotBlank(level)) {
             lambdaQueryWrapper.eq(MonitorAlarmRecord::getLevel, level);
@@ -202,7 +203,7 @@ public class MonitorAlarmRecordServiceImpl extends ServiceImpl<IMonitorAlarmReco
             Date endDateTime = DateUtil.endOfDay(startDateTime).toJdkDate();
             lambdaQueryWrapper.between(MonitorAlarmRecord::getUpdateTime, startDateTime, endDateTime);
         }
-        List<MonitorAlarmRecord> monitorAlarmRecords = this.monitorAlarmRecordDao.selectList(lambdaQueryWrapper);
+        List<MonitorAlarmRecord> monitorAlarmRecords = this.baseMapper.selectList(lambdaQueryWrapper);
         // 转换成监控告警表现层对象
         List<MonitorAlarmRecordVo> monitorAlarmRecordVos = Lists.newLinkedList();
         for (MonitorAlarmRecord monitorAlarmRecord : monitorAlarmRecords) {
@@ -229,7 +230,7 @@ public class MonitorAlarmRecordServiceImpl extends ServiceImpl<IMonitorAlarmReco
         for (MonitorAlarmRecordVo monitorAlarmRecordVo : monitorAlarmRecordVos) {
             ids.add(monitorAlarmRecordVo.getId());
         }
-        int result = this.monitorAlarmRecordDao.deleteBatchIds(ids);
+        int result = this.baseMapper.deleteBatchIds(ids);
         if (result == size) {
             return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);
         }
@@ -247,7 +248,7 @@ public class MonitorAlarmRecordServiceImpl extends ServiceImpl<IMonitorAlarmReco
      */
     @Override
     public LayUiAdminResultVo cleanupMonitorAlarmRecord() {
-        this.monitorAlarmRecordDao.cleanupMonitorAlarmRecord();
+        this.baseMapper.cleanupMonitorAlarmRecord();
         return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);
     }
 
@@ -262,7 +263,7 @@ public class MonitorAlarmRecordServiceImpl extends ServiceImpl<IMonitorAlarmReco
      */
     @Override
     public LayUiAdminResultVo getLast7DaysAlarmRecordStatistics() {
-        List<Map<String, Object>> maps = this.monitorAlarmRecordDao.getLast7DaysAlarmRecordStatistics();
+        List<Map<String, Object>> maps = this.baseMapper.getLast7DaysAlarmRecordStatistics();
         return LayUiAdminResultVo.ok(maps);
     }
 
@@ -277,7 +278,7 @@ public class MonitorAlarmRecordServiceImpl extends ServiceImpl<IMonitorAlarmReco
      */
     @Override
     public LayUiAdminResultVo getAlarmRecordTypeStatistics() {
-        List<Map<String, Object>> maps = this.monitorAlarmRecordDao.getAlarmRecordTypeStatistics();
+        List<Map<String, Object>> maps = this.baseMapper.getAlarmRecordTypeStatistics();
         // 总数
         long total = maps.stream().collect(Collectors.summarizingLong(e -> NumberUtil.parseLong(String.valueOf(e.get("totals"))))).getSum();
         for (Map<String, Object> map : maps) {
@@ -305,7 +306,7 @@ public class MonitorAlarmRecordServiceImpl extends ServiceImpl<IMonitorAlarmReco
      */
     @Override
     public MonitorAlarmRecordVo getMonitorAlarmRecordDetail(Long id) {
-        MonitorAlarmRecord monitorAlarmRecord = this.monitorAlarmRecordDao.selectById(id);
+        MonitorAlarmRecord monitorAlarmRecord = this.baseMapper.selectById(id);
         MonitorAlarmRecordVo monitorAlarmRecordVo = MonitorAlarmRecordVo.builder().build().convertFor(monitorAlarmRecord);
         // 告警类型（SERVER、NET、TCP4SERVICE、HTTP4SERVICE、DOCKER、INSTANCE、DATABASE、CUSTOM）
         String type = monitorAlarmRecordVo.getType();
@@ -320,9 +321,6 @@ public class MonitorAlarmRecordServiceImpl extends ServiceImpl<IMonitorAlarmReco
         }
         if (StringUtils.equals(MonitorTypeEnums.HTTP4SERVICE.name(), type)) {
             monitorAlarmRecordVo.setType("HTTP服务");
-        }
-        if (StringUtils.equals(MonitorTypeEnums.DOCKER.name(), type)) {
-            monitorAlarmRecordVo.setType("Docker");
         }
         if (StringUtils.equals(MonitorTypeEnums.INSTANCE.name(), type)) {
             monitorAlarmRecordVo.setType("应用");
@@ -365,7 +363,7 @@ public class MonitorAlarmRecordServiceImpl extends ServiceImpl<IMonitorAlarmReco
      */
     @Override
     public LayUiAdminResultVo getLast5AlarmRecord() {
-        List<MonitorAlarmRecordVo> monitorAlarmRecordVos = this.getMonitorAlarmRecordList(1L, 20L, null, null, null, null, null, null, null, null).getRecords();
+        List<MonitorAlarmRecordVo> monitorAlarmRecordVos = this.getMonitorAlarmRecordList(1L, 20L, null, null, null, null, null, null, null, null, null).getRecords();
         if (CollectionUtils.isNotEmpty(monitorAlarmRecordVos)) {
             // 根据 code（告警代码） 去重重复值
             monitorAlarmRecordVos = monitorAlarmRecordVos.stream().filter(distinctByKey(MonitorAlarmRecordVo::getCode)).collect(Collectors.toList());

@@ -19,6 +19,11 @@ public enum CommProtocolTypeEnums {
     HTTP,
 
     /**
+     * HTTPS协议
+     */
+    HTTPS,
+
+    /**
      * WS协议
      */
     WS,
@@ -26,7 +31,17 @@ public enum CommProtocolTypeEnums {
     /**
      * WSS协议
      */
-    WSS;
+    WSS,
+
+    /**
+     * TCP协议
+     */
+    TCP,
+
+    /**
+     * UDP协议
+     */
+    UDP;
 
     /**
      * <p>
@@ -43,6 +58,10 @@ public enum CommProtocolTypeEnums {
         if (StringUtils.equalsIgnoreCase(CommProtocolTypeEnums.HTTP.name(), protocolTypeStr)) {
             return CommProtocolTypeEnums.HTTP;
         }
+        // HTTPS协议
+        if (StringUtils.equalsIgnoreCase(CommProtocolTypeEnums.HTTPS.name(), protocolTypeStr)) {
+            return CommProtocolTypeEnums.HTTPS;
+        }
         // WS 协议
         else if (StringUtils.equalsIgnoreCase(CommProtocolTypeEnums.WS.name(), protocolTypeStr)) {
             return CommProtocolTypeEnums.WS;
@@ -50,6 +69,14 @@ public enum CommProtocolTypeEnums {
         // WSS 协议
         else if (StringUtils.equalsIgnoreCase(CommProtocolTypeEnums.WSS.name(), protocolTypeStr)) {
             return CommProtocolTypeEnums.WSS;
+        }
+        // TCP 协议
+        else if (StringUtils.equalsIgnoreCase(CommProtocolTypeEnums.TCP.name(), protocolTypeStr)) {
+            return CommProtocolTypeEnums.TCP;
+        }
+        // UDP 协议
+        else if (StringUtils.equalsIgnoreCase(CommProtocolTypeEnums.UDP.name(), protocolTypeStr)) {
+            return CommProtocolTypeEnums.UDP;
         }
         throw new MonitoringUniversalException("未知的通信协议！");
     }

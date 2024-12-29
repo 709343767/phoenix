@@ -38,6 +38,7 @@ public interface IMonitorAlarmRecordService extends IService<MonitorAlarmRecord>
      * @param current    当前页
      * @param size       每页显示条数
      * @param type       告警类型
+     * @param way        告警方式
      * @param level      告警级别
      * @param status     告警状态
      * @param title      告警标题
@@ -49,9 +50,9 @@ public interface IMonitorAlarmRecordService extends IService<MonitorAlarmRecord>
      * @author 皮锋
      * @custom.date 2020/8/3 11:07
      */
-    Page<MonitorAlarmRecordVo> getMonitorAlarmRecordList(Long current, Long size, String type, String level,
-                                                         String status, String title, String content,
-                                                         String number, String insertDate, String updateDate);
+    Page<MonitorAlarmRecordVo> getMonitorAlarmRecordList(Long current, Long size, String type, String way, String level,
+                                                         String status, String title, String content, String number,
+                                                         String insertDate, String updateDate);
 
     /**
      * <p>
@@ -59,6 +60,7 @@ public interface IMonitorAlarmRecordService extends IService<MonitorAlarmRecord>
      * </p>
      *
      * @param type       告警类型
+     * @param way        告警方式
      * @param level      告警级别
      * @param status     告警状态
      * @param title      告警标题
@@ -70,7 +72,7 @@ public interface IMonitorAlarmRecordService extends IService<MonitorAlarmRecord>
      * @author 皮锋
      * @custom.date 2021/5/18 22:50
      */
-    List<MonitorAlarmRecordVo> getMonitorAlarmRecordList(String type, String level, String status, String title,
+    List<MonitorAlarmRecordVo> getMonitorAlarmRecordList(String type, String way, String level, String status, String title,
                                                          String content, String number, String insertDate, String updateDate);
 
     /**

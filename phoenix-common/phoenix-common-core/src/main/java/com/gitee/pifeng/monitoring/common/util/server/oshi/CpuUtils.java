@@ -8,6 +8,7 @@ import oshi.hardware.CentralProcessor;
 import oshi.hardware.CentralProcessor.TickType;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * <p>
@@ -40,7 +41,7 @@ public class CpuUtils extends InitOshi {
             long[][] prevTicks = processor.getProcessorCpuLoadTicks();
             // 休眠一秒
             try {
-                Thread.sleep(1000);
+                TimeUnit.SECONDS.sleep(1);
             } catch (InterruptedException e) {
                 log.error("线程中断异常！", e);
             }

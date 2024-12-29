@@ -20,6 +20,16 @@ import lombok.*;
 public class MonitoringDbTableSpaceProperties implements ISuperBean {
 
     /**
+     * 是否监控数据库表空间
+     */
+    private boolean enable;
+
+    /**
+     * 告警是否打开
+     */
+    private boolean alarmEnable;
+
+    /**
      * 过载阈值
      */
     private double overloadThreshold;

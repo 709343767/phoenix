@@ -22,6 +22,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.hyperic.sigar.SigarException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -147,6 +148,7 @@ public class MonitorTcpController {
      */
     @Operation(summary = "删除TCP")
     @DeleteMapping("/delete-monitor-tcp")
+    @PreAuthorize("hasAuthority('超级管理员')")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.TCP4SERVICE, operType = OperateTypeConstants.DELETE, operDesc = "删除TCP")
     public LayUiAdminResultVo deleteMonitorTcp(@RequestBody List<MonitorTcpVo> monitorTcpVos) {
@@ -247,6 +249,7 @@ public class MonitorTcpController {
      */
     @Operation(summary = "编辑TCP信息")
     @PutMapping("/edit-monitor-tcp")
+    @PreAuthorize("hasAuthority('超级管理员')")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.TCP4SERVICE, operType = OperateTypeConstants.UPDATE, operDesc = "编辑TCP信息")
     public LayUiAdminResultVo editMonitorTcp(MonitorTcpVo monitorTcpVo) throws SigarException, IOException {
@@ -257,6 +260,54 @@ public class MonitorTcpController {
         // 测试TCP连通性
         this.monitorTcpService.testMonitorTcp(monitorTcpVo);
         return layUiAdminResultVo;
+    }
+
+    /**
+     * <p>
+     * 设置是否开启监控（0：不开启监控；1：开启监控）
+     * </p>
+     *
+     * @param id              主键ID
+     * @param isEnableMonitor 是否开启监控（0：不开启监控；1：开启监控）
+     * @return 如果设置成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @author 皮锋
+     * @custom.date 2024/12/10 21:20
+     */
+    @Operation(summary = "设置是否开启监控（0：不开启监控；1：开启监控）")
+    @Parameters(value = {
+            @Parameter(name = "id", description = "主键ID", required = true, in = ParameterIn.QUERY),
+            @Parameter(name = "isEnableMonitor", description = "是否开启监控（0：不开启监控；1：开启监控）", in = ParameterIn.QUERY)})
+    @PutMapping("/set-is-enable-monitor")
+    @PreAuthorize("hasAuthority('超级管理员')")
+    @ResponseBody
+    @OperateLog(operModule = UiModuleConstants.TCP4SERVICE, operType = OperateTypeConstants.UPDATE, operDesc = "设置是否开启监控（0：不开启监控；1：开启监控）")
+    public LayUiAdminResultVo setIsEnableMonitor(@RequestParam(value = "id") Long id,
+                                                 @RequestParam(value = "isEnableMonitor") String isEnableMonitor) {
+        return this.monitorTcpService.setIsEnableMonitor(id, isEnableMonitor);
+    }
+
+    /**
+     * <p>
+     * 设置是否开启告警（0：不开启告警；1：开启告警）
+     * </p>
+     *
+     * @param id            主键ID
+     * @param isEnableAlarm 是否开启告警（0：不开启告警；1：开启告警）
+     * @return 如果设置成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @author 皮锋
+     * @custom.date 2024/12/10 21:37
+     */
+    @Operation(summary = "设置是否开启告警（0：不开启告警；1：开启告警）")
+    @Parameters(value = {
+            @Parameter(name = "id", description = "主键ID", required = true, in = ParameterIn.QUERY),
+            @Parameter(name = "isEnableAlarm", description = "是否开启告警（0：不开启告警；1：开启告警）", in = ParameterIn.QUERY)})
+    @PutMapping("/set-is-enable-alarm")
+    @PreAuthorize("hasAuthority('超级管理员')")
+    @ResponseBody
+    @OperateLog(operModule = UiModuleConstants.TCP4SERVICE, operType = OperateTypeConstants.UPDATE, operDesc = "设置是否开启告警（0：不开启告警；1：开启告警）")
+    public LayUiAdminResultVo setIsEnableAlarm(@RequestParam(value = "id") Long id,
+                                               @RequestParam(value = "isEnableAlarm") String isEnableAlarm) {
+        return this.monitorTcpService.setIsEnableAlarm(id, isEnableAlarm);
     }
 
     /**

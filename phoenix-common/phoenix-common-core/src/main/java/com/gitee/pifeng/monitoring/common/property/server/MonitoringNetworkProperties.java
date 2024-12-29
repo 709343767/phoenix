@@ -23,4 +23,9 @@ public class MonitoringNetworkProperties implements ISuperBean {
      */
     private boolean enable;
 
+    /**
+     * 网络状态配置属性
+     */
+    private MonitoringNetworkStatusProperties networkStatusProperties;
+
 }

@@ -3,14 +3,17 @@
 <mapper namespace="com.gitee.pifeng.monitoring.ui.business.web.dao.IMonitorServerDao">
     <!-- 服务器在线率统计 -->
     <select id="getServerOnlineRateStatistics" resultType="java.util.Map" databaseId="mysql">
-        select tmp.serverSum                                                         as serverSum,
-               tmp.serverOnLineSum                                                   as serverOnLineSum,
-               tmp.serverSum - tmp.serverOnLineSum                                   as serverOffLineSum,
-               ifnull(round(tmp.serverOnLineSum / tmp.serverSum, 2) * 100, '100.00') as serverOnLineRate
-        from (
-                 select count(1)                     as serverSum,
-                        ifnull(sum(ms.IS_ONLINE), 0) as serverOnLineSum
-                 from MONITOR_SERVER ms) tmp
+        SELECT tmp.serverSum                                                         AS serverSum,
+               tmp.serverOnLineSum                                                   AS serverOnLineSum,
+               tmp.serverOffLineSum                                                  AS serverOffLineSum,
+               tmp.serverUnknownLineSum                                              AS serverUnknownLineSum,
+               IFNULL(ROUND(tmp.serverOnLineSum * 100 / tmp.serverSum, 2), '100.00') AS serverOnLineRate
+        FROM (SELECT COUNT(1)                                                     AS serverSum,
+                     IFNULL(SUM(CASE WHEN ms.IS_ONLINE = 1 THEN 1 ELSE 0 END), 0) AS serverOnLineSum,
+                     IFNULL(SUM(CASE WHEN ms.IS_ONLINE = 0 THEN 1 ELSE 0 END), 0) AS serverOffLineSum,
+                     IFNULL(SUM(CASE WHEN ms.IS_ONLINE IS NULL OR ms.IS_ONLINE = '' THEN 1 ELSE 0 END),
+                            0)                                                    AS serverUnknownLineSum
+              FROM MONITOR_SERVER ms) tmp
     </select>
 
     <!-- 获取服务器列表 -->
@@ -27,23 +30,31 @@
         LEFT JOIN MONITOR_SERVER_OS O ON O.IP =S.IP
         LEFT JOIN MONITOR_SERVER_CPU CPU ON CPU.IP = S.IP
         LEFT JOIN MONITOR_SERVER_MEMORY MEMORY ON MEMORY.IP = S.IP
-        LEFT JOIN MONITOR_SERVER_NETCARD NETCARD ON (NETCARD.IP = S.IP AND NETCARD.ADDRESS = S.IP)
+        LEFT JOIN (SELECT IP, ADDRESS, MAX( DOWNLOAD_BPS ) AS DOWNLOAD_BPS, MAX( UPLOAD_BPS ) AS UPLOAD_BPS FROM
+        MONITOR_SERVER_NETCARD GROUP BY IP, ADDRESS ) NETCARD ON (NETCARD.IP = S.IP AND NETCARD.ADDRESS = S.IP)
         LEFT JOIN MONITOR_SERVER_LOAD_AVERAGE AVERAGE ON AVERAGE.IP=S.IP
         <where>
             <if test="criteria.ip!=null and criteria.ip!=''">
-                AND S.IP like concat('%',#{criteria.ip},'%')
+                AND S.IP LIKE concat('%',#{criteria.ip},'%')
             </if>
             <if test="criteria.serverName!=null and criteria.serverName!=''">
-                AND S.SERVER_NAME like concat('%',#{criteria.serverName},'%')
+                AND S.SERVER_NAME LIKE concat('%',#{criteria.serverName},'%')
             </if>
             <if test="criteria.isOnline!=null and criteria.isOnline!=''">
-                AND S.IS_ONLINE=#{criteria.isOnline}
+                <choose>
+                    <when test="criteria.isOnline=='-1'">
+                        AND S.IS_ONLINE IS NULL
+                    </when>
+                    <otherwise>
+                        AND S.IS_ONLINE=#{criteria.isOnline}
+                    </otherwise>
+                </choose>
             </if>
             <if test="criteria.monitorEnv!=null and criteria.monitorEnv!=''">
-                AND S.MONITOR_ENV like concat('%',#{criteria.monitorEnv},'%')
+                AND S.MONITOR_ENV LIKE concat('%',#{criteria.monitorEnv},'%')
             </if>
             <if test="criteria.monitorGroup!=null and criteria.monitorGroup!=''">
-                AND S.MONITOR_GROUP like concat('%',#{criteria.monitorGroup},'%')
+                AND S.MONITOR_GROUP LIKE concat('%',#{criteria.monitorGroup},'%')
             </if>
         </where>
         GROUP BY S.ID,
@@ -75,7 +86,9 @@
                  LEFT JOIN MONITOR_SERVER_OS O ON O.IP = S.IP
                  LEFT JOIN MONITOR_SERVER_CPU CPU ON CPU.IP = S.IP
                  LEFT JOIN MONITOR_SERVER_MEMORY MEMORY ON MEMORY.IP = S.IP
-                 LEFT JOIN MONITOR_SERVER_NETCARD NETCARD ON (NETCARD.IP = S.IP AND NETCARD.ADDRESS = S.IP)
+                 LEFT JOIN (SELECT IP, ADDRESS, MAX(DOWNLOAD_BPS) AS DOWNLOAD_BPS, MAX(UPLOAD_BPS) AS UPLOAD_BPS
+                            FROM MONITOR_SERVER_NETCARD
+                            GROUP BY IP, ADDRESS) NETCARD ON (NETCARD.IP = S.IP AND NETCARD.ADDRESS = S.IP)
                  LEFT JOIN MONITOR_SERVER_LOAD_AVERAGE AVERAGE ON AVERAGE.IP = S.IP
         GROUP BY S.ID,
                  S.IP,

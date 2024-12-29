@@ -1,6 +1,8 @@
 package com.gitee.pifeng.monitoring.ui.business.web.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.gitee.pifeng.monitoring.common.inf.ISuperBean;
 import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorJvmThread;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -9,6 +11,7 @@ import lombok.experimental.Accessors;
 import org.springframework.beans.BeanUtils;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * <p>
@@ -29,6 +32,7 @@ import java.util.Date;
 @Schema(description = "java虚拟机线程信息表现层对象")
 public class MonitorJvmThreadVo implements ISuperBean {
 
+    @JsonSerialize(using = ToStringSerializer.class)
     @Schema(description = "主键ID")
     private Long id;
 
@@ -46,6 +50,9 @@ public class MonitorJvmThreadVo implements ISuperBean {
 
     @Schema(description = "当前活动守护线程数")
     private Integer daemonThreadCount;
+
+    @Schema(description = "所有线程信息")
+    private List<String> threadInfoList;
 
     @Schema(description = "新增时间")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")

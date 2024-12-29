@@ -24,7 +24,7 @@
 <div class="layui-fluid">
     <div class="layui-row layui-col-space15">
         <div class="layui-col-sm8">
-            <div class=" layui-row layui-col-space10">
+            <div class="layui-row layui-col-space10 background-color-none-my">
                 <!--<div class="layui-col-sm6 layui-col-md2">
                     <div class="layui-card">
                         <div class="layui-card-header">
@@ -65,7 +65,7 @@
                             <span class="layui-badge layui-bg-skyblue-my layuiadmin-badge">台</span>
                         </div>
                         <div class="layui-card-body layuiadmin-card-list" id="server-card-list-2">
-                            <p class="layuiadmin-big-font">
+                            <p class="layuiadmin-big-font layuiadmin-big-font-my">
                                 [[${homeServerVo.serverSum}]]
                                 <i class="home-i">[[${homeServerVo.serverOnLineRate}]]
                                     <img th:src="@{/images/icon16/percentage-16.png}"></i>
@@ -84,6 +84,13 @@
                                     <i class="layui-inline layui-icon"><img
                                             th:src="@{/images/icon16/off-line-16.png}"></i></span>
                             </p>
+                            <p>
+                                未知
+                                <span class="layuiadmin-span-color">
+                                    [[${homeServerVo.serverUnknownLineSum}]]
+                                    <i class="layui-inline layui-icon"><img
+                                            th:src="@{/images/icon16/unknown-line-16.png}"></i></span>
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -94,7 +101,7 @@
                             <span class="layui-badge layui-bg-blue layuiadmin-badge">个</span>
                         </div>
                         <div class="layui-card-body layuiadmin-card-list" id="instance-card-list">
-                            <p class="layuiadmin-big-font">
+                            <p class="layuiadmin-big-font layuiadmin-big-font-my">
                                 [[${homeInstanceVo.instanceSum}]]
                                 <i class="home-i">[[${homeInstanceVo.instanceOnLineRate}]]
                                     <img th:src="@{/images/icon16/percentage-16.png}"></i>
@@ -112,6 +119,13 @@
                                     [[${homeInstanceVo.instanceOffLineSum}]]
                                     <i class="layui-inline layui-icon"><img
                                             th:src="@{/images/icon16/off-line-16.png}"></i></span>
+                            </p>
+                            <p>
+                                未知
+                                <span class="layuiadmin-span-color">
+                                    [[${homeInstanceVo.instanceUnknownLineSum}]]
+                                    <i class="layui-inline layui-icon"><img
+                                            th:src="@{/images/icon16/unknown-line-16.png}"></i></span>
                             </p>
                         </div>
                     </div>
@@ -308,7 +322,7 @@
                             <!-- 通过ajax动态加载数据 -->
                             <div class="layui-row" id="alarm-record-result-statistics"></div>
                             <!-- 通过ajax动态加载数据 -->
-                            <div class="layui-row" id="alarm-record-type-statistics" style="top: 25px;"></div>
+                            <div class="layui-row" id="alarm-record-type-statistics"></div>
                         </div>
                     </div>
                 </div>
@@ -317,7 +331,7 @@
         <div class="layui-col-sm4">
             <div class="layui-card">
                 <div class="layui-card-header">最新告警</div>
-                <div class="layui-card-body">
+                <div class="layui-card-body last-alarm-layui-card-body">
                     <!-- 通过ajax动态加载数据 -->
                     <ul class="layuiadmin-card-status layuiadmin-home2-usernote" style="word-wrap:break-word;"
                         id="get-last-5-alarm-record"></ul>
@@ -334,7 +348,7 @@
         base: ctxPath //静态资源所在路径
     }).extend({
         index: 'lib/index' //主入口模块
-    }).use(['index', 'home', 'util'], function () {
+    }).use(['index', 'element', 'home', 'util'], function () {
         var util = layui.util;
         // 右下脚回到顶部小图标
         util.fixbar({

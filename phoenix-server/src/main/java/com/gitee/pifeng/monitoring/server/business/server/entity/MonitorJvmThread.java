@@ -63,6 +63,12 @@ public class MonitorJvmThread {
     private Integer daemonThreadCount;
 
     /**
+     * 所有线程信息
+     */
+    @TableField("THREAD_INFOS")
+    private String threadInfos;
+
+    /**
      * 新增时间
      */
     @TableField("INSERT_TIME")

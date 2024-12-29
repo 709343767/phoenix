@@ -22,11 +22,11 @@ public class MonitoringJvmInfoProperties {
     /**
      * 是否采集Java虚拟机信息
      */
-    private boolean enable;
+    private Boolean enable;
 
     /**
      * 发送Java虚拟机信息的频率
      */
-    private long rate;
+    private Long rate;
 
 }

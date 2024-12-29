@@ -65,7 +65,7 @@ public class UiPackageConstructor extends AbstractPackageConstructor {
         if (CollectionUtils.isEmpty(timeChain)) {
             timeChain = Sets.newLinkedHashSet();
         }
-        String ip = ConfigLoader.getMonitoringProperties().getServerInfoProperties().getIp() == null ? NetUtils.getLocalIp() : ConfigLoader.getMonitoringProperties().getServerInfoProperties().getIp();
+        String ip = ConfigLoader.getMonitoringProperties().getServerInfo().getIp() == null ? NetUtils.getLocalIp() : ConfigLoader.getMonitoringProperties().getServerInfo().getIp();
         networkChain.add(ip);
         chain.setNetworkChain(networkChain);
         instanceChain.add(InstanceGenerator.getInstanceId());
@@ -92,15 +92,15 @@ public class UiPackageConstructor extends AbstractPackageConstructor {
         // 应用实例ID
         pkg.setInstanceId(InstanceGenerator.getInstanceId());
         // 应用实例名
-        pkg.setInstanceName(ConfigLoader.getMonitoringProperties().getOwnProperties().getInstanceName());
+        pkg.setInstanceName(ConfigLoader.getMonitoringProperties().getInstance().getName());
         // 应用实例描述
-        pkg.setInstanceDesc(ConfigLoader.getMonitoringProperties().getOwnProperties().getInstanceDesc());
+        pkg.setInstanceDesc(ConfigLoader.getMonitoringProperties().getInstance().getDesc());
         // 应用实例程序语言
         pkg.setInstanceLanguage(LanguageTypeConstants.JAVA);
         // 应用服务器类型
         pkg.setAppServerType(AppServerDetectorUtils.getAppServerTypeEnum());
         // IP地址
-        String ip = ConfigLoader.getMonitoringProperties().getServerInfoProperties().getIp() == null ? NetUtils.getLocalIp() : ConfigLoader.getMonitoringProperties().getServerInfoProperties().getIp();
+        String ip = ConfigLoader.getMonitoringProperties().getServerInfo().getIp() == null ? NetUtils.getLocalIp() : ConfigLoader.getMonitoringProperties().getServerInfo().getIp();
         pkg.setIp(ip);
         // 计算机名
         pkg.setComputerName(OsUtils.getComputerName());

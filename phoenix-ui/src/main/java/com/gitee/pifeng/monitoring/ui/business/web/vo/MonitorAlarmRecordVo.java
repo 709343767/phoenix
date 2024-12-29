@@ -2,6 +2,8 @@ package com.gitee.pifeng.monitoring.ui.business.web.vo;
 
 import cn.afterturn.easypoi.excel.annotation.Excel;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.gitee.pifeng.monitoring.common.inf.ISuperBean;
 import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorAlarmRecord;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -30,6 +32,7 @@ import java.util.Date;
 @Schema(description = "监控告警表现层对象")
 public class MonitorAlarmRecordVo implements ISuperBean {
 
+    @JsonSerialize(using = ToStringSerializer.class)
     @Excel(name = "ID", orderNum = "1")
     @Schema(description = "主键ID")
     private Long id;
@@ -53,16 +56,6 @@ public class MonitorAlarmRecordVo implements ISuperBean {
     @Schema(description = "告警级别（INFO、WARM、ERROR、FATAL）")
     private String level;
 
-    @Excel(name = "记录时间", orderNum = "9", exportFormat = "yyyy-MM-dd HH:mm:ss")
-    @Schema(description = "告警时间")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    private Date insertTime;
-
-    @Excel(name = "告警时间", orderNum = "10", exportFormat = "yyyy-MM-dd HH:mm:ss")
-    @Schema(description = "告警结果获取时间")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    private Date updateTime;
-
     @Excel(name = "告警标题", orderNum = "5")
     @Schema(description = "告警标题")
     private String title;
@@ -78,6 +71,20 @@ public class MonitorAlarmRecordVo implements ISuperBean {
     @Excel(name = "号码", orderNum = "8")
     @Schema(description = "被告警人号码（手机号码、电子邮箱、...）")
     private String number;
+
+    @Excel(name = "不提醒原因", orderNum = "9")
+    @Schema(description = "不发送告警原因")
+    private String notSendReason;
+
+    @Excel(name = "记录时间", orderNum = "10", exportFormat = "yyyy-MM-dd HH:mm:ss")
+    @Schema(description = "告警时间")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    private Date insertTime;
+
+    @Excel(name = "告警时间", orderNum = "11", exportFormat = "yyyy-MM-dd HH:mm:ss")
+    @Schema(description = "告警结果获取时间")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    private Date updateTime;
 
     /**
      * <p>

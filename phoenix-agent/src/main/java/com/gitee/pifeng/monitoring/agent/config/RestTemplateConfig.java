@@ -112,9 +112,9 @@ public class RestTemplateConfig {
         manager.setDefaultMaxPerRoute(200);
         // 在从连接池获取连接时，连接不活跃多长时间后需要进行一次验证，默认为2s
         manager.setValidateAfterInactivity(30 * 1000);
-        int connectTimeout = this.monitoringProperties.getServerProperties().getConnectTimeout();
-        int socketTimeout = this.monitoringProperties.getServerProperties().getSocketTimeout();
-        int connectionRequestTimeout = this.monitoringProperties.getServerProperties().getConnectionRequestTimeout();
+        int connectTimeout = this.monitoringProperties.getComm().getHttp().getConnectTimeout();
+        int socketTimeout = this.monitoringProperties.getComm().getHttp().getSocketTimeout();
+        int connectionRequestTimeout = this.monitoringProperties.getComm().getHttp().getConnectionRequestTimeout();
         //默认请求配置
         RequestConfig defaultRequestConfig = RequestConfig.custom()
                 // 设置连接超时时间，15s

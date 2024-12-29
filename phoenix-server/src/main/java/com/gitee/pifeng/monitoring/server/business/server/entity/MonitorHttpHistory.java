@@ -50,10 +50,20 @@ public class MonitorHttpHistory {
     @TableField("METHOD")
     private String method;
     /**
-     * 请求参数
+     * 媒体类型
      */
-    @TableField("PARAMETER")
-    private String parameter;
+    @TableField("CONTENT_TYPE")
+    private String contentType;
+    /**
+     * 请求头参数
+     */
+    @TableField("HEADER_PARAMETER")
+    private String headerParameter;
+    /**
+     * 请求体参数
+     */
+    @TableField("BODY_PARAMETER")
+    private String bodyParameter;
     /**
      * 描述
      */

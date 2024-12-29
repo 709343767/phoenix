@@ -7,7 +7,7 @@ server:
   undertow:
     accesslog:
       #Undertow日志存放目录
-      dir: liblog4phoenix/logs/phoenix-server
+      dir: liblog4phoenix/logs/phoenix-server/undertow
       #是否启动日志
       enabled: true
       #日志格式
@@ -68,14 +68,15 @@ spring:
             #默认主机名和时间戳生成实例ID，可以是任何字符串，但对于所有调度程序来说，必须是唯一的
             instanceId: AUTO
           jobStore:
-            #持久化方式
-            class: org.quartz.impl.jdbcjobstore.JobStoreTX
+            #持久化方式，专为Spring应用设计，能够更好地与Spring的其他组件（如事务管理、依赖注入等）协同工作
+            class: org.springframework.scheduling.quartz.LocalDataSourceJobStore
             #持久化方式配置数据驱动
             driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate
             #quartz相关数据表前缀名
             tablePrefix: QRTZ_
             #开启分布式部署
             isClustered: true
+            #分布式节点有效性检查时间间隔（毫秒）
             clusterCheckinInterval: 10000
             useProperties: false
           threadPool:
@@ -85,10 +86,16 @@ spring:
             threadsInheritContextClassLoaderOfInitializingThread: true
     #数据库方式
     job-store-type: jdbc
+    #在应用程序关闭时，Quartz调度器会等待所有正在执行的任务完成后再彻底关闭调度器
+    wait-for-jobs-to-complete-on-shutdown: true
+    #允许新的作业或触发器覆盖已经存在于调度器中的同名作业或触发器
+    overwrite-existing-jobs: true
+    #应用程序启动时自动启动调度器
+    auto-startup: true
     #初始化表结构
     jdbc:
       #初始化表结构
-      initialize-schema: always
+      initialize-schema: never
 
 
   ############################################thymeleaf配置###############################################
@@ -221,19 +228,19 @@ management:
 knife4j:
   #开启增强配置
   enable: true
-  #开启生产环境屏蔽
+  #是否开启生产环境保护策略
   production: false
   setting:
     #Ui默认显示语言
     language: ZH_CN
     #是否在每个Debug调试栏后显示刷新变量按钮，默认不显示
-    enableReloadCacheParameter: true
+    enable-reload-cache-parameter: true
     #是否开启界面中对某接口的版本控制，如果开启，后端变化后Ui界面会存在小蓝点
-    enableVersion: true
+    enable-version: true
     #是否开启动态参数调试功能
-    enableDynamicParameter: true
+    enable-dynamic-parameter: true
     #针对RequestMapping的接口请求类型，在不指定参数类型的情况下，如果不过滤，默认会显示7个类型的接口地址参数，如果开启此配置，默认展示一个Post类型的接口地址
-    enableFilterMultipartApis: true
+    enable-filter-multipart-apis: true
   basic:
     #开启Swagger的Basic认证功能，默认是false
     enable: true

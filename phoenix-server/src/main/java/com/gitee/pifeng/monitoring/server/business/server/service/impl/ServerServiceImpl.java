@@ -165,6 +165,7 @@ public class ServerServiceImpl extends ServiceImpl<IMonitorServerDao, MonitorSer
      * <p>
      * 处理服务器信息包
      * </p>
+     * 此处不加事务，因为操作的表太多，数据太多，不加事务能提高并发性能，而且此处对数据的一致性要求并不是很高。
      *
      * @param serverPackage 服务器信息包
      * @return {@link Result}
@@ -309,6 +310,9 @@ public class ServerServiceImpl extends ServiceImpl<IMonitorServerDao, MonitorSer
         if (selectCountDb == 0) {
             monitorServer.setInsertTime(currentTime);
             monitorServer.setOfflineCount(0);
+            // 默认开启监控和告警
+            monitorServer.setIsEnableMonitor(ZeroOrOneConstants.ONE);
+            monitorServer.setIsEnableAlarm(ZeroOrOneConstants.ONE);
             this.save(monitorServer);
         }
         // 有

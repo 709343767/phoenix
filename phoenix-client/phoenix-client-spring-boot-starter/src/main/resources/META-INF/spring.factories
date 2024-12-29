@@ -1,2 +1,4 @@
 com.gitee.pifeng.monitoring.starter.annotation.EnableMonitoring=\
   com.gitee.pifeng.monitoring.starter.autoconfigure.MonitoringPlugAutoConfiguration
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.gitee.pifeng.monitoring.starter.property.MonitoringSpringBootProperties

@@ -66,6 +66,6 @@ public abstract class AbstractSuperPackage extends AbstractSuperBean {
     /**
      * 链路信息
      */
-    private Chain chain;
+    protected Chain chain;
 
 }

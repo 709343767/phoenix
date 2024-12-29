@@ -17,6 +17,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.time.LocalTime;
 import java.util.Date;
 
 /**
@@ -130,31 +131,48 @@ public class MonitoringConfigPropertiesLoader {
         // 告警配置属性
         MonitoringAlarmProperties alarmProperties = new MonitoringAlarmProperties(false,
                 AlarmLevelEnums.INFO,
+                false,
+                LocalTime.of(22, 30, 0),
+                LocalTime.of(8, 30, 0),
                 new AlarmWayEnums[]{AlarmWayEnums.MAIL, AlarmWayEnums.SMS},
                 alarmSmsProperties,
                 alarmMailProperties);
+        // 网络状态配置属性
+        MonitoringNetworkStatusProperties networkStatusProperties = new MonitoringNetworkStatusProperties(true, true);
         // 网络配置属性
-        MonitoringNetworkProperties networkProperties = new MonitoringNetworkProperties(true);
+        MonitoringNetworkProperties networkProperties = new MonitoringNetworkProperties(true, networkStatusProperties);
+        // TCP状态配置属性
+        MonitoringTcpStatusProperties tcpStatusProperties = new MonitoringTcpStatusProperties(true, true);
         // TCP配置属性
-        MonitoringTcpProperties tcpProperties = new MonitoringTcpProperties(true);
+        MonitoringTcpProperties tcpProperties = new MonitoringTcpProperties(true, tcpStatusProperties);
+        // HTTP状态配置属性
+        MonitoringHttpStatusProperties httpStatusProperties = new MonitoringHttpStatusProperties(true, true);
         // HTTP配置属性
-        MonitoringHttpProperties httpProperties = new MonitoringHttpProperties(true);
+        MonitoringHttpProperties httpProperties = new MonitoringHttpProperties(true, httpStatusProperties);
+        // 应用实例状态配置属性
+        MonitoringInstanceStatusProperties instanceStatusProperties = new MonitoringInstanceStatusProperties(true, true);
+        // 应用实例配置属性
+        MonitoringInstanceProperties instanceProperties = new MonitoringInstanceProperties(true, instanceStatusProperties);
+        // 服务器状态配置属性
+        MonitoringServerStatusProperties serverStatusProperties = new MonitoringServerStatusProperties(true, true);
         // 服务器CPU配置属性
-        MonitoringServerCpuProperties serverCpuProperties = new MonitoringServerCpuProperties(90D, AlarmLevelEnums.INFO);
+        MonitoringServerCpuProperties serverCpuProperties = new MonitoringServerCpuProperties(true, true, 90D, AlarmLevelEnums.INFO);
         // 服务器磁盘配置属性
-        MonitoringServerDiskProperties serverDiskProperties = new MonitoringServerDiskProperties(90D, AlarmLevelEnums.INFO);
+        MonitoringServerDiskProperties serverDiskProperties = new MonitoringServerDiskProperties(true, true, 90D, AlarmLevelEnums.INFO);
         // 服务器内存配置属性
-        MonitoringServerMemoryProperties serverMemoryProperties = new MonitoringServerMemoryProperties(90D, AlarmLevelEnums.INFO);
+        MonitoringServerMemoryProperties serverMemoryProperties = new MonitoringServerMemoryProperties(true, true, 90D, AlarmLevelEnums.INFO);
         // 服务器平均负载配置属性
-        MonitoringServerLoadAverageProperties serverLoadAverageProperties = new MonitoringServerLoadAverageProperties(1D, AlarmLevelEnums.INFO);
+        MonitoringServerLoadAverageProperties serverLoadAverageProperties = new MonitoringServerLoadAverageProperties(true, true, 1D, AlarmLevelEnums.INFO);
         // 服务器配置属性
-        MonitoringServerProperties serverProperties = new MonitoringServerProperties(true, serverCpuProperties, serverDiskProperties, serverMemoryProperties, serverLoadAverageProperties);
+        MonitoringServerProperties serverProperties = new MonitoringServerProperties(true, serverStatusProperties, serverCpuProperties, serverDiskProperties, serverMemoryProperties, serverLoadAverageProperties);
+        // 数据库状态配置属性
+        MonitoringDbStatusProperties dbStatusProperties = new MonitoringDbStatusProperties(true, true);
         // 数据库表空间配置属性
-        MonitoringDbTableSpaceProperties dbTableSpaceProperties = new MonitoringDbTableSpaceProperties(90D, AlarmLevelEnums.INFO);
+        MonitoringDbTableSpaceProperties dbTableSpaceProperties = new MonitoringDbTableSpaceProperties(true, true, 90D, AlarmLevelEnums.INFO);
         // 数据库配置
-        MonitoringDbProperties dbProperties = new MonitoringDbProperties(true, dbTableSpaceProperties);
+        MonitoringDbProperties dbProperties = new MonitoringDbProperties(true, dbStatusProperties, dbTableSpaceProperties);
         // 监控配置属性
-        MonitoringProperties properties = new MonitoringProperties(5, alarmProperties, networkProperties, tcpProperties, httpProperties, serverProperties, dbProperties);
+        MonitoringProperties properties = new MonitoringProperties(5, alarmProperties, networkProperties, tcpProperties, httpProperties, instanceProperties, serverProperties, dbProperties);
         // 查询数据库中是否有配置记录
         MonitorConfig monitorConfig = this.configService.getOne(new LambdaQueryWrapper<>());
         if (monitorConfig == null) {

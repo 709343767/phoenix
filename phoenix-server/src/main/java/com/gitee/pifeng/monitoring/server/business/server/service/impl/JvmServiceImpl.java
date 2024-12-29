@@ -84,6 +84,7 @@ public class JvmServiceImpl implements IJvmService {
      * <p>
      * 处理java虚拟机信息包
      * </p>
+     * 此处不加事务，因为操作的表太多，数据太多，不加事务能提高并发性能，而且此处对数据的一致性要求并不是很高。
      *
      * @param jvmPackage java虚拟机信息包
      * @return {@link Result}
@@ -198,6 +199,10 @@ public class JvmServiceImpl implements IJvmService {
             monitorJvmThread.setPeakThreadCount(threadDomain.getPeakThreadCount());
             monitorJvmThread.setTotalStartedThreadCount(threadDomain.getTotalStartedThreadCount());
             monitorJvmThread.setDaemonThreadCount(threadDomain.getDaemonThreadCount());
+            List<String> threadInfos = threadDomain.getThreadInfos();
+            if (CollectionUtils.isNotEmpty(threadInfos)) {
+                monitorJvmThread.setThreadInfos(String.join(";", threadInfos));
+            }
             // 查询数据库中有没有当前java虚拟机线程信息
             LambdaQueryWrapper<MonitorJvmThread> lambdaQueryWrapper = new LambdaQueryWrapper<>();
             lambdaQueryWrapper.eq(MonitorJvmThread::getInstanceId, instanceId);

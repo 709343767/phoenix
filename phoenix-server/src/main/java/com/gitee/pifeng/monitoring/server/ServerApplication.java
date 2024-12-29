@@ -22,11 +22,11 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  * @custom.date 2020年1月20日 上午8:45:29
  */
 @Indexed
-@SpringBootApplication(exclude = {MongoAutoConfiguration.class, MongoDataAutoConfiguration.class})
-@ComponentScan(nameGenerator = UniqueBeanNameGenerator.class)
-@EnableTransactionManagement
-@EnableAspectJAutoProxy(proxyTargetClass = true, exposeProxy = true)
 @EnableRetry
+@EnableTransactionManagement
+@ComponentScan(nameGenerator = UniqueBeanNameGenerator.class)
+@EnableAspectJAutoProxy(proxyTargetClass = true, exposeProxy = true)
+@SpringBootApplication(exclude = {MongoAutoConfiguration.class, MongoDataAutoConfiguration.class})
 public class ServerApplication extends CustomizationBeanHandler {
 
     public static void main(String[] args) {

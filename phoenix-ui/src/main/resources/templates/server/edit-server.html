@@ -22,19 +22,19 @@
 <div class="layui-form" lay-filter="layuiadmin-form-useradmin" id="layuiadmin-form-useradmin"
      style="padding: 20px 20px 0 0;">
     <div class="layui-form-item" style="display: none">
-        <label class="layui-form-label">ID</label>
+        <label class="layui-form-label" for="id">ID</label>
         <div class="layui-input-inline">
-            <input type="hidden" name="id" class="layui-input" th:value="${id}" readonly>
+            <input class="layui-input" id="id" name="id" readonly th:value="${id}" type="hidden">
         </div>
-        <label class="layui-form-label">IP</label>
+        <label class="layui-form-label" for="ip">IP</label>
         <div class="layui-input-inline">
-            <input type="hidden" name="ip" class="layui-input" th:value="${ip}" readonly>
+            <input class="layui-input" id="ip" name="ip" readonly th:value="${ip}" type="hidden">
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">环境</label>
+        <label class="layui-form-label" for="monitorEnv">环境</label>
         <div class="layui-input-block">
-            <select name="monitorEnv">
+            <select id="monitorEnv" name="monitorEnv">
                 <option value="">不设置</option>
                 <option th:each="monitorEnv:${monitorEnvs}" th:value="${monitorEnv}"
                         th:text="${monitorEnv}" th:selected="${monitorEnv==env}"></option>
@@ -42,9 +42,9 @@
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">分组</label>
+        <label class="layui-form-label" for="monitorGroup">分组</label>
         <div class="layui-input-block">
-            <select name="monitorGroup">
+            <select id="monitorGroup" name="monitorGroup">
                 <option value="">不设置</option>
                 <option th:each="monitorGroup:${monitorGroups}" th:value="${monitorGroup}"
                         th:text="${monitorGroup}" th:selected="${monitorGroup==group}"></option>
@@ -52,9 +52,25 @@
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">描述</label>
+        <label class="layui-form-label" for="isEnableMonitor">是否监控</label>
+        <div class="layui-input-inline">
+            <input id="isEnableMonitor" lay-skin="switch" lay-text="是|否"
+                   name="isEnableMonitor" th:checked="${isEnableMonitor=='1'}? true : false" type="checkbox"
+                   value="1">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label" for="isEnableAlarm">是否告警</label>
+        <div class="layui-input-inline">
+            <input id="isEnableAlarm" lay-skin="switch" lay-text="是|否"
+                   name="isEnableAlarm" th:checked="${isEnableAlarm=='1'}? true : false" type="checkbox"
+                   value="1">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label" for="serverSummary">描述</label>
         <div class="layui-input-block">
-            <textarea name="serverSummary" th:text="${serverSummary}" class="layui-textarea"
+            <textarea class="layui-textarea" id="serverSummary" name="serverSummary" th:text="${serverSummary}"
                       placeholder="请输入描述" autocomplete="off" maxlength="500"></textarea>
         </div>
     </div>

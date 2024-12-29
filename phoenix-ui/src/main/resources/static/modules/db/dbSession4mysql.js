@@ -1,7 +1,7 @@
 /** layuiAdmin.std-v2020.4.1 LPPL License By 皮锋 */
 ;layui.define(function (e) {
-    layui.use(['index', 'table'], function () {
-        var $ = layui.$, admin = layui.admin, form = layui.form, table = layui.table, device = layui.device();
+    layui.use(['index', 'admin', 'table', 'layer'], function () {
+        var $ = layui.$, admin = layui.admin, layer = layui.layer, table = layui.table, device = layui.device();
         table.render({
             elem: '#list-table',
             url: ctxPath + 'db-session4mysql/get-session-list?id=' + id,
@@ -28,7 +28,8 @@
             cols: [
                 [{
                     type: 'checkbox',
-                    hide: !authority
+                    hide: !authority,
+                    fixed: (device.ios || device.android) ? false : 'left',
                 }, {
                     field: 'id',
                     width: 100,

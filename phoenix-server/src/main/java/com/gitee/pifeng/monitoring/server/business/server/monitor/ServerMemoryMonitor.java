@@ -2,9 +2,11 @@ package com.gitee.pifeng.monitoring.server.business.server.monitor;
 
 import cn.hutool.core.util.NumberUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.gitee.pifeng.monitoring.common.constant.MonitorTypeEnums;
+import com.gitee.pifeng.monitoring.common.constant.ZeroOrOneConstants;
 import com.gitee.pifeng.monitoring.common.constant.alarm.AlarmLevelEnums;
 import com.gitee.pifeng.monitoring.common.constant.alarm.AlarmReasonEnums;
+import com.gitee.pifeng.monitoring.common.constant.monitortype.MonitorSubTypeEnums;
+import com.gitee.pifeng.monitoring.common.constant.monitortype.MonitorTypeEnums;
 import com.gitee.pifeng.monitoring.common.domain.Alarm;
 import com.gitee.pifeng.monitoring.common.dto.AlarmPackage;
 import com.gitee.pifeng.monitoring.common.exception.NetException;
@@ -84,8 +86,23 @@ public class ServerMemoryMonitor implements IServerMonitoringListener {
         if (!isEnable) {
             return;
         }
+        // 是否监控服务器内存
+        boolean isMemoryEnable = this.monitoringConfigPropertiesLoader.getMonitoringProperties().getServerProperties().getServerMemoryProperties().isEnable();
+        if (!isMemoryEnable) {
+            return;
+        }
         String ip = String.valueOf(obj[0]);
-        // 查询此IP的服务器CPU信息
+        MonitorServer monitorServer = this.serverService.getOne(new LambdaQueryWrapper<MonitorServer>().eq(MonitorServer::getIp, ip));
+        if (monitorServer == null) {
+            return;
+        }
+        // 是否开启监控（0：不开启监控；1：开启监控）
+        String isEnableMonitor = monitorServer.getIsEnableMonitor();
+        // 没有开启监控，直接结束
+        if (!StringUtils.equals(ZeroOrOneConstants.ONE, isEnableMonitor)) {
+            return;
+        }
+        // 查询此IP的服务器内存信息
         MonitorServerMemory monitorServerMemory = this.serverMemoryService.getOne(new LambdaQueryWrapper<MonitorServerMemory>().eq(MonitorServerMemory::getIp, ip));
         if (monitorServerMemory == null) {
             return;
@@ -97,10 +114,10 @@ public class ServerMemoryMonitor implements IServerMonitoringListener {
         // 物理内存使用率大于等于配置的过载阈值
         if (menUsedPercent >= overloadThreshold) {
             // 处理物理内存过载
-            this.dealMemoryOverLoad(ip, menUsedPercent);
+            this.dealMemoryOverLoad(monitorServer, menUsedPercent);
         } else {
             // 处理物理内存正常
-            this.dealMemoryNotOverLoad(ip, menUsedPercent);
+            this.dealMemoryNotOverLoad(monitorServer, menUsedPercent);
         }
     }
 
@@ -109,22 +126,16 @@ public class ServerMemoryMonitor implements IServerMonitoringListener {
      * 处理物理内存正常
      * </p>
      *
-     * @param ip             IP地址
+     * @param monitorServer  服务器信息
      * @param menUsedPercent 物理内存使用率
      * @author 皮锋
      * @custom.date 2021/2/4 14:34
      */
-    private void dealMemoryNotOverLoad(String ip, double menUsedPercent) {
-        MonitorServer monitorServer = this.serverService.getOne(new LambdaQueryWrapper<MonitorServer>().eq(MonitorServer::getIp, ip));
-        if (monitorServer == null) {
-            return;
-        }
-        String serverName = monitorServer.getServerName();
-        String serverSummary = monitorServer.getServerSummary();
+    private void dealMemoryNotOverLoad(MonitorServer monitorServer, double menUsedPercent) {
         // 发送告警信息
         try {
             // 不用担心头次检测到内存正常（非异常转正常）会发送告警，最终是否发送告警由“实时监控服务”决定
-            this.sendAlarmInfo("服务器内存恢复正常", ip, serverName, serverSummary, menUsedPercent, AlarmLevelEnums.INFO, AlarmReasonEnums.ABNORMAL_2_NORMAL);
+            this.sendAlarmInfo("服务器内存恢复正常", monitorServer, menUsedPercent, AlarmLevelEnums.INFO, AlarmReasonEnums.ABNORMAL_2_NORMAL);
         } catch (Exception e) {
             log.error("服务器内存恢复正常告警异常！", e);
         }
@@ -135,23 +146,17 @@ public class ServerMemoryMonitor implements IServerMonitoringListener {
      * 处理物理内存过载
      * </p>
      *
-     * @param ip             IP地址
+     * @param monitorServer  服务器信息
      * @param menUsedPercent 物理内存使用率
      * @author 皮锋
      * @custom.date 2021/2/4 14:26
      */
-    private void dealMemoryOverLoad(String ip, double menUsedPercent) {
-        MonitorServer monitorServer = this.serverService.getOne(new LambdaQueryWrapper<MonitorServer>().eq(MonitorServer::getIp, ip));
-        if (monitorServer == null) {
-            return;
-        }
-        String serverName = monitorServer.getServerName();
-        String serverSummary = monitorServer.getServerSummary();
+    private void dealMemoryOverLoad(MonitorServer monitorServer, double menUsedPercent) {
         // 告警级别
         AlarmLevelEnums alarmLevelEnum = this.monitoringConfigPropertiesLoader.getMonitoringProperties().getServerProperties().getServerMemoryProperties().getLevelEnum();
         // 发送告警信息
         try {
-            this.sendAlarmInfo("服务器内存过载", ip, serverName, serverSummary, menUsedPercent, alarmLevelEnum, AlarmReasonEnums.NORMAL_2_ABNORMAL);
+            this.sendAlarmInfo("服务器内存过载", monitorServer, menUsedPercent, alarmLevelEnum, AlarmReasonEnums.NORMAL_2_ABNORMAL);
         } catch (Exception e) {
             log.error("服务器内存过载告警异常！", e);
         }
@@ -163,9 +168,7 @@ public class ServerMemoryMonitor implements IServerMonitoringListener {
      * </p>
      *
      * @param title           告警标题
-     * @param ip              IP地址
-     * @param serverName      服务器名
-     * @param serverSummary   服务器摘要
+     * @param monitorServer   服务器信息
      * @param menUsedPercent  物理内存使用率
      * @param alarmLevelEnum  告警级别
      * @param alarmReasonEnum 告警原因
@@ -173,8 +176,22 @@ public class ServerMemoryMonitor implements IServerMonitoringListener {
      * @author 皮锋
      * @custom.date 2020/3/25 14:46
      */
-    private void sendAlarmInfo(String title, String ip, String serverName, String serverSummary, double menUsedPercent,
+    private void sendAlarmInfo(String title, MonitorServer monitorServer, double menUsedPercent,
                                AlarmLevelEnums alarmLevelEnum, AlarmReasonEnums alarmReasonEnum) throws NetException {
+        // 告警是否打开
+        boolean alarmEnable = this.monitoringConfigPropertiesLoader.getMonitoringProperties().getServerProperties().getServerMemoryProperties().isAlarmEnable();
+        if (!alarmEnable) {
+            return;
+        }
+        // 是否开启告警（0：不开启告警；1：开启告警）
+        String isEnableAlarm = monitorServer.getIsEnableAlarm();
+        // 没有开启告警，直接结束
+        if (!StringUtils.equals(ZeroOrOneConstants.ONE, isEnableAlarm)) {
+            return;
+        }
+        String ip = monitorServer.getIp();
+        String serverName = monitorServer.getServerName();
+        String serverSummary = monitorServer.getServerSummary();
         StringBuilder msgBuilder = new StringBuilder();
         msgBuilder.append("IP地址：").append(ip).append("，<br>服务器：").append(serverName);
         if (StringUtils.isNotBlank(serverSummary)) {
@@ -189,6 +206,8 @@ public class ServerMemoryMonitor implements IServerMonitoringListener {
                 .alarmLevel(alarmLevelEnum)
                 .alarmReason(alarmReasonEnum)
                 .monitorType(MonitorTypeEnums.SERVER)
+                .monitorSubType(MonitorSubTypeEnums.SERVER__MEMORY)
+                .alertedEntityId(String.valueOf(monitorServer.getId()))
                 .build();
         AlarmPackage alarmPackage = this.serverPackageConstructor.structureAlarmPackage(alarm);
         this.alarmService.dealAlarmPackage(alarmPackage);

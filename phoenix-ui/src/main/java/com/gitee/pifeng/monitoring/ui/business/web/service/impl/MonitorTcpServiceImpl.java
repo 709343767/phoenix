@@ -9,6 +9,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gitee.pifeng.monitoring.common.constant.ZeroOrOneConstants;
+import com.gitee.pifeng.monitoring.common.constant.monitortype.MonitorTypeEnums;
 import com.gitee.pifeng.monitoring.common.domain.Result;
 import com.gitee.pifeng.monitoring.common.dto.BaseRequestPackage;
 import com.gitee.pifeng.monitoring.common.dto.BaseResponsePackage;
@@ -17,6 +18,7 @@ import com.gitee.pifeng.monitoring.ui.business.web.dao.IMonitorTcpDao;
 import com.gitee.pifeng.monitoring.ui.business.web.dao.IMonitorTcpHistoryDao;
 import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorTcp;
 import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorTcpHistory;
+import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorRealtimeMonitoringService;
 import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorTcpService;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.HomeTcpVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.LayUiAdminResultVo;
@@ -54,6 +56,12 @@ public class MonitorTcpServiceImpl extends ServiceImpl<IMonitorTcpDao, MonitorTc
      */
     @Autowired
     private UiPackageConstructor uiPackageConstructor;
+
+    /**
+     * 实时监控服务类
+     */
+    @Autowired
+    private IMonitorRealtimeMonitoringService monitorRealtimeMonitoringService;
 
     /**
      * TCP信息数据访问对象
@@ -155,6 +163,8 @@ public class MonitorTcpServiceImpl extends ServiceImpl<IMonitorTcpDao, MonitorTc
         LambdaUpdateWrapper<MonitorTcp> monitorTcpLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
         monitorTcpLambdaUpdateWrapper.in(MonitorTcp::getId, ids);
         this.monitorTcpDao.delete(monitorTcpLambdaUpdateWrapper);
+        // 注意：删除实时监控信息，这个不要忘记了
+        this.monitorRealtimeMonitoringService.delete(MonitorTypeEnums.TCP4SERVICE, null, ids);
         return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);
     }
 
@@ -187,6 +197,12 @@ public class MonitorTcpServiceImpl extends ServiceImpl<IMonitorTcpDao, MonitorTc
         }
         if (StringUtils.isBlank(monitorTcpVo.getMonitorGroup())) {
             monitorTcp.setMonitorGroup(null);
+        }
+        if (StringUtils.isBlank(monitorTcpVo.getIsEnableMonitor())) {
+            monitorTcp.setIsEnableMonitor(ZeroOrOneConstants.ZERO);
+        }
+        if (StringUtils.isBlank(monitorTcpVo.getIsEnableAlarm())) {
+            monitorTcp.setIsEnableAlarm(ZeroOrOneConstants.ZERO);
         }
         int result = this.monitorTcpDao.insert(monitorTcp);
         if (result == 1) {
@@ -226,11 +242,65 @@ public class MonitorTcpServiceImpl extends ServiceImpl<IMonitorTcpDao, MonitorTc
         if (StringUtils.isBlank(monitorTcpVo.getMonitorGroup())) {
             monitorTcp.setMonitorGroup(null);
         }
+        if (StringUtils.isBlank(monitorTcpVo.getIsEnableMonitor())) {
+            monitorTcp.setIsEnableMonitor(ZeroOrOneConstants.ZERO);
+        }
+        if (StringUtils.isBlank(monitorTcpVo.getIsEnableAlarm())) {
+            monitorTcp.setIsEnableAlarm(ZeroOrOneConstants.ZERO);
+        }
         int result = this.monitorTcpDao.updateById(monitorTcp);
         if (result == 1) {
             return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);
         }
         return LayUiAdminResultVo.ok(WebResponseConstants.FAIL);
+    }
+
+    /**
+     * <p>
+     * 设置是否开启监控（0：不开启监控；1：开启监控）
+     * </p>
+     *
+     * @param id              主键ID
+     * @param isEnableMonitor 是否开启监控（0：不开启监控；1：开启监控）
+     * @return 如果设置成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @author 皮锋
+     * @custom.date 2024/12/10 21:20
+     */
+    @Override
+    public LayUiAdminResultVo setIsEnableMonitor(Long id, String isEnableMonitor) {
+        LambdaUpdateWrapper<MonitorTcp> tcpLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+        // 设置更新条件
+        tcpLambdaUpdateWrapper.eq(MonitorTcp::getId, id);
+        // 设置更新字段
+        tcpLambdaUpdateWrapper.set(MonitorTcp::getIsEnableMonitor, isEnableMonitor);
+        // 如果不监控，状态设置为未知
+        if (StringUtils.equals(isEnableMonitor, ZeroOrOneConstants.ZERO)) {
+            tcpLambdaUpdateWrapper.set(MonitorTcp::getStatus, null);
+        }
+        this.monitorTcpDao.update(null, tcpLambdaUpdateWrapper);
+        return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);
+    }
+
+    /**
+     * <p>
+     * 设置是否开启告警（0：不开启告警；1：开启告警）
+     * </p>
+     *
+     * @param id            主键ID
+     * @param isEnableAlarm 是否开启告警（0：不开启告警；1：开启告警）
+     * @return 如果设置成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
+     * @author 皮锋
+     * @custom.date 2024/12/10 21:37
+     */
+    @Override
+    public LayUiAdminResultVo setIsEnableAlarm(Long id, String isEnableAlarm) {
+        LambdaUpdateWrapper<MonitorTcp> tcpLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+        // 设置更新条件
+        tcpLambdaUpdateWrapper.eq(MonitorTcp::getId, id);
+        // 设置更新字段
+        tcpLambdaUpdateWrapper.set(MonitorTcp::getIsEnableAlarm, isEnableAlarm);
+        this.monitorTcpDao.update(null, tcpLambdaUpdateWrapper);
+        return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);
     }
 
     /**
@@ -262,12 +332,13 @@ public class MonitorTcpServiceImpl extends ServiceImpl<IMonitorTcpDao, MonitorTc
      *
      * @param monitorTcpVo TCP信息表现层对象
      * @return layUiAdmin响应对象：TCP连通性
+     * @throws SigarException Sigar异常
      * @throws IOException    IO异常
      * @author 皮锋
      * @custom.date 2022/10/12 21:41
      */
     @Override
-    public LayUiAdminResultVo testMonitorTcp(MonitorTcpVo monitorTcpVo) throws IOException {
+    public LayUiAdminResultVo testMonitorTcp(MonitorTcpVo monitorTcpVo) throws SigarException, IOException {
         // 封装请求数据
         JSONObject extraMsg = new JSONObject();
         extraMsg.put("hostnameTarget", monitorTcpVo.getHostnameTarget());

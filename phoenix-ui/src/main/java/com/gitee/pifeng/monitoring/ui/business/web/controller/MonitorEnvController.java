@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -152,6 +153,7 @@ public class MonitorEnvController {
      */
     @Operation(summary = "编辑环境信息")
     @PutMapping("/edit-monitor-env")
+    @PreAuthorize("hasAuthority('超级管理员')")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.CONFIG_MANAGE + "#环境管理", operType = OperateTypeConstants.UPDATE, operDesc = "编辑环境信息")
     public LayUiAdminResultVo editMonitorEnv(MonitorEnvVo monitorEnvVo) {
@@ -170,6 +172,7 @@ public class MonitorEnvController {
      */
     @Operation(summary = "删除环境信息")
     @DeleteMapping("/delete-monitor-env")
+    @PreAuthorize("hasAuthority('超级管理员')")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.CONFIG_MANAGE + "#环境管理", operType = OperateTypeConstants.DELETE, operDesc = "删除环境信息")
     public LayUiAdminResultVo deleteMonitorEnv(@RequestBody List<MonitorEnvVo> monitorEnvVos) {

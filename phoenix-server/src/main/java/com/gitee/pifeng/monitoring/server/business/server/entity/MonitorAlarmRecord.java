@@ -98,4 +98,10 @@ public class MonitorAlarmRecord {
     @TableField("NUMBER")
     private String number;
 
+    /**
+     * 不发送告警原因
+     */
+    @TableField("NOT_SEND_REASON")
+    private String notSendReason;
+
 }

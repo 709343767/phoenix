@@ -10,6 +10,7 @@ import lombok.Cleanup;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.net.telnet.TelnetClient;
+import org.apache.commons.net.util.SubnetUtils;
 import org.hyperic.sigar.SigarException;
 
 import java.io.BufferedReader;
@@ -201,6 +202,31 @@ public class NetUtils {
 
     /**
      * <p>
+     * 获取本机子网掩码
+     * </p>
+     *
+     * @return 子网掩码的点分十进制表示
+     * @throws NetException 获取网络信息异常：获取本机子网掩码异常！
+     * @author 皮锋
+     * @custom.date 2024/11/15 10:36
+     */
+    public static String getLocalSubnetMask() throws NetException {
+        try {
+            // Windows操作系统
+            if (OsUtils.isWindowsOs()) {
+                return getWindowsLocalSubnetMask();
+            } else {
+                return getLinuxLocalSubnetMask();
+            }
+        } catch (Exception e) {
+            String exp = "获取本机子网掩码异常！";
+            log.error(exp, e);
+            throw new NetException(exp);
+        }
+    }
+
+    /**
+     * <p>
      * 获取Windows系统下的IP地址
      * </p>
      *
@@ -210,8 +236,11 @@ public class NetUtils {
      * @custom.date 2020/12/15 10:44
      */
     private static String getWindowsLocalIp() throws UnknownHostException {
-        InetAddress ip4 = InetAddress.getLocalHost();
-        return ip4.getHostAddress();
+        InetAddress inetAddress = InetAddress.getLocalHost();
+        if (inetAddress instanceof Inet4Address) {
+            return inetAddress.getHostAddress();
+        }
+        return null;
     }
 
     /**
@@ -219,30 +248,117 @@ public class NetUtils {
      * 获取Linux系统下的IP地址
      * </p>
      *
-     * @return IP地址
+     * @return IP地址，如果获取失败则返回null
      * @throws SocketException 创建或访问套接字时异常
      * @author 皮锋
      * @custom.date 2020年3月20日 上午10:19:10
      */
     private static String getLinuxLocalIp() throws SocketException {
         String ip = null;
+        outerLoop:
         for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements(); ) {
             NetworkInterface intf = en.nextElement();
             String name = intf.getName();
             if (!name.contains("docker") && !name.contains("lo")) {
                 for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements(); ) {
                     InetAddress inetAddress = enumIpAddr.nextElement();
+                    if (!(inetAddress instanceof Inet4Address)) {
+                        continue;
+                    }
                     if (!inetAddress.isLoopbackAddress()) {
-                        String ipaddress = inetAddress.getHostAddress();
-                        if (!ipaddress.contains("::") && !ipaddress.contains("0:0:")
-                                && !ipaddress.contains("fe80")) {
-                            ip = ipaddress;
+                        String ipAddress = inetAddress.getHostAddress();
+                        if (!ipAddress.contains("::") && !ipAddress.contains("0:0:")
+                                && !ipAddress.contains("fe80")) {
+                            ip = ipAddress;
+                            break outerLoop;
                         }
                     }
                 }
             }
         }
         return ip;
+    }
+
+    /**
+     * <p>
+     * 获取Windows系统下的子网掩码
+     * </p>
+     *
+     * @return 子网掩码的点分十进制表示，如果获取失败则返回null
+     * @throws UnknownHostException 无法确定主机的IP地址异常
+     * @throws SocketException      创建或访问套接字时异常
+     * @author 皮锋
+     * @custom.date 2024/11/15 10:31
+     */
+    public static String getWindowsLocalSubnetMask() throws UnknownHostException, SocketException {
+        String subnetMask = null;
+        // 获取本机的IP地址
+        InetAddress localHost = InetAddress.getLocalHost();
+        // 获取与该IP地址关联的网络接口
+        NetworkInterface networkInterface = NetworkInterface.getByInetAddress(localHost);
+        if (networkInterface == null) {
+            throw new NetException("无法找到与IP地址[" + localHost.getHostAddress() + "]关联的网络接口！");
+        }
+        // 获取网络接口的所有IP地址
+        for (InterfaceAddress interfaceAddress : networkInterface.getInterfaceAddresses()) {
+            InetAddress address = interfaceAddress.getAddress();
+            // 只处理 IPv4 地址
+            if (address instanceof Inet4Address) {
+                // 获取子网掩码的前缀长度
+                int prefixLength = interfaceAddress.getNetworkPrefixLength();
+                // 组合成CIDR表示的字符串
+                String cidr = address.getHostAddress() + "/" + prefixLength;
+                // 使用Apache Commons Net库将CIDR表示转换为子网掩码
+                SubnetUtils subnetUtils = new SubnetUtils(cidr);
+                SubnetUtils.SubnetInfo subnetInfo = subnetUtils.getInfo();
+                subnetMask = subnetInfo.getNetmask();
+                break;
+            }
+        }
+        return subnetMask;
+    }
+
+    /**
+     * <p>
+     * 获取Linux系统下的子网掩码
+     * </p>
+     *
+     * @return 子网掩码的点分十进制表示，如果获取失败则返回null
+     * @throws SocketException 创建或访问套接字时异常
+     * @author 皮锋
+     * @custom.date 2024/11/15 9:53
+     */
+    public static String getLinuxLocalSubnetMask() throws SocketException {
+        String subnetMask = null;
+        outerLoop:
+        for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements(); ) {
+            NetworkInterface intf = en.nextElement();
+            String name = intf.getName();
+            if (!name.contains("docker") && !name.contains("lo")) {
+                for (InterfaceAddress interfaceAddress : intf.getInterfaceAddresses()) {
+                    InetAddress inetAddress = interfaceAddress.getAddress();
+                    if (!(inetAddress instanceof Inet4Address)) {
+                        continue;
+                    }
+                    if (!inetAddress.isLoopbackAddress()) {
+                        String ipAddress = inetAddress.getHostAddress();
+                        if (!ipAddress.contains("::") && !ipAddress.contains("0:0:")
+                                && !ipAddress.contains("fe80")) {
+                            // 获取子网掩码的前缀长度
+                            int prefixLength = interfaceAddress.getNetworkPrefixLength();
+                            // 组合成CIDR表示的字符串
+                            String cidr = ipAddress + "/" + prefixLength;
+                            // 使用Apache Commons Net库将CIDR表示转换为子网掩码
+                            SubnetUtils subnetUtils = new SubnetUtils(cidr);
+                            SubnetUtils.SubnetInfo subnetInfo = subnetUtils.getInfo();
+                            subnetMask = subnetInfo.getNetmask();
+                            break outerLoop;
+                        }
+                    }
+                }
+            }
+        }
+        return subnetMask;
     }
 
     /**

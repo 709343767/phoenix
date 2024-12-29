@@ -22,9 +22,9 @@
 <div class="layui-form" lay-filter="layuiadmin-form-useradmin" id="layuiadmin-form-useradmin"
      style="padding: 20px 20px 0 0;">
     <div class="layui-form-item">
-        <label class="layui-form-label">类型</label>
+        <label class="layui-form-label" for="dbType">类型</label>
         <div class="layui-input-block">
-            <select name="dbType" lay-filter="dbType">
+            <select id="dbType" lay-filter="dbType" name="dbType">
                 <option value="MySQL">MySQL</option>
                 <option value="Oracle">Oracle</option>
                 <option value="Redis">Redis</option>
@@ -33,37 +33,37 @@
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">连接名</label>
+        <label class="layui-form-label" for="connName">连接名</label>
         <div class="layui-input-block">
-            <input type="text" name="connName" autocomplete="off" class="layui-input" placeholder="请输入连接名"
+            <input autocomplete="off" class="layui-input" id="connName" name="connName" placeholder="请输入连接名" type="text"
                    lay-verify="required" lay-verType="tips">
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label" id="urlLabel">URL</label>
+        <label class="layui-form-label" for="url" id="urlLabel">URL</label>
         <div class="layui-input-block">
             <textarea id="url" name="url" class="layui-textarea" placeholder="请输入URL" autocomplete="off"
                       lay-verify="required" lay-verType="tips"></textarea>
         </div>
     </div>
     <div class="layui-form-item" id="usernameDiv">
-        <label class="layui-form-label">用户名</label>
+        <label class="layui-form-label" for="username">用户名</label>
         <div class="layui-input-block">
-            <input type="text" name="username" autocomplete="off" class="layui-input" placeholder="请输入用户名"
+            <input autocomplete="off" class="layui-input" id="username" name="username" placeholder="请输入用户名" type="text"
                    lay-verify="username" lay-verType="tips">
         </div>
     </div>
     <div class="layui-form-item" id="passwordDiv">
-        <label class="layui-form-label">密码</label>
+        <label class="layui-form-label" for="password">密码</label>
         <div class="layui-input-block">
-            <input type="password" name="password" autocomplete="off" class="layui-input" placeholder="请输入密码"
-                   lay-verify="password" lay-verType="tips">
+            <input autocomplete="off" class="layui-input" id="password" lay-verType="tips" lay-verify="password"
+                   name="password" placeholder="请输入密码" type="password">
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">环境</label>
+        <label class="layui-form-label" for="monitorEnv">环境</label>
         <div class="layui-input-block">
-            <select name="monitorEnv">
+            <select id="monitorEnv" name="monitorEnv">
                 <option value="">不设置</option>
                 <option th:each="monitorEnv:${monitorEnvs}" th:value="${monitorEnv}"
                         th:text="${monitorEnv}"></option>
@@ -71,9 +71,9 @@
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">分组</label>
+        <label class="layui-form-label" for="monitorGroup">分组</label>
         <div class="layui-input-block">
-            <select name="monitorGroup">
+            <select id="monitorGroup" name="monitorGroup">
                 <option value="">不设置</option>
                 <option th:each="monitorGroup:${monitorGroups}" th:value="${monitorGroup}"
                         th:text="${monitorGroup}"></option>
@@ -81,9 +81,25 @@
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">描述</label>
+        <label class="layui-form-label" for="isEnableMonitor">是否监控</label>
+        <div class="layui-input-inline">
+            <input checked="checked" id="isEnableMonitor" lay-skin="switch"
+                   lay-text="是|否" name="isEnableMonitor" type="checkbox"
+                   value="1">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label" for="isEnableAlarm">是否告警</label>
+        <div class="layui-input-inline">
+            <input checked="checked" id="isEnableAlarm" lay-skin="switch"
+                   lay-text="是|否" name="isEnableAlarm" type="checkbox"
+                   value="1">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label" for="dbDesc">描述</label>
         <div class="layui-input-block">
-            <textarea name="dbDesc" class="layui-textarea" placeholder="请输入描述" autocomplete="off"
+            <textarea autocomplete="off" class="layui-textarea" id="dbDesc" name="dbDesc" placeholder="请输入描述"
                       lay-verType="tips"></textarea>
         </div>
     </div>

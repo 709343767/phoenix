@@ -7,4 +7,78 @@
         TRUNCATE TABLE MONITOR_LOG_EXCEPTION
     </update>
 
+    <!-- 分页查询异常日志 -->
+    <select id="getMonitorLogExceptionList" databaseId="mysql"
+            resultType="com.gitee.pifeng.monitoring.ui.business.web.vo.MonitorLogExceptionVo">
+        SELECT
+        mle.ID,
+        mle.INSTANCE_ID,
+        mi.INSTANCE_NAME,
+        mle.EXC_NAME,
+        mle.EXC_MESSAGE,
+        mle.USER_ID,
+        mle.USERNAME,
+        mle.OPER_METHOD,
+        mle.REQ_PARAM,
+        mle.URI,
+        mle.IP,
+        mle.IS_ALARM,
+        mle.INSERT_TIME
+        FROM MONITOR_LOG_EXCEPTION mle
+        LEFT JOIN ( SELECT DISTINCT INSTANCE_ID, INSTANCE_NAME FROM MONITOR_INSTANCE ) mi
+        ON mle.INSTANCE_ID = mi.INSTANCE_ID
+        <where>
+            <if test="instanceId!=null and instanceId!=''">
+                AND mle.INSTANCE_ID LIKE CONCAT('%', #{instanceId}, '%')
+            </if>
+            <if test="instanceName!=null and instanceName!=''">
+                AND mi.INSTANCE_NAME LIKE CONCAT('%', #{instanceName}, '%')
+            </if>
+            <if test="excName!=null and excName!=''">
+                AND mle.EXC_NAME LIKE CONCAT('%', #{excName}, '%')
+            </if>
+            <if test="excMessage!=null and excMessage!=''">
+                AND mle.EXC_MESSAGE LIKE CONCAT('%', #{excMessage}, '%')
+            </if>
+            <if test="operMethod!=null and operMethod!=''">
+                AND mle.OPER_METHOD LIKE CONCAT('%', #{operMethod}, '%')
+            </if>
+            <if test="uri!=null and uri!=''">
+                AND mle.URI LIKE CONCAT('%', #{uri}, '%')
+            </if>
+            <if test="ip!=null and ip!=''">
+                AND mle.IP LIKE CONCAT('%', #{ip}, '%')
+            </if>
+            <if test="startDateTime!=null">
+                AND mle.INSERT_TIME <![CDATA[>=]]> #{startDateTime}
+            </if>
+            <if test="endDateTime!=null">
+                AND mle.INSERT_TIME <![CDATA[<=]]> #{endDateTime}
+            </if>
+        </where>
+        ORDER BY mle.INSERT_TIME DESC
+    </select>
+
+    <!-- 根据异常日志ID获取异常日志信息 -->
+    <select id="getMonitorLogExceptionById" databaseId="mysql"
+            resultType="com.gitee.pifeng.monitoring.ui.business.web.vo.MonitorLogExceptionVo">
+        SELECT mle.ID,
+               mle.INSTANCE_ID,
+               mi.INSTANCE_NAME,
+               mle.EXC_NAME,
+               mle.EXC_MESSAGE,
+               mle.USER_ID,
+               mle.USERNAME,
+               mle.OPER_METHOD,
+               mle.REQ_PARAM,
+               mle.URI,
+               mle.IP,
+               mle.IS_ALARM,
+               mle.INSERT_TIME
+        FROM MONITOR_LOG_EXCEPTION mle
+                 LEFT JOIN (SELECT DISTINCT INSTANCE_ID, INSTANCE_NAME FROM MONITOR_INSTANCE) mi
+                           ON mle.INSTANCE_ID = mi.INSTANCE_ID
+        WHERE mle.ID = #{id}
+    </select>
+
 </mapper>

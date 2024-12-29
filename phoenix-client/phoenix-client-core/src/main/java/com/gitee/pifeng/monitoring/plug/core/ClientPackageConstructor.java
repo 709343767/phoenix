@@ -5,7 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.gitee.pifeng.monitoring.common.abs.AbstractPackageConstructor;
 import com.gitee.pifeng.monitoring.common.abs.AbstractSuperPackage;
 import com.gitee.pifeng.monitoring.common.constant.LanguageTypeConstants;
-import com.gitee.pifeng.monitoring.common.constant.MonitorTypeEnums;
+import com.gitee.pifeng.monitoring.common.constant.monitortype.MonitorTypeEnums;
 import com.gitee.pifeng.monitoring.common.domain.Alarm;
 import com.gitee.pifeng.monitoring.common.domain.Chain;
 import com.gitee.pifeng.monitoring.common.domain.Jvm;
@@ -98,7 +98,7 @@ public class ClientPackageConstructor extends AbstractPackageConstructor {
         if (CollectionUtils.isEmpty(timeChain)) {
             timeChain = Sets.newLinkedHashSet();
         }
-        String ip = ConfigLoader.getMonitoringProperties().getServerInfoProperties().getIp() == null ? NetUtils.getLocalIp() : ConfigLoader.getMonitoringProperties().getServerInfoProperties().getIp();
+        String ip = ConfigLoader.getMonitoringProperties().getServerInfo().getIp() == null ? NetUtils.getLocalIp() : ConfigLoader.getMonitoringProperties().getServerInfo().getIp();
         networkChain.add(ip);
         chain.setNetworkChain(networkChain);
         instanceChain.add(InstanceGenerator.getInstanceId());
@@ -121,19 +121,19 @@ public class ClientPackageConstructor extends AbstractPackageConstructor {
      */
     private <T extends AbstractSuperPackage> void structureAbstractSuperPackage(T pkg) throws NetException {
         // 应用实例端点，从配置文件获取
-        pkg.setInstanceEndpoint(ConfigLoader.getMonitoringProperties().getOwnProperties().getInstanceEndpoint());
+        pkg.setInstanceEndpoint(ConfigLoader.getMonitoringProperties().getInstance().getEndpoint());
         // 应用实例ID
         pkg.setInstanceId(InstanceGenerator.getInstanceId());
         // 应用实例名
-        pkg.setInstanceName(ConfigLoader.getMonitoringProperties().getOwnProperties().getInstanceName());
+        pkg.setInstanceName(ConfigLoader.getMonitoringProperties().getInstance().getName());
         // 应用实例描述
-        pkg.setInstanceDesc(ConfigLoader.getMonitoringProperties().getOwnProperties().getInstanceDesc());
+        pkg.setInstanceDesc(ConfigLoader.getMonitoringProperties().getInstance().getDesc());
         // 应用实例程序语言
         pkg.setInstanceLanguage(LanguageTypeConstants.JAVA);
         // 应用服务器类型
         pkg.setAppServerType(AppServerDetectorUtils.getAppServerTypeEnum());
         // IP地址
-        String ip = ConfigLoader.getMonitoringProperties().getServerInfoProperties().getIp() == null ? NetUtils.getLocalIp() : ConfigLoader.getMonitoringProperties().getServerInfoProperties().getIp();
+        String ip = ConfigLoader.getMonitoringProperties().getServerInfo().getIp() == null ? NetUtils.getLocalIp() : ConfigLoader.getMonitoringProperties().getServerInfo().getIp();
         pkg.setIp(ip);
         // 计算机名
         pkg.setComputerName(OsUtils.getComputerName());
@@ -209,7 +209,7 @@ public class ClientPackageConstructor extends AbstractPackageConstructor {
         // 构造基础请求包数据
         this.structureBaseRequestPackage(heartbeatPackage, null);
         // 心跳频率
-        heartbeatPackage.setRate(ConfigLoader.getMonitoringProperties().getHeartbeatProperties().getRate());
+        heartbeatPackage.setRate(ConfigLoader.getMonitoringProperties().getHeartbeat().getRate());
         return heartbeatPackage;
     }
 
@@ -253,7 +253,7 @@ public class ClientPackageConstructor extends AbstractPackageConstructor {
         this.structureBaseRequestPackage(serverPackage, null);
         // 设置服务器信息
         serverPackage.setServer(server);
-        serverPackage.setRate(ConfigLoader.getMonitoringProperties().getServerInfoProperties().getRate());
+        serverPackage.setRate(ConfigLoader.getMonitoringProperties().getServerInfo().getRate());
         return serverPackage;
     }
 
@@ -275,7 +275,7 @@ public class ClientPackageConstructor extends AbstractPackageConstructor {
         this.structureBaseRequestPackage(jvmPackage, null);
         // 设置Java虚拟机信息
         jvmPackage.setJvm(jvm);
-        jvmPackage.setRate(ConfigLoader.getMonitoringProperties().getJvmInfoProperties().getRate());
+        jvmPackage.setRate(ConfigLoader.getMonitoringProperties().getJvmInfo().getRate());
         return jvmPackage;
     }
 

@@ -3,6 +3,7 @@ package com.gitee.pifeng.monitoring.common.util;
 import cn.hutool.core.collection.CollectionUtil;
 import com.google.common.collect.Lists;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -83,6 +84,39 @@ public class CollectionUtils {
                     itemList.add(resourceList.get(pre * subListSize + i));
                 }
                 result.add(itemList);
+            }
+        }
+        return result;
+    }
+
+    /**
+     * <p>
+     * 拆分成指定个数的List
+     * </p>
+     *
+     * @param <T>           泛型对象
+     * @param resourceList  需要拆分的List
+     * @param maxPartitions 拆分成多少个子List
+     * @return 返回拆分后的各个List组成的List
+     * @author 皮锋
+     * @custom.date 2021/8/31 14:57
+     **/
+    public static <T> List<List<T>> partitionList(List<T> resourceList, int maxPartitions) {
+        if (CollectionUtil.isEmpty(resourceList) || maxPartitions <= 0) {
+            return Lists.newArrayList();
+        }
+        int size = resourceList.size();
+        int partitionCount = Math.min(maxPartitions, size);
+        // 计算每个分区的大小
+        int partitionSize = (int) Math.ceil((double) size / partitionCount);
+        List<List<T>> result = Lists.newArrayList();
+        for (int i = 0; i < maxPartitions; i++) {
+            int fromIndex = i * partitionSize;
+            // 确保 toIndex 不会超过列表的大小
+            int toIndex = Math.min(fromIndex + partitionSize, size);
+            // 防止越界
+            if (fromIndex < size) {
+                result.add(new ArrayList<>(resourceList.subList(fromIndex, toIndex)));
             }
         }
         return result;
