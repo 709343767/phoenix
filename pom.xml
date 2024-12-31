@@ -112,7 +112,7 @@
         <spring-boot-maven-plugin.version>2.3.1.RELEASE</spring-boot-maven-plugin.version>
         <!-- 定制化打包插件版本 -->
         <maven-assembly-plugin.version>3.3.0</maven-assembly-plugin.version>
-        <!-- MavenCentral发布插件 -->
+        <!-- MavenCentral发布插件版本 -->
         <central-publishing-maven-plugin.version>0.6.0</central-publishing-maven-plugin.version>
         <!-- 生成java doc插件版本 -->
         <maven-javadoc-plugin.version>3.2.0</maven-javadoc-plugin.version>
