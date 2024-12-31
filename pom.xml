@@ -112,8 +112,8 @@
         <spring-boot-maven-plugin.version>2.3.1.RELEASE</spring-boot-maven-plugin.version>
         <!-- 定制化打包插件版本 -->
         <maven-assembly-plugin.version>3.3.0</maven-assembly-plugin.version>
-        <!-- sonatype的staging插件版本 -->
-        <nexus-staging-maven-plugin.version>1.6.8</nexus-staging-maven-plugin.version>
+        <!-- MavenCentral发布插件 -->
+        <central-publishing-maven-plugin.version>0.6.0</central-publishing-maven-plugin.version>
         <!-- 生成java doc插件版本 -->
         <maven-javadoc-plugin.version>3.2.0</maven-javadoc-plugin.version>
         <!-- 发布源码插件版本 -->
@@ -477,12 +477,6 @@
                         <outputDirectory>${session.executionRootDirectory}/target</outputDirectory>
                     </configuration>
                 </plugin>
-                <!-- sonatype的staging插件 -->
-                <plugin>
-                    <groupId>org.sonatype.plugins</groupId>
-                    <artifactId>nexus-staging-maven-plugin</artifactId>
-                    <version>${nexus-staging-maven-plugin.version}</version>
-                </plugin>
                 <!-- docker插件 -->
                 <!-- https://www.cnblogs.com/jpfss/p/10945324.html -->
                 <plugin>
@@ -611,16 +605,20 @@
                     </execution>
                 </executions>
             </plugin>
-            <!-- sonatype的staging插件 -->
+            <!-- MavenCentral发布插件 -->
             <plugin>
-                <groupId>org.sonatype.plugins</groupId>
-                <artifactId>nexus-staging-maven-plugin</artifactId>
+                <groupId>org.sonatype.central</groupId>
+                <artifactId>central-publishing-maven-plugin</artifactId>
+                <version>${central-publishing-maven-plugin.version}</version>
                 <extensions>true</extensions>
                 <configuration>
-                    <serverId>ossrh</serverId>
-                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-                    <autoReleaseAfterClose>false</autoReleaseAfterClose>
-                    <autoDropAfterRelease>false</autoDropAfterRelease>
+                    <publishingServerId>ossrh</publishingServerId>
+                    <!-- 排除的模块 -->
+                    <excludeArtifacts>
+                        <excludeArtifact>phoenix-agent</excludeArtifact>
+                        <excludeArtifact>phoenix-server</excludeArtifact>
+                        <excludeArtifact>phoenix-ui</excludeArtifact>
+                    </excludeArtifacts>
                 </configuration>
             </plugin>
         </plugins>
@@ -671,11 +669,11 @@
     <distributionManagement>
         <repository>
             <id>ossrh</id>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+            <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2</url>
         </repository>
         <snapshotRepository>
             <id>ossrh</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+            <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
             <!-- 发布的时候，是否为Snapshot版本分配一个包含时间戳的构建号 -->
             <!-- <uniqueVersion>false</uniqueVersion> -->
         </snapshotRepository>

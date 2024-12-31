@@ -9,7 +9,7 @@
         <artifactId>phoenix-client</artifactId>
         <groupId>com.gitee.pifeng</groupId>
         <version>1.2.6.RELEASE</version>
-        <relativePath>..</relativePath>
+        <relativePath>../pom.xml</relativePath>
     </parent>
 
     <!-- 项目基本信息 -->

@@ -9,7 +9,7 @@
         <artifactId>phoenix</artifactId>
         <groupId>com.gitee.pifeng</groupId>
         <version>1.2.6.RELEASE</version>
-        <relativePath>..</relativePath>
+        <relativePath>../pom.xml</relativePath>
     </parent>
 
     <!-- 项目基本信息 -->
@@ -133,18 +133,6 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
-            <!-- sonatype的staging插件 -->
-            <plugin>
-                <groupId>org.sonatype.plugins</groupId>
-                <artifactId>nexus-staging-maven-plugin</artifactId>
-                <extensions>true</extensions>
-                <configuration>
-                    <serverId>ossrh</serverId>
-                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-                    <!-- 忽略这个模块 -->
-                    <skipNexusStagingDeployMojo>true</skipNexusStagingDeployMojo>
-                </configuration>
             </plugin>
             <!-- docker插件 -->
             <plugin>
