@@ -18,6 +18,6 @@ public enum AuthTypeEnums {
     /**
      * 第三方认证
      */
-    THIRD;
+    THIRD
 
 }

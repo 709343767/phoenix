@@ -38,7 +38,7 @@ public class ExceptionUtils {
         for (StackTraceElement stet : elements) {
             builder.append(stet).append("\n");
         }
-        return exceptionName + ":" + exceptionMessage + "\n" + builder.toString();
+        return exceptionName + ":" + exceptionMessage + "\n" + builder;
     }
 
 }

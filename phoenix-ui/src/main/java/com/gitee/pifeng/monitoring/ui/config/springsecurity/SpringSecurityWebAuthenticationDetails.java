@@ -25,17 +25,17 @@ public class SpringSecurityWebAuthenticationDetails extends WebAuthenticationDet
     /**
      * 前端传过来的验证码
      */
-    private String captcha;
+    private final String captcha;
 
     /**
      * 保存在session中的验证码
      */
-    private ICaptcha savedCaptcha;
+    private final ICaptcha savedCaptcha;
 
     /**
      * 验证码超时时长
      */
-    private LocalDateTime captchaExpireTime;
+    private final LocalDateTime captchaExpireTime;
 
     /**
      * <p>

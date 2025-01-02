@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
@@ -20,10 +21,10 @@ import java.lang.reflect.Method;
  */
 @Slf4j
 @Component
-public class BusinessAgencyScaner implements BeanPostProcessor {
+public class BusinessAgencyScanner implements BeanPostProcessor {
 
     @Override
-    public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
+    public Object postProcessAfterInitialization(Object bean, @Nullable String beanName) throws BeansException {
         Class<?> clazz = bean.getClass();
         // 类名
         String clazzName = clazz.getName();
@@ -61,36 +62,32 @@ public class BusinessAgencyScaner implements BeanPostProcessor {
     private void register(Object bean, Class<?> clazz) {
         // 拿到这个类所实现的接口
         Class<?>[] interfaces = clazz.getInterfaces();
-        if (interfaces.length > 0) {
-            // 扫描类的所有接口父类
-            for (Class<?> interFace : interfaces) {
-                // 判断是否为代理执行业务的接口
-                TargetInf targetInf = interFace.getAnnotation(TargetInf.class);
-                if (targetInf == null) {
+        // 扫描类的所有接口父类
+        for (Class<?> interFace : interfaces) {
+            // 判断是否为代理执行业务的接口
+            TargetInf targetInf = interFace.getAnnotation(TargetInf.class);
+            if (targetInf == null) {
+                continue;
+            }
+            // 找出命令方法
+            Method[] methods = interFace.getMethods();
+            for (Method method : methods) {
+                TargetMethod targetInfMethod = method.getAnnotation(TargetMethod.class);
+                if (targetInfMethod == null) {
                     continue;
                 }
-                // 找出命令方法
-                Method[] methods = interFace.getMethods();
-                if (methods.length > 0) {
-                    for (Method method : methods) {
-                        TargetMethod targetInfMethod = method.getAnnotation(TargetMethod.class);
-                        if (targetInfMethod == null) {
-                            continue;
-                        }
-                        Invoker invoker = Invoker.valueOf(bean, method);
-                        if (InvokerHolder.getInvoker(interFace, method.getName()) == null) {
-                            InvokerHolder.addInvoker(interFace, method.getName(), invoker);
-                        } else {
-                            log.error("重复注册执行器！");
-                        }
-                    }
+                Invoker invoker = Invoker.valueOf(bean, method);
+                if (InvokerHolder.getInvoker(interFace, method.getName()) == null) {
+                    InvokerHolder.addInvoker(interFace, method.getName(), invoker);
+                } else {
+                    log.error("重复注册执行器！");
                 }
             }
         }
     }
 
     @Override
-    public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
+    public Object postProcessBeforeInitialization(@Nullable Object bean, @Nullable String beanName) throws BeansException {
         return bean;
     }
 
