@@ -130,7 +130,7 @@
                     admin.req({
                         type: 'delete',
                         url: ctxPath + 'db-session4oracle/destroy-session?id=' + id,
-                        data: JSON.stringify(checkStatus.data),
+                        data: JSON.stringify(checkData),
                         dataType: 'json',
                         contentType: 'application/json;charset=utf-8',
                         headers: {

@@ -63,10 +63,10 @@ public interface IMonitorEnvService extends IService<MonitorEnv> {
      * 删除环境信息
      * </p>
      *
-     * @param monitorEnvVos 监控环境信息表现层对象
+     * @param ids 主键ID集合
      * @return layUiAdmin响应对象：如果删除成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
      * @author 皮锋
      * @custom.date 2021/12/27 10:11
      */
-    LayUiAdminResultVo deleteMonitorEnv(List<MonitorEnvVo> monitorEnvVos);
+    LayUiAdminResultVo deleteMonitorEnv(List<Long> ids);
 }

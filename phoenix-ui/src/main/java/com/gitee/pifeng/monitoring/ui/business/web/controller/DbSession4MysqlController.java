@@ -77,8 +77,8 @@ public class DbSession4MysqlController {
      * 结束会话
      * </p>
      *
-     * @param dbSession4MysqlVos MySQL数据库会话
-     * @param id                 数据库ID
+     * @param sessionIds MySQL数据库会话ID集合
+     * @param id         数据库ID
      * @return layUiAdmin响应对象
      * @throws NetException   自定义获取网络信息异常
      * @throws SigarException Sigar异常
@@ -93,9 +93,9 @@ public class DbSession4MysqlController {
             @Parameter(name = "id", description = "数据库ID", required = true, in = ParameterIn.QUERY)})
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.DATABASE + "#会话", operType = OperateTypeConstants.CONTROL, operDesc = "结束会话")
-    public LayUiAdminResultVo destroySession(@RequestBody List<DbSession4MysqlVo> dbSession4MysqlVos,
+    public LayUiAdminResultVo destroySession(@RequestBody List<Long> sessionIds,
                                              @RequestParam(value = "id") Long id) throws NetException, IOException, SigarException {
-        return this.dbSession4MysqlService.destroySession(dbSession4MysqlVos, id);
+        return this.dbSession4MysqlService.destroySession(sessionIds, id);
     }
 
 }

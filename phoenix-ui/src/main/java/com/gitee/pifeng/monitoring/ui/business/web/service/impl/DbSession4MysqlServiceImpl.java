@@ -21,14 +21,12 @@ import com.gitee.pifeng.monitoring.ui.constant.WebResponseConstants;
 import com.gitee.pifeng.monitoring.ui.core.UiPackageConstructor;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
-import org.hyperic.sigar.SigarException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -63,8 +61,8 @@ public class DbSession4MysqlServiceImpl implements IDbSession4MysqlService {
      * @param size    每页显示条数
      * @param id      数据库ID
      * @return 简单分页模型
-     * @throws NetException   自定义获取网络信息异常
-     * @throws IOException    IO异常
+     * @throws NetException 自定义获取网络信息异常
+     * @throws IOException  IO异常
      * @author 皮锋
      * @custom.date 2020/12/24 16:55
      */
@@ -127,17 +125,16 @@ public class DbSession4MysqlServiceImpl implements IDbSession4MysqlService {
      * 结束会话
      * </p>
      *
-     * @param dbSession4MysqlVos MySQL数据库会话
-     * @param id                 数据库ID
+     * @param sessionIds MySQL数据库会话ID集合
+     * @param id         数据库ID
      * @return LayUiAdmin响应对象
-     * @throws NetException   自定义获取网络信息异常
-     * @throws IOException    IO异常
+     * @throws NetException 自定义获取网络信息异常
+     * @throws IOException  IO异常
      * @author 皮锋
      * @custom.date 2020/12/25 17:05
      */
     @Override
-    public LayUiAdminResultVo destroySession(List<DbSession4MysqlVo> dbSession4MysqlVos, Long id) throws NetException, IOException {
-        List<Long> sessionIds = dbSession4MysqlVos.stream().map(DbSession4MysqlVo::getId).collect(Collectors.toList());
+    public LayUiAdminResultVo destroySession(List<Long> sessionIds, Long id) throws NetException, IOException {
         // 根据ID查询到此数据库信息
         MonitorDb monitorDb = this.monitorDbDao.selectById(id);
         // url

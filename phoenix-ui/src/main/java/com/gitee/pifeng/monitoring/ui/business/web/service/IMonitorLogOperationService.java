@@ -44,12 +44,12 @@ public interface IMonitorLogOperationService extends IService<MonitorLogOperatio
      * 删除操作日志
      * </p>
      *
-     * @param monitorLogOperationVos 操作日志信息
+     * @param ids 操作日志ID
      * @return layUiAdmin响应对象：如果删除成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
      * @author 皮锋
      * @custom.date 2021/6/15 14:38
      */
-    LayUiAdminResultVo deleteMonitorLogOperation(List<MonitorLogOperationVo> monitorLogOperationVos);
+    LayUiAdminResultVo deleteMonitorLogOperation(List<Long> ids);
 
     /**
      * <p>

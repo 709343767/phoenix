@@ -105,7 +105,7 @@ public class MonitorLogExceptionController {
      * 删除异常日志
      * </p>
      *
-     * @param monitorLogExceptionVos 异常日志信息
+     * @param ids 异常日志ID列表
      * @return layUiAdmin响应对象：如果删除成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
      * @author 皮锋
      * @custom.date 2021/6/18 12:36
@@ -115,8 +115,8 @@ public class MonitorLogExceptionController {
     @PreAuthorize("hasAuthority('超级管理员')")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.LOG + "#异常日志", operType = OperateTypeConstants.DELETE, operDesc = "删除异常日志")
-    public LayUiAdminResultVo deleteMonitorLogException(@RequestBody List<MonitorLogExceptionVo> monitorLogExceptionVos) {
-        return this.monitorLogExceptionService.deleteMonitorLogException(monitorLogExceptionVos);
+    public LayUiAdminResultVo deleteMonitorLogException(@RequestBody List<Long> ids) {
+        return this.monitorLogExceptionService.deleteMonitorLogException(ids);
     }
 
     /**

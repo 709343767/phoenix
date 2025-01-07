@@ -137,18 +137,14 @@ public class MonitorAlarmDefinitionServiceImpl extends ServiceImpl<IMonitorAlarm
      * 删除告警定义
      * </p>
      *
-     * @param monitorAlarmDefinitionVos 告警定义
+     * @param ids 主键ID集合
      * @return layUiAdmin响应对象：如果删除成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
      * @author 皮锋
      * @custom.date 2020/8/7 15:36
      */
     @Override
-    public LayUiAdminResultVo deleteMonitorAlarmDefinition(List<MonitorAlarmDefinitionVo> monitorAlarmDefinitionVos) {
-        int size = monitorAlarmDefinitionVos.size();
-        List<Long> ids = Lists.newLinkedList();
-        for (MonitorAlarmDefinitionVo monitorAlarmDefinitionVo : monitorAlarmDefinitionVos) {
-            ids.add(monitorAlarmDefinitionVo.getId());
-        }
+    public LayUiAdminResultVo deleteMonitorAlarmDefinition(List<Long> ids) {
+        int size = ids.size();
         int result = this.monitorAlarmDefinitionDao.deleteBatchIds(ids);
         if (result == size) {
             return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);

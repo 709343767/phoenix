@@ -46,12 +46,12 @@ public interface IMonitorTcpService extends IService<MonitorTcp> {
      * 删除TCP
      * </p>
      *
-     * @param monitorTcpVos TCP信息
+     * @param ids 主键ID集合
      * @return layUiAdmin响应对象：如果删除成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
      * @author 皮锋
      * @custom.date 2022/1/11 9:45
      */
-    LayUiAdminResultVo deleteMonitorTcp(List<MonitorTcpVo> monitorTcpVos);
+    LayUiAdminResultVo deleteMonitorTcp(List<Long> ids);
 
     /**
      * <p>

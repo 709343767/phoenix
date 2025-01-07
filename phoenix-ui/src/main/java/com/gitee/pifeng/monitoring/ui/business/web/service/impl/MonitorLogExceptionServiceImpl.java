@@ -14,7 +14,6 @@ import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorLogExceptionS
 import com.gitee.pifeng.monitoring.ui.business.web.vo.LayUiAdminResultVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.MonitorLogExceptionVo;
 import com.gitee.pifeng.monitoring.ui.constant.WebResponseConstants;
-import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
@@ -76,17 +75,13 @@ public class MonitorLogExceptionServiceImpl extends ServiceImpl<IMonitorLogExcep
      * 删除异常日志
      * </p>
      *
-     * @param monitorLogExceptionVos 异常日志信息
+     * @param ids 异常日志ID列表
      * @return layUiAdmin响应对象：如果删除成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
      * @author 皮锋
      * @custom.date 2021/6/18 12:37
      */
     @Override
-    public LayUiAdminResultVo deleteMonitorLogException(List<MonitorLogExceptionVo> monitorLogExceptionVos) {
-        List<Long> ids = Lists.newArrayList();
-        for (MonitorLogExceptionVo monitorLogExceptionVo : monitorLogExceptionVos) {
-            ids.add(monitorLogExceptionVo.getId());
-        }
+    public LayUiAdminResultVo deleteMonitorLogException(List<Long> ids) {
         this.baseMapper.deleteBatchIds(ids);
         return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);
     }

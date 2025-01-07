@@ -399,7 +399,7 @@ public class MonitorUserServiceImpl extends ServiceImpl<IMonitorUserDao, Monitor
      * 删除用户
      * </p>
      *
-     * @param monitorUserVos 用户信息
+     * @param ids 用户ID集合
      * @return layUiAdmin响应对象：如果删除用户成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
      * @throws NotFoundUserException 找不到用户异常
      * @author 皮锋
@@ -407,13 +407,8 @@ public class MonitorUserServiceImpl extends ServiceImpl<IMonitorUserDao, Monitor
      */
     @Override
     @Transactional(rollbackFor = Throwable.class)
-    public LayUiAdminResultVo deleteUser(List<MonitorUserVo> monitorUserVos) throws NotFoundUserException {
-        int size = monitorUserVos.size();
-        List<Long> ids = Lists.newArrayList();
-        for (MonitorUserVo monitorUserVo : monitorUserVos) {
-            Long id = monitorUserVo.getId();
-            ids.add(id);
-        }
+    public LayUiAdminResultVo deleteUser(List<Long> ids) throws NotFoundUserException {
+        int size = ids.size();
         List<MonitorUserRealm> monitorUserRealms = this.getMonitorUserRealms(ids);
         int result = this.monitorUserDao.deleteBatchIds(ids);
         if (size == result) {

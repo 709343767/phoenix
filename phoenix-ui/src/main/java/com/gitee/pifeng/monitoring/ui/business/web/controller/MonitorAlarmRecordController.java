@@ -125,7 +125,7 @@ public class MonitorAlarmRecordController {
      * 删除告警记录
      * </p>
      *
-     * @param monitorAlarmRecordVos 告警记录
+     * @param ids 主键ID集合
      * @return layUiAdmin响应对象：如果删除成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
      * @author 皮锋
      * @custom.date 2020/8/7 16:58
@@ -135,8 +135,8 @@ public class MonitorAlarmRecordController {
     @PreAuthorize("hasAuthority('超级管理员')")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.ALARM, operType = OperateTypeConstants.DELETE, operDesc = "删除告警记录")
-    public LayUiAdminResultVo deleteMonitorAlarmRecord(@RequestBody List<MonitorAlarmRecordVo> monitorAlarmRecordVos) {
-        return this.monitorAlarmRecordService.deleteMonitorAlarmRecord(monitorAlarmRecordVos);
+    public LayUiAdminResultVo deleteMonitorAlarmRecord(@RequestBody List<Long> ids) {
+        return this.monitorAlarmRecordService.deleteMonitorAlarmRecord(ids);
     }
 
     /**

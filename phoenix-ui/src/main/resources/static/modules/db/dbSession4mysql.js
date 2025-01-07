@@ -105,7 +105,7 @@
                     admin.req({
                         type: 'delete',
                         url: ctxPath + 'db-session4mysql/destroy-session?id=' + id,
-                        data: JSON.stringify(checkStatus.data),
+                        data: JSON.stringify(checkData.map(data => data.id)),
                         dataType: 'json',
                         contentType: 'application/json;charset=utf-8',
                         headers: {
@@ -147,7 +147,7 @@
                     admin.req({
                         type: 'delete',
                         url: ctxPath + 'db-session4mysql/destroy-session?id=' + id,
-                        data: JSON.stringify([data]),
+                        data: JSON.stringify([data.id]),
                         dataType: 'json',
                         contentType: 'application/json;charset=utf-8',
                         headers: {

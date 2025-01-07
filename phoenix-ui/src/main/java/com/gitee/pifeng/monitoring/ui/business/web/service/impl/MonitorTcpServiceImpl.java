@@ -142,7 +142,7 @@ public class MonitorTcpServiceImpl extends ServiceImpl<IMonitorTcpDao, MonitorTc
      * 删除TCP
      * </p>
      *
-     * @param monitorTcpVos TCP信息
+     * @param ids 主键ID集合
      * @return layUiAdmin响应对象：如果删除成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
      * @author 皮锋
      * @custom.date 2022/1/11 9:45
@@ -150,11 +150,7 @@ public class MonitorTcpServiceImpl extends ServiceImpl<IMonitorTcpDao, MonitorTc
     @Transactional(rollbackFor = Throwable.class, isolation = Isolation.READ_COMMITTED)
     @Override
     @Retryable
-    public LayUiAdminResultVo deleteMonitorTcp(List<MonitorTcpVo> monitorTcpVos) {
-        List<Long> ids = Lists.newArrayList();
-        for (MonitorTcpVo monitorTcpVo : monitorTcpVos) {
-            ids.add(monitorTcpVo.getId());
-        }
+    public LayUiAdminResultVo deleteMonitorTcp(List<Long> ids) {
         // 删除TCP历史记录表
         LambdaUpdateWrapper<MonitorTcpHistory> monitorTcpHistoryLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
         monitorTcpHistoryLambdaUpdateWrapper.in(MonitorTcpHistory::getTcpId, ids);

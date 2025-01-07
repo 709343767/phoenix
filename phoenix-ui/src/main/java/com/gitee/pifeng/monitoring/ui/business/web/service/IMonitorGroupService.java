@@ -63,10 +63,10 @@ public interface IMonitorGroupService extends IService<MonitorGroup> {
      * 删除分组信息
      * </p>
      *
-     * @param monitorGroupVos 监控分组信息表现层对象
+     * @param ids 主键ID集合
      * @return layUiAdmin响应对象：如果删除成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
      * @author 皮锋
      * @custom.date 2021/12/27 12:28
      */
-    LayUiAdminResultVo deleteMonitorGroup(List<MonitorGroupVo> monitorGroupVos);
+    LayUiAdminResultVo deleteMonitorGroup(List<Long> ids);
 }

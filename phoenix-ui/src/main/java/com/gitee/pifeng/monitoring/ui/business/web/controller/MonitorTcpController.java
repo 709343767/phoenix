@@ -141,7 +141,7 @@ public class MonitorTcpController {
      * 删除TCP
      * </p>
      *
-     * @param monitorTcpVos TCP信息
+     * @param ids 主键ID集合
      * @return layUiAdmin响应对象：如果删除成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
      * @author 皮锋
      * @custom.date 2022/1/11 9:44
@@ -151,8 +151,8 @@ public class MonitorTcpController {
     @PreAuthorize("hasAuthority('超级管理员')")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.TCP4SERVICE, operType = OperateTypeConstants.DELETE, operDesc = "删除TCP")
-    public LayUiAdminResultVo deleteMonitorTcp(@RequestBody List<MonitorTcpVo> monitorTcpVos) {
-        return this.monitorTcpService.deleteMonitorTcp(monitorTcpVos);
+    public LayUiAdminResultVo deleteMonitorTcp(@RequestBody List<Long> ids) {
+        return this.monitorTcpService.deleteMonitorTcp(ids);
     }
 
     /**

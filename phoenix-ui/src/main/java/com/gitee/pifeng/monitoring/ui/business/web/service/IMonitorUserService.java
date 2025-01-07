@@ -122,11 +122,11 @@ public interface IMonitorUserService extends IService<MonitorUser>, Authenticati
      * 删除用户
      * </p>
      *
-     * @param monitorUserVos 用户信息
+     * @param ids 用户ID集合
      * @return layUiAdmin响应对象：如果删除用户成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
      * @throws NotFoundUserException 找不到用户异常
      * @author 皮锋
      * @custom.date 2020/8/2 17:35
      */
-    LayUiAdminResultVo deleteUser(List<MonitorUserVo> monitorUserVos) throws NotFoundUserException;
+    LayUiAdminResultVo deleteUser(List<Long> ids) throws NotFoundUserException;
 }

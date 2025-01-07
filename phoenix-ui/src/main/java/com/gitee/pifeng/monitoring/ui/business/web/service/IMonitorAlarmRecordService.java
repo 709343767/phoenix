@@ -80,12 +80,12 @@ public interface IMonitorAlarmRecordService extends IService<MonitorAlarmRecord>
      * 删除告警记录
      * </p>
      *
-     * @param monitorAlarmRecordVos 告警记录
+     * @param ids 主键ID集合
      * @return layUiAdmin响应对象：如果删除成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
      * @author 皮锋
      * @custom.date 2020/8/7 17:00
      */
-    LayUiAdminResultVo deleteMonitorAlarmRecord(List<MonitorAlarmRecordVo> monitorAlarmRecordVos);
+    LayUiAdminResultVo deleteMonitorAlarmRecord(List<Long> ids);
 
     /**
      * <p>

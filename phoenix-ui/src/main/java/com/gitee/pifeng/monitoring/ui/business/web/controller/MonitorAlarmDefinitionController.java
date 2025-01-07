@@ -173,7 +173,7 @@ public class MonitorAlarmDefinitionController {
      * 删除告警定义
      * </p>
      *
-     * @param monitorAlarmDefinitionVos 告警定义
+     * @param ids 主键ID集合
      * @return layUiAdmin响应对象：如果删除成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
      * @author 皮锋
      * @custom.date 2020/8/7 15:34
@@ -183,8 +183,8 @@ public class MonitorAlarmDefinitionController {
     @PreAuthorize("hasAuthority('超级管理员')")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.CONFIG_MANAGE + "#告警定义", operType = OperateTypeConstants.DELETE, operDesc = "删除告警定义")
-    public LayUiAdminResultVo deleteMonitorAlarmDefinition(@RequestBody List<MonitorAlarmDefinitionVo> monitorAlarmDefinitionVos) {
-        return this.monitorAlarmDefinitionService.deleteMonitorAlarmDefinition(monitorAlarmDefinitionVos);
+    public LayUiAdminResultVo deleteMonitorAlarmDefinition(@RequestBody List<Long> ids) {
+        return this.monitorAlarmDefinitionService.deleteMonitorAlarmDefinition(ids);
     }
 
 }

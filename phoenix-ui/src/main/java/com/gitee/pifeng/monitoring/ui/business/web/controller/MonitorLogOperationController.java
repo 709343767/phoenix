@@ -101,7 +101,7 @@ public class MonitorLogOperationController {
      * 删除操作日志
      * </p>
      *
-     * @param monitorLogOperationVos 操作日志信息
+     * @param ids 操作日志ID
      * @return layUiAdmin响应对象：如果删除成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
      * @author 皮锋
      * @custom.date 2021/6/15 14:30
@@ -111,8 +111,8 @@ public class MonitorLogOperationController {
     @PreAuthorize("hasAuthority('超级管理员')")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.LOG + "#操作日志", operType = OperateTypeConstants.DELETE, operDesc = "删除操作日志")
-    public LayUiAdminResultVo deleteMonitorLogOperation(@RequestBody List<MonitorLogOperationVo> monitorLogOperationVos) {
-        return this.monitorLogOperationService.deleteMonitorLogOperation(monitorLogOperationVos);
+    public LayUiAdminResultVo deleteMonitorLogOperation(@RequestBody List<Long> ids) {
+        return this.monitorLogOperationService.deleteMonitorLogOperation(ids);
     }
 
     /**

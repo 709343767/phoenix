@@ -128,7 +128,7 @@ public class MonitorNetworkController {
      * 删除网络
      * </p>
      *
-     * @param monitorNetVos 网络信息
+     * @param ids 主键ID集合
      * @return layUiAdmin响应对象：如果删除成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
      * @author 皮锋
      * @custom.date 2020/9/26 12:59
@@ -138,8 +138,8 @@ public class MonitorNetworkController {
     @PreAuthorize("hasAuthority('超级管理员')")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.NET, operType = OperateTypeConstants.DELETE, operDesc = "删除网络")
-    public LayUiAdminResultVo deleteMonitorNet(@RequestBody List<MonitorNetVo> monitorNetVos) {
-        return this.monitorNetService.deleteMonitorNet(monitorNetVos);
+    public LayUiAdminResultVo deleteMonitorNet(@RequestBody List<Long> ids) {
+        return this.monitorNetService.deleteMonitorNet(ids);
     }
 
     /**

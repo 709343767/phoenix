@@ -200,7 +200,7 @@ public class MonitorUserController {
      * 删除用户
      * </p>
      *
-     * @param monitorUserVos 用户信息
+     * @param ids 用户ID集合
      * @return layUiAdmin响应对象：如果删除用户成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
      * @throws NotFoundUserException 找不到用户异常
      * @author 皮锋
@@ -211,8 +211,8 @@ public class MonitorUserController {
     @PreAuthorize("hasAuthority('超级管理员')")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.USER_MANAGE + "#用户", operType = OperateTypeConstants.DELETE, operDesc = "删除用户")
-    public LayUiAdminResultVo deleteUser(@RequestBody List<MonitorUserVo> monitorUserVos) throws NotFoundUserException {
-        return this.monitorUserService.deleteUser(monitorUserVos);
+    public LayUiAdminResultVo deleteUser(@RequestBody List<Long> ids) throws NotFoundUserException {
+        return this.monitorUserService.deleteUser(ids);
     }
 
 }

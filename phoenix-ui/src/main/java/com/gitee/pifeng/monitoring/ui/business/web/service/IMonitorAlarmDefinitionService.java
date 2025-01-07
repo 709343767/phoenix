@@ -65,10 +65,10 @@ public interface IMonitorAlarmDefinitionService extends IService<MonitorAlarmDef
      * 删除告警定义
      * </p>
      *
-     * @param monitorAlarmDefinitionVos 告警定义
+     * @param ids 主键ID集合
      * @return layUiAdmin响应对象：如果删除成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
      * @author 皮锋
      * @custom.date 2020/8/7 15:36
      */
-    LayUiAdminResultVo deleteMonitorAlarmDefinition(List<MonitorAlarmDefinitionVo> monitorAlarmDefinitionVos);
+    LayUiAdminResultVo deleteMonitorAlarmDefinition(List<Long> ids);
 }

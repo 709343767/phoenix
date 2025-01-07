@@ -46,12 +46,12 @@ public interface IMonitorHttpService extends IService<MonitorHttp> {
      * 删除HTTP
      * </p>
      *
-     * @param monitorHttpVos HTTP信息
+     * @param ids 主键ID集合
      * @return layUiAdmin响应对象：如果删除成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
      * @author 皮锋
      * @custom.date 2022/1/11 9:44
      */
-    LayUiAdminResultVo deleteMonitorHttp(List<MonitorHttpVo> monitorHttpVos);
+    LayUiAdminResultVo deleteMonitorHttp(List<Long> ids);
 
     /**
      * <p>

@@ -48,12 +48,12 @@ public interface IMonitorLogExceptionService extends IService<MonitorLogExceptio
      * 删除异常日志
      * </p>
      *
-     * @param monitorLogExceptionVos 异常日志信息
+     * @param ids 异常日志ID列表
      * @return layUiAdmin响应对象：如果删除成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
      * @author 皮锋
      * @custom.date 2021/6/18 12:37
      */
-    LayUiAdminResultVo deleteMonitorLogException(List<MonitorLogExceptionVo> monitorLogExceptionVos);
+    LayUiAdminResultVo deleteMonitorLogException(List<Long> ids);
 
     /**
      * <p>

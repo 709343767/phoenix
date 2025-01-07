@@ -42,6 +42,12 @@ spring:
   jmx:
     #关闭jmx，因为用不到
     enabled: false
+  #缓存
+  cache:
+    type: caffeine
+    caffeine:
+      #缓存的最大条数，最后一次读或写操作后经过指定时间过期
+      spec: maximumSize=5000,expireAfterAccess=3600s
   session:
     store-type: jdbc
   mvc:

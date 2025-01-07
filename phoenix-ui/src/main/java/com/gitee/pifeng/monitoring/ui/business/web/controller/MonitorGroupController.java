@@ -165,7 +165,7 @@ public class MonitorGroupController {
      * 删除分组信息
      * </p>
      *
-     * @param monitorGroupVos 分组信息表现层对象
+     * @param ids 主键ID集合
      * @return layUiAdmin响应对象：如果删除成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
      * @author 皮锋
      * @custom.date 2021/12/27 12:25
@@ -175,8 +175,8 @@ public class MonitorGroupController {
     @PreAuthorize("hasAuthority('超级管理员')")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.CONFIG_MANAGE + "#分组管理", operType = OperateTypeConstants.DELETE, operDesc = "删除分组信息")
-    public LayUiAdminResultVo deleteMonitorGroup(@RequestBody List<MonitorGroupVo> monitorGroupVos) {
-        return this.monitorGroupService.deleteMonitorGroup(monitorGroupVos);
+    public LayUiAdminResultVo deleteMonitorGroup(@RequestBody List<Long> ids) {
+        return this.monitorGroupService.deleteMonitorGroup(ids);
     }
 
 }

@@ -41,8 +41,8 @@ public interface IDbSession4MysqlService {
      * 结束会话
      * </p>
      *
-     * @param dbSession4MysqlVos MySQL数据库会话
-     * @param id                 数据库ID
+     * @param sessionIds MySQL数据库会话ID集合
+     * @param id         数据库ID
      * @return LayUiAdmin响应对象
      * @throws NetException   自定义获取网络信息异常
      * @throws SigarException Sigar异常
@@ -50,6 +50,6 @@ public interface IDbSession4MysqlService {
      * @author 皮锋
      * @custom.date 2020/12/25 17:05
      */
-    LayUiAdminResultVo destroySession(List<DbSession4MysqlVo> dbSession4MysqlVos, Long id) throws NetException, SigarException, IOException;
+    LayUiAdminResultVo destroySession(List<Long> sessionIds, Long id) throws NetException, SigarException, IOException;
 
 }

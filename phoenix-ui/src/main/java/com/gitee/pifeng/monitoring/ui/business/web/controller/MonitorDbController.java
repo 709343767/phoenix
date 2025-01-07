@@ -284,7 +284,7 @@ public class MonitorDbController {
      * 删除数据库信息
      * </p>
      *
-     * @param monitorDbVos 删除数据库信息
+     * @param ids 数据库主键ID集合
      * @return layUiAdmin响应对象：如果删除成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
      * @author 皮锋
      * @custom.date 2020/12/19 20:59
@@ -294,8 +294,8 @@ public class MonitorDbController {
     @PreAuthorize("hasAuthority('超级管理员')")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.DATABASE, operType = OperateTypeConstants.DELETE, operDesc = "删除数据库信息")
-    public LayUiAdminResultVo deleteMonitorDb(@RequestBody List<MonitorDbVo> monitorDbVos) {
-        return this.monitorDbService.deleteMonitorDb(monitorDbVos);
+    public LayUiAdminResultVo deleteMonitorDb(@RequestBody List<Long> ids) {
+        return this.monitorDbService.deleteMonitorDb(ids);
     }
 
     /**

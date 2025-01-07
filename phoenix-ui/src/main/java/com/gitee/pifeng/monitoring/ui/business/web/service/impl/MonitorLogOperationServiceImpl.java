@@ -112,17 +112,13 @@ public class MonitorLogOperationServiceImpl extends ServiceImpl<IMonitorLogOpera
      * 删除操作日志
      * </p>
      *
-     * @param monitorLogOperationVos 操作日志信息
+     * @param ids 操作日志ID
      * @return layUiAdmin响应对象：如果删除成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
      * @author 皮锋
      * @custom.date 2021/6/15 14:38
      */
     @Override
-    public LayUiAdminResultVo deleteMonitorLogOperation(List<MonitorLogOperationVo> monitorLogOperationVos) {
-        List<Long> ids = Lists.newArrayList();
-        for (MonitorLogOperationVo monitorLogOperationVo : monitorLogOperationVos) {
-            ids.add(monitorLogOperationVo.getId());
-        }
+    public LayUiAdminResultVo deleteMonitorLogOperation(List<Long> ids) {
         this.monitorLogOperationDao.deleteBatchIds(ids);
         return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);
     }

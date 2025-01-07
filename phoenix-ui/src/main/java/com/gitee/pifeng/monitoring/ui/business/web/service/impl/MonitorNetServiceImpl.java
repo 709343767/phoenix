@@ -161,7 +161,7 @@ public class MonitorNetServiceImpl extends ServiceImpl<IMonitorNetDao, MonitorNe
      * 删除网络
      * </p>
      *
-     * @param monitorNetVos 网络信息
+     * @param ids 主键ID集合
      * @return layUiAdmin响应对象：如果删除成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
      * @author 皮锋
      * @custom.date 2020/9/26 14:02
@@ -169,11 +169,7 @@ public class MonitorNetServiceImpl extends ServiceImpl<IMonitorNetDao, MonitorNe
     @Transactional(rollbackFor = Throwable.class, isolation = Isolation.READ_COMMITTED)
     @Override
     @Retryable
-    public LayUiAdminResultVo deleteMonitorNet(List<MonitorNetVo> monitorNetVos) {
-        List<Long> ids = Lists.newArrayList();
-        for (MonitorNetVo monitorNetVo : monitorNetVos) {
-            ids.add(monitorNetVo.getId());
-        }
+    public LayUiAdminResultVo deleteMonitorNet(List<Long> ids) {
         // 删除历史记录
         LambdaUpdateWrapper<MonitorNetHistory> monitorNetHistoryLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
         monitorNetHistoryLambdaUpdateWrapper.in(MonitorNetHistory::getNetId, ids);

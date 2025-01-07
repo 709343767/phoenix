@@ -321,7 +321,7 @@
                         admin.req({
                             type: 'delete',
                             url: ctxPath + 'monitor-server/delete-monitor-server',
-                            data: JSON.stringify(checkStatus.data),
+                            data: JSON.stringify(checkData.map(({id, ip}) => ({id, ip}))),
                             dataType: 'json',
                             contentType: 'application/json;charset=utf-8',
                             headers: {
@@ -472,7 +472,7 @@
                                 admin.req({
                                     type: 'delete',
                                     url: ctxPath + 'monitor-server/delete-monitor-server',
-                                    data: JSON.stringify([data]),
+                                    data: JSON.stringify([{id: data.id, ip: data.ip}]),
                                     dataType: 'json',
                                     contentType: 'application/json;charset=utf-8',
                                     headers: {

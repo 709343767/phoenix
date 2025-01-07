@@ -150,7 +150,7 @@ public class MonitorHttpServiceImpl extends ServiceImpl<IMonitorHttpDao, Monitor
      * 删除HTTP
      * </p>
      *
-     * @param monitorHttpVos HTTP信息
+     * @param ids 主键ID集合
      * @return layUiAdmin响应对象：如果删除成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
      * @author 皮锋
      * @custom.date 2022/1/11 9:44
@@ -158,11 +158,7 @@ public class MonitorHttpServiceImpl extends ServiceImpl<IMonitorHttpDao, Monitor
     @Transactional(rollbackFor = Throwable.class, isolation = Isolation.READ_COMMITTED)
     @Override
     @Retryable
-    public LayUiAdminResultVo deleteMonitorHttp(List<MonitorHttpVo> monitorHttpVos) {
-        List<Long> ids = Lists.newArrayList();
-        for (MonitorHttpVo monitorHttpVo : monitorHttpVos) {
-            ids.add(monitorHttpVo.getId());
-        }
+    public LayUiAdminResultVo deleteMonitorHttp(List<Long> ids) {
         // 删除HTTP历史记录表
         LambdaUpdateWrapper<MonitorHttpHistory> monitorHttpHistoryLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
         monitorHttpHistoryLambdaUpdateWrapper.in(MonitorHttpHistory::getHttpId, ids);

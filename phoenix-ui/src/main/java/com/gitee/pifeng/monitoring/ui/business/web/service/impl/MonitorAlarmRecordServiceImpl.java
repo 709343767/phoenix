@@ -218,18 +218,14 @@ public class MonitorAlarmRecordServiceImpl extends ServiceImpl<IMonitorAlarmReco
      * 删除告警记录
      * </p>
      *
-     * @param monitorAlarmRecordVos 告警记录
+     * @param ids 主键ID集合
      * @return layUiAdmin响应对象：如果删除成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
      * @author 皮锋
      * @custom.date 2020/8/7 17:00
      */
     @Override
-    public LayUiAdminResultVo deleteMonitorAlarmRecord(List<MonitorAlarmRecordVo> monitorAlarmRecordVos) {
-        int size = monitorAlarmRecordVos.size();
-        List<Long> ids = Lists.newLinkedList();
-        for (MonitorAlarmRecordVo monitorAlarmRecordVo : monitorAlarmRecordVos) {
-            ids.add(monitorAlarmRecordVo.getId());
-        }
+    public LayUiAdminResultVo deleteMonitorAlarmRecord(List<Long> ids) {
+        int size = ids.size();
         int result = this.baseMapper.deleteBatchIds(ids);
         if (result == size) {
             return LayUiAdminResultVo.ok(WebResponseConstants.SUCCESS);

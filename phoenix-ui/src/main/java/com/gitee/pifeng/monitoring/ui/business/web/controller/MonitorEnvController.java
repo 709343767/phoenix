@@ -165,7 +165,7 @@ public class MonitorEnvController {
      * 删除环境信息
      * </p>
      *
-     * @param monitorEnvVos 环境信息表现层对象
+     * @param ids 主键ID集合
      * @return layUiAdmin响应对象：如果删除成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
      * @author 皮锋
      * @custom.date 2021/12/27 10:09
@@ -175,8 +175,8 @@ public class MonitorEnvController {
     @PreAuthorize("hasAuthority('超级管理员')")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.CONFIG_MANAGE + "#环境管理", operType = OperateTypeConstants.DELETE, operDesc = "删除环境信息")
-    public LayUiAdminResultVo deleteMonitorEnv(@RequestBody List<MonitorEnvVo> monitorEnvVos) {
-        return this.monitorEnvService.deleteMonitorEnv(monitorEnvVos);
+    public LayUiAdminResultVo deleteMonitorEnv(@RequestBody List<Long> ids) {
+        return this.monitorEnvService.deleteMonitorEnv(ids);
     }
 
 }

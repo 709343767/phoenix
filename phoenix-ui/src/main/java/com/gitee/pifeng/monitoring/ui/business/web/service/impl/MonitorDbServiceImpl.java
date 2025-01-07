@@ -309,18 +309,14 @@ public class MonitorDbServiceImpl extends ServiceImpl<IMonitorDbDao, MonitorDb> 
      * 删除数据库信息
      * </p>
      *
-     * @param monitorDbVos 数据库信息
+     * @param ids 数据库主键ID集合
      * @return layUiAdmin响应对象：如果删除成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
      * @author 皮锋
      * @custom.date 2020/12/19 20:59
      */
     @Transactional(rollbackFor = Throwable.class, isolation = Isolation.READ_COMMITTED)
     @Override
-    public LayUiAdminResultVo deleteMonitorDb(List<MonitorDbVo> monitorDbVos) {
-        List<Long> ids = Lists.newArrayList();
-        for (MonitorDbVo monitorDbVo : monitorDbVos) {
-            ids.add(monitorDbVo.getId());
-        }
+    public LayUiAdminResultVo deleteMonitorDb(List<Long> ids) {
         this.monitorDbDao.deleteBatchIds(ids);
         // 注意：删除实时监控信息，这个不要忘记了
         this.monitorRealtimeMonitoringService.delete(MonitorTypeEnums.DATABASE, null, ids);

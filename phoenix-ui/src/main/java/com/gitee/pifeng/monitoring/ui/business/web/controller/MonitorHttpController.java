@@ -141,7 +141,7 @@ public class MonitorHttpController {
      * 删除HTTP
      * </p>
      *
-     * @param monitorHttpVos HTTP信息
+     * @param ids 主键ID集合
      * @return layUiAdmin响应对象：如果删除成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
      * @author 皮锋
      * @custom.date 2022/1/11 9:44
@@ -151,8 +151,8 @@ public class MonitorHttpController {
     @PreAuthorize("hasAuthority('超级管理员')")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.HTTP4SERVICE, operType = OperateTypeConstants.DELETE, operDesc = "删除HTTP")
-    public LayUiAdminResultVo deleteMonitorHttp(@RequestBody List<MonitorHttpVo> monitorHttpVos) {
-        return this.monitorHttpService.deleteMonitorHttp(monitorHttpVos);
+    public LayUiAdminResultVo deleteMonitorHttp(@RequestBody List<Long> ids) {
+        return this.monitorHttpService.deleteMonitorHttp(ids);
     }
 
     /**

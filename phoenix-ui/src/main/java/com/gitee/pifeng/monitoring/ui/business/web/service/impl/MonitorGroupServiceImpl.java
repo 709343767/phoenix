@@ -136,17 +136,13 @@ public class MonitorGroupServiceImpl extends ServiceImpl<IMonitorGroupDao, Monit
      * 删除分组信息
      * </p>
      *
-     * @param monitorGroupVos 监控分组信息表现层对象
+     * @param ids 主键ID集合
      * @return layUiAdmin响应对象：如果删除成功，LayUiAdminResultVo.data="success"，否则LayUiAdminResultVo.data="fail"。
      * @author 皮锋
      * @custom.date 2021/12/27 12:28
      */
     @Override
-    public LayUiAdminResultVo deleteMonitorGroup(List<MonitorGroupVo> monitorGroupVos) {
-        List<Long> ids = Lists.newArrayList();
-        for (MonitorGroupVo monitorGroupVo : monitorGroupVos) {
-            ids.add(monitorGroupVo.getId());
-        }
+    public LayUiAdminResultVo deleteMonitorGroup(List<Long> ids) {
         LambdaUpdateWrapper<MonitorGroup> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();
         lambdaUpdateWrapper.in(MonitorGroup::getId, ids);
         try {
