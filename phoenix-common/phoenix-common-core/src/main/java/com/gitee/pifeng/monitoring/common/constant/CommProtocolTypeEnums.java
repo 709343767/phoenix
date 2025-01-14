@@ -63,19 +63,19 @@ public enum CommProtocolTypeEnums {
             return CommProtocolTypeEnums.HTTPS;
         }
         // WS 协议
-        else if (StringUtils.equalsIgnoreCase(CommProtocolTypeEnums.WS.name(), protocolTypeStr)) {
+        if (StringUtils.equalsIgnoreCase(CommProtocolTypeEnums.WS.name(), protocolTypeStr)) {
             return CommProtocolTypeEnums.WS;
         }
         // WSS 协议
-        else if (StringUtils.equalsIgnoreCase(CommProtocolTypeEnums.WSS.name(), protocolTypeStr)) {
+        if (StringUtils.equalsIgnoreCase(CommProtocolTypeEnums.WSS.name(), protocolTypeStr)) {
             return CommProtocolTypeEnums.WSS;
         }
         // TCP 协议
-        else if (StringUtils.equalsIgnoreCase(CommProtocolTypeEnums.TCP.name(), protocolTypeStr)) {
+        if (StringUtils.equalsIgnoreCase(CommProtocolTypeEnums.TCP.name(), protocolTypeStr)) {
             return CommProtocolTypeEnums.TCP;
         }
         // UDP 协议
-        else if (StringUtils.equalsIgnoreCase(CommProtocolTypeEnums.UDP.name(), protocolTypeStr)) {
+        if (StringUtils.equalsIgnoreCase(CommProtocolTypeEnums.UDP.name(), protocolTypeStr)) {
             return CommProtocolTypeEnums.UDP;
         }
         throw new MonitoringUniversalException("未知的通信协议！");

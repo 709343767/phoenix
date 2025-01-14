@@ -46,9 +46,15 @@ public class DbSession4OracleController {
      * 获取会话列表
      * </p>
      *
-     * @param current 当前页
-     * @param size    每页显示条数
-     * @param id      数据库ID
+     * @param current    当前页
+     * @param size       每页显示条数
+     * @param id         数据库ID
+     * @param username   用户
+     * @param schemaName 模式
+     * @param state      状态
+     * @param machine    远程主机
+     * @param osUser     远程用户
+     * @param sql        SQL
      * @return layUiAdmin响应对象
      * @throws NetException   自定义获取网络信息异常
      * @throws SigarException Sigar异常
@@ -60,14 +66,27 @@ public class DbSession4OracleController {
     @Parameters(value = {
             @Parameter(name = "current", description = "当前页", required = true, in = ParameterIn.QUERY),
             @Parameter(name = "size", description = "每页显示条数", required = true, in = ParameterIn.QUERY),
-            @Parameter(name = "id", description = "数据库ID", required = true, in = ParameterIn.QUERY)})
+            @Parameter(name = "id", description = "数据库ID", required = true, in = ParameterIn.QUERY),
+            @Parameter(name = "username", description = "用户", in = ParameterIn.QUERY),
+            @Parameter(name = "schemaName", description = "模式", in = ParameterIn.QUERY),
+            @Parameter(name = "state", description = "状态", in = ParameterIn.QUERY),
+            @Parameter(name = "machine", description = "远程主机", in = ParameterIn.QUERY),
+            @Parameter(name = "osUser", description = "远程用户", in = ParameterIn.QUERY),
+            @Parameter(name = "sql", description = "SQL", in = ParameterIn.QUERY)})
     @GetMapping("/get-session-list")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.DATABASE + "#会话", operType = OperateTypeConstants.QUERY, operDesc = "获取会话列表")
     public LayUiAdminResultVo getSessionList(@RequestParam(value = "current") Long current,
                                              @RequestParam(value = "size") Long size,
-                                             @RequestParam(value = "id") Long id) throws NetException, IOException, SigarException {
-        Page<DbSession4OracleVo> page = this.dbSession4OracleService.getSessionList(current, size, id);
+                                             @RequestParam(value = "id") Long id,
+                                             @RequestParam(value = "username", required = false) String username,
+                                             @RequestParam(value = "schemaName", required = false) String schemaName,
+                                             @RequestParam(value = "state", required = false) String state,
+                                             @RequestParam(value = "machine", required = false) String machine,
+                                             @RequestParam(value = "osUser", required = false) String osUser,
+                                             @RequestParam(value = "sql", required = false) String sql)
+            throws NetException, IOException, SigarException {
+        Page<DbSession4OracleVo> page = this.dbSession4OracleService.getSessionList(current, size, id, username, schemaName, state, machine, osUser, sql);
         return LayUiAdminResultVo.ok(page);
     }
 

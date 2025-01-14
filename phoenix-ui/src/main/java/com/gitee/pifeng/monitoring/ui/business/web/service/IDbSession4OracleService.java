@@ -24,9 +24,15 @@ public interface IDbSession4OracleService {
      * 获取会话列表
      * </p>
      *
-     * @param current 当前页
-     * @param size    每页显示条数
-     * @param id      数据库ID
+     * @param current         当前页
+     * @param size            每页显示条数
+     * @param id              数据库ID
+     * @param usernameParam   用户
+     * @param schemaNameParam 模式
+     * @param stateParam      状态
+     * @param machineParam    远程主机
+     * @param osUserParam     远程用户
+     * @param sqlParam        SQL
      * @return 简单分页模型
      * @throws NetException   自定义获取网络信息异常
      * @throws SigarException Sigar异常
@@ -34,7 +40,9 @@ public interface IDbSession4OracleService {
      * @author 皮锋
      * @custom.date 2020/12/30 12:46
      */
-    Page<DbSession4OracleVo> getSessionList(Long current, Long size, Long id) throws NetException, SigarException, IOException;
+    Page<DbSession4OracleVo> getSessionList(Long current, Long size, Long id, String usernameParam, String schemaNameParam,
+                                            String stateParam, String machineParam, String osUserParam, String sqlParam)
+            throws NetException, SigarException, IOException;
 
     /**
      * <p>

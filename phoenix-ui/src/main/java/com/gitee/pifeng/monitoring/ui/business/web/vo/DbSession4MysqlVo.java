@@ -42,13 +42,17 @@ public class DbSession4MysqlVo implements ISuperBean {
     @Schema(description = "命令")
     private String command;
 
-    @Schema(description = "时间")
-    private String time;
+    @JsonSerialize(using = ToStringSerializer.class)
+    @Schema(description = "时间（秒）")
+    private Long time;
+
+    @Schema(description = "时间（中文格式化时间）")
+    private String timeCn;
 
     @Schema(description = "状态")
     private String state;
 
-    @Schema(description = "活动查询")
+    @Schema(description = "命令文本")
     private String info;
 
 }

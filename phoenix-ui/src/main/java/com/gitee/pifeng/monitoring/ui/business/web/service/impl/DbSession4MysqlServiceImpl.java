@@ -21,12 +21,14 @@ import com.gitee.pifeng.monitoring.ui.constant.WebResponseConstants;
 import com.gitee.pifeng.monitoring.ui.core.UiPackageConstructor;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -57,9 +59,15 @@ public class DbSession4MysqlServiceImpl implements IDbSession4MysqlService {
      * 获取会话列表
      * </p>
      *
-     * @param current 当前页
-     * @param size    每页显示条数
-     * @param id      数据库ID
+     * @param current      当前页
+     * @param size         每页显示条数
+     * @param id           数据库ID
+     * @param userParam    用户
+     * @param hostParam    主机
+     * @param dbParam      数据库
+     * @param commandParam 命令
+     * @param stateParam   状态
+     * @param infoParam    命令文本
      * @return 简单分页模型
      * @throws NetException 自定义获取网络信息异常
      * @throws IOException  IO异常
@@ -67,7 +75,9 @@ public class DbSession4MysqlServiceImpl implements IDbSession4MysqlService {
      * @custom.date 2020/12/24 16:55
      */
     @Override
-    public Page<DbSession4MysqlVo> getSessionList(Long current, Long size, Long id) throws NetException, IOException {
+    public Page<DbSession4MysqlVo> getSessionList(Long current, Long size, Long id, String userParam, String hostParam,
+                                                  String dbParam, String commandParam, String stateParam, String infoParam)
+            throws NetException, IOException {
         // 根据ID查询到此数据库信息
         MonitorDb monitorDb = this.monitorDbDao.selectById(id);
         // url
@@ -105,11 +115,42 @@ public class DbSession4MysqlServiceImpl implements IDbSession4MysqlService {
                     .host(host)
                     .db(db)
                     .command(command)
-                    .time(DateUtil.formatBetween(time * 1000L, BetweenFormatter.Level.SECOND))
+                    .time(time)
+                    .timeCn(DateUtil.formatBetween(time * 1000L, BetweenFormatter.Level.SECOND))
                     .state(state)
                     .info(info)
                     .build();
             dbSession4MysqlVos.add(dbSession4MysqlVo);
+        }
+        if (StringUtils.isNotBlank(userParam)) {
+            dbSession4MysqlVos = dbSession4MysqlVos.stream()
+                    .filter(e -> StringUtils.containsIgnoreCase(e.getUser(), userParam))
+                    .collect(Collectors.toList());
+        }
+        if (StringUtils.isNotBlank(hostParam)) {
+            dbSession4MysqlVos = dbSession4MysqlVos.stream()
+                    .filter(e -> StringUtils.containsIgnoreCase(e.getHost(), hostParam))
+                    .collect(Collectors.toList());
+        }
+        if (StringUtils.isNotBlank(dbParam)) {
+            dbSession4MysqlVos = dbSession4MysqlVos.stream()
+                    .filter(e -> StringUtils.containsIgnoreCase(e.getDb(), dbParam))
+                    .collect(Collectors.toList());
+        }
+        if (StringUtils.isNotBlank(commandParam)) {
+            dbSession4MysqlVos = dbSession4MysqlVos.stream()
+                    .filter(e -> StringUtils.containsIgnoreCase(e.getCommand(), commandParam))
+                    .collect(Collectors.toList());
+        }
+        if (StringUtils.isNotBlank(stateParam)) {
+            dbSession4MysqlVos = dbSession4MysqlVos.stream()
+                    .filter(e -> StringUtils.containsIgnoreCase(e.getState(), stateParam))
+                    .collect(Collectors.toList());
+        }
+        if (StringUtils.isNotBlank(infoParam)) {
+            dbSession4MysqlVos = dbSession4MysqlVos.stream()
+                    .filter(e -> StringUtils.containsIgnoreCase(e.getInfo(), infoParam))
+                    .collect(Collectors.toList());
         }
         // 设置返回对象
         Page<DbSession4MysqlVo> dbSession4MysqlVoPage = new Page<>();

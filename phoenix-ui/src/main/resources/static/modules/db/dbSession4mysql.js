@@ -1,7 +1,8 @@
 /** layuiAdmin.std-v2020.4.1 LPPL License By 皮锋 */
 ;layui.define(function (e) {
-    layui.use(['index', 'admin', 'table', 'layer'], function () {
-        var $ = layui.$, admin = layui.admin, layer = layui.layer, table = layui.table, device = layui.device();
+    layui.use(['index', 'admin', 'form', 'table', 'layer'], function () {
+        var admin = layui.admin, form = layui.form, layer = layui.layer, table = layui.table,
+            device = layui.device();
         table.render({
             elem: '#list-table',
             url: ctxPath + 'db-session4mysql/get-session-list?id=' + id,
@@ -38,12 +39,12 @@
                 }, {
                     field: 'user',
                     title: '用户',
-                    minWidth: 100,
+                    minWidth: 80,
                     sort: !0
                 }, {
                     field: 'host',
                     title: '主机',
-                    minWidth: 150,
+                    minWidth: 120,
                     sort: !0
                 }, {
                     field: 'db',
@@ -53,13 +54,18 @@
                 }, {
                     field: 'command',
                     title: '命令',
-                    minWidth: 100,
+                    minWidth: 80,
                     sort: !0
                 }, {
                     field: 'time',
-                    title: '时间',
-                    minWidth: 150,
+                    title: '时间(s)',
+                    minWidth: 90,
                     sort: !0
+                }, {
+                    field: 'timeCn',
+                    title: '时间(格式化)',
+                    minWidth: 200,
+                    sort: 0
                 }, {
                     field: 'state',
                     title: '状态',
@@ -67,8 +73,8 @@
                     sort: !0
                 }, {
                     field: 'info',
-                    title: '活动查询',
-                    minWidth: 200,
+                    title: '命令文本',
+                    minWidth: 300,
                     sort: !0
                 }, {
                     title: '操作',
@@ -79,10 +85,30 @@
                     toolbar: '#list-table-toolbar-detail'
                 }]
             ],
-            page: false,
-            limit: 15,
-            limits: [10, 15, 20, 30, 40, 50, 60, 70, 80, 90, 100],
-            height: (device.ios || device.android) ? $(document).width() : $(document).width() * 0.5
+            page: {
+                layout: ['count']
+            },
+            // limit: 15,
+            // limits: [10, 15, 20, 30, 40, 50, 60, 70, 80, 90, 100],
+            height: (device.ios || device.android) ? 'full' : 'full-250'
+        });
+        //监听搜索
+        form.on('submit(list-table-search)', function (data) {
+            var field = data.field;
+            //执行重载
+            table.reload('list-table', {
+                where: field
+            });
+        });
+        // 监听重置
+        form.on('submit(list-table-reset)', function (data) {
+            var field = data.field;
+            // 清空所有字段的值
+            field = clearFields(field);
+            //执行重载
+            table.reload('list-table', {
+                where: field
+            });
         });
         // 点击表头排序
         table.on('sort(list-table)', function (obj) {

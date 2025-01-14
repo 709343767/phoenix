@@ -21,7 +21,7 @@ import com.gitee.pifeng.monitoring.ui.constant.WebResponseConstants;
 import com.gitee.pifeng.monitoring.ui.core.UiPackageConstructor;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
-import org.hyperic.sigar.SigarException;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -60,17 +60,25 @@ public class DbSession4OracleServiceImpl implements IDbSession4OracleService {
      * 获取会话列表
      * </p>
      *
-     * @param current 当前页
-     * @param size    每页显示条数
-     * @param id      数据库ID
+     * @param current         当前页
+     * @param size            每页显示条数
+     * @param id              数据库ID
+     * @param usernameParam   用户
+     * @param schemaNameParam 模式
+     * @param stateParam      状态
+     * @param machineParam    远程主机
+     * @param osUserParam     远程用户
+     * @param sqlParam        SQL
      * @return 简单分页模型
-     * @throws NetException   自定义获取网络信息异常
-     * @throws IOException    IO异常
+     * @throws NetException 自定义获取网络信息异常
+     * @throws IOException  IO异常
      * @author 皮锋
      * @custom.date 2020/12/30 12:46
      */
     @Override
-    public Page<DbSession4OracleVo> getSessionList(Long current, Long size, Long id) throws NetException, IOException {
+    public Page<DbSession4OracleVo> getSessionList(Long current, Long size, Long id, String usernameParam, String schemaNameParam,
+                                                   String stateParam, String machineParam, String osUserParam, String sqlParam)
+            throws NetException, IOException {
         // 根据ID查询到此数据库信息
         MonitorDb monitorDb = this.monitorDbDao.selectById(id);
         // url
@@ -123,6 +131,36 @@ public class DbSession4OracleServiceImpl implements IDbSession4OracleService {
                     .build();
             dbSession4OracleVos.add(dbSession4OracleVo);
         }
+        if (StringUtils.isNotBlank(usernameParam)) {
+            dbSession4OracleVos = dbSession4OracleVos.stream()
+                    .filter(e -> StringUtils.containsIgnoreCase(e.getUsername(), usernameParam))
+                    .collect(Collectors.toList());
+        }
+        if (StringUtils.isNotBlank(schemaNameParam)) {
+            dbSession4OracleVos = dbSession4OracleVos.stream()
+                    .filter(e -> StringUtils.containsIgnoreCase(e.getSchemaName(), schemaNameParam))
+                    .collect(Collectors.toList());
+        }
+        if (StringUtils.isNotBlank(stateParam)) {
+            dbSession4OracleVos = dbSession4OracleVos.stream()
+                    .filter(e -> StringUtils.containsIgnoreCase(e.getState(), stateParam))
+                    .collect(Collectors.toList());
+        }
+        if (StringUtils.isNotBlank(machineParam)) {
+            dbSession4OracleVos = dbSession4OracleVos.stream()
+                    .filter(e -> StringUtils.containsIgnoreCase(e.getMachine(), machineParam))
+                    .collect(Collectors.toList());
+        }
+        if (StringUtils.isNotBlank(osUserParam)) {
+            dbSession4OracleVos = dbSession4OracleVos.stream()
+                    .filter(e -> StringUtils.containsIgnoreCase(e.getOsUser(), osUserParam))
+                    .collect(Collectors.toList());
+        }
+        if (StringUtils.isNotBlank(sqlParam)) {
+            dbSession4OracleVos = dbSession4OracleVos.stream()
+                    .filter(e -> StringUtils.containsIgnoreCase(e.getSql(), sqlParam))
+                    .collect(Collectors.toList());
+        }
         // 设置返回对象
         Page<DbSession4OracleVo> dbSession4OracleVoPage = new Page<>();
         dbSession4OracleVoPage.setRecords(dbSession4OracleVos);
@@ -140,8 +178,8 @@ public class DbSession4OracleServiceImpl implements IDbSession4OracleService {
      * @param dbSession4OracleVos Oracle数据库会话
      * @param id                  数据库ID
      * @return LayUiAdmin响应对象
-     * @throws NetException   自定义获取网络信息异常
-     * @throws IOException    IO异常
+     * @throws NetException 自定义获取网络信息异常
+     * @throws IOException  IO异常
      * @author 皮锋
      * @custom.date 2020/12/30 15:22
      */

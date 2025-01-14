@@ -1,7 +1,8 @@
 /** layuiAdmin.std-v2020.4.1 LPPL License By 皮锋 */
 ;layui.define(function (e) {
-    layui.use(['index', 'admin', 'table', 'layer'], function () {
-        var $ = layui.$, admin = layui.admin, layer = layui.layer, table = layui.table, device = layui.device();
+    layui.use(['index', 'admin', 'form', 'table', 'layer'], function () {
+        var admin = layui.admin, form = layui.form, layer = layui.layer, table = layui.table,
+            device = layui.device();
         table.render({
             elem: '#list-table',
             url: ctxPath + 'db-session4oracle/get-session-list?id=' + id,
@@ -104,10 +105,30 @@
                     toolbar: '#list-table-toolbar-detail'
                 }]
             ],
-            page: false,
-            limit: 15,
-            limits: [10, 15, 20, 30, 40, 50, 60, 70, 80, 90, 100],
-            height: (device.ios || device.android) ? $(document).width() : $(document).width() * 0.5
+            page: {
+                layout: ['count']
+            },
+            // limit: 15,
+            // limits: [10, 15, 20, 30, 40, 50, 60, 70, 80, 90, 100],
+            height: (device.ios || device.android) ? 'full' : 'full-250'
+        });
+        //监听搜索
+        form.on('submit(list-table-search)', function (data) {
+            var field = data.field;
+            //执行重载
+            table.reload('list-table', {
+                where: field
+            });
+        });
+        // 监听重置
+        form.on('submit(list-table-reset)', function (data) {
+            var field = data.field;
+            // 清空所有字段的值
+            field = clearFields(field);
+            //执行重载
+            table.reload('list-table', {
+                where: field
+            });
         });
         // 点击表头排序
         table.on('sort(list-table)', function (obj) {

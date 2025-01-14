@@ -12,7 +12,6 @@ import com.gitee.pifeng.monitoring.ui.business.web.service.IDbInfo4RedisService;
 import com.gitee.pifeng.monitoring.ui.constant.UrlConstants;
 import com.gitee.pifeng.monitoring.ui.core.UiPackageConstructor;
 import org.apache.commons.lang3.StringUtils;
-import org.hyperic.sigar.SigarException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

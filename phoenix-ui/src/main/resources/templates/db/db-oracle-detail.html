@@ -3,7 +3,7 @@
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <meta charset="utf-8">
-    <title>数据库详情</title>
+    <title>Oracle数据库详情</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport"
@@ -29,44 +29,98 @@
     <div class="layui-card">
         <div class="layui-tab layui-tab-brief">
             <ul class="layui-tab-title">
-                <li class="layui-this"
-                    th:if="${#strings.toLowerCase(monitorDbVo.dbType)} eq 'oracle' or ${#strings.toLowerCase(monitorDbVo.dbType)} eq 'mysql'">
-                    会话管理
-                </li>
-                <li th:if="${#strings.toLowerCase(monitorDbVo.dbType)} eq 'oracle'">表空间</li>
-                <li class="layui-this" th:if="${#strings.toLowerCase(monitorDbVo.dbType)} eq 'redis'">信息</li>
-                <li class="layui-this" th:if="${#strings.toLowerCase(monitorDbVo.dbType)} eq 'mongo'">信息</li>
+                <li class="layui-this">会话管理</li>
+                <li>表空间</li>
                 <li>概要</li>
             </ul>
             <div class="layui-tab-content">
-                <div class="layui-tab-item layui-show"
-                     th:if="${#strings.toLowerCase(monitorDbVo.dbType)} eq 'oracle' or ${#strings.toLowerCase(monitorDbVo.dbType)} eq 'mysql'">
-                    <div class="layui-fluid">
-                        <table id="list-table" lay-filter="list-table"></table>
-                        <script type="text/html" id="imgTpl">
-                            <img style="display: inline-block; width: 50%; height: 100%;" src={{ d.avatar }}>
-                        </script>
-                        <script type="text/html" id="list-table-toolbar">
-                            <div class="layui-btn-group">
-                                <button class="layui-btn layui-btn-sm layuiadmin-btn-useradmin"
-                                        lay-event="batchRefresh">
-                                    <i class="layui-icon layui-icon-refresh"></i>刷新
-                                </button>
-                                <button class="layui-btn layui-btn-sm layui-btn-danger"
-                                        sec:authorize="hasAuthority('超级管理员')"
-                                        lay-event="batchdel">
-                                    <i class="layui-icon layui-icon-delete"></i>结束
-                                </button>
-                            </div>
-                        </script>
-                        <script type="text/html" id="list-table-toolbar-detail">
-                            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"
-                               sec:authorize="hasAuthority('超级管理员')">
-                                <i class="layui-icon layui-icon-delete"></i>结束</a>
-                        </script>
+                <div class="layui-tab-item layui-show">
+                    <div class="layui-card">
+                        <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+                            <form class="layui-form-item" onsubmit="return false;">
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">用户</label>
+                                    <div class="layui-input-block">
+                                        <input autocomplete="off" class="layui-input" name="username"
+                                               placeholder="请输入"
+                                               type="text">
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">模式</label>
+                                    <div class="layui-input-block">
+                                        <input autocomplete="off" class="layui-input" name="schemaName"
+                                               placeholder="请输入"
+                                               type="text">
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">状态</label>
+                                    <div class="layui-input-block">
+                                        <input autocomplete="off" class="layui-input" name="state" placeholder="请输入"
+                                               type="text">
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">远程主机</label>
+                                    <div class="layui-input-block">
+                                        <input autocomplete="off" class="layui-input" name="machine" placeholder="请输入"
+                                               type="text">
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">远程用户</label>
+                                    <div class="layui-input-block">
+                                        <input autocomplete="off" class="layui-input" name="osUser" placeholder="请输入"
+                                               type="text">
+                                    </div>
+                                </div>
+                                <div class="layui-inline" style="width: 85%">
+                                    <label class="layui-form-label">SQL</label>
+                                    <div class="layui-input-block">
+                                        <input autocomplete="off" class="layui-input" name="sql"
+                                               placeholder="请输入" type="text">
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <button class="layui-btn layuiadmin-btn-useradmin" lay-filter="list-table-search"
+                                            lay-submit>
+                                        <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                                    </button>
+                                    <button class="layui-btn" id="reset" lay-filter="list-table-reset" lay-submit
+                                            type="reset">
+                                        清空
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="layui-card-body">
+                            <table id="list-table" lay-filter="list-table"></table>
+                            <script id="imgTpl" type="text/html">
+                                <img style="display: inline-block; width: 50%; height: 100%;" src={{ d.avatar }}>
+                            </script>
+                            <script id="list-table-toolbar" type="text/html">
+                                <div class="layui-btn-group">
+                                    <button class="layui-btn layui-btn-sm layuiadmin-btn-useradmin"
+                                            lay-event="batchRefresh">
+                                        <i class="layui-icon layui-icon-refresh"></i>刷新
+                                    </button>
+                                    <button class="layui-btn layui-btn-sm layui-btn-danger"
+                                            sec:authorize="hasAuthority('超级管理员')"
+                                            lay-event="batchdel">
+                                        <i class="layui-icon layui-icon-delete"></i>结束
+                                    </button>
+                                </div>
+                            </script>
+                            <script id="list-table-toolbar-detail" type="text/html">
+                                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"
+                                   sec:authorize="hasAuthority('超级管理员')">
+                                    <i class="layui-icon layui-icon-delete"></i>结束</a>
+                            </script>
+                        </div>
                     </div>
                 </div>
-                <div class="layui-tab-item" th:if="${#strings.toLowerCase(monitorDbVo.dbType)} eq 'oracle'">
+                <div class="layui-tab-item">
                     <div class="layui-fluid">
                         <table id="list-table-space-all" lay-filter="list-table-space-all"></table>
                         <script type="text/html" id="imgTpl-space-all">
@@ -80,42 +134,8 @@
                         </script>
                     </div>
                 </div>
-                <div class="layui-tab-item layui-show" th:if="${#strings.toLowerCase(monitorDbVo.dbType)} eq 'redis'">
-                    <div class="layui-card">
-                        <div class="layui-card-body" style="word-wrap:break-word;">
-                            <form class="layui-form layui-form-pane">
-                                <div class="layui-form-item" style="text-align: right;">
-                                    <div class="layui-input-block">
-                                        <input type="checkbox" name="redisAutoRefresh" value=1
-                                               checked title="自动刷新" lay-filter="redisAutoRefresh">
-                                    </div>
-                                </div>
-                            </form>
-                            <div class="layui-row layui-col-space10" id="redis-main-info"></div>
-                            <div class="layui-row layui-col-space10" id="redis-key-value-info"></div>
-                            <div class="layui-row layui-col-space10" id="redis-info"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="layui-tab-item layui-show" th:if="${#strings.toLowerCase(monitorDbVo.dbType)} eq 'mongo'">
-                    <div class="layui-fluid">
-                        <table id="list-table-mongo-info" lay-filter="list-table-mongo-info"></table>
-                        <script type="text/html" id="imgTpl-mongo-info">
-                            <img style="display: inline-block; width: 50%; height: 100%;" src={{ d.avatar }}>
-                        </script>
-                        <script type="text/html" id="list-table-mongo-info-toolbar">
-                            <div class="layui-btn-container">
-                                <button class="layui-btn layui-btn-sm layuiadmin-btn-useradmin"
-                                        lay-event="batchRefresh">
-                                    <i class="layui-icon layui-icon-refresh"></i>刷新
-                                </button>
-                            </div>
-                        </script>
-                    </div>
-                </div>
                 <div class="layui-tab-item">
-                    <form class="layui-form layui-form-pane" id="layuiadmin-form-useradmin"
-                          style="padding: 20px 20px 0 0;" action="javascript:;">
+                    <form action="javascript:;" class="layui-form layui-form-pane" id="layuiadmin-form-useradmin">
                         <div class="layui-form-item">
                             <label class="layui-form-label">数据库ID</label>
                             <div class="layui-input-block">
@@ -130,15 +150,13 @@
                             </div>
                         </div>
                         <div class="layui-form-item layui-form-text">
-                            <label class="layui-form-label"
-                                   th:text="${monitorDbVo.dbType=='Redis'?'地址':'URL'}">URL</label>
+                            <label class="layui-form-label">URL</label>
                             <div class="layui-input-block">
                                 <textarea th:text="${monitorDbVo.url}" name="url" class="layui-textarea" disabled>
                                 </textarea>
                             </div>
                         </div>
-                        <div class="layui-form-item"
-                             th:style="${monitorDbVo.dbType=='Redis'||monitorDbVo.dbType=='Mongo'?'display: none;':''}">
+                        <div class="layui-form-item">
                             <label class="layui-form-label">用户名</label>
                             <div class="layui-input-block">
                                 <input type="text" name="username" disabled class="layui-input"
@@ -204,20 +222,11 @@
         index: 'lib/index'//主入口模块
     };
     var use = ['index', 'element', 'form'];
-    if ([[${monitorDbVo.dbType}]].toLowerCase() === 'mysql') {
-        extend.dbSession4mysql = 'db/dbSession4mysql';
-        use.push('dbSession4mysql');
-    } else if ([[${monitorDbVo.dbType}]].toLowerCase() === 'oracle') {
+    if ([[${monitorDbVo.dbType}]].toLowerCase() === 'oracle') {
         extend.dbSession4oracle = 'db/dbSession4oracle';
         extend.dbTableSpace4oracle = 'db/dbTableSpace4oracle';
         use.push('dbSession4oracle');
         use.push('dbTableSpace4oracle');
-    } else if ([[${monitorDbVo.dbType}]].toLowerCase() === 'redis') {
-        extend.dbInfo4redis = 'db/dbInfo4redis';
-        use.push('dbInfo4redis');
-    } else if ([[${monitorDbVo.dbType}]].toLowerCase() === 'mongo') {
-        extend.dbInfo4mongo = 'db/dbInfo4mongo';
-        use.push('dbInfo4mongo');
     }
     layui.config({
         base: ctxPath //静态资源所在路径

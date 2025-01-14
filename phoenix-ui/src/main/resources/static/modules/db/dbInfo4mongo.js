@@ -1,7 +1,7 @@
 /** layuiAdmin.std-v2020.4.1 LPPL License By 皮锋 */
 ;layui.define(function (e) {
     layui.use(['index', 'table'], function () {
-        var $ = layui.$, table = layui.table, device = layui.device();
+        var table = layui.table, device = layui.device();
         table.render({
             elem: '#list-table-mongo-info',
             url: ctxPath + 'db-info4mongo/get-mongo-info-list?id=' + id,
@@ -101,10 +101,12 @@
                     sort: !0
                 }]
             ],
-            page: false,
-            limit: 15,
-            limits: [10, 15, 20, 30, 40, 50, 60, 70, 80, 90, 100],
-            height: (device.ios || device.android) ? $(document).width() : $(document).width() * 0.5
+            page: {
+                layout: ['count']
+            },
+            // limit: 15,
+            // limits: [10, 15, 20, 30, 40, 50, 60, 70, 80, 90, 100],
+            height: (device.ios || device.android) ? 'full' : 'full-135'
         });
         // 点击表头排序
         table.on('sort(list-table-mongo-info)', function (obj) {

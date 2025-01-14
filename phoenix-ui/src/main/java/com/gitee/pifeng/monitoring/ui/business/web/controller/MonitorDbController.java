@@ -1,6 +1,7 @@
 package com.gitee.pifeng.monitoring.ui.business.web.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.gitee.pifeng.monitoring.common.constant.DbEnums;
 import com.gitee.pifeng.monitoring.ui.business.web.annotation.OperateLog;
 import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorDb;
 import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorEnv;
@@ -310,11 +311,29 @@ public class MonitorDbController {
      */
     @Operation(summary = "访问数据库详情页面")
     @Parameters(value = {
-            @Parameter(name = "id", description = "数据库ID", required = true, in = ParameterIn.QUERY)})
+            @Parameter(name = "id", description = "数据库ID", required = true, in = ParameterIn.QUERY),
+            @Parameter(name = "dbType", description = "数据库类型", required = true, in = ParameterIn.QUERY)})
     @GetMapping("/db-detail")
     @OperateLog(operModule = UiModuleConstants.DATABASE, operType = OperateTypeConstants.PAGE, operDesc = "访问数据库详情页面")
-    public ModelAndView dbDetail(Long id) {
-        ModelAndView mv = new ModelAndView("db/db-detail");
+    public ModelAndView dbDetail(Long id, String dbType) {
+        ModelAndView mv = new ModelAndView();
+        DbEnums dbEnums = DbEnums.str2Enum(dbType);
+        switch (dbEnums) {
+            case MySQL:
+                mv.setViewName("db/db-mysql-detail");
+                break;
+            case Oracle:
+                mv.setViewName("db/db-oracle-detail");
+                break;
+            case Mongo:
+                mv.setViewName("db/db-mongo-detail");
+                break;
+            case Redis:
+                mv.setViewName("db/db-redis-detail");
+                break;
+            default:
+                break;
+        }
         MonitorDb monitorDb = this.monitorDbService.getById(id);
         MonitorDbVo monitorDbVo = MonitorDbVo.builder().build().convertFor(monitorDb);
         // 屏蔽密码

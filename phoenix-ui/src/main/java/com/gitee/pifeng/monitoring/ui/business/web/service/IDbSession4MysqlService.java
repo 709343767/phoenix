@@ -24,9 +24,15 @@ public interface IDbSession4MysqlService {
      * 获取会话列表
      * </p>
      *
-     * @param current 当前页
-     * @param size    每页显示条数
-     * @param id      数据库ID
+     * @param current      当前页
+     * @param size         每页显示条数
+     * @param id           数据库ID
+     * @param userParam    用户
+     * @param hostParam    主机
+     * @param dbParam      数据库
+     * @param commandParam 命令
+     * @param stateParam   状态
+     * @param infoParam    命令文本
      * @return 简单分页模型
      * @throws NetException   自定义获取网络信息异常
      * @throws SigarException Sigar异常
@@ -34,7 +40,9 @@ public interface IDbSession4MysqlService {
      * @author 皮锋
      * @custom.date 2020/12/24 16:55
      */
-    Page<DbSession4MysqlVo> getSessionList(Long current, Long size, Long id) throws NetException, SigarException, IOException;
+    Page<DbSession4MysqlVo> getSessionList(Long current, Long size, Long id, String userParam, String hostParam,
+                                           String dbParam, String commandParam, String stateParam, String infoParam)
+            throws NetException, SigarException, IOException;
 
     /**
      * <p>

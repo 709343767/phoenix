@@ -15,7 +15,6 @@ import com.gitee.pifeng.monitoring.ui.business.web.vo.DbInfo4MongoVo;
 import com.gitee.pifeng.monitoring.ui.constant.UrlConstants;
 import com.gitee.pifeng.monitoring.ui.core.UiPackageConstructor;
 import com.google.common.collect.Lists;
-import org.hyperic.sigar.SigarException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
