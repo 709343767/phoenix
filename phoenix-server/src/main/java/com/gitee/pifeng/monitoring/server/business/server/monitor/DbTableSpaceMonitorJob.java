@@ -87,8 +87,8 @@ public class DbTableSpaceMonitorJob extends QuartzJobBean {
      * 线程池
      */
     @Autowired
-    @Qualifier("dbTbsMonitorThreadPoolExecutor")
-    private ThreadPoolExecutor dbTbsMonitorThreadPoolExecutor;
+    @Qualifier("dbMonitorThreadPoolExecutor")
+    private ThreadPoolExecutor dbMonitorThreadPoolExecutor;
 
     /**
      * <p>
@@ -121,7 +121,7 @@ public class DbTableSpaceMonitorJob extends QuartzJobBean {
                 List<List<MonitorDb>> subMonitorDbLists = CollectionUtils.split(monitorDbs, 10);
                 for (List<MonitorDb> subMonitorDbs : subMonitorDbLists) {
                     // 使用多线程，加快处理速度
-                    this.dbTbsMonitorThreadPoolExecutor.execute(() -> {
+                    this.dbMonitorThreadPoolExecutor.execute(() -> {
                         for (MonitorDb monitorDb : subMonitorDbs) {
                             try {
                                 // 是否开启监控（0：不开启监控；1：开启监控）
