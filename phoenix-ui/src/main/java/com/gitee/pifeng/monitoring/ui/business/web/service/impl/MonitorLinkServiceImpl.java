@@ -1,7 +1,6 @@
 package com.gitee.pifeng.monitoring.ui.business.web.service.impl;
 
 import cn.hutool.core.util.ArrayUtil;
-import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -83,10 +82,10 @@ public class MonitorLinkServiceImpl extends ServiceImpl<IMonitorLinkDao, Monitor
                 }
                 // 更新链路
                 if (StringUtils.contains(link, node) && !StringUtils.equals(node, link)) {
-                    String[] links = StrUtil.split(link, ",");
+                    String[] links = StringUtils.split(link, ",");
                     int indexOf = ArrayUtil.indexOf(links, node);
                     String newLink = ArrayUtil.join(ArrayUtil.remove(links, indexOf), ",");
-                    String[] linkTimes = StrUtil.split(monitorLink.getLinkTime(), ",");
+                    String[] linkTimes = StringUtils.split(monitorLink.getLinkTime(), ",");
                     String newLinkTime = ArrayUtil.join(ArrayUtil.remove(linkTimes, indexOf), ",");
                     monitorLink.setLink(newLink);
                     monitorLink.setLinkTime(newLinkTime);
