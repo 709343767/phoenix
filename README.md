@@ -180,6 +180,8 @@
 
 ![应用程序3](https://gitee.com/monitoring-platform/phoenix/raw/master/doc/%E6%88%AA%E5%9B%BE/%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F3.png "应用程序3")
 
+![应用程序4](https://gitee.com/monitoring-platform/phoenix/raw/master/doc/%E6%88%AA%E5%9B%BE/%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F4.png "应用程序4")
+
 ![数据库1](https://gitee.com/monitoring-platform/phoenix/raw/master/doc/%E6%88%AA%E5%9B%BE/%E6%95%B0%E6%8D%AE%E5%BA%931.png "数据库1")
 
 ![数据库2](https://gitee.com/monitoring-platform/phoenix/raw/master/doc/%E6%88%AA%E5%9B%BE/%E6%95%B0%E6%8D%AE%E5%BA%932.png "数据库2")
