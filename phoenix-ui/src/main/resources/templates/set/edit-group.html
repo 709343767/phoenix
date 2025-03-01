@@ -25,21 +25,21 @@
         <label class="layui-form-label">ID</label>
         <div class="layui-input-block">
             <input type="hidden" name="id" lay-verify="required" autocomplete="off"
-                   class="layui-input" lay-verType="tips" readonly th:value="${monitorGroupVo.id}">
+                   readonly th:value="${monitorGroupVo.id}" class="layui-input" lay-verType="tips">
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">分组名称</label>
         <div class="layui-input-block">
             <input type="text" name="groupName" lay-verify="required" placeholder="请输入分组名称" autocomplete="off"
-                   class="layui-input" lay-verType="tips" readonly th:value="${monitorGroupVo.groupName}">
+                   readonly th:value="${monitorGroupVo.groupName}" class="layui-input" lay-verType="tips">
         </div>
     </div>
     <div class="layui-form-item layui-form-text">
         <label class="layui-form-label">分组描述</label>
         <div class="layui-input-block">
             <textarea name="groupDesc" class="layui-textarea" placeholder="请输入分组描述" autocomplete="off"
-                      lay-verType="tips" lay-verify="required" th:text="${monitorGroupVo.groupDesc}"></textarea>
+                      th:text="${monitorGroupVo.groupDesc}" lay-verify="required" lay-verType="tips"></textarea>
         </div>
     </div>
     <div class="layui-form-item layui-hide">

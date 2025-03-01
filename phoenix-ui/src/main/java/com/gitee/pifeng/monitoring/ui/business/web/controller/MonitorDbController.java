@@ -304,7 +304,8 @@ public class MonitorDbController {
      * 访问数据库详情页面
      * </p>
      *
-     * @param id 数据库主键ID
+     * @param id     数据库主键ID
+     * @param dbType 数据库类型
      * @return {@link ModelAndView} 数据库详情页面
      * @author 皮锋
      * @custom.date 2020/12/22 14:47

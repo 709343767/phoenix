@@ -1,4 +1,4 @@
-package com.gitee.pifeng.monitoring.server.business.server.monitor;
+package com.gitee.pifeng.monitoring.server.business.server.monitor.net;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.gitee.pifeng.monitoring.common.constant.ZeroOrOneConstants;
@@ -20,6 +20,7 @@ import com.gitee.pifeng.monitoring.server.business.server.entity.MonitorNetHisto
 import com.gitee.pifeng.monitoring.server.business.server.service.IAlarmService;
 import com.gitee.pifeng.monitoring.server.business.server.service.INetHistoryService;
 import com.gitee.pifeng.monitoring.server.business.server.service.INetService;
+import com.gitee.pifeng.monitoring.server.constant.ComponentOrderConstants;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.quartz.DisallowConcurrentExecution;
@@ -47,7 +48,7 @@ import java.util.concurrent.ThreadPoolExecutor;
  */
 @Slf4j
 @Component
-@Order(3)
+@Order(ComponentOrderConstants.NET + 1)
 @DisallowConcurrentExecution
 public class NetMonitorJob extends QuartzJobBean {
 
@@ -148,7 +149,7 @@ public class NetMonitorJob extends QuartzJobBean {
                         }
                     });
                 }
-            } catch (NetException e) {
+            } catch (Exception e) {
                 log.error("定时扫描数据库“MONITOR_NET”表中的所有网络信息异常！", e);
             }
         }

@@ -24,8 +24,8 @@
     <div class="layui-form-item" style="display: none">
         <label class="layui-form-label" for="instanceId">ID</label>
         <div class="layui-input-inline">
-            <input class="layui-input" id="instanceId" name="instanceId" readonly th:value="${instanceId}"
-                   type="hidden">
+            <input type="hidden" id="instanceId" name="instanceId" class="layui-input" th:value="${instanceId}"
+                   readonly>
         </div>
     </div>
     <div class="layui-form-item">
@@ -51,17 +51,17 @@
     <div class="layui-form-item">
         <label class="layui-form-label" for="isEnableMonitor">是否监控</label>
         <div class="layui-input-inline">
-            <input id="isEnableMonitor" lay-skin="switch" lay-text="是|否"
-                   name="isEnableMonitor" th:checked="${isEnableMonitor=='1'}? true : false" type="checkbox"
-                   value="1">
+            <input type="checkbox" name="isEnableMonitor" lay-text="是|否"
+                   id="isEnableMonitor" value="1" lay-skin="switch"
+                   th:checked="${isEnableMonitor=='1'}? true : false">
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label" for="isEnableAlarm">是否告警</label>
         <div class="layui-input-inline">
-            <input id="isEnableAlarm" lay-skin="switch" lay-text="是|否"
-                   name="isEnableAlarm" th:checked="${isEnableAlarm=='1'}? true : false" type="checkbox"
-                   value="1">
+            <input type="checkbox" name="isEnableAlarm" lay-text="是|否"
+                   id="isEnableAlarm" value="1" lay-skin="switch"
+                   th:checked="${isEnableAlarm=='1'}? true : false">
         </div>
     </div>
     <div class="layui-form-item">

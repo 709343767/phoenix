@@ -6,10 +6,10 @@ import com.gitee.pifeng.monitoring.common.constant.alarm.AlarmLevelEnums;
 import com.gitee.pifeng.monitoring.common.constant.monitortype.MonitorTypeEnums;
 import com.gitee.pifeng.monitoring.common.domain.Alarm;
 import com.gitee.pifeng.monitoring.common.domain.Result;
+import com.gitee.pifeng.monitoring.common.threadpool.MonitoredScheduledThreadPoolExecutor;
 import com.google.common.base.Charsets;
 import org.junit.Test;
 
-import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -35,7 +35,7 @@ public class MonitorTest {
         // 开启监控
         Monitor.start();
         // 业务埋点监控：定时监控业务运行情况
-        ScheduledExecutorService service = Monitor.buryingPoint(() -> {
+        MonitoredScheduledThreadPoolExecutor executor = Monitor.buryingPoint(() -> {
             // 封装告警信息
             Alarm alarm = Alarm.builder()
                     .alarmLevel(AlarmLevelEnums.INFO)
@@ -50,6 +50,6 @@ public class MonitorTest {
             Console.log(result.toJsonString());
         }, 5, 60, TimeUnit.SECONDS, ThreadTypeEnums.IO_INTENSIVE_THREAD);
 
-        service.shutdown();
+        executor.shutdown();
     }
 }

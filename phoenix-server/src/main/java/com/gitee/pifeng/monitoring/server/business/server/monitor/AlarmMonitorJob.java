@@ -11,6 +11,7 @@ import com.gitee.pifeng.monitoring.common.exception.NetException;
 import com.gitee.pifeng.monitoring.server.business.server.core.MonitoringConfigPropertiesLoader;
 import com.gitee.pifeng.monitoring.server.business.server.core.ServerPackageConstructor;
 import com.gitee.pifeng.monitoring.server.business.server.service.IAlarmService;
+import com.gitee.pifeng.monitoring.server.constant.ComponentOrderConstants;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.DisallowConcurrentExecution;
 import org.quartz.JobExecutionContext;
@@ -30,7 +31,7 @@ import org.springframework.stereotype.Component;
  */
 @Slf4j
 @Component
-@Order(10)
+@Order(ComponentOrderConstants.OTHER + 2)
 @DisallowConcurrentExecution
 public class AlarmMonitorJob extends QuartzJobBean {
 

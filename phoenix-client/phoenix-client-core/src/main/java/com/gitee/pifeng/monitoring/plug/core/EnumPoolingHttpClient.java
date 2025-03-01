@@ -340,7 +340,9 @@ public class EnumPoolingHttpClient {
         resultMap.put("avgTime", avgTime);
         resultMap.put("excMessage", excMessage);
         resultMap.put("result", result);
-        log.info("发送post（{}）请求结果：{}", url, JSON.toJSONString(resultMap));
+        if (log.isDebugEnabled()) {
+            log.debug("发送post（{}）请求结果：{}", url, JSON.toJSONString(resultMap));
+        }
         return resultMap;
     }
 
@@ -404,7 +406,9 @@ public class EnumPoolingHttpClient {
         resultMap.put("avgTime", avgTime);
         resultMap.put("excMessage", excMessage);
         resultMap.put("result", result);
-        log.info("发送get（{}）请求结果：{}", url, JSON.toJSONString(resultMap));
+        if (log.isDebugEnabled()) {
+            log.debug("发送get（{}）请求结果：{}", url, JSON.toJSONString(resultMap));
+        }
         return resultMap;
     }
 

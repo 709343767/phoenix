@@ -40,7 +40,7 @@
                                 <div class="layui-inline">
                                     <label class="layui-form-label">时间范围(T)</label>
                                     <div class="layui-input-block">
-                                        <select name="time1" id="time1" lay-filter="time1">
+                                        <select id="jvmMemoryTime" lay-filter="jvmMemoryTime" name="jvmMemoryTime">
                                             <option value="hour">1小时</option>
                                             <option value="day">1天</option>
                                             <option value="week">1周</option>
@@ -54,7 +54,8 @@
                                 <div class="layui-inline">
                                     <label class="layui-form-label">自动刷新</label>
                                     <div class="layui-input-block">
-                                        <input type="checkbox" name="autoRefresh" lay-filter="autoRefresh" checked
+                                        <input checked lay-filter="autoRefreshJvmMemory"
+                                               name="autoRefreshJvmMemory" type="checkbox"
                                                lay-skin="switch" lay-text="开启|关闭">
                                     </div>
                                 </div>
@@ -73,7 +74,7 @@
                                 <div class="layui-inline">
                                     <label class="layui-form-label">图表(C)</label>
                                     <div class="layui-input-block">
-                                        <select name="chart" id="chart" lay-filter="chart">
+                                        <select id="jvmMemoryChart" lay-filter="jvmMemoryChart" name="jvmMemoryChart">
                                             <option th:each="types:${jvmMemoryTypes}" th:value="${types}"
                                                     th:text="${types}"></option>
                                         </select>
@@ -129,13 +130,27 @@
 <script src="./js/echarts.min.js" th:src="@{/js/echarts.min.js}"></script>
 <script src="./js/echarts.theme.infographic.js" th:src="@{/js/echarts.theme.infographic.js}"></script>
 <script src="./layui/layui.js" th:src="@{/layui/layui.js}"></script>
-<script>
+<script th:inline="javascript">
+    var extend = {
+        index: 'lib/index', //主入口模块
+        instanceDetailJvm: 'instance/instanceDetailJvm', // 应用实例详情java虚拟机
+        instanceDetailJvmMemory: 'instance/instanceDetailJvmMemory' // 应用实例详情java虚拟机内存
+    };
+    var use = ['index', 'element', 'form', 'instanceDetailJvm', 'instanceDetailJvmMemory'];
     layui.config({
         base: ctxPath //静态资源所在路径
-    }).extend({
-        index: 'lib/index', //主入口模块
-        instanceDetail: 'instance/instanceDetail' // 应用实例详情模块
-    }).use(['index', 'element', 'form', 'instanceDetail']);
+    }).extend(extend).use(use, function () {
+        var element = layui.element;
+        var instanceDetailJvmMemory = layui.instanceDetailJvmMemory;
+        // 监听tab页切换事件
+        element.on('tab(instanceDetail)', function (data) {
+            var index = data.index;
+            // 内存所在tab容器
+            if (index === 0) {
+                instanceDetailJvmMemory.tabSwitch();
+            }
+        });
+    });
 </script>
 </body>
 </html>

@@ -54,11 +54,11 @@ public class MonitorJvmMemoryHistoryController {
     @GetMapping("/get-instance-detail-page-jvm-memory-chart-info")
     @Parameters(value = {
             @Parameter(name = "instanceId", description = "应用实例ID", required = true, in = ParameterIn.QUERY),
-            @Parameter(name = "memoryType", description = "内存类型", in = ParameterIn.QUERY),
-            @Parameter(name = "time", description = "时间", in = ParameterIn.QUERY)})
+            @Parameter(name = "memoryType", description = "内存类型", required = true, in = ParameterIn.QUERY),
+            @Parameter(name = "time", description = "时间", required = true, in = ParameterIn.QUERY)})
     public LayUiAdminResultVo getInstanceDetailPageJvmMemoryChartInfo(@RequestParam(name = "instanceId") String instanceId,
-                                                                      @RequestParam(name = "memoryType", required = false) String memoryType,
-                                                                      @RequestParam(name = "time", required = false) String time) {
+                                                                      @RequestParam(name = "memoryType") String memoryType,
+                                                                      @RequestParam(name = "time") String time) {
         List<InstanceDetailPageJvmMemoryChartVo> monitorJvmMemoryChartVos = this.monitorJvmMemoryHistoryService.getInstanceDetailPageJvmMemoryChartInfo(instanceId, memoryType, time);
         return LayUiAdminResultVo.ok(monitorJvmMemoryChartVos);
     }

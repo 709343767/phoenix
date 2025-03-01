@@ -1,4 +1,4 @@
-package com.gitee.pifeng.monitoring.server.business.server.monitor;
+package com.gitee.pifeng.monitoring.server.business.server.monitor.db;
 
 import cn.hutool.db.DbUtil;
 import cn.hutool.db.ds.simple.SimpleDataSource;
@@ -24,6 +24,7 @@ import com.gitee.pifeng.monitoring.server.business.server.core.ServerPackageCons
 import com.gitee.pifeng.monitoring.server.business.server.entity.MonitorDb;
 import com.gitee.pifeng.monitoring.server.business.server.service.IAlarmService;
 import com.gitee.pifeng.monitoring.server.business.server.service.IDbService;
+import com.gitee.pifeng.monitoring.server.constant.ComponentOrderConstants;
 import com.gitee.pifeng.monitoring.server.util.db.MongoUtils;
 import com.gitee.pifeng.monitoring.server.util.db.RedisUtils;
 import com.mongodb.MongoClient;
@@ -57,7 +58,7 @@ import java.util.concurrent.ThreadPoolExecutor;
  */
 @Slf4j
 @Component
-@Order(4)
+@Order(ComponentOrderConstants.DB + 1)
 @DisallowConcurrentExecution
 public class DbMonitorJob extends QuartzJobBean {
 

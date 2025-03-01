@@ -32,13 +32,13 @@ public class ServerAspect {
     /**
      * 服务器信息监听器
      */
-    @Autowired
+    @Autowired(required = false)
     private List<IServerMonitoringListener> serverMonitoringListeners;
 
     /**
      * 链路信息监听器
      */
-    @Autowired
+    @Autowired(required = false)
     private List<ILinkListener> linkListeners;
 
     /**
@@ -66,13 +66,15 @@ public class ServerAspect {
     public void beforeWakeUp(JoinPoint joinPoint) {
         ServerPackage serverPackage = (ServerPackage) joinPoint.getArgs()[0];
         // 调用监听器回调接口
-        this.linkListeners.forEach(o -> ThreadPool.COMMON_IO_INTENSIVE_THREAD_POOL.execute(() -> {
-            try {
-                o.wakeUpMonitor(serverPackage);
-            } catch (Exception e) {
-                log.error(e.getMessage(), e);
-            }
-        }));
+        if (this.linkListeners != null) {
+            this.linkListeners.forEach(o -> ThreadPool.getCommonIoIntensiveThreadPoolExecutor().execute(() -> {
+                try {
+                    o.wakeUpMonitor(serverPackage);
+                } catch (Exception e) {
+                    log.error(e.getMessage(), e);
+                }
+            }));
+        }
     }
 
     /**
@@ -90,13 +92,15 @@ public class ServerAspect {
         // IP地址
         String ip = serverPackage.getIp();
         // 调用监听器回调接口
-        this.serverMonitoringListeners.forEach(o -> ThreadPool.COMMON_IO_INTENSIVE_THREAD_POOL.execute(() -> {
-            try {
-                o.wakeUpMonitor(ip);
-            } catch (Exception e) {
-                log.error(e.getMessage(), e);
-            }
-        }));
+        if (this.serverMonitoringListeners != null) {
+            this.serverMonitoringListeners.forEach(o -> ThreadPool.getCommonIoIntensiveThreadPoolExecutor().execute(() -> {
+                try {
+                    o.wakeUpMonitor(ip);
+                } catch (Exception e) {
+                    log.error(e.getMessage(), e);
+                }
+            }));
+        }
     }
 
 }

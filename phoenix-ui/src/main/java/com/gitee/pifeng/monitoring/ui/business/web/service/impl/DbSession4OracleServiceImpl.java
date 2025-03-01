@@ -112,7 +112,7 @@ public class DbSession4OracleServiceImpl implements IDbSession4OracleService {
             String osUser = entity.getStr("OSUSER", StandardCharsets.UTF_8);
             String program = entity.getStr("PROGRAM", StandardCharsets.UTF_8);
             String event = entity.getStr("EVENT", StandardCharsets.UTF_8);
-            Long waitTime = entity.getLong("WAITTIME");
+            Long waitTime = entity.getLong("WAITTIME") != null ? entity.getLong("WAITTIME") : Long.valueOf(0);
             String sql = entity.getStr("SQL", StandardCharsets.UTF_8);
             DbSession4OracleVo dbSession4OracleVo = DbSession4OracleVo.builder()
                     .sid(sid)

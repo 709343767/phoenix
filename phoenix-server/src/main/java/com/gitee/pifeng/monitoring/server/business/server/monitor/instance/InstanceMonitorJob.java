@@ -1,4 +1,4 @@
-package com.gitee.pifeng.monitoring.server.business.server.monitor;
+package com.gitee.pifeng.monitoring.server.business.server.monitor.instance;
 
 import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -19,6 +19,7 @@ import com.gitee.pifeng.monitoring.server.business.server.core.ServerPackageCons
 import com.gitee.pifeng.monitoring.server.business.server.entity.MonitorInstance;
 import com.gitee.pifeng.monitoring.server.business.server.service.IAlarmService;
 import com.gitee.pifeng.monitoring.server.business.server.service.IInstanceService;
+import com.gitee.pifeng.monitoring.server.constant.ComponentOrderConstants;
 import com.gitee.pifeng.monitoring.server.inf.IOfflineListener;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -47,7 +48,7 @@ import java.util.List;
  */
 @Slf4j
 @Component
-@Order(1)
+@Order(ComponentOrderConstants.INSTANCE + 1)
 @DisallowConcurrentExecution
 public class InstanceMonitorJob extends QuartzJobBean implements CommandLineRunner, DisposableBean, IOfflineListener {
 

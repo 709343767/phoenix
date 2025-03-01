@@ -1,6 +1,14 @@
 package com.gitee.pifeng.monitoring.server.config;
 
-import com.gitee.pifeng.monitoring.server.business.server.monitor.*;
+import com.gitee.pifeng.monitoring.server.business.server.monitor.AlarmMonitorJob;
+import com.gitee.pifeng.monitoring.server.business.server.monitor.ClearHistoryDataJob;
+import com.gitee.pifeng.monitoring.server.business.server.monitor.db.DbMonitorJob;
+import com.gitee.pifeng.monitoring.server.business.server.monitor.db.DbTableSpaceMonitorJob;
+import com.gitee.pifeng.monitoring.server.business.server.monitor.http.HttpMonitorJob;
+import com.gitee.pifeng.monitoring.server.business.server.monitor.instance.InstanceMonitorJob;
+import com.gitee.pifeng.monitoring.server.business.server.monitor.net.NetMonitorJob;
+import com.gitee.pifeng.monitoring.server.business.server.monitor.server.ServerMonitorJob;
+import com.gitee.pifeng.monitoring.server.business.server.monitor.tcp.TcpMonitorJob;
 import org.joda.time.DateTime;
 import org.quartz.*;
 import org.springframework.context.annotation.Bean;
@@ -383,6 +391,6 @@ public class QuartzConfig {
                 .withSchedule(CronScheduleBuilder.cronSchedule("0 30 8 * * ?"))
                 .build();
     }
-    ////////////////////////////////////////////alarmMonitor start//////////////////////////////////////////////////////
+    /////////////////////////////////////////////alarmMonitor end///////////////////////////////////////////////////////
 
 }

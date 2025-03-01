@@ -1,22 +1,22 @@
 <!DOCTYPE html>
-<html lang="zh" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
-      xmlns:th="http://www.thymeleaf.org">
+<html lang="zh" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <meta charset="utf-8">
     <title>Redis数据库详情</title>
-    <meta content="webkit" name="renderer">
-    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
-    <meta content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0"
-          name="viewport">
-    <link href="./layui/css/layui.css" media="all" rel="stylesheet" th:href="@{/layui/css/layui.css}">
-    <link href="./style/admin.css" media="all" rel="stylesheet" th:href="@{/style/admin.css}">
-    <link href="./style/myself.css" media="all" rel="stylesheet" th:href="@{/style/myself.css}">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="./layui/css/layui.css" th:href="@{/layui/css/layui.css}" media="all">
+    <link rel="stylesheet" href="./style/admin.css" th:href="@{/style/admin.css}" media="all">
+    <link rel="stylesheet" href="./style/myself.css" th:href="@{/style/myself.css}" media="all">
     <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
     <!--[if lt IE 9]>
     <script src="./js/html5.min.js" th:src="@{/js/html5.min.js}"></script>
     <script src="./js/respond.min.js" th:src="@{/js/respond.min.js}"></script>
     <![endif]-->
-    <script charset="utf-8" th:inline="javascript" type="text/javascript">
+    <script type="text/javascript" charset="utf-8" th:inline="javascript">
         var ctxPath = /*[[@{/}]]*/'';
         var tokenValue = /*[[${_csrf.token}]]*/'';
         // 数据库详情的主键ID
@@ -39,8 +39,8 @@
                             <form class="layui-form layui-form-pane">
                                 <div class="layui-form-item" style="text-align: right;">
                                     <div class="layui-input-block">
-                                        <input checked lay-filter="redisAutoRefresh" name="redisAutoRefresh"
-                                               title="自动刷新" type="checkbox" value=1>
+                                        <input type="checkbox" name="redisAutoRefresh" value=1
+                                               checked title="自动刷新" lay-filter="redisAutoRefresh">
                                     </div>
                                 </div>
                             </form>
@@ -55,67 +55,67 @@
                         <div class="layui-form-item">
                             <label class="layui-form-label">数据库ID</label>
                             <div class="layui-input-block">
-                                <input class="layui-input" disabled name="id" th:value="${monitorDbVo.id}" type="text">
+                                <input type="text" name="id" disabled class="layui-input" th:value="${monitorDbVo.id}">
                             </div>
                         </div>
                         <div class="layui-form-item">
                             <label class="layui-form-label">连接名</label>
                             <div class="layui-input-block">
-                                <input class="layui-input" disabled name="connName" th:value="${monitorDbVo.connName}"
-                                       type="text">
+                                <input type="text" name="connName" disabled class="layui-input"
+                                       th:value="${monitorDbVo.connName}">
                             </div>
                         </div>
                         <div class="layui-form-item layui-form-text">
                             <label class="layui-form-label">地址</label>
                             <div class="layui-input-block">
-                                <textarea class="layui-textarea" disabled name="url" th:text="${monitorDbVo.url}">
+                                <textarea th:text="${monitorDbVo.url}" name="url" class="layui-textarea" disabled>
                                 </textarea>
                             </div>
                         </div>
                         <div class="layui-form-item">
                             <label class="layui-form-label">类型</label>
                             <div class="layui-input-block">
-                                <input class="layui-input" disabled name="dbType" th:value="${monitorDbVo.dbType}"
-                                       type="text">
+                                <input type="text" name="dbType" disabled class="layui-input"
+                                       th:value="${monitorDbVo.dbType}">
                             </div>
                         </div>
                         <div class="layui-form-item">
                             <label class="layui-form-label">驱动类</label>
                             <div class="layui-input-block">
-                                <input class="layui-input" disabled name="driverClass" th:value="${monitorDbVo.driverClass}"
-                                       type="text">
+                                <input type="text" name="driverClass" disabled class="layui-input"
+                                       th:value="${monitorDbVo.driverClass}">
                             </div>
                         </div>
                         <div class="layui-form-item layui-form-text">
                             <label class="layui-form-label">描述</label>
                             <div class="layui-input-block">
-                                <textarea class="layui-textarea" disabled name="dbDesc"
-                                          th:text="${monitorDbVo.dbDesc}"></textarea>
+                                <textarea th:text="${monitorDbVo.dbDesc}" disabled name="dbDesc"
+                                          class="layui-textarea"></textarea>
                             </div>
                         </div>
                         <div class="layui-form-item">
                             <label class="layui-form-label">状态</label>
                             <div class="layui-input-block">
-                                <input class="layui-input" disabled name="isOnline" th:if="${monitorDbVo.isOnline=='0'}"
-                                       type="text" value="异常">
-                                <input class="layui-input" disabled name="isOnline" th:if="${monitorDbVo.isOnline=='1'}"
-                                       type="text" value="正常">
-                                <input class="layui-input" disabled name="isOnline" th:if="${monitorDbVo.isOnline=='' || monitorDbVo.isOnline==null}"
-                                       type="text" value="未知">
+                                <input type="text" name="isOnline" disabled class="layui-input"
+                                       th:if="${monitorDbVo.isOnline=='0'}" value="异常">
+                                <input type="text" name="isOnline" disabled class="layui-input"
+                                       th:if="${monitorDbVo.isOnline=='1'}" value="正常">
+                                <input type="text" name="isOnline" disabled class="layui-input"
+                                       th:if="${monitorDbVo.isOnline=='' || monitorDbVo.isOnline==null}" value="未知">
                             </div>
                         </div>
                         <div class="layui-form-item">
                             <label class="layui-form-label">新增时间</label>
                             <div class="layui-input-block">
-                                <input class="layui-input" disabled name="insertTime" th:value="${#dates.format(monitorDbVo.insertTime,'yyyy/MM/dd HH:mm:ss')}"
-                                       type="text">
+                                <input type="text" name="insertTime" disabled class="layui-input"
+                                       th:value="${#dates.format(monitorDbVo.insertTime,'yyyy/MM/dd HH:mm:ss')}">
                             </div>
                         </div>
                         <div class="layui-form-item">
                             <label class="layui-form-label">更新时间</label>
                             <div class="layui-input-block">
-                                <input class="layui-input" disabled name="updateTime" th:value="${#dates.format(monitorDbVo.updateTime,'yyyy/MM/dd HH:mm:ss')}"
-                                       type="text">
+                                <input type="text" name="updateTime" disabled class="layui-input"
+                                       th:value="${#dates.format(monitorDbVo.updateTime,'yyyy/MM/dd HH:mm:ss')}">
                             </div>
                         </div>
                     </form>
@@ -124,7 +124,7 @@
         </div>
     </div>
 </div>
-<script charset="utf-8" src="./js/common.js" th:src="@{/js/common.js}"></script>
+<script src="./js/common.js" th:src="@{/js/common.js}" charset="utf-8"></script>
 <script src="./layui/layui.js" th:src="@{/layui/layui.js}"></script>
 <script charset="utf-8" th:inline="javascript">
     var extend = {

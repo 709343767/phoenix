@@ -30,7 +30,7 @@ public class AsyncConfig implements AsyncConfigurer {
     @Override
     public Executor getAsyncExecutor() {
         // IO密集型的线程池
-        return ThreadPool.COMMON_IO_INTENSIVE_THREAD_POOL;
+        return ThreadPool.getCommonIoIntensiveThreadPoolExecutor();
     }
 
 }

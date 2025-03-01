@@ -40,8 +40,8 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">服务器名</label>
                     <div class="layui-input-block">
-                        <input autocomplete="off" class="layui-input" name="serverName" placeholder="请输入"
-                               type="text">
+                        <input type="text" name="serverName" placeholder="请输入" autocomplete="off"
+                               class="layui-input">
                     </div>
                 </div>
                 <div class="layui-inline">
@@ -89,12 +89,12 @@
             <script type="text/html" id="imgTpl">
                 <img style="display: inline-block; width: 50%; height: 100%;" src={{ d.avatar }}>
             </script>
-            <script id="isEnableMonitorTpl" type="text/html">
+            <script type="text/html" id="isEnableMonitorTpl">
                 <input type="checkbox" name="isEnableMonitor" value="{{ d.id }} | {{ d.ip }}" lay-skin="switch"
                        lay-text="是|否" lay-filter="isEnableMonitorFilter" {{ d.isEnableMonitor=='1'?'checked':'' }}
                        sec:authorize="hasAuthority('超级管理员')">
             </script>
-            <script id="isEnableAlarmTpl" type="text/html">
+            <script type="text/html" id="isEnableAlarmTpl">
                 <input type="checkbox" name="isEnableAlarm" value="{{ d.id }} | {{ d.ip }}" lay-skin="switch"
                        lay-text="是|否" lay-filter="isEnableAlarmFilter" {{ d.isEnableAlarm=='1'?'checked':'' }}
                        sec:authorize="hasAuthority('超级管理员')">

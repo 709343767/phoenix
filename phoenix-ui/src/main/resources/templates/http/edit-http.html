@@ -24,14 +24,14 @@
     <div class="layui-form-item" style="display: none;">
         <label class="layui-form-label" for="id">HTTP ID</label>
         <div class="layui-input-block">
-            <input autocomplete="off" id="id" name="id" readonly type="hidden"
+            <input type="hidden" id="id" name="id" autocomplete="off" readonly
                    class="layui-input" th:value="${monitorHttpVo.id}">
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label" for="urlTarget">目标URL</label>
         <div class="layui-input-block">
-            <input autocomplete="off" id="urlTarget" lay-verify="url" name="urlTarget" type="text"
+            <input type="text" id="urlTarget" name="urlTarget" lay-verify="url" autocomplete="off"
                    class="layui-input" lay-verType="tips" th:value="${monitorHttpVo.urlTarget}">
         </div>
     </div>
@@ -47,10 +47,10 @@
     <div class="layui-form-item-my">
         <div class="layui-tab layui-tab-brief" lay-filter="requestDataTab">
             <ul class="layui-tab-title">
-                <li id="requestHeaderTabLi" th:class="${monitorHttpVo.method=='GET'?'layui-this':''}">请求头</li>
-                <li id="requestBodyTabLi"
-                    th:class="${monitorHttpVo.method=='POST'?'layui-this':''}"
-                    th:style="${monitorHttpVo.method=='POST'? 'display: inline-block;':'display: none;'}">
+                <li th:class="${monitorHttpVo.method=='GET'?'layui-this':''}" id="requestHeaderTabLi">请求头</li>
+                <li th:class="${monitorHttpVo.method=='POST'?'layui-this':''}"
+                    th:style="${monitorHttpVo.method=='POST'? 'display: inline-block;':'display: none;'}"
+                    id="requestBodyTabLi">
                     请求体
                     <em>(<strong id="requestBodyContentTypeChecked" th:text="${monitorHttpVo.contentType}">application/x-www-form-urlencoded</strong>)</em>
                 </li>
@@ -64,12 +64,12 @@
                 <!-- 请求体tab -->
                 <div th:class="${monitorHttpVo.method=='POST'?'layui-tab-item layui-show':'layui-tab-item'}">
                     <!-- HTTP请求内容类型 -->
-                    <label class="layui-form-label" for="contentType"
-                           style="display: none;">内容类型</label>
+                    <label class="layui-form-label" style="display: none;"
+                           for="contentType">内容类型</label>
                     <div class="layui-input-block" style="display: none;">
-                        <input autocomplete="off" class="layui-input" id="contentType"
-                               name="contentType" readonly th:value="${monitorHttpVo.contentType}"
-                               type="hidden" value="application/x-www-form-urlencoded">
+                        <input type="hidden" class="layui-input" autocomplete="off"
+                               id="contentType" name="contentType" th:value="${monitorHttpVo.contentType}"
+                               value="application/x-www-form-urlencoded" readonly>
                     </div>
                     <div class="layui-tab layui-tab-brief" lay-filter="requestBodyTab">
                         <ul class="layui-tab-title">
@@ -90,14 +90,14 @@
                             </div>
                             <!--请求体application/json tab -->
                             <div th:class="${monitorHttpVo.contentType=='application/json'?'layui-tab-item layui-show':'layui-tab-item'}">
-                                <textarea autocomplete="off" class="layui-textarea"
-                                          id="requestBodyApplicationJson" lay-verify="json"
-                                          name="requestBodyApplicationJson" placeholder='{
+                                <textarea id="requestBodyApplicationJson" name="requestBodyApplicationJson"
+                                          lay-verify="json" th:text="${bodyApplicationJsonParameter}"
+                                          class="layui-textarea" autocomplete="off" style="height: 200px;"
+                                          placeholder='{
 "hostname":"192.168.1.8",
 "page":1,
 "pageSize":10
-}' style="height: 200px;"
-                                          th:text="${bodyApplicationJsonParameter}"></textarea>
+}'></textarea>
                             </div>
                         </div>
                     </div>
@@ -128,23 +128,23 @@
     <div class="layui-form-item">
         <label class="layui-form-label" for="isEnableMonitor">是否监控</label>
         <div class="layui-input-inline">
-            <input id="isEnableMonitor" lay-skin="switch" lay-text="是|否"
-                   name="isEnableMonitor" th:checked="${monitorHttpVo.isEnableMonitor=='1'}? true : false" type="checkbox"
-                   value="1">
+            <input type="checkbox" name="isEnableMonitor" lay-text="是|否"
+                   id="isEnableMonitor" value="1" lay-skin="switch"
+                   th:checked="${monitorHttpVo.isEnableMonitor=='1'}? true : false">
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label" for="isEnableAlarm">是否告警</label>
         <div class="layui-input-inline">
-            <input id="isEnableAlarm" lay-skin="switch" lay-text="是|否"
-                   name="isEnableAlarm" th:checked="${monitorHttpVo.isEnableAlarm=='1'}? true : false" type="checkbox"
-                   value="1">
+            <input type="checkbox" name="isEnableAlarm" lay-text="是|否"
+                   id="isEnableAlarm" value="1" lay-skin="switch"
+                   th:checked="${monitorHttpVo.isEnableAlarm=='1'}? true : false">
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label" for="descr">描述</label>
         <div class="layui-input-block">
-            <textarea class="layui-textarea" id="descr" name="descr" th:text="${monitorHttpVo.descr}"
+            <textarea id="descr" name="descr" class="layui-textarea" th:text="${monitorHttpVo.descr}"
                       placeholder="请输入描述" autocomplete="off"></textarea>
         </div>
     </div>
@@ -152,15 +152,15 @@
         <input type="button" lay-submit lay-filter="LAY-front-submit" id="LAY-front-submit" value="确认">
     </div>
 </div>
-<script charset="utf-8" src="./js/common.js" th:src="@{/js/common.js}"></script>
+<script src="./js/common.js" th:src="@{/js/common.js}" charset="utf-8"></script>
 <script src="./layui/layui.js" th:src="@{/layui/layui.js}"></script>
-<script id="requestHeaderTableOperateTpl" type="text/html">
+<script type="text/html" id="requestHeaderTableOperateTpl">
     <button type="button" class="layui-btn layui-btn-radius layui-btn-xs layui-btn-primary"
             lay-event="requestHeaderTableDel">
         <i class="layui-icon layui-icon-delete"></i>删除
     </button>
 </script>
-<script id="requestBodyApplicationFormUrlencodedTableOperateTpl" type="text/html">
+<script type="text/html" id="requestBodyApplicationFormUrlencodedTableOperateTpl">
     <button type="button" class="layui-btn layui-btn-radius layui-btn-xs layui-btn-primary"
             lay-event="request-application-x-www-form-urlencoded-BodyTableDel">
         <i class="layui-icon layui-icon-delete"></i>删除

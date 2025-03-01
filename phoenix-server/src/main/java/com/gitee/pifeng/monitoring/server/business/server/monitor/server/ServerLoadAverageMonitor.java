@@ -1,4 +1,4 @@
-package com.gitee.pifeng.monitoring.server.business.server.monitor;
+package com.gitee.pifeng.monitoring.server.business.server.monitor.server;
 
 import cn.hutool.core.util.NumberUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;

@@ -1,4 +1,4 @@
-package com.gitee.pifeng.monitoring.server.business.server.monitor;
+package com.gitee.pifeng.monitoring.server.business.server.monitor.db;
 
 import cn.hutool.core.io.unit.DataSizeUtil;
 import cn.hutool.core.util.NumberUtil;
@@ -6,6 +6,8 @@ import cn.hutool.db.Entity;
 import cn.hutool.db.handler.EntityListHandler;
 import cn.hutool.db.sql.SqlExecutor;
 import com.baomidou.mybatisplus.annotation.DbType;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.gitee.pifeng.monitoring.common.constant.ZeroOrOneConstants;
 import com.gitee.pifeng.monitoring.common.constant.alarm.AlarmLevelEnums;
 import com.gitee.pifeng.monitoring.common.constant.alarm.AlarmReasonEnums;
@@ -24,6 +26,7 @@ import com.gitee.pifeng.monitoring.server.business.server.domain.DbTableSpace;
 import com.gitee.pifeng.monitoring.server.business.server.entity.MonitorDb;
 import com.gitee.pifeng.monitoring.server.business.server.service.IAlarmService;
 import com.gitee.pifeng.monitoring.server.business.server.service.IDbService;
+import com.gitee.pifeng.monitoring.server.constant.ComponentOrderConstants;
 import com.gitee.pifeng.monitoring.server.util.db.DbUtils;
 import lombok.Cleanup;
 import lombok.extern.slf4j.Slf4j;
@@ -55,7 +58,7 @@ import java.util.concurrent.ThreadPoolExecutor;
  */
 @Slf4j
 @Component
-@Order(5)
+@Order(ComponentOrderConstants.DB + 2)
 @DisallowConcurrentExecution
 public class DbTableSpaceMonitorJob extends QuartzJobBean {
 
@@ -113,8 +116,11 @@ public class DbTableSpaceMonitorJob extends QuartzJobBean {
         }
         synchronized (DbTableSpaceMonitorJob.class) {
             try {
-                // 查询数据库中的所有数据库信息
-                List<MonitorDb> monitorDbs = this.dbService.list();
+                // 查询数据库中在线的数据库信息
+                LambdaQueryWrapper<MonitorDb> monitorDbLambdaQueryWrapper = Wrappers.lambdaQuery();
+                // 在线
+                monitorDbLambdaQueryWrapper.eq(MonitorDb::getIsOnline, ZeroOrOneConstants.ONE);
+                List<MonitorDb> monitorDbs = this.dbService.list(monitorDbLambdaQueryWrapper);
                 // 打乱
                 Collections.shuffle(monitorDbs);
                 // 按每个list大小为10拆分成多个list
@@ -130,13 +136,8 @@ public class DbTableSpaceMonitorJob extends QuartzJobBean {
                                 if (!StringUtils.equals(ZeroOrOneConstants.ONE, isEnableMonitor)) {
                                     continue;
                                 }
-                                // 数据库是否在线（可连接）
-                                boolean isOnline = ZeroOrOneConstants.ONE.equals(monitorDb.getIsOnline());
-                                // 数据库在线（可连接）
-                                if (isOnline) {
-                                    // 计算表空间，如果表空间不足，则发送告警
-                                    this.calculateTableSpace(monitorDb);
-                                }
+                                // 计算表空间，如果表空间不足，则发送告警
+                                this.calculateTableSpace(monitorDb);
                             } catch (Exception e) {
                                 log.error("执行数据库表空间监控异常！", e);
                             }

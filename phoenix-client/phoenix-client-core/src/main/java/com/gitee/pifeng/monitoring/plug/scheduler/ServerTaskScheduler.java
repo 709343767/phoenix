@@ -1,12 +1,10 @@
 package com.gitee.pifeng.monitoring.plug.scheduler;
 
-import com.gitee.pifeng.monitoring.common.threadpool.ExecutorObject;
 import com.gitee.pifeng.monitoring.plug.core.ConfigLoader;
+import com.gitee.pifeng.monitoring.plug.core.ThreadPoolAcquirer;
 import com.gitee.pifeng.monitoring.plug.thread.ServerThread;
 
 import java.util.concurrent.TimeUnit;
-
-import static com.gitee.pifeng.monitoring.plug.core.ThreadPoolAcquirer.SERVER_SCHEDULED_EXECUTOR_SERVICE;
 
 /**
  * <p>
@@ -36,23 +34,17 @@ public class ServerTaskScheduler {
      * 则由类{@link ConfigLoader}提供默认的发送服务器信息频率。
      * </p>
      *
-     * @return {@link ExecutorObject}
      * @author 皮锋
      * @custom.date 2020年3月7日 下午4:43:35
      */
-    public static ExecutorObject run() {
+    public static void run() {
         // 是否发送服务器信息
         boolean serverInfoEnable = ConfigLoader.getMonitoringProperties().getServerInfo().getEnable();
         if (serverInfoEnable) {
             // 发送服务器信息的频率
             long rate = ConfigLoader.getMonitoringProperties().getServerInfo().getRate();
-            SERVER_SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(new ServerThread(), 40, rate, TimeUnit.SECONDS);
-            return ExecutorObject.builder()
-                    .scheduledExecutorService(SERVER_SCHEDULED_EXECUTOR_SERVICE)
-                    .name("phoenix-server-pool-thread")
-                    .build();
+            ThreadPoolAcquirer.getServerScheduledThreadPoolExecutor().scheduleAtFixedRate(new ServerThread(), 40, rate, TimeUnit.SECONDS);
         }
-        return null;
     }
 
 }

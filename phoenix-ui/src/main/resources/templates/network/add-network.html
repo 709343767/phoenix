@@ -24,7 +24,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label" for="ipTarget">目标IP</label>
         <div class="layui-input-block">
-            <input autocomplete="off" id="ipTarget" lay-verify="ip" name="ipTarget" type="text"
+            <input type="text" id="ipTarget" name="ipTarget" lay-verify="ip" autocomplete="off"
                    class="layui-input" lay-verType="tips">
         </div>
     </div>
@@ -51,23 +51,23 @@
     <div class="layui-form-item">
         <label class="layui-form-label" for="isEnableMonitor">是否监控</label>
         <div class="layui-input-inline">
-            <input checked="checked" id="isEnableMonitor" lay-skin="switch"
-                   lay-text="是|否" name="isEnableMonitor" type="checkbox"
-                   value="1">
+            <input type="checkbox" name="isEnableMonitor" lay-text="是|否"
+                   id="isEnableMonitor" value="1" lay-skin="switch"
+                   checked="checked">
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label" for="isEnableAlarm">是否告警</label>
         <div class="layui-input-inline">
-            <input checked="checked" id="isEnableAlarm" lay-skin="switch"
-                   lay-text="是|否" name="isEnableAlarm" type="checkbox"
-                   value="1">
+            <input type="checkbox" name="isEnableAlarm" lay-text="是|否"
+                   id="isEnableAlarm" value="1" lay-skin="switch"
+                   checked="checked">
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label" for="ipDesc">描述</label>
         <div class="layui-input-block">
-            <textarea class="layui-textarea" id="ipDesc" name="ipDesc"
+            <textarea id="ipDesc" name="ipDesc" class="layui-textarea"
                       placeholder="请输入描述" autocomplete="off"></textarea>
         </div>
     </div>

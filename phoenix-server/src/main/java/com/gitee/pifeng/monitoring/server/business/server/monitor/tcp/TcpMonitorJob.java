@@ -1,4 +1,4 @@
-package com.gitee.pifeng.monitoring.server.business.server.monitor;
+package com.gitee.pifeng.monitoring.server.business.server.monitor.tcp;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.gitee.pifeng.monitoring.common.constant.ZeroOrOneConstants;
@@ -20,6 +20,7 @@ import com.gitee.pifeng.monitoring.server.business.server.entity.MonitorTcpHisto
 import com.gitee.pifeng.monitoring.server.business.server.service.IAlarmService;
 import com.gitee.pifeng.monitoring.server.business.server.service.ITcpHistoryService;
 import com.gitee.pifeng.monitoring.server.business.server.service.ITcpService;
+import com.gitee.pifeng.monitoring.server.constant.ComponentOrderConstants;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.quartz.DisallowConcurrentExecution;
@@ -47,7 +48,7 @@ import java.util.concurrent.ThreadPoolExecutor;
  */
 @Slf4j
 @Component
-@Order(7)
+@Order(ComponentOrderConstants.TCP + 1)
 @DisallowConcurrentExecution
 public class TcpMonitorJob extends QuartzJobBean {
 
@@ -151,7 +152,7 @@ public class TcpMonitorJob extends QuartzJobBean {
                         }
                     });
                 }
-            } catch (NetException e) {
+            } catch (Exception e) {
                 log.error("定时扫描数据库“MONITOR_TCP”表中的所有TCP信息异常！", e);
             }
         }

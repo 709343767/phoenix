@@ -30,7 +30,7 @@ public class OfflineAspect {
     /**
      * 下线监听器
      */
-    @Autowired
+    @Autowired(required = false)
     private List<IOfflineListener> offlineListeners;
 
     /**
@@ -58,13 +58,15 @@ public class OfflineAspect {
     public void beforeWakeUp(JoinPoint joinPoint) {
         OfflinePackage offlinePackage = (OfflinePackage) joinPoint.getArgs()[0];
         // 调用监听器回调接口
-        this.offlineListeners.forEach(o -> ThreadPool.COMMON_IO_INTENSIVE_THREAD_POOL.execute(() -> {
-            try {
-                o.notifyOffline(offlinePackage);
-            } catch (Exception e) {
-                log.error(e.getMessage(), e);
-            }
-        }));
+        if (this.offlineListeners != null) {
+            this.offlineListeners.forEach(o -> ThreadPool.getCommonIoIntensiveThreadPoolExecutor().execute(() -> {
+                try {
+                    o.notifyOffline(offlinePackage);
+                } catch (Exception e) {
+                    log.error(e.getMessage(), e);
+                }
+            }));
+        }
     }
 
 }

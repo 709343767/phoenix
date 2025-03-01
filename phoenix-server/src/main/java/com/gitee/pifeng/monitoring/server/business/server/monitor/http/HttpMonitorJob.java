@@ -1,4 +1,4 @@
-package com.gitee.pifeng.monitoring.server.business.server.monitor;
+package com.gitee.pifeng.monitoring.server.business.server.monitor.http;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -24,6 +24,7 @@ import com.gitee.pifeng.monitoring.server.business.server.entity.MonitorHttpHist
 import com.gitee.pifeng.monitoring.server.business.server.service.IAlarmService;
 import com.gitee.pifeng.monitoring.server.business.server.service.IHttpHistoryService;
 import com.gitee.pifeng.monitoring.server.business.server.service.IHttpService;
+import com.gitee.pifeng.monitoring.server.constant.ComponentOrderConstants;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpStatus;
@@ -54,7 +55,7 @@ import java.util.concurrent.ThreadPoolExecutor;
  */
 @Slf4j
 @Component
-@Order(8)
+@Order(ComponentOrderConstants.HTTP + 1)
 @DisallowConcurrentExecution
 public class HttpMonitorJob extends QuartzJobBean {
 

@@ -1,6 +1,7 @@
 package com.gitee.pifeng.monitoring.server.business.server.monitor;
 
 import com.gitee.pifeng.monitoring.server.business.server.service.*;
+import com.gitee.pifeng.monitoring.server.constant.ComponentOrderConstants;
 import lombok.extern.slf4j.Slf4j;
 import org.joda.time.DateTime;
 import org.quartz.DisallowConcurrentExecution;
@@ -23,7 +24,7 @@ import java.util.Date;
  */
 @Slf4j
 @Component
-@Order(6)
+@Order(ComponentOrderConstants.OTHER + 1)
 @DisallowConcurrentExecution
 public class ClearHistoryDataJob extends QuartzJobBean {
 

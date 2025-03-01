@@ -314,3 +314,20 @@ var formatMillisecond = function (milli, type) {
         milli + cn[0] :
         milli + en[0];
 };
+
+/**
+ * 清空所有字段的值
+ * @param fields 包含所有字段的JSON对象
+ * @returns {*}
+ */
+var clearFields = function (fields) {
+    if (isNotEmpty(fields)) {
+        for (var key in fields) {
+            // 确保你只操作对象自身的属性，而不是继承自原型链上的属性
+            if (fields.hasOwnProperty(key)) {
+                fields[key] = '';
+            }
+        }
+    }
+    return fields;
+};

@@ -1,4 +1,4 @@
-package com.gitee.pifeng.monitoring.server.business.server.monitor;
+package com.gitee.pifeng.monitoring.server.business.server.monitor.server;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.gitee.pifeng.monitoring.common.constant.ZeroOrOneConstants;
@@ -16,6 +16,7 @@ import com.gitee.pifeng.monitoring.server.business.server.core.ServerPackageCons
 import com.gitee.pifeng.monitoring.server.business.server.entity.MonitorServer;
 import com.gitee.pifeng.monitoring.server.business.server.service.IAlarmService;
 import com.gitee.pifeng.monitoring.server.business.server.service.IServerService;
+import com.gitee.pifeng.monitoring.server.constant.ComponentOrderConstants;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
@@ -41,7 +42,7 @@ import java.util.List;
  */
 @Component
 @Slf4j
-@Order(2)
+@Order(ComponentOrderConstants.SERVER + 1)
 @DisallowConcurrentExecution
 public class ServerMonitorJob extends QuartzJobBean implements CommandLineRunner {
 

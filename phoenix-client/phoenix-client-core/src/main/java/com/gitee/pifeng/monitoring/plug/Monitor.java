@@ -13,7 +13,7 @@ import com.gitee.pifeng.monitoring.common.exception.NotFoundConfigFileException;
 import com.gitee.pifeng.monitoring.common.exception.NotFoundConfigParamException;
 import com.gitee.pifeng.monitoring.common.init.InitBanner;
 import com.gitee.pifeng.monitoring.common.property.client.MonitoringProperties;
-import com.gitee.pifeng.monitoring.common.threadpool.ExecutorObject;
+import com.gitee.pifeng.monitoring.common.threadpool.MonitoredScheduledThreadPoolExecutor;
 import com.gitee.pifeng.monitoring.plug.constant.UrlConstants;
 import com.gitee.pifeng.monitoring.plug.core.*;
 import com.gitee.pifeng.monitoring.plug.scheduler.BusinessBuryingPointScheduler;
@@ -25,7 +25,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
-import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -137,13 +136,13 @@ public class Monitor {
             }
         }
         // 4.开始定时发送心跳包
-        ExecutorObject heartbeatExecutorObject = HeartbeatTaskScheduler.run();
+        HeartbeatTaskScheduler.run();
         // 5.开始定时发送服务器信息包
-        ExecutorObject serverExecutorObject = ServerTaskScheduler.run();
+        ServerTaskScheduler.run();
         // 6.开始定时发送Java虚拟机信息包
-        ExecutorObject jvmExecutorObject = JvmTaskScheduler.run();
+        JvmTaskScheduler.run();
         // 最后：添加关闭钩子，在jvm退出前做一些操作
-        ShutdownHook.addShutdownHook(heartbeatExecutorObject, serverExecutorObject, jvmExecutorObject);
+        ShutdownHook.addShutdownHook();
         // 返回监控属性
         return monitoringProperties;
     }
@@ -181,11 +180,11 @@ public class Monitor {
      * @param period         两次埋点监控任务之间的时间间隔
      * @param unit           时间单位
      * @param threadTypeEnum 线程类型：CPU密集型、IO密集型
-     * @return {@link ScheduledExecutorService}
+     * @return {@link MonitoredScheduledThreadPoolExecutor}
      * @author 皮锋
      * @custom.date 2020/8/24 20:33
      */
-    public static ScheduledExecutorService buryingPoint(Runnable command, long initialDelay, long period, TimeUnit unit, ThreadTypeEnums threadTypeEnum) {
+    public static MonitoredScheduledThreadPoolExecutor buryingPoint(Runnable command, long initialDelay, long period, TimeUnit unit, ThreadTypeEnums threadTypeEnum) {
         return BusinessBuryingPointScheduler.run(command, initialDelay, period, unit, threadTypeEnum);
     }
 

@@ -408,7 +408,7 @@ CREATE TABLE `MONITOR_JVM_THREAD`
 DROP TABLE IF EXISTS `MONITOR_LINK`;
 CREATE TABLE `MONITOR_LINK`
 (
-    `ID`             bigint(20)                                                   NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `ID` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键ID',
     `ROOT_NODE`      varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '根节点',
     `ROOT_NODE_TIME` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '根节点时间',
     `LINK`           text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci        NULL COMMENT '链路',

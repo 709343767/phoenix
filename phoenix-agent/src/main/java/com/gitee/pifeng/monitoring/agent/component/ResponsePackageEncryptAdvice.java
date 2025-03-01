@@ -26,7 +26,8 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
  */
 @Slf4j
 @RestControllerAdvice(basePackages = {
-        "com.gitee.pifeng.monitoring.agent.business.client.controller"
+        "com.gitee.pifeng.monitoring.agent.business.client.controller",
+        "com.gitee.pifeng.monitoring.agent.business.server.controller"
 })
 public class ResponsePackageEncryptAdvice implements ResponseBodyAdvice<Object> {
 

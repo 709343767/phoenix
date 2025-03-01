@@ -1,12 +1,10 @@
 package com.gitee.pifeng.monitoring.plug.scheduler;
 
-import com.gitee.pifeng.monitoring.common.threadpool.ExecutorObject;
 import com.gitee.pifeng.monitoring.plug.core.ConfigLoader;
+import com.gitee.pifeng.monitoring.plug.core.ThreadPoolAcquirer;
 import com.gitee.pifeng.monitoring.plug.thread.JvmThread;
 
 import java.util.concurrent.TimeUnit;
-
-import static com.gitee.pifeng.monitoring.plug.core.ThreadPoolAcquirer.JVM_SCHEDULED_EXECUTOR_SERVICE;
 
 /**
  * <p>
@@ -36,23 +34,17 @@ public class JvmTaskScheduler {
      * 则由类{@link ConfigLoader}提供默认的发送Java虚拟机信息频率。
      * </p>
      *
-     * @return {@link ExecutorObject}
      * @author 皮锋
      * @custom.date 2020年3月7日 下午4:43:35
      */
-    public static ExecutorObject run() {
+    public static void run() {
         // 是否发送Java虚拟机
         boolean jvmInfoEnable = ConfigLoader.getMonitoringProperties().getJvmInfo().getEnable();
         if (jvmInfoEnable) {
             // 发送Java虚拟机的频率
             long rate = ConfigLoader.getMonitoringProperties().getJvmInfo().getRate();
-            JVM_SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(new JvmThread(), 45, rate, TimeUnit.SECONDS);
-            return ExecutorObject.builder()
-                    .scheduledExecutorService(JVM_SCHEDULED_EXECUTOR_SERVICE)
-                    .name("phoenix-jvm-pool-thread")
-                    .build();
+            ThreadPoolAcquirer.getJvmScheduledThreadPoolExecutor().scheduleAtFixedRate(new JvmThread(), 45, rate, TimeUnit.SECONDS);
         }
-        return null;
     }
 
 }

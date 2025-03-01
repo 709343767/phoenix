@@ -35,8 +35,6 @@
         <myproject.name>phoenix</myproject.name>
         <!-- spring-boot-starter-parent版本 -->
         <spring-boot-starter-parent.version>2.3.12.RELEASE</spring-boot-starter-parent.version>
-        <!-- 解决eclipse中maven报错的问题 -->
-        <maven-jar-plugin.version>3.1.1</maven-jar-plugin.version>
         <!-- java版本 -->
         <java.version>1.8</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
@@ -100,6 +98,8 @@
         <!-- mongodb驱动版本 -->
         <mongo-java-driver.version>3.12.10</mongo-java-driver.version>
 
+        <!-- maven 版本管理插件版本 -->
+        <versions-maven-plugin.version>2.8.1</versions-maven-plugin.version>
         <!-- maven clear插件版本 -->
         <maven-clean-plugin.version>3.0.0</maven-clean-plugin.version>
         <!-- 编译插件版本 -->
@@ -523,6 +523,12 @@
 
         <!-- 插件 -->
         <plugins>
+            <!-- maven 版本管理插件 -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>versions-maven-plugin</artifactId>
+                <version>${versions-maven-plugin.version}</version>
+            </plugin>
             <!-- maven clean插件 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

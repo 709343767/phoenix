@@ -6,7 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
-import org.springframework.lang.Nullable;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
@@ -24,7 +24,7 @@ import java.lang.reflect.Method;
 public class BusinessAgencyScanner implements BeanPostProcessor {
 
     @Override
-    public Object postProcessAfterInitialization(Object bean, @Nullable String beanName) throws BeansException {
+    public Object postProcessAfterInitialization(@NonNull Object bean, @NonNull String beanName) throws BeansException {
         Class<?> clazz = bean.getClass();
         // 类名
         String clazzName = clazz.getName();
@@ -87,7 +87,7 @@ public class BusinessAgencyScanner implements BeanPostProcessor {
     }
 
     @Override
-    public Object postProcessBeforeInitialization(@Nullable Object bean, @Nullable String beanName) throws BeansException {
+    public Object postProcessBeforeInitialization(@NonNull Object bean, @NonNull String beanName) throws BeansException {
         return bean;
     }
 

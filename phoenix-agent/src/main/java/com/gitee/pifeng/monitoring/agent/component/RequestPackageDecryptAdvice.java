@@ -18,7 +18,8 @@ import java.lang.reflect.Type;
  * @custom.date 2020/4/28 15:30
  */
 @RestControllerAdvice(basePackages = {
-        "com.gitee.pifeng.monitoring.agent.business.client.controller"
+        "com.gitee.pifeng.monitoring.agent.business.client.controller",
+        "com.gitee.pifeng.monitoring.agent.business.server.controller"
 })
 public class RequestPackageDecryptAdvice implements RequestBodyAdvice {
 

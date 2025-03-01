@@ -25,21 +25,21 @@
         <label class="layui-form-label">ID</label>
         <div class="layui-input-block">
             <input type="hidden" name="id" lay-verify="required" autocomplete="off"
-                   class="layui-input" lay-verType="tips" readonly th:value="${monitorEnvVo.id}">
+                   readonly th:value="${monitorEnvVo.id}" class="layui-input" lay-verType="tips">
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">环境名称</label>
         <div class="layui-input-block">
             <input type="text" name="envName" lay-verify="required" placeholder="请输入环境名称" autocomplete="off"
-                   class="layui-input" lay-verType="tips" readonly th:value="${monitorEnvVo.envName}">
+                   readonly th:value="${monitorEnvVo.envName}" class="layui-input" lay-verType="tips">
         </div>
     </div>
     <div class="layui-form-item layui-form-text">
         <label class="layui-form-label">环境描述</label>
         <div class="layui-input-block">
             <textarea name="envDesc" class="layui-textarea" placeholder="请输入环境描述" autocomplete="off"
-                      lay-verType="tips" lay-verify="required" th:text="${monitorEnvVo.envDesc}"></textarea>
+                      th:text="${monitorEnvVo.envDesc}" lay-verify="required" lay-verType="tips"></textarea>
         </div>
     </div>
     <div class="layui-form-item layui-hide">

@@ -1,12 +1,10 @@
 package com.gitee.pifeng.monitoring.plug.scheduler;
 
-import com.gitee.pifeng.monitoring.common.threadpool.ExecutorObject;
 import com.gitee.pifeng.monitoring.plug.core.ConfigLoader;
+import com.gitee.pifeng.monitoring.plug.core.ThreadPoolAcquirer;
 import com.gitee.pifeng.monitoring.plug.thread.HeartbeatThread;
 
 import java.util.concurrent.TimeUnit;
-
-import static com.gitee.pifeng.monitoring.plug.core.ThreadPoolAcquirer.HEARTBEAT_SCHEDULED_EXECUTOR_SERVICE;
 
 /**
  * <p>
@@ -35,18 +33,13 @@ public class HeartbeatTaskScheduler {
      * 则由类{@link ConfigLoader}提供默认心跳频率。
      * </p>
      *
-     * @return {@link ExecutorObject}
      * @author 皮锋
      * @custom.date 2020年3月5日 下午2:56:47
      */
-    public static ExecutorObject run() {
+    public static void run() {
         // 心跳频率
         long rate = ConfigLoader.getMonitoringProperties().getHeartbeat().getRate();
-        HEARTBEAT_SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(new HeartbeatThread(), 35, rate, TimeUnit.SECONDS);
-        return ExecutorObject.builder()
-                .scheduledExecutorService(HEARTBEAT_SCHEDULED_EXECUTOR_SERVICE)
-                .name("phoenix-heartbeat-pool-thread")
-                .build();
+        ThreadPoolAcquirer.getHeartbeatScheduledThreadPoolExecutor().scheduleAtFixedRate(new HeartbeatThread(), 35, rate, TimeUnit.SECONDS);
     }
 
 }

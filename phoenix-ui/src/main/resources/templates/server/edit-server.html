@@ -24,11 +24,11 @@
     <div class="layui-form-item" style="display: none">
         <label class="layui-form-label" for="id">ID</label>
         <div class="layui-input-inline">
-            <input class="layui-input" id="id" name="id" readonly th:value="${id}" type="hidden">
+            <input type="hidden" id="id" name="id" class="layui-input" th:value="${id}" readonly>
         </div>
         <label class="layui-form-label" for="ip">IP</label>
         <div class="layui-input-inline">
-            <input class="layui-input" id="ip" name="ip" readonly th:value="${ip}" type="hidden">
+            <input type="hidden" id="ip" name="ip" class="layui-input" th:value="${ip}" readonly>
         </div>
     </div>
     <div class="layui-form-item">
@@ -54,23 +54,23 @@
     <div class="layui-form-item">
         <label class="layui-form-label" for="isEnableMonitor">是否监控</label>
         <div class="layui-input-inline">
-            <input id="isEnableMonitor" lay-skin="switch" lay-text="是|否"
-                   name="isEnableMonitor" th:checked="${isEnableMonitor=='1'}? true : false" type="checkbox"
-                   value="1">
+            <input type="checkbox" name="isEnableMonitor" lay-text="是|否"
+                   id="isEnableMonitor" value="1" lay-skin="switch"
+                   th:checked="${isEnableMonitor=='1'}? true : false">
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label" for="isEnableAlarm">是否告警</label>
         <div class="layui-input-inline">
-            <input id="isEnableAlarm" lay-skin="switch" lay-text="是|否"
-                   name="isEnableAlarm" th:checked="${isEnableAlarm=='1'}? true : false" type="checkbox"
-                   value="1">
+            <input type="checkbox" name="isEnableAlarm" lay-text="是|否"
+                   id="isEnableAlarm" value="1" lay-skin="switch"
+                   th:checked="${isEnableAlarm=='1'}? true : false">
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label" for="serverSummary">描述</label>
         <div class="layui-input-block">
-            <textarea class="layui-textarea" id="serverSummary" name="serverSummary" th:text="${serverSummary}"
+            <textarea id="serverSummary" name="serverSummary" th:text="${serverSummary}" class="layui-textarea"
                       placeholder="请输入描述" autocomplete="off" maxlength="500"></textarea>
         </div>
     </div>

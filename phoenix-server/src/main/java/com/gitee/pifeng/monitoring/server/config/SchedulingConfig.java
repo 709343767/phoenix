@@ -31,7 +31,7 @@ public class SchedulingConfig implements SchedulingConfigurer {
      */
     @Override
     public void configureTasks(ScheduledTaskRegistrar scheduledTaskRegistrar) {
-        scheduledTaskRegistrar.setScheduler(ThreadPool.COMMON_IO_INTENSIVE_SCHEDULED_THREAD_POOL);
+        scheduledTaskRegistrar.setScheduler(ThreadPool.getCommonIoIntensiveScheduledThreadPoolExecutor());
     }
 
 }

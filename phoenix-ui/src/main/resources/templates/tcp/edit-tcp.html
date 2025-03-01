@@ -24,21 +24,21 @@
     <div class="layui-form-item" style="display: none;">
         <label class="layui-form-label" for="id">TCP ID</label>
         <div class="layui-input-block">
-            <input autocomplete="off" id="id" name="id" readonly type="hidden"
+            <input type="hidden" id="id" name="id" autocomplete="off" readonly
                    class="layui-input" th:value="${monitorTcpVo.id}">
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label" for="hostnameTarget">目标主机</label>
         <div class="layui-input-block">
-            <input autocomplete="off" id="hostnameTarget" lay-verify="required" name="hostnameTarget" type="text"
+            <input type="text" id="hostnameTarget" name="hostnameTarget" lay-verify="required" autocomplete="off"
                    class="layui-input" lay-verType="tips" th:value="${monitorTcpVo.hostnameTarget}">
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label" for="portTarget">目标端口</label>
         <div class="layui-input-block">
-            <input autocomplete="off" id="portTarget" lay-verify="port" name="portTarget" type="text"
+            <input type="text" id="portTarget" name="portTarget" lay-verify="port" autocomplete="off"
                    class="layui-input" lay-verType="tips" th:value="${monitorTcpVo.portTarget}">
         </div>
     </div>
@@ -65,23 +65,23 @@
     <div class="layui-form-item">
         <label class="layui-form-label" for="isEnableMonitor">是否监控</label>
         <div class="layui-input-inline">
-            <input id="isEnableMonitor" lay-skin="switch" lay-text="是|否"
-                   name="isEnableMonitor" th:checked="${monitorTcpVo.isEnableMonitor=='1'}? true : false" type="checkbox"
-                   value="1">
+            <input type="checkbox" name="isEnableMonitor" lay-text="是|否"
+                   id="isEnableMonitor" value="1" lay-skin="switch"
+                   th:checked="${monitorTcpVo.isEnableMonitor=='1'}? true : false">
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label" for="isEnableAlarm">是否告警</label>
         <div class="layui-input-inline">
-            <input id="isEnableAlarm" lay-skin="switch" lay-text="是|否"
-                   name="isEnableAlarm" th:checked="${monitorTcpVo.isEnableAlarm=='1'}? true : false" type="checkbox"
-                   value="1">
+            <input type="checkbox" name="isEnableAlarm" lay-text="是|否"
+                   id="isEnableAlarm" value="1" lay-skin="switch"
+                   th:checked="${monitorTcpVo.isEnableAlarm=='1'}? true : false">
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label" for="descr">描述</label>
         <div class="layui-input-block">
-            <textarea class="layui-textarea" id="descr" name="descr" th:text="${monitorTcpVo.descr}"
+            <textarea id="descr" name="descr" class="layui-textarea" th:text="${monitorTcpVo.descr}"
                       placeholder="请输入描述" autocomplete="off"></textarea>
         </div>
     </div>

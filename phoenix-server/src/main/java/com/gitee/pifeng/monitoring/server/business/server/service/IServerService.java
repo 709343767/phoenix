@@ -31,6 +31,17 @@ public interface IServerService extends IService<MonitorServer> {
 
     /**
      * <p>
+     * 把服务器信息添加或更新到数据库
+     * </p>
+     *
+     * @param serverPackage 服务器信息包
+     * @author 皮锋
+     * @custom.date 2021/1/21 13:21
+     */
+    void operateServer(ServerPackage serverPackage);
+
+    /**
+     * <p>
      * 清理服务器历史记录
      * </p>
      *
