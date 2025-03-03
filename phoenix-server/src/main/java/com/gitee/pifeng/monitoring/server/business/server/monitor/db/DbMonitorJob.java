@@ -1,7 +1,6 @@
 package com.gitee.pifeng.monitoring.server.business.server.monitor.db;
 
 import cn.hutool.db.DbUtil;
-import cn.hutool.db.ds.simple.SimpleDataSource;
 import cn.hutool.db.handler.NumberHandler;
 import cn.hutool.db.sql.SqlExecutor;
 import com.baomidou.mybatisplus.annotation.DbType;
@@ -25,6 +24,7 @@ import com.gitee.pifeng.monitoring.server.business.server.entity.MonitorDb;
 import com.gitee.pifeng.monitoring.server.business.server.service.IAlarmService;
 import com.gitee.pifeng.monitoring.server.business.server.service.IDbService;
 import com.gitee.pifeng.monitoring.server.constant.ComponentOrderConstants;
+import com.gitee.pifeng.monitoring.server.util.db.DbUtils;
 import com.gitee.pifeng.monitoring.server.util.db.MongoUtils;
 import com.gitee.pifeng.monitoring.server.util.db.RedisUtils;
 import com.mongodb.MongoClient;
@@ -40,9 +40,7 @@ import org.springframework.scheduling.quartz.QuartzJobBean;
 import org.springframework.stereotype.Component;
 import redis.clients.jedis.Jedis;
 
-import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
-import java.util.Base64;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -246,9 +244,17 @@ public class DbMonitorJob extends QuartzJobBean {
      * @custom.date 2021/10/16 13:55
      */
     private void dealRelationalDb(MonitorDb monitorDb) {
+        // url
+        String url = monitorDb.getUrl();
+        // 用户名
+        String username = monitorDb.getUsername();
+        // 密码
+        String password = monitorDb.getPassword();
         // 关系型数据库连接
-        Connection connection = this.getRelationalDbConnection(monitorDb);
+        Connection connection = null;
         try {
+            // 获取数据库连接
+            connection = DbUtils.getConnection(url, username, password);
             // 关系型数据库是否可连接
             boolean isConnect = this.isRelationalDbConnect(connection, monitorDb);
             // 连接正常
@@ -319,32 +325,6 @@ public class DbMonitorJob extends QuartzJobBean {
         monitorDb.setUpdateTime(new Date());
         // 更新数据库
         this.dbService.updateById(monitorDb);
-    }
-
-    /**
-     * <p>
-     * 获取关系型数据库连接
-     * </p>
-     *
-     * @param monitorDb 数据库信息
-     * @return 数据库连接
-     * @author 皮锋
-     * @custom.date 2020/12/21 21:42
-     */
-    private Connection getRelationalDbConnection(MonitorDb monitorDb) {
-        // url
-        String url = monitorDb.getUrl();
-        // 用户名
-        String username = monitorDb.getUsername();
-        // 密码
-        String password = new String(Base64.getDecoder().decode(monitorDb.getPassword()), StandardCharsets.UTF_8);
-        // 数据源
-        try (SimpleDataSource ds = new SimpleDataSource(url, username, password)) {
-            return ds.getConnection();
-        } catch (Exception e) {
-            log.error("与数据库建立连接异常！", e);
-            return null;
-        }
     }
 
     /**
