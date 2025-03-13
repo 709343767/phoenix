@@ -7,11 +7,11 @@ import com.gitee.pifeng.monitoring.common.dto.ServerPackage;
 import com.gitee.pifeng.monitoring.server.business.server.dao.IMonitorServerProcessDao;
 import com.gitee.pifeng.monitoring.server.business.server.entity.MonitorServerProcess;
 import com.gitee.pifeng.monitoring.server.business.server.service.IServerProcessService;
+import com.google.common.collect.Lists;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -51,7 +51,7 @@ public class ServerProcessServiceImpl extends ServiceImpl<IMonitorServerProcessD
             lambdaUpdateWrapper.eq(MonitorServerProcess::getIp, ip);
             this.remove(lambdaUpdateWrapper);
             // 循环所有进程信息
-            List<MonitorServerProcess> insertMonitorServerProcesses = new ArrayList<>();
+            List<MonitorServerProcess> insertMonitorServerProcesses = Lists.newArrayList();
             for (ProcessDomain.ProcessInfoDomain processInfo : processInfoList) {
                 MonitorServerProcess monitorServerProcess = MonitorServerProcess.builder().build();
                 monitorServerProcess.setIp(ip);

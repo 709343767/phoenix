@@ -10,10 +10,10 @@ import com.baomidou.mybatisplus.generator.config.*;
 import com.baomidou.mybatisplus.generator.config.po.TableInfo;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
 import com.baomidou.mybatisplus.generator.engine.VelocityTemplateEngine;
+import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -95,7 +95,7 @@ public class MyBatisPlusAutoGenerator {
             public void initMap() {
             }
         };
-        List<FileOutConfig> focList = new ArrayList<>();
+        List<FileOutConfig> focList = Lists.newArrayList();
         focList.add(new FileOutConfig("/templates/mapper.xml.vm") {
             @Override
             public String outputFile(TableInfo tableInfo) {

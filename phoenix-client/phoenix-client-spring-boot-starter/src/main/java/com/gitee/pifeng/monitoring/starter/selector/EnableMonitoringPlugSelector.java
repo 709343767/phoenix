@@ -5,6 +5,7 @@ import org.springframework.beans.factory.BeanClassLoaderAware;
 import org.springframework.context.annotation.DeferredImportSelector;
 import org.springframework.core.io.support.SpringFactoriesLoader;
 import org.springframework.core.type.AnnotationMetadata;
+import org.springframework.lang.NonNull;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -35,8 +36,9 @@ public class EnableMonitoringPlugSelector implements DeferredImportSelector, Bea
      * @author 皮锋
      * @custom.date 2020/3/13 21:05
      */
+    @NonNull
     @Override
-    public String[] selectImports(AnnotationMetadata metadata) {
+    public String[] selectImports(@NonNull AnnotationMetadata metadata) {
         // 从spring.factories中获取的所有通过@EnableMonitoring注解引进来的自动配置类，并进行去重操作
         List<String> factories = new ArrayList<>(new LinkedHashSet<>(
                 SpringFactoriesLoader.loadFactoryNames(EnableMonitoring.class, this.beanClassLoader)));
@@ -56,7 +58,7 @@ public class EnableMonitoringPlugSelector implements DeferredImportSelector, Bea
      * @custom.date 2020/3/13 21:05
      */
     @Override
-    public void setBeanClassLoader(ClassLoader classLoader) {
+    public void setBeanClassLoader(@NonNull ClassLoader classLoader) {
         this.beanClassLoader = classLoader;
     }
 

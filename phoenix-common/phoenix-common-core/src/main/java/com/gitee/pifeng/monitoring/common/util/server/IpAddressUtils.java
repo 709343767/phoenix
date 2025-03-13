@@ -1,9 +1,9 @@
 package com.gitee.pifeng.monitoring.common.util.server;
 
+import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.net.util.SubnetUtils;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -68,7 +68,7 @@ public class IpAddressUtils {
         subnetUtils.setInclusiveHostCount(true);
         // 获取网段的起始和结束 IP 地址
         String[] allIps = subnetUtils.getInfo().getAllAddresses();
-        return new ArrayList<>(Arrays.asList(allIps));
+        return Lists.newArrayList(Arrays.asList(allIps));
     }
 
 }
