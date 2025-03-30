@@ -39,7 +39,7 @@ public class HeartbeatTaskScheduler {
     public static void run() {
         // 心跳频率
         long rate = ConfigLoader.getMonitoringProperties().getHeartbeat().getRate();
-        ThreadPoolAcquirer.getHeartbeatScheduledThreadPoolExecutor().scheduleAtFixedRate(new HeartbeatThread(), 35, rate, TimeUnit.SECONDS);
+        ThreadPoolAcquirer.getHeartbeatScheduledThreadPoolExecutor().scheduleWithFixedDelay(new HeartbeatThread(), 35, rate, TimeUnit.SECONDS);
     }
 
 }
