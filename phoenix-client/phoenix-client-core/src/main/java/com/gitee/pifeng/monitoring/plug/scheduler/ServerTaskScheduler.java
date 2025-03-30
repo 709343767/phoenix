@@ -43,7 +43,7 @@ public class ServerTaskScheduler {
         if (serverInfoEnable) {
             // 发送服务器信息的频率
             long rate = ConfigLoader.getMonitoringProperties().getServerInfo().getRate();
-            ThreadPoolAcquirer.getServerScheduledThreadPoolExecutor().scheduleAtFixedRate(new ServerThread(), 40, rate, TimeUnit.SECONDS);
+            ThreadPoolAcquirer.getServerScheduledThreadPoolExecutor().scheduleWithFixedDelay(new ServerThread(), 40, rate, TimeUnit.SECONDS);
         }
     }
 
