@@ -192,6 +192,7 @@ public class MonitorHttpController {
      */
     @Operation(summary = "添加HTTP信息")
     @PostMapping("/add-monitor-http")
+    @PreAuthorize("hasAuthority('超级管理员')")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.HTTP4SERVICE, operType = OperateTypeConstants.ADD, operDesc = "添加HTTP信息")
     public LayUiAdminResultVo addMonitorHttp(MonitorHttpVo monitorHttpVo) throws NetException, SigarException, IOException {

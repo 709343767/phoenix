@@ -271,6 +271,7 @@ public class MonitorDbController {
      */
     @Operation(summary = "添加数据库信息")
     @PostMapping("/add-monitor-db")
+    @PreAuthorize("hasAuthority('超级管理员')")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.DATABASE, operType = OperateTypeConstants.ADD, operDesc = "添加数据库信息")
     public LayUiAdminResultVo addMonitorDb(MonitorDbVo monitorDbVo) throws SigarException, IOException {

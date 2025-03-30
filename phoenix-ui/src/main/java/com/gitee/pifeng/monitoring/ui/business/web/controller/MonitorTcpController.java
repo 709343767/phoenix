@@ -192,6 +192,7 @@ public class MonitorTcpController {
      */
     @Operation(summary = "添加TCP信息")
     @PostMapping("/add-monitor-tcp")
+    @PreAuthorize("hasAuthority('超级管理员')")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.TCP4SERVICE, operType = OperateTypeConstants.ADD, operDesc = "添加TCP信息")
     public LayUiAdminResultVo addMonitorTcp(MonitorTcpVo monitorTcpVo) throws NetException, SigarException, IOException {

@@ -235,6 +235,7 @@ public class MonitorNetworkController {
      */
     @Operation(summary = "添加网络信息")
     @PostMapping("/add-monitor-network")
+    @PreAuthorize("hasAuthority('超级管理员')")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.NET, operType = OperateTypeConstants.ADD, operDesc = "添加网络信息")
     public LayUiAdminResultVo addMonitorNetwork(MonitorNetVo monitorNetVo) throws NetException, SigarException, IOException {
