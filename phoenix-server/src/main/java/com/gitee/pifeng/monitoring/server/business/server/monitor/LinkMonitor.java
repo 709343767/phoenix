@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 /**
@@ -72,13 +73,22 @@ public class LinkMonitor implements ILinkListener {
      */
     private void dealInstanceLink(HeartbeatPackage heartbeatPackage) {
         synchronized (LinkMonitor.class) {
+            if (heartbeatPackage == null) {
+                return;
+            }
             // 服务端应用ID
             String instanceId = InstanceGenerator.getInstanceId();
-            String link = ArrayUtil.join(ArrayUtil.reverse(heartbeatPackage.getChain().getInstanceChain().toArray(new String[]{})), ",");
+            LinkedHashSet<String> instanceChain = heartbeatPackage.getChain().getInstanceChain();
+            String link = CollectionUtils.isNotEmpty(instanceChain) ? ArrayUtil.join(ArrayUtil.reverse(instanceChain.toArray(new String[]{})), ",") : "";
             String rootNodeTime = String.valueOf(System.currentTimeMillis());
-            String linkTime = ArrayUtil.join(ArrayUtil.reverse(heartbeatPackage.getChain().getTimeChain().toArray(new String[]{})), ",");
+            LinkedHashSet<String> timeChain = heartbeatPackage.getChain().getTimeChain();
+            String linkTime = CollectionUtils.isNotEmpty(timeChain) ? ArrayUtil.join(ArrayUtil.reverse(timeChain.toArray(new String[]{})), ",") : "";
             // 自己，不处理
             if (StringUtils.equals(instanceId, link)) {
+                return;
+            }
+            // 链路为空
+            if (StringUtils.isBlank(link)) {
                 return;
             }
             // 先查询有没有此链路
@@ -117,11 +127,16 @@ public class LinkMonitor implements ILinkListener {
      */
     private void dealServerLink(ServerPackage serverPackage) {
         synchronized (LinkMonitor.class) {
+            if (serverPackage == null) {
+                return;
+            }
             // 服务端IP
             String ip = NetUtils.getLocalIp();
             String rootNodeTime = String.valueOf(System.currentTimeMillis());
-            String[] linkArry = ArrayUtil.reverse(serverPackage.getChain().getNetworkChain().toArray(new String[]{}));
-            String[] linkTimeArry = ArrayUtil.reverse(serverPackage.getChain().getTimeChain().toArray(new String[]{}));
+            LinkedHashSet<String> networkChain = serverPackage.getChain().getNetworkChain();
+            LinkedHashSet<String> timeChain = serverPackage.getChain().getTimeChain();
+            String[] linkArry = CollectionUtils.isNotEmpty(networkChain) ? ArrayUtil.reverse(networkChain.toArray(new String[]{})) : new String[]{};
+            String[] linkTimeArry = CollectionUtils.isNotEmpty(timeChain) ? ArrayUtil.reverse(timeChain.toArray(new String[]{})) : new String[]{};
             // 如果链路中的第一个IP与服务端IP相同，意味着是同一台服务器，需要去掉
             if (ArrayUtil.isNotEmpty(linkArry) && StringUtils.equals(linkArry[0], ip)) {
                 linkArry = ArrayUtil.remove(linkArry, 0);
