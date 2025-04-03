@@ -3,7 +3,7 @@
     layui.use(['admin', 'carousel', 'element'], function () {
         var e = layui.$, a = (layui.admin, layui.carousel), l = layui.element, t = layui.device();
         //轮播切换
-        e('.layadmin-carousel').each(function () {
+        e('#layadmin-dataview-my').each(function () {
             var l = e(this);
             var option = {
                 elem: this,
@@ -272,7 +272,24 @@
                                 type: 'pie',
                                 radius: '50%',
                                 //设置对应块的数据
-                                color: ['#00A65A', '#C23632', '#F39C12'],
+                                color: function (params) {
+                                    const colorList = [
+                                        // 渐变色定义
+                                        new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+                                            {offset: 0, color: '#00A65A'}, // 绿色渐变起点
+                                            {offset: 1, color: '#32CD32'}  // 绿色渐变终点
+                                        ]),
+                                        new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+                                            {offset: 0, color: '#C23632'}, // 红色渐变起点
+                                            {offset: 1, color: '#FF4500'}  // 红色渐变终点
+                                        ]),
+                                        new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+                                            {offset: 0, color: '#F39C12'}, // 橙色渐变起点
+                                            {offset: 1, color: '#FFC870'}  // 橙色渐变终点
+                                        ])
+                                    ];
+                                    return colorList[params.dataIndex];
+                                },
                                 data: [
                                     {value: alarmRecordSuccessSum, name: '成功'},
                                     {value: alarmRecordFailSum, name: '失败'},
