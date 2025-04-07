@@ -284,7 +284,7 @@
                                             {offset: 1, color: '#C23632'}  // 红色渐变终点
                                         ]),
                                         new echarts.graphic.RadialGradient(0.5, 0.5, 1, [
-                                            {offset: 0, color: '#FFA500'}, // 橙色渐变起点
+                                            {offset: 0, color: '#FFB433'}, // 橙色渐变起点
                                             {offset: 1, color: '#F39C12'}  // 橙色渐变终点
                                         ])
                                     ];
