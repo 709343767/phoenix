@@ -1,35 +1,32 @@
 /** layuiAdmin.std-v2020.4.1 LPPL License By 皮锋 */
 ;layui.define(function (e) {
-    layui.use(['admin', 'carousel', 'element'], function () {
-        var e = layui.$, a = (layui.admin, layui.carousel), l = layui.element, t = layui.device();
-        //轮播切换
-        e('#layadmin-dataview-my').each(function () {
-            var l = e(this);
-            var option = {
-                elem: this,
-                width: '100%',
-                arrow: 'hover',
-                interval: 5000,
-                autoplay: true,
-                trigger: t.ios || t.android ? 'click' : 'hover',
-                anim: l.data('anim')
-            };
-            a.render(option);
-        });
-        // 渲染进度条
-        l.render('progress');
-    }), layui.use(['admin', 'carousel', 'jquery', 'element'], function () {
-        var admin = layui.admin, $ = layui.$, element = layui.element;
+    layui.use(['admin', 'carousel', 'jquery', 'element'], function () {
+        var admin = layui.admin, $ = layui.$, element = layui.element, carousel = layui.carousel,
+            device = layui.device();
+        // 最近7天告警统计div
         var $Last7DaysAlarmRecordStatistics = $('#last-7-days-alarm-record-statistics');
+        // 告警结果统计div
         var $AlarmRecordResultStatistics = $('#alarm-record-result-statistics');
+        // 告警统计轮播div
         var $LayadminDataViewMy = $('#layadmin-dataview-my');
+        // 告警统计轮播
+        carousel.render({
+            elem: $LayadminDataViewMy[0],
+            width: '100%',
+            arrow: 'hover',
+            interval: 5000,
+            autoplay: true,
+            trigger: device.ios || device.android ? 'click' : 'hover',
+            anim: $LayadminDataViewMy.data('anim')
+        });
+        // 设置div高度为统计轮播div的高度，宽度为统计轮播div的宽度
         $Last7DaysAlarmRecordStatistics.width($LayadminDataViewMy.width());
         $Last7DaysAlarmRecordStatistics.height($LayadminDataViewMy.height());
         $AlarmRecordResultStatistics.width($LayadminDataViewMy.width());
         $AlarmRecordResultStatistics.height($LayadminDataViewMy.height());
         // 基于准备好的dom，初始化echarts实例
-        var myLast7DaysAlarmRecordStatisticsChart = (layui.carousel, echarts.init(document.getElementById('last-7-days-alarm-record-statistics'), 'infographic'));
-        var myAlarmRecordResultStatisticsChart = (layui.carousel, echarts.init(document.getElementById('alarm-record-result-statistics'), 'infographic'));
+        var myLast7DaysAlarmRecordStatisticsChart = echarts.init(document.getElementById('last-7-days-alarm-record-statistics'), 'infographic');
+        var myAlarmRecordResultStatisticsChart = echarts.init(document.getElementById('alarm-record-result-statistics'), 'infographic');
         // 浏览器窗口大小发生改变时
         window.addEventListener("resize", function () {
             $Last7DaysAlarmRecordStatistics.width($LayadminDataViewMy.width());
