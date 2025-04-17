@@ -118,7 +118,8 @@
                             lay-filter="alarm-record-list-table-search">
                         <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
                     </button>
-                    <button id="reset" type="reset" class="layui-btn">清空</button>
+                    <button id="reset" type="reset" class="layui-btn" lay-filter="list-table-reset" lay-submit>清空
+                    </button>
                     <button id="export" class="layui-btn" lay-submit
                             lay-filter="alarm-record-list-table-export">导出
                     </button>
@@ -334,6 +335,16 @@
         //监听搜索
         form.on('submit(alarm-record-list-table-search)', function (data) {
             var field = data.field;
+            //执行重载
+            table.reload('alarm-record-list-table', {
+                where: field
+            });
+        });
+        // 监听重置
+        form.on('submit(list-table-reset)', function (data) {
+            var field = data.field;
+            // 清空所有字段的值
+            field = clearFields(field);
             //执行重载
             table.reload('alarm-record-list-table', {
                 where: field

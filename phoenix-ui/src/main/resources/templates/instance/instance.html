@@ -80,7 +80,8 @@
                     <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="list-table-search">
                         <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
                     </button>
-                    <button id="reset" type="reset" class="layui-btn">清空</button>
+                    <button id="reset" type="reset" class="layui-btn" lay-filter="list-table-reset" lay-submit>清空
+                    </button>
                 </div>
             </form>
         </div>
@@ -289,6 +290,16 @@
         // 监听搜索
         form.on('submit(list-table-search)', function (data) {
             var field = data.field;
+            //执行重载
+            table.reload('list-table', {
+                where: field
+            });
+        });
+        // 监听重置
+        form.on('submit(list-table-reset)', function (data) {
+            var field = data.field;
+            // 清空所有字段的值
+            field = clearFields(field);
             //执行重载
             table.reload('list-table', {
                 where: field
