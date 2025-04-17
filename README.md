@@ -116,6 +116,8 @@
 
   [https://github.com/709343767/phoenix](https://github.com/709343767/phoenix)
 
+  [https://gitcode.com/monitoring-platform/phoenix](https://gitcode.com/monitoring-platform/phoenix)  
+
   **注意：一定要下载最新发行版源码！**
 
 - 中央仓库地址
