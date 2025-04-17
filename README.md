@@ -112,11 +112,11 @@
 
 - 源码仓库地址
 
+  [https://gitcode.com/monitoring-platform/phoenix](https://gitcode.com/monitoring-platform/phoenix)
+
   [https://gitee.com/monitoring-platform/phoenix](https://gitee.com/monitoring-platform/phoenix)
 
   [https://github.com/709343767/phoenix](https://github.com/709343767/phoenix)
-
-  [https://gitcode.com/monitoring-platform/phoenix](https://gitcode.com/monitoring-platform/phoenix)  
 
   **注意：一定要下载最新发行版源码！**
 
