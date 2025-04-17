@@ -53,15 +53,15 @@
 
 ## 设计
 
-- 功能架构
-
-  **红旗标注部分为收费功能，需向作者购买（1000￥，给源码）。**
-
-  ![功能导图](https://gitee.com/monitoring-platform/phoenix/raw/master/doc/%E5%8A%9F%E8%83%BD%E5%AF%BC%E5%9B%BE.png "功能导图")
-
 - 系统架构
 
   ![系统架构图](https://gitee.com/monitoring-platform/phoenix/raw/master/doc/%E7%B3%BB%E7%BB%9F%E6%9E%B6%E6%9E%84%E5%9B%BE.png "系统架构图")
+
+- 功能架构
+
+  **红旗标注部分为收费功能，需向作者购买。**
+
+  ![功能导图](https://gitee.com/monitoring-platform/phoenix/raw/master/doc/%E5%8A%9F%E8%83%BD%E5%AF%BC%E5%9B%BE.png "功能导图")
 
 - 运行环境
 
