@@ -156,10 +156,10 @@ public class MonitorInstanceServiceImpl extends ServiceImpl<IMonitorInstanceDao,
             }
         }
         if (StringUtils.isNotBlank(monitorEnv)) {
-            lambdaQueryWrapper.like(MonitorInstance::getMonitorEnv, monitorEnv);
+            lambdaQueryWrapper.eq(MonitorInstance::getMonitorEnv, monitorEnv);
         }
         if (StringUtils.isNotBlank(monitorGroup)) {
-            lambdaQueryWrapper.like(MonitorInstance::getMonitorGroup, monitorGroup);
+            lambdaQueryWrapper.eq(MonitorInstance::getMonitorGroup, monitorGroup);
         }
         lambdaQueryWrapper.orderByAsc(MonitorInstance::getInstanceName).orderByAsc(MonitorInstance::getId);
         IPage<MonitorInstance> monitorInstancePage = this.monitorInstanceDao.selectPage(ipage, lambdaQueryWrapper);

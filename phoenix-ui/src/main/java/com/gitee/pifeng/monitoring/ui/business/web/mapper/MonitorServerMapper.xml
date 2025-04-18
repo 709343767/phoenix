@@ -51,10 +51,10 @@
                 </choose>
             </if>
             <if test="criteria.monitorEnv!=null and criteria.monitorEnv!=''">
-                AND S.MONITOR_ENV LIKE concat('%',#{criteria.monitorEnv},'%')
+                AND S.MONITOR_ENV = #{criteria.monitorEnv}
             </if>
             <if test="criteria.monitorGroup!=null and criteria.monitorGroup!=''">
-                AND S.MONITOR_GROUP LIKE concat('%',#{criteria.monitorGroup},'%')
+                AND S.MONITOR_GROUP = #{criteria.monitorGroup}
             </if>
         </where>
         GROUP BY S.ID,
