@@ -87,6 +87,7 @@ public class MonitorTcpController {
         mv.addObject("ipSource", this.monitorNetService.getSourceIp());
         // 监控环境列表
         List<String> monitorEnvs = this.monitorEnvService.list().stream().map(MonitorEnv::getEnvName).collect(Collectors.toList());
+        // 监控分组列表
         List<MonitorGroup> monitorGroupList = this.monitorGroupService.getMonitorGroupList(MonitorTypeEnums.TCP4SERVICE);
         List<String> monitorGroups = monitorGroupList.stream().map(MonitorGroup::getGroupName).collect(Collectors.toList());
         mv.addObject("monitorEnvs", monitorEnvs);
