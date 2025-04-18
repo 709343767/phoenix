@@ -130,7 +130,7 @@ CREATE TABLE `MONITOR_ENV`
     `INSERT_TIME`    datetime                                                      NOT NULL COMMENT '插入时间',
     `UPDATE_TIME`    datetime                                                      NULL DEFAULT NULL COMMENT '更新时间',
     PRIMARY KEY (`ID`) USING BTREE,
-    INDEX `NX_ENV_NAME` (`ENV_NAME`) USING BTREE
+    INDEX `NX_ENV_NAME` (`ENV_NAME` ASC) USING BTREE COMMENT '索引_环境名'
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_general_ci COMMENT = '监控环境表'
@@ -143,6 +143,7 @@ DROP TABLE IF EXISTS `MONITOR_GROUP`;
 CREATE TABLE `MONITOR_GROUP`
 (
     `ID`             bigint(20) UNSIGNED                                           NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `GROUP_TYPE`     varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT '分组类型（SERVER、NET、TCP4SERVICE、HTTP4SERVICE、DOCKER、INSTANCE、DATABASE、CUSTOM）',
     `GROUP_NAME`     varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT '分组名',
     `GROUP_DESC`     varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '分组描述',
     `CREATE_ACCOUNT` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '创建人账号',
@@ -150,7 +151,8 @@ CREATE TABLE `MONITOR_GROUP`
     `INSERT_TIME`    datetime                                                      NOT NULL COMMENT '插入时间',
     `UPDATE_TIME`    datetime                                                      NULL DEFAULT NULL COMMENT '更新时间',
     PRIMARY KEY (`ID`) USING BTREE,
-    INDEX `NX_GROUP_NAME` (`GROUP_NAME`) USING BTREE
+    INDEX `NX_GROUP_TYPE` (`GROUP_TYPE` ASC) USING BTREE COMMENT '索引_分组类型',
+    INDEX `NX_GROUP_NAME` (`GROUP_NAME` ASC) USING BTREE COMMENT '索引_分组名'
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_general_ci COMMENT = '监控分组表'
@@ -408,7 +410,7 @@ CREATE TABLE `MONITOR_JVM_THREAD`
 DROP TABLE IF EXISTS `MONITOR_LINK`;
 CREATE TABLE `MONITOR_LINK`
 (
-    `ID` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `ID`             bigint(20) UNSIGNED                                          NOT NULL AUTO_INCREMENT COMMENT '主键ID',
     `ROOT_NODE`      varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '根节点',
     `ROOT_NODE_TIME` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '根节点时间',
     `LINK`           text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci        NULL COMMENT '链路',

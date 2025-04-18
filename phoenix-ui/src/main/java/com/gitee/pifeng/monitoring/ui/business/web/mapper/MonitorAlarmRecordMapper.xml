@@ -59,7 +59,7 @@
                CASE
                    d.types
                    WHEN 'INSTANCE' THEN
-                       '应用'
+                       '应用程序'
                    WHEN 'SERVER' THEN
                        '服务器'
                    WHEN 'NET' THEN

@@ -38,6 +38,10 @@ public class MonitorGroup implements Serializable {
     @TableId(value = "ID", type = IdType.AUTO)
     private Long id;
 
+    @Schema(description = "分组类型（SERVER、NET、TCP4SERVICE、HTTP4SERVICE、DOCKER、INSTANCE、DATABASE、CUSTOM）")
+    @TableField("GROUP_TYPE")
+    private String groupType;
+
     @Schema(description = "分组名")
     @TableField("GROUP_NAME")
     private String groupName;

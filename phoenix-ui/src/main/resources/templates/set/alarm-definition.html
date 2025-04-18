@@ -33,7 +33,7 @@
                             <option value="" selected>所有</option>
                             <option value="SERVER">服务器</option>
                             <option value="NET">网络</option>
-                            <option value="INSTANCE">应用</option>
+                            <option value="INSTANCE">应用程序</option>
                             <option value="CUSTOM">自定义</option>
                         </select>
                     </div>
@@ -136,15 +136,6 @@
             },
             done: function () {
                 $('[data-field="type"]').children().each(function () {
-                    if ($(this).text() === 'SERVER') {
-                        $(this).text('服务器');
-                    }
-                    if ($(this).text() === 'NET') {
-                        $(this).text('网络');
-                    }
-                    if ($(this).text() === 'INSTANCE') {
-                        $(this).text('应用');
-                    }
                     if ($(this).text() === 'CUSTOM') {
                         $(this).text('自定义');
                     }
@@ -311,7 +302,7 @@
                         // 宽度
                         width = document.body.clientWidth * 0.4 + 'px';
                         // 高度
-                        height = document.body.clientHeight * 0.62 + 'px';
+                        height = document.body.clientHeight * 0.68 + 'px';
                     }
                     var infoLayerAddIndex = layer.open({
                         type: 2,
@@ -405,7 +396,7 @@
                     // 宽度
                     width = document.body.clientWidth * 0.4 + 'px';
                     // 高度
-                    height = document.body.clientHeight * 0.62 + 'px';
+                    height = document.body.clientHeight * 0.68 + 'px';
                 }
                 var infoLayerEditIndex = layer.open({
                     type: 2,

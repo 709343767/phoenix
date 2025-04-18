@@ -24,16 +24,12 @@
     <div class="layui-form-item">
         <label class="layui-form-label">告警编码</label>
         <div class="layui-input-block">
-            <input type="text" id="code" name="code" lay-verify="required" placeholder="请输入告警编码" autocomplete="off"
-                   class="layui-input" lay-verType="tips">
+            <input type="text" id="code" name="code" lay-verify="required" placeholder="请输入告警编码"
+                   autocomplete="off" class="layui-input" lay-verType="tips">
         </div>
         <label class="layui-form-label" style="display: none;">告警类型</label>
         <div class="layui-input-block" style="display: none;">
             <select name="type" disabled>
-                <option value="SERVER">服务器</option>
-                <option value="NET">网络</option>
-                <option value="DATABASE">数据库</option>
-                <option value="INSTANCE">应用</option>
                 <option value="CUSTOM" selected>自定义</option>
             </select>
         </div>

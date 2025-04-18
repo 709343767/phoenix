@@ -319,7 +319,7 @@ public class MonitorAlarmRecordServiceImpl extends ServiceImpl<IMonitorAlarmReco
             monitorAlarmRecordVo.setType("HTTP服务");
         }
         if (StringUtils.equals(MonitorTypeEnums.INSTANCE.name(), type)) {
-            monitorAlarmRecordVo.setType("应用");
+            monitorAlarmRecordVo.setType("应用程序");
         }
         if (StringUtils.equals(MonitorTypeEnums.CUSTOM.name(), type)) {
             monitorAlarmRecordVo.setType("自定义");

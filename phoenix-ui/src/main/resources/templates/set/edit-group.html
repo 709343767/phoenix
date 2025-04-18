@@ -22,24 +22,41 @@
 <div class="layui-form" lay-filter="layuiadmin-form-useradmin" id="layuiadmin-form-useradmin"
      style="padding: 20px 20px 0 0;">
     <div class="layui-form-item" style="display: none;">
-        <label class="layui-form-label">ID</label>
+        <label class="layui-form-label" for="id">ID</label>
         <div class="layui-input-block">
-            <input type="hidden" name="id" lay-verify="required" autocomplete="off"
+            <input type="hidden" id="id" name="id" lay-verify="required" autocomplete="off"
                    readonly th:value="${monitorGroupVo.id}" class="layui-input" lay-verType="tips">
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">分组名称</label>
+        <label class="layui-form-label" for="groupType">分组类型</label>
         <div class="layui-input-block">
-            <input type="text" name="groupName" lay-verify="required" placeholder="请输入分组名称" autocomplete="off"
-                   readonly th:value="${monitorGroupVo.groupName}" class="layui-input" lay-verType="tips">
+            <select id="groupType" name="groupType">
+                <option value="" th:selected="${monitorGroupVo.groupType==''}">所有</option>
+                <option value="SERVER" th:selected="${monitorGroupVo.groupType=='SERVER'}">服务器</option>
+                <option value="INSTANCE" th:selected="${monitorGroupVo.groupType=='INSTANCE'}">应用程序</option>
+                <option value="DATABASE" th:selected="${monitorGroupVo.groupType=='DATABASE'}">数据库</option>
+                <option value="NET" th:selected="${monitorGroupVo.groupType=='NET'}">网络</option>
+                <option value="TCP4SERVICE" th:selected="${monitorGroupVo.groupType=='TCP4SERVICE'}">TCP服务</option>
+                <option value="HTTP4SERVICE" th:selected="${monitorGroupVo.groupType=='HTTP4SERVICE'}">HTTP服务</option>
+                <option value="CUSTOM" th:selected="${monitorGroupVo.groupType=='CUSTOM'}">自定义</option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label" for="groupName">分组名称</label>
+        <div class="layui-input-block">
+            <input type="text" id="groupName" name="groupName" lay-verify="required" placeholder="请输入分组名称"
+                   autocomplete="off" disabled th:value="${monitorGroupVo.groupName}" class="layui-input"
+                   lay-verType="tips">
         </div>
     </div>
     <div class="layui-form-item layui-form-text">
-        <label class="layui-form-label">分组描述</label>
+        <label class="layui-form-label" for="groupDesc">分组描述</label>
         <div class="layui-input-block">
-            <textarea name="groupDesc" class="layui-textarea" placeholder="请输入分组描述" autocomplete="off"
-                      th:text="${monitorGroupVo.groupDesc}" lay-verify="required" lay-verType="tips"></textarea>
+            <textarea id="groupDesc" name="groupDesc" class="layui-textarea" placeholder="请输入分组描述"
+                      autocomplete="off" th:text="${monitorGroupVo.groupDesc}" lay-verify="required"
+                      lay-verType="tips"></textarea>
         </div>
     </div>
     <div class="layui-form-item layui-hide">

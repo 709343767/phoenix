@@ -2,6 +2,7 @@ package com.gitee.pifeng.monitoring.ui.business.web.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.gitee.pifeng.monitoring.common.constant.MonitorTypeEnums;
 import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorGroup;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.LayUiAdminResultVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.MonitorGroupVo;
@@ -20,18 +21,31 @@ public interface IMonitorGroupService extends IService<MonitorGroup> {
 
     /**
      * <p>
-     * 获取监控分组列表
+     * 分页获取监控分组列表
      * </p>
      *
      * @param current   当前页
      * @param size      每页显示条数
+     * @param groupType 分组类型
      * @param groupName 分组名称
      * @param groupDesc 分组描述
      * @return 简单分页模型
      * @author 皮锋
      * @custom.date 2021/12/24 14:32
      */
-    Page<MonitorGroupVo> getMonitorGroupList(Long current, Long size, String groupName, String groupDesc);
+    Page<MonitorGroupVo> getMonitorGroupList(Long current, Long size, String groupType, String groupName, String groupDesc);
+
+    /**
+     * <p>
+     * 获取监控分组列表
+     * </p>
+     *
+     * @param monitorTypeEnum 监控类型
+     * @return 监控分组列表
+     * @author 皮锋
+     * @custom.date 2025/4/18 11:44
+     */
+    List<MonitorGroup> getMonitorGroupList(MonitorTypeEnums monitorTypeEnum);
 
     /**
      * <p>

@@ -1,6 +1,7 @@
 package com.gitee.pifeng.monitoring.ui.business.web.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.gitee.pifeng.monitoring.common.constant.MonitorTypeEnums;
 import com.gitee.pifeng.monitoring.ui.business.web.annotation.OperateLog;
 import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorEnv;
 import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorGroup;
@@ -80,7 +81,8 @@ public class MonitorInstanceController {
         // 监控环境列表
         List<String> monitorEnvs = this.monitorEnvService.list().stream().map(MonitorEnv::getEnvName).collect(Collectors.toList());
         // 监控分组列表
-        List<String> monitorGroups = this.monitorGroupService.list().stream().map(MonitorGroup::getGroupName).collect(Collectors.toList());
+        List<MonitorGroup> monitorGroupList = this.monitorGroupService.getMonitorGroupList(MonitorTypeEnums.INSTANCE);
+        List<String> monitorGroups = monitorGroupList.stream().map(MonitorGroup::getGroupName).collect(Collectors.toList());
         mv.addObject("monitorEnvs", monitorEnvs);
         mv.addObject("monitorGroups", monitorGroups);
         return mv;
@@ -243,7 +245,8 @@ public class MonitorInstanceController {
         // 监控环境列表
         List<String> monitorEnvs = this.monitorEnvService.list().stream().map(MonitorEnv::getEnvName).collect(Collectors.toList());
         // 监控分组列表
-        List<String> monitorGroups = this.monitorGroupService.list().stream().map(MonitorGroup::getGroupName).collect(Collectors.toList());
+        List<MonitorGroup> monitorGroupList = this.monitorGroupService.getMonitorGroupList(MonitorTypeEnums.INSTANCE);
+        List<String> monitorGroups = monitorGroupList.stream().map(MonitorGroup::getGroupName).collect(Collectors.toList());
         mv.addObject("monitorEnvs", monitorEnvs);
         mv.addObject("monitorGroups", monitorGroups);
         return mv;

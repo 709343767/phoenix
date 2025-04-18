@@ -2,6 +2,7 @@ package com.gitee.pifeng.monitoring.ui.business.web.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.gitee.pifeng.monitoring.common.constant.DbEnums;
+import com.gitee.pifeng.monitoring.common.constant.MonitorTypeEnums;
 import com.gitee.pifeng.monitoring.ui.business.web.annotation.OperateLog;
 import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorDb;
 import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorEnv;
@@ -79,7 +80,8 @@ public class MonitorDbController {
         // 监控环境列表
         List<String> monitorEnvs = this.monitorEnvService.list().stream().map(MonitorEnv::getEnvName).collect(Collectors.toList());
         // 监控分组列表
-        List<String> monitorGroups = this.monitorGroupService.list().stream().map(MonitorGroup::getGroupName).collect(Collectors.toList());
+        List<MonitorGroup> monitorGroupList = this.monitorGroupService.getMonitorGroupList(MonitorTypeEnums.DATABASE);
+        List<String> monitorGroups = monitorGroupList.stream().map(MonitorGroup::getGroupName).collect(Collectors.toList());
         mv.addObject("monitorEnvs", monitorEnvs);
         mv.addObject("monitorGroups", monitorGroups);
         return mv;
@@ -151,7 +153,8 @@ public class MonitorDbController {
         // 监控环境列表
         List<String> monitorEnvs = this.monitorEnvService.list().stream().map(MonitorEnv::getEnvName).collect(Collectors.toList());
         // 监控分组列表
-        List<String> monitorGroups = this.monitorGroupService.list().stream().map(MonitorGroup::getGroupName).collect(Collectors.toList());
+        List<MonitorGroup> monitorGroupList = this.monitorGroupService.getMonitorGroupList(MonitorTypeEnums.SERVER);
+        List<String> monitorGroups = monitorGroupList.stream().map(MonitorGroup::getGroupName).collect(Collectors.toList());
         mv.addObject("monitorEnvs", monitorEnvs);
         mv.addObject("monitorGroups", monitorGroups);
         mv.addObject("env", monitorDbVo.getMonitorEnv());
@@ -250,7 +253,8 @@ public class MonitorDbController {
         // 监控环境列表
         List<String> monitorEnvs = this.monitorEnvService.list().stream().map(MonitorEnv::getEnvName).collect(Collectors.toList());
         // 监控分组列表
-        List<String> monitorGroups = this.monitorGroupService.list().stream().map(MonitorGroup::getGroupName).collect(Collectors.toList());
+        List<MonitorGroup> monitorGroupList = this.monitorGroupService.getMonitorGroupList(MonitorTypeEnums.DATABASE);
+        List<String> monitorGroups = monitorGroupList.stream().map(MonitorGroup::getGroupName).collect(Collectors.toList());
         mv.addObject("monitorEnvs", monitorEnvs);
         mv.addObject("monitorGroups", monitorGroups);
         return mv;

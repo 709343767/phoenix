@@ -27,15 +27,32 @@
         <div class="layui-form layui-card-header layuiadmin-card-header-auto">
             <form class="layui-form-item" onsubmit="return false;">
                 <div class="layui-inline">
-                    <label class="layui-form-label">分组名称</label>
-                    <div class="layui-input-block">
-                        <input type="text" name="groupName" placeholder="请输入" autocomplete="off" class="layui-input">
+                    <label class="layui-form-label" for="groupType">分组类型</label>
+                    <div class="layui-input-block" style="width: 182px;">
+                        <select id="groupType" name="groupType">
+                            <option value="">所有</option>
+                            <option value="SERVER">服务器</option>
+                            <option value="INSTANCE">应用程序</option>
+                            <option value="DATABASE">数据库</option>
+                            <option value="NET">网络</option>
+                            <option value="TCP4SERVICE">TCP服务</option>
+                            <option value="HTTP4SERVICE">HTTP服务</option>
+                            <option value="CUSTOM">自定义</option>
+                        </select>
                     </div>
                 </div>
                 <div class="layui-inline">
-                    <label class="layui-form-label">分组描述</label>
+                    <label class="layui-form-label" for="groupName">分组名称</label>
                     <div class="layui-input-block">
-                        <input type="text" name="groupDesc" placeholder="请输入" autocomplete="off" class="layui-input">
+                        <input type="text" id="groupName" name="groupName" placeholder="请输入" autocomplete="off"
+                               class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label" for="groupDesc">分组描述</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="groupDesc" name="groupDesc" placeholder="请输入" autocomplete="off"
+                               class="layui-input">
                     </div>
                 </div>
                 <div class="layui-inline">
@@ -85,7 +102,8 @@
     }).extend({
         index: 'lib/index' //主入口模块
     }).use(['index', 'admin', 'form', 'table', 'layer'], function () {
-        var admin = layui.admin, form = layui.form, table = layui.table, device = layui.device(), layer = layui.layer;
+        var admin = layui.admin, form = layui.form, table = layui.table, device = layui.device(), layer = layui.layer,
+            $ = layui.$;
         table.render({
             elem: '#monitor-group-list-table',
             url: ctxPath + 'monitor-group/get-monitor-group-list',
@@ -109,6 +127,34 @@
                     'data': res.data.records //解析数据列表
                 };
             },
+            done: function () {
+                $('[data-field="groupType"]').children().each(function () {
+                    if ($(this).text() === 'SERVER') {
+                        $(this).text('服务器');
+                    }
+                    if ($(this).text() === 'NET') {
+                        $(this).text('网络');
+                    }
+                    if ($(this).text() === 'TCP4SERVICE') {
+                        $(this).text('TCP服务');
+                    }
+                    if ($(this).text() === 'HTTP4SERVICE') {
+                        $(this).text('HTTP服务');
+                    }
+                    if ($(this).text() === 'INSTANCE') {
+                        $(this).text('应用程序');
+                    }
+                    if ($(this).text() === 'CUSTOM') {
+                        $(this).text('自定义');
+                    }
+                    if ($(this).text() === 'DATABASE') {
+                        $(this).text('数据库');
+                    }
+                    if ($(this).text() === '') {
+                        $(this).html('<span style="color: #e6e6e6;font-weight: bold;">所有</span>');
+                    }
+                });
+            },
             cols: [
                 [{
                     type: 'checkbox',
@@ -120,6 +166,11 @@
                     minWidth: 100,
                     sort: !0,
                     hide: true
+                }, {
+                    field: 'groupType',
+                    title: '分组类型',
+                    minWidth: 80,
+                    sort: !0
                 }, {
                     field: 'groupName',
                     title: '分组名',
@@ -238,7 +289,7 @@
                         // 宽度
                         width = document.body.clientWidth * 0.4 + 'px';
                         // 高度
-                        height = document.body.clientHeight * 0.35 + 'px';
+                        height = document.body.clientHeight * 0.58 + 'px';
                     }
                     var infoLayerAddIndex = layer.open({
                         type: 2,
@@ -334,7 +385,7 @@
                     // 宽度
                     width = document.body.clientWidth * 0.4 + 'px';
                     // 高度
-                    height = document.body.clientHeight * 0.35 + 'px';
+                    height = document.body.clientHeight * 0.58 + 'px';
                 }
                 var infoLayerEditIndex = layer.open({
                     type: 2,

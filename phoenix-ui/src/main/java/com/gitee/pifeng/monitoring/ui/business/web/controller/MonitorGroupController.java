@@ -72,6 +72,7 @@ public class MonitorGroupController {
     @Parameters(value = {
             @Parameter(name = "current", description = "当前页", required = true, in = ParameterIn.QUERY),
             @Parameter(name = "size", description = "每页显示条数", required = true, in = ParameterIn.QUERY),
+            @Parameter(name = "groupType", description = "分组类型", in = ParameterIn.QUERY),
             @Parameter(name = "groupName", description = "分组名称", in = ParameterIn.QUERY),
             @Parameter(name = "groupDesc", description = "分组描述", in = ParameterIn.QUERY)})
     @GetMapping("get-monitor-group-list")
@@ -79,9 +80,10 @@ public class MonitorGroupController {
     @OperateLog(operModule = UiModuleConstants.CONFIG_MANAGE + "#分组管理", operType = OperateTypeConstants.QUERY, operDesc = "获取分组列表")
     public LayUiAdminResultVo getMonitorGroupList(@RequestParam(value = "current") Long current,
                                                   @RequestParam(value = "size") Long size,
+                                                  @RequestParam(value = "groupType", required = false) String groupType,
                                                   @RequestParam(value = "groupName", required = false) String groupName,
                                                   @RequestParam(value = "groupDesc", required = false) String groupDesc) {
-        Page<MonitorGroupVo> page = this.monitorGroupService.getMonitorGroupList(current, size, groupName, groupDesc);
+        Page<MonitorGroupVo> page = this.monitorGroupService.getMonitorGroupList(current, size, groupType, groupName, groupDesc);
         return LayUiAdminResultVo.ok(page);
     }
 

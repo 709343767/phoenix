@@ -35,6 +35,9 @@ public class MonitorGroupVo implements ISuperBean {
     @Schema(description = "主键ID")
     private Long id;
 
+    @Schema(description = "分组类型（SERVER、NET、TCP4SERVICE、HTTP4SERVICE、DOCKER、INSTANCE、DATABASE、CUSTOM）")
+    private String groupType;
+
     @Schema(description = "分组名")
     private String groupName;
 
