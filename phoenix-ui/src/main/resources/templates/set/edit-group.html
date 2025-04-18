@@ -32,7 +32,7 @@
         <label class="layui-form-label" for="groupType">分组类型</label>
         <div class="layui-input-block">
             <select id="groupType" name="groupType">
-                <option value="" th:selected="${monitorGroupVo.groupType==''}">所有</option>
+                <option value="" th:selected="${monitorGroupVo.groupType==''}">不设置</option>
                 <option value="SERVER" th:selected="${monitorGroupVo.groupType=='SERVER'}">服务器</option>
                 <option value="INSTANCE" th:selected="${monitorGroupVo.groupType=='INSTANCE'}">应用程序</option>
                 <option value="DATABASE" th:selected="${monitorGroupVo.groupType=='DATABASE'}">数据库</option>
