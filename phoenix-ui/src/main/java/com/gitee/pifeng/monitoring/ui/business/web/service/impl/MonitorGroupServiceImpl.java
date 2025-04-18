@@ -19,6 +19,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -102,6 +103,11 @@ public class MonitorGroupServiceImpl extends ServiceImpl<IMonitorGroupDao, Monit
         if (CollectionUtils.isEmpty(monitorGroups)) {
             return Lists.newArrayList();
         }
+        // 使用 Comparator 对列表进行排序
+        monitorGroups.sort(Comparator.comparing(
+                // 将未设置分组类型的排到最后
+                monitorGroup -> StringUtils.isBlank(monitorGroup.getGroupType()) ? 1 : 0
+        ));
         return monitorGroups;
     }
 
