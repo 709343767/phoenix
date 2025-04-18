@@ -153,7 +153,7 @@ public class MonitorDbController {
         // 监控环境列表
         List<String> monitorEnvs = this.monitorEnvService.list().stream().map(MonitorEnv::getEnvName).collect(Collectors.toList());
         // 监控分组列表
-        List<MonitorGroup> monitorGroupList = this.monitorGroupService.getMonitorGroupList(MonitorTypeEnums.SERVER);
+        List<MonitorGroup> monitorGroupList = this.monitorGroupService.getMonitorGroupList(MonitorTypeEnums.DATABASE);
         List<String> monitorGroups = monitorGroupList.stream().map(MonitorGroup::getGroupName).collect(Collectors.toList());
         mv.addObject("monitorEnvs", monitorEnvs);
         mv.addObject("monitorGroups", monitorGroups);
