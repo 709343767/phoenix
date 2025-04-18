@@ -130,7 +130,7 @@ CREATE TABLE `MONITOR_ENV`
     `INSERT_TIME`    datetime                                                      NOT NULL COMMENT '插入时间',
     `UPDATE_TIME`    datetime                                                      NULL DEFAULT NULL COMMENT '更新时间',
     PRIMARY KEY (`ID`) USING BTREE,
-    INDEX `NX_ENV_NAME` (`ENV_NAME` ASC) USING BTREE COMMENT '索引_环境名'
+    INDEX `NX_ENV_NAME` (`ENV_NAME`) USING BTREE COMMENT '索引_环境名'
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_general_ci COMMENT = '监控环境表'
@@ -151,8 +151,8 @@ CREATE TABLE `MONITOR_GROUP`
     `INSERT_TIME`    datetime                                                      NOT NULL COMMENT '插入时间',
     `UPDATE_TIME`    datetime                                                      NULL DEFAULT NULL COMMENT '更新时间',
     PRIMARY KEY (`ID`) USING BTREE,
-    INDEX `NX_GROUP_TYPE` (`GROUP_TYPE` ASC) USING BTREE COMMENT '索引_分组类型',
-    INDEX `NX_GROUP_NAME` (`GROUP_NAME` ASC) USING BTREE COMMENT '索引_分组名'
+    INDEX `NX_GROUP_TYPE` (`GROUP_TYPE`) USING BTREE COMMENT '索引_分组类型',
+    INDEX `NX_GROUP_NAME` (`GROUP_NAME`) USING BTREE COMMENT '索引_分组名'
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_general_ci COMMENT = '监控分组表'
