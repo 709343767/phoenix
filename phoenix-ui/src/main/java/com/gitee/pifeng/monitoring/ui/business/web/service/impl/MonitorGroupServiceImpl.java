@@ -126,6 +126,7 @@ public class MonitorGroupServiceImpl extends ServiceImpl<IMonitorGroupDao, Monit
     public LayUiAdminResultVo saveMonitorGroup(MonitorGroupVo monitorGroupVo) {
         // 判断分组是否已经存在
         LambdaQueryWrapper<MonitorGroup> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(MonitorGroup::getGroupType, monitorGroupVo.getGroupType());
         lambdaQueryWrapper.eq(MonitorGroup::getGroupName, monitorGroupVo.getGroupName());
         Integer count = this.baseMapper.selectCount(lambdaQueryWrapper);
         if (count != null && count > 0) {
