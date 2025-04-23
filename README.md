@@ -59,6 +59,8 @@
 
 - 功能架构
 
+  **红旗标注部分为收费功能，需向作者购买（给源码）。**
+
   ![功能导图](https://gitee.com/monitoring-platform/phoenix/raw/master/doc/%E5%8A%9F%E8%83%BD%E5%AF%BC%E5%9B%BE.png "功能导图")
 
 - 运行环境
