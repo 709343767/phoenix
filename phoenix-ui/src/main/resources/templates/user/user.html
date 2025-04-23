@@ -257,6 +257,9 @@
                             //监听提交
                             iframeWindow.layui.form.on('submit(' + submitID + ')', function (data) {
                                 var field = data.field; //获取提交的字段
+                                var loading = layer.load(1, {
+                                    shade: [0.1, '#fff'] //0.1透明度的白色背景
+                                });
                                 // 加密密码
                                 field.password = $.base64.encode(field.password);
                                 admin.req({
@@ -278,9 +281,11 @@
                                         } else {
                                             layer.msg('添加失败！', {icon: 5, shift: 6});
                                         }
+                                        layer.close(loading);
                                     },
                                     error: function () {
                                         layer.msg('系统错误！', {icon: 5, shift: 6});
+                                        layer.close(loading);
                                     }
                                 });
                             });
@@ -353,6 +358,9 @@
                         //监听提交
                         iframeWindow.layui.form.on('submit(' + submitID + ')', function (data) {
                             var field = data.field; //获取提交的字段
+                            var loading = layer.load(1, {
+                                shade: [0.1, '#fff'] //0.1透明度的白色背景
+                            });
                             // 加密密码
                             field.password = $.base64.encode(field.password);
                             admin.req({
@@ -372,9 +380,11 @@
                                     } else {
                                         layer.msg('编辑失败！', {icon: 5, shift: 6});
                                     }
+                                    layer.close(loading);
                                 },
                                 error: function () {
                                     layer.msg('系统错误！', {icon: 5, shift: 6});
+                                    layer.close(loading);
                                 }
                             });
                         });
