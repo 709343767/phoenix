@@ -70,7 +70,7 @@
         <!-- jna-platform版本 -->
         <jna-platform.version>5.13.0</jna-platform.version>
         <!-- Hutool工具包版本 -->
-        <hutool-all.version>5.8.35</hutool-all.version>
+        <hutool-all.version>5.8.37</hutool-all.version>
         <!-- easypoi工具包版本 -->
         <easypoi-spring-boot-starter.version>4.4.0</easypoi-spring-boot-starter.version>
         <!-- cglib动态代理版本 -->
@@ -86,7 +86,9 @@
         <!-- velocity模板引擎版本 -->
         <velocity-engine-core.version>2.1</velocity-engine-core.version>
         <!-- bouncy castle加解密版本 -->
-        <bcprov-jdk15on.version>1.69</bcprov-jdk15on.version>
+        <bcprov.version>1.78.1</bcprov.version>
+        <bcpkix.version>1.78.1</bcpkix.version>
+        <bcutil.version>1.78.1</bcutil.version>
         <!-- alibaba的druid数据库连接池版本 -->
         <druid-spring-boot-starter.version>1.2.4</druid-spring-boot-starter.version>
         <!-- pagehelper分页插件版本 -->
@@ -340,8 +342,18 @@
             <!-- bouncy castle加解密依赖 -->
             <dependency>
                 <groupId>org.bouncycastle</groupId>
-                <artifactId>bcprov-jdk15on</artifactId>
-                <version>${bcprov-jdk15on.version}</version>
+                <artifactId>bcprov-jdk18on</artifactId>
+                <version>${bcprov.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.bouncycastle</groupId>
+                <artifactId>bcpkix-jdk18on</artifactId>
+                <version>${bcpkix.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.bouncycastle</groupId>
+                <artifactId>bcutil-jdk18on</artifactId>
+                <version>${bcutil.version}</version>
             </dependency>
             <!-- alibaba的druid数据库连接池依赖 -->
             <dependency>
@@ -443,7 +455,7 @@
                     <artifactId>spring-boot-maven-plugin</artifactId>
                     <version>${spring-boot-maven-plugin.version}</version>
                     <configuration>
-                        <layout>ZIP</layout>
+                        <!--<layout>ZIP</layout>-->
                         <fork>true</fork>
                         <!-- 这个配置非常重要，使打包好的jar包具备可执行权限 -->
                         <executable>true</executable>
@@ -457,6 +469,21 @@
                                 <artifactId>lombok</artifactId>
                             </exclude>
                         </excludes>
+                        <!-- 解压BC依赖以避免JAR嵌套校验问题 -->
+                        <requiresUnpack>
+                            <dependency>
+                                <groupId>org.bouncycastle</groupId>
+                                <artifactId>bcprov-jdk18on</artifactId>
+                            </dependency>
+                            <dependency>
+                                <groupId>org.bouncycastle</groupId>
+                                <artifactId>bcpkix-jdk18on</artifactId>
+                            </dependency>
+                            <dependency>
+                                <groupId>org.bouncycastle</groupId>
+                                <artifactId>bcutil-jdk18on</artifactId>
+                            </dependency>
+                        </requiresUnpack>
                     </configuration>
                     <executions>
                         <execution>
