@@ -1,7 +1,10 @@
 package com.gitee.pifeng.monitoring.server;
 
+import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.date.TimeInterval;
 import com.gitee.pifeng.monitoring.common.web.core.CustomizationBeanHandler;
 import com.gitee.pifeng.monitoring.common.web.core.UniqueBeanNameGenerator;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.data.mongo.MongoDataAutoConfiguration;
@@ -21,6 +24,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  * @author 皮锋
  * @custom.date 2020年1月20日 上午8:45:29
  */
+@Slf4j
 @Indexed
 @EnableRetry
 @EnableTransactionManagement
@@ -30,7 +34,12 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 public class ServerApplication extends CustomizationBeanHandler {
 
     public static void main(String[] args) {
+        // 计时器
+        TimeInterval timer = DateUtil.timer();
         SpringApplication.run(ServerApplication.class, args);
+        // 时间差（毫秒）
+        String betweenDay = timer.intervalPretty();
+        log.info("监控服务端启动耗时：{}", betweenDay);
     }
 
 }
