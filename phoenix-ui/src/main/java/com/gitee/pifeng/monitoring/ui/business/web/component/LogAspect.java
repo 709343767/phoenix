@@ -1,5 +1,7 @@
 package com.gitee.pifeng.monitoring.ui.business.web.component;
 
+import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.date.TimeInterval;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.gitee.pifeng.monitoring.common.constant.ZeroOrOneConstants;
@@ -113,6 +115,8 @@ public class LogAspect {
      */
     @Around(value = "operateLogPointCut()")
     public Object saveOperateLog(ProceedingJoinPoint joinPoint) throws Throwable {
+        // 计时器
+        TimeInterval timer = DateUtil.timer();
         HttpServletRequest request = ContextUtils.getRequest();
         // 从切面织入点处通过反射机制获取织入点处的方法
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
@@ -170,6 +174,9 @@ public class LogAspect {
             throw throwable;
         } finally {
             builder.respParam(response != null ? JSON.toJSONString(response) : "");
+            // 时间差（毫秒）
+            String duration = timer.intervalPretty();
+            builder.duration(duration);
             this.monitorLogOperationService.save(builder.build());
         }
         return response;

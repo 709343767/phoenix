@@ -64,9 +64,10 @@ public class MonitorLogOperationServiceImpl extends ServiceImpl<IMonitorLogOpera
         IPage<MonitorLogOperation> ipage = new Page<>(current, size);
         LambdaQueryWrapper<MonitorLogOperation> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         // 只查询部分字段
-        lambdaQueryWrapper.select(MonitorLogOperation::getId, MonitorLogOperation::getOperType, MonitorLogOperation::getOperMethod,
-                MonitorLogOperation::getOperModule, MonitorLogOperation::getOperDesc, MonitorLogOperation::getUri,
-                MonitorLogOperation::getUsername, MonitorLogOperation::getIp, MonitorLogOperation::getInsertTime);
+        lambdaQueryWrapper.select(MonitorLogOperation::getId, MonitorLogOperation::getOperType,
+                MonitorLogOperation::getOperMethod, MonitorLogOperation::getOperModule, MonitorLogOperation::getOperDesc,
+                MonitorLogOperation::getUri, MonitorLogOperation::getUsername, MonitorLogOperation::getIp,
+                MonitorLogOperation::getDuration, MonitorLogOperation::getInsertTime);
         // 查询条件
         if (StringUtils.isNotBlank(operModule)) {
             lambdaQueryWrapper.like(MonitorLogOperation::getOperModule, operModule);

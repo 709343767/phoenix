@@ -79,6 +79,10 @@ public class MonitorLogOperation implements Serializable {
     @TableField("IP")
     private String ip;
 
+    @Schema(description = "耗时")
+    @TableField("DURATION")
+    private String duration;
+
     @Schema(description = "插入时间")
     @TableField("INSERT_TIME")
     private Date insertTime;

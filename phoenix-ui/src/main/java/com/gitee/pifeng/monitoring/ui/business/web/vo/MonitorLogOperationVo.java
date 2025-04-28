@@ -66,6 +66,9 @@ public class MonitorLogOperationVo implements ISuperBean {
     @Schema(description = "请求IP")
     private String ip;
 
+    @Schema(description = "耗时")
+    private String duration;
+
     @Schema(description = "插入时间")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date insertTime;
