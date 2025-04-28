@@ -468,6 +468,7 @@ CREATE TABLE `MONITOR_LOG_OPERATION`
     `OPER_METHOD` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '操作方法',
     `URI`         varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '请求URI',
     `IP`          varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '请求IP',
+    `DURATION`    varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '耗时',
     `INSERT_TIME` datetime                                                      NOT NULL COMMENT '插入时间',
     PRIMARY KEY (`ID`) USING BTREE,
     INDEX `NX_INSERT_TIME` (`INSERT_TIME`) USING BTREE COMMENT '索引_插入时间'
