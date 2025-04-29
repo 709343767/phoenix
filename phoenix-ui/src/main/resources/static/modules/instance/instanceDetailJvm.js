@@ -35,10 +35,10 @@
                         '           <label class="label-font-weight">线程峰值：</label>' + peakThreadCount +
                         '       </div>' +
                         '       <div class="layui-col-md3">' +
-                        '           <label class="label-font-weight">守护程序线程数：</label>' + daemonThreadCount +
+                        '           <label class="label-font-weight">守护线程数：</label>' + daemonThreadCount +
                         '       </div>' +
                         '       <div class="layui-col-md3">' +
-                        '           <label class="label-font-weight">启动的线程总数：</label>' + totalStartedThreadCount +
+                        '           <label class="label-font-weight">线程总数：</label>' + totalStartedThreadCount +
                         '       </div>';
                     if (Array.isArray(threadInfoList)) {
                         html += '<div class="layui-col-md12"><label class="label-font-weight">线程详情：</label>';
@@ -115,16 +115,16 @@
                     // 是否启用了类加载系统的详细输出
                     var isVerbose = isEmpty(data.isVerbose) ? webConstCn.NOT_OBTAINED_CN : (data.isVerbose === '0' ? '否' : '是');
                     var html = '<div class="layui-col-md3">' +
-                        '           <label class="label-font-weight">已加载当前类：</label>' + loadedClassCount +
+                        '           <label class="label-font-weight">累计加载类数量：</label>' + totalLoadedClassCount +
                         '       </div>' +
                         '       <div class="layui-col-md3">' +
-                        '          <label class="label-font-weight">已加载类总数：</label>' + totalLoadedClassCount +
+                        '          <label class="label-font-weight">已加载类数量：</label>' + loadedClassCount +
                         '       </div>' +
                         '       <div class="layui-col-md3">' +
                         '           <label class="label-font-weight">以卸载类总数：</label>' + unloadedClassCount +
                         '       </div>' +
                         '       <div class="layui-col-md3">' +
-                        '           <label class="label-font-weight">是否启用了类加载系统的详细输出：</label>' + isVerbose +
+                        '           <label class="label-font-weight">是否启用详细模式：</label>' + isVerbose +
                         '       </div>';
                     $('#class-loading').empty().append(html);
                 }
@@ -177,37 +177,37 @@
                     // Java虚拟机的开始时间
                     var startTime = isEmpty(data.startTime) ? webConstCn.NOT_OBTAINED_CN : data.startTime;
                     var html = '<div class="layui-col-md12">' +
-                        '            <label class="label-font-weight">Java虚拟机的开始时间：</label>' + startTime +
+                        '            <label class="label-font-weight">虚拟机开始时间：</label>' + startTime +
                         '       </div>' +
                         '       <div class="layui-col-md12">' +
-                        '            <label class="label-font-weight">Java虚拟机的正常运行时间（毫秒）：</label>' + uptime +
+                        '            <label class="label-font-weight">虚拟机正常运行时间（毫秒）：</label>' + uptime +
                         '       </div>' +
                         '       <div class="layui-col-md12">' +
-                        '           <label class="label-font-weight">正在运行的Java虚拟机名称：</label>' + name +
+                        '           <label class="label-font-weight">虚拟机名称：</label>' + name +
                         '       </div>' +
                         '       <div class="layui-col-md12">' +
-                        '           <label class="label-font-weight">Java虚拟机实现名称：</label>' + vmName +
+                        '           <label class="label-font-weight">虚拟机实现名称：</label>' + vmName +
                         '       </div>' +
                         '       <div class="layui-col-md12">' +
-                        '           <label class="label-font-weight">Java虚拟机实现供应商：</label>' + vmVendor +
+                        '           <label class="label-font-weight">虚拟机实现供应商：</label>' + vmVendor +
                         '       </div>' +
                         '       <div class="layui-col-md12">' +
-                        '           <label class="label-font-weight">Java虚拟机实现版本：</label>' + vmVersion +
+                        '           <label class="label-font-weight">虚拟机实现版本：</label>' + vmVersion +
                         '       </div>' +
                         '       <div class="layui-col-md12">' +
-                        '            <label class="label-font-weight">Java虚拟机规范名称：</label>' + specName +
+                        '            <label class="label-font-weight">虚拟机规范名称：</label>' + specName +
                         '       </div>' +
                         '       <div class="layui-col-md12">' +
-                        '            <label class="label-font-weight">Java虚拟机规范供应商：</label>' + specVendor +
+                        '            <label class="label-font-weight">虚拟机规范供应商：</label>' + specVendor +
                         '       </div>' +
                         '       <div class="layui-col-md12">' +
-                        '            <label class="label-font-weight">Java虚拟机规范版本：</label>' + specVersion +
+                        '            <label class="label-font-weight">虚拟机规范版本：</label>' + specVersion +
                         '       </div>' +
                         '       <div class="layui-col-md12">' +
                         '            <label class="label-font-weight">管理接口规范版本：</label>' + managementSpecVersion +
                         '       </div>' +
                         '       <div class="layui-col-md12">' +
-                        '            <label class="label-font-weight">Java虚拟机入参：</label>' + inputArguments +
+                        '            <label class="label-font-weight">虚拟机入参：</label>' + inputArguments +
                         '       </div>' +
                         '       <div class="layui-col-md12">' +
                         '            <label class="label-font-weight">Java类路径：</label>' + classPath +
@@ -216,7 +216,7 @@
                         '            <label class="label-font-weight">Java库路径：</label>' + libraryPath +
                         '       </div>' +
                         '       <div class="layui-col-md12">' +
-                        '            <label class="label-font-weight">Java虚拟机是否支持引导类路径：</label>' + isBootClassPathSupported +
+                        '            <label class="label-font-weight">虚拟机是否支持引导类路径：</label>' + isBootClassPathSupported +
                         '       </div>' +
                         '       <div class="layui-col-md12">' +
                         '            <label class="label-font-weight">引导类路径：</label>' + bootClassPath +
