@@ -2,7 +2,7 @@
 ;layui.define(function (e) {
     layui.use(['admin', 'carousel', 'jquery', 'element'], function () {
         var admin = layui.admin, $ = layui.$, element = layui.element, carousel = layui.carousel,
-            device = layui.device();
+            device = layui.device(), layer = layui.layer;
         // 最近7天告警统计div
         var $Last7DaysAlarmRecordStatistics = $('#last-7-days-alarm-record-statistics');
         // 告警结果统计div
