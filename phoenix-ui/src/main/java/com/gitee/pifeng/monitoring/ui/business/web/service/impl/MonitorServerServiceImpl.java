@@ -248,9 +248,9 @@ public class MonitorServerServiceImpl extends ServiceImpl<IMonitorServerDao, Mon
      * @author 皮锋
      * @custom.date 2020/9/4 16:13
      */
+    @Retryable
     @Transactional(rollbackFor = Throwable.class, isolation = Isolation.READ_COMMITTED)
     @Override
-    @Retryable
     public LayUiAdminResultVo deleteMonitorServer(List<MonitorServerVo> monitorServerVos) {
         List<String> ips = Lists.newArrayList();
         List<String> ids = Lists.newArrayList();

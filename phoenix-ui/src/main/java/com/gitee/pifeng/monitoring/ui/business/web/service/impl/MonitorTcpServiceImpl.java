@@ -28,7 +28,6 @@ import com.gitee.pifeng.monitoring.ui.constant.WebResponseConstants;
 import com.gitee.pifeng.monitoring.ui.core.UiPackageConstructor;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
-import org.hyperic.sigar.SigarException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
@@ -147,9 +146,9 @@ public class MonitorTcpServiceImpl extends ServiceImpl<IMonitorTcpDao, MonitorTc
      * @author 皮锋
      * @custom.date 2022/1/11 9:45
      */
+    @Retryable
     @Transactional(rollbackFor = Throwable.class, isolation = Isolation.READ_COMMITTED)
     @Override
-    @Retryable
     public LayUiAdminResultVo deleteMonitorTcp(List<Long> ids) {
         // 删除TCP历史记录表
         LambdaUpdateWrapper<MonitorTcpHistory> monitorTcpHistoryLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
@@ -328,13 +327,12 @@ public class MonitorTcpServiceImpl extends ServiceImpl<IMonitorTcpDao, MonitorTc
      *
      * @param monitorTcpVo TCP信息表现层对象
      * @return layUiAdmin响应对象：TCP连通性
-     * @throws SigarException Sigar异常
-     * @throws IOException    IO异常
+     * @throws IOException IO异常
      * @author 皮锋
      * @custom.date 2022/10/12 21:41
      */
     @Override
-    public LayUiAdminResultVo testMonitorTcp(MonitorTcpVo monitorTcpVo) throws SigarException, IOException {
+    public LayUiAdminResultVo testMonitorTcp(MonitorTcpVo monitorTcpVo) throws IOException {
         // 封装请求数据
         JSONObject extraMsg = new JSONObject();
         extraMsg.put("hostnameTarget", monitorTcpVo.getHostnameTarget());

@@ -12,8 +12,10 @@ import com.gitee.pifeng.monitoring.server.business.server.dao.IMonitorRealtimeMo
 import com.gitee.pifeng.monitoring.server.business.server.entity.MonitorRealtimeMonitoring;
 import com.gitee.pifeng.monitoring.server.business.server.service.IRealtimeMonitoringService;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import java.util.Date;
 
@@ -38,33 +40,39 @@ public class RealtimeMonitoringServiceImpl extends ServiceImpl<IMonitorRealtimeM
      * @author 皮锋
      * @custom.date 2021/2/1 11:20
      */
+    @Retryable
     @Transactional(rollbackFor = Throwable.class)
     @Override
     public boolean beforeAlarmJudge(Alarm alarm) {
-        synchronized (RealtimeMonitoringServiceImpl.class) {
-            // 监控类型
-            MonitorTypeEnums monitorTypeEnum = alarm.getMonitorType();
-            // 告警原因
-            AlarmReasonEnums alarmReasonEnum = alarm.getAlarmReason();
-            // 自定义业务告警 || 没有设置告警原因==>直接放过
-            if (monitorTypeEnum == MonitorTypeEnums.CUSTOM || alarmReasonEnum == AlarmReasonEnums.IGNORE) {
-                return true;
-            }
+        // 监控类型
+        MonitorTypeEnums monitorTypeEnum = alarm.getMonitorType();
+        // 告警原因
+        AlarmReasonEnums alarmReasonEnum = alarm.getAlarmReason();
+        // 自定义业务告警 || 没有设置告警原因==>直接放过
+        if (monitorTypeEnum == MonitorTypeEnums.CUSTOM || alarmReasonEnum == AlarmReasonEnums.IGNORE) {
+            return true;
+        }
+        // 监控类型名
+        String typeEnumName = monitorTypeEnum.name();
+        // 告警代码
+        String alarmCode = alarm.getCode();
+        // 生成细粒度锁键（type:code）
+        String lockKey = typeEnumName + ":" + alarmCode;
+        // 使用 intern() 确保相同字符串引用
+        synchronized (lockKey.intern()) {
             // 监控子类型
             MonitorSubTypeEnums monitorSubType = alarm.getMonitorSubType();
             // 被告警主体唯一ID
             String alertedEntityId = alarm.getAlertedEntityId();
-            // 告警代码
-            String alarmCode = alarm.getCode();
             // 查询数据库中有没有此实时监控信息
             LambdaQueryWrapper<MonitorRealtimeMonitoring> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-            lambdaQueryWrapper.eq(MonitorRealtimeMonitoring::getType, monitorTypeEnum.name());
+            lambdaQueryWrapper.eq(MonitorRealtimeMonitoring::getType, typeEnumName);
             lambdaQueryWrapper.eq(MonitorRealtimeMonitoring::getCode, alarmCode);
             MonitorRealtimeMonitoring monitorRealtimeMonitoringDb = this.baseMapper.selectOne(lambdaQueryWrapper);
             // 一.数据库中没有此实时监控信息
             if (monitorRealtimeMonitoringDb == null) {
                 MonitorRealtimeMonitoring monitorRealtimeMonitoring = MonitorRealtimeMonitoring.builder()
-                        .type(monitorTypeEnum.name())
+                        .type(typeEnumName)
                         .subType(monitorSubType.name())
                         .code(alarmCode)
                         .alertedEntityId(alertedEntityId)
@@ -78,14 +86,14 @@ public class RealtimeMonitoringServiceImpl extends ServiceImpl<IMonitorRealtimeM
             }
             // 二.数据库中有此实时监控信息
             MonitorRealtimeMonitoring monitorRealtimeMonitoring = MonitorRealtimeMonitoring.builder()
-                    .type(monitorTypeEnum.name())
+                    .type(typeEnumName)
                     .code(alarmCode)
                     // 如果是“正常变异常”告警，把是否告警设置为true
                     .isSentAlarm(alarmReasonEnum == AlarmReasonEnums.NORMAL_2_ABNORMAL ? ZeroOrOneConstants.ONE : ZeroOrOneConstants.ZERO)
                     .updateTime(new Date())
                     .build();
             LambdaUpdateWrapper<MonitorRealtimeMonitoring> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();
-            lambdaUpdateWrapper.eq(MonitorRealtimeMonitoring::getType, monitorTypeEnum.name());
+            lambdaUpdateWrapper.eq(MonitorRealtimeMonitoring::getType, typeEnumName);
             lambdaUpdateWrapper.eq(MonitorRealtimeMonitoring::getCode, alarmCode);
             // 更新实时监控信息
             this.baseMapper.update(monitorRealtimeMonitoring, lambdaUpdateWrapper);
@@ -98,6 +106,8 @@ public class RealtimeMonitoringServiceImpl extends ServiceImpl<IMonitorRealtimeM
             if (alarmReasonEnum == AlarmReasonEnums.ABNORMAL_2_NORMAL) {
                 return isSentAlarm;
             }
+            // 显示提交事务
+            TransactionAspectSupport.currentTransactionStatus().flush();
             return false;
         }
     }

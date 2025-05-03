@@ -276,7 +276,7 @@ CREATE TABLE `MONITOR_JVM_CLASS_LOADING`
     `INSERT_TIME`              datetime                                                     NOT NULL COMMENT '新增时间',
     `UPDATE_TIME`              datetime                                                     NULL DEFAULT NULL COMMENT '更新时间',
     PRIMARY KEY (`ID`) USING BTREE,
-    INDEX `NX_INSTANCE_ID` (`INSTANCE_ID`) USING BTREE COMMENT '索引_应用实例ID'
+    UNIQUE INDEX `UX_INSTANCE_ID` (`INSTANCE_ID`) USING BTREE COMMENT '索引_应用实例ID'
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_general_ci COMMENT = 'java虚拟机类加载信息表'
@@ -297,6 +297,7 @@ CREATE TABLE `MONITOR_JVM_GARBAGE_COLLECTOR`
     `INSERT_TIME`            datetime                                                      NOT NULL COMMENT '新增时间',
     `UPDATE_TIME`            datetime                                                      NULL DEFAULT NULL COMMENT '更新时间',
     PRIMARY KEY (`ID`) USING BTREE,
+    UNIQUE INDEX `UX_INSTANCE_ID_GARBAGE_COLLECTOR_NAME` (`INSTANCE_ID`, `GARBAGE_COLLECTOR_NAME`) USING BTREE COMMENT '索引_应用实例ID_内存管理器名称',
     INDEX `NX_INSTANCE_ID` (`INSTANCE_ID`) USING BTREE COMMENT '索引_应用实例ID'
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
@@ -319,6 +320,7 @@ CREATE TABLE `MONITOR_JVM_MEMORY`
     `INSERT_TIME` datetime                                                      NOT NULL COMMENT '新增时间',
     `UPDATE_TIME` datetime                                                      NULL DEFAULT NULL COMMENT '更新时间',
     PRIMARY KEY (`ID`) USING BTREE,
+    UNIQUE INDEX `UX_INSTANCE_ID_MEMORY_TYPE` (`INSTANCE_ID`, `MEMORY_TYPE`) USING BTREE COMMENT '索引_应用实例ID_内存类型',
     INDEX `NX_INSTANCE_ID` (`INSTANCE_ID`) USING BTREE COMMENT '索引_应用实例ID'
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
@@ -376,7 +378,7 @@ CREATE TABLE `MONITOR_JVM_RUNTIME`
     `INSERT_TIME`                  datetime                                                      NOT NULL COMMENT '新增时间',
     `UPDATE_TIME`                  datetime                                                      NULL DEFAULT NULL COMMENT '更新时间',
     PRIMARY KEY (`ID`) USING BTREE,
-    INDEX `NX_INSTANCE_ID` (`INSTANCE_ID`) USING BTREE COMMENT '索引_应用实例ID'
+    UNIQUE INDEX `UX_INSTANCE_ID` (`INSTANCE_ID`) USING BTREE COMMENT '索引_应用实例ID'
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_general_ci COMMENT = 'java虚拟机运行时信息表'
@@ -398,7 +400,7 @@ CREATE TABLE `MONITOR_JVM_THREAD`
     `INSERT_TIME`                datetime                                                     NOT NULL COMMENT '新增时间',
     `UPDATE_TIME`                datetime                                                     NULL DEFAULT NULL COMMENT '更新时间',
     PRIMARY KEY (`ID`) USING BTREE,
-    INDEX `NX_INSTANCE_ID` (`INSTANCE_ID`) USING BTREE COMMENT '索引_应用实例ID'
+    UNIQUE INDEX `UX_INSTANCE_ID` (`INSTANCE_ID`) USING BTREE COMMENT '索引_应用实例ID'
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_general_ci COMMENT = 'java虚拟机线程信息表'
@@ -551,7 +553,7 @@ CREATE TABLE `MONITOR_REALTIME_MONITORING`
     `INSERT_TIME`       datetime                                                     NOT NULL COMMENT '插入时间',
     `UPDATE_TIME`       datetime                                                     NULL DEFAULT NULL COMMENT '更新时间',
     PRIMARY KEY (`ID`) USING BTREE,
-    INDEX `NX_TYPE_CODE` (`TYPE`, `CODE`) USING BTREE COMMENT '索引_类型_编码',
+    UNIQUE INDEX `UX_TYPE_CODE` (`TYPE`, `CODE`) USING BTREE COMMENT '索引_类型_编码',
     INDEX `NX_TYPE_SUB_TYPE_ALERTED_ENTITY_ID` (`TYPE`, `SUB_TYPE`, `ALERTED_ENTITY_ID`) USING BTREE COMMENT '索引_类型_子类型_被告警主体唯一ID',
     INDEX `NX_TYPE_ALERTED_ENTITY_ID` (`TYPE`, `ALERTED_ENTITY_ID`) USING BTREE COMMENT '索引_类型_被告警主体唯一ID'
 ) ENGINE = InnoDB
@@ -626,6 +628,7 @@ CREATE TABLE `MONITOR_SERVER_CPU`
     `INSERT_TIME`  datetime                                                      NOT NULL COMMENT '新增时间',
     `UPDATE_TIME`  datetime                                                      NULL DEFAULT NULL COMMENT '更新时间',
     PRIMARY KEY (`ID`) USING BTREE,
+    UNIQUE INDEX `UX_IP_CPU_NO` (`IP`, `CPU_NO`) USING BTREE COMMENT '索引_IP地址_CPU序号',
     INDEX `NX_IP` (`IP`) USING BTREE COMMENT '索引_IP地址'
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
@@ -682,6 +685,7 @@ CREATE TABLE `MONITOR_SERVER_DISK`
     `INSERT_TIME`   datetime                                                      NOT NULL COMMENT '新增时间',
     `UPDATE_TIME`   datetime                                                      NULL DEFAULT NULL COMMENT '更新时间',
     PRIMARY KEY (`ID`) USING BTREE,
+    UNIQUE INDEX `UX_IP_DISK_NO` (`IP`, `DISK_NO`) USING BTREE COMMENT '索引_IP_磁盘序号',
     INDEX `NX_IP` (`IP`) USING BTREE COMMENT '索引_IP'
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
@@ -732,7 +736,7 @@ CREATE TABLE `MONITOR_SERVER_LOAD_AVERAGE`
     `INSERT_TIME`             datetime                                                     NOT NULL COMMENT '新增时间',
     `UPDATE_TIME`             datetime                                                     NULL DEFAULT NULL COMMENT '更新时间',
     PRIMARY KEY (`ID`) USING BTREE,
-    INDEX `NX_IP` (`IP`) USING BTREE COMMENT '索引_IP'
+    UNIQUE INDEX `UX_IP` (`IP`) USING BTREE COMMENT '索引_IP'
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_general_ci COMMENT = '服务器平均负载表'
@@ -780,7 +784,7 @@ CREATE TABLE `MONITOR_SERVER_MEMORY`
     `INSERT_TIME`       datetime                                                     NOT NULL COMMENT '新增时间',
     `UPDATE_TIME`       datetime                                                     NULL DEFAULT NULL COMMENT '更新时间',
     PRIMARY KEY (`ID`) USING BTREE,
-    INDEX `NX_IP` (`IP`) USING BTREE COMMENT '索引_IP'
+    UNIQUE INDEX `UX_IP` (`IP`) USING BTREE COMMENT '索引_IP'
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_general_ci COMMENT = '服务器内存表'
@@ -842,6 +846,7 @@ CREATE TABLE `MONITOR_SERVER_NETCARD`
     `INSERT_TIME`  datetime                                                      NOT NULL COMMENT '新增时间',
     `UPDATE_TIME`  datetime                                                      NULL DEFAULT NULL COMMENT '更新时间',
     PRIMARY KEY (`ID`) USING BTREE,
+    UNIQUE INDEX `UX_IP_NET_NO` (`IP`, `NET_NO`) USING BTREE COMMENT '索引_IP_网卡序号',
     INDEX `NX_IP` (`IP`) USING BTREE COMMENT '索引_IP'
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
@@ -904,7 +909,7 @@ CREATE TABLE `MONITOR_SERVER_OS`
     `INSERT_TIME`  datetime                                                      NOT NULL COMMENT '新增时间',
     `UPDATE_TIME`  datetime                                                      NULL DEFAULT NULL COMMENT '更新时间',
     PRIMARY KEY (`ID`) USING BTREE,
-    INDEX `NX_IP` (`IP`) USING BTREE
+    UNIQUE INDEX `UX_IP` (`IP`) USING BTREE COMMENT '索引_IP'
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_general_ci COMMENT = '服务器操作系统表'
@@ -942,6 +947,7 @@ CREATE TABLE `MONITOR_SERVER_POWER_SOURCES`
     `INSERT_TIME`                datetime                                                      NOT NULL COMMENT '新增时间',
     `UPDATE_TIME`                datetime                                                      NULL DEFAULT NULL COMMENT '更新时间',
     PRIMARY KEY (`ID`) USING BTREE,
+    UNIQUE INDEX `UX_IP_POWER_SOURCES_NO` (`IP`, `POWER_SOURCES_NO`) USING BTREE COMMENT '索引_IP_电池序号',
     INDEX `NX_IP` (`IP`) USING BTREE COMMENT '索引_IP'
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
@@ -1011,7 +1017,7 @@ CREATE TABLE `MONITOR_SERVER_SENSORS`
     `INSERT_TIME`     datetime                                                      NOT NULL COMMENT '新增时间',
     `UPDATE_TIME`     datetime                                                      NULL DEFAULT NULL COMMENT '更新时间',
     PRIMARY KEY (`ID`) USING BTREE,
-    INDEX `NX_IP` (`IP`) USING BTREE COMMENT '索引_IP'
+    UNIQUE INDEX `UX_IP` (`IP`) USING BTREE COMMENT '索引_IP'
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_general_ci COMMENT = '服务器传感器表'

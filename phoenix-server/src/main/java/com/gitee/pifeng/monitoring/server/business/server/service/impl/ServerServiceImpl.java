@@ -215,9 +215,9 @@ public class ServerServiceImpl extends ServiceImpl<IMonitorServerDao, MonitorSer
      * @author 皮锋
      * @custom.date 2021/1/21 13:21
      */
+    @Retryable
     @Transactional(rollbackFor = Throwable.class)
     @Override
-    @Retryable
     public void operateServer(ServerPackage serverPackage) {
         // IP地址
         String ip = serverPackage.getIp();
