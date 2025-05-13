@@ -10,6 +10,7 @@ import com.gitee.pifeng.monitoring.common.dto.AlarmPackage;
 import com.gitee.pifeng.monitoring.common.exception.NetException;
 import com.gitee.pifeng.monitoring.server.business.server.core.MonitoringConfigPropertiesLoader;
 import com.gitee.pifeng.monitoring.server.business.server.core.ServerPackageConstructor;
+import com.gitee.pifeng.monitoring.server.business.server.service.IAlarmRecordService;
 import com.gitee.pifeng.monitoring.server.business.server.service.IAlarmService;
 import com.gitee.pifeng.monitoring.server.constant.ComponentOrderConstants;
 import lombok.extern.slf4j.Slf4j;
@@ -54,6 +55,12 @@ public class AlarmMonitorJob extends QuartzJobBean {
     private IAlarmService alarmService;
 
     /**
+     * 告警记录服务接口
+     */
+    @Autowired
+    private IAlarmRecordService alarmRecordService;
+
+    /**
      * 查询告警记录表，看是否有需要定时告警的数据，有则发送告警。
      *
      * @param jobExecutionContext 作业执行上下文
@@ -67,7 +74,7 @@ public class AlarmMonitorJob extends QuartzJobBean {
         // 过去24小时
         DateTime twentyFourHoursAgo = DateUtil.offsetDay(now, -1);
         // 获取过去24小时的静默告警记录数
-        int silenceAlarmCount = this.alarmService.getSilenceAlarmCount(twentyFourHoursAgo, now);
+        int silenceAlarmCount = this.alarmRecordService.getSilenceAlarmCount(twentyFourHoursAgo, now);
         if (silenceAlarmCount > 0) {
             this.sendAlarmInfo("静默告警提醒",
                     "您有" + silenceAlarmCount + "条未查看的静默告警消息，请及时登录监控平台查看！",

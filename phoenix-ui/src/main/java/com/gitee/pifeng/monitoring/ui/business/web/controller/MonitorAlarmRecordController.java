@@ -6,11 +6,14 @@ import cn.afterturn.easypoi.excel.entity.enmus.ExcelType;
 import cn.afterturn.easypoi.view.PoiBaseView;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.gitee.pifeng.monitoring.common.constant.DateTimeStylesEnums;
+import com.gitee.pifeng.monitoring.common.constant.alarm.AlarmWayEnums;
 import com.gitee.pifeng.monitoring.common.util.DateTimeUtils;
 import com.gitee.pifeng.monitoring.common.web.util.ContextUtils;
 import com.gitee.pifeng.monitoring.ui.business.web.annotation.OperateLog;
+import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorAlarmRecordDetailService;
 import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorAlarmRecordService;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.LayUiAdminResultVo;
+import com.gitee.pifeng.monitoring.ui.business.web.vo.MonitorAlarmRecordDetailVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.MonitorAlarmRecordVo;
 import com.gitee.pifeng.monitoring.ui.constant.OperateTypeConstants;
 import com.gitee.pifeng.monitoring.ui.constant.UiModuleConstants;
@@ -20,6 +23,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -30,10 +34,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * <p>
@@ -53,6 +54,12 @@ public class MonitorAlarmRecordController {
      */
     @Autowired
     private IMonitorAlarmRecordService monitorAlarmRecordService;
+
+    /**
+     * 告警记录详情服务类
+     */
+    @Autowired
+    private IMonitorAlarmRecordDetailService monitorAlarmRecordDetailService;
 
     /**
      * <p>
@@ -77,14 +84,10 @@ public class MonitorAlarmRecordController {
      * @param current    当前页
      * @param size       每页显示条数
      * @param type       告警类型
-     * @param way        告警方式
      * @param level      告警级别
-     * @param status     告警状态
      * @param title      告警标题
      * @param content    告警内容
-     * @param number     被告警人号码
      * @param insertDate 记录日期
-     * @param updateDate 告警日期
      * @return layUiAdmin响应对象
      * @author 皮锋
      * @custom.date 2020/8/7 16:12
@@ -94,29 +97,21 @@ public class MonitorAlarmRecordController {
             @Parameter(name = "current", description = "当前页", required = true, in = ParameterIn.QUERY),
             @Parameter(name = "size", description = "每页显示条数", required = true, in = ParameterIn.QUERY),
             @Parameter(name = "type", description = "告警类型", in = ParameterIn.QUERY),
-            @Parameter(name = "way", description = "告警方式", in = ParameterIn.QUERY),
             @Parameter(name = "level", description = "告警级别", in = ParameterIn.QUERY),
-            @Parameter(name = "status", description = "告警状态", in = ParameterIn.QUERY),
             @Parameter(name = "title", description = "告警标题", in = ParameterIn.QUERY),
             @Parameter(name = "content", description = "告警内容", in = ParameterIn.QUERY),
-            @Parameter(name = "number", description = "被告警人号码", in = ParameterIn.QUERY),
-            @Parameter(name = "insertDate", description = "记录日期", in = ParameterIn.QUERY),
-            @Parameter(name = "updateDate", description = "告警日期", in = ParameterIn.QUERY)})
+            @Parameter(name = "insertDate", description = "记录日期", in = ParameterIn.QUERY)})
     @GetMapping("/get-monitor-alarm-record-list")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.ALARM, operType = OperateTypeConstants.QUERY, operDesc = "获取告警记录列表")
     public LayUiAdminResultVo getMonitorAlarmRecordList(@RequestParam(value = "current") Long current,
                                                         @RequestParam(value = "size") Long size,
                                                         @RequestParam(value = "type", required = false) String type,
-                                                        @RequestParam(value = "way", required = false) String way,
                                                         @RequestParam(value = "level", required = false) String level,
-                                                        @RequestParam(value = "status", required = false) String status,
                                                         @RequestParam(value = "title", required = false) String title,
                                                         @RequestParam(value = "content", required = false) String content,
-                                                        @RequestParam(value = "number", required = false) String number,
-                                                        @RequestParam(value = "insertDate", required = false) String insertDate,
-                                                        @RequestParam(value = "updateDate", required = false) String updateDate) {
-        Page<MonitorAlarmRecordVo> page = this.monitorAlarmRecordService.getMonitorAlarmRecordList(current, size, type, way, level, status, title, content, number, insertDate, updateDate);
+                                                        @RequestParam(value = "insertDate", required = false) String insertDate) {
+        Page<MonitorAlarmRecordVo> page = this.monitorAlarmRecordService.getMonitorAlarmRecordList(current, size, type, level, title, content, insertDate);
         return LayUiAdminResultVo.ok(page);
     }
 
@@ -163,42 +158,34 @@ public class MonitorAlarmRecordController {
      * </p>
      *
      * @param type       告警类型
-     * @param way        告警方式
      * @param level      告警级别
-     * @param status     告警状态
      * @param title      告警标题
      * @param content    告警内容
-     * @param number     被告警人号码
      * @param insertDate 记录日期
-     * @param updateDate 告警日期
      * @author 皮锋
      * @custom.date 2021/5/18 22:12
      */
     @Operation(summary = "导出告警记录列表")
     @Parameters(value = {
             @Parameter(name = "type", description = "告警类型", in = ParameterIn.QUERY),
-            @Parameter(name = "way", description = "告警方式", in = ParameterIn.QUERY),
             @Parameter(name = "level", description = "告警级别", in = ParameterIn.QUERY),
-            @Parameter(name = "status", description = "告警状态", in = ParameterIn.QUERY),
             @Parameter(name = "title", description = "告警标题", in = ParameterIn.QUERY),
             @Parameter(name = "content", description = "告警内容", in = ParameterIn.QUERY),
-            @Parameter(name = "number", description = "被告警人号码", in = ParameterIn.QUERY),
-            @Parameter(name = "insertDate", description = "记录日期", in = ParameterIn.QUERY),
-            @Parameter(name = "updateDate", description = "告警日期", in = ParameterIn.QUERY)})
+            @Parameter(name = "insertDate", description = "记录日期", in = ParameterIn.QUERY)})
     @GetMapping("/export-monitor-alarm-record-list")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.ALARM, operType = OperateTypeConstants.EXPORT, operDesc = "导出告警记录列表")
     public void exportMonitorAlarmRecordList(@RequestParam(value = "type", required = false) String type,
-                                             @RequestParam(value = "way", required = false) String way,
                                              @RequestParam(value = "level", required = false) String level,
-                                             @RequestParam(value = "status", required = false) String status,
                                              @RequestParam(value = "title", required = false) String title,
                                              @RequestParam(value = "content", required = false) String content,
-                                             @RequestParam(value = "number", required = false) String number,
-                                             @RequestParam(value = "insertDate", required = false) String insertDate,
-                                             @RequestParam(value = "updateDate", required = false) String updateDate) {
+                                             @RequestParam(value = "insertDate", required = false) String insertDate) {
         String name = "告警记录";
-        List<MonitorAlarmRecordVo> monitorAlarmRecordVos = this.monitorAlarmRecordService.getMonitorAlarmRecordList(type, way, level, status, title, content, number, insertDate, updateDate);
+        List<MonitorAlarmRecordVo> monitorAlarmRecordVos = this.monitorAlarmRecordService.getMonitorAlarmRecordList(type, level, title, content, insertDate);
+        if (CollectionUtils.isEmpty(monitorAlarmRecordVos)) {
+            // 倒序
+            Collections.reverse(monitorAlarmRecordVos);
+        }
         for (MonitorAlarmRecordVo monitorAlarmRecordVo : monitorAlarmRecordVos) {
             // 单独处理下告警内容
             String alarmRecordVoContent = monitorAlarmRecordVo.getContent() != null ? monitorAlarmRecordVo.getContent() : "";
@@ -207,6 +194,11 @@ public class MonitorAlarmRecordController {
             alarmRecordVoContent = monitorAlarmRecordVo.getContent();
             // 截取
             monitorAlarmRecordVo.setContent(alarmRecordVoContent.length() >= 500 ? StringUtils.substring(alarmRecordVoContent, 0, 500) + "......" : alarmRecordVoContent);
+            // 告警方式，多种方式用逗号分隔
+            String way = monitorAlarmRecordVo.getWay();
+            monitorAlarmRecordVo.setWay(StringUtils.isBlank(way) ? way : way.replace(",", "、")
+                    .replace(AlarmWayEnums.SMS.name(), "短信")
+                    .replace(AlarmWayEnums.MAIL.name(), "邮件"));
         }
         ExportParams params = new ExportParams(name, name, ExcelType.XSSF);
         // 不设置列高
@@ -243,8 +235,10 @@ public class MonitorAlarmRecordController {
     @OperateLog(operModule = UiModuleConstants.ALARM, operType = OperateTypeConstants.PAGE, operDesc = "访问告警记录详情页面")
     public ModelAndView monitorAlarmRecordDetail(Long id) {
         ModelAndView mv = new ModelAndView("alarm/alarm-record-detail");
-        MonitorAlarmRecordVo monitorAlarmRecordInfo = this.monitorAlarmRecordService.getMonitorAlarmRecordDetail(id);
-        mv.addObject("monitorAlarmRecordInfo", monitorAlarmRecordInfo);
+        MonitorAlarmRecordVo monitorAlarmRecordVo = this.monitorAlarmRecordService.getMonitorAlarmRecord(id);
+        mv.addObject("monitorAlarmRecordVo", monitorAlarmRecordVo);
+        List<MonitorAlarmRecordDetailVo> monitorAlarmRecordDetailVos = this.monitorAlarmRecordDetailService.getMonitorAlarmRecordDetails(id);
+        mv.addObject("monitorAlarmRecordDetailVos", monitorAlarmRecordDetailVos);
         return mv;
     }
 

@@ -2,57 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.gitee.pifeng.monitoring.ui.business.web.dao.IMonitorAlarmRecordDao">
 
-    <!-- 清空告警记录 -->
-    <update id="cleanupMonitorAlarmRecord" databaseId="mysql">
-        TRUNCATE TABLE MONITOR_ALARM_RECORD
-    </update>
-
-    <!-- 获取最近7天的告警统计信息 -->
-    <select id="getLast7DaysAlarmRecordStatistics" resultType="java.util.Map" databaseId="mysql">
-        SELECT b.`date`                     AS `date`,
-               b.total                      AS total,
-               b.success                    AS success,
-               b.fail                       AS fail,
-               b.total - b.success - b.fail AS unsent
-        FROM (SELECT DATE_FORMAT(d.`date`, '%Y/%m/%d')                 AS `date`,
-                     COUNT(a.ID)                                       AS total,
-                     SUM(CASE WHEN a.`STATUS` = '1' THEN 1 ELSE 0 END) AS success,
-                     SUM(CASE WHEN a.`STATUS` = '0' THEN 1 ELSE 0 END) AS fail
-              FROM (SELECT DATE_SUB(CURDATE(), INTERVAL 0 DAY) `date`
-                    UNION
-                    SELECT DATE_SUB(CURDATE(), INTERVAL 1 DAY) `date`
-                    UNION
-                    SELECT DATE_SUB(CURDATE(), INTERVAL 2 DAY) `date`
-                    UNION
-                    SELECT DATE_SUB(CURDATE(), INTERVAL 3 DAY) `date`
-                    UNION
-                    SELECT DATE_SUB(CURDATE(), INTERVAL 4 DAY) `date`
-                    UNION
-                    SELECT DATE_SUB(CURDATE(), INTERVAL 5 DAY) `date`
-                    UNION
-                    SELECT DATE_SUB(CURDATE(), INTERVAL 6 DAY) `date`) d
-                       LEFT JOIN MONITOR_ALARM_RECORD a ON (
-                      DATE_FORMAT(d.`date`, '%Y/%m/%d') = DATE_FORMAT(a.INSERT_TIME, '%Y/%m/%d'))
-              GROUP BY d.`date`
-              ORDER BY d.`date` ASC) b
-    </select>
-
-    <!-- 告警成功率统计 -->
-    <select id="getAlarmRecordSuccessRateStatistics" resultType="java.util.Map" databaseId="mysql">
-        SELECT tmp.alarmRecordSum        AS alarmRecordSum,
-               tmp.alarmRecordSuccessSum AS alarmRecordSuccessSum,
-               tmp.alarmRecordFailSum    AS alarmRecordFailSum,
-               tmp.alarmRecordUnsentSum  AS alarmRecordUnsentSum,
-               IFNULL(ROUND(tmp.alarmRecordSuccessSum * 100 / (tmp.alarmRecordSum - tmp.alarmRecordUnsentSum), 2),
-                      '100.00')          AS alarmSucRate
-        FROM (SELECT COUNT(mar.ID)                                                  AS alarmRecordSum,
-                     IFNULL(SUM(CASE WHEN mar.`STATUS` = '1' THEN 1 ELSE 0 END), 0) AS alarmRecordSuccessSum,
-                     IFNULL(SUM(CASE WHEN mar.`STATUS` = '0' THEN 1 ELSE 0 END), 0) AS alarmRecordFailSum,
-                     IFNULL(SUM(CASE WHEN mar.`STATUS` IS NULL OR mar.`STATUS` = '' THEN 1 ELSE 0 END),
-                            0)                                                      AS alarmRecordUnsentSum
-              FROM MONITOR_ALARM_RECORD mar) tmp
-    </select>
-
     <!-- 获取告警类型统计信息 -->
     <select id="getAlarmRecordTypeStatistics" resultType="java.util.Map" databaseId="mysql">
         SELECT d.totals AS totals,
@@ -74,7 +23,7 @@
                        'HTTP'
                    END  AS types
         FROM (SELECT t.types,
-                     count(mar.ID) AS totals
+                     COUNT(mar.ID) AS totals
               FROM (SELECT 'INSTANCE' types
                     FROM DUAL
                     UNION

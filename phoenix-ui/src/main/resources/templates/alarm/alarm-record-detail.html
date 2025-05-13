@@ -2,7 +2,7 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
-    <title>告警记录详情</title>
+    <title>告警详情</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport"
@@ -12,8 +12,8 @@
     <link rel="stylesheet" href="./style/myself.css" th:href="@{/style/myself.css}" media="all">
     <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
     <!--[if lt IE 9]>
-    <script src="./js/html5.min.js" th:src="@{/js/html5.min.js}"></script>
-    <script src="./js/respond.min.js" th:src="@{/js/respond.min.js}"></script>
+    <script th:src="@{/js/html5.min.js}"></script>
+    <script th:src="@{/js/respond.min.js}"></script>
     <![endif]-->
     <script type="text/javascript" charset="utf-8" th:inline="javascript">
         var ctxPath = /*[[@{/}]]*/'';
@@ -22,84 +22,89 @@
 <body>
 <div class="layui-fluid">
     <div class="layui-card">
-        <!-- <div class="layui-card-header">折叠面板</div>-->
-        <div class="layui-card-body">
-            <div class="layui-collapse" lay-filter="component-panel">
-                <div class="layui-colla-item" th:unless="${#strings.isEmpty(monitorAlarmRecordInfo.type)}">
-                    <h2 class="layui-colla-title">告警类型</h2>
-                    <div class="layui-colla-content layui-show">
-                        <p th:text="${monitorAlarmRecordInfo.type}"></p>
+        <div class="layui-collapse">
+            <div class="layui-colla-item">
+                <h2 class="layui-colla-title">告警记录</h2>
+                <div class="layui-colla-content layui-show">
+                    <div class="layui-row layui-col-space10" style="word-break: break-all;">
+                        <!--<div class="layui-col-md12" th:unless="${#strings.isEmpty(monitorAlarmRecordVo.code)}">
+                            <label class="label-font-weight">告警编码：</label>[[${monitorAlarmRecordVo.code}]]
+                        </div>-->
+                        <!--<div class="layui-col-md12" th:unless="${#strings.isEmpty(monitorAlarmRecordVo.alarmDefCode)}">
+                            <label class="label-font-weight">告警定义编码：</label>[[${monitorAlarmRecordVo.alarmDefCode}]]
+                        </div>-->
+                        <div class="layui-col-md12" th:unless="${#strings.isEmpty(monitorAlarmRecordVo.type)}">
+                            <label class="label-font-weight">告警类型：</label>[[${monitorAlarmRecordVo.type}]]
+                        </div>
+                        <div class="layui-col-md12" th:unless="${#strings.isEmpty(monitorAlarmRecordVo.level)}">
+                            <label class="label-font-weight">告警级别：</label>[[${monitorAlarmRecordVo.level}]]
+                        </div>
+                        <div class="layui-col-md12" th:unless="${#strings.isEmpty(monitorAlarmRecordVo.way)}">
+                            <label class="label-font-weight">告警方式：</label>[[${monitorAlarmRecordVo.way}]]
+                        </div>
+                        <div class="layui-col-md12" th:unless="${#strings.isEmpty(monitorAlarmRecordVo.notSendReason)}"
+                             th:style="${not #strings.isEmpty(monitorAlarmRecordVo.notSendReason)} ? 'color: red;' : ''">
+                            <label class="label-font-weight">未通知原因：</label>[[${monitorAlarmRecordVo.notSendReason}]]
+                        </div>
+                        <div class="layui-col-md12" th:unless="${monitorAlarmRecordVo.insertTime==null}">
+                            <label class="label-font-weight">记录时间：</label>
+                            [[${#dates.format(monitorAlarmRecordVo.insertTime,'yyyy-MM-dd HH:mm:ss')}]]
+                        </div>
+                        <div class="layui-col-md12" th:unless="${monitorAlarmRecordVo.updateTime==null}">
+                            <label class="label-font-weight">更新时间：</label>
+                            [[${#dates.format(monitorAlarmRecordVo.updateTime,'yyyy-MM-dd HH:mm:ss')}]]
+                        </div>
+                        <div class="layui-col-md12" th:unless="${#strings.isEmpty(monitorAlarmRecordVo.title)}">
+                            <label class="label-font-weight"
+                                   style="display: inline-block;vertical-align: top;">告警标题：</label>
+                            <span style="display: inline-block;white-space:pre-wrap;word-wrap:break-word;"
+                                  th:utext="${monitorAlarmRecordVo.title}"></span>
+                        </div>
+                        <div class="layui-col-md12" th:unless="${#strings.isEmpty(monitorAlarmRecordVo.content)}">
+                            <label class="label-font-weight"
+                                   style="display: inline-block;vertical-align: top;">告警内容：</label>
+                            <span style="display: inline-block;white-space:pre-wrap;word-wrap:break-word;"
+                                  th:utext="${monitorAlarmRecordVo.content}"></span>
+                        </div>
                     </div>
                 </div>
-                <div class="layui-colla-item" th:unless="${#strings.isEmpty(monitorAlarmRecordInfo.way)}">
-                    <h2 class="layui-colla-title">告警方式</h2>
-                    <div class="layui-colla-content layui-show">
-                        <p th:text="${monitorAlarmRecordInfo.way}"></p>
-                    </div>
-                </div>
-                <div class="layui-colla-item" th:unless="${#strings.isEmpty(monitorAlarmRecordInfo.level)}">
-                    <h2 class="layui-colla-title">告警级别</h2>
-                    <div class="layui-colla-content layui-show">
-                        <p th:text="${monitorAlarmRecordInfo.level}"></p>
-                    </div>
-                </div>
-                <div class="layui-colla-item" th:unless="${#strings.isEmpty(monitorAlarmRecordInfo.title)}">
-                    <h2 class="layui-colla-title">告警标题</h2>
-                    <div class="layui-colla-content layui-show">
-                        <p style="white-space:pre-wrap;word-wrap:break-word;"
-                           th:text="${monitorAlarmRecordInfo.title}"></p>
-                    </div>
-                </div>
-                <div class="layui-colla-item" th:unless="${#strings.isEmpty(monitorAlarmRecordInfo.content)}">
-                    <h2 class="layui-colla-title">告警内容</h2>
-                    <div class="layui-colla-content layui-show">
-                        <p style="white-space:pre-wrap;word-wrap:break-word;"
-                           th:utext="${monitorAlarmRecordInfo.content}"></p>
-                    </div>
-                </div>
-                <div class="layui-colla-item" th:unless="${#strings.isEmpty(monitorAlarmRecordInfo.alarmDefCode)}">
-                    <h2 class="layui-colla-title">告警编码</h2>
-                    <div class="layui-colla-content layui-show">
-                        <p style="white-space:pre-wrap;word-wrap:break-word;"
-                           th:utext="${monitorAlarmRecordInfo.alarmDefCode}"></p>
-                    </div>
-                </div>
-                <div class="layui-colla-item" th:unless="${#strings.isEmpty(monitorAlarmRecordInfo.status)}">
-                    <h2 class="layui-colla-title">状态</h2>
-                    <div class="layui-colla-content layui-show">
-                        <p th:text="${monitorAlarmRecordInfo.status}"></p>
-                    </div>
-                </div>
-                <div class="layui-colla-item" th:unless="${#strings.isEmpty(monitorAlarmRecordInfo.number)}">
-                    <h2 class="layui-colla-title">号码</h2>
-                    <div class="layui-colla-content layui-show">
-                        <p th:text="${monitorAlarmRecordInfo.number}"></p>
-                    </div>
-                </div>
-                <div class="layui-colla-item" th:unless="${#strings.isEmpty(monitorAlarmRecordInfo.notSendReason)}">
-                    <h2 class="layui-colla-title">不提醒原因</h2>
-                    <div class="layui-colla-content layui-show">
-                        <p th:text="${monitorAlarmRecordInfo.notSendReason}"></p>
-                    </div>
-                </div>
-                <div class="layui-colla-item" th:unless="${monitorAlarmRecordInfo.insertTime==null}">
-                    <h2 class="layui-colla-title">记录时间</h2>
-                    <div class="layui-colla-content layui-show">
-                        <p th:text="${#dates.format(monitorAlarmRecordInfo.insertTime,'yyyy/MM/dd HH:mm:ss')}"></p>
-                    </div>
-                </div>
-                <div class="layui-colla-item" th:unless="${monitorAlarmRecordInfo.updateTime==null}">
-                    <h2 class="layui-colla-title">告警时间</h2>
-                    <div class="layui-colla-content layui-show">
-                        <p th:text="${#dates.format(monitorAlarmRecordInfo.updateTime,'yyyy/MM/dd HH:mm:ss')}"></p>
+            </div>
+            <div class="layui-colla-item" th:unless="${#lists.isEmpty(monitorAlarmRecordDetailVos)}">
+                <h2 class="layui-colla-title">告警通知</h2>
+                <div class="layui-colla-content layui-show">
+                    <div class="layui-row layui-col-space10" style="word-wrap:break-word;">
+                        <th:block th:each="item, stat : ${monitorAlarmRecordDetailVos}">
+                            <div class="layui-col-md3" th:unless="${#strings.isEmpty(item.way)}">
+                                <label class="label-font-weight">告警方式：</label>[[${item.way}]]
+                            </div>
+                            <div class="layui-col-md3" th:unless="${#strings.isEmpty(item.status)}"
+                                 th:style="${item.status == '失败'} ? 'color: red;' : ''">
+                                <label class="label-font-weight">状态：</label>[[${item.status}]]
+                            </div>
+                            <div class="layui-col-md3" th:unless="${item.insertTime==null}">
+                                <label class="label-font-weight">告警时间：</label>
+                                [[${#dates.format(item.insertTime,'yyyy-MM-dd HH:mm:ss')}]]
+                            </div>
+                            <div class="layui-col-md3" th:unless="${item.updateTime==null}">
+                                <label class="label-font-weight">告警结果时间：</label>
+                                [[${#dates.format(item.updateTime,'yyyy-MM-dd HH:mm:ss')}]]
+                            </div>
+                            <div class="layui-col-md12" th:unless="${#strings.isEmpty(item.number)}">
+                                <label class="label-font-weight">号码：</label>[[${item.number}]]
+                            </div>
+                            <div class="layui-col-md12" th:unless="${#strings.isEmpty(item.excMessage)}">
+                                <label class="label-font-weight">异常信息：</label>[[${item.excMessage}]]
+                            </div>
+                            <hr class="layui-bg-gray hr-padding" th:if="${!stat.last}"/>
+                        </th:block>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<script src="./js/common.js" th:src="@{/js/common.js}" charset="utf-8"></script>
-<script src="./layui/layui.js" th:src="@{/layui/layui.js}"></script>
+<script th:src="@{/js/common.js}" charset="utf-8"></script>
+<script th:src="@{/layui/layui.js}"></script>
 <script charset="utf-8" th:inline="javascript">
     layui.config({
         base: ctxPath //静态资源所在路径

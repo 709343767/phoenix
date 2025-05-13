@@ -48,13 +48,13 @@ public class MonitorAlarmRecordVo implements ISuperBean {
     @Schema(description = "告警类型（SERVER、NET、TCP4SERVICE、HTTP4SERVICE、DOCKER、INSTANCE、DATABASE、CUSTOM）")
     private String type;
 
-    @Excel(name = "告警方式", orderNum = "3", replace = {"短信_SMS", "邮件_MAIL", "钉钉_DINGTALK", "企业微信_EPWECHAT"})
-    @Schema(description = "告警方式（SMS、MAIL、...）")
-    private String way;
-
-    @Excel(name = "告警级别", orderNum = "4", replace = {"消息_INFO", "警告_WARM", "错误_ERROR", "严重_FATAL"})
+    @Excel(name = "告警级别", orderNum = "3", replace = {"消息_INFO", "警告_WARM", "错误_ERROR", "严重_FATAL"})
     @Schema(description = "告警级别（INFO、WARM、ERROR、FATAL）")
     private String level;
+
+    @Excel(name = "告警方式", orderNum = "4")
+    @Schema(description = "告警方式，多种方式用逗号分隔")
+    private String way;
 
     @Excel(name = "告警标题", orderNum = "5")
     @Schema(description = "告警标题")
@@ -64,25 +64,17 @@ public class MonitorAlarmRecordVo implements ISuperBean {
     @Schema(description = "告警内容")
     private String content;
 
-    @Excel(name = "状态", orderNum = "7", replace = {"失败_0", "成功_1", "不提醒_null"})
-    @Schema(description = "告警发送状态（0：失败；1：成功）")
-    private String status;
-
-    @Excel(name = "号码", orderNum = "8")
-    @Schema(description = "被告警人号码（手机号码、电子邮箱、...）")
-    private String number;
-
-    @Excel(name = "不提醒原因", orderNum = "9")
+    @Excel(name = "未通知原因", orderNum = "7")
     @Schema(description = "不发送告警原因")
     private String notSendReason;
 
-    @Excel(name = "记录时间", orderNum = "10", exportFormat = "yyyy-MM-dd HH:mm:ss")
-    @Schema(description = "告警时间")
+    @Excel(name = "记录时间", orderNum = "8", exportFormat = "yyyy-MM-dd HH:mm:ss")
+    @Schema(description = "插入时间")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date insertTime;
 
-    @Excel(name = "告警时间", orderNum = "11", exportFormat = "yyyy-MM-dd HH:mm:ss")
-    @Schema(description = "告警结果获取时间")
+    @Excel(name = "更新时间", orderNum = "9", exportFormat = "yyyy-MM-dd HH:mm:ss")
+    @Schema(description = "更新时间")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date updateTime;
 

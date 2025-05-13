@@ -179,11 +179,11 @@ public class ServerCpuMonitor implements IServerMonitoringListener {
             return 0D;
         }
         return NumberUtil.round(monitorServerCpus.stream()
-                // 过滤掉为空的元素
-                .filter(cpu -> cpu != null && cpu.getCpuCombined() != null)
-                .mapToDouble(MonitorServerCpu::getCpuCombined)
-                .average()
-                .orElse(0D) * 100D, 2)
+                        // 过滤掉为空的元素
+                        .filter(cpu -> cpu != null && cpu.getCpuCombined() != null)
+                        .mapToDouble(MonitorServerCpu::getCpuCombined)
+                        .average()
+                        .orElse(0D) * 100D, 2)
                 .doubleValue();
     }
 

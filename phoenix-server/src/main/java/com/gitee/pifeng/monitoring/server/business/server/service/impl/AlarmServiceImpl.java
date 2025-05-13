@@ -2,8 +2,7 @@ package com.gitee.pifeng.monitoring.server.business.server.service.impl;
 
 import cn.hutool.core.util.ArrayUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
-import com.gitee.pifeng.monitoring.common.constant.ZeroOrOneConstants;
+import com.gitee.pifeng.monitoring.common.constant.ResultMsgConstants;
 import com.gitee.pifeng.monitoring.common.constant.alarm.AlarmLevelEnums;
 import com.gitee.pifeng.monitoring.common.constant.alarm.AlarmWayEnums;
 import com.gitee.pifeng.monitoring.common.constant.alarm.NoTSendAlarmReasonEnums;
@@ -12,23 +11,15 @@ import com.gitee.pifeng.monitoring.common.domain.Alarm;
 import com.gitee.pifeng.monitoring.common.domain.Result;
 import com.gitee.pifeng.monitoring.common.dto.AlarmPackage;
 import com.gitee.pifeng.monitoring.server.business.server.core.MonitoringConfigPropertiesLoader;
-import com.gitee.pifeng.monitoring.server.business.server.dao.IMonitorAlarmDefinitionDao;
-import com.gitee.pifeng.monitoring.server.business.server.dao.IMonitorAlarmRecordDao;
 import com.gitee.pifeng.monitoring.server.business.server.entity.MonitorAlarmDefinition;
-import com.gitee.pifeng.monitoring.server.business.server.entity.MonitorAlarmRecord;
-import com.gitee.pifeng.monitoring.server.business.server.service.IAlarmService;
-import com.gitee.pifeng.monitoring.server.business.server.service.IRealtimeMonitoringService;
-import com.gitee.pifeng.monitoring.server.business.server.service.ITemplateMsgSendFacadeService;
+import com.gitee.pifeng.monitoring.server.business.server.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalTime;
-import java.util.Date;
 import java.util.concurrent.ThreadPoolExecutor;
 
 /**
@@ -39,8 +30,8 @@ import java.util.concurrent.ThreadPoolExecutor;
  * @author 皮锋
  * @custom.date 2020年3月10日 下午1:30:07
  */
-@Service
 @Slf4j
+@Service
 public class AlarmServiceImpl implements IAlarmService {
 
     /**
@@ -56,22 +47,22 @@ public class AlarmServiceImpl implements IAlarmService {
     private IRealtimeMonitoringService realtimeMonitoringService;
 
     /**
-     * 发送模板消息门面服务接口
+     * 告警定义服务接口
      */
     @Autowired
-    private ITemplateMsgSendFacadeService templateMsgSendFacadeService;
+    private IAlarmDefinitionService alarmDefinitionService;
 
     /**
-     * 监控告警定义数据访问对象
+     * 告警记录服务接口
      */
     @Autowired
-    private IMonitorAlarmDefinitionDao monitorAlarmDefinitionDao;
+    private IAlarmRecordService alarmRecordService;
 
     /**
-     * 监控告警记录数据访问对象
+     * 告警记录详情服务层接口
      */
     @Autowired
-    private IMonitorAlarmRecordDao monitorAlarmRecordDao;
+    private IAlarmRecordDetailService alarmRecordDetailService;
 
     /**
      * 线程池
@@ -92,8 +83,8 @@ public class AlarmServiceImpl implements IAlarmService {
      */
     @Override
     public Result dealAlarmPackage(AlarmPackage alarmPackage) {
-        // 返回结果
-        Result result = new Result();
+        // 返回结果，先默认成功，失败的后面会修改
+        Result result = Result.builder().isSuccess(true).msg(ResultMsgConstants.SUCCESS).build();
         // 处理告警信息
         this.dealAlarm(result, alarmPackage);
         return result;
@@ -118,8 +109,8 @@ public class AlarmServiceImpl implements IAlarmService {
             this.wrapFailResult(result, expMsg);
             return;
         }
-        // 告警ID
-        String alarmUuid = alarmPackage.getId();
+        // 告警代码，使用UUID
+        String alarmCode = alarmPackage.getId();
         // 监控类型
         MonitorTypeEnums monitorTypeEnum = alarm.getMonitorType();
         // 告警代码
@@ -129,7 +120,7 @@ public class AlarmServiceImpl implements IAlarmService {
             try {
                 LambdaQueryWrapper<MonitorAlarmDefinition> lambdaQueryWrapper = new LambdaQueryWrapper<>();
                 lambdaQueryWrapper.eq(MonitorAlarmDefinition::getCode, code);
-                MonitorAlarmDefinition monitorAlarmDefinition = this.monitorAlarmDefinitionDao.selectOne(lambdaQueryWrapper);
+                MonitorAlarmDefinition monitorAlarmDefinition = this.alarmDefinitionService.getOne(lambdaQueryWrapper);
                 if (monitorAlarmDefinition != null) {
                     // 数据库中的告警级别
                     String dbLevel = monitorAlarmDefinition.getGrade();
@@ -154,132 +145,24 @@ public class AlarmServiceImpl implements IAlarmService {
                 return;
             }
         }
-        // 不管发不发送告警信息，先把告警记录存入数据库，AopContext.currentProxy()调用是为了让事务生效
-        ((IAlarmService) AopContext.currentProxy()).insertMonitorAlarmRecordToDb(alarm, alarmUuid);
-        // 是否发送告警信息
-        if (!this.isSendAlarm(result, alarm, alarmUuid)) {
+        // 不管发不发送告警信息，先把告警记录存入数据库
+        Long alarmRecordId = this.alarmRecordService.insertMonitorAlarmRecordToDb(alarm, alarmCode);
+        // 是否发送告警通知信息
+        boolean isSendAlarm = this.isSendAlarm(result, alarm, alarmCode);
+        // 不发送告警通知，直接结束
+        if (!isSendAlarm) {
             return;
         }
         // 注意：走到此处，就确定发送告警了，不管发送是否成功，result都是返回成功，代表处理此次告警成功了，发送告警和处理告警是两回事，
         // 因此采用异步的方式发送告警，防止阻塞此方法
         this.alarmThreadPoolExecutor.execute(() -> {
-            // 发送告警以及把告警记录计入数据库
-            this.sendAlarm(alarm, alarmUuid);
-        });
-    }
-
-    /**
-     * <p>
-     * 发送告警
-     * </p>
-     * 1.发送告警；<br>
-     * 2.更新数据库中的告警发送结果。<br>
-     *
-     * @param alarm     告警信息
-     * @param alarmUuid 告警代码
-     * @author 皮锋
-     * @custom.date 2020/9/14 12:56
-     */
-    private void sendAlarm(Alarm alarm, String alarmUuid) {
-        // 告警级别
-        AlarmLevelEnums alarmLevelEnum = alarm.getAlarmLevel();
-        // 告警内容标题
-        String alarmTitle = alarm.getTitle();
-        // 告警内容
-        String alarmMsg = alarm.getMsg();
-        // 告警方式
-        AlarmWayEnums[] alarmWayEnums = this.monitoringConfigPropertiesLoader.getMonitoringProperties().getAlarmProperties().getWayEnums();
-        for (AlarmWayEnums alarmWayEnum : alarmWayEnums) {
-            // 发送模板文本消息
-            Result result = this.templateMsgSendFacadeService.sendTemplateTextMsg(alarmWayEnum, alarmLevelEnum, alarmTitle, alarmMsg);
-            // 告警发送完更新数据库中告警发送结果
-            this.updateMonitorAlarmRecordToDb(result, alarmUuid, alarmWayEnum);
-        }
-    }
-
-    /**
-     * <p>
-     * 更新数据库中告警信息发送状态
-     * </p>
-     *
-     * @param result        {@link Result} 返回结果
-     * @param uuid          告警代码
-     * @param alarmWayEnums 告警方式
-     * @author 皮锋
-     * @custom.date 2020/5/13 17:04
-     */
-    private void updateMonitorAlarmRecordToDb(Result result, String uuid, AlarmWayEnums alarmWayEnums) {
-        MonitorAlarmRecord monitorAlarmRecord = new MonitorAlarmRecord();
-        // 更新状态
-        if (result.isSuccess()) {
-            monitorAlarmRecord.setStatus(ZeroOrOneConstants.ONE);
-        } else {
-            monitorAlarmRecord.setStatus(ZeroOrOneConstants.ZERO);
-        }
-        // 更新时间
-        monitorAlarmRecord.setUpdateTime(new Date());
-        LambdaUpdateWrapper<MonitorAlarmRecord> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();
-        lambdaUpdateWrapper.eq(MonitorAlarmRecord::getCode, uuid);
-        lambdaUpdateWrapper.eq(MonitorAlarmRecord::getWay, alarmWayEnums);
-        this.monitorAlarmRecordDao.update(monitorAlarmRecord, lambdaUpdateWrapper);
-    }
-
-    /**
-     * <p>
-     * 把告警信息插入数据库
-     * </p>
-     *
-     * @param alarm     告警信息
-     * @param alarmUuid 告警代码
-     * @author 皮锋
-     * @custom.date 2020/5/13 16:21
-     */
-    @Override
-    @Transactional(rollbackFor = Throwable.class)
-    public void insertMonitorAlarmRecordToDb(Alarm alarm, String alarmUuid) {
-        // 告警定义编码
-        String code = alarm.getCode();
-        // 告警级别
-        AlarmLevelEnums alarmLevelEnum = alarm.getAlarmLevel();
-        // 监控类型
-        MonitorTypeEnums monitorTypeEnum = alarm.getMonitorType();
-        // 告警内容标题
-        String alarmTitle = alarm.getTitle();
-        // 告警内容
-        String alarmMsg = alarm.getMsg();
-        // 告警方式
-        AlarmWayEnums[] alarmWayEnums = this.monitoringConfigPropertiesLoader.getMonitoringProperties().getAlarmProperties().getWayEnums();
-        MonitorAlarmRecord monitorAlarmRecord = new MonitorAlarmRecord();
-        monitorAlarmRecord.setCode(alarmUuid);
-        monitorAlarmRecord.setAlarmDefCode(code);
-        monitorAlarmRecord.setTitle(alarmTitle);
-        monitorAlarmRecord.setContent(alarmMsg);
-        monitorAlarmRecord.setLevel(alarmLevelEnum != null ? alarmLevelEnum.name() : null);
-        monitorAlarmRecord.setType(monitorTypeEnum != null ? monitorTypeEnum.name() : null);
-        // 没有告警级别
-        if (alarmLevelEnum == null) {
-            return;
-        }
-        // 告警方式
-        for (AlarmWayEnums alarmWayEnum : alarmWayEnums) {
-            switch (alarmWayEnum) {
-                case SMS:
-                    String[] phones = this.monitoringConfigPropertiesLoader.getMonitoringProperties().getAlarmProperties().getSmsProperties().getPhoneNumbers();
-                    monitorAlarmRecord.setNumber(StringUtils.join(phones, ";"));
-                    break;
-                case MAIL:
-                    String[] mails = this.monitoringConfigPropertiesLoader.getMonitoringProperties().getAlarmProperties().getMailProperties().getEmails();
-                    monitorAlarmRecord.setNumber(StringUtils.join(mails, ";"));
-                    break;
-                default:
-                    // 其它情况直接结束
-                    return;
+            try {
+                // 执行告警操作
+                this.alarmRecordDetailService.executeAlarm(alarm, alarmRecordId, alarmCode);
+            } catch (Exception e) {
+                log.error("执行告警操作异常：{}", e.getMessage(), e);
             }
-            monitorAlarmRecord.setWay(alarmWayEnum.name());
-            monitorAlarmRecord.setInsertTime(new Date());
-            monitorAlarmRecord.setId(null);
-            this.monitorAlarmRecordDao.insert(monitorAlarmRecord);
-        }
+        });
     }
 
     /**
@@ -289,12 +172,12 @@ public class AlarmServiceImpl implements IAlarmService {
      *
      * @param result    {@link Result} 返回结果
      * @param alarm     告警信息
-     * @param alarmUuid 告警代码
+     * @param alarmCode 告警代码
      * @return 是 或 否
      * @author 皮锋
      * @custom.date 2020/9/14 12:37
      */
-    private boolean isSendAlarm(Result result, Alarm alarm, String alarmUuid) {
+    private boolean isSendAlarm(Result result, Alarm alarm, String alarmCode) {
         // 告警开关是否打开
         boolean isEnable = this.monitoringConfigPropertiesLoader.getMonitoringProperties().getAlarmProperties().isEnable();
         // 告警开关没有打开，不做处理，直接返回
@@ -302,12 +185,7 @@ public class AlarmServiceImpl implements IAlarmService {
             String expMsg = "告警开关没有打开，不发送告警信息！";
             this.wrapFailResult(result, expMsg);
             // 写入不发送告警原因
-            MonitorAlarmRecord monitorAlarmRecord = new MonitorAlarmRecord();
-            monitorAlarmRecord.setNotSendReason(NoTSendAlarmReasonEnums.ALARM_SWITCH_OFF.getMsg());
-            monitorAlarmRecord.setUpdateTime(new Date());
-            LambdaUpdateWrapper<MonitorAlarmRecord> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();
-            lambdaUpdateWrapper.eq(MonitorAlarmRecord::getCode, alarmUuid);
-            this.monitorAlarmRecordDao.update(monitorAlarmRecord, lambdaUpdateWrapper);
+            this.alarmRecordService.updateMonitorAlarmRecord(NoTSendAlarmReasonEnums.ALARM_SWITCH_OFF, alarmCode);
             return false;
         }
         // 是否开启告警静默
@@ -320,12 +198,7 @@ public class AlarmServiceImpl implements IAlarmService {
                 String expMsg = "告警静默时间段，不发送告警信息！";
                 this.wrapFailResult(result, expMsg);
                 // 写入不发送告警原因
-                MonitorAlarmRecord monitorAlarmRecord = new MonitorAlarmRecord();
-                monitorAlarmRecord.setNotSendReason(NoTSendAlarmReasonEnums.SILENCE_ALARM_PERIOD.getMsg());
-                monitorAlarmRecord.setUpdateTime(new Date());
-                LambdaUpdateWrapper<MonitorAlarmRecord> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();
-                lambdaUpdateWrapper.eq(MonitorAlarmRecord::getCode, alarmUuid);
-                this.monitorAlarmRecordDao.update(monitorAlarmRecord, lambdaUpdateWrapper);
+                this.alarmRecordService.updateMonitorAlarmRecord(NoTSendAlarmReasonEnums.SILENCE_ALARM_PERIOD, alarmCode);
                 return false;
             }
         }
@@ -336,12 +209,7 @@ public class AlarmServiceImpl implements IAlarmService {
             String expMsg = "当前为测试信息，不发送告警信息！";
             this.wrapFailResult(result, expMsg);
             // 写入不发送告警原因
-            MonitorAlarmRecord monitorAlarmRecord = new MonitorAlarmRecord();
-            monitorAlarmRecord.setNotSendReason(NoTSendAlarmReasonEnums.TEST_MSG.getMsg());
-            monitorAlarmRecord.setUpdateTime(new Date());
-            LambdaUpdateWrapper<MonitorAlarmRecord> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();
-            lambdaUpdateWrapper.eq(MonitorAlarmRecord::getCode, alarmUuid);
-            this.monitorAlarmRecordDao.update(monitorAlarmRecord, lambdaUpdateWrapper);
+            this.alarmRecordService.updateMonitorAlarmRecord(NoTSendAlarmReasonEnums.TEST_MSG, alarmCode);
             return false;
         }
         // 告警级别
@@ -353,12 +221,7 @@ public class AlarmServiceImpl implements IAlarmService {
             String expMsg = "小于配置的告警级别，不发送告警信息！";
             this.wrapFailResult(result, expMsg);
             // 写入不发送告警原因
-            MonitorAlarmRecord monitorAlarmRecord = new MonitorAlarmRecord();
-            monitorAlarmRecord.setNotSendReason(NoTSendAlarmReasonEnums.LESS_THAN_THE_CONFIGURED_ALARM_LEVEL.getMsg());
-            monitorAlarmRecord.setUpdateTime(new Date());
-            LambdaUpdateWrapper<MonitorAlarmRecord> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();
-            lambdaUpdateWrapper.eq(MonitorAlarmRecord::getCode, alarmUuid);
-            this.monitorAlarmRecordDao.update(monitorAlarmRecord, lambdaUpdateWrapper);
+            this.alarmRecordService.updateMonitorAlarmRecord(NoTSendAlarmReasonEnums.LESS_THAN_THE_CONFIGURED_ALARM_LEVEL, alarmCode);
             return false;
         }
         // 告警内容标题
@@ -368,12 +231,7 @@ public class AlarmServiceImpl implements IAlarmService {
             String expMsg = "告警标题为空，不发送告警信息！";
             this.wrapFailResult(result, expMsg);
             // 写入不发送告警原因
-            MonitorAlarmRecord monitorAlarmRecord = new MonitorAlarmRecord();
-            monitorAlarmRecord.setNotSendReason(NoTSendAlarmReasonEnums.ALARM_TITLE_EMPTY.getMsg());
-            monitorAlarmRecord.setUpdateTime(new Date());
-            LambdaUpdateWrapper<MonitorAlarmRecord> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();
-            lambdaUpdateWrapper.eq(MonitorAlarmRecord::getCode, alarmUuid);
-            this.monitorAlarmRecordDao.update(monitorAlarmRecord, lambdaUpdateWrapper);
+            this.alarmRecordService.updateMonitorAlarmRecord(NoTSendAlarmReasonEnums.ALARM_TITLE_EMPTY, alarmCode);
             return false;
         }
         // 告警内容
@@ -383,12 +241,7 @@ public class AlarmServiceImpl implements IAlarmService {
             String expMsg = "告警内容为空，不发送告警信息！";
             this.wrapFailResult(result, expMsg);
             // 写入不发送告警原因
-            MonitorAlarmRecord monitorAlarmRecord = new MonitorAlarmRecord();
-            monitorAlarmRecord.setNotSendReason(NoTSendAlarmReasonEnums.ALARM_CONTENT_EMPTY.getMsg());
-            monitorAlarmRecord.setUpdateTime(new Date());
-            LambdaUpdateWrapper<MonitorAlarmRecord> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();
-            lambdaUpdateWrapper.eq(MonitorAlarmRecord::getCode, alarmUuid);
-            this.monitorAlarmRecordDao.update(monitorAlarmRecord, lambdaUpdateWrapper);
+            this.alarmRecordService.updateMonitorAlarmRecord(NoTSendAlarmReasonEnums.ALARM_CONTENT_EMPTY, alarmCode);
             return false;
         }
         // 告警方式
@@ -398,12 +251,7 @@ public class AlarmServiceImpl implements IAlarmService {
             String expMsg = "没有配置告警方式，不发送告警信息！";
             this.wrapFailResult(result, expMsg);
             // 写入不发送告警原因
-            MonitorAlarmRecord monitorAlarmRecord = new MonitorAlarmRecord();
-            monitorAlarmRecord.setNotSendReason(NoTSendAlarmReasonEnums.NO_ALARM_MODE_CONFIGURED.getMsg());
-            monitorAlarmRecord.setUpdateTime(new Date());
-            LambdaUpdateWrapper<MonitorAlarmRecord> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();
-            lambdaUpdateWrapper.eq(MonitorAlarmRecord::getCode, alarmUuid);
-            this.monitorAlarmRecordDao.update(monitorAlarmRecord, lambdaUpdateWrapper);
+            this.alarmRecordService.updateMonitorAlarmRecord(NoTSendAlarmReasonEnums.NO_ALARM_MODE_CONFIGURED, alarmCode);
             return false;
         }
         return true;
@@ -425,41 +273,6 @@ public class AlarmServiceImpl implements IAlarmService {
         }
         result.setSuccess(false);
         result.setMsg(msg);
-    }
-
-    /**
-     * <p>
-     * 根据 Wrapper 条件，查询总记录数
-     * </p>
-     *
-     * @param monitorAlarmRecordLambdaQueryWrapper Wrapper 条件
-     * @return 总记录数
-     * @author 皮锋
-     * @custom.date 2024/5/3 11:28
-     */
-    @Override
-    public int selectCount(LambdaQueryWrapper<MonitorAlarmRecord> monitorAlarmRecordLambdaQueryWrapper) {
-        Integer count = this.monitorAlarmRecordDao.selectCount(monitorAlarmRecordLambdaQueryWrapper);
-        if (count == null) {
-            return 0;
-        }
-        return count;
-    }
-
-    /**
-     * <p>
-     * 根据条件获取静默告警记录数
-     * </p>
-     *
-     * @param startTime 开始时间
-     * @param endTime   结束时间
-     * @return 记录数
-     * @author 皮锋
-     * @custom.date 2024/11/4 12:19
-     */
-    @Override
-    public int getSilenceAlarmCount(Date startTime, Date endTime) {
-        return this.monitorAlarmRecordDao.getSilenceAlarmCount(startTime, endTime);
     }
 
 }

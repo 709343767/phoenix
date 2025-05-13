@@ -46,25 +46,17 @@ public class MonitorAlarmRecord implements Serializable {
     @TableField("ALARM_DEF_CODE")
     private String alarmDefCode;
 
-    @Schema(description = "告警类型（SERVER、NET、TCP4SERVICE、HTTP4SERVICE、DOCKER、INSTANCE、DATABASE、CUSTOM）")
+    @Schema(description = "告警类型（SERVER、NET、TCP4SERVICE、HTTP4SERVICE、DOCKER、INSTANCE、DATABASE、NETWORK_DEVICE、CUSTOM）")
     @TableField("TYPE")
     private String type;
-
-    @Schema(description = "告警方式（SMS、MAIL、...）")
-    @TableField("WAY")
-    private String way;
 
     @Schema(description = "告警级别（INFO、WARM、ERROR、FATAL）")
     @TableField("LEVEL")
     private String level;
 
-    @Schema(description = "告警时间")
-    @TableField("INSERT_TIME")
-    private Date insertTime;
-
-    @Schema(description = "告警结果获取时间")
-    @TableField("UPDATE_TIME")
-    private Date updateTime;
+    @Schema(description = "告警方式，多种方式用逗号分隔")
+    @TableField("WAY")
+    private String way;
 
     @Schema(description = "告警标题")
     @TableField("TITLE")
@@ -74,16 +66,16 @@ public class MonitorAlarmRecord implements Serializable {
     @TableField("CONTENT")
     private String content;
 
-    @Schema(description = "告警发送状态（0：失败；1：成功）")
-    @TableField("STATUS")
-    private String status;
-
-    @Schema(description = "被告警人号码（手机号码、电子邮箱、...）")
-    @TableField("NUMBER")
-    private String number;
-
     @Schema(description = "不发送告警原因")
     @TableField("NOT_SEND_REASON")
     private String notSendReason;
+
+    @Schema(description = "插入时间")
+    @TableField("INSERT_TIME")
+    private Date insertTime;
+
+    @Schema(description = "更新时间")
+    @TableField("UPDATE_TIME")
+    private Date updateTime;
 
 }

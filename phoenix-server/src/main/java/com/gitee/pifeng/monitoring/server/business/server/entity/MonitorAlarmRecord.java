@@ -1,9 +1,6 @@
 package com.gitee.pifeng.monitoring.server.business.server.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import lombok.*;
 import lombok.experimental.Accessors;
 
@@ -51,28 +48,16 @@ public class MonitorAlarmRecord {
     private String type;
 
     /**
-     * 告警方式（SMS、MAIL、...）
-     */
-    @TableField("WAY")
-    private String way;
-
-    /**
      * 告警级别（INFO、WARM、ERROR、FATAL）
      */
     @TableField("LEVEL")
     private String level;
 
     /**
-     * 告警时间
+     * 告警方式，多种方式用逗号分隔
      */
-    @TableField("INSERT_TIME")
-    private Date insertTime;
-
-    /**
-     * 告警结果获取时间
-     */
-    @TableField("UPDATE_TIME")
-    private Date updateTime;
+    @TableField(value = "WAY", updateStrategy = FieldStrategy.IGNORED)
+    private String way;
 
     /**
      * 告警标题
@@ -87,21 +72,21 @@ public class MonitorAlarmRecord {
     private String content;
 
     /**
-     * 告警发送状态（0：失败；1：成功）
-     */
-    @TableField("STATUS")
-    private String status;
-
-    /**
-     * 被告警人号码（手机号码、电子邮箱、...）
-     */
-    @TableField("NUMBER")
-    private String number;
-
-    /**
      * 不发送告警原因
      */
     @TableField("NOT_SEND_REASON")
     private String notSendReason;
+
+    /**
+     * 插入时间
+     */
+    @TableField("INSERT_TIME")
+    private Date insertTime;
+
+    /**
+     * 更新时间
+     */
+    @TableField("UPDATE_TIME")
+    private Date updateTime;
 
 }

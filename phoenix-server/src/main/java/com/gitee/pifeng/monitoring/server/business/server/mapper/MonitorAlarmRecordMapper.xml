@@ -4,23 +4,15 @@
 
     <!-- 根据条件获取静默告警记录数 -->
     <select id="getSilenceAlarmCount" resultType="java.lang.Integer" databaseId="mysql">
-        SELECT
-        IFNULL( MAX( r.num ), 0 ) AS num
-        FROM
-        (SELECT
-        COUNT( ID ) AS num
-        FROM
-        MONITOR_ALARM_RECORD
-        WHERE
-        NOT_SEND_REASON = '静默告警'
+        SELECT COUNT(ID) AS num
+        FROM MONITOR_ALARM_RECORD
+        WHERE NOT_SEND_REASON = '静默告警'
         <if test="startTime!=null">
             AND INSERT_TIME <![CDATA[>=]]> #{startTime}
         </if>
         <if test="endTime!=null">
-            AND INSERT_TIME <![CDATA[<=]]>#{endTime}
+            AND INSERT_TIME <![CDATA[<=]]> #{endTime}
         </if>
-        GROUP BY
-        WAY) r
     </select>
 
 </mapper>

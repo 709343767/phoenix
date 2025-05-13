@@ -48,6 +48,12 @@ public class HomeController {
     private IMonitorAlarmRecordService monitorAlarmRecordService;
 
     /**
+     * 告警记录详情服务类
+     */
+    @Autowired
+    private IMonitorAlarmRecordDetailService monitorAlarmRecordDetailService;
+
+    /**
      * 网络信息服务类
      */
     @Autowired
@@ -91,7 +97,7 @@ public class HomeController {
         mv.addObject("homeNetVo", homeNetVo);
         HomeServerVo homeServerVo = this.monitorServerService.getHomeServerInfo();
         mv.addObject("homeServerVo", homeServerVo);
-        HomeAlarmRecordVo homeAlarmRecordVo = this.monitorAlarmRecordService.getHomeAlarmRecordInfo();
+        HomeAlarmRecordVo homeAlarmRecordVo = this.monitorAlarmRecordDetailService.getHomeAlarmRecordInfo();
         mv.addObject("homeAlarmRecordVo", homeAlarmRecordVo);
         HomeDbVo homeDbVo = this.monitorDbService.getHomeDbInfo();
         mv.addObject("homeDbVo", homeDbVo);
@@ -118,7 +124,7 @@ public class HomeController {
         HomeInstanceVo homeInstanceVo = this.monitorInstanceService.getHomeInstanceInfo();
         HomeNetVo homeNetVo = this.monitorNetService.getHomeNetInfo();
         HomeServerVo homeServerVo = this.monitorServerService.getHomeServerInfo();
-        HomeAlarmRecordVo homeAlarmRecordVo = this.monitorAlarmRecordService.getHomeAlarmRecordInfo();
+        HomeAlarmRecordVo homeAlarmRecordVo = this.monitorAlarmRecordDetailService.getHomeAlarmRecordInfo();
         HomeDbVo homeDbVo = this.monitorDbService.getHomeDbInfo();
         HomeTcpVo homeTcpVo = this.monitorTcpService.getHomeTcpInfo();
         HomeHttpVo homeHttpVo = this.monitorHttpService.getHomeHttpInfo();
@@ -146,7 +152,7 @@ public class HomeController {
     @ResponseBody
     @PostMapping("/home/get-last-7-days-alarm-record-statistics")
     public LayUiAdminResultVo getLast7DaysAlarmRecordStatistics() {
-        return this.monitorAlarmRecordService.getLast7DaysAlarmRecordStatistics();
+        return this.monitorAlarmRecordDetailService.getLast7DaysAlarmRecordStatistics();
     }
 
     /**
@@ -178,7 +184,7 @@ public class HomeController {
     @ResponseBody
     @PostMapping("/home/get-alarm-record-result-statistics")
     public LayUiAdminResultVo getAlarmRecordResultStatistics() {
-        HomeAlarmRecordVo homeAlarmRecordVo = this.monitorAlarmRecordService.getHomeAlarmRecordInfo();
+        HomeAlarmRecordVo homeAlarmRecordVo = this.monitorAlarmRecordDetailService.getHomeAlarmRecordInfo();
         return LayUiAdminResultVo.ok(homeAlarmRecordVo);
     }
 
