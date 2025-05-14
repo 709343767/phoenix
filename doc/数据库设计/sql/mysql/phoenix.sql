@@ -45,6 +45,60 @@ CREATE TABLE `MONITOR_ALARM_RECORD`
     `ID`              bigint(20) UNSIGNED                                           NOT NULL AUTO_INCREMENT COMMENT '主键ID',
     `CODE`            varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT '告警代码，使用UUID',
     `ALARM_DEF_CODE`  varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NULL DEFAULT NULL COMMENT '告警定义编码',
+    `TYPE`            varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NULL DEFAULT NULL COMMENT '告警类型（SERVER、NET、TCP4SERVICE、HTTP4SERVICE、DOCKER、INSTANCE、DATABASE、CUSTOM）',
+    `LEVEL`           varchar(5) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci   NULL DEFAULT NULL COMMENT '告警级别（INFO、WARM、ERROR、FATAL）',
+    `WAY`             varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '告警方式，多种方式用逗号分隔',
+    `TITLE`           varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '告警标题',
+    `CONTENT`         longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci     NULL COMMENT '告警内容',
+    `NOT_SEND_REASON` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NULL DEFAULT NULL COMMENT '不发送告警原因',
+    `INSERT_TIME`     datetime                                                      NOT NULL COMMENT '插入时间',
+    `UPDATE_TIME`     datetime                                                      NULL DEFAULT NULL COMMENT '更新时间',
+    PRIMARY KEY (`ID`) USING BTREE,
+    INDEX `NX_CODE` (`CODE`) USING BTREE COMMENT '索引_告警记录编码',
+    INDEX `NX_INSERT_TIME` (`INSERT_TIME`) USING BTREE COMMENT '索引_插入时间',
+    INDEX `NX_UPDATE_TIME` (`UPDATE_TIME`) USING BTREE COMMENT '索引_更新时间',
+    INDEX `NX_TYPE` (`TYPE`) USING BTREE COMMENT '索引_告警类型',
+    INDEX `NX_LEVEL` (`LEVEL`) USING BTREE COMMENT '索引_告警级别'
+) ENGINE = InnoDB
+  CHARACTER SET = utf8mb4
+  COLLATE = utf8mb4_general_ci COMMENT = '告警记录表'
+  ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Table structure for MONITOR_ALARM_RECORD_DETAIL
+-- ----------------------------
+DROP TABLE IF EXISTS `MONITOR_ALARM_RECORD_DETAIL`;
+CREATE TABLE `MONITOR_ALARM_RECORD_DETAIL`
+(
+    `ID`              bigint(20) UNSIGNED                                           NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `ALARM_RECORD_ID` bigint(20) UNSIGNED                                           NOT NULL COMMENT '告警记录ID',
+    `CODE`            varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT '告警代码，使用UUID',
+    `WAY`             varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '告警方式（SMS、MAIL、...）',
+    `NUMBER`          varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '被告警人号码（手机号码、电子邮箱、...）',
+    `STATUS`          varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '告警发送状态（0：失败；1：成功）',
+    `EXC_MESSAGE`     longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci     NULL COMMENT '异常信息',
+    `INSERT_TIME`     datetime                                                      NOT NULL COMMENT '告警时间',
+    `UPDATE_TIME`     datetime                                                      NULL DEFAULT NULL COMMENT '告警结果获取时间',
+    PRIMARY KEY (`ID`) USING BTREE,
+    UNIQUE INDEX `UX_ALARM_RECORD_ID_WAY` (`ALARM_RECORD_ID`, `WAY`) USING BTREE COMMENT '索引_告警记录ID_告警方式',
+    INDEX `NX_WAY` (`WAY`) USING BTREE COMMENT '索引_告警方式',
+    INDEX `NX_STATUS` (`STATUS`) USING BTREE COMMENT '索引_告警发送状态',
+    INDEX `MONITOR_ALARM_RECORD_FK` (`ALARM_RECORD_ID`) USING BTREE COMMENT '索引_告警记录ID',
+    CONSTRAINT `MONITOR_ALARM_RECORD_FK` FOREIGN KEY (`ALARM_RECORD_ID`) REFERENCES `MONITOR_ALARM_RECORD` (`ID`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB
+  CHARACTER SET = utf8mb4
+  COLLATE = utf8mb4_general_ci COMMENT = '告警记录详情表'
+  ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Table structure for MONITOR_ALARM_RECORD
+-- ----------------------------
+DROP TABLE IF EXISTS `MONITOR_ALARM_RECORD`;
+CREATE TABLE `MONITOR_ALARM_RECORD`
+(
+    `ID`              bigint(20) UNSIGNED                                           NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `CODE`            varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT '告警代码，使用UUID',
+    `ALARM_DEF_CODE`  varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NULL DEFAULT NULL COMMENT '告警定义编码',
     `TYPE`            varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT '告警类型（SERVER、NET、TCP4SERVICE、HTTP4SERVICE、DOCKER、INSTANCE、DATABASE、CUSTOM）',
     `WAY`             varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NULL DEFAULT NULL COMMENT '告警方式（SMS、MAIL、...）',
     `LEVEL`           varchar(5) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci   NOT NULL COMMENT '告警级别（INFO、WARM、ERROR、FATAL）',

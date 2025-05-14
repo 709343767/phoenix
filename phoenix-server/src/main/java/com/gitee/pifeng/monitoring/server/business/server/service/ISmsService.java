@@ -1,5 +1,6 @@
 package com.gitee.pifeng.monitoring.server.business.server.service;
 
+import com.gitee.pifeng.monitoring.common.domain.Result;
 import com.gitee.pifeng.monitoring.server.business.server.domain.Sms;
 
 /**
@@ -18,10 +19,10 @@ public interface ISmsService {
      * </p>
      *
      * @param sms 短信实体对象
-     * @return boolean
+     * @return {@link Result} 返回结果
      * @author 皮锋
      * @custom.date 2021/1/29 10:05
      */
-    boolean sendAlarmTemplateSms(Sms sms);
+    Result sendAlarmTemplateSms(Sms sms);
 
 }

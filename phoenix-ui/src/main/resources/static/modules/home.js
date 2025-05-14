@@ -66,12 +66,25 @@
                         return parseInt(item.unsent);
                     });
                     var option = {
+                        title: {
+                            text: '告警通知',
+                            left: 'center',
+                            textStyle: {
+                                color: '#696969',
+                                fontSize: 15
+                            },
+                            subtext: '结果趋势',
+                            subtextStyle: {
+                                color: '#8B8989'
+                            }
+                        },
                         // 鼠标移到折线上展示数据
                         tooltip: {
                             trigger: 'axis'
                         },
                         legend: {
-                            data: ['不提醒', '失败', '成功']
+                            top: 'bottom',
+                            data: ['成功', '失败', '不提醒']
                         },
                         xAxis: [{
                             type: 'category',
@@ -89,9 +102,9 @@
                         },
                         // 数据
                         series: [{
-                            stack: '总数',
-                            name: '不提醒',
-                            data: unsent,
+                            // stack: '总数',
+                            name: '成功',
+                            data: success,
                             type: 'line',
                             smooth: true,
                             areaStyle: {
@@ -101,10 +114,10 @@
                                     // 三种由深及浅的颜色
                                     [{
                                         offset: 0,
-                                        color: '#FFDEAD'
+                                        color: '#A2CD5A'
                                     }, {
                                         offset: 0.5,
-                                        color: '#FFFACD'
+                                        color: '#BCEE68'
                                     }, {
                                         offset: 1,
                                         color: '#FFFFFF'
@@ -113,11 +126,11 @@
                             itemStyle: {
                                 normal: {
                                     // 设置颜色
-                                    color: '#FF9A18'
+                                    color: '#6E8B3D'
                                 }
                             }
                         }, {
-                            stack: '总数',
+                            // stack: '总数',
                             name: '失败',
                             data: fail,
                             type: 'line',
@@ -145,9 +158,9 @@
                                 }
                             }
                         }, {
-                            stack: '总数',
-                            name: '成功',
-                            data: success,
+                            // stack: '总数',
+                            name: '不提醒',
+                            data: unsent,
                             type: 'line',
                             smooth: true,
                             areaStyle: {
@@ -157,10 +170,10 @@
                                     // 三种由深及浅的颜色
                                     [{
                                         offset: 0,
-                                        color: '#A2CD5A'
+                                        color: '#FFDEAD'
                                     }, {
                                         offset: 0.5,
-                                        color: '#BCEE68'
+                                        color: '#FFFACD'
                                     }, {
                                         offset: 1,
                                         color: '#FFFFFF'
@@ -169,7 +182,7 @@
                             itemStyle: {
                                 normal: {
                                     // 设置颜色
-                                    color: '#6E8B3D'
+                                    color: '#FF9A18'
                                 }
                             }
                         }]
@@ -204,7 +217,7 @@
                         // 类型
                         var types = obj.types;
                         html += '<div class="layui-progress" lay-showPercent="yes">'
-                            + '     <h3>' + types + '（' + totals + '次）</h3>'
+                            + '     <h3>' + types + '（' + totals + '条）</h3>'
                             + '     <div class="layui-progress-bar layui-bg-orange" lay-percent="' + rate + '"></div>'
                             + '  </div>';
                     }
@@ -243,16 +256,18 @@
                     var alarmSucRate = data.alarmSucRate;
                     var option = {
                         title: {
-                            text: '总数：' + alarmRecordSum + '次',
+                            text: '告警通知',
                             left: 'center',
                             textStyle: {
                                 color: '#696969',
-                                fontSize: 14
+                                fontSize: 15
                             },
-                            subtext: '成功：' + alarmRecordSuccessSum + '次'
+                            subtext: '结果比例' + '\n\n'
+                                + '成功率：' + alarmSucRate + '%' + '\n\n'
+                                + '总数：' + alarmRecordSum + '次'
+                                + '，成功：' + alarmRecordSuccessSum + '次'
                                 + '，失败：' + alarmRecordFailSum + '次'
-                                + '，不提醒：' + alarmRecordUnsentSum + '次'
-                                + '，成功率：' + alarmSucRate + '%',
+                                + '，不提醒：' + alarmRecordUnsentSum + '次',
                             subtextStyle: {
                                 color: '#8B8989'
                             }

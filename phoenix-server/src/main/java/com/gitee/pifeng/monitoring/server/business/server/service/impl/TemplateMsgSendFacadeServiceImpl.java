@@ -1,6 +1,5 @@
 package com.gitee.pifeng.monitoring.server.business.server.service.impl;
 
-import com.gitee.pifeng.monitoring.common.constant.ResultMsgConstants;
 import com.gitee.pifeng.monitoring.common.constant.alarm.AlarmLevelEnums;
 import com.gitee.pifeng.monitoring.common.constant.alarm.AlarmWayEnums;
 import com.gitee.pifeng.monitoring.common.domain.Result;
@@ -57,7 +56,7 @@ public class TemplateMsgSendFacadeServiceImpl implements ITemplateMsgSendFacadeS
      */
     @Override
     public Result sendTemplateTextMsg(AlarmWayEnums alarmWay, AlarmLevelEnums alarmLevel, String alarmTitle, String alarmContent) {
-        Result.ResultBuilder builder = Result.builder();
+        Result result = Result.builder().build();
         switch (alarmWay) {
             case SMS:
                 Sms sms = Sms.builder()
@@ -66,8 +65,7 @@ public class TemplateMsgSendFacadeServiceImpl implements ITemplateMsgSendFacadeS
                         .content(alarmContent)
                         .level(alarmLevel != null ? alarmLevel.name() : null)
                         .build();
-                boolean smsSuc = this.smsService.sendAlarmTemplateSms(sms);
-                builder.isSuccess(smsSuc).msg(smsSuc ? ResultMsgConstants.SUCCESS : "发送短信失败！");
+                result = this.smsService.sendAlarmTemplateSms(sms);
                 break;
             case MAIL:
                 Mail mail = Mail.builder()
@@ -76,13 +74,12 @@ public class TemplateMsgSendFacadeServiceImpl implements ITemplateMsgSendFacadeS
                         .content(alarmContent)
                         .level(alarmLevel != null ? alarmLevel.name() : null)
                         .build();
-                boolean mailSuc = this.mailService.sendAlarmTemplateMail(mail);
-                builder.isSuccess(mailSuc).msg(mailSuc ? ResultMsgConstants.SUCCESS : "发送电子邮件失败！");
+                result = this.mailService.sendAlarmTemplateMail(mail);
                 break;
             default:
                 break;
         }
-        return builder.build();
+        return result;
     }
 
 }

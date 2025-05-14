@@ -1,5 +1,7 @@
 package com.gitee.pifeng.monitoring.server.business.server.service.impl;
 
+import com.gitee.pifeng.monitoring.common.constant.ResultMsgConstants;
+import com.gitee.pifeng.monitoring.common.domain.Result;
 import com.gitee.pifeng.monitoring.server.business.server.domain.Mail;
 import com.gitee.pifeng.monitoring.server.business.server.service.IMailService;
 import lombok.extern.slf4j.Slf4j;
@@ -49,12 +51,12 @@ public class MailServiceImpl implements IMailService {
      * </p>
      *
      * @param mail 邮件实体对象
-     * @return boolean
+     * @return {@link Result} 返回结果
      * @author 皮锋
      * @custom.date 2020/4/13 11:40
      */
     @Override
-    public boolean sendAlarmTemplateMail(Mail mail) {
+    public Result sendAlarmTemplateMail(Mail mail) {
         try {
             MimeMessage mimeMessage = this.mailSender.createMimeMessage();
             MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage, true);
@@ -77,10 +79,10 @@ public class MailServiceImpl implements IMailService {
             messageHelper.setText(emailContent, true);
             // 发送邮件
             this.mailSender.send(mimeMessage);
-            return true;
+            return Result.builder().isSuccess(true).msg(ResultMsgConstants.SUCCESS).build();
         } catch (Exception e) {
             log.error("HTML模板邮件发送失败！", e);
-            return false;
+            return Result.builder().isSuccess(false).msg(e.getMessage()).build();
         }
     }
 }

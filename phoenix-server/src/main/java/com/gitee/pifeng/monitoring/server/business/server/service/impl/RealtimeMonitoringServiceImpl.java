@@ -106,7 +106,7 @@ public class RealtimeMonitoringServiceImpl extends ServiceImpl<IMonitorRealtimeM
             if (alarmReasonEnum == AlarmReasonEnums.ABNORMAL_2_NORMAL) {
                 return isSentAlarm;
             }
-            // 显示提交事务
+            // 显式提交事务
             TransactionAspectSupport.currentTransactionStatus().flush();
             return false;
         }

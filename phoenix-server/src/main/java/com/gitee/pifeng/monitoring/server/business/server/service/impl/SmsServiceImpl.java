@@ -1,6 +1,8 @@
 package com.gitee.pifeng.monitoring.server.business.server.service.impl;
 
 import com.gitee.pifeng.monitoring.common.constant.EnterpriseEnums;
+import com.gitee.pifeng.monitoring.common.constant.ResultMsgConstants;
+import com.gitee.pifeng.monitoring.common.domain.Result;
 import com.gitee.pifeng.monitoring.server.business.server.core.MonitoringConfigPropertiesLoader;
 import com.gitee.pifeng.monitoring.server.business.server.domain.MonitoringSms;
 import com.gitee.pifeng.monitoring.server.business.server.domain.Sms;
@@ -39,12 +41,12 @@ public class SmsServiceImpl implements ISmsService {
      * </p>
      *
      * @param sms 短信实体对象
-     * @return boolean
+     * @return {@link Result} 返回结果
      * @author 皮锋
      * @custom.date 2021/1/29 10:05
      */
     @Override
-    public boolean sendAlarmTemplateSms(Sms sms) {
+    public Result sendAlarmTemplateSms(Sms sms) {
         // 短信接口商家
         EnterpriseEnums enterpriseEnum = this.monitoringConfigPropertiesLoader.getMonitoringProperties().getAlarmProperties().getSmsProperties().getEnterpriseEnum();
         // 判断短信接口商家，不同的商家调用不同的接口
@@ -52,7 +54,7 @@ public class SmsServiceImpl implements ISmsService {
             // 调用phoenix短信接口
             return this.callMonitoringSmsApi(sms);
         }
-        return false;
+        return Result.builder().isSuccess(false).msg("没有设置短信接口商家！").build();
     }
 
     /**
@@ -61,11 +63,11 @@ public class SmsServiceImpl implements ISmsService {
      * </p>
      *
      * @param sms 短信实体对象
-     * @return boolean
+     * @return {@link Result} 返回结果
      * @author 皮锋
      * @custom.date 2020年3月10日 下午3:19:36
      */
-    private boolean callMonitoringSmsApi(Sms sms) {
+    private Result callMonitoringSmsApi(Sms sms) {
         String enterprise = this.monitoringConfigPropertiesLoader.getMonitoringProperties().getAlarmProperties().getSmsProperties().getEnterpriseEnum().name();
         // 短信不支持<br>标签换行
         String text = sms.getContent().replace("<br>", "");
@@ -86,24 +88,27 @@ public class SmsServiceImpl implements ISmsService {
      * </p>
      *
      * @param sms Monitoring短信实体对象
-     * @return 短信发送结果
+     * @return {@link Result} 短信发送结果
      * @author 皮锋
      * @custom.date 2020年3月10日 上午11:01:47
      */
-    private boolean sendSmsByMonitoringApi(MonitoringSms sms) {
+    private Result sendSmsByMonitoringApi(MonitoringSms sms) {
         String alarmSmsAddress = this.monitoringConfigPropertiesLoader.getMonitoringProperties().getAlarmProperties().getSmsProperties().getAddress();
         // URL地址
-        String url = alarmSmsAddress + "?phone=" + sms.getPhone() + "&type=" + sms.getType() + "&content="
-                + sms.getContent() + "&identity=" + sms.getIdentity();
+        String url = alarmSmsAddress + "?phone=" + sms.getPhone() + "&type=" + sms.getType() + "&content=" + sms.getContent() + "&identity=" + sms.getIdentity();
         log.info("Monitoring的短信接口URL：{}", url);
         try {
             ResponseEntity<String> responseEntity = this.restTemplate.getForEntity(url, String.class);
             String body = responseEntity.getBody();
-            // 短信发送成功
-            return StringUtils.isNotBlank(body);
+            boolean notBlank = StringUtils.isNotBlank(body);
+            if (notBlank) {
+                // 短信发送成功
+                return Result.builder().isSuccess(true).msg(ResultMsgConstants.SUCCESS).build();
+            }
+            return Result.builder().isSuccess(false).msg("发送短信失败！").build();
         } catch (Exception e) {
             log.error("调用Monitoring的短信接口发送短信异常！", e);
-            return false;
+            return Result.builder().isSuccess(false).msg(e.getMessage()).build();
         }
     }
 
