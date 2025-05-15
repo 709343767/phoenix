@@ -691,6 +691,8 @@
                         var bitness = obj.bitness;
                         // 占用内存大小
                         var memorySize = obj.memorySizeStr;
+                        // 占用端口
+                        var port = obj.port;
                         html += '<div class="layui-col-md4">' +
                             '       <label class="label-font-weight">进程ID：</label>' + processId +
                             '    </div>' +
@@ -718,6 +720,11 @@
                             '    <div class="layui-col-md4">' +
                             '       <label class="label-font-weight">用户名：</label>' + user +
                             '    </div>';
+                        if (!isEmpty(port)) {
+                            html += '<div class="layui-col-md12">' +
+                                '       <label class="label-font-weight">占用端口：</label>' + port +
+                                '    </div>';
+                        }
                         if (!isEmpty(commandLine)) {
                             html += '<div class="layui-col-md12">' +
                                 '       <label class="label-font-weight">命令行：</label>' + commandLine +
