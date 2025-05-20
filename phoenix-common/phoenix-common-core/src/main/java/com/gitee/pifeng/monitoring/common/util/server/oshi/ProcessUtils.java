@@ -7,6 +7,7 @@ import cn.hutool.core.util.StrUtil;
 import com.gitee.pifeng.monitoring.common.domain.server.ProcessDomain;
 import com.gitee.pifeng.monitoring.common.init.InitOshi;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import oshi.software.os.InternetProtocolStats;
@@ -129,7 +130,7 @@ public class ProcessUtils extends InitOshi {
     private static List<ProcessDomain.ProcessInfoDomain> wrapProcessInfoDomainList(List<OSProcess> processes) {
         List<ProcessDomain.ProcessInfoDomain> processInfoList = Lists.newArrayList();
         // 获取进程与端口的映射关系
-        Map<Integer, List<Integer>> processPortsMap = getProcessPortsMapping();
+        Map<Integer, Set<Integer>> processPortsMap = getProcessPortsMapping();
         for (OSProcess process : processes) {
             // 进程ID
             int processId = process.getProcessID();
@@ -171,7 +172,7 @@ public class ProcessUtils extends InitOshi {
             processInfoDomain.setMemorySize(memorySize);
             // 设置进程占用的端口
             if (processPortsMap.containsKey(processId)) {
-                processInfoDomain.setPort(StrUtil.join(",", processPortsMap.get(processId)));
+                processInfoDomain.setPorts(StrUtil.join(",", processPortsMap.get(processId)));
             }
             processInfoList.add(processInfoDomain);
         }
@@ -188,31 +189,30 @@ public class ProcessUtils extends InitOshi {
      * @author weixu38
      * @custom.date 2025/4/15 16:48
      */
-    public static Map<Integer, List<Integer>> getProcessPortsMapping() {
+    public static Map<Integer, Set<Integer>> getProcessPortsMapping() {
         try {
-            Map<Integer, List<Integer>> processPortsMap = new HashMap<>();
-
+            Map<Integer, Set<Integer>> processPortsMap = Maps.newHashMap();
+            // 获取当前操作系统的实例
             OperatingSystem os = SYSTEM_INFO.getOperatingSystem();
+            // 获得网络协议统计信息
             InternetProtocolStats ipStats = os.getInternetProtocolStats();
-
+            // 提取所有互联网协议连接
             List<InternetProtocolStats.IPConnection> connections = ipStats.getConnections();
-
-            if (connections != null) {
+            if (CollectionUtils.isNotEmpty(connections)) {
                 for (InternetProtocolStats.IPConnection conn : connections) {
                     int localPort = conn.getLocalPort();
                     int pid = conn.getowningProcessId();
                     // 过滤无效数据
-                    if (pid <= 0 || localPort <= 0) {
+                    if (localPort <= 0 || pid <= 0) {
                         continue;
                     }
                     // 可选：只保留监听中的连接
                     if (conn.getState() != InternetProtocolStats.TcpState.LISTEN) {
                         continue;
                     }
-                    processPortsMap.computeIfAbsent(pid, k -> new ArrayList<>()).add(localPort);
+                    processPortsMap.computeIfAbsent(pid, k -> new HashSet<>()).add(localPort);
                 }
             }
-
             return processPortsMap;
         } catch (Throwable e) {
             log.error("获取进程端口映射关系异常：{}", e.getMessage(), e);

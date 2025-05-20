@@ -8,6 +8,7 @@ import com.gitee.pifeng.monitoring.ui.business.web.entity.MonitorServerProcess;
 import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorServerProcessService;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.MonitorServerProcessVo;
 import com.google.common.collect.Lists;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -51,6 +52,7 @@ public class MonitorServerProcessServiceImpl extends ServiceImpl<IMonitorServerP
             MonitorServerProcessVo monitorServerProcessVo = MonitorServerProcessVo.builder().build().convertFor(monitorServerProcess);
             // 占用内存大小（智能转换单位后的大小）
             monitorServerProcessVo.setMemorySizeStr(DataSizeUtil.format(monitorServerProcessVo.getMemorySize()));
+            monitorServerProcessVo.setPorts(StringUtils.replace(monitorServerProcessVo.getPorts(), ",", "、"));
             monitorServerProcessVos.add(monitorServerProcessVo);
         }
         return monitorServerProcessVos;

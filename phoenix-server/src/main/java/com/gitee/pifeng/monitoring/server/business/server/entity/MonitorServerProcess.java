@@ -113,8 +113,8 @@ public class MonitorServerProcess {
     /**
      * 端口号列表（逗号分隔）
      */
-    @TableField("PORT")
-    private String port;
+    @TableField("PORTS")
+    private String ports;
 
     /**
      * 新增时间

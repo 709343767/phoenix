@@ -80,7 +80,7 @@ public class MonitorServerProcessVo implements ISuperBean {
     private String memorySizeStr;
 
     @Schema(description = "进程占用的端口列表（逗号分割）")
-    private String port;
+    private String ports;
 
     @JsonFormat(pattern = "yyyy/MM/dd HH:mm:ss", timezone = "GMT+8")
     @Schema(description = "新增时间")

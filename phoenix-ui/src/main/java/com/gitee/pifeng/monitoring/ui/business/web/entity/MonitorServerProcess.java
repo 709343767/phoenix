@@ -91,8 +91,8 @@ public class MonitorServerProcess implements Serializable {
     private Long memorySize;
 
     @Schema(description = "占用端口（逗号分隔）")
-    @TableField("PORT")
-    private String port;
+    @TableField("PORTS")
+    private String ports;
 
     @Schema(description = "新增时间")
     @TableField("INSERT_TIME")
