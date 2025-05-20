@@ -67,6 +67,7 @@ public class ServerProcessServiceImpl extends ServiceImpl<IMonitorServerProcessD
                 monitorServerProcess.setCpuLoadCumulative(processInfo.getCpuLoadCumulative());
                 monitorServerProcess.setBitness(processInfo.getBitness());
                 monitorServerProcess.setMemorySize(processInfo.getMemorySize());
+                monitorServerProcess.setPort(processInfo.getPort());
                 monitorServerProcess.setInsertTime(currentTime);
                 monitorServerProcess.setUpdateTime(currentTime);
                 insertMonitorServerProcesses.add(monitorServerProcess);

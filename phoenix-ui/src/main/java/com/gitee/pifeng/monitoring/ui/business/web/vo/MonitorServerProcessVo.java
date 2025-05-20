@@ -79,6 +79,9 @@ public class MonitorServerProcessVo implements ISuperBean {
     @Schema(description = "占用内存大小（智能转换单位后的大小）")
     private String memorySizeStr;
 
+    @Schema(description = "进程占用的端口列表（逗号分割）")
+    private String port;
+
     @JsonFormat(pattern = "yyyy/MM/dd HH:mm:ss", timezone = "GMT+8")
     @Schema(description = "新增时间")
     private Date insertTime;

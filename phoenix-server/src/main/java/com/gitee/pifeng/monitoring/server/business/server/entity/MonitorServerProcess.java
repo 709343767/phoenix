@@ -111,6 +111,12 @@ public class MonitorServerProcess {
     private Long memorySize;
 
     /**
+     * 端口号列表（逗号分隔）
+     */
+    @TableField("PORT")
+    private String port;
+
+    /**
      * 新增时间
      */
     @TableField("INSERT_TIME")

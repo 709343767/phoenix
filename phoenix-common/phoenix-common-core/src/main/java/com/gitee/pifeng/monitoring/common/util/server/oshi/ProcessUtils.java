@@ -3,19 +3,19 @@ package com.gitee.pifeng.monitoring.common.util.server.oshi;
 import cn.hutool.core.date.BetweenFormatter;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.NumberUtil;
+import cn.hutool.core.util.StrUtil;
 import com.gitee.pifeng.monitoring.common.domain.server.ProcessDomain;
 import com.gitee.pifeng.monitoring.common.init.InitOshi;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
+import oshi.software.os.InternetProtocolStats;
 import oshi.software.os.OSProcess;
 import oshi.software.os.OperatingSystem;
 import oshi.software.os.OperatingSystem.ProcessFiltering;
 import oshi.software.os.OperatingSystem.ProcessSorting;
 
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.gitee.pifeng.monitoring.common.util.CollectionUtils.distinctByKey;
@@ -128,6 +128,8 @@ public class ProcessUtils extends InitOshi {
      */
     private static List<ProcessDomain.ProcessInfoDomain> wrapProcessInfoDomainList(List<OSProcess> processes) {
         List<ProcessDomain.ProcessInfoDomain> processInfoList = Lists.newArrayList();
+        // 获取进程与端口的映射关系
+        Map<Integer, List<Integer>> processPortsMap = getProcessPortsMapping();
         for (OSProcess process : processes) {
             // 进程ID
             int processId = process.getProcessID();
@@ -167,10 +169,57 @@ public class ProcessUtils extends InitOshi {
             processInfoDomain.setCpuLoadCumulative(cpuLoadCumulative);
             processInfoDomain.setBitness(bitness);
             processInfoDomain.setMemorySize(memorySize);
+            // 设置进程占用的端口
+            if (processPortsMap.containsKey(processId)) {
+                processInfoDomain.setPort(StrUtil.join(",", processPortsMap.get(processId)));
+            }
             processInfoList.add(processInfoDomain);
         }
         return processInfoList;
     }
+
+
+    /**
+     * <p>
+     * 获取进程与对应端口的映射关系
+     * </p>
+     *
+     * @return 进程ID与端口列表的映射
+     * @author weixu38
+     * @custom.date 2025/4/15 16:48
+     */
+    public static Map<Integer, List<Integer>> getProcessPortsMapping() {
+        try {
+            Map<Integer, List<Integer>> processPortsMap = new HashMap<>();
+
+            OperatingSystem os = SYSTEM_INFO.getOperatingSystem();
+            InternetProtocolStats ipStats = os.getInternetProtocolStats();
+
+            List<InternetProtocolStats.IPConnection> connections = ipStats.getConnections();
+
+            if (connections != null) {
+                for (InternetProtocolStats.IPConnection conn : connections) {
+                    int localPort = conn.getLocalPort();
+                    int pid = conn.getowningProcessId();
+                    // 过滤无效数据
+                    if (pid <= 0 || localPort <= 0) {
+                        continue;
+                    }
+                    // 可选：只保留监听中的连接
+                    if (conn.getState() != InternetProtocolStats.TcpState.LISTEN) {
+                        continue;
+                    }
+                    processPortsMap.computeIfAbsent(pid, k -> new ArrayList<>()).add(localPort);
+                }
+            }
+
+            return processPortsMap;
+        } catch (Throwable e) {
+            log.error("获取进程端口映射关系异常：{}", e.getMessage(), e);
+            return Collections.emptyMap();
+        }
+    }
+
 
     /**
      * <p>

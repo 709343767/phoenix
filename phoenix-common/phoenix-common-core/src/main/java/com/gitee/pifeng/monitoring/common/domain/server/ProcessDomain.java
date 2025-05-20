@@ -89,5 +89,9 @@ public class ProcessDomain extends AbstractSuperBean {
          * 占用内存大小（单位：byte）
          */
         private long memorySize;
+        /**
+         * 进程占用的端口列表
+         */
+        private String port;
     }
 }

@@ -1028,6 +1028,7 @@ CREATE TABLE `MONITOR_SERVER_PROCESS`
     `CPU_LOAD_CUMULATIVE`       double(16, 4)                                                 NULL DEFAULT NULL COMMENT '进程的累积CPU使用率',
     `BITNESS`                   varchar(4) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci   NULL DEFAULT NULL COMMENT '进程的位数',
     `MEMORY_SIZE`               bigint(20)                                                    NULL DEFAULT NULL COMMENT '占用内存大小（单位：byte）',
+    `PORT`                      varchar(1024) DEFAULT NULL COMMENT '端口列表（逗号分割）',
     `INSERT_TIME`               datetime                                                      NOT NULL COMMENT '新增时间',
     `UPDATE_TIME`               datetime                                                      NULL DEFAULT NULL COMMENT '更新时间',
     PRIMARY KEY (`ID`) USING BTREE,
