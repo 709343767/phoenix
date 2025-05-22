@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<html lang="zh" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <meta charset="utf-8">
     <title>用户管理</title>
@@ -12,11 +13,12 @@
     <link rel="stylesheet" href="./style/myself.css" th:href="@{/style/myself.css}" media="all">
     <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
     <!--[if lt IE 9]>
-    <script src="./js/html5.min.js" th:src="@{/js/html5.min.js}"></script>
-    <script src="./js/respond.min.js" th:src="@{/js/respond.min.js}"></script>
+    <script th:src="@{/js/html5.min.js}"></script>
+    <script th:src="@{/js/respond.min.js}"></script>
     <![endif]-->
     <script type="text/javascript" charset="utf-8" th:inline="javascript">
         var ctxPath = /*[[@{/}]]*/'';
+        var authority = [[${#authorization.expression('hasAuthority("超级管理员")')}]];
     </script>
 </head>
 <body>
@@ -25,21 +27,24 @@
         <div class="layui-form layui-card-header layuiadmin-card-header-auto">
             <form class="layui-form-item" onsubmit="return false;">
                 <div class="layui-inline">
-                    <label class="layui-form-label">账号</label>
+                    <label class="layui-form-label" for="account">账号</label>
                     <div class="layui-input-block">
-                        <input type="text" name="account" placeholder="请输入" autocomplete="off" class="layui-input">
+                        <input type="text" id="account" name="account" placeholder="请输入" autocomplete="off"
+                               class="layui-input">
                     </div>
                 </div>
                 <div class="layui-inline">
-                    <label class="layui-form-label">用户名</label>
+                    <label class="layui-form-label" for="username">用户名</label>
                     <div class="layui-input-block">
-                        <input type="text" name="username" placeholder="请输入" autocomplete="off" class="layui-input">
+                        <input type="text" id="username" name="username" placeholder="请输入" autocomplete="off"
+                               class="layui-input">
                     </div>
                 </div>
                 <div class="layui-inline">
-                    <label class="layui-form-label">邮箱</label>
+                    <label class="layui-form-label" for="email">邮箱</label>
                     <div class="layui-input-block">
-                        <input type="text" name="email" placeholder="请输入" autocomplete="off" class="layui-input">
+                        <input type="text" id="email" name="email" placeholder="请输入" autocomplete="off"
+                               class="layui-input">
                     </div>
                 </div>
                 <div class="layui-inline">
@@ -58,7 +63,7 @@
                 <img style="display: inline-block; width: 50%; height: 100%;" src={{ d.avatar }}>
             </script>
             <script type="text/html" id="list-table-toolbar">
-                <div class="layui-btn-group">
+                <div class="layui-btn-group" sec:authorize="hasAuthority('超级管理员')">
                     <button class="layui-btn layui-btn-sm layui-btn-danger" lay-event="batchdel">
                         <i class="layui-icon layui-icon-delete"></i>删除
                     </button>
@@ -68,7 +73,7 @@
                 </div>
             </script>
             <script type="text/html" id="user-list-table-toolbar">
-                <div class="layui-btn-group">
+                <div class="layui-btn-group" sec:authorize="hasAuthority('超级管理员')">
                     <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i
                             class="layui-icon layui-icon-edit"></i>编辑</a>
                     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i
@@ -78,10 +83,10 @@
         </div>
     </div>
 </div>
-<script src="./js/common.js" th:src="@{/js/common.js}" charset="utf-8"></script>
-<script src="./js/jquery.min.js" th:src="@{/js/jquery.min.js}" charset="utf-8"></script>
-<script src="./js/jquery.base64.js" th:src="@{/js/jquery.base64.js}" charset="utf-8"></script>
-<script src="./layui/layui.js" th:src="@{/layui/layui.js}"></script>
+<script th:src="@{/js/common.js}" charset="utf-8"></script>
+<script th:src="@{/js/jquery.min.js}" charset="utf-8"></script>
+<script th:src="@{/js/jquery.base64.js}" charset="utf-8"></script>
+<script th:src="@{/layui/layui.js}"></script>
 <script charset="utf-8" th:inline="javascript">
     layui.config({
         base: ctxPath //静态资源所在路径
@@ -89,6 +94,62 @@
         index: 'lib/index' //主入口模块
     }).use(['index', 'admin', 'form', 'table', 'layer'], function () {
         var admin = layui.admin, form = layui.form, table = layui.table, device = layui.device(), layer = layui.layer;
+        // 列定义
+        const allColumns = [
+            [{
+                type: 'checkbox',
+                hide: !authority,
+            }, {
+                field: 'id',
+                width: 100,
+                title: 'ID',
+                sort: !0,
+                hide: true
+            }, {
+                field: 'account',
+                title: '账号',
+                minWidth: 100,
+                sort: !0
+            }, {
+                field: 'username',
+                title: '用户名',
+                minWidth: 100,
+                sort: !0
+            }, {
+                field: 'roleName',
+                title: '角色',
+                minWidth: 100,
+                sort: !0
+            }, {
+                field: 'email',
+                title: '邮箱',
+                minWidth: 120,
+                sort: !0
+            }, {
+                field: 'registerTime',
+                title: '注册时间',
+                minWidth: 170,
+                sort: !0
+            }, {
+                field: 'updateTime',
+                title: '更新时间',
+                minWidth: 170,
+                sort: !0
+            }, {
+                field: 'remarks',
+                title: '描述',
+                minWidth: 250,
+                sort: !0
+            }, {
+                title: '操作',
+                width: 140,
+                hide: !authority,
+                permission: authority,
+                align: 'center',
+                fixed: (device.ios || device.android) ? false : 'right',
+                toolbar: '#user-list-table-toolbar'
+            }]
+        ];
         table.render({
             elem: '#user-list-table',
             url: ctxPath + 'user/get-monitor-user-list',
@@ -112,58 +173,8 @@
                     'data': res.data.records //解析数据列表
                 };
             },
-            cols: [
-                [{
-                    type: 'checkbox'
-                }, {
-                    field: 'id',
-                    width: 100,
-                    title: 'ID',
-                    sort: !0,
-                    hide: true
-                }, {
-                    field: 'account',
-                    title: '账号',
-                    minWidth: 100,
-                    sort: !0
-                }, {
-                    field: 'username',
-                    title: '用户名',
-                    minWidth: 100,
-                    sort: !0
-                }, {
-                    field: 'roleName',
-                    title: '角色',
-                    minWidth: 100,
-                    sort: !0
-                }, {
-                    field: 'email',
-                    title: '邮箱',
-                    minWidth: 120,
-                    sort: !0
-                }, {
-                    field: 'registerTime',
-                    title: '注册时间',
-                    minWidth: 170,
-                    sort: !0
-                }, {
-                    field: 'updateTime',
-                    title: '更新时间',
-                    minWidth: 170,
-                    sort: !0
-                }, {
-                    field: 'remarks',
-                    title: '描述',
-                    minWidth: 250,
-                    sort: !0
-                }, {
-                    title: '操作',
-                    width: 140,
-                    align: 'center',
-                    fixed: (device.ios || device.android) ? false : 'right',
-                    toolbar: '#user-list-table-toolbar'
-                }]
-            ],
+            // 如果没有 permission 属性或者 permission 不是 false，则保留该列
+            cols: allColumns.map(columnsGroup => columnsGroup.filter(col => !('permission' in col) || col.permission !== false)),
             page: !0,
             limit: 15,
             limits: [10, 15, 20, 30, 40, 50, 60, 70, 80, 90, 100],

@@ -170,6 +170,7 @@ public class MonitorUserController {
      */
     @Operation(summary = "添加用户")
     @PostMapping("/save-user")
+    @PreAuthorize("hasAuthority('超级管理员')")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.USER_MANAGE + "#用户", operType = OperateTypeConstants.ADD, operDesc = "添加用户")
     public LayUiAdminResultVo saveUser(MonitorUserVo monitorUserVo) {
