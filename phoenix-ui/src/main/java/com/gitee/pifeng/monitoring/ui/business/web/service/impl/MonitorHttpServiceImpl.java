@@ -96,6 +96,10 @@ public class MonitorHttpServiceImpl extends ServiceImpl<IMonitorHttpDao, Monitor
         // 查询数据库
         IPage<MonitorHttp> ipage = new Page<>(current, size);
         LambdaQueryWrapper<MonitorHttp> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.select(MonitorHttp::getId, MonitorHttp::getHostnameSource, MonitorHttp::getUrlTarget,
+                MonitorHttp::getMethod, MonitorHttp::getStatus, MonitorHttp::getAvgTime, MonitorHttp::getOfflineCount,
+                MonitorHttp::getMonitorEnv, MonitorHttp::getMonitorGroup, MonitorHttp::getDescr, MonitorHttp::getInsertTime,
+                MonitorHttp::getUpdateTime, MonitorHttp::getIsEnableMonitor, MonitorHttp::getIsEnableAlarm);
         if (StringUtils.isNotBlank(hostnameSource)) {
             lambdaQueryWrapper.like(MonitorHttp::getHostnameSource, hostnameSource);
         }
