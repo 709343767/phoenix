@@ -49,6 +49,8 @@ public class MonitorHttpHistoryServiceImpl extends ServiceImpl<IMonitorHttpHisto
     @Override
     public HttpAvgTimeChartVo getAvgTimeChartInfo(Long id, String hostnameSource, String urlTarget, String method, String dateValue) {
         LambdaQueryWrapper<MonitorHttpHistory> monitorHttpHistoryLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        // 只查询特定的字段，减少传输
+        monitorHttpHistoryLambdaQueryWrapper.select(MonitorHttpHistory::getAvgTime, MonitorHttpHistory::getStatus, MonitorHttpHistory::getInsertTime);
         monitorHttpHistoryLambdaQueryWrapper.eq(MonitorHttpHistory::getHttpId, id);
         monitorHttpHistoryLambdaQueryWrapper.eq(MonitorHttpHistory::getHostnameSource, hostnameSource);
         monitorHttpHistoryLambdaQueryWrapper.eq(MonitorHttpHistory::getUrlTarget, urlTarget);

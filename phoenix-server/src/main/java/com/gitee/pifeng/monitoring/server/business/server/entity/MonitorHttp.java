@@ -102,6 +102,18 @@ public class MonitorHttp {
     private String excMessage;
 
     /**
+     * 结果内容
+     */
+    @TableField(value = "RESULT_BODY", updateStrategy = FieldStrategy.IGNORED)
+    private String resultBody;
+
+    /**
+     * 结果内容大小（byte）
+     */
+    @TableField(value = "RESULT_BODY_SIZE", updateStrategy = FieldStrategy.IGNORED)
+    private Integer resultBodySize;
+
+    /**
      * 离线次数
      */
     @TableField("OFFLINE_COUNT")

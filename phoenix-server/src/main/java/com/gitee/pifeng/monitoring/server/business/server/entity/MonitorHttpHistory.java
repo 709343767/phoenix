@@ -1,9 +1,6 @@
 package com.gitee.pifeng.monitoring.server.business.server.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -84,6 +81,19 @@ public class MonitorHttpHistory {
      */
     @TableField("EXC_MESSAGE")
     private String excMessage;
+
+    /**
+     * 结果内容
+     */
+    @TableField(value = "RESULT_BODY", updateStrategy = FieldStrategy.IGNORED)
+    private String resultBody;
+
+    /**
+     * 结果内容大小（byte）
+     */
+    @TableField(value = "RESULT_BODY_SIZE", updateStrategy = FieldStrategy.IGNORED)
+    private Integer resultBodySize;
+
     /**
      * 离线次数
      */

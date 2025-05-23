@@ -62,11 +62,20 @@
                         <div class="layui-col-md12">
                             <label class="label-font-weight">状态：</label>[[${monitorHttpVo.status}]]
                         </div>
-                        <div class="layui-col-md12">
+                        <div class="layui-col-md12" th:unless="${#strings.isEmpty(monitorHttpVo.excMessage)}">
                             <label class="label-font-weight">异常信息：</label>[[${monitorHttpVo.excMessage}]]
                         </div>
                         <div class="layui-col-md12">
                             <label class="label-font-weight">离线次数：</label>[[${monitorHttpVo.offlineCount}]]
+                        </div>
+                        <div class="layui-col-md12" th:unless="${#strings.isEmpty(monitorHttpVo.resultBodySize)}">
+                            <label class="label-font-weight">结果内容大小：</label>[[${monitorHttpVo.resultBodySize}]]
+                        </div>
+                        <div class="layui-col-md12" th:unless="${#strings.isEmpty(monitorHttpVo.resultBody)}">
+                            <label class="label-font-weight">结果内容：</label>
+                            <div>
+                                <pre class="layui-code" th:text="${monitorHttpVo.resultBody}"></pre>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -105,7 +114,10 @@
         base: ctxPath //静态资源所在路径
     }).extend({
         index: 'lib/index' //主入口模块
-    }).use(['index']);
+    }).use(['index', 'code'], function () {
+        // 代码文本修饰
+        layui.code({height: '320px'});
+    });
 </script>
 </body>
 </html>

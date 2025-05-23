@@ -62,6 +62,8 @@ public class HttpServiceImpl extends ServiceImpl<IMonitorHttpDao, MonitorHttp> i
         long avgTime = Long.parseLong(String.valueOf(map.get("avgTime")));
         // 异常信息
         String excMessage = map.get("excMessage") != null ? String.valueOf(map.get("excMessage")) : null;
+        // 结果
+        String result = map.get("result") != null ? String.valueOf(map.get("result")) : null;
         // 从数据库获取HTTP信息
         LambdaQueryWrapper<MonitorHttp> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         lambdaQueryWrapper.eq(MonitorHttp::getHostnameSource, NetUtils.getLocalIp());
@@ -71,6 +73,8 @@ public class HttpServiceImpl extends ServiceImpl<IMonitorHttpDao, MonitorHttp> i
         if (monitorHttp != null) {
             monitorHttp.setStatus(statusCode);
             monitorHttp.setAvgTime(avgTime);
+            monitorHttp.setResultBody(result);
+            monitorHttp.setResultBodySize(result != null ? result.getBytes().length : null);
             monitorHttp.setUpdateTime(new Date());
             if (statusCode != HttpStatus.SC_OK) {
                 monitorHttp.setExcMessage(excMessage);

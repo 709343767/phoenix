@@ -84,6 +84,14 @@ public class MonitorHttp implements Serializable {
     @TableField("EXC_MESSAGE")
     private String excMessage;
 
+    @Schema(description = "结果内容")
+    @TableField(value = "RESULT_BODY")
+    private String resultBody;
+
+    @Schema(description = "结果内容大小（byte）")
+    @TableField(value = "RESULT_BODY_SIZE")
+    private Integer resultBodySize;
+
     @Schema(description = "离线次数")
     @TableField("OFFLINE_COUNT")
     private Integer offlineCount;

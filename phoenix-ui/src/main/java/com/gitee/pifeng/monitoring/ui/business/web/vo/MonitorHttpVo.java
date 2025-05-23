@@ -72,6 +72,12 @@ public class MonitorHttpVo implements ISuperBean {
     @Schema(description = "异常信息")
     private String excMessage;
 
+    @Schema(description = "结果内容")
+    private String resultBody;
+
+    @Schema(description = "结果内容大小（byte）")
+    private String resultBodySize;
+
     @Schema(description = "离线次数")
     private Integer offlineCount;
 

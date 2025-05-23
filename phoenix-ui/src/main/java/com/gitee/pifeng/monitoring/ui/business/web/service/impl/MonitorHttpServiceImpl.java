@@ -15,6 +15,7 @@ import com.gitee.pifeng.monitoring.common.constant.monitortype.MonitorTypeEnums;
 import com.gitee.pifeng.monitoring.common.domain.Result;
 import com.gitee.pifeng.monitoring.common.dto.BaseRequestPackage;
 import com.gitee.pifeng.monitoring.common.dto.BaseResponsePackage;
+import com.gitee.pifeng.monitoring.common.util.DataSizeUtils;
 import com.gitee.pifeng.monitoring.common.util.LayUiUtils;
 import com.gitee.pifeng.monitoring.plug.core.Sender;
 import com.gitee.pifeng.monitoring.ui.business.web.dao.IMonitorHttpDao;
@@ -409,9 +410,12 @@ public class MonitorHttpServiceImpl extends ServiceImpl<IMonitorHttpDao, Monitor
                 bodyParameter = String.valueOf(bodyParameterJson.get("bodyApplicationJsonParameter"));
             }
         }
+        // 结果内容大小（byte）
+        Integer resultBodySize = monitorHttp.getResultBodySize();
         // 设置请求参数
         monitorHttpVo.setHeaderParameter(headerParameter);
         monitorHttpVo.setBodyParameter(bodyParameter);
+        monitorHttpVo.setResultBodySize(resultBodySize != null ? DataSizeUtils.format(resultBodySize) : null);
         return monitorHttpVo;
     }
 

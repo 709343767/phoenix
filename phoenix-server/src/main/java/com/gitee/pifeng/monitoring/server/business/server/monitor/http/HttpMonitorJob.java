@@ -197,8 +197,10 @@ public class HttpMonitorJob extends QuartzJobBean {
             long avgTime = Long.parseLong(String.valueOf(stringObjectMap.get("avgTime")));
             // 成功
             if (statusCode == HttpStatus.SC_OK) {
+                // 结果
+                String result = stringObjectMap.get("result") != null ? String.valueOf(stringObjectMap.get("result")) : null;
                 // 处理HTTP服务正常
-                this.connected(monitorHttp, statusCode, avgTime);
+                this.connected(monitorHttp, statusCode, avgTime, result);
             } else {
                 // 异常信息
                 String excMessage = stringObjectMap.get("excMessage") != null ? String.valueOf(stringObjectMap.get("excMessage")) : null;
@@ -236,8 +238,10 @@ public class HttpMonitorJob extends QuartzJobBean {
             long avgTime = Long.parseLong(String.valueOf(stringObjectMap.get("avgTime")));
             // 成功
             if (statusCode == HttpStatus.SC_OK) {
+                // 结果
+                String result = stringObjectMap.get("result") != null ? String.valueOf(stringObjectMap.get("result")) : null;
                 // 处理HTTP服务正常
-                this.connected(monitorHttp, statusCode, avgTime);
+                this.connected(monitorHttp, statusCode, avgTime, result);
             } else {
                 // 异常信息
                 String excMessage = stringObjectMap.get("excMessage") != null ? String.valueOf(stringObjectMap.get("excMessage")) : null;
@@ -280,6 +284,8 @@ public class HttpMonitorJob extends QuartzJobBean {
         monitorHttp.setStatus(statusCode);
         monitorHttp.setExcMessage(excMessage);
         monitorHttp.setAvgTime(avgTime);
+        monitorHttp.setResultBody(null);
+        monitorHttp.setResultBodySize(null);
         monitorHttp.setUpdateTime(date);
         // 更新数据库
         this.httpService.updateById(monitorHttp);
@@ -297,6 +303,8 @@ public class HttpMonitorJob extends QuartzJobBean {
         monitorHttpHistory.setStatus(monitorHttp.getStatus());
         monitorHttpHistory.setExcMessage(monitorHttp.getExcMessage());
         monitorHttpHistory.setOfflineCount(monitorHttp.getOfflineCount());
+        monitorHttpHistory.setResultBody(null);
+        monitorHttpHistory.setResultBodySize(null);
         monitorHttpHistory.setInsertTime(date);
         monitorHttpHistory.setUpdateTime(date);
         this.httpHistoryService.save(monitorHttpHistory);
@@ -310,10 +318,11 @@ public class HttpMonitorJob extends QuartzJobBean {
      * @param monitorHttp HTTP信息表
      * @param statusCode  http状态码
      * @param avgTime     平均时间（毫秒）
+     * @param result      结果
      * @author 皮锋
      * @custom.date 2022/4/13 13:05
      */
-    private void connected(MonitorHttp monitorHttp, int statusCode, long avgTime) {
+    private void connected(MonitorHttp monitorHttp, int statusCode, long avgTime, String result) {
         try {
             if (null != monitorHttp.getStatus()) {
                 this.sendAlarmInfo("HTTP服务恢复", AlarmLevelEnums.INFO, AlarmReasonEnums.ABNORMAL_2_NORMAL, monitorHttp);
@@ -321,10 +330,13 @@ public class HttpMonitorJob extends QuartzJobBean {
         } catch (Exception e) {
             log.error("HTTP服务告警异常！", e);
         }
+        Integer resultBodySize = result != null ? result.getBytes().length : null;
         Date date = new Date();
         monitorHttp.setStatus(statusCode);
         monitorHttp.setAvgTime(avgTime);
         monitorHttp.setExcMessage(null);
+        monitorHttp.setResultBody(result);
+        monitorHttp.setResultBodySize(resultBodySize);
         monitorHttp.setUpdateTime(date);
         // 更新数据库
         this.httpService.updateById(monitorHttp);
@@ -341,6 +353,8 @@ public class HttpMonitorJob extends QuartzJobBean {
         monitorHttpHistory.setAvgTime(monitorHttp.getAvgTime());
         monitorHttpHistory.setStatus(monitorHttp.getStatus());
         monitorHttpHistory.setOfflineCount(monitorHttp.getOfflineCount());
+        monitorHttpHistory.setResultBody(result);
+        monitorHttpHistory.setResultBodySize(resultBodySize);
         monitorHttpHistory.setInsertTime(date);
         monitorHttpHistory.setUpdateTime(date);
         this.httpHistoryService.save(monitorHttpHistory);
