@@ -60,6 +60,8 @@ public class HttpServiceImpl extends ServiceImpl<IMonitorHttpDao, MonitorHttp> i
         int statusCode = Integer.parseInt(String.valueOf(map.get("statusCode")));
         // 响应时间
         long avgTime = Long.parseLong(String.valueOf(map.get("avgTime")));
+        // 异常信息
+        String excMessage = map.get("excMessage") != null ? String.valueOf(map.get("excMessage")) : null;
         // 从数据库获取HTTP信息
         LambdaQueryWrapper<MonitorHttp> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         lambdaQueryWrapper.eq(MonitorHttp::getHostnameSource, NetUtils.getLocalIp());
@@ -71,15 +73,23 @@ public class HttpServiceImpl extends ServiceImpl<IMonitorHttpDao, MonitorHttp> i
             monitorHttp.setAvgTime(avgTime);
             monitorHttp.setUpdateTime(new Date());
             if (statusCode != HttpStatus.SC_OK) {
-                // 异常信息
-                String excMessage = map.get("excMessage") != null ? String.valueOf(map.get("excMessage")) : null;
                 monitorHttp.setExcMessage(excMessage);
             }
             // 更新数据库
             this.updateById(monitorHttp);
         }
-        // 状态码
-        return String.valueOf(statusCode);
+        // 返回值
+        String resultStr;
+        if (statusCode == HttpStatus.SC_OK) {
+            resultStr = String.valueOf(statusCode);
+        } else {
+            if (StringUtils.isNotBlank(excMessage)) {
+                resultStr = statusCode + "：" + excMessage;
+            } else {
+                resultStr = String.valueOf(statusCode);
+            }
+        }
+        return resultStr;
     }
 
 }
