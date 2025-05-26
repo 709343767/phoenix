@@ -126,11 +126,11 @@ public class Monitor {
             monitoringProperties = ConfigLoader.verify(monitoringProperties);
         }
         // 3.验证许可证信息
-        boolean isVerifyPassed = LicenseChecker.verify();
-        if (!isVerifyPassed) {
-            String endpoint = monitoringProperties.getInstance().getEndpoint();
-            String clientNameEn = EndpointTypeEnums.CLIENT.getNameEn();
-            if (!StringUtils.equalsIgnoreCase(endpoint, clientNameEn)) {
+        String endpoint = monitoringProperties.getInstance().getEndpoint();
+        String clientNameEn = EndpointTypeEnums.CLIENT.getNameEn();
+        if (!StringUtils.equalsIgnoreCase(endpoint, clientNameEn)) {
+            boolean isVerifyPassed = LicenseChecker.verify();
+            if (!isVerifyPassed) {
                 // 立即终止JVM，状态码为1
                 Runtime.getRuntime().halt(1);
             }
