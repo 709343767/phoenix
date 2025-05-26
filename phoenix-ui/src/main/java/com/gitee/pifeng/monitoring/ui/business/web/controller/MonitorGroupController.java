@@ -62,6 +62,7 @@ public class MonitorGroupController {
      *
      * @param current   当前页
      * @param size      每页显示条数
+     * @param groupType 分组类型
      * @param groupName 分组名称
      * @param groupDesc 分组描述
      * @return layUiAdmin响应对象
