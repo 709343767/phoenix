@@ -28,18 +28,29 @@ import java.util.Optional;
 public class InstanceGenerator {
 
     /**
-     * 应用实例ID文件（相对路径 + 文件名）
-     */
-    private static final String INSTANCE_ID_FILENAME = "liblog4phoenix" + File.separator + "data" + File.separator
-            + StringUtils.lowerCase(ConfigLoader.getMonitoringProperties().getInstance().getEndpoint()) + "InstanceId";
-
-    /**
      * <p>
      * 应用实例ID
      * </p>
      * 使用 volatile 关键字确保在多线程环境下的可见性。
      */
     private static volatile String instanceId;
+
+    /**
+     * 应用实例ID文件（相对路径 + 文件名）
+     */
+    private static final String INSTANCE_ID_FILENAME;
+
+    static {
+        String instanceIdFileName;
+        try {
+            String endpoint = StringUtils.lowerCase(ConfigLoader.getMonitoringProperties().getInstance().getEndpoint());
+            instanceIdFileName = "liblog4phoenix" + File.separator + "data" + File.separator + endpoint + "InstanceId";
+        } catch (Exception e) {
+            // 防止静态初始化块抛异常导致类加载失败
+            instanceIdFileName = "liblog4phoenix" + File.separator + "data" + File.separator + "instanceId";
+        }
+        INSTANCE_ID_FILENAME = instanceIdFileName;
+    }
 
     /**
      * <p>
@@ -112,6 +123,7 @@ public class InstanceGenerator {
      * 把应用实例ID写入文件
      * </p>
      *
+     * @param instanceId 应用实例ID
      * @author 皮锋
      * @custom.date 2025年5月26日 下午21:59:39
      */
@@ -131,6 +143,7 @@ public class InstanceGenerator {
      * 从文件读取应用实例ID
      * </p>
      *
+     * @return 应用实例ID
      * @author 皮锋
      * @custom.date 2025年5月26日 22:02:18
      */
