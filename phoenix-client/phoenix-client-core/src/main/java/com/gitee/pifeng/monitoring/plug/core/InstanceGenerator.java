@@ -1,11 +1,20 @@
 package com.gitee.pifeng.monitoring.plug.core;
 
+import cn.hutool.core.io.file.FileReader;
+import cn.hutool.core.io.file.FileWriter;
+import cn.hutool.core.util.IdUtil;
 import com.gitee.pifeng.monitoring.common.exception.NetException;
+import com.gitee.pifeng.monitoring.common.property.client.MonitoringInstanceProperties;
+import com.gitee.pifeng.monitoring.common.property.client.MonitoringServerInfoProperties;
+import com.gitee.pifeng.monitoring.common.util.DirUtils;
 import com.gitee.pifeng.monitoring.common.util.Md5Utils;
 import com.gitee.pifeng.monitoring.common.util.server.NetUtils;
 import com.gitee.pifeng.monitoring.common.util.server.oshi.BaseboardUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+
+import java.io.File;
+import java.util.Optional;
 
 /**
  * <p>
@@ -17,6 +26,12 @@ import org.apache.commons.lang3.StringUtils;
  */
 @Slf4j
 public class InstanceGenerator {
+
+    /**
+     * 应用实例ID文件（相对路径 + 文件名）
+     */
+    private static final String INSTANCE_ID_FILENAME = "liblog4phoenix" + File.separator + "data" + File.separator
+            + StringUtils.lowerCase(ConfigLoader.getMonitoringProperties().getInstance().getEndpoint()) + "InstanceId";
 
     /**
      * <p>
@@ -50,32 +65,84 @@ public class InstanceGenerator {
      */
     public static String getInstanceId() throws NetException {
         // 第一次检查
-        if (instanceId == null) {
-            synchronized (InstanceGenerator.class) {
-                // 第二次检查
-                if (instanceId == null) {
-                    // 实例次序（不能重复）
-                    int order = ConfigLoader.getMonitoringProperties().getInstance().getOrder();
-                    // 实例名称
-                    String instanceName = ConfigLoader.getMonitoringProperties().getInstance().getName();
-                    // 获取主板序列号
-                    String baseboardSerialNumber = BaseboardUtils.getBaseboardSerialNumber();
-                    // 能获取到主板号
-                    String unknown = "未知";
-                    if (!StringUtils.equals(baseboardSerialNumber, unknown)) {
-                        instanceId = Md5Utils.encrypt(baseboardSerialNumber + order + instanceName);
-                    }
-                    // 不能获取到主板号
-                    else {
-                        String mac = NetUtils.getLocalMac();
-                        // 如果配置了服务器IP，用配置的，如果没有配置服务器IP，则自己获取
-                        String ip = ConfigLoader.getMonitoringProperties().getServerInfo().getIp() == null ? NetUtils.getLocalIp() : ConfigLoader.getMonitoringProperties().getServerInfo().getIp();
-                        instanceId = Md5Utils.encrypt(mac + ip + order + instanceName);
-                    }
-                }
-            }
+        if (StringUtils.isNotBlank(instanceId)) {
+            return instanceId;
         }
-        return instanceId;
+        synchronized (InstanceGenerator.class) {
+            // 第二次检查
+            if (StringUtils.isNotBlank(instanceId)) {
+                return instanceId;
+            }
+            // 先尝试从文件读取
+            instanceId = readInstanceIdInFile();
+            if (StringUtils.isNotBlank(instanceId)) {
+                return instanceId;
+            }
+            // 获取配置信息
+            MonitoringInstanceProperties monitoringInstanceProperties = ConfigLoader.getMonitoringProperties().getInstance();
+            MonitoringServerInfoProperties monitoringServerInfoProperties = ConfigLoader.getMonitoringProperties().getServerInfo();
+            // UUID
+            String uuid = IdUtil.fastSimpleUUID();
+            // 实例次序（不能重复）
+            int order = monitoringInstanceProperties.getOrder();
+            // 实例名称
+            String instanceName = monitoringInstanceProperties.getName();
+            // 获取主板序列号
+            String baseboardSerialNumber = BaseboardUtils.getBaseboardSerialNumber();
+            // 能获取到主板号
+            if (!"未知".equals(baseboardSerialNumber) && StringUtils.isNotBlank(baseboardSerialNumber)) {
+                instanceId = Md5Utils.encrypt(uuid + baseboardSerialNumber + order + instanceName);
+            }
+            // 不能获取到主板号
+            else {
+                // MAC地址
+                String mac = NetUtils.getLocalMac();
+                // 如果配置了服务器IP，用配置的，如果没有配置服务器IP，则自己获取
+                String ip = Optional.ofNullable(monitoringServerInfoProperties.getIp()).orElseGet(NetUtils::getLocalIp);
+                instanceId = Md5Utils.encrypt(uuid + mac + ip + order + instanceName);
+            }
+            // 写入文件
+            writeInstanceIdToFile(instanceId);
+            return instanceId;
+        }
+    }
+
+    /**
+     * <p>
+     * 把应用实例ID写入文件
+     * </p>
+     *
+     * @author 皮锋
+     * @custom.date 2025年5月26日 下午21:59:39
+     */
+    private static void writeInstanceIdToFile(String instanceId) {
+        // 根据相对路径获取绝对路径
+        String pathname = DirUtils.getAbsolutePathByRelativePath(INSTANCE_ID_FILENAME);
+        try {
+            FileWriter writer = new FileWriter(pathname);
+            writer.write(instanceId);
+        } catch (Exception e) {
+            log.error("把应用实例ID写入文件失败：{}", e.getMessage(), e);
+        }
+    }
+
+    /**
+     * <p>
+     * 从文件读取应用实例ID
+     * </p>
+     *
+     * @author 皮锋
+     * @custom.date 2025年5月26日 22:02:18
+     */
+    private static String readInstanceIdInFile() {
+        // 根据相对路径获取绝对路径
+        String pathname = DirUtils.getAbsolutePathByRelativePath(INSTANCE_ID_FILENAME);
+        try {
+            FileReader fileReader = new FileReader(pathname);
+            return fileReader.readString();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
 }

@@ -92,4 +92,26 @@ public class DirUtils {
         return resourceUrl;
     }
 
+    /**
+     * <p>
+     * 根据相对路径获取绝对路径
+     * </p>
+     *
+     * @param relativePath 相对路径，可以是“路径”，也可以是“路径+文件名”
+     * @return 绝对路径，可以是“路径”，也可以是“路径+文件名”
+     * @author 皮锋
+     * @custom.date 2025/05/26 21:50
+     */
+    public static String getAbsolutePathByRelativePath(String relativePath) {
+        String pathname;
+        try {
+            // 获取Jar同级目录
+            String jarDirectory = getJarDirectory();
+            pathname = jarDirectory + File.separator + relativePath;
+        } catch (Exception e) {
+            pathname = System.getProperty("user.dir") + File.separator + relativePath;
+        }
+        return pathname;
+    }
+
 }
