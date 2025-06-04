@@ -7,7 +7,6 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.gitee.pifeng.monitoring.common.constant.HttpMediaTypeConstants;
-import com.gitee.pifeng.monitoring.common.util.ArrayUtils;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import lombok.Cleanup;
@@ -128,10 +127,8 @@ public class EnumPoolingHttpClient {
         try {
             // 创建并配置 SSLContext
             SSLContext sslContext = SSLContexts.custom().loadTrustMaterial(null, (chain, authType) -> true).build();
-            String[] designativeTlsVersions = new String[]{"TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"};
             String[] supportedProtocols = sslContext.getSupportedSSLParameters().getProtocols();
-            String[] allTlsVersions = ArrayUtils.mergeAndDeduplicateStrings(designativeTlsVersions, supportedProtocols);
-            sslConnectionSocketFactory = new SSLConnectionSocketFactory(sslContext, allTlsVersions, null, NoopHostnameVerifier.INSTANCE);
+            sslConnectionSocketFactory = new SSLConnectionSocketFactory(sslContext, supportedProtocols, null, NoopHostnameVerifier.INSTANCE);
         } catch (NoSuchAlgorithmException | KeyManagementException | KeyStoreException e) {
             // 拿到默认的SSLConnectionSocketFactory
             sslConnectionSocketFactory = SSLConnectionSocketFactory.getSystemSocketFactory();
