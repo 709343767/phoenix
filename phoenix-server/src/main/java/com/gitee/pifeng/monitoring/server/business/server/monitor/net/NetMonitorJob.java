@@ -21,6 +21,7 @@ import com.gitee.pifeng.monitoring.server.business.server.service.IAlarmService;
 import com.gitee.pifeng.monitoring.server.business.server.service.INetHistoryService;
 import com.gitee.pifeng.monitoring.server.business.server.service.INetService;
 import com.gitee.pifeng.monitoring.server.constant.ComponentOrderConstants;
+import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.quartz.DisallowConcurrentExecution;
@@ -129,9 +130,19 @@ public class NetMonitorJob extends QuartzJobBean {
                             }
                             // 目标IP地址
                             String ipTarget = monitorNet.getIpTarget();
-                            Map<String, Object> objectMap = NetUtils.isConnect(ipTarget);
                             // 测试IP地址能否ping通
-                            boolean isConnected = Boolean.parseBoolean(String.valueOf(objectMap.get("isConnect")));
+                            boolean isConnected = false;
+                            Map<String, Object> objectMap = Maps.newHashMap();
+                            // 监控阈值
+                            int threshold = this.monitoringConfigPropertiesLoader.getMonitoringProperties().getThreshold();
+                            for (int i = 0; i < threshold; i++) {
+                                objectMap = NetUtils.isConnect(ipTarget);
+                                // 测试IP地址能否ping通
+                                isConnected = Boolean.parseBoolean(String.valueOf(objectMap.get("isConnect")));
+                                if (isConnected) {
+                                    break;
+                                }
+                            }
                             // 平均响应时间
                             Double avgTime = Double.valueOf(String.valueOf(objectMap.get("avgTime")));
                             // ping详情

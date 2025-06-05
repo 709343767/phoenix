@@ -25,6 +25,7 @@ import com.gitee.pifeng.monitoring.server.business.server.service.IAlarmService;
 import com.gitee.pifeng.monitoring.server.business.server.service.IHttpHistoryService;
 import com.gitee.pifeng.monitoring.server.business.server.service.IHttpService;
 import com.gitee.pifeng.monitoring.server.constant.ComponentOrderConstants;
+import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpStatus;
@@ -190,9 +191,19 @@ public class HttpMonitorJob extends QuartzJobBean {
                     }
                 }
             }
-            Map<String, Object> stringObjectMap = httpClient.sendHttpPost(urlTarget, contentType, headerParameter, bodyParameter);
             // 状态码
-            int statusCode = Integer.parseInt(String.valueOf(stringObjectMap.get("statusCode")));
+            int statusCode = HttpStatus.SC_INTERNAL_SERVER_ERROR;
+            Map<String, Object> stringObjectMap = Maps.newHashMap();
+            // 监控阈值
+            int threshold = this.monitoringConfigPropertiesLoader.getMonitoringProperties().getThreshold();
+            for (int i = 0; i < threshold; i++) {
+                stringObjectMap = httpClient.sendHttpPost(urlTarget, contentType, headerParameter, bodyParameter);
+                // 状态码
+                statusCode = Integer.parseInt(String.valueOf(stringObjectMap.get("statusCode")));
+                if (statusCode == HttpStatus.SC_OK) {
+                    break;
+                }
+            }
             // 响应时间
             long avgTime = Long.parseLong(String.valueOf(stringObjectMap.get("avgTime")));
             // 成功
@@ -225,15 +236,25 @@ public class HttpMonitorJob extends QuartzJobBean {
      */
     private void checkGet(MonitorHttp monitorHttp) {
         try {
-            //HTTP线程池工具类
+            // HTTP线程池工具类
             EnumPoolingHttpClient httpClient = EnumPoolingHttpClient.getInstance();
             // URL地址（目的地）
             String urlTarget = monitorHttp.getUrlTarget();
             // 请求头参数（LayUiTable数据中，过滤出选中的数据）
             String headerParameter = LayUiUtils.filterCheckedWithLayUiTable(monitorHttp.getHeaderParameter());
-            Map<String, Object> stringObjectMap = httpClient.sendHttpGet(urlTarget, headerParameter);
             // 状态码
-            int statusCode = Integer.parseInt(String.valueOf(stringObjectMap.get("statusCode")));
+            int statusCode = HttpStatus.SC_INTERNAL_SERVER_ERROR;
+            Map<String, Object> stringObjectMap = Maps.newHashMap();
+            // 监控阈值
+            int threshold = this.monitoringConfigPropertiesLoader.getMonitoringProperties().getThreshold();
+            for (int i = 0; i < threshold; i++) {
+                stringObjectMap = httpClient.sendHttpGet(urlTarget, headerParameter);
+                // 状态码
+                statusCode = Integer.parseInt(String.valueOf(stringObjectMap.get("statusCode")));
+                if (statusCode == HttpStatus.SC_OK) {
+                    break;
+                }
+            }
             // 响应时间
             long avgTime = Long.parseLong(String.valueOf(stringObjectMap.get("avgTime")));
             // 成功

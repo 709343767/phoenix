@@ -171,7 +171,15 @@ public class DbMonitorJob extends QuartzJobBean {
             // 获取 MongoClient
             mongoClient = MongoUtils.getClient(url);
             // Mongo数据库是否可连接
-            boolean isConnect = MongoUtils.isConnect(mongoClient);
+            boolean isConnect = false;
+            // 监控阈值
+            int threshold = this.monitoringConfigPropertiesLoader.getMonitoringProperties().getThreshold();
+            for (int i = 0; i < threshold; i++) {
+                isConnect = MongoUtils.isConnect(mongoClient);
+                if (isConnect) {
+                    break;
+                }
+            }
             // 连接正常
             if (isConnect) {
                 // 处理数据库正常
@@ -214,7 +222,15 @@ public class DbMonitorJob extends QuartzJobBean {
             // 获取 Jedis
             jedis = RedisUtils.getJedis(host, port, password);
             // Redis数据库是否可连接
-            boolean isConnect = RedisUtils.isConnect(jedis);
+            boolean isConnect = false;
+            // 监控阈值
+            int threshold = this.monitoringConfigPropertiesLoader.getMonitoringProperties().getThreshold();
+            for (int i = 0; i < threshold; i++) {
+                isConnect = RedisUtils.isConnect(jedis);
+                if (isConnect) {
+                    break;
+                }
+            }
             // 连接正常
             if (isConnect) {
                 // 处理数据库正常
@@ -256,7 +272,15 @@ public class DbMonitorJob extends QuartzJobBean {
             // 获取数据库连接
             connection = DbUtils.getConnection(url, username, password);
             // 关系型数据库是否可连接
-            boolean isConnect = this.isRelationalDbConnect(connection, monitorDb);
+            boolean isConnect = false;
+            // 监控阈值
+            int threshold = this.monitoringConfigPropertiesLoader.getMonitoringProperties().getThreshold();
+            for (int i = 0; i < threshold; i++) {
+                isConnect = this.isRelationalDbConnect(connection, monitorDb);
+                if (isConnect) {
+                    break;
+                }
+            }
             // 连接正常
             if (isConnect) {
                 // 处理数据库正常

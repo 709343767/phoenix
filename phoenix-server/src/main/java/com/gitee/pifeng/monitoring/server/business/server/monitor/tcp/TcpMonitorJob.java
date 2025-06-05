@@ -21,6 +21,7 @@ import com.gitee.pifeng.monitoring.server.business.server.service.IAlarmService;
 import com.gitee.pifeng.monitoring.server.business.server.service.ITcpHistoryService;
 import com.gitee.pifeng.monitoring.server.business.server.service.ITcpService;
 import com.gitee.pifeng.monitoring.server.constant.ComponentOrderConstants;
+import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.quartz.DisallowConcurrentExecution;
@@ -133,10 +134,20 @@ public class TcpMonitorJob extends QuartzJobBean {
                             String hostnameTarget = monitorTcp.getHostnameTarget();
                             // 目标端口号
                             Integer portTarget = monitorTcp.getPortTarget();
-                            // 测试telnet能否成功
-                            Map<String, Object> telnet = NetUtils.telnetVT200(hostnameTarget, portTarget);
                             // 是否能telnet通
-                            boolean isConnected = Boolean.parseBoolean(String.valueOf(telnet.get("isConnect")));
+                            boolean isConnected = false;
+                            Map<String, Object> telnet = Maps.newHashMap();
+                            // 监控阈值
+                            int threshold = this.monitoringConfigPropertiesLoader.getMonitoringProperties().getThreshold();
+                            for (int i = 0; i < threshold; i++) {
+                                // 测试telnet能否成功
+                                telnet = NetUtils.telnetVT200(hostnameTarget, portTarget);
+                                // 是否能telnet通
+                                isConnected = Boolean.parseBoolean(String.valueOf(telnet.get("isConnect")));
+                                if (isConnected) {
+                                    break;
+                                }
+                            }
                             // 平均时间（毫秒）
                             Long avgTime = Long.valueOf(String.valueOf(telnet.get("avgTime")));
                             // TCP服务正常

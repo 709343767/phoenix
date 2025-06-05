@@ -44,6 +44,9 @@ public class MonitorJvmThreadServiceImpl extends ServiceImpl<IMonitorJvmThreadDa
         LambdaQueryWrapper<MonitorJvmThread> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         lambdaQueryWrapper.eq(MonitorJvmThread::getInstanceId, instanceId);
         MonitorJvmThread monitorJvmThread = this.monitorJvmThreadDao.selectOne(lambdaQueryWrapper);
+        if (monitorJvmThread == null) {
+            return MonitorJvmThreadVo.builder().build();
+        }
         MonitorJvmThreadVo monitorJvmThreadVo = MonitorJvmThreadVo.builder().build().convertFor(monitorJvmThread);
         String threadInfosStr = monitorJvmThread.getThreadInfos();
         if (StringUtils.isNotBlank(threadInfosStr)) {
