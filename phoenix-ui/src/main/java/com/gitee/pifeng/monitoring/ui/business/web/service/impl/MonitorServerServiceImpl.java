@@ -84,6 +84,12 @@ public class MonitorServerServiceImpl extends ServiceImpl<IMonitorServerDao, Mon
     private IMonitorServerCpuHistoryDao monitorServerCpuHistoryDao;
 
     /**
+     * 服务器GPU数据访问对象
+     */
+    @Autowired
+    private IMonitorServerGpuDao monitorServerGpuDao;
+
+    /**
      * 服务器磁盘数据访问对象
      */
     @Autowired
@@ -273,6 +279,10 @@ public class MonitorServerServiceImpl extends ServiceImpl<IMonitorServerDao, Mon
         LambdaUpdateWrapper<MonitorServerCpu> serverCpuLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
         serverCpuLambdaUpdateWrapper.in(MonitorServerCpu::getIp, ips);
         this.monitorServerCpuDao.delete(serverCpuLambdaUpdateWrapper);
+        // 服务器GPU表
+        LambdaUpdateWrapper<MonitorServerGpu> serverGpuLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+        serverGpuLambdaUpdateWrapper.in(MonitorServerGpu::getIp, ips);
+        this.monitorServerGpuDao.delete(serverGpuLambdaUpdateWrapper);
         // 服务器磁盘历史记录
         LambdaUpdateWrapper<MonitorServerDiskHistory> serverDiskHistoryLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
         serverDiskHistoryLambdaUpdateWrapper.in(MonitorServerDiskHistory::getIp, ips);

@@ -780,6 +780,30 @@ CREATE TABLE `MONITOR_SERVER_DISK_HISTORY`
   ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
+-- Table structure for MONITOR_SERVER_GPU
+-- ----------------------------
+DROP TABLE IF EXISTS `MONITOR_SERVER_GPU`;
+CREATE TABLE `MONITOR_SERVER_GPU`
+(
+    `ID`               bigint(20) UNSIGNED                                           NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `IP`               varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT 'IP地址',
+    `GPU_NO`           int(8)                                                        NULL DEFAULT NULL COMMENT 'GPU序号',
+    `GPU_NAME`         varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'GPU名称',
+    `GPU_DEVICE_ID`    varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'GPU设备ID',
+    `GPU_VENDOR`       varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'GPU供应商',
+    `GPU_VERSION_INFO` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'GPU版本信息',
+    `GPU_VRAM_TOTAL`   bigint(20)                                                    NULL DEFAULT NULL COMMENT 'GPU显存总量（单位：byte）',
+    `INSERT_TIME`      datetime                                                      NOT NULL COMMENT '新增时间',
+    `UPDATE_TIME`      datetime                                                      NULL DEFAULT NULL COMMENT '更新时间',
+    PRIMARY KEY (`ID`) USING BTREE,
+    UNIQUE INDEX `UX_IP_GPU_NO` (`IP`, `GPU_NO`) USING BTREE COMMENT '索引_IP地址_GPU序号',
+    INDEX `NX_IP` (`IP`) USING BTREE COMMENT '索引_IP地址'
+) ENGINE = InnoDB
+  CHARACTER SET = utf8mb4
+  COLLATE = utf8mb4_general_ci COMMENT = '服务器GPU表'
+  ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
 -- Table structure for MONITOR_SERVER_LOAD_AVERAGE
 -- ----------------------------
 DROP TABLE IF EXISTS `MONITOR_SERVER_LOAD_AVERAGE`;

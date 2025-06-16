@@ -61,6 +61,12 @@ public class ServerServiceImpl extends ServiceImpl<IMonitorServerDao, MonitorSer
     private IServerCpuHistoryService serverCpuHistoryService;
 
     /**
+     * 服务器GPU信息服务层接口
+     */
+    @Autowired
+    private IServerGpuService serverGpuService;
+
+    /**
      * 服务器网卡信息服务层接口
      */
     @Autowired
@@ -182,6 +188,8 @@ public class ServerServiceImpl extends ServiceImpl<IMonitorServerDao, MonitorSer
         this.serverCpuService.operateServerCpu(serverPackage);
         // 把服务器CPU历史记录添加到数据库
         this.serverCpuHistoryService.operateServerCpuHistory(serverPackage);
+        // 把服务器GPU信息添加或更新到数据库
+        this.serverGpuService.operateServerGpu(serverPackage);
         // 把服务器网卡信息添加或更新到数据库
         this.serverNetcardService.operateServerNetcard(serverPackage);
         // 把服务器网卡历史记录添加到数据库

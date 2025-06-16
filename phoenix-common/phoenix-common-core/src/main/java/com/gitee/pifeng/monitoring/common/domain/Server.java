@@ -38,6 +38,11 @@ public final class Server extends AbstractSuperBean {
     private CpuDomain cpuDomain;
 
     /**
+     * Gpu信息
+     */
+    private GpuDomain gpuDomain;
+
+    /**
      * 系统平均负载信息
      */
     private SystemLoadAverageDomain systemLoadAverageDomain;

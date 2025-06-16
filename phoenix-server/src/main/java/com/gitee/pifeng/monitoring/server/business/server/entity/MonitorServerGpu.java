@@ -1,0 +1,89 @@
+package com.gitee.pifeng.monitoring.server.business.server.entity;
+
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.*;
+import lombok.experimental.Accessors;
+
+import java.util.Date;
+
+/**
+ * <p>
+ * 服务器GPU表
+ * </p>
+ *
+ * @author 皮锋
+ * @custom.date 2025-06-09
+ */
+@Data
+@EqualsAndHashCode(callSuper = false)
+@Accessors(chain = true)
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@TableName("MONITOR_SERVER_GPU")
+public class MonitorServerGpu {
+
+    /**
+     * 主键ID
+     */
+    @TableId(value = "ID", type = IdType.AUTO)
+    private Long id;
+
+    /**
+     * IP地址
+     */
+    @TableField("IP")
+    private String ip;
+
+    /**
+     * GPU序号
+     */
+    @TableField("GPU_NO")
+    private Integer gpuNo;
+
+    /**
+     * GPU名称
+     */
+    @TableField("GPU_NAME")
+    private String gpuName;
+
+    /**
+     * GPU设备ID
+     */
+    @TableField("GPU_DEVICE_ID")
+    private String gpuDeviceId;
+
+    /**
+     * GPU供应商
+     */
+    @TableField("GPU_VENDOR")
+    private String gpuVendor;
+
+    /**
+     * GPU版本信息
+     */
+    @TableField("GPU_VERSION_INFO")
+    private String gpuVersionInfo;
+
+    /**
+     * GPU显存总量（单位：byte）
+     */
+    @TableField("GPU_VRAM_TOTAL")
+    private Long gpuVramTotal;
+
+    /**
+     * 新增时间
+     */
+    @TableField("INSERT_TIME")
+    private Date insertTime;
+
+    /**
+     * 更新时间
+     */
+    @TableField("UPDATE_TIME")
+    private Date updateTime;
+
+}

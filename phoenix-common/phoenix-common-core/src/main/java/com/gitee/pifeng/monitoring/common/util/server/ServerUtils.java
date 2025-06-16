@@ -1,6 +1,10 @@
 package com.gitee.pifeng.monitoring.common.util.server;
 
 import com.gitee.pifeng.monitoring.common.domain.Server;
+import com.gitee.pifeng.monitoring.common.util.server.oshi.GpuUtils;
+import com.gitee.pifeng.monitoring.common.util.server.oshi.PowerSourceUtils;
+import com.gitee.pifeng.monitoring.common.util.server.oshi.ProcessUtils;
+import com.gitee.pifeng.monitoring.common.util.server.oshi.SensorsUtils;
 import org.hyperic.sigar.SigarException;
 
 /**
@@ -36,14 +40,15 @@ public final class ServerUtils {
     public static Server getSigarServerInfo() throws SigarException {
         return Server.builder()
                 .cpuDomain(com.gitee.pifeng.monitoring.common.util.server.sigar.CpuUtils.getCpuInfo())
+                .gpuDomain(GpuUtils.getGpuInfo())
                 .memoryDomain(com.gitee.pifeng.monitoring.common.util.server.sigar.MemoryUtils.getMemoryInfo())
                 .netDomain(com.gitee.pifeng.monitoring.common.util.server.sigar.NetInterfaceUtils.getNetInfo())
                 .diskDomain(com.gitee.pifeng.monitoring.common.util.server.sigar.DiskUtils.getDiskInfo())
+                .powerSourcesDomain(PowerSourceUtils.getPowerSourcesInfo())
+                .sensorsDomain(SensorsUtils.getSensorsInfo())
+                .processDomain(ProcessUtils.getProcessInfo())
                 .systemLoadAverageDomain(com.gitee.pifeng.monitoring.common.util.server.sigar.SystemLoadAverageUtils.getSystemLoadAverageInfo())
                 .osDomain(OsUtils.getOsInfo())
-                .powerSourcesDomain(com.gitee.pifeng.monitoring.common.util.server.oshi.PowerSourceUtils.getPowerSourcesInfo())
-                .sensorsDomain(com.gitee.pifeng.monitoring.common.util.server.oshi.SensorsUtils.getSensorsInfo())
-                .processDomain(com.gitee.pifeng.monitoring.common.util.server.oshi.ProcessUtils.getProcessInfo())
                 .build();
     }
 
@@ -59,6 +64,7 @@ public final class ServerUtils {
     public static Server getOshiServerInfo() {
         return Server.builder()
                 .cpuDomain(com.gitee.pifeng.monitoring.common.util.server.oshi.CpuUtils.getCpuInfo())
+                .gpuDomain(com.gitee.pifeng.monitoring.common.util.server.oshi.GpuUtils.getGpuInfo())
                 .memoryDomain(com.gitee.pifeng.monitoring.common.util.server.oshi.MemoryUtils.getMemoryInfo())
                 .netDomain(com.gitee.pifeng.monitoring.common.util.server.oshi.NetInterfaceUtils.getNetInfo())
                 .diskDomain(com.gitee.pifeng.monitoring.common.util.server.oshi.DiskUtils.getDiskInfo())

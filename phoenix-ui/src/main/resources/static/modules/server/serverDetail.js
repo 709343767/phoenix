@@ -583,7 +583,7 @@
                         var isPowerOnLine = obj.isPowerOnLine === '1' ? '充电' : '放电';
                         var voltage = obj.voltage;
                         html += '<div class="layui-col-md4">' +
-                            '       <label class="label-font-weight">电池名称：</label>' + name + '（' + deviceName + '）' +
+                            '       <label class="label-font-weight">电池名称：</label>' + name + '(' + deviceName + ')' +
                             '    </div>' +
                             '    <div class="layui-col-md4">' +
                             '       <label class="label-font-weight">序列号：</label>' + serialNumber +
@@ -592,7 +592,7 @@
                             '       <label class="label-font-weight">电池类型：</label>' + chemistry +
                             '    </div>' +
                             '    <div class="layui-col-md4">' +
-                            '       <label class="label-font-weight">制造商：</label>' + manufacturer +
+                            '       <label class="label-font-weight">供应商：</label>' + manufacturer +
                             '    </div>' +
                             '    <div class="layui-col-md4">' +
                             '       <label class="label-font-weight">生产日期：</label>' + manufactureDate +
@@ -610,10 +610,10 @@
                             '       <label class="label-font-weight">剩余百分比：</label>' + remainingCapacityPercent +
                             '    </div>' +
                             '    <div class="layui-col-md4">' +
-                            '       <label class="label-font-weight">剩余使用时间（系统报告）：</label>' + timeRemainingEstimated +
+                            '       <label class="label-font-weight">剩余使用时间(系统报告)：</label>' + timeRemainingEstimated +
                             '    </div>' +
                             '    <div class="layui-col-md4">' +
-                            '       <label class="label-font-weight">' + isPowerOnLine + '剩余时间（电池报告）：</label>' + timeRemainingInstant +
+                            '       <label class="label-font-weight">' + isPowerOnLine + '剩余时间(电池报告)：</label>' + timeRemainingInstant +
                             '    </div>' +
                             '    <div class="layui-col-md4">' +
                             '       <label class="label-font-weight">电压：</label>' + voltage +
@@ -703,7 +703,7 @@
                             '       <label class="label-font-weight">CPU使用率：</label>' + cpuLoadCumulative + '%' +
                             '    </div>' +
                             '    <div class="layui-col-md4">' +
-                            '       <label class="label-font-weight">占用内存（RSS）：</label>' + memorySize +
+                            '       <label class="label-font-weight">占用内存(RSS)：</label>' + memorySize +
                             '    </div>' +
                             '    <div class="layui-col-md4">' +
                             '       <label class="label-font-weight">状态：</label>' + state +
@@ -777,7 +777,7 @@
                     var html = '';
                     // 设置CPU核数
                     var cpuCores = data.length;
-                    $('#cpuHead').empty().append('（' + cpuCores + '核）');
+                    $('#cpuHead').empty().append('(' + cpuCores + '核)');
                     for (var i = 0; i < data.length; i++) {
                         var obj = data[i];
                         var cpuVendor = obj.cpuVendor;
@@ -793,7 +793,7 @@
                             '       <label class="label-font-weight">频率：</label>' + cpuMhz + 'MHz' +
                             '    </div>' +
                             '    <div class="layui-col-md4">' +
-                            '       <label class="label-font-weight">制造商：</label>' + cpuVendor +
+                            '       <label class="label-font-weight">供应商：</label>' + cpuVendor +
                             '    </div>' +
                             '    <div class="layui-col-md4">' +
                             '       <label class="label-font-weight">类型：</label>' + cpuModel +
@@ -827,6 +827,61 @@
                 error: function () {
                     // 关闭loading框
                     // layer.close(loadingIndex);
+                }
+            });
+        }
+
+        // 发送ajax请求，获取GPU数据
+        function getServerGpuInfo() {
+            admin.req({
+                type: 'get',
+                url: layui.setter.base + 'monitor-server-gpu/get-server-detail-page-server-gpu-info',
+                dataType: 'json',
+                contentType: 'application/json;charset=utf-8',
+                headers: {
+                    "X-CSRF-TOKEN": tokenValue
+                },
+                data: {
+                    ip: ip // 服务器IP
+                },
+                success: function (result) {
+                    var data = result.data;
+                    // 没有gpu信息
+                    if (data.length === 0) {
+                        $('#gpuDiv').hide();
+                    } else {
+                        $('#gpuDiv').show();
+                    }
+                    var html = '';
+                    for (var i = 0; i < data.length; i++) {
+                        var obj = data[i];
+                        var gpuDeviceId = obj.gpuDeviceId;
+                        var gpuName = obj.gpuName;
+                        var gpuVendor = obj.gpuVendor;
+                        var gpuVersionInfo = obj.gpuVersionInfo;
+                        var gpuVramTotal = obj.gpuVramTotal;
+                        html += '<div class="layui-col-md4">' +
+                            '       <label class="label-font-weight">设备ID：</label>' + gpuDeviceId +
+                            '    </div>' +
+                            '    <div class="layui-col-md4">' +
+                            '       <label class="label-font-weight">名称：</label>' + gpuName +
+                            '    </div>' +
+                            '    <div class="layui-col-md4">' +
+                            '       <label class="label-font-weight">供应商：</label>' + gpuVendor +
+                            '    </div>' +
+                            '    <div class="layui-col-md4">' +
+                            '       <label class="label-font-weight">版本信息：</label>' + gpuVersionInfo +
+                            '    </div>' +
+                            '    <div class="layui-col-md4">' +
+                            '       <label class="label-font-weight">显存总量：</label>' + gpuVramTotal +
+                            '    </div>';
+                        if (i !== data.length - 1) {
+                            html += '<hr class="layui-bg-gray hr-padding">';
+                        }
+                    }
+                    $('#gpu').empty().append(html);
+                },
+                error: function () {
                 }
             });
         }
@@ -1844,7 +1899,7 @@
                     var lastUploadSpeed = data.length !== 0 ? convertSize(data[data.length - 1].uploadSpeed) + '/s' : '没数据';
                     var option = {
                         title: {
-                            text: chartAddress + '（' + name + '） 上行/下行 带宽',
+                            text: chartAddress + '(' + name + ') 上行/下行 带宽',
                             left: 'center',
                             textStyle: {
                                 color: '#696969',
@@ -2375,6 +2430,8 @@
             getServerNetcardInfo();
             // 发送ajax请求，获取CPU数据
             getServerCpuInfo();
+            // 发送ajax请求，获取GPU数据
+            getServerGpuInfo();
             // 发送ajax请求，获取电池数据
             getServerPowerSourcesInfo();
             // 发送ajax请求，获取传感器数据
