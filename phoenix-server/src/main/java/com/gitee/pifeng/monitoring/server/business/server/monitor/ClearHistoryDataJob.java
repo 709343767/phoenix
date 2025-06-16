@@ -59,7 +59,7 @@ public class ClearHistoryDataJob extends QuartzJobBean {
     private IHttpHistoryService httpHistoryService;
 
     /**
-     * 扫描数据库所有历史记录表，清理一星期以前的历史记录。
+     * 扫描数据库所有历史记录表，清理一个月以前的历史记录。
      *
      * @param jobExecutionContext 作业执行上下文
      * @author 皮锋
@@ -68,12 +68,12 @@ public class ClearHistoryDataJob extends QuartzJobBean {
     @Override
     protected void executeInternal(@NonNull JobExecutionContext jobExecutionContext) {
         try {
-            // 清理一星期以前的数据
-            Date historyTime = new DateTime().plusWeeks(-1).toDate();
-            int clearJvmHistoryDataNum = this.jvmService.clearHistoryData(historyTime);
-            log.info("清理JVM历史数据：{} 条！", clearJvmHistoryDataNum);
+            // 清理一个月以前的数据
+            Date historyTime = new DateTime().plusMonths(-1).toDate();
             int clearServerHistoryDataNum = this.serverService.clearHistoryData(historyTime);
             log.info("清理服务器历史数据：{} 条！", clearServerHistoryDataNum);
+            int clearJvmHistoryDataNum = this.jvmService.clearHistoryData(historyTime);
+            log.info("清理JVM历史数据：{} 条！", clearJvmHistoryDataNum);
             int clearNetHistoryDataNum = this.netHistoryService.clearHistoryData(historyTime);
             log.info("清理网络历史数据：{} 条！", clearNetHistoryDataNum);
             int clearTcpHistoryDataNum = this.tcpHistoryService.clearHistoryData(historyTime);
