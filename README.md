@@ -167,6 +167,10 @@
 注意：1.演示项目只提供非管理员账号，只有查看权限！  
 &emsp;&emsp;&emsp;2.演示项目访问比较慢是因为服务器太菜，带宽太小！
 
+## 王者荣耀
+
+
+
 ## 功能截图
 
 ![首页1](https://gitee.com/monitoring-platform/phoenix/raw/master/doc/%E6%88%AA%E5%9B%BE/%E9%A6%96%E9%A1%B51.png "首页1")
@@ -277,4 +281,9 @@
 ## 捐赠
 
 ![捐赠](https://gitee.com/monitoring-platform/phoenix/raw/master/doc/%E5%85%B6%E5%AE%83/donate.jpg "捐赠")
+
+## Github Star 历史
+
+[![GitHub Star 历史](https://starchart.cc/709343767/phoenix.svg?variant=adaptive)](https://starchart.cc/709343767/phoenix)
+
 
