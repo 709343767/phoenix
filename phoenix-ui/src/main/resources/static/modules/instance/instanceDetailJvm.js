@@ -83,7 +83,7 @@
                             '        <label class="label-font-weight">GC总次数：</label>' + collectionCount +
                             '    </div>' +
                             '    <div class="layui-col-md4">' +
-                            '        <label class="label-font-weight">GC总时间（毫秒）：</label>' + collectionTime +
+                            '        <label class="label-font-weight">GC总时间(毫秒)：</label>' + collectionTime +
                             '    </div>';
                     }
                     $('#gc').empty().append(html);
@@ -180,7 +180,7 @@
                         '            <label class="label-font-weight">虚拟机开始时间：</label>' + startTime +
                         '       </div>' +
                         '       <div class="layui-col-md12">' +
-                        '            <label class="label-font-weight">虚拟机正常运行时间（毫秒）：</label>' + uptime +
+                        '            <label class="label-font-weight">虚拟机正常运行时间(毫秒)：</label>' + uptime +
                         '       </div>' +
                         '       <div class="layui-col-md12">' +
                         '           <label class="label-font-weight">虚拟机名称：</label>' + name +
