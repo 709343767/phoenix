@@ -169,7 +169,7 @@
 
 ## 王者荣耀
 
-
+![Phoenix GitCode G-Star 毕业项目认证](https://gitee.com/monitoring-platform/phoenix/raw/master/doc/%E5%85%B6%E5%AE%83/Phoenix%20GitCode%20G-Star%20%E6%AF%95%E4%B8%9A%E9%A1%B9%E7%9B%AE%E8%AE%A4%E8%AF%81.jpg "Phoenix GitCode G-Star 毕业项目认证")
 
 ## 功能截图
 
@@ -276,7 +276,7 @@
 
 ## 交流群
 
-[![加入QQ频道](https://img.shields.io/badge/QQ%E9%A2%91%E9%81%93-qqm7n4r70p-blue)](https://pd.qq.com/s/azkxjsk3v) [![加入QQ群](https://img.shields.io/badge/QQ%E7%BE%A4-773127639-blue)](http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=qEfrXWBpzslfYc9QrTQJwx1Kty0sC3Ee&authKey=0GQGNvA5G0SLWZgRyn9EjX3Uta0WLAGuzSmrGqNWAnaUTU5LzRTZovcB2ivgE%2BFm&noverify=0&group_code=773127639)
+[![加入QQ群](https://img.shields.io/badge/QQ%E7%BE%A4-773127639-blue)](http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=qEfrXWBpzslfYc9QrTQJwx1Kty0sC3Ee&authKey=0GQGNvA5G0SLWZgRyn9EjX3Uta0WLAGuzSmrGqNWAnaUTU5LzRTZovcB2ivgE%2BFm&noverify=0&group_code=773127639)
 
 ## 捐赠
 
