@@ -1,14 +1,22 @@
-#指定基镜像
-FROM openjdk:8-jdk-alpine
-#指定数据卷
-VOLUME ["/tmp","/liblog4phoenix"]
-#作者
-MAINTAINER 皮锋 <709343767@qq.com>
-#添加项目
-ADD phoenix-server.jar app.jar
-#修改这个文件的访问时间为当前时间
-#RUN sh -c 'touch /app.jar'
-#暴露端口
+# 使用 JDK 17 基础镜像（推荐使用 Adoptium 官方镜像）
+FROM eclipse-temurin:17-jdk-focal
+# 设置编码环境（设置容器内的系统编码为 UTF-8，避免中文乱码或字符集问题）
+ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
+# 声明容器挂载点
+VOLUME ["/liblog4phoenix", "/config"]
+# 维护者信息
+LABEL maintainer="皮锋 <709343767@qq.com>"
+# 复制本地 jar 包到容器中
+COPY phoenix-server.jar phoenix-server.jar
+# 复制本地 许可证文件 到容器中
+COPY license.txt license.txt
+# 暴露应用端口
 EXPOSE 16000
-#指定执行启动项目
-ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-Duser.timezone=GMT+08","-Ddruid.mysql.usePingMethod=false","-Dspring.profiles.active=prod","-jar","app.jar"]
+# 容器启动命令
+ENTRYPOINT ["java", \
+"-Djava.security.egd=file:/dev/./urandom", \
+"-Duser.timezone=GMT+08", \
+"-Ddruid.mysql.usePingMethod=false", \
+"-Dspring.profiles.active=prod", \
+"-jar", \
+"phoenix-server.jar"]
