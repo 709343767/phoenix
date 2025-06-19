@@ -1,5 +1,7 @@
 # 使用 JDK 17 基础镜像（推荐使用 Adoptium 官方镜像）
 FROM eclipse-temurin:17-jdk-focal
+# 设置编码环境（设置容器内的系统编码为 UTF-8，避免中文乱码或字符集问题）
+ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
 # 声明目录作为容器的挂载点
 VOLUME ["/liblog4phoenix", "/config"]
 # 维护者信息
