@@ -4,6 +4,11 @@ FROM eclipse-temurin:17-jdk-focal
 ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
 # 设置系统时区为中国上海
 RUN ln -snf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && echo Asia/Shanghai > /etc/timezone
+# 安装 ping 工具
+RUN apt-get update && \
+    apt-get install -y iputils-ping && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 # 设置容器工作目录（COPY, ADD, RUN 等默认都在 WORKDIR 下执行）
 WORKDIR /app
 # 声明容器挂载点
