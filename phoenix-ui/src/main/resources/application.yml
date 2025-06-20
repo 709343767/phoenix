@@ -189,10 +189,13 @@ management:
   endpoint:
     shutdown:
       enabled: true
+    health:
+      show-details: always
+      enabled: true
   endpoints:
     web:
       exposure:
-        include: shutdown
+        include: shutdown,health
   server:
     #处于安全考虑，只允许在本地进行关闭操作
     address: 127.0.0.1

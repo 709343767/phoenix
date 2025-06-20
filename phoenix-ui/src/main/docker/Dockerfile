@@ -16,6 +16,9 @@ COPY phoenix-ui.jar phoenix-ui.jar
 COPY license.txt license.txt
 # 暴露应用端口
 EXPOSE 80 443
+# 健康检查
+HEALTHCHECK --interval=30s --timeout=5s \
+    CMD curl -fsS http://localhost/phoenix-ui/actuator/health | grep -q '"status":"UP"' || exit 1
 # 容器启动命令
 ENTRYPOINT ["java", \
 "--add-opens", \
