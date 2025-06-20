@@ -3,15 +3,15 @@ FROM eclipse-temurin:17-jdk-focal
 # 设置编码环境（设置容器内的系统编码为 UTF-8，避免中文乱码或字符集问题）
 ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
 # 设置系统时区为中国上海
-RUN ln -snf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime &&  \
+RUN ln -snf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
     echo Asia/Shanghai > /etc/timezone
 # 创建用户和组（用户名为 phoenix，组名为 phoenix-group）
-RUN groupadd -r phoenix-group &&  \
+RUN groupadd -r phoenix-group && \
     useradd -r -g phoenix-group -d /app -s /bin/bash phoenix
 # 设置容器工作目录（COPY, ADD, RUN 等默认都在 WORKDIR 下执行）
 WORKDIR /app
 # 创建挂载目录，设置目录权限
-RUN mkdir -p /app/liblog4phoenix /app/config &&  \
+RUN mkdir -p /app/liblog4phoenix /app/config && \
     chown -R phoenix:phoenix-group /app
 # 维护者信息
 LABEL maintainer="皮锋 <709343767@qq.com>" \
