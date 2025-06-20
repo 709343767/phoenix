@@ -15,12 +15,12 @@ fi
 # 启动容器
 echo "Starting phoenix-server container..."
 docker run -itd \
-  --name phoenix-server \
-  --net host \
   -v /etc/localtime:/etc/localtime:ro \
   -v "${HOST_DATA_DIR}/liblog4phoenix:/app/liblog4phoenix" \
   -v "${HOST_DATA_DIR}/config:/app/config" \
   -p 16000:16000 \
+  --net host \
+  --name phoenix-server \
   phoenix/phoenix-server:1.2.6.RELEASE-CR3
 # 启动容器成功
 echo "Container started successfully."
