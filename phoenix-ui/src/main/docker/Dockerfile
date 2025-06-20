@@ -3,19 +3,29 @@ FROM eclipse-temurin:17-jdk-focal
 # 设置编码环境（设置容器内的系统编码为 UTF-8，避免中文乱码或字符集问题）
 ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
 # 设置系统时区为中国上海
-RUN ln -snf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && echo Asia/Shanghai > /etc/timezone
+RUN ln -snf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime &&  \
+    echo Asia/Shanghai > /etc/timezone
+# 创建用户和组（用户名为 phoenix，组名为 phoenix-group）
+RUN groupadd -r phoenix-group &&  \
+    useradd -r -g phoenix-group -d /app -s /bin/bash phoenix
 # 设置容器工作目录（COPY, ADD, RUN 等默认都在 WORKDIR 下执行）
 WORKDIR /app
-# 声明容器挂载点
-VOLUME ["/app/liblog4phoenix", "/app/config"]
+# 创建挂载目录，设置目录权限
+RUN mkdir -p /app/liblog4phoenix /app/config &&  \
+    chown -R phoenix:phoenix-group /app
 # 维护者信息
-LABEL maintainer="皮锋 <709343767@qq.com>"
+LABEL maintainer="皮锋 <709343767@qq.com>" \
+      title="Phoenix UI Application"
 # 复制本地 jar 包到容器中
-COPY phoenix-ui.jar phoenix-ui.jar
+COPY --chown=phoenix:phoenix-group phoenix-ui.jar phoenix-ui.jar
 # 复制本地 许可证文件 到容器中
-COPY license.txt license.txt
+COPY --chown=phoenix:phoenix-group license.txt license.txt
+# 声明容器挂载点（必须在 USER 切换前）
+VOLUME ["/app/liblog4phoenix", "/app/config"]
 # 暴露应用端口
 EXPOSE 80 443
+# 切换到非 root 用户
+USER phoenix
 # 健康检查
 HEALTHCHECK --interval=30s --timeout=5s \
     CMD curl -fsS http://localhost/phoenix-ui/actuator/health | grep -q '"status":"UP"' || exit 1
