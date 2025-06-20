@@ -17,7 +17,9 @@ public class BaseWebSecurityConfigurerAdapter extends WebSecurityConfigurerAdapt
      */
     protected static final String[] URLS = {
             // 关闭端点
-            "/actuator/shutdown"
+            "/actuator/shutdown",
+            // 健康端点
+            "/actuator/health"
     };
 
     /**
