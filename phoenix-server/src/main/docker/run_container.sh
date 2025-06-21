@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 # 出错立即退出
 set -e
 # 宿主机目录
