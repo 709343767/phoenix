@@ -13,7 +13,7 @@ RUN apt-get update && \
 # 创建用户和组（用户名为 phoenix，组名为 phoenix-group）
 RUN groupadd -r phoenix-group && \
     useradd -r -g phoenix-group -d /app -s /bin/bash phoenix
-# 创建配置目录和文件
+# 创建配置目录和文件（允许非root用户绑定 80 端口）
 RUN mkdir -p /etc/authbind/byport && \
     touch /etc/authbind/byport/80 && \
     chmod 755 /etc/authbind/byport/80 && \
