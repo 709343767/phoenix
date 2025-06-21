@@ -20,6 +20,7 @@ docker run -itd \
   -v "${HOST_DATA_DIR}/config:/app/config" \
   -p 80:80 \
   --net host \
+  --cap-add=NET_BIND_SERVICE \
   --name phoenix-ui \
   phoenix/phoenix-ui:1.2.6.RELEASE-CR3
 # 启动容器成功
