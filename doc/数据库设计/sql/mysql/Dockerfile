@@ -1,17 +1,28 @@
-# 使用官方 MySQL 8.0 镜像
-FROM mysql:8.0
+# 使用官方 MySQL 8.0 镜像并指定版本
+FROM mysql:8.0.37
 
-# 设置默认数据库信息（可被 docker run 覆盖）
-ENV MYSQL_ROOT_PASSWORD=phoenix@2025
-ENV MYSQL_DATABASE=phoenix
-ENV MYSQL_USER=phoenix
-ENV MYSQL_PASSWORD=phoenix@2025
+# 设置默认数据库信息（可通过docker run覆盖）
+ENV MYSQL_ROOT_PASSWORD=phoenix@2025 \
+    MYSQL_DATABASE=phoenix \
+    MYSQL_USER=phoenix \
+    MYSQL_PASSWORD=phoenix@2025 \
+    TZ=Asia/Shanghai
 
-# 复制本地 SQL 初始化脚本到容器内指定路径
-COPY ./init-scripts/ /docker-entrypoint-initdb.d/
+# 设置系统时区
+RUN ln -snf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 
-# 设置权限（确保 mysql 用户能读取这些 SQL 文件）
-RUN chmod a+r /docker-entrypoint-initdb.d/*.sql
+# 复制初始化脚本（自动处理权限问题）
+COPY --chown=mysql:mysql ./init-scripts/ /docker-entrypoint-initdb.d/
 
-# 确保使用 mysql 用户运行容器（非 root）
+# 添加健康检查
+HEALTHCHECK --interval=30s --timeout=10s --retries=3 \
+    CMD mysqladmin ping -u root -p${MYSQL_ROOT_PASSWORD} || exit 1
+
+# 确保容器以非root用户运行
 USER mysql
+
+# 暴露MySQL默认端口（显式声明）
+EXPOSE 3306
+
+# 数据卷声明（推荐在运行时映射）
+VOLUME /var/lib/mysql
