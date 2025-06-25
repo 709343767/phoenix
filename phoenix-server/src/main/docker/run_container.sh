@@ -27,6 +27,7 @@ docker run -itd \
   -v "${HOST_DATA_DIR}/config:/app/config" \
   -p 16000:16000 \
   --net host \
+  --restart unless-stopped \
   --name ${CONTAINER_NAME} \
   phoenix/phoenix-server:1.2.6.RELEASE-CR3
 # 启动容器成功

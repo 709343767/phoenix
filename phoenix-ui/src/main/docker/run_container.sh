@@ -27,6 +27,7 @@ docker run -itd \
   -v "${HOST_DATA_DIR}/config:/app/config" \
   -p 80:80 \
   --net host \
+  --restart unless-stopped \
   --cap-add=NET_BIND_SERVICE \
   --name ${CONTAINER_NAME} \
   phoenix/phoenix-ui:1.2.6.RELEASE-CR3
