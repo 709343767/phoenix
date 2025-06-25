@@ -20,7 +20,7 @@ if [ "$(docker inspect --format='{{.Id}}' ${CONTAINER_NAME} 2>/dev/null)" ]; the
   docker rm ${CONTAINER_NAME} > /dev/null 2>&1
 fi
 # 启动容器
-echo "Starting ${CONTAINER_NAME} container..."
+echo "Starting '${CONTAINER_NAME}' container..."
 docker run -itd \
   -p 3306:3306 \
   --restart unless-stopped \
