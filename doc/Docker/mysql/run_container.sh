@@ -14,6 +14,7 @@ mkdir -p "${HOST_DATA_DIR}/data"
 chmod -R o+rw "${HOST_DATA_DIR}"
 # 删除已存在的容器（如果有的话）
 if [ "$(docker inspect --format='{{.Id}}' phoenix-mysql 2>/dev/null)" ]; then
+  echo "Removing existing container 'phoenix-mysql'..."
   docker stop phoenix-mysql > /dev/null 2>&1 || true
   docker rm phoenix-mysql > /dev/null 2>&1
 fi
@@ -26,4 +27,4 @@ docker run -itd \
   --name phoenix-mysql \
   crpi-4iaxdbbs1euymfiu.cn-shanghai.personal.cr.aliyuncs.com/pifeng_phoenix/mysql:1.2.6.RELEASE-CR3
 # 启动容器成功
-echo "Container started successfully."
+echo "Container 'phoenix-mysql' started successfully."
