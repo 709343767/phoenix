@@ -5,10 +5,10 @@ set -e
 CONTAINER_NAME="phoenix-server"
 HOST_DATA_DIR="/data/phoenix/phoenix-server"
 # 检查父目录是否有写权限
-if [ ! -w "$(dirname "$HOST_DATA_DIR")" ]; then
-  echo "Error: No write permission to $(dirname "$HOST_DATA_DIR")" >&2
-  exit 1
-fi
+#if [ ! -w "$(dirname "$HOST_DATA_DIR")" ]; then
+#  echo "Error: No write permission to $(dirname "$HOST_DATA_DIR")" >&2
+#  exit 1
+#fi
 # 创建目录（如果不存在）
 mkdir -p "${HOST_DATA_DIR}/liblog4phoenix" "${HOST_DATA_DIR}/config"
 # 赋予读写权限
