@@ -161,15 +161,24 @@
 
 ## 快速使用
 
-系统环境符合以下要求：  
-软件依赖：Docker 20.10.14 版本以上  
-软件依赖：Docker Compose 2.0.0 版本以上  
-最低资源需求：1 核 CPU / 1 GB 内存 / 5 GB 磁盘
-
 一键安装：3 分钟即可完成自动安装。
+
+最低资源需求：1 核 CPU / 2 GB 内存 / 5 GB 磁盘
+
+### Docker安装
+
+软件依赖：Docker 20.10.14 版本以上
 
 ```shell
 bash -c "$(curl -fsSL https://gitee.com/monitoring-platform/phoenix/raw/master/doc/Docker/install.sh)"
+```
+
+### Docker Compose安装
+
+软件依赖：Docker Compose 2.0.0 版本以上
+
+```shell
+bash -c "$(curl -fsSL https://gitee.com/monitoring-platform/phoenix/raw/master/doc/DockerCompose/install.sh)"
 ```
 
 更多使用方式，请参考 **使用说明**
