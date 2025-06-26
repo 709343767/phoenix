@@ -1,5 +1,3 @@
-version: '3.8'
-
 # 使用 YAML 锚点实现日志配置复用
 x-logconfig: &default-logconfig
   driver: "json-file"
