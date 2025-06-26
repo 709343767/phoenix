@@ -1,0 +1,75 @@
+version: '3.8'
+
+services:
+
+  phoenix-mysql:
+    container_name: phoenix-mysql
+    image: crpi-4iaxdbbs1euymfiu.cn-shanghai.personal.cr.aliyuncs.com/pifeng_phoenix/mysql:1.2.6.RELEASE-CR3
+    restart: unless-stopped
+    ports:
+      - "3306:3306"
+    volumes:
+      - /data/phoenix/mysql/data:/var/lib/mysql
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  phoenix-server:
+    container_name: phoenix-server
+    image: crpi-4iaxdbbs1euymfiu.cn-shanghai.personal.cr.aliyuncs.com/pifeng_phoenix/phoenix-server:1.2.6.RELEASE-CR3
+    restart: unless-stopped
+    ports:
+      - "16000:16000"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /data/phoenix/phoenix-server/liblog4phoenix:/app/liblog4phoenix
+      - /data/phoenix/phoenix-server/config:/app/config
+    network_mode: host
+    cap_add:
+      - NET_BIND_SERVICE
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+    depends_on:
+      phoenix-mysql:
+        condition: service_healthy
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  phoenix-ui:
+    container_name: phoenix-ui
+    image: crpi-4iaxdbbs1euymfiu.cn-shanghai.personal.cr.aliyuncs.com/pifeng_phoenix/phoenix-ui:1.2.6.RELEASE-CR3
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /data/phoenix/phoenix-ui/liblog4phoenix:/app/liblog4phoenix
+      - /data/phoenix/phoenix-ui/config:/app/config
+    network_mode: host
+    cap_add:
+      - NET_BIND_SERVICE
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+    depends_on:
+      phoenix-mysql:
+        condition: service_healthy
+      phoenix-server:
+        condition: service_healthy
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
