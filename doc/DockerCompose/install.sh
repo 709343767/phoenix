@@ -23,6 +23,15 @@ then
     exit 1
 fi
 
+# 定义宿主机目录
+HOST_DATA_DIR="/data/phoenix"
+# 创建目录（如果不存在）
+mkdir -p "${HOST_DATA_DIR}/mysql/data"
+mkdir -p "${HOST_DATA_DIR}/phoenix-server/liblog4phoenix" "${HOST_DATA_DIR}/phoenix-server/config"
+mkdir -p "${HOST_DATA_DIR}/phoenix-ui/liblog4phoenix" "${HOST_DATA_DIR}/phoenix-ui/config"
+# 赋予读写权限
+chmod -R o+rw "${HOST_DATA_DIR}" || echo "Warning: Failed to set permissions on ${HOST_DATA_DIR}"
+
 # 停止并删除现有容器（如果有的话）
 echo "Stopping and removing existing containers..."
 docker-compose -f $LOCAL_COMPOSE_FILE down
