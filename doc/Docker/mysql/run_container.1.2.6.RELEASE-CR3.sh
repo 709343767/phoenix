@@ -25,7 +25,7 @@ docker run -itd \
   -p 3306:3306 \
   -v "${HOST_DATA_DIR}/data:/var/lib/mysql" \
   --restart unless-stopped \
-  --name ${CONTAINER_NAME} \
+  --name "${CONTAINER_NAME}" \
   crpi-4iaxdbbs1euymfiu.cn-shanghai.personal.cr.aliyuncs.com/pifeng_phoenix/mysql:1.2.6.RELEASE-CR3
 # 启动容器成功
 echo "Container '${CONTAINER_NAME}' started successfully."
