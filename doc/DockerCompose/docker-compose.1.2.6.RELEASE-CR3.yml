@@ -27,8 +27,6 @@ services:
     container_name: phoenix-server
     image: crpi-4iaxdbbs1euymfiu.cn-shanghai.personal.cr.aliyuncs.com/pifeng_phoenix/phoenix-server:1.2.6.RELEASE-CR3
     restart: unless-stopped
-    ports:
-      - "16000:16000"
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /data/phoenix/phoenix-server/liblog4phoenix:/app/liblog4phoenix
@@ -49,8 +47,6 @@ services:
     container_name: phoenix-ui
     image: crpi-4iaxdbbs1euymfiu.cn-shanghai.personal.cr.aliyuncs.com/pifeng_phoenix/phoenix-ui:1.2.6.RELEASE-CR3
     restart: unless-stopped
-    ports:
-      - "80:80"
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /data/phoenix/phoenix-ui/liblog4phoenix:/app/liblog4phoenix
