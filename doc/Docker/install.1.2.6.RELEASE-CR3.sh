@@ -11,12 +11,12 @@ RUN_CONTAINER_PHOENIX_UI_URL="https://gitee.com/monitoring-platform/phoenix/raw/
 
 # 执行脚本
 echo "Executing MySQL container script..."
-bash -c "$(curl -fsSL "$RUN_CONTAINER_PHOENIX_MYSQL_URL")"
+bash -c "$(curl -fsSL "${RUN_CONTAINER_PHOENIX_MYSQL_URL}")"
 
 echo "Executing Phoenix Server container script..."
-bash -c "$(curl -fsSL "$RUN_CONTAINER_PHOENIX_SERVER_URL")"
+bash -c "$(curl -fsSL "${RUN_CONTAINER_PHOENIX_SERVER_URL}")"
 
 echo "Executing Phoenix UI container script..."
-bash -c "$(curl -fsSL "$RUN_CONTAINER_PHOENIX_UI_URL")"
+bash -c "$(curl -fsSL "${RUN_CONTAINER_PHOENIX_UI_URL}")"
 
-echo "All remote scripts have been executed successfully."
+echo "All remote scripts have been executed successfully..."
