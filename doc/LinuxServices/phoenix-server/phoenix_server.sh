@@ -1,110 +1,139 @@
 #!/usr/bin/env bash
 
-#包名
-packageName="phoenix-server.jar"
-#程序名
-programName="phoenix-server"
+# 出错立即退出
+set -e
+# 未定义变量报错
+set -u
 
-#检测状态
-function status() {
+# ================== 配置项 ==================
+
+# 定义可执行 JAR 文件名
+PACKAGE_NAME="phoenix-server.jar"
+# 定义程序的名称
+PROGRAM_NAME="phoenix-server"
+# 定义启动程序的命令
+START_CMD="java -jar ${PACKAGE_NAME} --spring.profiles.active=prod"
+# 定义在停止程序时，最大重试次数
+MAX_RETRY=12
+# 定义每次重试之间的等待时间
+SLEEP_SEC=5
+
+# ================== 工具函数 ==================
+
+# 获取当前运行进程的 PID
+get_pid() {
+  pgrep -f "${PACKAGE_NAME}" 2>/dev/null
+}
+
+# 判断程序是否正在运行
+is_running() {
+  [ -n "$(get_pid)" ]
+}
+
+# ================== 功能函数 ==================
+
+# 查看状态
+status() {
   echo "---------------------------------------检测状态---------------------------------------"
-  pid=$(ps -ef | grep -n ${packageName} | grep -v grep | awk '{print $2}')
-  if [ ${pid} ]; then
-    echo "${programName}正在运行，进程ID：${pid}"
+  if is_running; then
+    local pid
+    pid=$(get_pid)
+    echo "${PROGRAM_NAME} 正在运行，进程ID：${pid}"
   else
-    echo "${programName}未运行！"
+    echo "${PROGRAM_NAME} 未运行！"
   fi
 }
 
-#停止程序
-function stop() {
+# 停止程序
+stop() {
   echo "---------------------------------------停止程序---------------------------------------"
-  #打印出当前的进程，grep -v grep 去掉grep进程
-  pid=$(ps -ef | grep -n ${packageName} | grep -v grep | awk '{print $2}')
-  #查询进程个数：wc -l 返回行数
-  count=$(ps -ef | grep -n ${packageName} | grep -v grep | wc -l)
-  echo "${programName}进程ID：$pid，进程个数：$count"
-  #关闭进程
-  if (($count > 0)); then
-    kill $pid
-    #打印关掉的进程ID
-    echo "关闭进程：$pid"
-    count=$(ps -ef | grep -n ${packageName} | grep -v grep | wc -l)
-    sec=5
-    sum=12
-    #开始一个循环
-    while (($sum > 0)); do
-      if (($count > 0)); then
-        #若进程还未关闭，则脚本sleep几秒
-        sleep $sec
-        count=$(ps -ef | grep -n ${packageName} | grep -v grep | wc -l)
-      else
-        #若进程已经关闭，则跳出循环
-        echo "${programName}已经关闭！"
-        break
-      fi
-      sum=$(($sum - 1))
-    done
-    #超时不能停止，强制杀掉进程
-    if (($count > 0)); then
-      kill -9 $pid
-      echo "${programName}被强制关闭！"
-      sleep 1
-    fi
-  else
-    echo "${programName}未运行！"
+  if ! is_running; then
+    echo "${PROGRAM_NAME} 未运行！"
+    return 0
   fi
+
+  local pid
+  pid=$(get_pid)
+  echo "${PROGRAM_NAME} 进程ID：${pid}"
+
+  kill "${pid}" 2>/dev/null
+  echo "发送关闭信号：kill ${pid}"
+
+  local retry=${MAX_RETRY}
+  while ((retry > 0)); do
+    if ! is_running; then
+      echo "${PROGRAM_NAME} 已经关闭！"
+      return 0
+    fi
+    sleep ${SLEEP_SEC}
+    ((retry--))
+  done
+
+  echo "等待超时，仍未关闭，尝试强制终止..."
+  kill -9 "${pid}" 2>/dev/null
+  echo "${PROGRAM_NAME} 被强制关闭！"
 }
 
-#启动程序
-function start() {
+# 启动程序
+start() {
   echo "---------------------------------------启动程序---------------------------------------"
-  pid=$(ps -ef | grep -n ${packageName} | grep -v grep | awk '{print $2}')
-  if [ ${pid} ]; then
-    echo "${programName}正在运行，请先停止程序！"
+  if is_running; then
+    echo "${PROGRAM_NAME} 正在运行，请先停止程序！"
+    return 1
+  fi
+
+  echo "启动命令：${START_CMD}"
+  nohup "${START_CMD}" >/dev/null 2>&1 &
+  local pid=$!
+
+  echo "启动中，PID: ${pid}"
+
+  # 给一点时间让进程启动
+  sleep 3
+
+  if ! is_running; then
+    echo "${PROGRAM_NAME} 启动失败！"
+    return 1
   else
-    #启动进程
-    nohup java -jar -Ddruid.mysql.usePingMethod=false ${packageName} --spring.profiles.active=prod >/dev/null 2>&1 &
-    pid=$(ps -ef | grep -n ${packageName} | grep -v grep | awk '{print $2}')
-    if [ ${pid} ]; then
-      echo "${programName}已经启动，进程ID为：$pid"
-    else
-      #等待15秒
-      sleep 15
-      pid=$(ps -ef | grep -n ${packageName} | grep -v grep | awk '{print $2}')
-      if [ ! ${pid} ]; then
-        echo "${programName}启动失败！"
-      fi
-    fi
+    echo "${PROGRAM_NAME} 已启动，PID: $(get_pid)"
   fi
 }
 
-#启动时带参数，根据参数执行
-if [ ${#} -ge 1 ]; then
-  case ${1} in
-  "start")
+# 重启程序
+restart() {
+  stop
+  start
+}
+
+# ================== 主程序入口 ==================
+if [ $# -lt 1 ]; then
+  echo "
+用法: $0 {start|stop|restart|status}
+示例:
+  ./phoenix_server.sh start     # 启动服务
+  ./phoenix_server.sh stop      # 停止服务
+  ./phoenix_server.sh restart   # 重启服务
+  ./phoenix_server.sh status    # 检查状态
+"
+  exit 1
+fi
+
+case "$1" in
+  start)
     start
     ;;
-  "restart")
-    stop
-    start
-    ;;
-  "stop")
+  stop)
     stop
     ;;
-  "status")
+  restart)
+    restart
+    ;;
+  status)
     status
     ;;
   *)
-    echo "${1}无任何操作"
+    echo "无效参数: ${1}"
+    echo "请使用: start | stop | restart | status"
+    exit 1
     ;;
-  esac
-else
-  echo "
-    start：启动
-    stop：停止
-    restart：重启
-    status：检查状态
-    示例命令如：./phoenix_server.sh start
-    "
-fi
+esac
