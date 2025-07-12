@@ -181,7 +181,7 @@ bash -c "$(curl -fsSL https://gitee.com/monitoring-platform/phoenix/raw/master/d
 bash -c "$(curl -fsSL https://gitee.com/monitoring-platform/phoenix/raw/master/doc/DockerCompose/install.sh)"
 ```
 
-更多使用方式，请参考**使用说明**
+更多使用方式，请参考 **使用说明**
 
 ## 访问地址
 监控 UI 端 访问 URL：http://localhost/phoenix-ui/index ，开发环境(dev)使用 http，生产环境(prod)使用 https，初始账号/密码：admin/admin123，guest/guest123
