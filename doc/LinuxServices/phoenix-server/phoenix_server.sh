@@ -12,7 +12,7 @@ PACKAGE_NAME="phoenix-server.jar"
 # 定义程序的名称
 PROGRAM_NAME="phoenix-server"
 # 定义启动程序的命令
-START_CMD="java -jar ${PACKAGE_NAME} --spring.profiles.active=prod"
+START_CMD="java -jar -Ddruid.mysql.usePingMethod=false ${PACKAGE_NAME} --spring.profiles.active=prod"
 # 定义在停止程序时，最大重试次数
 MAX_RETRY=12
 # 定义每次重试之间的等待时间
@@ -83,13 +83,14 @@ start() {
   fi
 
   echo "启动命令：${START_CMD}"
-  nohup "${START_CMD}" >/dev/null 2>&1 &
+  # 此处是一条完整命令，不能加双引号
+  nohup ${START_CMD} >/dev/null 2>&1 &
   local pid=$!
 
   echo "启动中，PID: ${pid}"
 
   # 给一点时间让进程启动
-  sleep 3
+  sleep 15
 
   if ! is_running; then
     echo "${PROGRAM_NAME} 启动失败！"
