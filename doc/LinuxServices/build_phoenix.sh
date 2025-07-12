@@ -40,4 +40,9 @@ mv "${EXECUTABLE_JAR_SRC_DIR}/phoenix-server.jar" "${EXECUTABLE_JAR_DEST_DIR}/"
 mv "${EXECUTABLE_JAR_SRC_DIR}/phoenix-ui.jar"     "${EXECUTABLE_JAR_DEST_DIR}/"
 mv "${EXECUTABLE_JAR_SRC_DIR}/phoenix-agent.jar"  "${EXECUTABLE_JAR_DEST_DIR}/"
 
+# 去掉执行权限
+chmod -x "${EXECUTABLE_JAR_DEST_DIR}/phoenix-server.jar"
+chmod -x "${EXECUTABLE_JAR_DEST_DIR}/phoenix-ui.jar"
+chmod -x "${EXECUTABLE_JAR_DEST_DIR}/phoenix-agent.jar"
+
 log_info "✅ 可执行 JAR 已转移到：$(realpath "${EXECUTABLE_JAR_DEST_DIR}")"
