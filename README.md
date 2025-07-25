@@ -97,7 +97,7 @@
   ├── phoenix-server（监控服务端）  
   ├── phoenix-ui（监控UI端）  
   ├── doc（文档）  
-  └── script（Maven打包脚本）
+  └── mvn（Maven打包脚本）
 
   phoenix：监控平台父工程，管理平台的依赖、构建、插件等；  
   phoenix-common：监控公共模块，提供平台所有的公共代码，包含一个监控核心公共模块（phoenix-common-core）和一个监控WEB公共模块（phoenix-common-web）；  
@@ -106,7 +106,7 @@
   phoenix-server：监控服务端，是监控平台的核心模块，用于汇聚、分析监控信息，在发现异常时实时推送告警信息；  
   phoenix-ui：监控可视化系统，用于平台配置、用户管理、监控信息查看、图表展示等；  
   doc：包含平台的设计文档、服务启停脚本、数据库脚本等；  
-  script：包含平台的Maven打包脚本。
+  mvn：包含平台的Maven打包脚本。
 
 ## 下载
 
