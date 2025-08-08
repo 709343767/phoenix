@@ -23,8 +23,8 @@
     <link rel="stylesheet" href="./style/login.css" th:href="@{/style/login.css}" media="all">
     <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
     <!--[if lt IE 9]>
-    <script src="./js/html5.min.js" th:src="@{/js/html5.min.js}"></script>
-    <script src="./js/respond.min.js" th:src="@{/js/respond.min.js}"></script>
+    <script th:src="@{/js/html5.min.js}"></script>
+    <script th:src="@{/js/respond.min.js}"></script>
     <![endif]-->
 </head>
 <body>
@@ -58,7 +58,7 @@
                     <div class="layui-col-xs5">
                         <div style="margin-left: 10px;">
                             <img th:src="@{/captcha.png}" class="layadmin-user-login-codeimg"
-                                 id="LAY-user-get-vercode">
+                                 id="LAY-user-get-vercode" alt="">
                         </div>
                     </div>
                 </div>
@@ -133,7 +133,7 @@
     </div>-->
 
 </div>
-<script src="./layui/layui.js" th:src="@{/layui/layui.js}" charset="utf-8"></script>
+<script th:src="@{/layui/layui.js}" charset="utf-8"></script>
 <script th:inline="javascript" charset="utf-8">
     var ctxPath = /*[[@{/}]]*/'';
     // 是否启用登录验证码
@@ -162,6 +162,12 @@
         $('#LAY-user-get-vercode').click(function (_this) {
             $('#LAY-user-get-vercode').attr('src', ctxPath + 'captcha.png' + "?t=" + Math.random());
         });
+        if (enableLoginCaptcha === true) {
+            // 验证码每分钟自动刷新
+            window.setInterval(function () {
+                $('#LAY-user-get-vercode').attr('src', ctxPath + 'captcha.png' + "?t=" + Math.random());
+            }, 1000 * 60);
+        }
     });
 </script>
 </body>
