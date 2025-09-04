@@ -138,7 +138,7 @@ public class UiPackageConstructor extends AbstractPackageConstructor {
      *
      * @param extraMsg 附加信息
      * @return {@link BaseRequestPackage}
-     * @throws NetException 自定义获取网络信息异常
+     * @throws NetException 获取网络信息异常
      * @author 皮锋
      * @custom.date 2021/4/5 12:45
      */

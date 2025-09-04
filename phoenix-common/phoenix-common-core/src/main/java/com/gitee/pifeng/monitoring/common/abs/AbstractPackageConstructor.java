@@ -84,12 +84,12 @@ public class AbstractPackageConstructor implements IPackageConstructor {
 
     /**
      * <p>
-     * 构建请求基础响应包
+     * 构建基础响应包
      * </p>
      *
      * @param result 返回结果
      * @return {@link BaseResponsePackage}
-     * @throws NetException 自定义获取网络信息异常
+     * @throws NetException 获取网络信息异常
      * @author 皮锋
      * @custom.date 2020年3月11日 上午9:52:48
      */
@@ -105,7 +105,7 @@ public class AbstractPackageConstructor implements IPackageConstructor {
      *
      * @param extraMsg 附加信息
      * @return {@link BaseRequestPackage}
-     * @throws NetException 自定义获取网络信息异常
+     * @throws NetException 获取网络信息异常
      * @author 皮锋
      * @custom.date 2021/4/5 12:45
      */

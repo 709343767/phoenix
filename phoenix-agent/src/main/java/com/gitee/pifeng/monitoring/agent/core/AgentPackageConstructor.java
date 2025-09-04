@@ -182,7 +182,7 @@ public class AgentPackageConstructor extends AbstractPackageConstructor {
 
     /**
      * <p>
-     * 构建请求基础响应包
+     * 构建基础响应包
      * </p>
      *
      * @param result 返回结果
