@@ -160,12 +160,12 @@
         });
         // 点击图片刷新
         $('#LAY-user-get-vercode').click(function (_this) {
-            $('#LAY-user-get-vercode').attr('src', ctxPath + 'captcha.png' + "?t=" + Math.random());
+            $('#LAY-user-get-vercode').attr('src', ctxPath + 'captcha.png?t=' + Math.random());
         });
         if (enableLoginCaptcha === true) {
             // 验证码每分钟自动刷新
             window.setInterval(function () {
-                $('#LAY-user-get-vercode').attr('src', ctxPath + 'captcha.png' + "?t=" + Math.random());
+                $('#LAY-user-get-vercode').attr('src', ctxPath + 'captcha.png?t=' + Math.random());
             }, 1000 * 60);
         }
     });
