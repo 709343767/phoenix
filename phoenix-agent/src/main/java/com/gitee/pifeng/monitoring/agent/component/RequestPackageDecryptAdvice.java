@@ -4,6 +4,7 @@ import com.gitee.pifeng.monitoring.common.web.core.http.HttpInputMessagePackageD
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpInputMessage;
 import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.RequestBodyAdvice;
 
@@ -24,23 +25,29 @@ import java.lang.reflect.Type;
 public class RequestPackageDecryptAdvice implements RequestBodyAdvice {
 
     @Override
-    public boolean supports(MethodParameter methodParameter, Type targetType, Class<? extends HttpMessageConverter<?>> converterType) {
+    public boolean supports(@NonNull MethodParameter methodParameter, @NonNull Type targetType,
+                            @NonNull Class<? extends HttpMessageConverter<?>> converterType) {
         // 总开关：是否启用请求包解密
         return true;
     }
 
+    @NonNull
     @Override
-    public Object afterBodyRead(Object body, HttpInputMessage inputMessage, MethodParameter parameter, Type targetType, Class<? extends HttpMessageConverter<?>> converterType) {
+    public Object afterBodyRead(@NonNull Object body, @NonNull HttpInputMessage inputMessage, @NonNull MethodParameter parameter,
+                                @NonNull Type targetType, @NonNull Class<? extends HttpMessageConverter<?>> converterType) {
         return body;
     }
 
     @Override
-    public Object handleEmptyBody(Object body, HttpInputMessage inputMessage, MethodParameter parameter, Type targetType, Class<? extends HttpMessageConverter<?>> converterType) {
+    public Object handleEmptyBody(Object body, @NonNull HttpInputMessage inputMessage, @NonNull MethodParameter parameter,
+                                  @NonNull Type targetType, @NonNull Class<? extends HttpMessageConverter<?>> converterType) {
         return body;
     }
 
+    @NonNull
     @Override
-    public HttpInputMessage beforeBodyRead(HttpInputMessage inputMessage, MethodParameter parameter, Type targetType, Class<? extends HttpMessageConverter<?>> converterType) {
+    public HttpInputMessage beforeBodyRead(@NonNull HttpInputMessage inputMessage, @NonNull MethodParameter parameter,
+                                           @NonNull Type targetType, @NonNull Class<? extends HttpMessageConverter<?>> converterType) {
         try {
             return new HttpInputMessagePackageDecrypt(inputMessage);
         } catch (Exception e) {
