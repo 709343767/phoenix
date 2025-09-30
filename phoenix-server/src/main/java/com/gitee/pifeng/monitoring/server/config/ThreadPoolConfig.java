@@ -22,6 +22,62 @@ import java.util.concurrent.TimeUnit;
 public class ThreadPoolConfig {
 
     /**
+     * <p>
+     * 服务器服务监控线程池
+     * </p>
+     *
+     * @return {@link ThreadPoolExecutor}
+     * @author 皮锋
+     * @custom.date 2025/9/30 17:09
+     */
+    @Lazy
+    @Bean(name = "serverMonitorThreadPoolExecutor", destroyMethod = "shutdown")
+    public ThreadPoolExecutor serverMonitorThreadPoolExecutor() {
+        return new ThreadPoolExecutor(
+                // 线程数 = Ncpu /（1 - 阻塞系数），IO密集型阻塞系数相对较大
+                (int) (ProcessorsUtils.getAvailableProcessors() / (1 - 0.8)),
+                (int) (ProcessorsUtils.getAvailableProcessors() / (1 - 0.8)),
+                1L,
+                TimeUnit.HOURS,
+                new LinkedBlockingQueue<>(Integer.MAX_VALUE),
+                new BasicThreadFactory.Builder()
+                        // 设置线程名
+                        .namingPattern("phoenix-server-server-monitor-pool-thread-%d")
+                        // 设置为守护线程
+                        .daemon(true)
+                        .build(),
+                new ThreadPoolExecutor.AbortPolicy());
+    }
+
+    /**
+     * <p>
+     * 应用实例服务监控线程池
+     * </p>
+     *
+     * @return {@link ThreadPoolExecutor}
+     * @author 皮锋
+     * @custom.date 2025/9/30 17:02
+     */
+    @Lazy
+    @Bean(name = "instanceMonitorThreadPoolExecutor", destroyMethod = "shutdown")
+    public ThreadPoolExecutor instanceMonitorThreadPoolExecutor() {
+        return new ThreadPoolExecutor(
+                // 线程数 = Ncpu /（1 - 阻塞系数），IO密集型阻塞系数相对较大
+                (int) (ProcessorsUtils.getAvailableProcessors() / (1 - 0.8)),
+                (int) (ProcessorsUtils.getAvailableProcessors() / (1 - 0.8)),
+                1L,
+                TimeUnit.HOURS,
+                new LinkedBlockingQueue<>(Integer.MAX_VALUE),
+                new BasicThreadFactory.Builder()
+                        // 设置线程名
+                        .namingPattern("phoenix-server-instance-monitor-pool-thread-%d")
+                        // 设置为守护线程
+                        .daemon(true)
+                        .build(),
+                new ThreadPoolExecutor.AbortPolicy());
+    }
+
+    /**
      * 数据库服务监控线程池
      *
      * @return {@link ThreadPoolExecutor}

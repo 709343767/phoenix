@@ -10,14 +10,20 @@ import com.gitee.pifeng.monitoring.common.dto.ServerPackage;
 import com.gitee.pifeng.monitoring.server.business.server.dao.*;
 import com.gitee.pifeng.monitoring.server.business.server.entity.*;
 import com.gitee.pifeng.monitoring.server.business.server.service.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 /**
  * <p>
@@ -27,6 +33,7 @@ import java.util.Date;
  * @author 皮锋
  * @custom.date 2020/3/23 15:23
  */
+@Slf4j
 @Service
 public class ServerServiceImpl extends ServiceImpl<IMonitorServerDao, MonitorServer> implements IServerService {
 
@@ -163,6 +170,13 @@ public class ServerServiceImpl extends ServiceImpl<IMonitorServerDao, MonitorSer
     private IMonitorServerLoadAverageHistoryDao monitorServerLoadAverageHistoryDao;
 
     /**
+     * 服务器服务监控线程池
+     */
+    @Autowired
+    @Qualifier("serverMonitorThreadPoolExecutor")
+    private ThreadPoolExecutor serverMonitorThreadPoolExecutor;
+
+    /**
      * <p>
      * 处理服务器信息包
      * </p>
@@ -176,40 +190,57 @@ public class ServerServiceImpl extends ServiceImpl<IMonitorServerDao, MonitorSer
     //@Transactional(rollbackFor = Throwable.class)
     @Override
     public Result dealServerPackage(ServerPackage serverPackage) {
-        // 把服务器信息添加或更新到数据库
-        ((IServerService) AopContext.currentProxy()).operateServer(serverPackage);
-        // 把服务器操作系统信息添加或更新到数据库
-        this.serverOsService.operateServerOs(serverPackage);
-        // 把服务器内存信息添加或更新到数据库
-        this.serverMemoryService.operateServerMemory(serverPackage);
-        // 把服务器内存历史记录添加到数据库
-        this.serverMemoryHistoryService.operateServerMemoryHistory(serverPackage);
-        // 把服务器CPU信息添加或更新到数据库
-        this.serverCpuService.operateServerCpu(serverPackage);
-        // 把服务器CPU历史记录添加到数据库
-        this.serverCpuHistoryService.operateServerCpuHistory(serverPackage);
-        // 把服务器GPU信息添加或更新到数据库
-        this.serverGpuService.operateServerGpu(serverPackage);
-        // 把服务器网卡信息添加或更新到数据库
-        this.serverNetcardService.operateServerNetcard(serverPackage);
-        // 把服务器网卡历史记录添加到数据库
-        this.serverNetcardHistoryService.operateServerNetcardHistory(serverPackage);
-        // 把服务器磁盘信息添加或更新到数据库
-        this.serverDiskService.operateServerDisk(serverPackage);
-        // 把服务器磁盘历史记录添加到数据库
-        this.serverDiskHistoryService.operateServerDiskHistory(serverPackage);
-        // 把服务器电池信息添加或更新到数据库
-        this.serverPowerSourcesService.operateServerPowerSources(serverPackage);
-        // 把服务器传感器信息添加或更新到数据库
-        this.serverSensorsService.operateServerSensors(serverPackage);
-        // 把服务器进程信息添加或更新到数据库
-        this.serverProcessService.operateServerProcess(serverPackage);
-        // 把服务器进程历史记录添加到数据库
-        this.serverProcessHistoryService.operateServerProcessHistory(serverPackage);
-        // 把服务器平均负载信息添加或更新到数据库
-        this.serverLoadAverageService.operateServerLoadAverage(serverPackage);
-        // 把服务器平均负载历史记录添加到数据库
-        this.serverLoadAverageHistoryService.operateServerLoadAverageHistory(serverPackage);
+        // 在主线程获取代理（此时 AOP 上下文有效）
+        IServerService selfProxy = (IServerService) AopContext.currentProxy();
+        CompletableFuture<Void> allFutures = CompletableFuture.allOf(
+                // 把服务器信息添加或更新到数据库
+                CompletableFuture.runAsync(() -> selfProxy.operateServer(serverPackage), this.serverMonitorThreadPoolExecutor),
+                // 把服务器操作系统信息添加或更新到数据库
+                CompletableFuture.runAsync(() -> this.serverOsService.operateServerOs(serverPackage), this.serverMonitorThreadPoolExecutor),
+                // 把服务器内存信息添加或更新到数据库
+                CompletableFuture.runAsync(() -> this.serverMemoryService.operateServerMemory(serverPackage), this.serverMonitorThreadPoolExecutor),
+                // 把服务器内存历史记录添加到数据库
+                CompletableFuture.runAsync(() -> this.serverMemoryHistoryService.operateServerMemoryHistory(serverPackage), this.serverMonitorThreadPoolExecutor),
+                // 把服务器CPU信息添加或更新到数据库
+                CompletableFuture.runAsync(() -> this.serverCpuService.operateServerCpu(serverPackage), this.serverMonitorThreadPoolExecutor),
+                // 把服务器CPU历史记录添加到数据库
+                CompletableFuture.runAsync(() -> this.serverCpuHistoryService.operateServerCpuHistory(serverPackage), this.serverMonitorThreadPoolExecutor),
+                // 把服务器GPU信息添加或更新到数据库
+                CompletableFuture.runAsync(() -> this.serverGpuService.operateServerGpu(serverPackage), this.serverMonitorThreadPoolExecutor),
+                // 把服务器网卡信息添加或更新到数据库
+                CompletableFuture.runAsync(() -> this.serverNetcardService.operateServerNetcard(serverPackage), this.serverMonitorThreadPoolExecutor),
+                // 把服务器网卡历史记录添加到数据库
+                CompletableFuture.runAsync(() -> this.serverNetcardHistoryService.operateServerNetcardHistory(serverPackage), this.serverMonitorThreadPoolExecutor),
+                // 把服务器磁盘信息添加或更新到数据库
+                CompletableFuture.runAsync(() -> this.serverDiskService.operateServerDisk(serverPackage), this.serverMonitorThreadPoolExecutor),
+                // 把服务器磁盘历史记录添加到数据库
+                CompletableFuture.runAsync(() -> this.serverDiskHistoryService.operateServerDiskHistory(serverPackage), this.serverMonitorThreadPoolExecutor),
+                // 把服务器电池信息添加或更新到数据库
+                CompletableFuture.runAsync(() -> this.serverPowerSourcesService.operateServerPowerSources(serverPackage), this.serverMonitorThreadPoolExecutor),
+                // 把服务器传感器信息添加或更新到数据库
+                CompletableFuture.runAsync(() -> this.serverSensorsService.operateServerSensors(serverPackage), this.serverMonitorThreadPoolExecutor),
+                // 把服务器进程信息添加或更新到数据库
+                CompletableFuture.runAsync(() -> this.serverProcessService.operateServerProcess(serverPackage), this.serverMonitorThreadPoolExecutor),
+                // 把服务器进程历史记录添加到数据库
+                CompletableFuture.runAsync(() -> this.serverProcessHistoryService.operateServerProcessHistory(serverPackage), this.serverMonitorThreadPoolExecutor),
+                // 把服务器平均负载信息添加或更新到数据库
+                CompletableFuture.runAsync(() -> this.serverLoadAverageService.operateServerLoadAverage(serverPackage), this.serverMonitorThreadPoolExecutor),
+                // 把服务器平均负载历史记录添加到数据库
+                CompletableFuture.runAsync(() -> this.serverLoadAverageHistoryService.operateServerLoadAverageHistory(serverPackage), this.serverMonitorThreadPoolExecutor)
+        );
+        try {
+            // 设置超时时间
+            allFutures.get(30, TimeUnit.SECONDS);
+        } catch (InterruptedException e) {
+            log.error("并行处理服务器信息包被中断：{}", e.getMessage(), e);
+            return Result.builder().isSuccess(false).msg("并行处理服务器信息包被中断！").build();
+        } catch (TimeoutException e) {
+            log.error("并行处理服务器信息包超时(30s)：{}", e.getMessage(), e);
+            return Result.builder().isSuccess(false).msg("并行处理服务器信息包超时(30s)！").build();
+        } catch (Exception e) {
+            log.error("并行处理服务器信息包出错：{}", e.getMessage(), e);
+            return Result.builder().isSuccess(false).msg("并行处理服务器信息包出错！").build();
+        }
         // 返回结果
         return Result.builder().isSuccess(true).msg(ResultMsgConstants.SUCCESS).build();
     }

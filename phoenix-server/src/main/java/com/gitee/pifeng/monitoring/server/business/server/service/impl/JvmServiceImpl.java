@@ -9,12 +9,18 @@ import com.gitee.pifeng.monitoring.server.business.server.dao.IMonitorJvmMemoryH
 import com.gitee.pifeng.monitoring.server.business.server.entity.MonitorInstance;
 import com.gitee.pifeng.monitoring.server.business.server.entity.MonitorJvmMemoryHistory;
 import com.gitee.pifeng.monitoring.server.business.server.service.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 /**
  * <p>
@@ -24,6 +30,7 @@ import java.util.Date;
  * @author 皮锋
  * @custom.date 2020/8/27 17:42
  */
+@Slf4j
 @Service
 public class JvmServiceImpl implements IJvmService {
 
@@ -76,6 +83,13 @@ public class JvmServiceImpl implements IJvmService {
     private IMonitorJvmMemoryHistoryDao monitorJvmMemoryHistoryDao;
 
     /**
+     * 应用实例服务监控线程池
+     */
+    @Autowired
+    @Qualifier("netMonitorThreadPoolExecutor")
+    private ThreadPoolExecutor instanceMonitorThreadPoolExecutor;
+
+    /**
      * <p>
      * 处理java虚拟机信息包
      * </p>
@@ -96,18 +110,33 @@ public class JvmServiceImpl implements IJvmService {
         if (count == 0) {
             return Result.builder().isSuccess(false).msg(ResultMsgConstants.FAILURE).build();
         }
-        // 把java虚拟机运行时信息添加或更新到数据库
-        this.jvmRuntimeService.operateMonitorJvmRuntime(jvmPackage);
-        // 把java虚拟机类加载信息添加或更新到数据库
-        this.jvmClassLoadingService.operateMonitorJvmClassLoading(jvmPackage);
-        // 把java虚拟机内存信息添加或更新到数据库
-        this.jvmMemoryService.operateMonitorJvmMemory(jvmPackage);
-        // 把java虚拟机内存历史信息添加到数据库
-        this.jvmMemoryHistoryService.operateMonitorJvmMemoryHistory(jvmPackage);
-        // 把java虚拟机线程信息添加或更新到数据库
-        this.jvmThreadService.operateMonitorJvmThread(jvmPackage);
-        // 把java虚拟机GC信息添加或更新到数据库
-        this.jvmGarbageCollectorService.operateMonitorJvmGarbageCollector(jvmPackage);
+        CompletableFuture<Void> allFutures = CompletableFuture.allOf(
+                // 把java虚拟机运行时信息添加或更新到数据库
+                CompletableFuture.runAsync(() -> this.jvmRuntimeService.operateMonitorJvmRuntime(jvmPackage), this.instanceMonitorThreadPoolExecutor),
+                // 把java虚拟机类加载信息添加或更新到数据库
+                CompletableFuture.runAsync(() -> this.jvmClassLoadingService.operateMonitorJvmClassLoading(jvmPackage), this.instanceMonitorThreadPoolExecutor),
+                // 把java虚拟机内存信息添加或更新到数据库
+                CompletableFuture.runAsync(() -> this.jvmMemoryService.operateMonitorJvmMemory(jvmPackage), this.instanceMonitorThreadPoolExecutor),
+                // 把java虚拟机内存历史信息添加到数据库
+                CompletableFuture.runAsync(() -> this.jvmMemoryHistoryService.operateMonitorJvmMemoryHistory(jvmPackage), this.instanceMonitorThreadPoolExecutor),
+                // 把java虚拟机线程信息添加或更新到数据库
+                CompletableFuture.runAsync(() -> this.jvmThreadService.operateMonitorJvmThread(jvmPackage), this.instanceMonitorThreadPoolExecutor),
+                // 把java虚拟机GC信息添加或更新到数据库
+                CompletableFuture.runAsync(() -> this.jvmGarbageCollectorService.operateMonitorJvmGarbageCollector(jvmPackage), this.instanceMonitorThreadPoolExecutor)
+        );
+        try {
+            // 设置超时时间
+            allFutures.get(30, TimeUnit.SECONDS);
+        } catch (InterruptedException e) {
+            log.error("并行处理java虚拟机信息包被中断：{}", e.getMessage(), e);
+            return Result.builder().isSuccess(false).msg("并行处理java虚拟机信息包被中断！").build();
+        } catch (TimeoutException e) {
+            log.error("并行处理java虚拟机信息包超时(30s)：{}", e.getMessage(), e);
+            return Result.builder().isSuccess(false).msg("并行处理java虚拟机信息包超时(30s)！").build();
+        } catch (Exception e) {
+            log.error("并行处理java虚拟机信息包出错：{}", e.getMessage(), e);
+            return Result.builder().isSuccess(false).msg("并行处理java虚拟机信息包出错！").build();
+        }
         // 返回结果
         return Result.builder().isSuccess(true).msg(ResultMsgConstants.SUCCESS).build();
     }
