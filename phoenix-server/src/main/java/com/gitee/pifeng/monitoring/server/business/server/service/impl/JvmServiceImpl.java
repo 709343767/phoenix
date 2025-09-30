@@ -86,7 +86,7 @@ public class JvmServiceImpl implements IJvmService {
      * 应用实例服务监控线程池
      */
     @Autowired
-    @Qualifier("netMonitorThreadPoolExecutor")
+    @Qualifier("instanceMonitorThreadPoolExecutor")
     private ThreadPoolExecutor instanceMonitorThreadPoolExecutor;
 
     /**
