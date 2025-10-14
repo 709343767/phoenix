@@ -108,6 +108,8 @@
         <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
         <!-- 单元测试插件版本 -->
         <maven-surefire-plugin.version>3.0.0-M4</maven-surefire-plugin.version>
+        <!-- jacoco代码覆盖率插件依赖版本 -->
+        <jacoco.version>0.8.11</jacoco.version>
         <!-- 打包插件版本 -->
         <maven-jar-plugin.version>3.2.0</maven-jar-plugin.version>
         <!-- springboot插件版本 -->
@@ -435,6 +437,14 @@
                     <version>${maven-surefire-plugin.version}</version>
                     <configuration>
                         <skipTests>true</skipTests>
+                        <forkCount>1</forkCount>
+                        <reuseForks>true</reuseForks>
+                        <argLine>
+                            <!-- 关键：保留 JaCoCo 注入的 agent -->
+                            ${argLine}
+                            -Dfile.encoding=UTF-8
+                            -Djdk.net.URLClassPath.disableClassPathURLCheck=true
+                        </argLine>
                     </configuration>
                 </plugin>
                 <!--打包插件 -->
@@ -569,6 +579,32 @@
                             <directory>${project.basedir}/liblog4phoenix</directory>
                         </fileset>
                     </filesets>
+                </configuration>
+            </plugin>
+            <!-- jacoco代码覆盖率插件 -->
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>${jacoco.version}</version>
+                <executions>
+                    <execution>
+                        <id>prepare-agent</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>report</id>
+                        <!-- 这是指定生成报告时期，注意一定要在test之后 -->
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <!-- 这是报告生成位置 target/site/jacoco -->
+                    <outputDirectory>${project.reporting.outputDirectory}/jacoco</outputDirectory>
                 </configuration>
             </plugin>
             <!-- 生成java doc插件 -->
