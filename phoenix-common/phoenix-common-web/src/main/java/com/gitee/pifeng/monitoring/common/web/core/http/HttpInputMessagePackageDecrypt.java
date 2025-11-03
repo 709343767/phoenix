@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpInputMessage;
+import org.springframework.lang.NonNull;
 
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
@@ -71,11 +72,13 @@ public class HttpInputMessagePackageDecrypt implements HttpInputMessage {
         this.body = IOUtils.toInputStream(decryptStr, StandardCharsets.UTF_8);
     }
 
+    @NonNull
     @Override
     public InputStream getBody() {
         return this.body;
     }
 
+    @NonNull
     @Override
     public HttpHeaders getHeaders() {
         return this.headers;
