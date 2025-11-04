@@ -3,6 +3,7 @@ package com.gitee.pifeng.monitoring.common.web.core;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.context.annotation.AnnotationBeanNameGenerator;
+import org.springframework.lang.NonNull;
 import org.springframework.util.StringUtils;
 
 /**
@@ -31,8 +32,9 @@ public class UniqueBeanNameGenerator extends AnnotationBeanNameGenerator {
      * @author 皮锋
      * @custom.date 2020/2/15 13:46
      */
+    @NonNull
     @Override
-    public String generateBeanName(BeanDefinition definition, BeanDefinitionRegistry registry) {
+    public String generateBeanName(BeanDefinition definition, @NonNull BeanDefinitionRegistry registry) {
         // 全限定类名
         String beanName = definition.getBeanClassName();
         if (StringUtils.hasText(beanName)) {
