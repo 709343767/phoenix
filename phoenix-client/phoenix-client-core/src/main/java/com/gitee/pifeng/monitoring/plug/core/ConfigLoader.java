@@ -198,7 +198,8 @@ public class ConfigLoader {
         String commFrameworkType;
         if (hasMonitoringProperties) {
             monitoringCommProperties = monitoringProperties.getComm() == null ? new MonitoringCommProperties() : monitoringProperties.getComm();
-            commFrameworkType = monitoringCommProperties.getCommFrameworkType().getName();
+            CommFrameworkTypeEnums commFrameworkTypeEnum = monitoringCommProperties.getCommFrameworkType();
+            commFrameworkType = commFrameworkTypeEnum == null ? null : commFrameworkTypeEnum.getName();
             // 没有配置通信框架类型 或者 通信框架是apacheHttpComponents
             if (StringUtils.isBlank(commFrameworkType) || StringUtils.equalsIgnoreCase(commFrameworkType, CommFrameworkTypeEnums.APACHE_HTTP_COMPONENTS.getName())) {
                 monitoringCommProperties.setCommFrameworkType(CommFrameworkTypeEnums.APACHE_HTTP_COMPONENTS);
