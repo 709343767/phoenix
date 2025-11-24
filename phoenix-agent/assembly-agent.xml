@@ -22,7 +22,7 @@
         </fileSet>
         <fileSet>
             <!--源目录-->
-            <directory>../doc/Windows服务/代理端/</directory>
+            <directory>../doc/WindowsServices/phoenix-agent/</directory>
             <!--放在哪-->
             <outputDirectory>/phoenixAgent</outputDirectory>
             <includes>

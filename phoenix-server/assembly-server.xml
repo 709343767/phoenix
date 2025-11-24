@@ -22,7 +22,7 @@
         </fileSet>
         <fileSet>
             <!--源目录-->
-            <directory>../doc/Windows服务/服务端/</directory>
+            <directory>../doc/WindowsServices/phoenix-server/</directory>
             <!--放在哪-->
             <outputDirectory>/phoenixServer</outputDirectory>
             <includes>

@@ -22,7 +22,7 @@
         </fileSet>
         <fileSet>
             <!--源目录-->
-            <directory>../doc/Windows服务/UI端/</directory>
+            <directory>../doc/WindowsServices/phoenix-ui/</directory>
             <!--放在哪-->
             <outputDirectory>/phoenixUI</outputDirectory>
             <includes>
