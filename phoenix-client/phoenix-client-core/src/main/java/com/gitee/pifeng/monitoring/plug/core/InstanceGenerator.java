@@ -43,8 +43,10 @@ public class InstanceGenerator {
     static {
         String instanceIdFileName;
         try {
-            String endpoint = StringUtils.lowerCase(ConfigLoader.getMonitoringProperties().getInstance().getEndpoint());
-            instanceIdFileName = "liblog4phoenix" + File.separator + "data" + File.separator + endpoint + "InstanceId";
+            MonitoringInstanceProperties instance = ConfigLoader.getMonitoringProperties().getInstance();
+            String name = StringUtils.lowerCase(instance.getName());
+            String endpoint = StringUtils.lowerCase(instance.getEndpoint());
+            instanceIdFileName = "liblog4phoenix" + File.separator + "data" + File.separator + name + File.separator + endpoint + "InstanceId";
         } catch (Exception e) {
             // 防止静态初始化块抛异常导致类加载失败
             instanceIdFileName = "liblog4phoenix" + File.separator + "data" + File.separator + "instanceId";
