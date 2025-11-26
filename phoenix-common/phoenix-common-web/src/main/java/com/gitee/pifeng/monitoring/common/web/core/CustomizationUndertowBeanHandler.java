@@ -1,5 +1,6 @@
 package com.gitee.pifeng.monitoring.common.web.core;
 
+import io.undertow.UndertowOptions;
 import io.undertow.server.DefaultByteBufferPool;
 import io.undertow.websockets.jsr.WebSocketDeploymentInfo;
 import org.springframework.boot.web.embedded.undertow.UndertowServletWebServerFactory;
@@ -14,7 +15,7 @@ import org.springframework.boot.web.server.WebServerFactoryCustomizer;
  * @author 皮锋
  * @custom.date 2020/8/25 10:19
  */
-public class CustomizationBeanHandler implements WebServerFactoryCustomizer<UndertowServletWebServerFactory> {
+public class CustomizationUndertowBeanHandler implements WebServerFactoryCustomizer<UndertowServletWebServerFactory> {
 
     /**
      * <p>
@@ -28,9 +29,21 @@ public class CustomizationBeanHandler implements WebServerFactoryCustomizer<Unde
     @Override
     public void customize(UndertowServletWebServerFactory factory) {
         factory.addDeploymentInfoCustomizers(deploymentInfo -> {
+            // WebSocket 配置
             WebSocketDeploymentInfo webSocketDeploymentInfo = new WebSocketDeploymentInfo();
             webSocketDeploymentInfo.setBuffers(new DefaultByteBufferPool(false, 1024));
             deploymentInfo.addServletContextAttribute("io.undertow.websockets.jsr.WebSocketDeploymentInfo", webSocketDeploymentInfo);
         });
+
+        // 三个超时配置
+        factory.addBuilderCustomizers(builder -> {
+            // 连接在 无任何读写活动 状态下最多保持 5 分钟，之后自动关闭
+            builder.setSocketOption(UndertowOptions.IDLE_TIMEOUT, 300_000);
+            // 10 秒内必须完成 HTTP 请求头解析
+            builder.setSocketOption(UndertowOptions.REQUEST_PARSE_TIMEOUT, 10_000);
+            // 连接建立后 10 秒内没发 HTTP 请求 就关闭（防慢连接攻击）
+            builder.setSocketOption(UndertowOptions.NO_REQUEST_TIMEOUT, 10_000);
+        });
     }
+
 }

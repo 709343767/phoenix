@@ -2,7 +2,7 @@ package com.gitee.pifeng.monitoring.agent;
 
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.date.TimeInterval;
-import com.gitee.pifeng.monitoring.common.web.core.CustomizationBeanHandler;
+import com.gitee.pifeng.monitoring.common.web.core.CustomizationUndertowBeanHandler;
 import com.gitee.pifeng.monitoring.common.web.core.UniqueBeanNameGenerator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
@@ -25,7 +25,7 @@ import org.springframework.stereotype.Indexed;
 @EnableRetry
 @SpringBootApplication
 @ComponentScan(nameGenerator = UniqueBeanNameGenerator.class)
-public class AgentApplication extends CustomizationBeanHandler {
+public class AgentApplication extends CustomizationUndertowBeanHandler {
 
     public static void main(String[] args) {
         // 计时器

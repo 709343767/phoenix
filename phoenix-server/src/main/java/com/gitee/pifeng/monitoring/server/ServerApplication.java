@@ -2,7 +2,7 @@ package com.gitee.pifeng.monitoring.server;
 
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.date.TimeInterval;
-import com.gitee.pifeng.monitoring.common.web.core.CustomizationBeanHandler;
+import com.gitee.pifeng.monitoring.common.web.core.CustomizationUndertowBeanHandler;
 import com.gitee.pifeng.monitoring.common.web.core.UniqueBeanNameGenerator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
@@ -31,7 +31,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @ComponentScan(nameGenerator = UniqueBeanNameGenerator.class)
 @EnableAspectJAutoProxy(proxyTargetClass = true, exposeProxy = true)
 @SpringBootApplication(exclude = {MongoAutoConfiguration.class, MongoDataAutoConfiguration.class})
-public class ServerApplication extends CustomizationBeanHandler {
+public class ServerApplication extends CustomizationUndertowBeanHandler {
 
     public static void main(String[] args) {
         // 计时器
