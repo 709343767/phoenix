@@ -3,7 +3,6 @@ package com.gitee.pifeng.monitoring.common.util.secure;
 import cn.hutool.crypto.KeyUtil;
 import com.gitee.pifeng.monitoring.common.constant.SecurerEnums;
 import com.gitee.pifeng.monitoring.common.init.InitSecure;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
@@ -87,7 +86,6 @@ public class SecureUtils extends InitSecure {
      * @author 皮锋
      * @custom.date 2021/12/21 13:08
      */
-    @SneakyThrows
     public static byte[] decrypt(String str) {
         // 没选择加解密类型，则不解密
         if (StringUtils.isBlank(SECRET_TYPE)) {

@@ -8,6 +8,7 @@ import com.gitee.pifeng.monitoring.common.constant.alarm.AlarmReasonEnums;
 import com.gitee.pifeng.monitoring.common.constant.monitortype.MonitorTypeEnums;
 import com.gitee.pifeng.monitoring.common.domain.Alarm;
 import com.gitee.pifeng.monitoring.common.dto.AlarmPackage;
+import com.gitee.pifeng.monitoring.common.exception.DecryptionException;
 import com.gitee.pifeng.monitoring.common.exception.NetException;
 import com.gitee.pifeng.monitoring.common.util.DateTimeUtils;
 import com.gitee.pifeng.monitoring.common.util.ExceptionUtils;
@@ -102,6 +103,11 @@ public class ExceptionLogAspect {
      */
     @AfterThrowing(pointcut = "exceptionLogPointCut()", throwing = "e")
     public void saveExceptionLog(JoinPoint joinPoint, Throwable e) throws NetException {
+        // 排除解密异常，交给全局异常处理器
+        if (e instanceof DecryptionException) {
+            // 不记录、不处理，放行
+            return;
+        }
         HttpServletRequest request;
         try {
             // 如果是http请求，则有请求对象
