@@ -200,6 +200,9 @@ public class InstanceMonitorJob extends QuartzJobBean implements CommandLineRunn
         LambdaQueryWrapper<MonitorInstance> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         lambdaQueryWrapper.eq(MonitorInstance::getInstanceId, instanceId);
         MonitorInstance monitorInstance = this.instanceService.getOne(lambdaQueryWrapper);
+        if (monitorInstance == null) {
+            return;
+        }
         // 是否开启监控（0：不开启监控；1：开启监控）
         String isEnableMonitor = monitorInstance.getIsEnableMonitor();
         // 没有开启监控，直接跳过
@@ -246,6 +249,9 @@ public class InstanceMonitorJob extends QuartzJobBean implements CommandLineRunn
             LambdaQueryWrapper<MonitorInstance> lambdaQueryWrapper = new LambdaQueryWrapper<>();
             lambdaQueryWrapper.eq(MonitorInstance::getInstanceId, instanceId);
             MonitorInstance monitorInstance = this.instanceService.getOne(lambdaQueryWrapper);
+            if (monitorInstance == null) {
+                return;
+            }
             // 是否开启监控（0：不开启监控；1：开启监控）
             String isEnableMonitor = monitorInstance.getIsEnableMonitor();
             // 没有开启监控，直接跳过
