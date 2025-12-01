@@ -1,6 +1,5 @@
 package com.gitee.pifeng.monitoring.agent.component;
 
-import com.gitee.pifeng.monitoring.common.exception.DecryptionException;
 import com.gitee.pifeng.monitoring.common.web.core.http.HttpInputMessagePackageDecrypt;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpInputMessage;
@@ -9,6 +8,7 @@ import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.RequestBodyAdvice;
 
+import java.io.IOException;
 import java.lang.reflect.Type;
 
 /**
@@ -48,7 +48,7 @@ public class RequestPackageDecryptAdvice implements RequestBodyAdvice {
     @NonNull
     @Override
     public HttpInputMessage beforeBodyRead(@NonNull HttpInputMessage inputMessage, @NonNull MethodParameter parameter,
-                                           @NonNull Type targetType, @NonNull Class<? extends HttpMessageConverter<?>> converterType) throws DecryptionException {
+                                           @NonNull Type targetType, @NonNull Class<? extends HttpMessageConverter<?>> converterType) throws IOException {
         return new HttpInputMessagePackageDecrypt(inputMessage);
     }
 
