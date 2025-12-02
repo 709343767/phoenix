@@ -13,6 +13,7 @@ import lombok.Cleanup;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpStatus;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.config.RequestConfig;
@@ -244,10 +245,18 @@ public class EnumPoolingHttpClient {
             CloseableHttpResponse response = HTTP_CLIENT.execute(httpPost);
             // post请求返回结果
             String result = null;
+            int statusCode = response.getStatusLine().getStatusCode();
+            HttpEntity entity = response.getEntity();
             // 成功
-            if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+            if (statusCode == HttpStatus.SC_OK) {
                 // 读取服务器返回过来的json字符串数据
-                result = EntityUtils.toString(response.getEntity(), CharsetUtil.UTF_8);
+                result = EntityUtils.toString(entity, CharsetUtil.UTF_8);
+            } else {
+                // 即使非200，也要消费掉 body
+                if (entity != null) {
+                    // 安全释放
+                    EntityUtils.consume(entity);
+                }
             }
             return result;
         } finally {
@@ -321,10 +330,17 @@ public class EnumPoolingHttpClient {
             @Cleanup
             CloseableHttpResponse response = HTTP_CLIENT.execute(httpPost);
             statusCode = response.getStatusLine().getStatusCode();
+            HttpEntity entity = response.getEntity();
             // 成功
             if (statusCode == HttpStatus.SC_OK) {
                 // 读取服务器返回过来的json字符串数据
-                result = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);
+                result = EntityUtils.toString(entity, StandardCharsets.UTF_8);
+            } else {
+                // 即使非200，也要消费掉 body
+                if (entity != null) {
+                    // 安全释放
+                    EntityUtils.consume(entity);
+                }
             }
         } catch (Exception e) {
             if (log.isDebugEnabled()) {
@@ -388,9 +404,16 @@ public class EnumPoolingHttpClient {
             @Cleanup
             CloseableHttpResponse response = HTTP_CLIENT.execute(httpget);
             statusCode = response.getStatusLine().getStatusCode();
+            HttpEntity entity = response.getEntity();
             // 成功
             if (statusCode == HttpStatus.SC_OK) {
-                result = EntityUtils.toString(response.getEntity(), CharsetUtil.UTF_8);
+                result = EntityUtils.toString(entity, CharsetUtil.UTF_8);
+            } else {
+                // 即使非200，也要消费掉 body
+                if (entity != null) {
+                    // 安全释放
+                    EntityUtils.consume(entity);
+                }
             }
         } catch (Exception e) {
             if (log.isDebugEnabled()) {
