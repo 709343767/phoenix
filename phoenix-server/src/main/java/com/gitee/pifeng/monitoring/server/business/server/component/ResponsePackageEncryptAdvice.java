@@ -4,6 +4,7 @@ import com.gitee.pifeng.monitoring.common.domain.Result;
 import com.gitee.pifeng.monitoring.common.dto.BaseResponsePackage;
 import com.gitee.pifeng.monitoring.common.dto.CiphertextPackage;
 import com.gitee.pifeng.monitoring.common.web.core.http.HttpOutputMessagePackageEncrypt;
+import com.gitee.pifeng.monitoring.common.web.util.AccessObjectUtils;
 import com.gitee.pifeng.monitoring.server.business.server.core.ServerPackageConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,8 @@ import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * <p>
@@ -41,14 +44,16 @@ public class ResponsePackageEncryptAdvice implements ResponseBodyAdvice<Object> 
      * </p>
      *
      * @param throwable {@link Throwable}
+     * @param request   {@link HttpServletRequest}
      * @return 密文数据包 {@link CiphertextPackage}
      * @author 皮锋
      * @custom.date 2020/9/4 21:54
      */
     @ExceptionHandler(value = Throwable.class)
-    public CiphertextPackage handler(Throwable throwable) {
+    public CiphertextPackage handler(Throwable throwable, HttpServletRequest request) {
         String throwableString = throwable.toString();
-        log.error("异常：{}", throwableString, throwable);
+        String clientAddress = AccessObjectUtils.getClientAddress(request);
+        log.error("请求客户端IP：{}，异常：{}", clientAddress, throwableString);
         Result build = Result.builder().isSuccess(false).msg(throwableString).build();
         BaseResponsePackage baseResponsePackage = this.serverPackageConstructor.structureBaseResponsePackage(build);
         return new HttpOutputMessagePackageEncrypt().encrypt(baseResponsePackage);
