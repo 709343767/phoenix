@@ -35,7 +35,8 @@ public class ControllerExceptionHandlerAdvice {
     public LayUiAdminResultVo handler(Throwable throwable, HttpServletRequest request) {
         String throwableString = throwable.toString();
         String clientAddress = AccessObjectUtils.getClientAddress(request);
-        log.error("请求客户端IP：{}，异常：{}", clientAddress, throwableString, throwable);
+        String uri = request.getRequestURI();
+        log.error("请求客户端IP：{}，URI：{}，异常：{}", clientAddress, uri, throwableString, throwable);
         return LayUiAdminResultVo.fail(throwable.getMessage());
     }
 

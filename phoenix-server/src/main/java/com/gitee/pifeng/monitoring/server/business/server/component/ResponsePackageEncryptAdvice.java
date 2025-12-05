@@ -53,7 +53,8 @@ public class ResponsePackageEncryptAdvice implements ResponseBodyAdvice<Object> 
     public CiphertextPackage handler(Throwable throwable, HttpServletRequest request) {
         String throwableString = throwable.toString();
         String clientAddress = AccessObjectUtils.getClientAddress(request);
-        log.error("请求客户端IP：{}，异常：{}", clientAddress, throwableString);
+        String uri = request.getRequestURI();
+        log.error("请求客户端IP：{}，URI：{}，异常：{}", clientAddress, uri, throwableString);
         Result build = Result.builder().isSuccess(false).msg(throwableString).build();
         BaseResponsePackage baseResponsePackage = this.serverPackageConstructor.structureBaseResponsePackage(build);
         return new HttpOutputMessagePackageEncrypt().encrypt(baseResponsePackage);
