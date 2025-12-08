@@ -171,6 +171,22 @@ CREATE TABLE `MONITOR_DB`
   ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
+-- Table structure for MONITOR_DISTRIBUTED_LOCK
+-- ----------------------------
+DROP TABLE IF EXISTS `MONITOR_DISTRIBUTED_LOCK`;
+CREATE TABLE `MONITOR_DISTRIBUTED_LOCK`
+(
+    `LOCK_KEY`    varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '锁名称',
+    `OWNER`       varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT '锁持有者',
+    `EXPIRE_TIME` datetime(3)                                                   NOT NULL COMMENT '过期时间（防死锁，毫秒精度）',
+    PRIMARY KEY (`LOCK_KEY`) USING BTREE,
+    INDEX `UX_EXPIRE_TIME` (`EXPIRE_TIME` ASC) USING BTREE COMMENT '索引_过期时间'
+) ENGINE = InnoDB
+  CHARACTER SET = utf8mb4
+  COLLATE = utf8mb4_general_ci COMMENT = '分布式锁表'
+  ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
 -- Table structure for MONITOR_ENV
 -- ----------------------------
 DROP TABLE IF EXISTS `MONITOR_ENV`;

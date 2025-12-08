@@ -1,5 +1,7 @@
 package com.gitee.pifeng.monitoring.server.business.server.service.impl;
 
+import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.date.TimeInterval;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -8,14 +10,17 @@ import com.gitee.pifeng.monitoring.common.constant.alarm.AlarmReasonEnums;
 import com.gitee.pifeng.monitoring.common.constant.monitortype.MonitorSubTypeEnums;
 import com.gitee.pifeng.monitoring.common.constant.monitortype.MonitorTypeEnums;
 import com.gitee.pifeng.monitoring.common.domain.Alarm;
+import com.gitee.pifeng.monitoring.plug.core.InstanceGenerator;
+import com.gitee.pifeng.monitoring.server.business.server.core.MysqlDistributedLock;
 import com.gitee.pifeng.monitoring.server.business.server.dao.IMonitorRealtimeMonitoringDao;
 import com.gitee.pifeng.monitoring.server.business.server.entity.MonitorRealtimeMonitoring;
 import com.gitee.pifeng.monitoring.server.business.server.service.IRealtimeMonitoringService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import java.util.Date;
 
@@ -27,8 +32,15 @@ import java.util.Date;
  * @author 皮锋
  * @custom.date 2021/1/29 14:56
  */
+@Slf4j
 @Service
 public class RealtimeMonitoringServiceImpl extends ServiceImpl<IMonitorRealtimeMonitoringDao, MonitorRealtimeMonitoring> implements IRealtimeMonitoringService {
+
+    /**
+     * MySQL实现的分布式锁
+     */
+    @Autowired
+    private MysqlDistributedLock mysqlDistributedLock;
 
     /**
      * <p>
@@ -40,10 +52,12 @@ public class RealtimeMonitoringServiceImpl extends ServiceImpl<IMonitorRealtimeM
      * @author 皮锋
      * @custom.date 2021/2/1 11:20
      */
-    @Retryable
-    @Transactional(rollbackFor = Throwable.class)
     @Override
+    @Retryable
+    @Transactional(rollbackFor = Throwable.class, timeout = 10)
     public boolean beforeAlarmJudge(Alarm alarm) {
+        // 计时器
+        TimeInterval timer = DateUtil.timer();
         // 监控类型
         MonitorTypeEnums monitorTypeEnum = alarm.getMonitorType();
         // 告警原因
@@ -56,10 +70,24 @@ public class RealtimeMonitoringServiceImpl extends ServiceImpl<IMonitorRealtimeM
         String typeEnumName = monitorTypeEnum.name();
         // 告警代码
         String alarmCode = alarm.getCode();
+        if (StringUtils.isEmpty(alarmCode)) {
+            return true;
+        }
         // 生成细粒度锁键（type:code）
-        String lockKey = typeEnumName + ":" + alarmCode;
-        // 使用 intern() 确保相同字符串引用
-        synchronized (lockKey.intern()) {
+        String lockKey = "alarm_judge:" + typeEnumName + ":" + alarmCode;
+        // 锁持有者
+        String instanceId = InstanceGenerator.getInstanceId();
+        // 是否获取到分布式锁
+        boolean lockAcquired = false;
+        try {
+            // 尝试获取锁：最多等待 5 秒，锁自动过期 15 秒
+            // 注意：分布式锁在 Spring 事务提交前持有，需确保事务执行时间 < 锁过期时间（15秒）
+            // 高并发场景下 Redisson 分布式锁是更优选择
+            lockAcquired = this.mysqlDistributedLock.tryLock(lockKey, instanceId, 15, 5);
+            if (!lockAcquired) {
+                // 获取锁超时，放弃本次告警判断（避免并发冲突）
+                return false;
+            }
             // 监控子类型
             MonitorSubTypeEnums monitorSubType = alarm.getMonitorSubType();
             // 被告警主体唯一ID
@@ -106,9 +134,26 @@ public class RealtimeMonitoringServiceImpl extends ServiceImpl<IMonitorRealtimeM
             if (alarmReasonEnum == AlarmReasonEnums.ABNORMAL_2_NORMAL) {
                 return isSentAlarm;
             }
-            // 显式提交事务
-            TransactionAspectSupport.currentTransactionStatus().flush();
             return false;
+        } finally {
+            if (lockAcquired) {
+                try {
+                    boolean released = this.mysqlDistributedLock.releaseLock(lockKey, instanceId);
+                    if (!released) {
+                        log.warn("尝试释放分布式锁失败（可能已被自动清理）：lockKey={}，instanceId={}", lockKey, instanceId);
+                    }
+                } catch (Exception e) {
+                    // 可记录日志，但不要抛出异常影响主流程
+                    log.error("尝试释放分布式锁失败：lockKey={}，instanceId={}", lockKey, instanceId, e);
+                }
+            }
+            // 时间差（毫秒）
+            String betweenDay = timer.intervalPretty();
+            // 临界值
+            int criticalValue = 10;
+            if (timer.intervalSecond() > criticalValue) {
+                log.warn("告警前置判断耗时：{}", betweenDay);
+            }
         }
     }
 
