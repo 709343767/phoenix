@@ -200,6 +200,18 @@ body .layui-layer-class-my .layui-layer-btn .layui-layer-btn1 {
     line-height: 20px;
 }
 
+.config-fixed-buttons {
+    position: fixed;
+    bottom: 20px; /* 距离底部 20px */
+    right: 50%;
+    z-index: 9999; /* 确保在最上层 */
+    width: auto; /* 宽度自适应按钮 */
+    background: white; /* 防止文字穿透（可选） */
+    padding: 10px; /* 内边距（可选） */
+    border-radius: 4px; /* 圆角（可选） */
+    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.15); /* 阴影（可选） */
+}
+
 /* 在大屏幕上应用样式 */
 @media (min-width: 768px) {
     .last-alarm-layui-card-body {
