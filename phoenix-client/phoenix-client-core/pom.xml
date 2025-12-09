@@ -67,7 +67,6 @@
                 <excludes>
                     <!-- 排除掉监控配置文件 -->
                     <exclude>monitoring.properties</exclude>
-                    <exclude>monitoring-secure.properties</exclude>
                 </excludes>
             </resource>
         </resources>

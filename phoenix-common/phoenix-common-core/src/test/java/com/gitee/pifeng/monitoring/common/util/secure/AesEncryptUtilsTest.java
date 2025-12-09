@@ -26,8 +26,8 @@ public class AesEncryptUtilsTest extends TestCase {
      */
     public void testEncrypt() {
         String encrypt = AesEncryptUtils.encrypt("测试AES加解密工具类", StandardCharsets.UTF_8);
-        log.info("加密结果：" + encrypt);
-        assertEquals(encrypt, "9FUrFVEsBR3MjwVFv2gydNAKlnXM2fkBdkn1FhMHFro=");
+        log.info("加密结果：{}", encrypt);
+        assertEquals("9FUrFVEsBR3MjwVFv2gydNAKlnXM2fkBdkn1FhMHFro=", encrypt);
     }
 
     /**
@@ -40,8 +40,8 @@ public class AesEncryptUtilsTest extends TestCase {
      */
     public void testDecrypt() {
         String decrypt = AesEncryptUtils.decrypt("9FUrFVEsBR3MjwVFv2gydNAKlnXM2fkBdkn1FhMHFro=", StandardCharsets.UTF_8);
-        log.info("解密结果：" + decrypt);
-        assertEquals(decrypt, "测试AES加解密工具类");
+        log.info("解密结果：{}", decrypt);
+        assertEquals("测试AES加解密工具类", decrypt);
     }
 
 }

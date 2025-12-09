@@ -3,9 +3,11 @@ package com.gitee.pifeng.monitoring.plug.core;
 import com.gitee.pifeng.monitoring.common.constant.CommFrameworkTypeEnums;
 import com.gitee.pifeng.monitoring.common.constant.EndpointTypeEnums;
 import com.gitee.pifeng.monitoring.common.constant.LanguageTypeConstants;
+import com.gitee.pifeng.monitoring.common.constant.SecurerEnums;
 import com.gitee.pifeng.monitoring.common.exception.ErrorConfigParamException;
 import com.gitee.pifeng.monitoring.common.exception.NotFoundConfigFileException;
 import com.gitee.pifeng.monitoring.common.exception.NotFoundConfigParamException;
+import com.gitee.pifeng.monitoring.common.init.InitSecure;
 import com.gitee.pifeng.monitoring.common.property.client.*;
 import com.gitee.pifeng.monitoring.common.util.DirUtils;
 import com.gitee.pifeng.monitoring.common.util.PropertiesUtils;
@@ -47,6 +49,7 @@ public class ConfigLoader {
      * <p>
      * 获取监控属性
      * </p>
+     * 注意：这个方法名称不能随意改动，因为在 {@link  InitSecure} 用了反射来调用这个方法
      *
      * @return {@link MonitoringProperties}
      * @author 皮锋
@@ -168,11 +171,161 @@ public class ConfigLoader {
     private static void analysis(Properties properties, MonitoringProperties monitoringProperties, boolean hasMonitoringProperties)
             throws NotFoundConfigParamException, ErrorConfigParamException {
         // 封装数据
+        wrapMonitoringSecureProperties(properties, monitoringProperties, hasMonitoringProperties);
         wrapMonitoringCommProperties(properties, monitoringProperties, hasMonitoringProperties);
         wrapMonitoringInstanceProperties(properties, monitoringProperties, hasMonitoringProperties);
         wrapMonitoringHeartbeatProperties(properties, monitoringProperties, hasMonitoringProperties);
         wrapMonitoringServerInfoProperties(properties, monitoringProperties, hasMonitoringProperties);
         wrapMonitoringJvmInfoProperties(properties, monitoringProperties, hasMonitoringProperties);
+    }
+
+    /**
+     * <p>
+     * 封装与安全相关的监控属性
+     * </p>
+     *
+     * @param properties              配置属性
+     * @param monitoringProperties    {@link MonitoringProperties}
+     * @param hasMonitoringProperties 是否有监控属性类
+     * @throws NotFoundConfigParamException 找不到配置参数异常
+     * @throws ErrorConfigParamException    错误的配置参数异常
+     * @author 皮锋
+     * @custom.date 2025/12/7 13:15
+     */
+    private static void wrapMonitoringSecureProperties(Properties properties,
+                                                       MonitoringProperties monitoringProperties,
+                                                       boolean hasMonitoringProperties)
+            throws NotFoundConfigParamException, ErrorConfigParamException {
+        // 与安全相关监控属性
+        MonitoringSecureProperties monitoringSecureProperties;
+        // 加密算法类型
+        String encryptionAlgorithmType;
+        if (hasMonitoringProperties) {
+            monitoringSecureProperties = monitoringProperties.getSecure() == null ? new MonitoringSecureProperties() : monitoringProperties.getSecure();
+            SecurerEnums securerEnums = monitoringSecureProperties.getEncryptionAlgorithmType();
+            encryptionAlgorithmType = securerEnums == null ? null : securerEnums.name();
+        } else {
+            monitoringSecureProperties = new MonitoringSecureProperties();
+            encryptionAlgorithmType = StringUtils.trimToNull(properties.getProperty("monitoring.secure.encryption-algorithm-type"));
+        }
+        // AES加解密
+        if (StringUtils.equalsIgnoreCase(encryptionAlgorithmType, SecurerEnums.AES.name())) {
+            monitoringSecureProperties.setEncryptionAlgorithmType(SecurerEnums.AES);
+            // 封装AES加密算法属性
+            MonitoringSecureAesProperties monitoringSecureAesProperties = wrapMonitoringSecureAesProperties(properties, monitoringProperties, hasMonitoringProperties);
+            monitoringSecureProperties.setAes(monitoringSecureAesProperties);
+        }
+        // DES加解密
+        else if (StringUtils.equalsIgnoreCase(encryptionAlgorithmType, SecurerEnums.DES.name())) {
+            monitoringSecureProperties.setEncryptionAlgorithmType(SecurerEnums.DES);
+            // 封装DES加密算法属性
+            MonitoringSecureDesProperties monitoringSecureDesProperties = wrapMonitoringSecureDesProperties(properties, monitoringProperties, hasMonitoringProperties);
+            monitoringSecureProperties.setDes(monitoringSecureDesProperties);
+        }
+        // 国密SM4加解密
+        else if (StringUtils.equalsIgnoreCase(encryptionAlgorithmType, SecurerEnums.SM4.name())) {
+            monitoringSecureProperties.setEncryptionAlgorithmType(SecurerEnums.SM4);
+            // 封装国密SM4加密算法属性
+            MonitoringSecureSm4Properties monitoringSecureSm4Properties = wrapMonitoringSecureSm4Properties(properties, monitoringProperties, hasMonitoringProperties);
+            monitoringSecureProperties.setSm4(monitoringSecureSm4Properties);
+        }
+        MONITORING_PROPERTIES.setSecure(monitoringSecureProperties);
+    }
+
+    /**
+     * <p>
+     * 封装AES加密算法属性
+     * </p>
+     *
+     * @param properties              配置属性
+     * @param monitoringProperties    {@link MonitoringProperties}
+     * @param hasMonitoringProperties 是否有监控属性类
+     * @return {MonitoringSecureAesProperties} AES加密算法属性
+     * @throws NotFoundConfigParamException 找不到配置参数异常
+     * @throws ErrorConfigParamException    错误的配置参数异常
+     * @author 皮锋
+     * @custom.date 2025/12/7 13:51
+     */
+    private static MonitoringSecureAesProperties wrapMonitoringSecureAesProperties(Properties properties,
+                                                                                   MonitoringProperties monitoringProperties,
+                                                                                   boolean hasMonitoringProperties)
+            throws NotFoundConfigParamException, ErrorConfigParamException {
+        // 秘钥
+        String key;
+        if (hasMonitoringProperties) {
+            MonitoringSecureProperties secure = monitoringProperties.getSecure() == null ? new MonitoringSecureProperties() : monitoringProperties.getSecure();
+            MonitoringSecureAesProperties aes = secure.getAes() == null ? new MonitoringSecureAesProperties() : secure.getAes();
+            key = aes.getKey();
+        } else {
+            key = StringUtils.trimToNull(properties.getProperty("monitoring.secure.aes.key"));
+        }
+        MonitoringSecureAesProperties monitoringSecureAesProperties = new MonitoringSecureAesProperties();
+        monitoringSecureAesProperties.setKey(key);
+        return monitoringSecureAesProperties;
+    }
+
+    /**
+     * <p>
+     * 封装DES加密算法属性
+     * </p>
+     *
+     * @param properties              配置属性
+     * @param monitoringProperties    {@link MonitoringProperties}
+     * @param hasMonitoringProperties 是否有监控属性类
+     * @return {MonitoringSecureDesProperties} DES加密算法属性
+     * @throws NotFoundConfigParamException 找不到配置参数异常
+     * @throws ErrorConfigParamException    错误的配置参数异常
+     * @author 皮锋
+     * @custom.date 2025/12/7 13:39
+     */
+    private static MonitoringSecureDesProperties wrapMonitoringSecureDesProperties(Properties properties,
+                                                                                   MonitoringProperties monitoringProperties,
+                                                                                   boolean hasMonitoringProperties)
+            throws NotFoundConfigParamException, ErrorConfigParamException {
+        // 秘钥
+        String key;
+        if (hasMonitoringProperties) {
+            MonitoringSecureProperties secure = monitoringProperties.getSecure() == null ? new MonitoringSecureProperties() : monitoringProperties.getSecure();
+            MonitoringSecureDesProperties des = secure.getDes() == null ? new MonitoringSecureDesProperties() : secure.getDes();
+            key = des.getKey();
+        } else {
+            key = StringUtils.trimToNull(properties.getProperty("monitoring.secure.des.key"));
+        }
+        MonitoringSecureDesProperties monitoringSecureDesProperties = new MonitoringSecureDesProperties();
+        monitoringSecureDesProperties.setKey(key);
+        return monitoringSecureDesProperties;
+    }
+
+    /**
+     * <p>
+     * 封装国密SM4加密算法属性
+     * </p>
+     *
+     * @param properties              配置属性
+     * @param monitoringProperties    {@link MonitoringProperties}
+     * @param hasMonitoringProperties 是否有监控属性类
+     * @return {MonitoringSecureSm4Properties} SM4加密算法属性
+     * @throws NotFoundConfigParamException 找不到配置参数异常
+     * @throws ErrorConfigParamException    错误的配置参数异常
+     * @author 皮锋
+     * @custom.date 2025/12/7 13:21
+     */
+    private static MonitoringSecureSm4Properties wrapMonitoringSecureSm4Properties(Properties properties,
+                                                                                   MonitoringProperties monitoringProperties,
+                                                                                   boolean hasMonitoringProperties)
+            throws NotFoundConfigParamException, ErrorConfigParamException {
+        // 秘钥
+        String key;
+        if (hasMonitoringProperties) {
+            MonitoringSecureProperties secure = monitoringProperties.getSecure() == null ? new MonitoringSecureProperties() : monitoringProperties.getSecure();
+            MonitoringSecureSm4Properties sm4 = secure.getSm4() == null ? new MonitoringSecureSm4Properties() : secure.getSm4();
+            key = sm4.getKey();
+        } else {
+            key = StringUtils.trimToNull(properties.getProperty("monitoring.secure.sm4.key"));
+        }
+        MonitoringSecureSm4Properties monitoringSecureSm4Properties = new MonitoringSecureSm4Properties();
+        monitoringSecureSm4Properties.setKey(key);
+        return monitoringSecureSm4Properties;
     }
 
     /**

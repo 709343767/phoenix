@@ -7,6 +7,26 @@
       "type": "com.gitee.pifeng.monitoring.common.property.client.MonitoringProperties"
     },
     {
+      "sourceType": "com.gitee.pifeng.monitoring.common.property.client.MonitoringSecureProperties",
+      "name": "phoenix.monitoring.secure",
+      "type": "com.gitee.pifeng.monitoring.common.property.client.MonitoringSecureProperties"
+    },
+    {
+      "sourceType": "com.gitee.pifeng.monitoring.common.property.client.MonitoringSecureAesProperties",
+      "name": "phoenix.monitoring.secure.aes",
+      "type": "com.gitee.pifeng.monitoring.common.property.client.MonitoringSecureAesProperties"
+    },
+    {
+      "sourceType": "com.gitee.pifeng.monitoring.common.property.client.MonitoringSecureDesProperties",
+      "name": "phoenix.monitoring.secure.des",
+      "type": "com.gitee.pifeng.monitoring.common.property.client.MonitoringSecureDesProperties"
+    },
+    {
+      "sourceType": "com.gitee.pifeng.monitoring.common.property.client.MonitoringSecureSm4Properties",
+      "name": "phoenix.monitoring.secure.sm4",
+      "type": "com.gitee.pifeng.monitoring.common.property.client.MonitoringSecureSm4Properties"
+    },
+    {
       "sourceType": "com.gitee.pifeng.monitoring.common.property.client.MonitoringCommProperties",
       "name": "phoenix.monitoring.comm",
       "type": "com.gitee.pifeng.monitoring.common.property.client.MonitoringCommProperties"
@@ -38,6 +58,30 @@
     }
   ],
   "properties": [
+    {
+      "sourceType": "com.gitee.pifeng.monitoring.common.property.client.MonitoringSecureProperties",
+      "name": "phoenix.monitoring.secure.encryption-algorithm-type",
+      "description": "缺省[加密算法类型，默认：不填写].",
+      "type": "com.gitee.pifeng.monitoring.common.constant.SecurerEnums"
+    },
+    {
+      "sourceType": "com.gitee.pifeng.monitoring.common.property.client.MonitoringSecureAesProperties",
+      "name": "phoenix.monitoring.secure.aes.key",
+      "description": "缺省[AES加密算法秘钥，默认：不填写].",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.gitee.pifeng.monitoring.common.property.client.MonitoringSecureDesProperties",
+      "name": "phoenix.monitoring.secure.des.key",
+      "description": "缺省[DES加密算法秘钥，默认：不填写].",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.gitee.pifeng.monitoring.common.property.client.MonitoringSecureSm4Properties",
+      "name": "phoenix.monitoring.secure.sm4.key",
+      "description": "缺省[SM4加密算法秘钥，默认：不填写].",
+      "type": "java.lang.String"
+    },
     {
       "sourceType": "com.gitee.pifeng.monitoring.common.property.client.MonitoringCommProperties",
       "name": "phoenix.monitoring.comm.comm-framework-type",

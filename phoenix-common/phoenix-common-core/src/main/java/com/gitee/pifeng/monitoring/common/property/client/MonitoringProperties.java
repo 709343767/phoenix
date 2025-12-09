@@ -1,6 +1,7 @@
 package com.gitee.pifeng.monitoring.common.property.client;
 
 import com.gitee.pifeng.monitoring.common.inf.ISuperBean;
+import com.gitee.pifeng.monitoring.common.init.InitSecure;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -19,6 +20,12 @@ import lombok.experimental.Accessors;
 @NoArgsConstructor
 @Accessors(chain = true)
 public class MonitoringProperties implements ISuperBean {
+
+    /**
+     * 安全相关监控属性
+     * 注意：这个属性名称不能随意改动，因为在 {@link InitSecure} 用了反射来获取这个属性
+     */
+    private MonitoringSecureProperties secure;
 
     /**
      * 与通信相关的监控属性

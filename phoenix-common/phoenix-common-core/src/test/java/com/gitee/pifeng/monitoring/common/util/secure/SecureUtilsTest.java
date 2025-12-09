@@ -26,7 +26,7 @@ public class SecureUtilsTest extends TestCase {
     public void testGenerateKey() {
         String secretType = SecureUtils.SECRET_TYPE;
         if (StringUtils.isBlank(secretType)) {
-            log.info("加解密类型为空，请修改“monitoring-secure.properties”配置文件参数！");
+            log.info("加解密类型为空！");
             return;
         }
         log.info(secretType);

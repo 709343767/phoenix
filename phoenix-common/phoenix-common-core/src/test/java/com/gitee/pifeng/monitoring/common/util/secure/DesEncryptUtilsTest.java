@@ -26,8 +26,8 @@ public class DesEncryptUtilsTest extends TestCase {
      */
     public void testEncrypt() {
         String encrypt = DesEncryptUtils.encrypt("测试DES加解密工具类", StandardCharsets.UTF_8);
-        log.info("加密结果：" + encrypt);
-        assertEquals(encrypt, "9H9PtukuYEeFIMdraLd+3qWX1DLwDwl7ga7sVr5l6DU=");
+        log.info("加密结果：{}", encrypt);
+        assertEquals("9H9PtukuYEeFIMdraLd+3qWX1DLwDwl7ga7sVr5l6DU=", encrypt);
     }
 
     /**
@@ -40,8 +40,8 @@ public class DesEncryptUtilsTest extends TestCase {
      */
     public void testDecrypt() {
         String decrypt = DesEncryptUtils.decrypt("9H9PtukuYEeFIMdraLd+3qWX1DLwDwl7ga7sVr5l6DU=", StandardCharsets.UTF_8);
-        log.info("解密结果：" + decrypt);
-        assertEquals(decrypt, "测试DES加解密工具类");
+        log.info("解密结果：{}", decrypt);
+        assertEquals("测试DES加解密工具类", decrypt);
     }
 
 }

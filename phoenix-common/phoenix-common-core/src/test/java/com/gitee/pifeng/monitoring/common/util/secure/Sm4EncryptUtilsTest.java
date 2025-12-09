@@ -26,8 +26,8 @@ public class Sm4EncryptUtilsTest extends TestCase {
      */
     public void testEncrypt() {
         String encrypt = Sm4EncryptUtils.encrypt("测试AES加解密工具类", StandardCharsets.UTF_8);
-        log.info("加密结果：" + encrypt);
-        assertEquals(encrypt, "WWv1OzuLn4Uep/oz9LFIrqMdXU45y+I7wrFuZW0nGuM=");
+        log.info("加密结果：{}", encrypt);
+        assertEquals("WWv1OzuLn4Uep/oz9LFIrqMdXU45y+I7wrFuZW0nGuM=", encrypt);
     }
 
     /**
@@ -40,8 +40,8 @@ public class Sm4EncryptUtilsTest extends TestCase {
      */
     public void testDecrypt() {
         String decrypt = Sm4EncryptUtils.decrypt("WWv1OzuLn4Uep/oz9LFIrqMdXU45y+I7wrFuZW0nGuM=", StandardCharsets.UTF_8);
-        log.info("解密结果：" + decrypt);
-        assertEquals(decrypt, "测试AES加解密工具类");
+        log.info("解密结果：{}", decrypt);
+        assertEquals("测试AES加解密工具类", decrypt);
     }
 
 }
