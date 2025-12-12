@@ -10,6 +10,7 @@ import com.gitee.pifeng.monitoring.common.util.DirUtils;
 import com.gitee.pifeng.monitoring.common.util.Md5Utils;
 import com.gitee.pifeng.monitoring.common.util.server.NetUtils;
 import com.gitee.pifeng.monitoring.common.util.server.oshi.BaseboardUtils;
+import com.google.common.base.CharMatcher;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
@@ -40,12 +41,26 @@ public class InstanceGenerator {
      */
     private static final String INSTANCE_ID_FILENAME;
 
+    /**
+     * 定义能用来做文件路径的安全字符集合：
+     * 1. 小写字母 a 到 z
+     * 2. 或者大写字母 A 到 Z
+     * 3. 或者数字 0 到 9
+     * 4. 或者字符 '.', '_', '-'
+     */
+    private static final CharMatcher SAFE_CHARS = CharMatcher.inRange('a', 'z')
+            .or(CharMatcher.inRange('A', 'Z'))
+            .or(CharMatcher.inRange('0', '9'))
+            .or(CharMatcher.anyOf("._-"))
+            // 优化性能（预计算）
+            .precomputed();
+
     static {
         String instanceIdFileName;
         try {
             MonitoringInstanceProperties instance = ConfigLoader.getMonitoringProperties().getInstance();
             String endpoint = StringUtils.lowerCase(instance.getEndpoint());
-            String name = "phoenix-" + endpoint;
+            String name = SAFE_CHARS.retainFrom(instance.getName());
             instanceIdFileName = "liblog4phoenix" + File.separator + "data" + File.separator + name + File.separator + endpoint + "InstanceId";
         } catch (Exception e) {
             // 防止静态初始化块抛异常导致类加载失败
