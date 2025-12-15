@@ -11,8 +11,10 @@ DATA_PATH="/data/phoenix/mysql/data"
 
 # 动态获取 UID/GID
 echo "Detecting mysql user UID/GID from image..."
-MYSQL_UID=$(docker run --rm "${IMAGE_NAME}" id -u mysql)
-MYSQL_GID=$(docker run --rm "${IMAGE_NAME}" id -g mysql)
+# MYSQL_UID=$(docker run --rm "${IMAGE_NAME}" id -u mysql 2>/dev/null || echo "999")
+# MYSQL_GID=$(docker run --rm "${IMAGE_NAME}" id -g mysql 2>/dev/null || echo "999")
+MYSQL_UID=999
+MYSQL_GID=999
 echo "Detected UID=${MYSQL_UID}, GID=${MYSQL_GID}"
 
 # 创建目录（如果不存在）
@@ -30,10 +32,13 @@ fi
 # 启动容器
 echo "Starting '${CONTAINER_NAME}' container..."
 docker run -itd \
-  -p 3306:3306 \
+  -p 3307:3306 \
   -v "${DATA_PATH}:/var/lib/mysql" \
   --restart unless-stopped \
   --name "${CONTAINER_NAME}" \
   "${IMAGE_NAME}"
 # 启动容器成功
 echo "Container '${CONTAINER_NAME}' started successfully."
+echo "User: phoenix"
+echo "Pass: phoenix@2025"
+echo "Remember to change your password later!"

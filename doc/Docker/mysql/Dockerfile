@@ -16,10 +16,10 @@ COPY --chown=mysql:mysql ./init-scripts/ /docker-entrypoint-initdb.d/
 
 # 添加健康检查
 HEALTHCHECK --interval=30s --timeout=10s --retries=3 \
-    CMD mysqladmin ping -u root -p${MYSQL_ROOT_PASSWORD} || exit 1
+    CMD mysqladmin ping -u root --socket=/var/run/mysqld/mysqld.sock || exit 1
 
-# 确保容器以非root用户运行
-USER mysql
+# 确保容器以非 root 用户运行，不要设置 USER mysql，官方 entrypoint 会自动降权
+# USER mysql
 
 # 暴露MySQL默认端口（显式声明）
 EXPOSE 3306
