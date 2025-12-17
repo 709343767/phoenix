@@ -10,12 +10,12 @@ CONTAINER_NAME="phoenix-mysql"
 DATA_PATH="/data/phoenix/mysql/data"
 
 # 动态获取 UID/GID
-echo "Detecting mysql user UID/GID from image..."
+# echo "Detecting mysql user UID/GID from image..."
 # MYSQL_UID=$(docker run --rm "${IMAGE_NAME}" id -u mysql 2>/dev/null || echo "999")
 # MYSQL_GID=$(docker run --rm "${IMAGE_NAME}" id -g mysql 2>/dev/null || echo "999")
 MYSQL_UID=999
 MYSQL_GID=999
-echo "Detected UID=${MYSQL_UID}, GID=${MYSQL_GID}"
+echo "UID=${MYSQL_UID}, GID=${MYSQL_GID}"
 
 # 创建目录（如果不存在）
 mkdir -p "${DATA_PATH}"

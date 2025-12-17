@@ -12,7 +12,7 @@ HOST_DATA_DIR="/data/phoenix/phoenix-ui"
 # 定义 UID/GID
 PHOENIX_UI_UID=999
 PHOENIX_UI_GID=999
-echo "Detected UID=${PHOENIX_UI_UID}, GID=${PHOENIX_UI_GID}"
+echo "UID=${PHOENIX_UI_UID}, GID=${PHOENIX_UI_GID}"
 
 # 创建目录（如果不存在）
 mkdir -p "${HOST_DATA_DIR}/liblog4phoenix" "${HOST_DATA_DIR}/config"

@@ -12,7 +12,7 @@ HOST_DATA_DIR="/data/phoenix/phoenix-server"
 # 定义 UID/GID
 PHOENIX_SERVER_UID=999
 PHOENIX_SERVER_GID=999
-echo "Detected UID=${PHOENIX_SERVER_UID}, GID=${PHOENIX_SERVER_GID}"
+echo "UID=${PHOENIX_SERVER_UID}, GID=${PHOENIX_SERVER_GID}"
 
 # 创建目录（如果不存在）
 mkdir -p "${HOST_DATA_DIR}/liblog4phoenix" "${HOST_DATA_DIR}/config"
