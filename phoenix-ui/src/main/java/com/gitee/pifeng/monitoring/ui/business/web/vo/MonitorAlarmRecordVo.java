@@ -48,8 +48,8 @@ public class MonitorAlarmRecordVo implements ISuperBean {
     @Schema(description = "告警类型（SERVER、NET、TCP4SERVICE、HTTP4SERVICE、DOCKER、INSTANCE、DATABASE、CUSTOM）")
     private String type;
 
-    @Excel(name = "告警级别", orderNum = "3", replace = {"消息_INFO", "警告_WARM", "错误_ERROR", "严重_FATAL"})
-    @Schema(description = "告警级别（INFO、WARM、ERROR、FATAL）")
+    @Excel(name = "告警级别", orderNum = "3", replace = {"忽略_IGNORE", "消息_INFO", "警告_WARM", "错误_ERROR", "严重_FATAL"})
+    @Schema(description = "告警级别（IGNORE、INFO、WARM、ERROR、FATAL）")
     private String level;
 
     @Excel(name = "告警方式", orderNum = "4")

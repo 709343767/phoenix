@@ -46,7 +46,7 @@ CREATE TABLE `MONITOR_ALARM_RECORD`
     `CODE`            varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT '告警代码，使用UUID',
     `ALARM_DEF_CODE`  varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NULL DEFAULT NULL COMMENT '告警定义编码',
     `TYPE`            varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NULL DEFAULT NULL COMMENT '告警类型（SERVER、NET、TCP4SERVICE、HTTP4SERVICE、DOCKER、INSTANCE、DATABASE、CUSTOM）',
-    `LEVEL`           varchar(5) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci   NULL DEFAULT NULL COMMENT '告警级别（INFO、WARM、ERROR、FATAL）',
+    `LEVEL`           varchar(6) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci   NULL DEFAULT NULL COMMENT '告警级别（IGNORE、INFO、WARM、ERROR、FATAL）',
     `WAY`             varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '告警方式，多种方式用逗号分隔',
     `TITLE`           varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '告警标题',
     `CONTENT`         longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci     NULL COMMENT '告警内容',
@@ -88,38 +88,6 @@ CREATE TABLE `MONITOR_ALARM_RECORD_DETAIL`
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_general_ci COMMENT = '告警记录详情表'
-  ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Table structure for MONITOR_ALARM_RECORD
--- ----------------------------
-DROP TABLE IF EXISTS `MONITOR_ALARM_RECORD`;
-CREATE TABLE `MONITOR_ALARM_RECORD`
-(
-    `ID`              bigint(20) UNSIGNED                                           NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-    `CODE`            varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT '告警代码，使用UUID',
-    `ALARM_DEF_CODE`  varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NULL DEFAULT NULL COMMENT '告警定义编码',
-    `TYPE`            varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT '告警类型（SERVER、NET、TCP4SERVICE、HTTP4SERVICE、DOCKER、INSTANCE、DATABASE、CUSTOM）',
-    `WAY`             varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NULL DEFAULT NULL COMMENT '告警方式（SMS、MAIL、...）',
-    `LEVEL`           varchar(5) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci   NOT NULL COMMENT '告警级别（INFO、WARM、ERROR、FATAL）',
-    `TITLE`           varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '告警标题',
-    `CONTENT`         longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci     NULL COMMENT '告警内容',
-    `STATUS`          varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci   NULL DEFAULT NULL COMMENT '告警发送状态（0：失败；1：成功）',
-    `NOT_SEND_REASON` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NULL DEFAULT NULL COMMENT '不发送告警原因',
-    `NUMBER`          varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '被告警人号码（手机号码、电子邮箱、...）',
-    `INSERT_TIME`     datetime                                                      NOT NULL COMMENT '告警时间',
-    `UPDATE_TIME`     datetime                                                      NULL DEFAULT NULL COMMENT '告警结果获取时间',
-    PRIMARY KEY (`ID`) USING BTREE,
-    INDEX `NX_CODE` (`CODE`) USING BTREE COMMENT '索引_告警记录编码',
-    INDEX `NX_INSERT_TIME` (`INSERT_TIME`) USING BTREE COMMENT '索引_插入时间',
-    INDEX `NX_UPDATE_TIME` (`UPDATE_TIME`) USING BTREE COMMENT '索引_更新时间',
-    INDEX `NX_TYPE` (`TYPE`) USING BTREE COMMENT '索引_告警类型',
-    INDEX `NX_WAY` (`WAY`) USING BTREE COMMENT '索引_告警方式',
-    INDEX `NX_LEVEL` (`LEVEL`) USING BTREE COMMENT '索引_告警级别',
-    INDEX `NX_STATUS` (`STATUS`) USING BTREE COMMENT '索引_告警发送状态'
-) ENGINE = InnoDB
-  CHARACTER SET = utf8mb4
-  COLLATE = utf8mb4_general_ci COMMENT = '告警记录表'
   ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -273,7 +241,7 @@ DROP TABLE IF EXISTS `MONITOR_HTTP_HISTORY`;
 CREATE TABLE `MONITOR_HTTP_HISTORY`
 (
     `ID`               bigint(20) UNSIGNED                                           NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-    `HTTP_ID`          bigint(20)                                                    NOT NULL COMMENT 'HTTP主表ID',
+    `HTTP_ID`          bigint(20) UNSIGNED                                           NOT NULL COMMENT 'HTTP主表ID',
     `HOSTNAME_SOURCE`  varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT '主机名（来源）',
     `URL_TARGET`       varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'URL地址（目的地）',
     `METHOD`           varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NULL DEFAULT NULL COMMENT '请求方法',
@@ -510,7 +478,7 @@ CREATE TABLE `MONITOR_LOG_EXCEPTION`
     `INSTANCE_ID` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT '应用实例ID',
     `EXC_NAME`    varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '异常名称',
     `EXC_MESSAGE` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci     NULL COMMENT '异常信息',
-    `USER_ID`     bigint(20)                                                    NULL DEFAULT NULL COMMENT '操作用户ID',
+    `USER_ID`     bigint(20) UNSIGNED                                           NULL DEFAULT NULL COMMENT '操作用户ID',
     `USERNAME`    varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '操作用户名',
     `OPER_METHOD` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '操作方法',
     `REQ_PARAM`   longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci     NULL COMMENT '请求参数',
@@ -539,7 +507,7 @@ CREATE TABLE `MONITOR_LOG_OPERATION`
     `OPER_DESC`   varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '操作描述',
     `REQ_PARAM`   text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci         NULL COMMENT '请求参数',
     `RESP_PARAM`  longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci     NULL COMMENT '返回参数',
-    `USER_ID`     bigint(20)                                                    NULL DEFAULT NULL COMMENT '操作用户ID',
+    `USER_ID`     bigint(20) UNSIGNED                                           NULL DEFAULT NULL COMMENT '操作用户ID',
     `USERNAME`    varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NULL DEFAULT NULL COMMENT '操作用户名',
     `OPER_METHOD` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '操作方法',
     `URI`         varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '请求URI',
@@ -592,7 +560,7 @@ DROP TABLE IF EXISTS `MONITOR_NET_HISTORY`;
 CREATE TABLE `MONITOR_NET_HISTORY`
 (
     `ID`            bigint(20) UNSIGNED                                           NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-    `NET_ID`        bigint(20)                                                    NOT NULL COMMENT '网络主表ID',
+    `NET_ID`        bigint(20) UNSIGNED                                           NOT NULL COMMENT '网络主表ID',
     `IP_SOURCE`     varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT 'IP地址（来源）',
     `IP_TARGET`     varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT 'IP地址（目的地）',
     `IP_DESC`       varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'IP地址描述',
@@ -1162,7 +1130,7 @@ DROP TABLE IF EXISTS `MONITOR_TCP_HISTORY`;
 CREATE TABLE `MONITOR_TCP_HISTORY`
 (
     `ID`              bigint(20) UNSIGNED                                           NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-    `TCP_ID`          bigint(20)                                                    NOT NULL COMMENT 'TCP主表ID',
+    `TCP_ID`          bigint(20) UNSIGNED                                           NOT NULL COMMENT 'TCP主表ID',
     `HOSTNAME_SOURCE` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT '主机名（来源）',
     `HOSTNAME_TARGET` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT '主机名（目的地）',
     `PORT_TARGET`     int(8)                                                        NOT NULL COMMENT '端口号',

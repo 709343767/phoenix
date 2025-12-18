@@ -48,7 +48,7 @@ public class MonitorAlarmRecord {
     private String type;
 
     /**
-     * 告警级别（INFO、WARM、ERROR、FATAL）
+     * 告警级别（IGNORE、INFO、WARM、ERROR、FATAL）
      */
     @TableField("LEVEL")
     private String level;

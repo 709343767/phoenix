@@ -50,7 +50,7 @@ public class MonitorAlarmRecord implements Serializable {
     @TableField("TYPE")
     private String type;
 
-    @Schema(description = "告警级别（INFO、WARM、ERROR、FATAL）")
+    @Schema(description = "告警级别（IGNORE、INFO、WARM、ERROR、FATAL）")
     @TableField("LEVEL")
     private String level;
 

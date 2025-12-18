@@ -52,6 +52,7 @@
                     <div class="layui-input-block" style="width: 120px;">
                         <select id="level" name="level">
                             <option value="">所有</option>
+                            <option value="IGNORE">忽略</option>
                             <option value="INFO">消息</option>
                             <option value="WARN">警告</option>
                             <option value="ERROR">错误</option>
@@ -184,6 +185,9 @@
                     }
                 });
                 $('[data-field="level"]').children().each(function () {
+                    if ($(this).text() === 'IGNORE') {
+                        $(this).text('忽略');
+                    }
                     if ($(this).text() === 'INFO') {
                         $(this).text('消息');
                     }

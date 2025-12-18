@@ -250,11 +250,11 @@ public class MonitorAlarmRecordServiceImpl extends ServiceImpl<IMonitorAlarmReco
                         MonitorTypeEnums.INSTANCE.name(), MonitorTypeEnums.CUSTOM.name(),
                         MonitorTypeEnums.DATABASE.name()},
                 new String[]{"服务器", "网络", "TCP服务", "HTTP服务", "应用程序", "自定义", "数据库"}));
-        // 告警级别（INFO、WARM、ERROR、FATAL）
+        // 告警级别（IGNORE、INFO、WARM、ERROR、FATAL）
         String level = monitorAlarmRecordVo.getLevel();
         monitorAlarmRecordVo.setLevel(StringUtils.replaceEach(level,
-                new String[]{AlarmLevelEnums.INFO.name(), AlarmLevelEnums.WARN.name(), AlarmLevelEnums.ERROR.name(), AlarmLevelEnums.FATAL.name()},
-                new String[]{"消息", "警告", "错误", "严重"}));
+                new String[]{AlarmLevelEnums.IGNORE.name(), AlarmLevelEnums.INFO.name(), AlarmLevelEnums.WARN.name(), AlarmLevelEnums.ERROR.name(), AlarmLevelEnums.FATAL.name()},
+                new String[]{"忽略", "消息", "警告", "错误", "严重"}));
         // 告警方式，多种方式用逗号分隔
         String way = monitorAlarmRecordVo.getWay();
         monitorAlarmRecordVo.setWay(StringUtils.isBlank(way) ? way : way.replace(",", "、")

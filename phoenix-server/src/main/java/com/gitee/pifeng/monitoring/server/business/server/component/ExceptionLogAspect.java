@@ -25,12 +25,14 @@ import com.google.common.collect.Maps;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.ibatis.exceptions.PersistenceException;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
@@ -190,6 +192,10 @@ public class ExceptionLogAspect {
                 .title(excName)
                 .msg(msgBuilder.toString())
                 .build();
+        // 要忽略的告警，只保存告警记录，不发送告警消息
+        if (e instanceof DuplicateKeyException || e instanceof PersistenceException) {
+            alarm.setAlarmLevel(AlarmLevelEnums.IGNORE);
+        }
         AlarmPackage alarmPackage = this.serverPackageConstructor.structureAlarmPackage(alarm);
         this.alarmService.dealAlarmPackage(alarmPackage);
     }

@@ -86,6 +86,7 @@ public class RealtimeMonitoringServiceImpl extends ServiceImpl<IMonitorRealtimeM
             lockAcquired = this.mysqlDistributedLock.tryLock(lockKey, instanceId, 15, 5);
             if (!lockAcquired) {
                 // 获取锁超时，放弃本次告警判断（避免并发冲突）
+                log.warn("尝试获取分布式锁超时：lockKey={}，instanceId={}", lockKey, instanceId);
                 return false;
             }
             // 监控子类型

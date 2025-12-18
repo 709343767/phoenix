@@ -18,6 +18,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import java.time.LocalTime;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -155,6 +157,30 @@ public class AlarmServiceImpl implements IAlarmService {
         }
         // 注意：走到此处，就确定发送告警了，不管发送是否成功，result都是返回成功，代表处理此次告警成功了，发送告警和处理告警是两回事，
         // 因此采用异步的方式发送告警，防止阻塞此方法
+        if (TransactionSynchronizationManager.isActualTransactionActive()) {
+            TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+                @Override
+                public void afterCommit() {
+                    asyncExecuteAlarm(alarm, alarmRecordId, alarmCode);
+                }
+            });
+        } else {
+            this.asyncExecuteAlarm(alarm, alarmRecordId, alarmCode);
+        }
+    }
+
+    /**
+     * <p>
+     * 异步执行告警操作
+     * </p>
+     *
+     * @param alarm         告警信息
+     * @param alarmRecordId 告警记录表主键ID
+     * @param alarmCode     告警代码
+     * @author 皮锋
+     * @custom.date 2025/12/17 10:27
+     */
+    private void asyncExecuteAlarm(Alarm alarm, Long alarmRecordId, String alarmCode) {
         this.alarmThreadPoolExecutor.execute(() -> {
             try {
                 // 执行告警操作
