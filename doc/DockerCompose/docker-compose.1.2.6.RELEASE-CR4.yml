@@ -9,10 +9,10 @@ services:
 
   phoenix-mysql:
     container_name: phoenix-mysql
-    image: crpi-4iaxdbbs1euymfiu.cn-shanghai.personal.cr.aliyuncs.com/pifeng_phoenix/mysql:1.2.6.RELEASE-CR3
+    image: crpi-4iaxdbbs1euymfiu.cn-shanghai.personal.cr.aliyuncs.com/pifeng_phoenix/mysql:1.2.6.RELEASE-CR4
     restart: unless-stopped
     ports:
-      - "3307:3306"
+      - "3306:3306"
     volumes:
       - /data/phoenix/mysql/data:/var/lib/mysql
     deploy:
@@ -25,7 +25,7 @@ services:
 
   phoenix-server:
     container_name: phoenix-server
-    image: crpi-4iaxdbbs1euymfiu.cn-shanghai.personal.cr.aliyuncs.com/pifeng_phoenix/phoenix-server:1.2.6.RELEASE-CR3
+    image: crpi-4iaxdbbs1euymfiu.cn-shanghai.personal.cr.aliyuncs.com/pifeng_phoenix/phoenix-server:1.2.6.RELEASE-CR4
     restart: unless-stopped
     volumes:
       - /etc/localtime:/etc/localtime:ro
@@ -45,7 +45,7 @@ services:
 
   phoenix-ui:
     container_name: phoenix-ui
-    image: crpi-4iaxdbbs1euymfiu.cn-shanghai.personal.cr.aliyuncs.com/pifeng_phoenix/phoenix-ui:1.2.6.RELEASE-CR3
+    image: crpi-4iaxdbbs1euymfiu.cn-shanghai.personal.cr.aliyuncs.com/pifeng_phoenix/phoenix-ui:1.2.6.RELEASE-CR4
     restart: unless-stopped
     volumes:
       - /etc/localtime:/etc/localtime:ro

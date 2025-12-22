@@ -17,7 +17,7 @@ if [ $? -ne 0 ]; then
 fi
 
 # 检查是否已安装 docker-compose
-if ! command -v docker-compose &> /dev/null; then
+if ! command -v docker-compose &> /dev/null;then
   echo "docker-compose could not be found, please install it."
   exit 1
 fi
