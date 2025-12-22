@@ -2,51 +2,98 @@
 # 出错立即退出
 set -e
 
-# 定义 docker-compose.yml 文件的URL
+# ==============================
+# 配置区（可根据需要调整）
+# ==============================
 COMPOSE_FILE_URL="https://gitee.com/monitoring-platform/phoenix/raw/master/doc/DockerCompose/docker-compose.1.2.6.RELEASE-CR4.yml"
-
-# 定义本地存储路径
 LOCAL_COMPOSE_FILE="./docker-compose.yml"
-
-# 下载 docker-compose.yml 文件
-echo "Downloading docker-compose.yml..."
-curl -o ${LOCAL_COMPOSE_FILE} -L ${COMPOSE_FILE_URL}
-if [ $? -ne 0 ]; then
-  echo "Failed to download docker-compose.yml"
-  exit 1
-fi
-
-# 检查是否已安装 docker-compose
-if ! command -v docker-compose &> /dev/null; then
-  echo "docker-compose could not be found, please install it."
-  exit 1
-fi
-
-# 定义宿主机目录
 HOST_DATA_DIR="/data/phoenix"
-# 创建目录（如果不存在）
+
+# 定义 UID/GID
+CONTAINER_UID=999
+CONTAINER_GID=999
+
+# ==============================
+# 工具函数
+# ==============================
+
+log() {
+  echo "[$(date +'%Y-%m-%d %H:%M:%S')] $*"
+}
+
+error_exit() {
+  log "ERROR: $*" >&2
+  exit 1
+}
+
+# ==============================
+# 主流程开始
+# ==============================
+
+log "Starting Phoenix platform deployment..."
+
+# 1. 确定使用哪个 compose 命令
+if command -v docker-compose &> /dev/null; then
+  COMPOSE_CMD="docker-compose"
+elif docker compose version &> /dev/null; then
+  COMPOSE_CMD="docker compose"
+else
+  error_exit "Neither 'docker-compose' nor 'docker compose' is installed."
+fi
+
+log "Using compose command: ${COMPOSE_CMD}"
+
+# 2. 下载 docker-compose.yml
+log "Downloading docker-compose.yml from: ${COMPOSE_FILE_URL}"
+if ! curl --retry 3 --retry-delay 2 -fsSL -o "${LOCAL_COMPOSE_FILE}" "${COMPOSE_FILE_URL}"; then
+  error_exit "Failed to download docker-compose.yml after 3 retries"
+fi
+
+# 验证文件是否有效（非空且不是 HTML 错误页）
+if [ ! -s "${LOCAL_COMPOSE_FILE}" ]; then
+  error_exit "Downloaded file is empty."
+fi
+
+if head -n 5 "${LOCAL_COMPOSE_FILE}" | grep -qi "<html"; then
+  error_exit "Downloaded file appears to be an HTML error page (e.g., 404)."
+fi
+
+log "docker-compose.yml downloaded successfully."
+
+# 3. 创建宿主机数据目录
+log "Creating host data directories..."
 mkdir -p "${HOST_DATA_DIR}/mysql/data"
 mkdir -p "${HOST_DATA_DIR}/phoenix-server/liblog4phoenix" "${HOST_DATA_DIR}/phoenix-server/config"
 mkdir -p "${HOST_DATA_DIR}/phoenix-ui/liblog4phoenix" "${HOST_DATA_DIR}/phoenix-ui/config"
-# 赋予读写权限
-chmod -R o+rw "${HOST_DATA_DIR}" || echo "Warning: Failed to set permissions on ${HOST_DATA_DIR}"
 
-# 停止并删除现有容器（如果有的话）
-echo "Stopping and removing existing containers..."
-docker-compose -f ${LOCAL_COMPOSE_FILE} down
-
-# 拉取最新的镜像
-echo "Pulling the latest images..."
-docker-compose -f ${LOCAL_COMPOSE_FILE} pull
-
-# 使用 docker-compose 启动服务
-echo "Starting services with docker-compose..."
-docker-compose -f ${LOCAL_COMPOSE_FILE} up -d
-
-# 检查 docker-compose 命令是否成功
-if [ $? -eq 0 ]; then
-  echo "Services started successfully."
+# 4. 设置权限
+log "Setting ownership of entire data directory to ${CONTAINER_UID}:${CONTAINER_GID}..."
+if chown -R "${CONTAINER_UID}:${CONTAINER_GID}" "${HOST_DATA_DIR}"; then
+  log "Ownership set successfully."
 else
-  echo "Failed to start services."
-  exit 1
+  log "Warning: Failed to change ownership of ${HOST_DATA_DIR}."
+  log "This may cause permission issues if containers run as UID ${CONTAINER_UID}."
+  log "Consider running this script with 'sudo' if needed."
 fi
+
+# 5. 停止旧服务
+log "Stopping and removing existing containers (if any)..."
+if [ -f "${LOCAL_COMPOSE_FILE}" ]; then
+  ${COMPOSE_CMD} -f "${LOCAL_COMPOSE_FILE}" down --remove-orphans || true
+fi
+
+# 6. 拉取最新镜像
+log "Pulling latest images..."
+if ! ${COMPOSE_CMD} -f "${LOCAL_COMPOSE_FILE}" pull; then
+  error_exit "Failed to pull one or more images. Please check network connectivity, image tags, and registry access."
+fi
+
+# 7. 启动服务
+log "Starting services in detached mode..."
+if ! ${COMPOSE_CMD} -f "${LOCAL_COMPOSE_FILE}" up -d; then
+  error_exit "Failed to start services."
+fi
+
+log "Phoenix platform started successfully!"
+log "Data directory: ${HOST_DATA_DIR}"
+log "Compose file: ${LOCAL_COMPOSE_FILE}"
