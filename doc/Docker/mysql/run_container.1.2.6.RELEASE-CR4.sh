@@ -5,7 +5,7 @@ set -e
 set -u
 
 # 定义 镜像名、容器名、宿主机目录
-IMAGE_NAME="crpi-4iaxdbbs1euymfiu.cn-shanghai.personal.cr.aliyuncs.com/pifeng_phoenix/mysql:1.2.6.RELEASE-CR4"
+IMAGE_NAME="crpi-4iaxdbbs1euymfiu.cn-shanghai.personal.cr.aliyuncs.com/pifeng_phoenix/phoenix-mysql:1.2.6.RELEASE-CR4"
 CONTAINER_NAME="phoenix-mysql"
 DATA_PATH="/data/phoenix/mysql/data"
 
