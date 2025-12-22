@@ -12,7 +12,7 @@ services:
     image: crpi-4iaxdbbs1euymfiu.cn-shanghai.personal.cr.aliyuncs.com/pifeng_phoenix/mysql:1.2.6.RELEASE-CR4
     restart: unless-stopped
     ports:
-      - "3306:3306"
+      - "3307:3306"
     volumes:
       - /data/phoenix/mysql/data:/var/lib/mysql
     deploy:
