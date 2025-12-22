@@ -5,9 +5,9 @@ set -e
 echo "Starting to execute remote scripts..."
 
 # 定义三个远程脚本的 URL
-RUN_CONTAINER_PHOENIX_MYSQL_URL="https://gitee.com/monitoring-platform/phoenix/raw/master/doc/Docker/mysql/run_container.1.2.6.RELEASE-CR3.sh"
-RUN_CONTAINER_PHOENIX_SERVER_URL="https://gitee.com/monitoring-platform/phoenix/raw/master/doc/Docker/phoenix-server/run_container.1.2.6.RELEASE-CR3.sh"
-RUN_CONTAINER_PHOENIX_UI_URL="https://gitee.com/monitoring-platform/phoenix/raw/master/doc/Docker/phoenix-ui/run_container.1.2.6.RELEASE-CR3.sh"
+RUN_CONTAINER_PHOENIX_MYSQL_URL="https://gitee.com/monitoring-platform/phoenix/raw/master/doc/Docker/mysql/run_container.1.2.6.RELEASE-CR4.sh"
+RUN_CONTAINER_PHOENIX_SERVER_URL="https://gitee.com/monitoring-platform/phoenix/raw/master/doc/Docker/phoenix-server/run_container.1.2.6.RELEASE-CR4.sh"
+RUN_CONTAINER_PHOENIX_UI_URL="https://gitee.com/monitoring-platform/phoenix/raw/master/doc/Docker/phoenix-ui/run_container.1.2.6.RELEASE-CR4.sh"
 
 # 执行脚本
 echo "Executing MySQL container script..."

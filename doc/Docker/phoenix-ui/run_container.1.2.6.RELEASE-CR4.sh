@@ -28,11 +28,10 @@ fi
 
 # 启动容器
 echo "Starting '${CONTAINER_NAME}' container..."
-docker run -itd \
+docker run -d \
   -v /etc/localtime:/etc/localtime:ro \
   -v "${HOST_DATA_DIR}/liblog4phoenix:/app/liblog4phoenix" \
   -v "${HOST_DATA_DIR}/config:/app/config" \
-  -p 80:80 \
   --net host \
   --restart unless-stopped \
   --cap-add=NET_BIND_SERVICE \

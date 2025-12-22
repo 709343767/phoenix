@@ -31,7 +31,7 @@ fi
 
 # 启动容器
 echo "Starting '${CONTAINER_NAME}' container..."
-docker run -itd \
+docker run -d \
   -p 3307:3306 \
   -v "${DATA_PATH}:/var/lib/mysql" \
   --restart unless-stopped \
