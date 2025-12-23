@@ -13,9 +13,6 @@ HOST_DATA_DIR="/data/phoenix"
 CONTAINER_UID=999
 CONTAINER_GID=999
 
-# 检查的端口（根据实际服务调整）
-CHECK_PORTS=(3307 80 16000)
-
 # ==============================
 # 工具函数
 # ==============================
@@ -27,19 +24,6 @@ log() {
 error_exit() {
   log "ERROR: $*" >&2
   exit 1
-}
-
-check_port() {
-  local port=$1
-  if command -v ss &> /dev/null; then
-    ss -tuln | grep -qE ":${port}([^0-9]|$)" && return 0
-  elif command -v netstat &> /dev/null; then
-    netstat -tuln | grep -qE ":${port}([^0-9]|$)" && return 0
-  else
-    log "Warning: Neither 'ss' nor 'netstat' available to check port ${port}."
-    return 1
-  fi
-  return 1
 }
 
 # ==============================
@@ -92,26 +76,19 @@ else
   log "Consider running this script with 'sudo' if needed."
 fi
 
-# 5. 检查端口占用
-for port in "${CHECK_PORTS[@]}"; do
-  if check_port "${port}"; then
-    log "Warning: Port ${port} is already in use. Services using host network may fail."
-  fi
-done
-
-# 6. 停止旧服务
+# 5. 停止旧服务
 log "Stopping and removing existing containers (if any)..."
 if [ -f "${LOCAL_COMPOSE_FILE}" ]; then
   ${COMPOSE_CMD} -f "${LOCAL_COMPOSE_FILE}" down --remove-orphans || true
 fi
 
-# 7. 拉取最新镜像
+# 6. 拉取最新镜像
 log "Pulling latest images..."
 if ! ${COMPOSE_CMD} -f "${LOCAL_COMPOSE_FILE}" pull; then
   error_exit "Failed to pull one or more images. Please check network connectivity, image tags, and registry access."
 fi
 
-# 8. 启动服务
+# 7. 启动服务
 log "Starting services in detached mode..."
 if ! ${COMPOSE_CMD} -f "${LOCAL_COMPOSE_FILE}" up -d; then
   error_exit "Failed to start services."
