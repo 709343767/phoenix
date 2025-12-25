@@ -50,7 +50,7 @@ public enum AlarmLevelEnums {
      */
     public static boolean isAlarm(AlarmLevelEnums configAlarmLevel, AlarmLevelEnums alarmLevel) {
         // IGNORE
-        if (AlarmLevelEnums.IGNORE == configAlarmLevel) {
+        if (AlarmLevelEnums.IGNORE == alarmLevel) {
             // 直接忽略
             return false;
         }

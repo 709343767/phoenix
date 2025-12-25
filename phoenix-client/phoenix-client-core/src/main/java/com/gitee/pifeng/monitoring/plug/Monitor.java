@@ -12,6 +12,7 @@ import com.gitee.pifeng.monitoring.common.exception.NetException;
 import com.gitee.pifeng.monitoring.common.exception.NotFoundConfigFileException;
 import com.gitee.pifeng.monitoring.common.exception.NotFoundConfigParamException;
 import com.gitee.pifeng.monitoring.common.init.InitBanner;
+import com.gitee.pifeng.monitoring.common.init.InitSecure;
 import com.gitee.pifeng.monitoring.common.property.client.MonitoringProperties;
 import com.gitee.pifeng.monitoring.common.threadpool.MonitoredScheduledThreadPoolExecutor;
 import com.gitee.pifeng.monitoring.plug.constant.UrlConstants;
@@ -135,11 +136,13 @@ public class Monitor {
                 Runtime.getRuntime().halt(1);
             }
         }
-        // 4.开始定时发送心跳包
+        // 4.初始化加解密配置
+        InitSecure.declare();
+        // 5.开始定时发送心跳包
         HeartbeatTaskScheduler.run();
-        // 5.开始定时发送服务器信息包
+        // 6.开始定时发送服务器信息包
         ServerTaskScheduler.run();
-        // 6.开始定时发送Java虚拟机信息包
+        // 7.开始定时发送Java虚拟机信息包
         JvmTaskScheduler.run();
         // 最后：添加关闭钩子，在jvm退出前做一些操作
         ShutdownHook.addShutdownHook();
