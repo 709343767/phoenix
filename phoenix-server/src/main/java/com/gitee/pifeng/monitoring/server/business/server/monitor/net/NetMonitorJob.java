@@ -284,6 +284,12 @@ public class NetMonitorJob extends QuartzJobBean {
         if (StringUtils.isNotBlank(net.getIpDesc())) {
             builder.append("，<br>描述：").append(net.getIpDesc());
         }
+        if (StringUtils.isNotBlank(net.getMonitorEnv())) {
+            builder.append("，<br>环境：").append(net.getMonitorEnv());
+        }
+        if (StringUtils.isNotBlank(net.getMonitorGroup())) {
+            builder.append("，<br>分组：").append(net.getMonitorGroup());
+        }
         builder.append("，<br>时间：").append(DateTimeUtils.dateToString(new Date()));
         Alarm alarm = Alarm.builder()
                 // 保证code的唯一性

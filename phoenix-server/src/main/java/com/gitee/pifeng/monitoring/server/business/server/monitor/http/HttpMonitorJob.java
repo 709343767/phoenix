@@ -442,6 +442,12 @@ public class HttpMonitorJob extends QuartzJobBean {
         if (StringUtils.isNotBlank(monitorHttp.getDescr())) {
             builder.append("，<br>描述：").append(monitorHttp.getDescr());
         }
+        if (StringUtils.isNotBlank(monitorHttp.getMonitorEnv())) {
+            builder.append("，<br>环境：").append(monitorHttp.getMonitorEnv());
+        }
+        if (StringUtils.isNotBlank(monitorHttp.getMonitorGroup())) {
+            builder.append("，<br>分组：").append(monitorHttp.getMonitorGroup());
+        }
         builder.append("，<br>时间：").append(DateTimeUtils.dateToString(new Date()));
         Alarm alarm = Alarm.builder()
                 // 保证code的唯一性

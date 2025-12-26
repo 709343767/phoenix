@@ -208,15 +208,23 @@ public class ServerDiskMonitor implements IServerMonitoringListener {
         String ip = monitorServer.getIp();
         String serverName = monitorServer.getServerName();
         String serverSummary = monitorServer.getServerSummary();
+        String monitorEnv = monitorServer.getMonitorEnv();
+        String monitorGroup = monitorServer.getMonitorGroup();
         StringBuilder msgBuilder = new StringBuilder();
         msgBuilder.append("IP地址：").append(ip).append("，<br>服务器：").append(serverName);
         if (StringUtils.isNotBlank(serverSummary)) {
             msgBuilder.append("，<br>服务器描述：").append(serverSummary);
         }
+        if (StringUtils.isNotBlank(monitorEnv)) {
+            msgBuilder.append("，<br>服务器环境：").append(monitorEnv);
+        }
+        if (StringUtils.isNotBlank(monitorGroup)) {
+            msgBuilder.append("，<br>服务器分组：").append(monitorGroup);
+        }
         msgBuilder.append("，<br>磁盘分区名称：").append(devName)
                 .append("，<br>磁盘分区路径：").append(dirName)
-                .append("，<br>磁盘分区使用率：").append(usePercent)
-                .append("%，<br>时间：").append(DateTimeUtils.dateToString(new Date()));
+                .append("，<br>磁盘分区使用率：").append(usePercent).append("%");
+        msgBuilder.append("，<br>时间：").append(DateTimeUtils.dateToString(new Date()));
         Alarm alarm = Alarm.builder()
                 // 保证code的唯一性
                 .code(Md5Utils.encrypt32(ip + serverName + devName + dirName + ServerDiskMonitor.class.getName()))

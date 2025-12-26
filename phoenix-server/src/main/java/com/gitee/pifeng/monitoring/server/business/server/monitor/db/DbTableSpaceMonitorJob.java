@@ -242,6 +242,12 @@ public class DbTableSpaceMonitorJob extends QuartzJobBean {
         if (StringUtils.isNotBlank(monitorDb.getDbDesc())) {
             builder.append("，<br>描述：").append(monitorDb.getDbDesc());
         }
+        if (StringUtils.isNotBlank(monitorDb.getMonitorEnv())) {
+            builder.append("，<br>环境：").append(monitorDb.getMonitorEnv());
+        }
+        if (StringUtils.isNotBlank(monitorDb.getMonitorGroup())) {
+            builder.append("，<br>分组：").append(monitorDb.getMonitorGroup());
+        }
         builder.append("，<br>表空间名：").append(dbTableSpace.getTablespaceName());
         builder.append("，<br>总空间：").append(dbTableSpace.getTotal());
         builder.append("，<br>使用空间：").append(dbTableSpace.getUsed());
