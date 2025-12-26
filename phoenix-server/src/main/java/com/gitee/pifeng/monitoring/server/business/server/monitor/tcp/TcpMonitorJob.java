@@ -284,6 +284,12 @@ public class TcpMonitorJob extends QuartzJobBean {
         if (StringUtils.isNotBlank(monitorTcp.getDescr())) {
             builder.append("，<br>描述：").append(monitorTcp.getDescr());
         }
+        if (StringUtils.isNotBlank(monitorTcp.getMonitorEnv())) {
+            builder.append("，<br>环境：").append(monitorTcp.getMonitorEnv());
+        }
+        if (StringUtils.isNotBlank(monitorTcp.getMonitorGroup())) {
+            builder.append("，<br>分组：").append(monitorTcp.getMonitorGroup());
+        }
         builder.append("，<br>时间：").append(DateTimeUtils.dateToString(new Date()));
         Alarm alarm = Alarm.builder()
                 // 保证code的唯一性

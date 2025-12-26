@@ -367,6 +367,14 @@ public class InstanceMonitorJob extends QuartzJobBean implements CommandLineRunn
                 builder.append("，<br>应用描述：").append(instanceDesc);
             }
         }
+        String monitorEnv = instance.getMonitorEnv();
+        if (StringUtils.isNotBlank(monitorEnv)) {
+            builder.append("，<br>应用环境：").append(monitorEnv);
+        }
+        String monitorGroup = instance.getMonitorGroup();
+        if (StringUtils.isNotBlank(monitorGroup)) {
+            builder.append("，<br>应用分组：").append(monitorGroup);
+        }
         builder.append("，<br>应用端点：").append(instance.getEndpoint())
                 .append("，<br>IP地址：").append(instance.getIp())
                 .append("，<br>时间：").append(DateTimeUtils.dateToString(new Date()));
