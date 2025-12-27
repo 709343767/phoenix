@@ -5,7 +5,7 @@ set -e
 set -u
 
 # 定义 镜像名、容器名、宿主机目录
-IMAGE_NAME="phoenix/phoenix-agent:1.2.6.RELEASE-CR5"
+IMAGE_NAME="crpi-4iaxdbbs1euymfiu.cn-shanghai.personal.cr.aliyuncs.com/pifeng_phoenix/phoenix-agent:1.2.6.RELEASE-CR5"
 CONTAINER_NAME="phoenix-agent"
 HOST_DATA_DIR="/data/phoenix/phoenix-agent"
 
@@ -33,10 +33,14 @@ docker run -itd \
   -v /proc:/proc:ro \
   -v /sys:/sys:ro \
   -v /etc/localtime:/etc/localtime:ro \
+  -v /etc/os-release:/etc/os-release:ro \
   -v "${HOST_DATA_DIR}/liblog4phoenix:/app/liblog4phoenix" \
   -v "${HOST_DATA_DIR}/config:/app/config" \
   --pid=host \
   --net host \
+  --security-opt label=disable \
+  --cap-add=SYS_RAWIO \
+  --cap-add=SYS_ADMIN \
   --restart unless-stopped \
   --name "${CONTAINER_NAME}" \
   "${IMAGE_NAME}"

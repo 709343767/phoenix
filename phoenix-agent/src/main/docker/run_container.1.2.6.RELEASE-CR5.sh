@@ -33,13 +33,32 @@ docker run -itd \
   -v /proc:/proc:ro \
   -v /sys:/sys:ro \
   -v /etc/localtime:/etc/localtime:ro \
+  -v /etc/os-release:/etc/os-release:ro \
   -v "${HOST_DATA_DIR}/liblog4phoenix:/app/liblog4phoenix" \
   -v "${HOST_DATA_DIR}/config:/app/config" \
   -p 12000:12000 \
   --pid=host \
   --net host \
+  --security-opt label=disable \
+  --cap-add=SYS_RAWIO \
+  --cap-add=SYS_ADMIN \
   --restart unless-stopped \
   --name "${CONTAINER_NAME}" \
   "${IMAGE_NAME}"
 # 启动容器成功
 echo "Container '${CONTAINER_NAME}' started successfully."
+
+
+# -v /dev:/dev:ro \                                                # 设备信息
+# -v /proc:/proc:ro \                                              # 进程与系统状态
+# -v /sys:/sys:ro \                                                # 硬件设备
+# -v /etc/localtime:/etc/localtime:ro \                            # 时区同步
+# -v /etc/os-release:/etc/os-release:ro \                          # 系统版本
+# -v "${HOST_DATA_DIR}/liblog4phoenix:/app/liblog4phoenix" \       # 动态库
+# -v "${HOST_DATA_DIR}/config:/app/config" \                       # 配置
+# --pid=host \                                                     # 共享进程视图
+# --net host \                                                     # 共享网络
+# --security-opt label=disable \                                   # 关 SELinux（CentOS）
+# --cap-add=SYS_RAWIO \                                            # 原始 I/O 权限
+# --cap-add=SYS_ADMIN \                                            # 访问 /sys、/proc
+# --restart unless-stopped \                                       # 自启（除非手动停）
