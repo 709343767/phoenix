@@ -247,13 +247,13 @@ public class ServerLoadAverageMonitor implements IServerMonitoringListener {
         StringBuilder msgBuilder = new StringBuilder();
         msgBuilder.append("IP地址：").append(ip).append("，<br>服务器：").append(serverName);
         if (StringUtils.isNotBlank(serverSummary)) {
-            msgBuilder.append("，<br>服务器描述：").append(serverSummary);
+            msgBuilder.append("，<br>描述：").append(serverSummary);
         }
         if (StringUtils.isNotBlank(monitorEnv)) {
-            msgBuilder.append("，<br>服务器环境：").append(monitorEnv);
+            msgBuilder.append("，<br>环境：").append(monitorEnv);
         }
         if (StringUtils.isNotBlank(monitorGroup)) {
-            msgBuilder.append("，<br>服务器分组：").append(monitorGroup);
+            msgBuilder.append("，<br>分组：").append(monitorGroup);
         }
         msgBuilder.append("，<br>CPU逻辑核数：").append(logicalProcessorCount)
                 .append("，<br>1分钟平均负载：").append(loadAverage1minutes)

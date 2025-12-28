@@ -250,13 +250,13 @@ public class ServerMonitorJob extends QuartzJobBean implements CommandLineRunner
         String monitorEnv = server.getMonitorEnv();
         String monitorGroup = server.getMonitorGroup();
         if (StringUtils.isNotBlank(serverSummary)) {
-            stringBuilder.append("，<br>服务器描述：").append(serverSummary);
+            stringBuilder.append("，<br>描述：").append(serverSummary);
         }
         if (StringUtils.isNotBlank(monitorEnv)) {
-            stringBuilder.append("，<br>服务器环境：").append(monitorEnv);
+            stringBuilder.append("，<br>环境：").append(monitorEnv);
         }
         if (StringUtils.isNotBlank(monitorGroup)) {
-            stringBuilder.append("，<br>服务器分组：").append(monitorGroup);
+            stringBuilder.append("，<br>分组：").append(monitorGroup);
         }
         stringBuilder.append("，<br>时间：").append(DateTimeUtils.dateToString(new Date()));
         Alarm alarm = Alarm.builder()
