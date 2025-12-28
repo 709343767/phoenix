@@ -28,7 +28,7 @@ fi
 
 # 启动容器
 echo "Starting '${CONTAINER_NAME}' container..."
-docker run -itd \
+docker run -d \
   -v /dev:/dev:ro \
   -v /proc:/proc:ro \
   -v /sys:/sys:ro \
@@ -38,6 +38,7 @@ docker run -itd \
   -v "${HOST_DATA_DIR}/config:/app/config" \
   --pid=host \
   --net host \
+  --uts=host \
   --security-opt label=disable \
   --cap-add=SYS_RAWIO \
   --cap-add=SYS_ADMIN \

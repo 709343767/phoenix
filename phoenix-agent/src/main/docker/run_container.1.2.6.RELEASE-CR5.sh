@@ -39,6 +39,7 @@ docker run -itd \
   -p 12000:12000 \
   --pid=host \
   --net host \
+  --uts=host \
   --security-opt label=disable \
   --cap-add=SYS_RAWIO \
   --cap-add=SYS_ADMIN \
@@ -49,16 +50,17 @@ docker run -itd \
 echo "Container '${CONTAINER_NAME}' started successfully."
 
 
-# -v /dev:/dev:ro \                                                # 设备信息
-# -v /proc:/proc:ro \                                              # 进程与系统状态
-# -v /sys:/sys:ro \                                                # 硬件设备
-# -v /etc/localtime:/etc/localtime:ro \                            # 时区同步
-# -v /etc/os-release:/etc/os-release:ro \                          # 系统版本
-# -v "${HOST_DATA_DIR}/liblog4phoenix:/app/liblog4phoenix" \       # 动态库
-# -v "${HOST_DATA_DIR}/config:/app/config" \                       # 配置
-# --pid=host \                                                     # 共享进程视图
-# --net host \                                                     # 共享网络
-# --security-opt label=disable \                                   # 关 SELinux（CentOS）
-# --cap-add=SYS_RAWIO \                                            # 原始 I/O 权限
-# --cap-add=SYS_ADMIN \                                            # 访问 /sys、/proc
-# --restart unless-stopped \                                       # 自启（除非手动停）
+# -v /dev:/dev:ro                                                 # 设备信息
+# -v /proc:/proc:ro                                               # 进程与系统状态
+# -v /sys:/sys:ro                                                 # 硬件设备
+# -v /etc/localtime:/etc/localtime:ro                             # 时区同步
+# -v /etc/os-release:/etc/os-release:ro                           # 系统版本
+# -v "${HOST_DATA_DIR}/liblog4phoenix:/app/liblog4phoenix"        # 动态库
+# -v "${HOST_DATA_DIR}/config:/app/config"                        # 配置
+# --pid=host                                                      # 共享进程视图
+# --net host                                                      # 共享网络
+# --uts=host                                                      # 共享宿主机 UTS 命名空间（使容器内 hostname 与宿主机一致）
+# --security-opt label=disable                                    # 关 SELinux（CentOS）
+# --cap-add=SYS_RAWIO                                             # 原始 I/O 权限
+# --cap-add=SYS_ADMIN                                             # 访问 /sys、/proc
+# --restart unless-stopped                                        # 自启（除非手动停）
