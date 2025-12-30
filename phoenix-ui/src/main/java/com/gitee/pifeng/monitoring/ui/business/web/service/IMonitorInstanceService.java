@@ -36,18 +36,21 @@ public interface IMonitorInstanceService extends IService<MonitorInstance> {
      * 获取应用程序列表
      * </p>
      *
-     * @param current      当前页
-     * @param size         每页显示条数
-     * @param instanceName 应用实例名
-     * @param endpoint     端点
-     * @param isOnline     应用状态
-     * @param monitorEnv   监控环境
-     * @param monitorGroup 监控分组
+     * @param current       当前页
+     * @param size          每页显示条数
+     * @param instanceName  应用实例名
+     * @param endpoint      端点
+     * @param isOnline      应用状态
+     * @param monitorEnv    监控环境
+     * @param monitorGroup  监控分组
+     * @param ip            IP
+     * @param appServerType 应用服务器
+     * @param instanceDesc  描述
      * @return 简单分页模型
      * @author 皮锋
      * @custom.date 2020/9/26 11:02
      */
-    Page<MonitorInstanceVo> getMonitorInstanceList(Long current, Long size, String instanceName, String endpoint, String isOnline, String monitorEnv, String monitorGroup);
+    Page<MonitorInstanceVo> getMonitorInstanceList(Long current, Long size, String instanceName, String endpoint, String isOnline, String monitorEnv, String monitorGroup, String ip, String appServerType, String instanceDesc);
 
     /**
      * <p>

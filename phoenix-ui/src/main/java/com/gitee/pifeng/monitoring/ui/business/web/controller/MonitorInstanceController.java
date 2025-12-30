@@ -93,13 +93,16 @@ public class MonitorInstanceController {
      * 获取应用程序列表
      * </p>
      *
-     * @param current      当前页
-     * @param size         每页显示条数
-     * @param instanceName 应用实例名
-     * @param endpoint     端点
-     * @param isOnline     应用状态
-     * @param monitorEnv   监控环境
-     * @param monitorGroup 监控分组
+     * @param current       当前页
+     * @param size          每页显示条数
+     * @param instanceName  应用实例名
+     * @param endpoint      端点
+     * @param isOnline      应用状态
+     * @param monitorEnv    监控环境
+     * @param monitorGroup  监控分组
+     * @param ip            IP
+     * @param appServerType 应用服务器
+     * @param instanceDesc  描述
      * @return layUiAdmin响应对象
      * @author 皮锋
      * @custom.date 2020/9/26 10:59
@@ -112,7 +115,11 @@ public class MonitorInstanceController {
             @Parameter(name = "endpoint", description = "端点", in = ParameterIn.QUERY),
             @Parameter(name = "isOnline", description = "应用状态", in = ParameterIn.QUERY),
             @Parameter(name = "monitorEnv", description = "监控环境", in = ParameterIn.QUERY),
-            @Parameter(name = "monitorGroup", description = "监控分组", in = ParameterIn.QUERY)})
+            @Parameter(name = "monitorGroup", description = "监控分组", in = ParameterIn.QUERY),
+            @Parameter(name = "ip", description = "IP", in = ParameterIn.QUERY),
+            @Parameter(name = "appServerType", description = "应用服务器", in = ParameterIn.QUERY),
+            @Parameter(name = "instanceDesc", description = "描述", in = ParameterIn.QUERY)
+    })
     @GetMapping("/get-monitor-instance-list")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.INSTANCE, operType = OperateTypeConstants.QUERY, operDesc = "获取应用程序列表")
@@ -122,8 +129,11 @@ public class MonitorInstanceController {
                                                      @RequestParam(value = "endpoint", required = false) String endpoint,
                                                      @RequestParam(value = "isOnline", required = false) String isOnline,
                                                      @RequestParam(value = "monitorEnv", required = false) String monitorEnv,
-                                                     @RequestParam(value = "monitorGroup", required = false) String monitorGroup) {
-        Page<MonitorInstanceVo> page = this.monitorInstanceService.getMonitorInstanceList(current, size, instanceName, endpoint, isOnline, monitorEnv, monitorGroup);
+                                                     @RequestParam(value = "monitorGroup", required = false) String monitorGroup,
+                                                     @RequestParam(value = "ip", required = false) String ip,
+                                                     @RequestParam(value = "appServerType", required = false) String appServerType,
+                                                     @RequestParam(value = "instanceDesc", required = false) String instanceDesc) {
+        Page<MonitorInstanceVo> page = this.monitorInstanceService.getMonitorInstanceList(current, size, instanceName, endpoint, isOnline, monitorEnv, monitorGroup, ip, appServerType, instanceDesc);
         return LayUiAdminResultVo.ok(page);
     }
 
