@@ -193,19 +193,21 @@ public class MonitorServerServiceImpl extends ServiceImpl<IMonitorServerDao, Mon
      * 获取服务器列表
      * </p>
      *
-     * @param current      当前页
-     * @param size         每页显示条数
-     * @param ip           IP
-     * @param serverName   服务器名
-     * @param isOnline     状态
-     * @param monitorEnv   监控环境
-     * @param monitorGroup 监控分组
+     * @param current       当前页
+     * @param size          每页显示条数
+     * @param ip            IP
+     * @param serverName    服务器名
+     * @param isOnline      状态
+     * @param monitorEnv    监控环境
+     * @param monitorGroup  监控分组
+     * @param osName        系统
+     * @param serverSummary 描述
      * @return 简单分页模型
      * @author 皮锋
      * @custom.date 2020/9/4 12:38
      */
     @Override
-    public Page<MonitorServerVo> getMonitorServerList(Long current, Long size, String ip, String serverName, String isOnline, String monitorEnv, String monitorGroup) {
+    public Page<MonitorServerVo> getMonitorServerList(Long current, Long size, String ip, String serverName, String isOnline, String monitorEnv, String monitorGroup, String osName, String serverSummary) {
         // 查询数据库
         IPage<MonitorServer> ipage = new Page<>(current, size);
         // 查询条件
@@ -215,6 +217,8 @@ public class MonitorServerServiceImpl extends ServiceImpl<IMonitorServerDao, Mon
         criteria.put("isOnline", isOnline);
         criteria.put("monitorEnv", monitorEnv);
         criteria.put("monitorGroup", monitorGroup);
+        criteria.put("osName", osName);
+        criteria.put("serverSummary", serverSummary);
         IPage<MonitorServerVo> monitorServerPage = this.monitorServerDao.getMonitorServerList(ipage, criteria);
         List<MonitorServerVo> monitorServerVos = monitorServerPage.getRecords();
         // 当前时间

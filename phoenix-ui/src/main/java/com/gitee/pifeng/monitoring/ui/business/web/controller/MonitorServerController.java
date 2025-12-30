@@ -97,13 +97,15 @@ public class MonitorServerController {
      * 获取服务器列表
      * </p>
      *
-     * @param current      当前页
-     * @param size         每页显示条数
-     * @param ip           IP
-     * @param isOnline     状态
-     * @param serverName   服务器名
-     * @param monitorEnv   监控环境
-     * @param monitorGroup 监控分组
+     * @param current       当前页
+     * @param size          每页显示条数
+     * @param ip            IP
+     * @param isOnline      状态
+     * @param serverName    服务器名
+     * @param monitorEnv    监控环境
+     * @param monitorGroup  监控分组
+     * @param osName        系统
+     * @param serverSummary 描述
      * @return layUiAdmin响应对象
      * @author 皮锋
      * @custom.date 2020/9/4 12:34
@@ -116,7 +118,9 @@ public class MonitorServerController {
             @Parameter(name = "serverName", description = "服务器名", in = ParameterIn.QUERY),
             @Parameter(name = "isOnline", description = "状态", in = ParameterIn.QUERY),
             @Parameter(name = "monitorEnv", description = "监控环境", in = ParameterIn.QUERY),
-            @Parameter(name = "monitorGroup", description = "监控分组", in = ParameterIn.QUERY)})
+            @Parameter(name = "monitorGroup", description = "监控分组", in = ParameterIn.QUERY),
+            @Parameter(name = "osName", description = "系统", in = ParameterIn.QUERY),
+            @Parameter(name = "serverSummary", description = "描述", in = ParameterIn.QUERY)})
     @GetMapping("/get-monitor-server-list")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.SERVER, operType = OperateTypeConstants.QUERY, operDesc = "获取服务器列表")
@@ -126,8 +130,10 @@ public class MonitorServerController {
                                                    @RequestParam(value = "serverName", required = false) String serverName,
                                                    @RequestParam(value = "isOnline", required = false) String isOnline,
                                                    @RequestParam(value = "monitorEnv", required = false) String monitorEnv,
-                                                   @RequestParam(value = "monitorGroup", required = false) String monitorGroup) {
-        Page<MonitorServerVo> page = this.monitorServerService.getMonitorServerList(current, size, ip, serverName, isOnline, monitorEnv, monitorGroup);
+                                                   @RequestParam(value = "monitorGroup", required = false) String monitorGroup,
+                                                   @RequestParam(value = "osName", required = false) String osName,
+                                                   @RequestParam(value = "serverSummary", required = false) String serverSummary) {
+        Page<MonitorServerVo> page = this.monitorServerService.getMonitorServerList(current, size, ip, serverName, isOnline, monitorEnv, monitorGroup, osName, serverSummary);
         return LayUiAdminResultVo.ok(page);
     }
 

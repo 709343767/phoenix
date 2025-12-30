@@ -56,6 +56,12 @@
             <if test="criteria.monitorGroup!=null and criteria.monitorGroup!=''">
                 AND S.MONITOR_GROUP = #{criteria.monitorGroup}
             </if>
+            <if test="criteria.osName!=null and criteria.osName!=''">
+                AND O.OS_NAME LIKE concat('%',#{criteria.osName},'%')
+            </if>
+            <if test="criteria.serverSummary!=null and criteria.serverSummary!=''">
+                AND S.SERVER_SUMMARY LIKE concat('%',#{criteria.serverSummary},'%')
+            </if>
         </where>
         GROUP BY S.ID,
         S.IP,
