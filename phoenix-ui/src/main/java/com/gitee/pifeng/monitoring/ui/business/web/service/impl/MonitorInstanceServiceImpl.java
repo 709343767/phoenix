@@ -171,7 +171,22 @@ public class MonitorInstanceServiceImpl extends ServiceImpl<IMonitorInstanceDao,
             lambdaQueryWrapper.like(MonitorInstance::getAppServerType, appServerType);
         }
         if (StringUtils.isNotBlank(instanceDesc)) {
-            lambdaQueryWrapper.like(MonitorInstance::getInstanceDesc, instanceDesc);
+            lambdaQueryWrapper.and(wrapper -> wrapper
+                    // 情况1：summary 为空（null 或 ""） → 用 desc 匹配
+                    .or(w ->
+                            w.and(inner -> inner
+                                    .isNull(MonitorInstance::getInstanceSummary)
+                                    .or()
+                                    .eq(MonitorInstance::getInstanceSummary, "")
+                            ).like(MonitorInstance::getInstanceDesc, instanceDesc)
+                    )
+                    // 情况2：summary 非空（非 null 且 非 ""） → 用 summary 匹配
+                    .or(w ->
+                            w.and(inner -> inner
+                                    .isNotNull(MonitorInstance::getInstanceSummary)
+                                    .ne(MonitorInstance::getInstanceSummary, "")
+                            ).like(MonitorInstance::getInstanceSummary, instanceDesc))
+            );
         }
         lambdaQueryWrapper.orderByAsc(MonitorInstance::getInstanceName).orderByAsc(MonitorInstance::getId);
         IPage<MonitorInstance> monitorInstancePage = this.monitorInstanceDao.selectPage(ipage, lambdaQueryWrapper);
