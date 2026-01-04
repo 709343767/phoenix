@@ -93,16 +93,19 @@ public class MonitorInstanceController {
      * 获取应用程序列表
      * </p>
      *
-     * @param current       当前页
-     * @param size          每页显示条数
-     * @param instanceName  应用实例名
-     * @param endpoint      端点
-     * @param isOnline      应用状态
-     * @param monitorEnv    监控环境
-     * @param monitorGroup  监控分组
-     * @param ip            IP
-     * @param appServerType 应用服务器
-     * @param instanceDesc  描述
+     * @param current         当前页
+     * @param size            每页显示条数
+     * @param instanceName    应用实例名
+     * @param endpoint        端点
+     * @param isOnline        应用状态
+     * @param monitorEnv      监控环境
+     * @param monitorGroup    监控分组
+     * @param ip              IP
+     * @param appServerType   应用服务器
+     * @param instanceDesc    描述
+     * @param isEnableMonitor 是否开启监控（0：不开启监控；1：开启监控）
+     * @param isEnableAlarm   是否开启告警（0：不开启告警；1：开启告警）
+     * @param language        程序语言
      * @return layUiAdmin响应对象
      * @author 皮锋
      * @custom.date 2020/9/26 10:59
@@ -118,7 +121,10 @@ public class MonitorInstanceController {
             @Parameter(name = "monitorGroup", description = "监控分组", in = ParameterIn.QUERY),
             @Parameter(name = "ip", description = "IP", in = ParameterIn.QUERY),
             @Parameter(name = "appServerType", description = "应用服务器", in = ParameterIn.QUERY),
-            @Parameter(name = "instanceDesc", description = "描述", in = ParameterIn.QUERY)
+            @Parameter(name = "instanceDesc", description = "描述", in = ParameterIn.QUERY),
+            @Parameter(name = "isEnableMonitor", description = "是否开启监控（0：不开启监控；1：开启监控）", in = ParameterIn.QUERY),
+            @Parameter(name = "isEnableAlarm", description = "是否开启告警（0：不开启告警；1：开启告警）", in = ParameterIn.QUERY),
+            @Parameter(name = "language", description = "程序语言", in = ParameterIn.QUERY)
     })
     @GetMapping("/get-monitor-instance-list")
     @ResponseBody
@@ -132,8 +138,13 @@ public class MonitorInstanceController {
                                                      @RequestParam(value = "monitorGroup", required = false) String monitorGroup,
                                                      @RequestParam(value = "ip", required = false) String ip,
                                                      @RequestParam(value = "appServerType", required = false) String appServerType,
-                                                     @RequestParam(value = "instanceDesc", required = false) String instanceDesc) {
-        Page<MonitorInstanceVo> page = this.monitorInstanceService.getMonitorInstanceList(current, size, instanceName, endpoint, isOnline, monitorEnv, monitorGroup, ip, appServerType, instanceDesc);
+                                                     @RequestParam(value = "instanceDesc", required = false) String instanceDesc,
+                                                     @RequestParam(value = "isEnableMonitor", required = false) String isEnableMonitor,
+                                                     @RequestParam(value = "isEnableAlarm", required = false) String isEnableAlarm,
+                                                     @RequestParam(value = "language", required = false) String language) {
+        Page<MonitorInstanceVo> page = this.monitorInstanceService.getMonitorInstanceList(current, size, instanceName,
+                endpoint, isOnline, monitorEnv, monitorGroup, ip, appServerType, instanceDesc, isEnableMonitor,
+                isEnableAlarm, language);
         return LayUiAdminResultVo.ok(page);
     }
 
