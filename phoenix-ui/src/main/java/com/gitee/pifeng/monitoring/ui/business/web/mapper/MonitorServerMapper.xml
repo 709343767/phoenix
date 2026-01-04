@@ -62,6 +62,12 @@
             <if test="criteria.serverSummary!=null and criteria.serverSummary!=''">
                 AND S.SERVER_SUMMARY LIKE concat('%',#{criteria.serverSummary},'%')
             </if>
+            <if test="criteria.isEnableMonitor!=null and criteria.isEnableMonitor!=''">
+                AND S.IS_ENABLE_MONITOR = #{criteria.isEnableMonitor}
+            </if>
+            <if test="criteria.isEnableAlarm!=null and criteria.isEnableAlarm!=''">
+                AND S.IS_ENABLE_ALARM = #{criteria.isEnableAlarm}
+            </if>
         </where>
         GROUP BY S.ID,
         S.IP,

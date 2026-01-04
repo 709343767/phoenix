@@ -63,7 +63,6 @@
                         </select>
                     </div>
                 </div>
-                <br>
                 <div class="layui-inline">
                     <label class="layui-form-label" for="monitorEnv">环境</label>
                     <div class="layui-input-block" style="width: 182px;">
@@ -89,6 +88,26 @@
                     <div class="layui-input-block">
                         <input type="text" id="serverSummary" name="serverSummary" placeholder="请输入"
                                autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label" for="isEnableMonitor">是否监控</label>
+                    <div class="layui-input-block" style="width: 182px;">
+                        <select id="isEnableMonitor" name="isEnableMonitor">
+                            <option value="">所有</option>
+                            <option value="1">是</option>
+                            <option value="0">否</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label" for="isEnableAlarm">是否告警</label>
+                    <div class="layui-input-block" style="width: 182px;">
+                        <select id="isEnableAlarm" name="isEnableAlarm">
+                            <option value="">所有</option>
+                            <option value="1">是</option>
+                            <option value="0">否</option>
+                        </select>
                     </div>
                 </div>
                 <div class="layui-inline">
