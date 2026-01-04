@@ -223,6 +223,7 @@ public class MonitorServerServiceImpl extends ServiceImpl<IMonitorServerDao, Mon
         criteria.put("monitorEnv", monitorEnv);
         criteria.put("monitorGroup", monitorGroup);
         criteria.put("osName", osName);
+        criteria.put("serverSummary", serverSummary);
         criteria.put("isEnableMonitor", isEnableMonitor);
         criteria.put("isEnableAlarm", isEnableAlarm);
         IPage<MonitorServerVo> monitorServerPage = this.monitorServerDao.getMonitorServerList(ipage, criteria);
