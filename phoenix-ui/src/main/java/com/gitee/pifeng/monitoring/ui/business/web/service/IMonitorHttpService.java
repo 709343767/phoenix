@@ -26,20 +26,24 @@ public interface IMonitorHttpService extends IService<MonitorHttp> {
      * 获取HTTP列表
      * </p>
      *
-     * @param current        当前页
-     * @param size           每页显示条数
-     * @param hostnameSource 主机名（来源）
-     * @param urlTarget      URL地址（目的地）
-     * @param method         请求方法
-     * @param status         状态
-     * @param monitorEnv     监控环境
-     * @param monitorGroup   监控分组
+     * @param current         当前页
+     * @param size            每页显示条数
+     * @param hostnameSource  主机名（来源）
+     * @param urlTarget       URL地址（目的地）
+     * @param method          请求方法
+     * @param status          状态
+     * @param monitorEnv      监控环境
+     * @param monitorGroup    监控分组
+     * @param descr           描述
+     * @param isEnableMonitor 是否开启监控（0：不开启监控；1：开启监控）
+     * @param isEnableAlarm   是否开启告警（0：不开启告警；1：开启告警）
      * @return layUiAdmin响应对象
      * @author 皮锋
      * @custom.date 2022/4/11 10:51
      */
     Page<MonitorHttpVo> getMonitorHttpList(Long current, Long size, String hostnameSource, String urlTarget,
-                                           String method, Integer status, String monitorEnv, String monitorGroup);
+                                           String method, Integer status, String monitorEnv, String monitorGroup,
+                                           String descr, String isEnableMonitor, String isEnableAlarm);
 
     /**
      * <p>

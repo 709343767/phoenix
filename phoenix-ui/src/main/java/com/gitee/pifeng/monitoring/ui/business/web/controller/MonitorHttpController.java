@@ -99,14 +99,17 @@ public class MonitorHttpController {
      * 获取HTTP列表
      * </p>
      *
-     * @param current        当前页
-     * @param size           每页显示条数
-     * @param hostnameSource 主机名（来源）
-     * @param urlTarget      URL地址（目的地）
-     * @param method         请求方法
-     * @param status         状态
-     * @param monitorEnv     监控环境
-     * @param monitorGroup   监控分组
+     * @param current         当前页
+     * @param size            每页显示条数
+     * @param hostnameSource  主机名（来源）
+     * @param urlTarget       URL地址（目的地）
+     * @param method          请求方法
+     * @param status          状态
+     * @param monitorEnv      监控环境
+     * @param monitorGroup    监控分组
+     * @param descr           描述
+     * @param isEnableMonitor 是否开启监控（0：不开启监控；1：开启监控）
+     * @param isEnableAlarm   是否开启告警（0：不开启告警；1：开启告警）
      * @return layUiAdmin响应对象
      * @author 皮锋
      * @custom.date 2022/1/11 9:31
@@ -120,7 +123,10 @@ public class MonitorHttpController {
             @Parameter(name = "method", description = "请求方法", in = ParameterIn.QUERY),
             @Parameter(name = "status", description = "状态", in = ParameterIn.QUERY),
             @Parameter(name = "monitorEnv", description = "监控环境", in = ParameterIn.QUERY),
-            @Parameter(name = "monitorGroup", description = "监控分组", in = ParameterIn.QUERY)})
+            @Parameter(name = "monitorGroup", description = "监控分组", in = ParameterIn.QUERY),
+            @Parameter(name = "descr", description = "描述", in = ParameterIn.QUERY),
+            @Parameter(name = "isEnableMonitor", description = "是否开启监控（0：不开启监控；1：开启监控）", in = ParameterIn.QUERY),
+            @Parameter(name = "isEnableAlarm", description = "是否开启告警（0：不开启告警；1：开启告警）", in = ParameterIn.QUERY)})
     @GetMapping("/get-monitor-http-list")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.HTTP4SERVICE, operType = OperateTypeConstants.QUERY, operDesc = "获取HTTP列表")
@@ -131,9 +137,12 @@ public class MonitorHttpController {
                                                  @RequestParam(value = "method", required = false) String method,
                                                  @RequestParam(value = "status", required = false) Integer status,
                                                  @RequestParam(value = "monitorEnv", required = false) String monitorEnv,
-                                                 @RequestParam(value = "monitorGroup", required = false) String monitorGroup) {
+                                                 @RequestParam(value = "monitorGroup", required = false) String monitorGroup,
+                                                 @RequestParam(value = "descr", required = false) String descr,
+                                                 @RequestParam(value = "isEnableMonitor", required = false) String isEnableMonitor,
+                                                 @RequestParam(value = "isEnableAlarm", required = false) String isEnableAlarm) {
         Page<MonitorHttpVo> page = this.monitorHttpService.getMonitorHttpList(current, size, hostnameSource, urlTarget,
-                method, status, monitorEnv, monitorGroup);
+                method, status, monitorEnv, monitorGroup, descr, isEnableMonitor, isEnableAlarm);
         return LayUiAdminResultVo.ok(page);
     }
 

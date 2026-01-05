@@ -78,21 +78,25 @@ public class MonitorHttpServiceImpl extends ServiceImpl<IMonitorHttpDao, Monitor
      * 获取HTTP列表
      * </p>
      *
-     * @param current        当前页
-     * @param size           每页显示条数
-     * @param hostnameSource 主机名（来源）
-     * @param urlTarget      URL地址（目的地）
-     * @param method         请求方法
-     * @param status         状态
-     * @param monitorEnv     监控环境
-     * @param monitorGroup   监控分组
+     * @param current         当前页
+     * @param size            每页显示条数
+     * @param hostnameSource  主机名（来源）
+     * @param urlTarget       URL地址（目的地）
+     * @param method          请求方法
+     * @param status          状态
+     * @param monitorEnv      监控环境
+     * @param monitorGroup    监控分组
+     * @param descr           描述
+     * @param isEnableMonitor 是否开启监控（0：不开启监控；1：开启监控）
+     * @param isEnableAlarm   是否开启告警（0：不开启告警；1：开启告警）
      * @return layUiAdmin响应对象
      * @author 皮锋
      * @custom.date 2022/4/11 10:51
      */
     @Override
     public Page<MonitorHttpVo> getMonitorHttpList(Long current, Long size, String hostnameSource, String urlTarget,
-                                                  String method, Integer status, String monitorEnv, String monitorGroup) {
+                                                  String method, Integer status, String monitorEnv, String monitorGroup,
+                                                  String descr, String isEnableMonitor, String isEnableAlarm) {
         // 查询数据库
         IPage<MonitorHttp> ipage = new Page<>(current, size);
         LambdaQueryWrapper<MonitorHttp> lambdaQueryWrapper = new LambdaQueryWrapper<>();
@@ -133,6 +137,15 @@ public class MonitorHttpServiceImpl extends ServiceImpl<IMonitorHttpDao, Monitor
         }
         if (StringUtils.isNotBlank(monitorGroup)) {
             lambdaQueryWrapper.eq(MonitorHttp::getMonitorGroup, monitorGroup);
+        }
+        if (StringUtils.isNotBlank(descr)) {
+            lambdaQueryWrapper.like(MonitorHttp::getDescr, descr);
+        }
+        if (StringUtils.isNotBlank(isEnableMonitor)) {
+            lambdaQueryWrapper.eq(MonitorHttp::getIsEnableMonitor, isEnableMonitor);
+        }
+        if (StringUtils.isNotBlank(isEnableAlarm)) {
+            lambdaQueryWrapper.eq(MonitorHttp::getIsEnableAlarm, isEnableAlarm);
         }
         IPage<MonitorHttp> monitorHttpPage = this.baseMapper.selectPage(ipage, lambdaQueryWrapper);
         List<MonitorHttp> monitorHttps = monitorHttpPage.getRecords();
