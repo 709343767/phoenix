@@ -26,20 +26,24 @@ public interface IMonitorDbService extends IService<MonitorDb> {
      * 获取数据库列表
      * </p>
      *
-     * @param current      当前页
-     * @param size         每页显示条数
-     * @param connName     数据库连接名
-     * @param url          数据库URL
-     * @param dbType       数据库类型
-     * @param isOnline     数据库状态
-     * @param monitorEnv   监控环境
-     * @param monitorGroup 监控分组
+     * @param current         当前页
+     * @param size            每页显示条数
+     * @param connName        数据库连接名
+     * @param url             数据库URL
+     * @param dbType          数据库类型
+     * @param isOnline        数据库状态
+     * @param monitorEnv      监控环境
+     * @param monitorGroup    监控分组
+     * @param dbDesc          描述
+     * @param isEnableMonitor 是否开启监控（0：不开启监控；1：开启监控）
+     * @param isEnableAlarm   是否开启告警（0：不开启告警；1：开启告警）
      * @return 简单分页模型
      * @author 皮锋
      * @custom.date 2020/12/19 17:37
      */
     Page<MonitorDbVo> getMonitorDbList(Long current, Long size, String connName, String url, String dbType,
-                                       String isOnline, String monitorEnv, String monitorGroup);
+                                       String isOnline, String monitorEnv, String monitorGroup, String dbDesc,
+                                       String isEnableMonitor, String isEnableAlarm);
 
     /**
      * <p>

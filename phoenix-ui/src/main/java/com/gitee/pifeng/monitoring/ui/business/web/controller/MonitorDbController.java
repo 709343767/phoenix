@@ -92,14 +92,17 @@ public class MonitorDbController {
      * 获取数据库列表
      * </p>
      *
-     * @param current      当前页
-     * @param size         每页显示条数
-     * @param connName     数据库连接名
-     * @param url          数据库URL
-     * @param dbType       数据库类型
-     * @param isOnline     数据库状态
-     * @param monitorEnv   监控环境
-     * @param monitorGroup 监控分组
+     * @param current         当前页
+     * @param size            每页显示条数
+     * @param connName        数据库连接名
+     * @param url             数据库URL
+     * @param dbType          数据库类型
+     * @param isOnline        数据库状态
+     * @param monitorEnv      监控环境
+     * @param monitorGroup    监控分组
+     * @param dbDesc          描述
+     * @param isEnableMonitor 是否开启监控（0：不开启监控；1：开启监控）
+     * @param isEnableAlarm   是否开启告警（0：不开启告警；1：开启告警）
      * @return layUiAdmin响应对象
      * @author 皮锋
      * @custom.date 2020/12/19 17:36
@@ -113,7 +116,10 @@ public class MonitorDbController {
             @Parameter(name = "dbType", description = "数据库类型", in = ParameterIn.QUERY),
             @Parameter(name = "isOnline", description = "数据库状态", in = ParameterIn.QUERY),
             @Parameter(name = "monitorEnv", description = "监控环境", in = ParameterIn.QUERY),
-            @Parameter(name = "monitorGroup", description = "监控分组", in = ParameterIn.QUERY)})
+            @Parameter(name = "monitorGroup", description = "监控分组", in = ParameterIn.QUERY),
+            @Parameter(name = "dbDesc", description = "描述", in = ParameterIn.QUERY),
+            @Parameter(name = "isEnableMonitor", description = "是否开启监控（0：不开启监控；1：开启监控）", in = ParameterIn.QUERY),
+            @Parameter(name = "isEnableAlarm", description = "是否开启告警（0：不开启告警；1：开启告警）", in = ParameterIn.QUERY)})
     @GetMapping("get-monitor-db-list")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.DATABASE, operType = OperateTypeConstants.QUERY, operDesc = "获取数据库列表")
@@ -124,8 +130,12 @@ public class MonitorDbController {
                                                @RequestParam(value = "dbType", required = false) String dbType,
                                                @RequestParam(value = "isOnline", required = false) String isOnline,
                                                @RequestParam(value = "monitorEnv", required = false) String monitorEnv,
-                                               @RequestParam(value = "monitorGroup", required = false) String monitorGroup) {
-        Page<MonitorDbVo> page = this.monitorDbService.getMonitorDbList(current, size, connName, url, dbType, isOnline, monitorEnv, monitorGroup);
+                                               @RequestParam(value = "monitorGroup", required = false) String monitorGroup,
+                                               @RequestParam(value = "dbDesc", required = false) String dbDesc,
+                                               @RequestParam(value = "isEnableMonitor", required = false) String isEnableMonitor,
+                                               @RequestParam(value = "isEnableAlarm", required = false) String isEnableAlarm) {
+        Page<MonitorDbVo> page = this.monitorDbService.getMonitorDbList(current, size, connName, url, dbType, isOnline,
+                monitorEnv, monitorGroup, dbDesc, isEnableMonitor, isEnableAlarm);
         return LayUiAdminResultVo.ok(page);
     }
 
