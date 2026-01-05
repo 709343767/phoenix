@@ -100,14 +100,17 @@ public class MonitorTcpController {
      * 获取TCP列表
      * </p>
      *
-     * @param current        当前页
-     * @param size           每页显示条数
-     * @param hostnameSource 主机名（来源）
-     * @param hostnameTarget 主机名（目的地）
-     * @param portTarget     目标端口
-     * @param status         状态（0：不通，1：正常）
-     * @param monitorEnv     监控环境
-     * @param monitorGroup   监控分组
+     * @param current         当前页
+     * @param size            每页显示条数
+     * @param hostnameSource  主机名（来源）
+     * @param hostnameTarget  主机名（目的地）
+     * @param portTarget      目标端口
+     * @param status          状态（0：不通，1：正常）
+     * @param monitorEnv      监控环境
+     * @param monitorGroup    监控分组
+     * @param descr           描述
+     * @param isEnableMonitor 是否开启监控（0：不开启监控；1：开启监控）
+     * @param isEnableAlarm   是否开启告警（0：不开启告警；1：开启告警）
      * @return layUiAdmin响应对象
      * @author 皮锋
      * @custom.date 2022/1/11 9:31
@@ -121,7 +124,10 @@ public class MonitorTcpController {
             @Parameter(name = "portTarget", description = "目标端口", in = ParameterIn.QUERY),
             @Parameter(name = "status", description = "状态（0：不通，1：正常）", in = ParameterIn.QUERY),
             @Parameter(name = "monitorEnv", description = "监控环境", in = ParameterIn.QUERY),
-            @Parameter(name = "monitorGroup", description = "监控分组", in = ParameterIn.QUERY)})
+            @Parameter(name = "monitorGroup", description = "监控分组", in = ParameterIn.QUERY),
+            @Parameter(name = "descr", description = "描述", in = ParameterIn.QUERY),
+            @Parameter(name = "isEnableMonitor", description = "是否开启监控（0：不开启监控；1：开启监控）", in = ParameterIn.QUERY),
+            @Parameter(name = "isEnableAlarm", description = "是否开启告警（0：不开启告警；1：开启告警）", in = ParameterIn.QUERY)})
     @GetMapping("/get-monitor-tcp-list")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.TCP4SERVICE, operType = OperateTypeConstants.QUERY, operDesc = "获取TCP列表")
@@ -132,9 +138,12 @@ public class MonitorTcpController {
                                                 @RequestParam(value = "portTarget", required = false) Integer portTarget,
                                                 @RequestParam(value = "status", required = false) String status,
                                                 @RequestParam(value = "monitorEnv", required = false) String monitorEnv,
-                                                @RequestParam(value = "monitorGroup", required = false) String monitorGroup) {
+                                                @RequestParam(value = "monitorGroup", required = false) String monitorGroup,
+                                                @RequestParam(value = "descr", required = false) String descr,
+                                                @RequestParam(value = "isEnableMonitor", required = false) String isEnableMonitor,
+                                                @RequestParam(value = "isEnableAlarm", required = false) String isEnableAlarm) {
         Page<MonitorTcpVo> page = this.monitorTcpService.getMonitorTcpList(current, size, hostnameSource, hostnameTarget,
-                portTarget, status, monitorEnv, monitorGroup);
+                portTarget, status, monitorEnv, monitorGroup, descr, isEnableMonitor, isEnableAlarm);
         return LayUiAdminResultVo.ok(page);
     }
 

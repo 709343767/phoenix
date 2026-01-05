@@ -26,20 +26,24 @@ public interface IMonitorTcpService extends IService<MonitorTcp> {
      * 获取TCP列表
      * </p>
      *
-     * @param current        当前页
-     * @param size           每页显示条数
-     * @param hostnameSource 主机名（来源）
-     * @param hostnameTarget 主机名（目的地）
-     * @param portTarget     目标端口
-     * @param status         状态（0：网络不通，1：网络正常）
-     * @param monitorEnv     监控环境
-     * @param monitorGroup   监控分组
+     * @param current         当前页
+     * @param size            每页显示条数
+     * @param hostnameSource  主机名（来源）
+     * @param hostnameTarget  主机名（目的地）
+     * @param portTarget      目标端口
+     * @param status          状态（0：网络不通，1：网络正常）
+     * @param monitorEnv      监控环境
+     * @param monitorGroup    监控分组
+     * @param descr           描述
+     * @param isEnableMonitor 是否开启监控（0：不开启监控；1：开启监控）
+     * @param isEnableAlarm   是否开启告警（0：不开启告警；1：开启告警）
      * @return 简单分页模型
      * @author 皮锋
      * @custom.date 2022/1/11 9:33
      */
     Page<MonitorTcpVo> getMonitorTcpList(Long current, Long size, String hostnameSource, String hostnameTarget,
-                                         Integer portTarget, String status, String monitorEnv, String monitorGroup);
+                                         Integer portTarget, String status, String monitorEnv, String monitorGroup,
+                                         String descr, String isEnableMonitor, String isEnableAlarm);
 
     /**
      * <p>
