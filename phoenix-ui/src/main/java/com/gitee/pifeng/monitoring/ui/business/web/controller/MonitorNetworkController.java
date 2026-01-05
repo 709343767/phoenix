@@ -91,13 +91,16 @@ public class MonitorNetworkController {
      * 获取网络列表
      * </p>
      *
-     * @param current      当前页
-     * @param size         每页显示条数
-     * @param ipSource     IP地址（来源）
-     * @param ipTarget     IP地址（目的地）
-     * @param status       状态（0：网络不通，1：网络正常）
-     * @param monitorEnv   监控环境
-     * @param monitorGroup 监控分组
+     * @param current         当前页
+     * @param size            每页显示条数
+     * @param ipSource        IP地址（来源）
+     * @param ipTarget        IP地址（目的地）
+     * @param status          状态（0：网络不通，1：网络正常）
+     * @param monitorEnv      监控环境
+     * @param monitorGroup    监控分组
+     * @param ipDesc          IP地址描述
+     * @param isEnableMonitor 是否开启监控（0：不开启监控；1：开启监控）
+     * @param isEnableAlarm   是否开启告警（0：不开启告警；1：开启告警）
      * @return layUiAdmin响应对象
      * @author 皮锋
      * @custom.date 2020/9/26 10:59
@@ -110,7 +113,10 @@ public class MonitorNetworkController {
             @Parameter(name = "ipTarget", description = "IP地址（目的地）", in = ParameterIn.QUERY),
             @Parameter(name = "status", description = "状态（0：网络不通，1：网络正常）", in = ParameterIn.QUERY),
             @Parameter(name = "monitorEnv", description = "监控环境", in = ParameterIn.QUERY),
-            @Parameter(name = "monitorGroup", description = "监控分组", in = ParameterIn.QUERY)})
+            @Parameter(name = "monitorGroup", description = "监控分组", in = ParameterIn.QUERY),
+            @Parameter(name = "ipDesc", description = "IP地址描述", in = ParameterIn.QUERY),
+            @Parameter(name = "isEnableMonitor", description = "是否开启监控（0：不开启监控；1：开启监控）", in = ParameterIn.QUERY),
+            @Parameter(name = "isEnableAlarm", description = "是否开启告警（0：不开启告警；1：开启告警）", in = ParameterIn.QUERY)})
     @GetMapping("/get-monitor-network-list")
     @ResponseBody
     @OperateLog(operModule = UiModuleConstants.NET, operType = OperateTypeConstants.QUERY, operDesc = "获取网络列表")
@@ -120,8 +126,12 @@ public class MonitorNetworkController {
                                                 @RequestParam(value = "ipTarget", required = false) String ipTarget,
                                                 @RequestParam(value = "status", required = false) String status,
                                                 @RequestParam(value = "monitorEnv", required = false) String monitorEnv,
-                                                @RequestParam(value = "monitorGroup", required = false) String monitorGroup) {
-        Page<MonitorNetVo> page = this.monitorNetService.getMonitorNetList(current, size, ipSource, ipTarget, status, monitorEnv, monitorGroup);
+                                                @RequestParam(value = "monitorGroup", required = false) String monitorGroup,
+                                                @RequestParam(value = "ipDesc", required = false) String ipDesc,
+                                                @RequestParam(value = "isEnableMonitor", required = false) String isEnableMonitor,
+                                                @RequestParam(value = "isEnableAlarm", required = false) String isEnableAlarm) {
+        Page<MonitorNetVo> page = this.monitorNetService.getMonitorNetList(current, size, ipSource, ipTarget, status,
+                monitorEnv, monitorGroup, ipDesc, isEnableMonitor, isEnableAlarm);
         return LayUiAdminResultVo.ok(page);
     }
 
