@@ -1,5 +1,6 @@
 package com.gitee.pifeng.monitoring.server.business.server.monitor.server;
 
+import cn.hutool.core.io.unit.DataSizeUtil;
 import cn.hutool.core.util.NumberUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.gitee.pifeng.monitoring.common.constant.ZeroOrOneConstants;
@@ -113,6 +114,10 @@ public class ServerDiskMonitor implements IServerMonitoringListener {
         double overloadThreshold = this.monitoringConfigPropertiesLoader.getMonitoringProperties().getServerProperties().getServerDiskProperties().getOverloadThreshold();
         // 循环所有磁盘
         monitorServerDisks.forEach(monitorServerDisk -> {
+            // 磁盘总大小
+            String total = DataSizeUtil.format(monitorServerDisk.getTotal());
+            // 磁盘已用大小
+            String used = DataSizeUtil.format(monitorServerDisk.getUsed());
             // 磁盘资源的利用率
             double usePercent = NumberUtil.round(monitorServerDisk.getUsePercent() * 100D, 2).doubleValue();
             // 分区的盘符名称
@@ -122,10 +127,10 @@ public class ServerDiskMonitor implements IServerMonitoringListener {
             // 磁盘资源利用率大于等于配置的过载阈值
             if (usePercent >= overloadThreshold) {
                 // 处理磁盘空间不足
-                this.dealDiskOverLoad(monitorServer, devName, dirName, usePercent);
+                this.dealDiskOverLoad(monitorServer, devName, dirName, total, used, usePercent);
             } else {
                 // 处理磁盘空间正常
-                this.dealDiskNotOverLoad(monitorServer, devName, dirName, usePercent);
+                this.dealDiskNotOverLoad(monitorServer, devName, dirName, total, used, usePercent);
             }
         });
     }
@@ -138,15 +143,17 @@ public class ServerDiskMonitor implements IServerMonitoringListener {
      * @param monitorServer 服务器信息
      * @param devName       分区的盘符名称
      * @param dirName       分区的盘符路径
+     * @param total         磁盘总大小
+     * @param used          磁盘已用大小
      * @param usePercent    磁盘资源的利用率
      * @author 皮锋
      * @custom.date 2021/2/4 15:15
      */
-    private void dealDiskNotOverLoad(MonitorServer monitorServer, String devName, String dirName, double usePercent) {
+    private void dealDiskNotOverLoad(MonitorServer monitorServer, String devName, String dirName, String total, String used, double usePercent) {
         // 发送告警信息
         try {
             // 不用担心头次检测到磁盘正常（非异常转正常）会发送告警，最终是否发送告警由“实时监控服务”决定
-            this.sendAlarmInfo("服务器磁盘空间恢复正常", monitorServer, devName, dirName, usePercent, AlarmLevelEnums.INFO, AlarmReasonEnums.ABNORMAL_2_NORMAL);
+            this.sendAlarmInfo("服务器磁盘空间恢复正常", monitorServer, devName, dirName, total, used, usePercent, AlarmLevelEnums.INFO, AlarmReasonEnums.ABNORMAL_2_NORMAL);
         } catch (Exception e) {
             log.error("服务器磁盘空间恢复正常告警异常！", e);
         }
@@ -160,16 +167,18 @@ public class ServerDiskMonitor implements IServerMonitoringListener {
      * @param monitorServer 服务器信息
      * @param devName       分区的盘符名称
      * @param dirName       分区的盘符路径
+     * @param total         磁盘总大小
+     * @param used          磁盘已用大小
      * @param usePercent    磁盘资源的利用率
      * @author 皮锋
      * @custom.date 2021/2/4 15:10
      */
-    private void dealDiskOverLoad(MonitorServer monitorServer, String devName, String dirName, double usePercent) {
+    private void dealDiskOverLoad(MonitorServer monitorServer, String devName, String dirName, String total, String used, double usePercent) {
         // 告警级别
         AlarmLevelEnums alarmLevelEnum = this.monitoringConfigPropertiesLoader.getMonitoringProperties().getServerProperties().getServerDiskProperties().getLevelEnum();
         // 发送告警信息
         try {
-            this.sendAlarmInfo("服务器磁盘空间不足", monitorServer, devName, dirName, usePercent, alarmLevelEnum, AlarmReasonEnums.NORMAL_2_ABNORMAL);
+            this.sendAlarmInfo("服务器磁盘空间不足", monitorServer, devName, dirName, total, used, usePercent, alarmLevelEnum, AlarmReasonEnums.NORMAL_2_ABNORMAL);
         } catch (Exception e) {
             log.error("服务器磁盘空间不足告警异常！", e);
         }
@@ -184,6 +193,8 @@ public class ServerDiskMonitor implements IServerMonitoringListener {
      * @param monitorServer   服务器信息
      * @param devName         分区的盘符名称
      * @param dirName         分区的盘符路径
+     * @param total           磁盘总大小
+     * @param used            磁盘已用大小
      * @param usePercent      磁盘资源的利用率
      * @param alarmLevelEnum  告警级别
      * @param alarmReasonEnum 告警原因
@@ -191,8 +202,8 @@ public class ServerDiskMonitor implements IServerMonitoringListener {
      * @author 皮锋
      * @custom.date 2020/3/25 14:46
      */
-    private void sendAlarmInfo(String title, MonitorServer monitorServer, String devName, String dirName,
-                               double usePercent, AlarmLevelEnums alarmLevelEnum, AlarmReasonEnums alarmReasonEnum)
+    private void sendAlarmInfo(String title, MonitorServer monitorServer, String devName, String dirName, String total,
+                               String used, double usePercent, AlarmLevelEnums alarmLevelEnum, AlarmReasonEnums alarmReasonEnum)
             throws NetException {
         // 告警是否打开
         boolean alarmEnable = this.monitoringConfigPropertiesLoader.getMonitoringProperties().getServerProperties().getServerDiskProperties().isAlarmEnable();
@@ -223,6 +234,7 @@ public class ServerDiskMonitor implements IServerMonitoringListener {
         }
         msgBuilder.append("，<br>磁盘分区名称：").append(devName)
                 .append("，<br>磁盘分区路径：").append(dirName)
+                .append("，<br>磁盘分区使用量：").append(used).append(" / ").append(total)
                 .append("，<br>磁盘分区使用率：").append(usePercent).append("%");
         msgBuilder.append("，<br>时间：").append(DateTimeUtils.dateToString(new Date()));
         Alarm alarm = Alarm.builder()
