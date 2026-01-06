@@ -1,5 +1,6 @@
 package com.gitee.pifeng.monitoring.server.business.server.monitor.server;
 
+import cn.hutool.core.io.unit.DataSizeUtil;
 import cn.hutool.core.util.NumberUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.gitee.pifeng.monitoring.common.constant.ZeroOrOneConstants;
@@ -109,15 +110,19 @@ public class ServerMemoryMonitor implements IServerMonitoringListener {
         }
         // 过载阈值
         double overloadThreshold = this.monitoringConfigPropertiesLoader.getMonitoringProperties().getServerProperties().getServerMemoryProperties().getOverloadThreshold();
+        // 物理内存总量
+        String menTotal = DataSizeUtil.format(monitorServerMemory.getMenTotal());
+        // 物理内存使用量
+        String menUsed = DataSizeUtil.format(monitorServerMemory.getMenUsed());
         // 物理内存使用率
         double menUsedPercent = NumberUtil.round(monitorServerMemory.getMenUsedPercent() * 100D, 2).doubleValue();
         // 物理内存使用率大于等于配置的过载阈值
         if (menUsedPercent >= overloadThreshold) {
             // 处理物理内存过载
-            this.dealMemoryOverLoad(monitorServer, menUsedPercent);
+            this.dealMemoryOverLoad(monitorServer, menUsedPercent, menTotal, menUsed);
         } else {
             // 处理物理内存正常
-            this.dealMemoryNotOverLoad(monitorServer, menUsedPercent);
+            this.dealMemoryNotOverLoad(monitorServer, menUsedPercent, menTotal, menUsed);
         }
     }
 
@@ -128,14 +133,16 @@ public class ServerMemoryMonitor implements IServerMonitoringListener {
      *
      * @param monitorServer  服务器信息
      * @param menUsedPercent 物理内存使用率
+     * @param menTotal       物理内存总量
+     * @param menUsed        物理内存使用量
      * @author 皮锋
      * @custom.date 2021/2/4 14:34
      */
-    private void dealMemoryNotOverLoad(MonitorServer monitorServer, double menUsedPercent) {
+    private void dealMemoryNotOverLoad(MonitorServer monitorServer, double menUsedPercent, String menTotal, String menUsed) {
         // 发送告警信息
         try {
             // 不用担心头次检测到内存正常（非异常转正常）会发送告警，最终是否发送告警由“实时监控服务”决定
-            this.sendAlarmInfo("服务器内存恢复正常", monitorServer, menUsedPercent, AlarmLevelEnums.INFO, AlarmReasonEnums.ABNORMAL_2_NORMAL);
+            this.sendAlarmInfo("服务器内存恢复正常", monitorServer, menUsedPercent, menTotal, menUsed, AlarmLevelEnums.INFO, AlarmReasonEnums.ABNORMAL_2_NORMAL);
         } catch (Exception e) {
             log.error("服务器内存恢复正常告警异常！", e);
         }
@@ -148,15 +155,17 @@ public class ServerMemoryMonitor implements IServerMonitoringListener {
      *
      * @param monitorServer  服务器信息
      * @param menUsedPercent 物理内存使用率
+     * @param menTotal       物理内存总量
+     * @param menUsed        物理内存使用量
      * @author 皮锋
      * @custom.date 2021/2/4 14:26
      */
-    private void dealMemoryOverLoad(MonitorServer monitorServer, double menUsedPercent) {
+    private void dealMemoryOverLoad(MonitorServer monitorServer, double menUsedPercent, String menTotal, String menUsed) {
         // 告警级别
         AlarmLevelEnums alarmLevelEnum = this.monitoringConfigPropertiesLoader.getMonitoringProperties().getServerProperties().getServerMemoryProperties().getLevelEnum();
         // 发送告警信息
         try {
-            this.sendAlarmInfo("服务器内存过载", monitorServer, menUsedPercent, alarmLevelEnum, AlarmReasonEnums.NORMAL_2_ABNORMAL);
+            this.sendAlarmInfo("服务器内存过载", monitorServer, menUsedPercent, menTotal, menUsed, alarmLevelEnum, AlarmReasonEnums.NORMAL_2_ABNORMAL);
         } catch (Exception e) {
             log.error("服务器内存过载告警异常！", e);
         }
@@ -172,12 +181,15 @@ public class ServerMemoryMonitor implements IServerMonitoringListener {
      * @param menUsedPercent  物理内存使用率
      * @param alarmLevelEnum  告警级别
      * @param alarmReasonEnum 告警原因
+     * @param menTotal        物理内存总量
+     * @param menUsed         物理内存使用量
      * @throws NetException 获取网络信息异常
      * @author 皮锋
      * @custom.date 2020/3/25 14:46
      */
-    private void sendAlarmInfo(String title, MonitorServer monitorServer, double menUsedPercent,
-                               AlarmLevelEnums alarmLevelEnum, AlarmReasonEnums alarmReasonEnum) throws NetException {
+    private void sendAlarmInfo(String title, MonitorServer monitorServer, double menUsedPercent, String menTotal,
+                               String menUsed, AlarmLevelEnums alarmLevelEnum, AlarmReasonEnums alarmReasonEnum)
+            throws NetException {
         // 告警是否打开
         boolean alarmEnable = this.monitoringConfigPropertiesLoader.getMonitoringProperties().getServerProperties().getServerMemoryProperties().isAlarmEnable();
         if (!alarmEnable) {
@@ -205,6 +217,7 @@ public class ServerMemoryMonitor implements IServerMonitoringListener {
         if (StringUtils.isNotBlank(monitorGroup)) {
             msgBuilder.append("，<br>分组：").append(monitorGroup);
         }
+        msgBuilder.append("，<br>内存使用量：").append(menUsed).append(" / ").append(menTotal);
         msgBuilder.append("，<br>内存使用率：").append(menUsedPercent).append("%");
         msgBuilder.append("，<br>时间：").append(DateTimeUtils.dateToString(new Date()));
         Alarm alarm = Alarm.builder()
