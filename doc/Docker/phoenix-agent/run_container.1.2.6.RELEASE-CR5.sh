@@ -40,6 +40,7 @@ docker run -d \
   --net host \
   --uts=host \
   --security-opt label=disable \
+  --security-opt apparmor=unconfined \
   --cap-add=SYS_RAWIO \
   --cap-add=SYS_ADMIN \
   --restart unless-stopped \
