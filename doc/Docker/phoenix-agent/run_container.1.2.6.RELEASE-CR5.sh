@@ -30,7 +30,6 @@ fi
 echo "Starting '${CONTAINER_NAME}' container..."
 docker run -d \
   -v /dev:/dev:ro \
-  -v /proc:/proc:ro \
   -v /sys:/sys:ro \
   -v /etc/localtime:/etc/localtime:ro \
   -v /etc/os-release:/etc/os-release:ro \
