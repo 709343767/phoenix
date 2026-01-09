@@ -42,6 +42,7 @@ public class Oracle {
             "S.PROGRAM AS PROGRAM, " +
             "S.EVENT AS EVENT, " +
             "S.SECONDS_IN_WAIT AS WAITTIME, " +
+            "S.LAST_CALL_ET AS LAST_CALL_ET, " +
             "TO_CHAR(SUBSTR(SQ.SQL_FULLTEXT, 0, 2000)) AS SQL " +
             "FROM " +
             "GV$SESSION S, " +
