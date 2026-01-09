@@ -148,7 +148,7 @@ CREATE TABLE `MONITOR_DISTRIBUTED_LOCK`
     `OWNER`       varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT '锁持有者',
     `EXPIRE_TIME` datetime(3)                                                   NOT NULL COMMENT '过期时间（防死锁，毫秒精度）',
     PRIMARY KEY (`LOCK_KEY`) USING BTREE,
-    INDEX `UX_EXPIRE_TIME` (`EXPIRE_TIME` ASC) USING BTREE COMMENT '索引_过期时间'
+    INDEX `NX_EXPIRE_TIME` (`EXPIRE_TIME`) USING BTREE COMMENT '索引_过期时间'
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_general_ci COMMENT = '分布式锁表'
