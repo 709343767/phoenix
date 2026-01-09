@@ -20,6 +20,7 @@ import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorAlarmRecordSe
 import com.gitee.pifeng.monitoring.ui.business.web.vo.LayUiAdminResultVo;
 import com.gitee.pifeng.monitoring.ui.business.web.vo.MonitorAlarmRecordVo;
 import com.gitee.pifeng.monitoring.ui.constant.WebResponseConstants;
+import com.gitee.pifeng.monitoring.ui.util.HtmlUtils;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -101,6 +102,8 @@ public class MonitorAlarmRecordServiceImpl extends ServiceImpl<IMonitorAlarmReco
         List<MonitorAlarmRecordVo> monitorAlarmRecordVos = Lists.newLinkedList();
         for (MonitorAlarmRecord monitorAlarmRecord : monitorAlarmRecords) {
             MonitorAlarmRecordVo monitorAlarmRecordVo = MonitorAlarmRecordVo.builder().build().convertFor(monitorAlarmRecord);
+            // 告警内容
+            monitorAlarmRecordVo.setContent(HtmlUtils.escapeHtmlButAllowBr(monitorAlarmRecordVo.getContent()));
             monitorAlarmRecordVos.add(monitorAlarmRecordVo);
         }
         // 设置返回对象
@@ -260,6 +263,9 @@ public class MonitorAlarmRecordServiceImpl extends ServiceImpl<IMonitorAlarmReco
         monitorAlarmRecordVo.setWay(StringUtils.isBlank(way) ? way : way.replace(",", "、")
                 .replace(AlarmWayEnums.SMS.name(), "短信")
                 .replace(AlarmWayEnums.MAIL.name(), "邮件"));
+        // 告警内容
+        String content = monitorAlarmRecordVo.getContent();
+        monitorAlarmRecordVo.setContent(HtmlUtils.escapeHtmlButAllowBr(content));
         return monitorAlarmRecordVo;
     }
 
