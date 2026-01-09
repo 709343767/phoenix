@@ -30,7 +30,6 @@ fi
 echo "Starting '${CONTAINER_NAME}' container..."
 docker run -itd \
   -v /dev:/dev:ro \
-  -v /proc:/proc:ro \
   -v /sys:/sys:ro \
   -v /etc/localtime:/etc/localtime:ro \
   -v /etc/os-release:/etc/os-release:ro \
@@ -41,6 +40,7 @@ docker run -itd \
   --net host \
   --uts=host \
   --security-opt label=disable \
+  --security-opt apparmor=unconfined \
   --cap-add=SYS_RAWIO \
   --cap-add=SYS_ADMIN \
   --restart unless-stopped \
@@ -61,6 +61,7 @@ echo "Container '${CONTAINER_NAME}' started successfully."
 # --net host                                                      # 共享网络
 # --uts=host                                                      # 共享宿主机 UTS 命名空间（使容器内 hostname 与宿主机一致）
 # --security-opt label=disable                                    # 关 SELinux（CentOS）
+# --security-opt apparmor=unconfined                              # 禁用 AppArmor 对容器的限制
 # --cap-add=SYS_RAWIO                                             # 原始 I/O 权限
 # --cap-add=SYS_ADMIN                                             # 访问 /sys、/proc
 # --restart unless-stopped                                        # 自启（除非手动停）
