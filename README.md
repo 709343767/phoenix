@@ -165,7 +165,9 @@
 
 最低资源需求：1 核 CPU / 2 GB 内存 / 5 GB 磁盘
 
-### 1.安装数据库、phoenix-server、phoenix-ui
+更多使用方式，请参考 **使用说明**
+
+### 安装数据库、phoenix-server、phoenix-ui
 
 #### Docker安装
 
@@ -183,7 +185,15 @@ bash -c "$(curl -fsSL https://gitee.com/monitoring-platform/phoenix/raw/master/d
 bash -c "$(curl -fsSL https://gitee.com/monitoring-platform/phoenix/raw/master/doc/DockerCompose/install.sh)"
 ```
 
-### 2.Docker 单独安装 phoenix-agent
+### 配置服务
+
+安装完成后，请执行以下操作：  
+1.从源码目录 **phoenix/phoenix-server/src/main/resources/** 中复制 **application-prod.yml** 文件；  
+2.将其放置于服务器路径 **/data/phoenix/phoenix-server/config/**；
+3.编辑该文件，把电子邮件配置正确配置好；
+4.重启 **phoenix-server** 容器。
+
+### Docker 单独安装 phoenix-agent
 
 如果需要监控服务器，则需要单独安装 **phoenix-agent**：
 
@@ -191,9 +201,11 @@ bash -c "$(curl -fsSL https://gitee.com/monitoring-platform/phoenix/raw/master/d
 bash -c "$(curl -fsSL https://gitee.com/monitoring-platform/phoenix/raw/master/doc/Docker/phoenix-agent/install_agent.sh)"
 ```
 
-安装完后，在服务器 **/data/phoenix/phoenix-agent/config** 路径下新增配置文件 **monitoring-prod.properties**， 配置文件在源码中(**phoenix/phoenix-agent/src/main/resources/monitoring-prod.properties**)复制，然后配置**monitoring.comm.http.url=http://{phoenix-server服务的IP}:16000/phoenix-server**。
-
-更多使用方式，请参考 **使用说明**
+安装完成后，请执行以下操作：  
+1.从源码目录 **phoenix/phoenix-agent/src/main/resources/** 中复制 **monitoring-prod.properties** 文件；  
+2.将其放置于服务器路径 **/data/phoenix/phoenix-agent/config/**；  
+3.编辑该文件，将 **monitoring.comm.http.url** 的值配置为 **http://{phoenix-server主机IP}:16000/phoenix-server**；
+4.重启 **phoenix-agent** 容器。
 
 ### 访问地址
 
