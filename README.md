@@ -167,7 +167,7 @@
 
 ### 1.安装数据库、phoenix-server、phoenix-ui
 
-#### Docker安装
+#### 1.1.Docker安装
 
 软件依赖：Docker 20.10.14 版本以上
 
@@ -175,7 +175,7 @@
 bash -c "$(curl -fsSL https://gitee.com/monitoring-platform/phoenix/raw/master/doc/Docker/install.sh)"
 ```
 
-#### Docker Compose安装
+#### 1.2.Docker Compose安装
 
 软件依赖：Docker Compose 2.0.0 版本以上
 
@@ -187,7 +187,7 @@ bash -c "$(curl -fsSL https://gitee.com/monitoring-platform/phoenix/raw/master/d
 
 如果需要监控服务器，则需要单独安装 **phoenix-agent**。
 
-#### Docker安装
+#### 2.1.Docker安装
 
 ```shell
 bash -c "$(curl -fsSL https://gitee.com/monitoring-platform/phoenix/raw/master/doc/Docker/phoenix-agent/install_agent.sh)"
@@ -195,7 +195,7 @@ bash -c "$(curl -fsSL https://gitee.com/monitoring-platform/phoenix/raw/master/d
 
 ### 3.配置服务
 
-#### 配置phoenix-server
+#### 3.1.配置phoenix-server
 
 安装完成后，请执行以下操作：  
 1.从源码目录 **phoenix/phoenix-server/src/main/resources/** 中复制 **application-prod.yml** 文件；  
@@ -203,7 +203,7 @@ bash -c "$(curl -fsSL https://gitee.com/monitoring-platform/phoenix/raw/master/d
 3.编辑该文件，把电子邮件配置正确配置好；  
 4.重启 **phoenix-server** 容器。
 
-#### 配置phoenix-agent
+#### 3.2.配置phoenix-agent
 
 安装完成后，请执行以下操作：  
 1.从源码目录 **phoenix/phoenix-agent/src/main/resources/** 中复制 **monitoring-prod.properties** 文件；  
