@@ -165,7 +165,9 @@
 
 最低资源需求：1 核 CPU / 2 GB 内存 / 5 GB 磁盘
 
-### Docker安装
+### 1.安装数据库、phoenix-server、phoenix-ui
+
+#### Docker安装
 
 软件依赖：Docker 20.10.14 版本以上
 
@@ -173,13 +175,23 @@
 bash -c "$(curl -fsSL https://gitee.com/monitoring-platform/phoenix/raw/master/doc/Docker/install.sh)"
 ```
 
-### Docker Compose安装
+#### Docker Compose安装
 
 软件依赖：Docker Compose 2.0.0 版本以上
 
 ```shell
 bash -c "$(curl -fsSL https://gitee.com/monitoring-platform/phoenix/raw/master/doc/DockerCompose/install.sh)"
 ```
+
+### 2.Docker 单独安装 phoenix-agent
+
+如果需要监控服务器，则需要单独安装 **phoenix-agent**：
+
+```shell
+bash -c "$(curl -fsSL https://gitee.com/monitoring-platform/phoenix/raw/master/doc/Docker/phoenix-agent/install_agent.sh)"
+```
+
+安装完后，在服务器 **/data/phoenix/phoenix-agent/config** 路径下新增配置文件 **monitoring-prod.properties**， 配置文件在源码中(**phoenix/phoenix-agent/src/main/resources/monitoring-prod.properties**)复制，然后配置**monitoring.comm.http.url=http://{phoenix-server服务的IP}:16000/phoenix-server**。
 
 更多使用方式，请参考 **使用说明**
 
