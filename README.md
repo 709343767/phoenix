@@ -193,13 +193,17 @@ bash -c "$(curl -fsSL https://gitee.com/monitoring-platform/phoenix/raw/master/d
 3.编辑该文件，把电子邮件配置正确配置好；  
 4.重启 **phoenix-server** 容器。
 
-### Docker 单独安装 phoenix-agent
+### 安装phoenix-agent
+
+#### Docker安装
 
 如果需要监控服务器，则需要单独安装 **phoenix-agent**：
 
 ```shell
 bash -c "$(curl -fsSL https://gitee.com/monitoring-platform/phoenix/raw/master/doc/Docker/phoenix-agent/install_agent.sh)"
 ```
+
+### 配置服务
 
 安装完成后，请执行以下操作：  
 1.从源码目录 **phoenix/phoenix-agent/src/main/resources/** 中复制 **monitoring-prod.properties** 文件；  
