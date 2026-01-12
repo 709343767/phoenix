@@ -189,8 +189,8 @@ bash -c "$(curl -fsSL https://gitee.com/monitoring-platform/phoenix/raw/master/d
 
 安装完成后，请执行以下操作：  
 1.从源码目录 **phoenix/phoenix-server/src/main/resources/** 中复制 **application-prod.yml** 文件；  
-2.将其放置于服务器路径 **/data/phoenix/phoenix-server/config/**；
-3.编辑该文件，把电子邮件配置正确配置好；
+2.将其放置于服务器路径 **/data/phoenix/phoenix-server/config/**；  
+3.编辑该文件，把电子邮件配置正确配置好；  
 4.重启 **phoenix-server** 容器。
 
 ### Docker 单独安装 phoenix-agent
@@ -204,7 +204,7 @@ bash -c "$(curl -fsSL https://gitee.com/monitoring-platform/phoenix/raw/master/d
 安装完成后，请执行以下操作：  
 1.从源码目录 **phoenix/phoenix-agent/src/main/resources/** 中复制 **monitoring-prod.properties** 文件；  
 2.将其放置于服务器路径 **/data/phoenix/phoenix-agent/config/**；  
-3.编辑该文件，将 **monitoring.comm.http.url** 的值配置为 **http://{phoenix-server主机IP}:16000/phoenix-server**；
+3.编辑该文件，将 **monitoring.comm.http.url** 的值配置为 **http://{phoenix-server主机IP}:16000/phoenix-server**；  
 4.重启 **phoenix-agent** 容器。
 
 ### 访问地址
