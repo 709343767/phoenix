@@ -161,13 +161,11 @@
 
 ## 快速使用
 
-一键安装：3 分钟即可完成自动安装
+一键安装：10 分钟即可完成自动安装
 
 最低资源需求：1 核 CPU / 2 GB 内存 / 5 GB 磁盘
 
-更多使用方式，请参考 **使用说明**
-
-### 安装数据库、phoenix-server、phoenix-ui
+### 1.安装数据库、phoenix-server、phoenix-ui
 
 #### Docker安装
 
@@ -185,17 +183,17 @@ bash -c "$(curl -fsSL https://gitee.com/monitoring-platform/phoenix/raw/master/d
 bash -c "$(curl -fsSL https://gitee.com/monitoring-platform/phoenix/raw/master/doc/DockerCompose/install.sh)"
 ```
 
-### 安装phoenix-agent
+### 2.安装phoenix-agent
+
+如果需要监控服务器，则需要单独安装 **phoenix-agent**。
 
 #### Docker安装
-
-如果需要监控服务器，则需要单独安装 **phoenix-agent**：
 
 ```shell
 bash -c "$(curl -fsSL https://gitee.com/monitoring-platform/phoenix/raw/master/doc/Docker/phoenix-agent/install_agent.sh)"
 ```
 
-### 配置服务
+### 3.配置服务
 
 #### 配置phoenix-server
 
@@ -212,6 +210,8 @@ bash -c "$(curl -fsSL https://gitee.com/monitoring-platform/phoenix/raw/master/d
 2.将其放置于服务器路径 **/data/phoenix/phoenix-agent/config/**；  
 3.编辑该文件，将 **monitoring.comm.http.url** 的值配置为 **http://phoenix-server主机IP:16000/phoenix-server**；  
 4.重启 **phoenix-agent** 容器。
+
+更多使用方式，请参考 **使用说明**。
 
 ### 访问地址
 
