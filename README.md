@@ -185,14 +185,6 @@ bash -c "$(curl -fsSL https://gitee.com/monitoring-platform/phoenix/raw/master/d
 bash -c "$(curl -fsSL https://gitee.com/monitoring-platform/phoenix/raw/master/doc/DockerCompose/install.sh)"
 ```
 
-### 配置服务
-
-安装完成后，请执行以下操作：  
-1.从源码目录 **phoenix/phoenix-server/src/main/resources/** 中复制 **application-prod.yml** 文件；  
-2.将其放置于服务器路径 **/data/phoenix/phoenix-server/config/**；  
-3.编辑该文件，把电子邮件配置正确配置好；  
-4.重启 **phoenix-server** 容器。
-
 ### 安装phoenix-agent
 
 #### Docker安装
@@ -204,6 +196,16 @@ bash -c "$(curl -fsSL https://gitee.com/monitoring-platform/phoenix/raw/master/d
 ```
 
 ### 配置服务
+
+#### 配置phoenix-server
+
+安装完成后，请执行以下操作：  
+1.从源码目录 **phoenix/phoenix-server/src/main/resources/** 中复制 **application-prod.yml** 文件；  
+2.将其放置于服务器路径 **/data/phoenix/phoenix-server/config/**；  
+3.编辑该文件，把电子邮件配置正确配置好；  
+4.重启 **phoenix-server** 容器。
+
+#### 配置phoenix-agent
 
 安装完成后，请执行以下操作：  
 1.从源码目录 **phoenix/phoenix-agent/src/main/resources/** 中复制 **monitoring-prod.properties** 文件；  
