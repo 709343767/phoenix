@@ -189,6 +189,8 @@ bash -c "$(curl -fsSL https://gitee.com/monitoring-platform/phoenix/raw/master/d
 
 #### 2.1.Docker安装
 
+软件依赖：Docker 20.10.14 版本以上
+
 ```shell
 bash -c "$(curl -fsSL https://gitee.com/monitoring-platform/phoenix/raw/master/doc/Docker/phoenix-agent/install_agent.sh)"
 ```
