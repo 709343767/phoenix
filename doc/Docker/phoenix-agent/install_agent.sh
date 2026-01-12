@@ -11,4 +11,4 @@ RUN_CONTAINER_PHOENIX_AGENT_URL="https://gitee.com/monitoring-platform/phoenix/r
 echo "Executing Phoenix Agent container script..."
 bash -c "$(curl -fsSL "${RUN_CONTAINER_PHOENIX_AGENT_URL}")"
 
-echo "Remote scripts have been executed successfully..."
+echo "Remote script have been executed successfully..."
