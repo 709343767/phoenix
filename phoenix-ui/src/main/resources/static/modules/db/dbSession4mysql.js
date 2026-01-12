@@ -4,9 +4,9 @@
         var admin = layui.admin, form = layui.form, layer = layui.layer, table = layui.table,
             device = layui.device();
         table.render({
-            elem: '#list-table',
+            elem: '#list-table-session',
             url: ctxPath + 'db-session4mysql/get-session-list?id=' + id,
-            toolbar: '#list-table-toolbar',
+            toolbar: '#list-table-session-toolbar',
             request: {
                 pageName: 'current',//页码的参数名称，默认：page
                 limitName: 'size' //每页数据量的参数名，默认：limit
@@ -82,7 +82,7 @@
                     width: 85,
                     align: 'center',
                     fixed: (device.ios || device.android) ? false : 'right',
-                    toolbar: '#list-table-toolbar-detail'
+                    toolbar: '#list-table-session-toolbar-detail'
                 }]
             ],
             page: {
@@ -93,33 +93,33 @@
             height: (device.ios || device.android) ? 'full' : 'full-250'
         });
         //监听搜索
-        form.on('submit(list-table-search)', function (data) {
+        form.on('submit(list-table-session-search)', function (data) {
             var field = data.field;
             //执行重载
-            table.reload('list-table', {
+            table.reload('list-table-session', {
                 where: field
             });
         });
         // 监听重置
-        form.on('submit(list-table-reset)', function (data) {
+        form.on('submit(list-table-session-reset)', function (data) {
             var field = data.field;
             // 清空所有字段的值
             field = clearFields(field);
             //执行重载
-            table.reload('list-table', {
+            table.reload('list-table-session', {
                 where: field
             });
         });
         // 点击表头排序
-        table.on('sort(list-table)', function (obj) {
-            //table.reload('list-table', {
+        table.on('sort(list-table-session)', function (obj) {
+            //table.reload('list-table-session', {
             //  initSort: obj
             //});
         });
         //头工具栏事件
-        table.on('toolbar(list-table)', function (obj) {
+        table.on('toolbar(list-table-session)', function (obj) {
             if (obj.event === 'batchdel') {
-                var checkStatus = table.checkStatus('list-table'), checkData = checkStatus.data; //得到选中的数据
+                var checkStatus = table.checkStatus('list-table-session'), checkData = checkStatus.data; //得到选中的数据
                 if (checkData.length === 0) {
                     return layer.msg('请选择数据');
                 }
@@ -140,7 +140,7 @@
                         success: function (result) {
                             var data = result.data;
                             if (data === webConst.SUCCESS) {
-                                table.reload('list-table'); //数据刷新
+                                table.reload('list-table-session'); //数据刷新
                                 layer.msg('操作成功！', {icon: 6});
                             } else {
                                 layer.msg('操作失败！', {icon: 5, shift: 6});
@@ -158,11 +158,11 @@
             }
             // 刷新
             if (obj.event === 'batchRefresh') {
-                table.reload('list-table'); //数据刷新
+                table.reload('list-table-session'); //数据刷新
             }
         });
         //监听工具条
-        table.on('tool(list-table)', function (obj) {
+        table.on('tool(list-table-session)', function (obj) {
             var data = obj.data;
             if (obj.event === 'del') {
                 layer.confirm('确定结束会话吗？', function (index) {
@@ -183,7 +183,7 @@
                             var data = result.data;
                             if (data === webConst.SUCCESS) {
                                 obj.del();
-                                table.reload('list-table'); //数据刷新
+                                table.reload('list-table-session'); //数据刷新
                                 layer.msg('操作成功！', {icon: 6});
                             } else {
                                 layer.msg('操作失败！', {icon: 5, shift: 6});

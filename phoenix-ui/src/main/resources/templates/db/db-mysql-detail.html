@@ -81,22 +81,22 @@
                                 </div>
                                 <div class="layui-inline">
                                     <button class="layui-btn layuiadmin-btn-useradmin" lay-submit
-                                            lay-filter="list-table-search">
+                                            lay-filter="list-table-session-search">
                                         <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
                                     </button>
-                                    <button class="layui-btn" id="reset" lay-filter="list-table-reset" lay-submit
-                                            type="reset">
+                                    <button class="layui-btn" id="reset" lay-filter="list-table-session-reset"
+                                            lay-submit type="reset">
                                         清空
                                     </button>
                                 </div>
                             </form>
                         </div>
                         <div class="layui-card-body">
-                            <table id="list-table" lay-filter="list-table"></table>
+                            <table id="list-table-session" lay-filter="list-table-session"></table>
                             <script type="text/html" id="imgTpl">
                                 <img style="display: inline-block; width: 50%; height: 100%;" src={{ d.avatar }}>
                             </script>
-                            <script type="text/html" id="list-table-toolbar">
+                            <script type="text/html" id="list-table-session-toolbar">
                                 <div class="layui-btn-group">
                                     <button class="layui-btn layui-btn-sm layuiadmin-btn-useradmin"
                                             lay-event="batchRefresh">
@@ -109,7 +109,7 @@
                                     </button>
                                 </div>
                             </script>
-                            <script type="text/html" id="list-table-toolbar-detail">
+                            <script type="text/html" id="list-table-session-toolbar-detail">
                                 <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"
                                    sec:authorize="hasAuthority('超级管理员')">
                                     <i class="layui-icon layui-icon-delete"></i>结束</a>
