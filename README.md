@@ -215,7 +215,7 @@ bash -c "$(curl -fsSL https://gitee.com/monitoring-platform/phoenix/raw/master/d
 
 更多使用方式，请参考 **使用说明**。
 
-### 访问地址
+### 4.访问地址
 
 访问 URL：http://phoenix-ui主机IP/phoenix-ui/index ，初始账号/密码：admin/admin123，guest/guest123
 
