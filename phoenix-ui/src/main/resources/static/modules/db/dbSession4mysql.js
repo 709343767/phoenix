@@ -73,7 +73,7 @@
                     sort: !0
                 }, {
                     field: 'info',
-                    title: '命令文本',
+                    title: 'SQL',
                     minWidth: 300,
                     sort: !0
                 }, {
