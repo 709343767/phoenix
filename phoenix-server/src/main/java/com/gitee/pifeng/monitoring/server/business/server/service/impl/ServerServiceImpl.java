@@ -236,6 +236,8 @@ public class ServerServiceImpl extends ServiceImpl<IMonitorServerDao, MonitorSer
             return Result.builder().isSuccess(false).msg("并行处理服务器信息包被中断！").build();
         } catch (TimeoutException e) {
             log.error("并行处理服务器信息包超时(30s)：{}", e.getMessage(), e);
+            // 取消所有子任务（会触发线程中断）
+            allFutures.cancel(true);
             return Result.builder().isSuccess(false).msg("并行处理服务器信息包超时(30s)！").build();
         } catch (Exception e) {
             log.error("并行处理服务器信息包出错：{}", e.getMessage(), e);
