@@ -72,7 +72,7 @@ public class MyBatisPlusAutoGenerator {
 
         // 数据源配置
         DataSourceConfig dsc = new DataSourceConfig();
-        dsc.setUrl("jdbc:mysql://localhost:3306/phoenix?useSSL=false&serverTimezone=GMT%2b8&useUnicode=true&characterEncoding=utf-8");
+        dsc.setUrl("jdbc:mysql://localhost:3306/phoenix?useSSL=false&serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8");
         dsc.setDbType(DbType.MYSQL);
         dsc.setDriverName("com.mysql.cj.jdbc.Driver");
         dsc.setUsername("root");
