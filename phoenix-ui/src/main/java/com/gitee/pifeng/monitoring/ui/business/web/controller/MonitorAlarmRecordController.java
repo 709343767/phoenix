@@ -85,6 +85,8 @@ public class MonitorAlarmRecordController {
      * @param size       每页显示条数
      * @param type       告警类型
      * @param level      告警级别
+     * @param way        告警方式
+     * @param status     告警状态（0：失败；1：成功）
      * @param title      告警标题
      * @param content    告警内容
      * @param insertDate 记录日期
@@ -98,6 +100,8 @@ public class MonitorAlarmRecordController {
             @Parameter(name = "size", description = "每页显示条数", required = true, in = ParameterIn.QUERY),
             @Parameter(name = "type", description = "告警类型", in = ParameterIn.QUERY),
             @Parameter(name = "level", description = "告警级别", in = ParameterIn.QUERY),
+            @Parameter(name = "way", description = "告警方式", in = ParameterIn.QUERY),
+            @Parameter(name = "status", description = "告警状态（0：失败；1：成功）", in = ParameterIn.QUERY),
             @Parameter(name = "title", description = "告警标题", in = ParameterIn.QUERY),
             @Parameter(name = "content", description = "告警内容", in = ParameterIn.QUERY),
             @Parameter(name = "insertDate", description = "记录日期", in = ParameterIn.QUERY)})
@@ -108,10 +112,12 @@ public class MonitorAlarmRecordController {
                                                         @RequestParam(value = "size") Long size,
                                                         @RequestParam(value = "type", required = false) String type,
                                                         @RequestParam(value = "level", required = false) String level,
+                                                        @RequestParam(value = "way", required = false) String way,
+                                                        @RequestParam(value = "status", required = false) String status,
                                                         @RequestParam(value = "title", required = false) String title,
                                                         @RequestParam(value = "content", required = false) String content,
                                                         @RequestParam(value = "insertDate", required = false) String insertDate) {
-        Page<MonitorAlarmRecordVo> page = this.monitorAlarmRecordService.getMonitorAlarmRecordList(current, size, type, level, title, content, insertDate);
+        Page<MonitorAlarmRecordVo> page = this.monitorAlarmRecordService.getMonitorAlarmRecordList(current, size, type, level, way, status, title, content, insertDate);
         return LayUiAdminResultVo.ok(page);
     }
 
@@ -159,6 +165,8 @@ public class MonitorAlarmRecordController {
      *
      * @param type       告警类型
      * @param level      告警级别
+     * @param way        告警方式
+     * @param status     告警状态（0：失败；1：成功）
      * @param title      告警标题
      * @param content    告警内容
      * @param insertDate 记录日期
@@ -169,6 +177,8 @@ public class MonitorAlarmRecordController {
     @Parameters(value = {
             @Parameter(name = "type", description = "告警类型", in = ParameterIn.QUERY),
             @Parameter(name = "level", description = "告警级别", in = ParameterIn.QUERY),
+            @Parameter(name = "way", description = "告警方式", in = ParameterIn.QUERY),
+            @Parameter(name = "status", description = "告警状态（0：失败；1：成功）", in = ParameterIn.QUERY),
             @Parameter(name = "title", description = "告警标题", in = ParameterIn.QUERY),
             @Parameter(name = "content", description = "告警内容", in = ParameterIn.QUERY),
             @Parameter(name = "insertDate", description = "记录日期", in = ParameterIn.QUERY)})
@@ -177,11 +187,13 @@ public class MonitorAlarmRecordController {
     @OperateLog(operModule = UiModuleConstants.ALARM, operType = OperateTypeConstants.EXPORT, operDesc = "导出告警记录列表")
     public void exportMonitorAlarmRecordList(@RequestParam(value = "type", required = false) String type,
                                              @RequestParam(value = "level", required = false) String level,
+                                             @RequestParam(value = "way", required = false) String way,
+                                             @RequestParam(value = "status", required = false) String status,
                                              @RequestParam(value = "title", required = false) String title,
                                              @RequestParam(value = "content", required = false) String content,
                                              @RequestParam(value = "insertDate", required = false) String insertDate) {
         String name = "告警记录";
-        List<MonitorAlarmRecordVo> monitorAlarmRecordVos = this.monitorAlarmRecordService.getMonitorAlarmRecordList(type, level, title, content, insertDate);
+        List<MonitorAlarmRecordVo> monitorAlarmRecordVos = this.monitorAlarmRecordService.getMonitorAlarmRecordList(type, level, way, status, title, content, insertDate);
         if (CollectionUtils.isEmpty(monitorAlarmRecordVos)) {
             // 倒序
             Collections.reverse(monitorAlarmRecordVos);
@@ -195,8 +207,8 @@ public class MonitorAlarmRecordController {
             // 截取
             monitorAlarmRecordVo.setContent(alarmRecordVoContent.length() >= 500 ? StringUtils.substring(alarmRecordVoContent, 0, 500) + "......" : alarmRecordVoContent);
             // 告警方式，多种方式用逗号分隔
-            String way = monitorAlarmRecordVo.getWay();
-            monitorAlarmRecordVo.setWay(StringUtils.isBlank(way) ? way : way.replace(",", "、")
+            String alarmWay = monitorAlarmRecordVo.getWay();
+            monitorAlarmRecordVo.setWay(StringUtils.isBlank(alarmWay) ? alarmWay : alarmWay.replace(",", "、")
                     .replace(AlarmWayEnums.SMS.name(), "短信")
                     .replace(AlarmWayEnums.MAIL.name(), "邮件"));
         }

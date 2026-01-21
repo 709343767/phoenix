@@ -64,6 +64,8 @@ public class MonitorAlarmRecordServiceImpl extends ServiceImpl<IMonitorAlarmReco
      * @param size       每页显示条数
      * @param type       告警类型
      * @param level      告警级别
+     * @param way        告警方式
+     * @param status     告警状态（0：失败；1：成功）
      * @param title      告警标题
      * @param content    告警内容
      * @param insertDate 记录日期
@@ -72,8 +74,9 @@ public class MonitorAlarmRecordServiceImpl extends ServiceImpl<IMonitorAlarmReco
      * @custom.date 2020/8/3 11:07
      */
     @Override
-    public Page<MonitorAlarmRecordVo> getMonitorAlarmRecordList(Long current, Long size, String type, String level, String title,
-                                                                String content, String insertDate) {
+    public Page<MonitorAlarmRecordVo> getMonitorAlarmRecordList(Long current, Long size, String type, String level,
+                                                                String way, String status, String title, String content,
+                                                                String insertDate) {
         // 查询数据库
         IPage<MonitorAlarmRecord> ipage = new Page<>(current, size);
         LambdaQueryWrapper<MonitorAlarmRecord> lambdaQueryWrapper = new LambdaQueryWrapper<>();
@@ -84,6 +87,17 @@ public class MonitorAlarmRecordServiceImpl extends ServiceImpl<IMonitorAlarmReco
         }
         if (StringUtils.isNotBlank(level)) {
             lambdaQueryWrapper.eq(MonitorAlarmRecord::getLevel, level);
+        }
+        if (StringUtils.isNotBlank(way)) {
+            lambdaQueryWrapper.like(MonitorAlarmRecord::getWay, way);
+        }
+        if (StringUtils.isNotBlank(status)) {
+            // 0：失败；1：成功
+            if (StringUtils.equals(status, "0")) {
+                lambdaQueryWrapper.like(MonitorAlarmRecord::getWay, "失败");
+            } else if (StringUtils.equals(status, "1")) {
+                lambdaQueryWrapper.like(MonitorAlarmRecord::getWay, "成功");
+            }
         }
         if (StringUtils.isNotBlank(title)) {
             lambdaQueryWrapper.like(MonitorAlarmRecord::getTitle, title);
@@ -120,6 +134,8 @@ public class MonitorAlarmRecordServiceImpl extends ServiceImpl<IMonitorAlarmReco
      *
      * @param type       告警类型
      * @param level      告警级别
+     * @param way        告警方式
+     * @param status     告警状态（0：失败；1：成功）
      * @param title      告警标题
      * @param content    告警内容
      * @param insertDate 记录日期
@@ -128,7 +144,8 @@ public class MonitorAlarmRecordServiceImpl extends ServiceImpl<IMonitorAlarmReco
      * @custom.date 2021/5/18 22:50
      */
     @Override
-    public List<MonitorAlarmRecordVo> getMonitorAlarmRecordList(String type, String level, String title, String content, String insertDate) {
+    public List<MonitorAlarmRecordVo> getMonitorAlarmRecordList(String type, String level, String way, String status,
+                                                                String title, String content, String insertDate) {
         LambdaQueryWrapper<MonitorAlarmRecord> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         // 倒叙查询
         lambdaQueryWrapper.orderByDesc(MonitorAlarmRecord::getInsertTime);
@@ -137,6 +154,17 @@ public class MonitorAlarmRecordServiceImpl extends ServiceImpl<IMonitorAlarmReco
         }
         if (StringUtils.isNotBlank(level)) {
             lambdaQueryWrapper.eq(MonitorAlarmRecord::getLevel, level);
+        }
+        if (StringUtils.isNotBlank(way)) {
+            lambdaQueryWrapper.like(MonitorAlarmRecord::getWay, way);
+        }
+        if (StringUtils.isNotBlank(status)) {
+            // 0：失败；1：成功
+            if (StringUtils.equals(status, "0")) {
+                lambdaQueryWrapper.like(MonitorAlarmRecord::getWay, "失败");
+            } else if (StringUtils.equals(status, "1")) {
+                lambdaQueryWrapper.like(MonitorAlarmRecord::getWay, "成功");
+            }
         }
         if (StringUtils.isNotBlank(title)) {
             lambdaQueryWrapper.like(MonitorAlarmRecord::getTitle, title);
@@ -280,7 +308,7 @@ public class MonitorAlarmRecordServiceImpl extends ServiceImpl<IMonitorAlarmReco
      */
     @Override
     public LayUiAdminResultVo getLast5AlarmRecord() {
-        Page<MonitorAlarmRecordVo> monitorAlarmRecordVoPage = this.getMonitorAlarmRecordList(1L, 5L, null, null, null, null, null);
+        Page<MonitorAlarmRecordVo> monitorAlarmRecordVoPage = this.getMonitorAlarmRecordList(1L, 5L, null, null, null, null, null, null, null);
         List<MonitorAlarmRecordVo> monitorAlarmRecordVos = monitorAlarmRecordVoPage.getRecords();
         return LayUiAdminResultVo.ok(monitorAlarmRecordVos);
     }
