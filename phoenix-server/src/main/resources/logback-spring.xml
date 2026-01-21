@@ -47,6 +47,37 @@
     </appender>
 
     <!-- 按照每天生成日志文件 -->
+    <appender name="FILE_WARN"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_HOME}/warn.log</file>
+        <rollingPolicy
+                class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!--日志文件输出的文件名 -->
+            <fileNamePattern>${LOG_HOME}/warn.%d{yyyy-MM-dd}.%i.log
+            </fileNamePattern>
+            <!--日志文件最大的大小 -->
+            <maxFileSize>2MB</maxFileSize>
+            <!--日志文件保留天数 -->
+            <maxHistory>30</maxHistory>
+            <!--日志文件的上限大小 -->
+            <totalSizeCap>1GB</totalSizeCap>
+        </rollingPolicy>
+        <encoder
+                class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符 -->
+            <pattern><![CDATA[%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] %logger{50}.%M -%msg%n]]></pattern>
+            <!-- 此处设置字符集 -->
+            <charset>UTF-8</charset>
+        </encoder>
+        <!-- 只打印WARN日志 -->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>WARN</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+
+    <!-- 按照每天生成日志文件 -->
     <appender name="FILE_ERROR"
               class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${LOG_HOME}/error.log</file>
@@ -83,6 +114,7 @@
     <root level="INFO">
         <appender-ref ref="STDOUT"/>
         <appender-ref ref="FILE"/>
+        <appender-ref ref="FILE_WARN"/>
         <appender-ref ref="FILE_ERROR"/>
     </root>
 </configuration>
