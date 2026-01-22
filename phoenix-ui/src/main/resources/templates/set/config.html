@@ -34,11 +34,11 @@
                             <div class="layui-card-header div-font-weight">监控</div>
                             <div class="layui-card-body" pad20>
                                 <div class="layui-form-item">
-                                    <label class="layui-form-label" for="threshold"
-                                           style="text-align: left;">阈值</label>
+                                    <label class="layui-form-label" style="text-align: left;">阈值</label>
                                     <div class="layui-input-block">
-                                        <input type="radio" name="threshold" th:value="${num}" th:title="${num}"
-                                               id="threshold" th:each="num, numStat : ${#numbers.sequence(1,10)}"
+                                        <input type="radio" th:value="${num}" th:title="${num}"
+                                               th:id="${'threshold_' + num}" name="threshold"
+                                               th:each="num, numStat : ${#numbers.sequence(1,10)}"
                                                th:checked="${monitorConfigPageForm.threshold==num}? true : false">
                                     </div>
                                     <div class="layui-form-mid layui-word-aux">1到10，共10级，值越小监控越灵敏</div>
@@ -64,7 +64,8 @@
                                             </div>
                                         </div>
                                         <div class="layui-form-item">
-                                            <label class="layui-form-label" style="text-align: left;">静默时段</label>
+                                            <label class="layui-form-label" style="text-align: left;"
+                                                   for="alarmSilenceTimeSlot">静默时段</label>
                                             <div class="layui-input-inline">
                                                 <!-- label上加上for，导致点击label也弹出时间选择框，所以我就去掉了 -->
                                                 <input type="text" name="alarmSilenceTimeSlot" class="layui-input"
@@ -72,7 +73,7 @@
                                                        lay-verify="required" lay-verType="tips"
                                                        th:value="${monitorConfigPageForm.alarmSilenceTimeSlot}">
                                             </div>
-                                            <strong for="alarmSilenceTimeSlot" class="config-strong">
+                                            <strong class="config-strong">
                                                 在告警静默时段产生的告警将不会被通知。
                                             </strong>
                                         </div>
