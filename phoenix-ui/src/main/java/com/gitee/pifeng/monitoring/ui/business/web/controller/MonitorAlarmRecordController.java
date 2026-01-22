@@ -7,6 +7,7 @@ import cn.afterturn.easypoi.view.PoiBaseView;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.gitee.pifeng.monitoring.common.constant.DateTimeStylesEnums;
 import com.gitee.pifeng.monitoring.common.constant.alarm.AlarmWayEnums;
+import com.gitee.pifeng.monitoring.common.constant.alarm.NoTSendAlarmReasonEnums;
 import com.gitee.pifeng.monitoring.common.util.DateTimeUtils;
 import com.gitee.pifeng.monitoring.common.web.util.ContextUtils;
 import com.gitee.pifeng.monitoring.ui.business.web.annotation.OperateLog;
@@ -73,7 +74,11 @@ public class MonitorAlarmRecordController {
     @Operation(summary = "访问告警记录列表页面")
     @GetMapping("/list")
     public ModelAndView list() {
-        return new ModelAndView("alarm/alarm-record");
+        // 获取所有“不发送告警原因”枚举项对应的消息文本列表
+        List<String> allNoSendAlarmReasonMsgs = NoTSendAlarmReasonEnums.getAllNoSendAlarmReasonMsgs();
+        ModelAndView mv = new ModelAndView("alarm/alarm-record");
+        mv.addObject("allNoSendAlarmReasonMsgs", allNoSendAlarmReasonMsgs);
+        return mv;
     }
 
     /**
@@ -81,15 +86,16 @@ public class MonitorAlarmRecordController {
      * 获取告警记录列表
      * </p>
      *
-     * @param current    当前页
-     * @param size       每页显示条数
-     * @param type       告警类型
-     * @param level      告警级别
-     * @param way        告警方式
-     * @param status     告警状态（0：失败；1：成功）
-     * @param title      告警标题
-     * @param content    告警内容
-     * @param insertDate 记录日期
+     * @param current       当前页
+     * @param size          每页显示条数
+     * @param type          告警类型
+     * @param level         告警级别
+     * @param way           告警方式
+     * @param status        告警状态（0：失败；1：成功）
+     * @param title         告警标题
+     * @param content       告警内容
+     * @param notSendReason 未通知原因
+     * @param insertDate    记录日期
      * @return layUiAdmin响应对象
      * @author 皮锋
      * @custom.date 2020/8/7 16:12
@@ -104,6 +110,7 @@ public class MonitorAlarmRecordController {
             @Parameter(name = "status", description = "告警状态（0：失败；1：成功）", in = ParameterIn.QUERY),
             @Parameter(name = "title", description = "告警标题", in = ParameterIn.QUERY),
             @Parameter(name = "content", description = "告警内容", in = ParameterIn.QUERY),
+            @Parameter(name = "notSendReason", description = "未通知原因", in = ParameterIn.QUERY),
             @Parameter(name = "insertDate", description = "记录日期", in = ParameterIn.QUERY)})
     @GetMapping("/get-monitor-alarm-record-list")
     @ResponseBody
@@ -116,8 +123,9 @@ public class MonitorAlarmRecordController {
                                                         @RequestParam(value = "status", required = false) String status,
                                                         @RequestParam(value = "title", required = false) String title,
                                                         @RequestParam(value = "content", required = false) String content,
+                                                        @RequestParam(value = "notSendReason", required = false) String notSendReason,
                                                         @RequestParam(value = "insertDate", required = false) String insertDate) {
-        Page<MonitorAlarmRecordVo> page = this.monitorAlarmRecordService.getMonitorAlarmRecordList(current, size, type, level, way, status, title, content, insertDate);
+        Page<MonitorAlarmRecordVo> page = this.monitorAlarmRecordService.getMonitorAlarmRecordList(current, size, type, level, way, status, title, content, notSendReason, insertDate);
         return LayUiAdminResultVo.ok(page);
     }
 
@@ -163,13 +171,14 @@ public class MonitorAlarmRecordController {
      * 导出告警记录列表
      * </p>
      *
-     * @param type       告警类型
-     * @param level      告警级别
-     * @param way        告警方式
-     * @param status     告警状态（0：失败；1：成功）
-     * @param title      告警标题
-     * @param content    告警内容
-     * @param insertDate 记录日期
+     * @param type          告警类型
+     * @param level         告警级别
+     * @param way           告警方式
+     * @param status        告警状态（0：失败；1：成功）
+     * @param title         告警标题
+     * @param content       告警内容
+     * @param notSendReason 未通知原因
+     * @param insertDate    记录日期
      * @author 皮锋
      * @custom.date 2021/5/18 22:12
      */
@@ -181,6 +190,7 @@ public class MonitorAlarmRecordController {
             @Parameter(name = "status", description = "告警状态（0：失败；1：成功）", in = ParameterIn.QUERY),
             @Parameter(name = "title", description = "告警标题", in = ParameterIn.QUERY),
             @Parameter(name = "content", description = "告警内容", in = ParameterIn.QUERY),
+            @Parameter(name = "notSendReason", description = "未通知原因", in = ParameterIn.QUERY),
             @Parameter(name = "insertDate", description = "记录日期", in = ParameterIn.QUERY)})
     @GetMapping("/export-monitor-alarm-record-list")
     @ResponseBody
@@ -191,9 +201,10 @@ public class MonitorAlarmRecordController {
                                              @RequestParam(value = "status", required = false) String status,
                                              @RequestParam(value = "title", required = false) String title,
                                              @RequestParam(value = "content", required = false) String content,
+                                             @RequestParam(value = "notSendReason", required = false) String notSendReason,
                                              @RequestParam(value = "insertDate", required = false) String insertDate) {
         String name = "告警记录";
-        List<MonitorAlarmRecordVo> monitorAlarmRecordVos = this.monitorAlarmRecordService.getMonitorAlarmRecordList(type, level, way, status, title, content, insertDate);
+        List<MonitorAlarmRecordVo> monitorAlarmRecordVos = this.monitorAlarmRecordService.getMonitorAlarmRecordList(type, level, way, status, title, content, notSendReason, insertDate);
         if (CollectionUtils.isEmpty(monitorAlarmRecordVos)) {
             // 倒序
             Collections.reverse(monitorAlarmRecordVos);

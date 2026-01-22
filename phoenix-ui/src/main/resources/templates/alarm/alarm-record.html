@@ -96,6 +96,16 @@
                     </div>
                 </div>
                 <div class="layui-inline">
+                    <label class="layui-form-label" for="notSendReason">未通知原因</label>
+                    <div class="layui-input-block" style="width: 182px;">
+                        <select id="notSendReason" name="notSendReason">
+                            <option value="">所有</option>
+                            <option th:each="msg:${allNoSendAlarmReasonMsgs}" th:value="${msg}"
+                                    th:text="${msg}"></option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
                     <label class="layui-form-label" for="insertDate">记录日期</label>
                     <div class="layui-input-block" style="width: 182px;">
                         <input type="text" class="layui-input" id="insertDate" name="insertDate" autocomplete="off"
@@ -317,10 +327,12 @@
             var way = field.way;
             var status = field.status;
             var title = field.title;
+            var notSendReason = field.notSendReason;
             var insertDate = field.insertDate;
             var exportUrl = ctxPath + 'monitor-alarm-record/export-monitor-alarm-record-list?' +
                 'content=' + content + '&level=' + level + '&way=' + way + '&status=' + status +
-                '&title=' + title + '&type=' + type + '&insertDate=' + insertDate;
+                '&title=' + title + '&type=' + type + '&notSendReason=' + notSendReason +
+                '&insertDate=' + insertDate;
             // 弹出loading框
             var exportLoadingIndex = layer.load(1, {
                 shade: [0.1, '#fff'] //0.1透明度的白色背景

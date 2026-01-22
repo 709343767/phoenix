@@ -3,6 +3,11 @@ package com.gitee.pifeng.monitoring.common.constant.alarm;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * <p>
  * 不发送告警原因
@@ -53,5 +58,20 @@ public enum NoTSendAlarmReasonEnums {
     private final String code;
 
     private final String msg;
+
+    /**
+     * <p>
+     * 获取所有“不发送告警原因”枚举项对应的消息文本列表
+     * </p>
+     *
+     * @return 所有“不发送告警原因”的消息文本组成的不可变 {@link List}，按枚举定义顺序排列；列表非 null，且不包含 null 元素。
+     * @author 皮锋
+     * @custom.date 2026/1/22 09:24
+     */
+    public static List<String> getAllNoSendAlarmReasonMsgs() {
+        return Arrays.stream(NoTSendAlarmReasonEnums.values())
+                .map(NoTSendAlarmReasonEnums::getMsg)
+                .collect(Collectors.collectingAndThen(Collectors.toList(), Collections::unmodifiableList));
+    }
 
 }

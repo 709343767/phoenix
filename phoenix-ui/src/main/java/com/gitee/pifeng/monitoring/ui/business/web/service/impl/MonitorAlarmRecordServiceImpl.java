@@ -60,15 +60,16 @@ public class MonitorAlarmRecordServiceImpl extends ServiceImpl<IMonitorAlarmReco
      * 获取监控告警列表
      * </p>
      *
-     * @param current    当前页
-     * @param size       每页显示条数
-     * @param type       告警类型
-     * @param level      告警级别
-     * @param way        告警方式
-     * @param status     告警状态（0：失败；1：成功）
-     * @param title      告警标题
-     * @param content    告警内容
-     * @param insertDate 记录日期
+     * @param current       当前页
+     * @param size          每页显示条数
+     * @param type          告警类型
+     * @param level         告警级别
+     * @param way           告警方式
+     * @param status        告警状态（0：失败；1：成功）
+     * @param title         告警标题
+     * @param content       告警内容
+     * @param notSendReason 未通知原因
+     * @param insertDate    记录日期
      * @return 分页Page对象
      * @author 皮锋
      * @custom.date 2020/8/3 11:07
@@ -76,7 +77,7 @@ public class MonitorAlarmRecordServiceImpl extends ServiceImpl<IMonitorAlarmReco
     @Override
     public Page<MonitorAlarmRecordVo> getMonitorAlarmRecordList(Long current, Long size, String type, String level,
                                                                 String way, String status, String title, String content,
-                                                                String insertDate) {
+                                                                String notSendReason, String insertDate) {
         // 查询数据库
         IPage<MonitorAlarmRecord> ipage = new Page<>(current, size);
         LambdaQueryWrapper<MonitorAlarmRecord> lambdaQueryWrapper = new LambdaQueryWrapper<>();
@@ -105,6 +106,9 @@ public class MonitorAlarmRecordServiceImpl extends ServiceImpl<IMonitorAlarmReco
         if (StringUtils.isNotBlank(content)) {
             lambdaQueryWrapper.like(MonitorAlarmRecord::getContent, content);
         }
+        if (StringUtils.isNotBlank(notSendReason)) {
+            lambdaQueryWrapper.eq(MonitorAlarmRecord::getNotSendReason, notSendReason);
+        }
         if (StringUtils.isNotBlank(insertDate)) {
             Date startDateTime = DateTimeUtils.string2Date(insertDate, DateTimeStylesEnums.YYYY_MM_DD);
             Date endDateTime = DateUtil.endOfDay(startDateTime).toJdkDate();
@@ -132,20 +136,22 @@ public class MonitorAlarmRecordServiceImpl extends ServiceImpl<IMonitorAlarmReco
      * 获取监控告警列表
      * </p>
      *
-     * @param type       告警类型
-     * @param level      告警级别
-     * @param way        告警方式
-     * @param status     告警状态（0：失败；1：成功）
-     * @param title      告警标题
-     * @param content    告警内容
-     * @param insertDate 记录日期
+     * @param type          告警类型
+     * @param level         告警级别
+     * @param way           告警方式
+     * @param status        告警状态（0：失败；1：成功）
+     * @param title         告警标题
+     * @param content       告警内容
+     * @param notSendReason 未通知原因
+     * @param insertDate    记录日期
      * @return 监控告警表现层对象列表
      * @author 皮锋
      * @custom.date 2021/5/18 22:50
      */
     @Override
     public List<MonitorAlarmRecordVo> getMonitorAlarmRecordList(String type, String level, String way, String status,
-                                                                String title, String content, String insertDate) {
+                                                                String title, String content, String notSendReason,
+                                                                String insertDate) {
         LambdaQueryWrapper<MonitorAlarmRecord> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         // 倒叙查询
         lambdaQueryWrapper.orderByDesc(MonitorAlarmRecord::getInsertTime);
@@ -171,6 +177,9 @@ public class MonitorAlarmRecordServiceImpl extends ServiceImpl<IMonitorAlarmReco
         }
         if (StringUtils.isNotBlank(content)) {
             lambdaQueryWrapper.like(MonitorAlarmRecord::getContent, content);
+        }
+        if (StringUtils.isNotBlank(notSendReason)) {
+            lambdaQueryWrapper.eq(MonitorAlarmRecord::getNotSendReason, notSendReason);
         }
         if (StringUtils.isNotBlank(insertDate)) {
             Date startDateTime = DateTimeUtils.string2Date(insertDate, DateTimeStylesEnums.YYYY_MM_DD);
@@ -308,7 +317,7 @@ public class MonitorAlarmRecordServiceImpl extends ServiceImpl<IMonitorAlarmReco
      */
     @Override
     public LayUiAdminResultVo getLast5AlarmRecord() {
-        Page<MonitorAlarmRecordVo> monitorAlarmRecordVoPage = this.getMonitorAlarmRecordList(1L, 5L, null, null, null, null, null, null, null);
+        Page<MonitorAlarmRecordVo> monitorAlarmRecordVoPage = this.getMonitorAlarmRecordList(1L, 5L, null, null, null, null, null, null, null, null);
         List<MonitorAlarmRecordVo> monitorAlarmRecordVos = monitorAlarmRecordVoPage.getRecords();
         return LayUiAdminResultVo.ok(monitorAlarmRecordVos);
     }

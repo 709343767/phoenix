@@ -9,3 +9,6 @@
 .settings
 liblog4phoenix
 target
+
+.apt_generated
+.apt_generated_tests
