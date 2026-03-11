@@ -349,7 +349,9 @@ public class QuartzConfig {
                 .forJob(this.clearHistoryDataJobDetail())
                 .withIdentity("clearHistoryDataTrigger", TRIGGER_GROUP)
                 // 每小时执行一次
-                .withSchedule(CronScheduleBuilder.cronSchedule("0 0 * * * ?"))
+                // .withSchedule(CronScheduleBuilder.cronSchedule("0 0 * * * ?"))
+                // 每五分钟一次
+                .withSchedule(CronScheduleBuilder.cronSchedule("0 */5 * * * ?"))
                 .build();
     }
     //////////////////////////////////////////clearHistoryData end//////////////////////////////////////////////////////

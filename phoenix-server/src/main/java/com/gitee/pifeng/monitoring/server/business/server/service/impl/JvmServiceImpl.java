@@ -1,7 +1,6 @@
 package com.gitee.pifeng.monitoring.server.business.server.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.gitee.pifeng.monitoring.common.constant.ResultMsgConstants;
 import com.gitee.pifeng.monitoring.common.domain.Result;
 import com.gitee.pifeng.monitoring.common.dto.JvmPackage;
@@ -13,8 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.concurrent.CompletableFuture;
@@ -153,12 +150,14 @@ public class JvmServiceImpl implements IJvmService {
      * @author 皮锋
      * @custom.date 2021/12/9 20:46
      */
-    @Transactional(rollbackFor = Throwable.class, isolation = Isolation.READ_COMMITTED)
+    // @Transactional(rollbackFor = Throwable.class, isolation = Isolation.READ_COMMITTED)
     @Override
     public int clearHistoryData(Date historyTime) {
-        LambdaUpdateWrapper<MonitorJvmMemoryHistory> jvmMemoryHistoryLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
-        jvmMemoryHistoryLambdaUpdateWrapper.le(MonitorJvmMemoryHistory::getInsertTime, historyTime);
-        return this.monitorJvmMemoryHistoryDao.delete(jvmMemoryHistoryLambdaUpdateWrapper);
+        LambdaQueryWrapper<MonitorJvmMemoryHistory> jvmMemoryHistoryLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        jvmMemoryHistoryLambdaQueryWrapper.le(MonitorJvmMemoryHistory::getInsertTime, historyTime);
+        jvmMemoryHistoryLambdaQueryWrapper.orderByAsc(MonitorJvmMemoryHistory::getInsertTime);
+        jvmMemoryHistoryLambdaQueryWrapper.last("limit 5000");
+        return this.monitorJvmMemoryHistoryDao.delete(jvmMemoryHistoryLambdaQueryWrapper);
     }
 
 }

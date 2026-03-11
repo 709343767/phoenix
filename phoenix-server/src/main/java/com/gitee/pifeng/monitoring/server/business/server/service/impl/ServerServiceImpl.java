@@ -16,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
@@ -301,27 +300,39 @@ public class ServerServiceImpl extends ServiceImpl<IMonitorServerDao, MonitorSer
      * @author 皮锋
      * @custom.date 2021/12/9 20:59
      */
-    @Transactional(rollbackFor = Throwable.class, isolation = Isolation.READ_COMMITTED)
+    // @Transactional(rollbackFor = Throwable.class, isolation = Isolation.READ_COMMITTED)
     @Override
     public int clearHistoryData(Date historyTime) {
-        LambdaUpdateWrapper<MonitorServerProcessHistory> serverProcessHistoryLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
-        serverProcessHistoryLambdaUpdateWrapper.le(MonitorServerProcessHistory::getInsertTime, historyTime);
-        int deleteServerProcessHistoryNum = this.monitorServerProcessHistoryDao.delete(serverProcessHistoryLambdaUpdateWrapper);
-        LambdaUpdateWrapper<MonitorServerCpuHistory> serverCpuHistoryLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
-        serverCpuHistoryLambdaUpdateWrapper.le(MonitorServerCpuHistory::getInsertTime, historyTime);
-        int deleteServerCpuHistoryNum = this.monitorServerCpuHistoryDao.delete(serverCpuHistoryLambdaUpdateWrapper);
-        LambdaUpdateWrapper<MonitorServerDiskHistory> serverDiskHistoryLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
-        serverDiskHistoryLambdaUpdateWrapper.le(MonitorServerDiskHistory::getInsertTime, historyTime);
-        int deleteServerDiskHistoryNum = this.monitorServerDiskHistoryDao.delete(serverDiskHistoryLambdaUpdateWrapper);
-        LambdaUpdateWrapper<MonitorServerMemoryHistory> serverMemoryHistoryLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
-        serverMemoryHistoryLambdaUpdateWrapper.le(MonitorServerMemoryHistory::getInsertTime, historyTime);
-        int deleteServerMemoryHistoryNum = this.monitorServerMemoryHistoryDao.delete(serverMemoryHistoryLambdaUpdateWrapper);
-        LambdaUpdateWrapper<MonitorServerNetcardHistory> serverNetcardHistoryLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
-        serverNetcardHistoryLambdaUpdateWrapper.le(MonitorServerNetcardHistory::getInsertTime, historyTime);
-        int deleteServerNetcardHistoryNum = this.monitorServerNetcardHistoryDao.delete(serverNetcardHistoryLambdaUpdateWrapper);
-        LambdaUpdateWrapper<MonitorServerLoadAverageHistory> serverLoadAverageHistoryLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
-        serverLoadAverageHistoryLambdaUpdateWrapper.le(MonitorServerLoadAverageHistory::getInsertTime, historyTime);
-        int deleteServerLoadAverageHistoryNum = this.monitorServerLoadAverageHistoryDao.delete(serverLoadAverageHistoryLambdaUpdateWrapper);
+        LambdaQueryWrapper<MonitorServerProcessHistory> processHistoryLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        processHistoryLambdaQueryWrapper.le(MonitorServerProcessHistory::getInsertTime, historyTime);
+        processHistoryLambdaQueryWrapper.orderByAsc(MonitorServerProcessHistory::getInsertTime);
+        processHistoryLambdaQueryWrapper.last("limit 5000");
+        int deleteServerProcessHistoryNum = this.monitorServerProcessHistoryDao.delete(processHistoryLambdaQueryWrapper);
+        LambdaQueryWrapper<MonitorServerCpuHistory> cpuHistoryLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        cpuHistoryLambdaQueryWrapper.le(MonitorServerCpuHistory::getInsertTime, historyTime);
+        cpuHistoryLambdaQueryWrapper.orderByAsc(MonitorServerCpuHistory::getInsertTime);
+        cpuHistoryLambdaQueryWrapper.last("limit 5000");
+        int deleteServerCpuHistoryNum = this.monitorServerCpuHistoryDao.delete(cpuHistoryLambdaQueryWrapper);
+        LambdaQueryWrapper<MonitorServerDiskHistory> diskHistoryLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        diskHistoryLambdaQueryWrapper.le(MonitorServerDiskHistory::getInsertTime, historyTime);
+        diskHistoryLambdaQueryWrapper.orderByAsc(MonitorServerDiskHistory::getInsertTime);
+        diskHistoryLambdaQueryWrapper.last("limit 5000");
+        int deleteServerDiskHistoryNum = this.monitorServerDiskHistoryDao.delete(diskHistoryLambdaQueryWrapper);
+        LambdaQueryWrapper<MonitorServerMemoryHistory> memoryHistoryLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        memoryHistoryLambdaQueryWrapper.le(MonitorServerMemoryHistory::getInsertTime, historyTime);
+        memoryHistoryLambdaQueryWrapper.orderByAsc(MonitorServerMemoryHistory::getInsertTime);
+        memoryHistoryLambdaQueryWrapper.last("limit 5000");
+        int deleteServerMemoryHistoryNum = this.monitorServerMemoryHistoryDao.delete(memoryHistoryLambdaQueryWrapper);
+        LambdaQueryWrapper<MonitorServerNetcardHistory> netcardHistoryLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        netcardHistoryLambdaQueryWrapper.le(MonitorServerNetcardHistory::getInsertTime, historyTime);
+        netcardHistoryLambdaQueryWrapper.orderByAsc(MonitorServerNetcardHistory::getInsertTime);
+        netcardHistoryLambdaQueryWrapper.last("limit 5000");
+        int deleteServerNetcardHistoryNum = this.monitorServerNetcardHistoryDao.delete(netcardHistoryLambdaQueryWrapper);
+        LambdaQueryWrapper<MonitorServerLoadAverageHistory> loadAverageHistoryLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        loadAverageHistoryLambdaQueryWrapper.le(MonitorServerLoadAverageHistory::getInsertTime, historyTime);
+        loadAverageHistoryLambdaQueryWrapper.orderByAsc(MonitorServerLoadAverageHistory::getInsertTime);
+        loadAverageHistoryLambdaQueryWrapper.last("limit 5000");
+        int deleteServerLoadAverageHistoryNum = this.monitorServerLoadAverageHistoryDao.delete(loadAverageHistoryLambdaQueryWrapper);
         return deleteServerProcessHistoryNum
                 + deleteServerCpuHistoryNum
                 + deleteServerDiskHistoryNum

@@ -1,6 +1,6 @@
 package com.gitee.pifeng.monitoring.server.business.server.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gitee.pifeng.monitoring.server.business.server.dao.IMonitorHttpHistoryDao;
 import com.gitee.pifeng.monitoring.server.business.server.entity.MonitorHttpHistory;
@@ -29,11 +29,14 @@ public class HttpHistoryServiceImpl extends ServiceImpl<IMonitorHttpHistoryDao, 
      * @author 皮锋
      * @custom.date 2022/4/25 11:30
      */
+    // @Transactional(rollbackFor = Throwable.class, isolation = Isolation.READ_COMMITTED)
     @Override
     public int clearHistoryData(Date historyTime) {
-        LambdaUpdateWrapper<MonitorHttpHistory> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();
-        lambdaUpdateWrapper.le(MonitorHttpHistory::getInsertTime, historyTime);
-        return this.baseMapper.delete(lambdaUpdateWrapper);
+        LambdaQueryWrapper<MonitorHttpHistory> httpHistoryLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        httpHistoryLambdaQueryWrapper.le(MonitorHttpHistory::getInsertTime, historyTime);
+        httpHistoryLambdaQueryWrapper.orderByAsc(MonitorHttpHistory::getInsertTime);
+        httpHistoryLambdaQueryWrapper.last("limit 5000");
+        return this.baseMapper.delete(httpHistoryLambdaQueryWrapper);
     }
 
 }
