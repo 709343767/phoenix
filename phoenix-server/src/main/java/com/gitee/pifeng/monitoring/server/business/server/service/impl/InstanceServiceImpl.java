@@ -8,11 +8,14 @@ import com.gitee.pifeng.monitoring.common.dto.HeartbeatPackage;
 import com.gitee.pifeng.monitoring.server.business.server.dao.IMonitorInstanceDao;
 import com.gitee.pifeng.monitoring.server.business.server.entity.MonitorInstance;
 import com.gitee.pifeng.monitoring.server.business.server.service.IInstanceService;
+import org.apache.commons.collections.CollectionUtils;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * <p>
@@ -72,6 +75,25 @@ public class InstanceServiceImpl extends ServiceImpl<IMonitorInstanceDao, Monito
             lambdaUpdateWrapper.eq(MonitorInstance::getInstanceId, instanceId);
             this.update(entity, lambdaUpdateWrapper);
         }
+    }
+
+    /**
+     * <p>
+     * 根据 应用实例ID 查询 应用实例（自动使用缓存）
+     * </p>
+     *
+     * @param instanceId 应用实例ID
+     * @return 应用实例列表
+     * @author 皮锋
+     * @custom.date 2026/3/11 16:13
+     */
+    @Override
+    @Cacheable(cacheNames = "monitorInstanceCache", key = "#instanceId", unless = "#result == null")
+    public MonitorInstance getByInstanceIdWithCache(String instanceId) {
+        LambdaQueryWrapper<MonitorInstance> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(MonitorInstance::getInstanceId, instanceId);
+        List<MonitorInstance> list = this.list(wrapper);
+        return CollectionUtils.isEmpty(list) ? null : list.get(0);
     }
 
 }

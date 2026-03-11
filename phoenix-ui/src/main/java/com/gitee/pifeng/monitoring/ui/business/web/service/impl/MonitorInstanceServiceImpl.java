@@ -23,8 +23,10 @@ import com.gitee.pifeng.monitoring.ui.constant.WebResponseConstants;
 import com.gitee.pifeng.monitoring.ui.core.CalculateDateTime;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -446,6 +448,25 @@ public class MonitorInstanceServiceImpl extends ServiceImpl<IMonitorInstanceDao,
             result.put(instanceId, monitorInstanceVo);
         }
         return result;
+    }
+
+    /**
+     * <p>
+     * 根据 应用实例ID 查询 应用实例（自动使用缓存）
+     * </p>
+     *
+     * @param instanceId 应用实例ID
+     * @return 应用实例列表
+     * @author 皮锋
+     * @custom.date 2026/3/11 16:13
+     */
+    @Override
+    @Cacheable(cacheNames = "monitorInstanceCache", key = "#instanceId", unless = "#result == null")
+    public MonitorInstance getByInstanceIdWithCache(String instanceId) {
+        LambdaQueryWrapper<MonitorInstance> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(MonitorInstance::getInstanceId, instanceId);
+        List<MonitorInstance> list = this.list(wrapper);
+        return CollectionUtils.isEmpty(list) ? null : list.get(0);
     }
 
 }

@@ -9,6 +9,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.data.mongo.MongoDataAutoConfiguration;
 import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.retry.annotation.EnableRetry;
@@ -27,6 +28,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @Slf4j
 @Indexed
 @EnableRetry
+@EnableCaching // @EnableCaching注解启用缓存是因为某些查询接口要用到，启用缓存后，在application.yml进行了缓存配置
 @EnableTransactionManagement
 @ComponentScan(nameGenerator = UniqueBeanNameGenerator.class)
 @EnableAspectJAutoProxy(proxyTargetClass = true, exposeProxy = true)

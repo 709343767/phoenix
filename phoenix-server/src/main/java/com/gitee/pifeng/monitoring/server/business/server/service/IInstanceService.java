@@ -25,4 +25,16 @@ public interface IInstanceService extends IService<MonitorInstance> {
      */
     void operateMonitorInstance(HeartbeatPackage heartbeatPackage);
 
+    /**
+     * <p>
+     * 根据 应用实例ID 查询 应用实例（自动使用缓存）
+     * </p>
+     *
+     * @param instanceId 应用实例ID
+     * @return 应用实例列表
+     * @author 皮锋
+     * @custom.date 2026/3/11 16:13
+     */
+    MonitorInstance getByInstanceIdWithCache(String instanceId);
+
 }

@@ -1,7 +1,6 @@
 package com.gitee.pifeng.monitoring.server.business.server.component;
 
 import com.alibaba.fastjson.JSON;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.gitee.pifeng.monitoring.common.constant.ZeroOrOneConstants;
 import com.gitee.pifeng.monitoring.common.constant.alarm.AlarmLevelEnums;
 import com.gitee.pifeng.monitoring.common.constant.alarm.AlarmReasonEnums;
@@ -22,26 +21,21 @@ import com.gitee.pifeng.monitoring.server.business.server.service.IInstanceServi
 import com.gitee.pifeng.monitoring.server.business.server.service.ILogExceptionService;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.ibatis.exceptions.PersistenceException;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.nio.charset.StandardCharsets;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * <p>
@@ -79,6 +73,19 @@ public class ExceptionLogAspect {
      */
     @Autowired
     private IInstanceService instanceService;
+
+    /**
+     * 要忽略的异常类型，这些异常类型对应的告警将不发送，只保存告警记录
+     */
+    private static final Set<Class<? extends Throwable>> IGNORE_ALARM_EXCEPTIONS = Collections.unmodifiableSet(new HashSet<>(Arrays.asList(
+            org.apache.ibatis.exceptions.PersistenceException.class,
+            org.mybatis.spring.MyBatisSystemException.class,
+            org.springframework.dao.DuplicateKeyException.class,
+            org.springframework.dao.RecoverableDataAccessException.class,
+            org.springframework.dao.DataAccessResourceFailureException.class,
+            org.springframework.transaction.CannotCreateTransactionException.class,
+            org.springframework.jdbc.UncategorizedSQLException.class
+    )));
 
     /**
      * <p>
@@ -128,15 +135,14 @@ public class ExceptionLogAspect {
             MonitorLogException.MonitorLogExceptionBuilder builder = MonitorLogException.builder();
             // 转换请求参数
             Map<String, Object> reqParamMap = request != null ? MapUtils.convertParamMap(request.getParameterMap()) : Maps.newHashMap();
-            if (reqParamMap.isEmpty()) {
-                if (ArrayUtils.isNotEmpty(args)) {
-                    // 遍历方法参数
-                    for (int i = 0; i < args.length; i++) {
-                        Parameter[] parameters = method.getParameters();
-                        String paramName = parameters[i].getName();
-                        Object paramValue = args[i];
-                        reqParamMap.put(paramName, paramValue != null ? JSON.toJSON(paramValue) : null);
-                    }
+            if (reqParamMap.isEmpty() && ArrayUtils.isNotEmpty(args)) {
+                Parameter[] parameters = method.getParameters();
+                int paramCount = Math.min(args.length, parameters.length);
+                // 遍历方法参数
+                for (int i = 0; i < paramCount; i++) {
+                    String paramName = parameters[i].getName();
+                    Object paramValue = args[i];
+                    reqParamMap.put(paramName, paramValue != null ? JSON.toJSON(paramValue) : null);
                 }
             }
             builder.reqParam(reqParamMap.isEmpty() ? "" : JSON.toJSONString(reqParamMap));
@@ -153,13 +159,10 @@ public class ExceptionLogAspect {
             MonitorLogException monitorLogException = builder.build();
             this.logExceptionService.save(monitorLogException);
             // 根据应用ID查询应用信息
-            LambdaQueryWrapper<MonitorInstance> monitorInstanceLambdaQueryWrapper = new LambdaQueryWrapper<>();
-            monitorInstanceLambdaQueryWrapper.eq(MonitorInstance::getInstanceId, monitorLogException.getInstanceId());
-            List<MonitorInstance> monitorInstances = this.instanceService.list(monitorInstanceLambdaQueryWrapper);
-            if (CollectionUtils.isEmpty(monitorInstances)) {
+            MonitorInstance monitorInstance = this.instanceService.getByInstanceIdWithCache(monitorLogException.getInstanceId());
+            if (monitorInstance == null) {
                 return;
             }
-            MonitorInstance monitorInstance = monitorInstances.get(0);
             // 拼接告警消息
             StringBuilder msgBuilder = new StringBuilder();
             msgBuilder.append("应用ID：").append(monitorInstance.getInstanceId())
@@ -193,7 +196,7 @@ public class ExceptionLogAspect {
                     .msg(msgBuilder.toString())
                     .build();
             // 要忽略的告警，只保存告警记录，不发送告警消息
-            if (e instanceof DuplicateKeyException || e instanceof PersistenceException) {
+            if (IGNORE_ALARM_EXCEPTIONS.stream().anyMatch(clazz -> clazz.isInstance(e))) {
                 alarm.setAlarmLevel(AlarmLevelEnums.IGNORE);
             }
             AlarmPackage alarmPackage = this.serverPackageConstructor.structureAlarmPackage(alarm);

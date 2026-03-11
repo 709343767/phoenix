@@ -3,7 +3,6 @@ package com.gitee.pifeng.monitoring.ui.business.web.component;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.date.TimeInterval;
 import com.alibaba.fastjson.JSON;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.gitee.pifeng.monitoring.common.constant.ZeroOrOneConstants;
 import com.gitee.pifeng.monitoring.common.constant.alarm.AlarmLevelEnums;
 import com.gitee.pifeng.monitoring.common.constant.alarm.AlarmReasonEnums;
@@ -26,7 +25,6 @@ import com.gitee.pifeng.monitoring.ui.business.web.service.IMonitorLogOperationS
 import com.gitee.pifeng.monitoring.ui.business.web.vo.LayUiAdminResultVo;
 import com.gitee.pifeng.monitoring.ui.util.SpringSecurityUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.JoinPoint;
@@ -44,7 +42,6 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -211,15 +208,14 @@ public class LogAspect {
         MonitorLogException.MonitorLogExceptionBuilder builder = MonitorLogException.builder();
         // 转换请求参数
         Map<String, Object> reqParamMap = MapUtils.convertParamMap(request.getParameterMap());
-        if (reqParamMap.isEmpty()) {
-            if (ArrayUtils.isNotEmpty(args)) {
-                // 遍历方法参数
-                for (int i = 0; i < args.length; i++) {
-                    Parameter[] parameters = method.getParameters();
-                    String paramName = parameters[i].getName();
-                    Object paramValue = args[i];
-                    reqParamMap.put(paramName, paramValue != null ? JSON.toJSON(paramValue) : null);
-                }
+        if (reqParamMap.isEmpty() && ArrayUtils.isNotEmpty(args)) {
+            Parameter[] parameters = method.getParameters();
+            int paramCount = Math.min(args.length, parameters.length);
+            // 遍历方法参数
+            for (int i = 0; i < paramCount; i++) {
+                String paramName = parameters[i].getName();
+                Object paramValue = args[i];
+                reqParamMap.put(paramName, paramValue != null ? JSON.toJSON(paramValue) : null);
             }
         }
         builder.reqParam(reqParamMap.isEmpty() ? "" : JSON.toJSONString(reqParamMap));
@@ -237,13 +233,10 @@ public class LogAspect {
         MonitorLogException monitorLogException = builder.build();
         this.monitorLogExceptionService.save(monitorLogException);
         // 根据应用ID查询应用信息
-        LambdaQueryWrapper<MonitorInstance> monitorInstanceLambdaQueryWrapper = new LambdaQueryWrapper<>();
-        monitorInstanceLambdaQueryWrapper.eq(MonitorInstance::getInstanceId, monitorLogException.getInstanceId());
-        List<MonitorInstance> monitorInstances = this.monitorInstanceService.list(monitorInstanceLambdaQueryWrapper);
-        if (CollectionUtils.isEmpty(monitorInstances)) {
+        MonitorInstance monitorInstance = this.monitorInstanceService.getByInstanceIdWithCache(monitorLogException.getInstanceId());
+        if (monitorInstance == null) {
             return;
         }
-        MonitorInstance monitorInstance = monitorInstances.get(0);
         // 拼接告警消息
         StringBuilder msgBuilder = new StringBuilder();
         msgBuilder.append("应用ID：").append(monitorInstance.getInstanceId())
