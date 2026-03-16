@@ -1,15 +1,9 @@
 package com.gitee.pifeng.monitoring.plug.core;
 
-import cn.hutool.core.util.CharsetUtil;
-import cn.hutool.core.util.ZipUtil;
-import com.alibaba.fastjson.JSON;
-import com.gitee.pifeng.monitoring.common.dto.CiphertextPackage;
-import com.gitee.pifeng.monitoring.common.util.ZipUtils;
-import com.gitee.pifeng.monitoring.common.util.secure.SecureUtils;
+import com.gitee.pifeng.monitoring.common.util.MsgPayloadUtils;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 
 /**
  * <p>
@@ -50,36 +44,16 @@ public class Sender {
         if (log.isDebugEnabled()) {
             log.debug("发送数据包：{}", json);
         }
-        CiphertextPackage requestCiphertextPackage;
-        // 字符串是否需要进行gzip压缩
-        if (ZipUtils.isNeedGzip(json)) {
-            // 压缩字符串
-            byte[] gzip = ZipUtil.gzip(json, CharsetUtil.UTF_8);
-            // 加密请求数据
-            String encrypt = SecureUtils.encrypt(gzip);
-            requestCiphertextPackage = new CiphertextPackage(encrypt, true);
-        } else {
-            // 加密请求数据
-            String encrypt = SecureUtils.encrypt(json, StandardCharsets.UTF_8);
-            requestCiphertextPackage = new CiphertextPackage(encrypt, false);
-        }
+        // 将 明文JSON字符串 转换成 密文JSON字符串
+        String encryptStr = MsgPayloadUtils.encryptPayload(json);
         // 发送请求
         EnumPoolingHttpClient httpClient = EnumPoolingHttpClient.getInstance();
-        String result = httpClient.sendHttpPostByJson(url, requestCiphertextPackage.toJsonString());
-        // 响应结果
-        CiphertextPackage responseCiphertextPackage = JSON.parseObject(result, CiphertextPackage.class);
-        // 解密响应数据
-        String decryptStr;
-        // 是否需要进行UnGzip
-        boolean isUnGzipEnabled = responseCiphertextPackage.isUnGzipEnabled();
-        if (isUnGzipEnabled) {
-            // 解密
-            byte[] decrypt = SecureUtils.decrypt(responseCiphertextPackage.getCiphertext());
-            // 解压
-            decryptStr = ZipUtil.unGzip(decrypt, CharsetUtil.UTF_8);
-        } else {
-            // 解密
-            decryptStr = SecureUtils.decrypt(responseCiphertextPackage.getCiphertext(), StandardCharsets.UTF_8);
+        String result = httpClient.sendHttpPostByJson(url, encryptStr);
+        // 将 密文JSON字符串 转换成 明文JSON字符串
+        String decryptStr = MsgPayloadUtils.decryptPayload(result);
+        // 打印收到的数据包
+        if (log.isDebugEnabled()) {
+            log.debug("收到数据包：{}", decryptStr);
         }
         return decryptStr;
     }

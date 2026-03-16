@@ -1,12 +1,10 @@
 package com.gitee.pifeng.monitoring.common.web.core.http;
 
-import cn.hutool.core.util.CharsetUtil;
-import cn.hutool.core.util.ZipUtil;
 import com.fasterxml.jackson.core.io.JsonStringEncoder;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gitee.pifeng.monitoring.common.dto.CiphertextPackage;
 import com.gitee.pifeng.monitoring.common.exception.DecryptionException;
-import com.gitee.pifeng.monitoring.common.util.secure.SecureUtils;
+import com.gitee.pifeng.monitoring.common.util.MsgPayloadUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.springframework.http.HttpHeaders;
@@ -72,19 +70,8 @@ public class HttpInputMessagePackageDecrypt implements HttpInputMessage {
             JsonStringEncoder encoder = JsonStringEncoder.getInstance();
             byte[] fb = encoder.encodeAsUTF8(bodyStr);
             CiphertextPackage ciphertextPackage = OBJECT_MAPPER.readValue(fb, CiphertextPackage.class);
-            // 解密后的字符串
-            String decryptStr;
-            // 是否需要进行UnGzip
-            boolean isUnGzipEnabled = ciphertextPackage.isUnGzipEnabled();
-            if (isUnGzipEnabled) {
-                // 解密
-                byte[] decrypt = SecureUtils.decrypt(ciphertextPackage.getCiphertext());
-                // 解压
-                decryptStr = ZipUtil.unGzip(decrypt, CharsetUtil.UTF_8);
-            } else {
-                // 解密
-                decryptStr = SecureUtils.decrypt(ciphertextPackage.getCiphertext(), StandardCharsets.UTF_8);
-            }
+            // 将 密文数据包 转换成 明文JSON字符串
+            String decryptStr = MsgPayloadUtils.decryptPayloadFrom(ciphertextPackage);
             // 打印日志
             if (log.isDebugEnabled()) {
                 log.debug("请求包：{}", decryptStr);

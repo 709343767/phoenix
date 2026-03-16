@@ -1,20 +1,16 @@
 package com.gitee.pifeng.monitoring.agent.business.server.service.impl;
 
-import cn.hutool.core.util.CharsetUtil;
-import cn.hutool.core.util.ZipUtil;
 import com.alibaba.fastjson.JSON;
 import com.gitee.pifeng.monitoring.agent.business.server.service.IHttpService;
 import com.gitee.pifeng.monitoring.common.dto.BaseResponsePackage;
 import com.gitee.pifeng.monitoring.common.dto.CiphertextPackage;
-import com.gitee.pifeng.monitoring.common.util.ZipUtils;
-import com.gitee.pifeng.monitoring.common.util.secure.SecureUtils;
+import com.gitee.pifeng.monitoring.common.util.MsgPayloadUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.Objects;
 
@@ -54,39 +50,16 @@ public class HttpServiceImpl implements IHttpService {
     @Override
     @Retryable
     public BaseResponsePackage sendHttpPost(String json, String url) {
-        CiphertextPackage requestCiphertextPackage;
-        // 字符串是否需要进行gzip压缩
-        if (ZipUtils.isNeedGzip(json)) {
-            // 压缩
-            byte[] gzip = ZipUtil.gzip(json, CharsetUtil.UTF_8);
-            // 加密
-            String encrypt = SecureUtils.encrypt(gzip);
-            requestCiphertextPackage = new CiphertextPackage(encrypt, true);
-        } else {
-            // 加密
-            String encrypt = SecureUtils.encrypt(json, StandardCharsets.UTF_8);
-            requestCiphertextPackage = new CiphertextPackage(encrypt, false);
-        }
+        // 将 明文JSON字符串 转换成 密文数据包
+        CiphertextPackage requestCiphertextPackage = MsgPayloadUtils.encryptPayloadTo(json);
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
         HttpEntity<CiphertextPackage> entity = new HttpEntity<>(requestCiphertextPackage, headers);
         ResponseEntity<CiphertextPackage> responseEntity = this.restTemplate.exchange(url,
                 HttpMethod.POST, entity, CiphertextPackage.class);
         CiphertextPackage responseciphertextPackage = Objects.requireNonNull(responseEntity.getBody());
-        String ciphertext = responseciphertextPackage.getCiphertext();
-        // 解密后的字符串
-        String decryptStr;
-        // 是否需要进行UnGzip
-        boolean isUnGzipEnabled = responseciphertextPackage.isUnGzipEnabled();
-        if (isUnGzipEnabled) {
-            // 解密
-            byte[] decrypt = SecureUtils.decrypt(ciphertext);
-            // 解压
-            decryptStr = ZipUtil.unGzip(decrypt, CharsetUtil.UTF_8);
-        } else {
-            // 解密
-            decryptStr = SecureUtils.decrypt(ciphertext, StandardCharsets.UTF_8);
-        }
+        // 将 密文数据包 转换成 明文JSON字符串
+        String decryptStr = MsgPayloadUtils.decryptPayloadFrom(responseciphertextPackage);
         return JSON.parseObject(decryptStr, BaseResponsePackage.class);
     }
 }
