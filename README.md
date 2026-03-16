@@ -72,7 +72,7 @@
 
 - 技术选型
 
-  核心框架：SpringBoot  
+  核心框架：SpringBoot、Netty  
   安全框架：SpringSecurity、SpringSession  
   任务调度：JUC、SpringTask、Quartz  
   持久层框架：MyBatis-Plus  

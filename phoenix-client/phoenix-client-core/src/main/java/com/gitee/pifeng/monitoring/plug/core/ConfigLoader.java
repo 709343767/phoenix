@@ -105,40 +105,40 @@ public class ConfigLoader {
             }
             String path = StringUtils.removeStart(configPath, "filepath:");
             properties = PropertiesUtils.loadPropertiesInFilepath(StringUtils.replace(path + configName, "/", File.separator));
-        } catch (Exception e1) {
+        } catch (Throwable e1) {
             try {
                 String filePath;
                 try {
                     // 获取Jar同级目录
                     filePath = DirUtils.getJarDirectory() + File.separator + "config" + File.separator + configName;
-                } catch (Exception e) {
+                } catch (Throwable e) {
                     filePath = "config" + File.separator + configName;
                 }
                 properties = PropertiesUtils.loadPropertiesInFilepath(filePath);
-            } catch (Exception e2) {
+            } catch (Throwable e2) {
                 try {
                     String filePath;
                     try {
                         // 获取Jar同级目录
                         filePath = DirUtils.getJarDirectory() + File.separator + configName;
-                    } catch (Exception e) {
+                    } catch (Throwable e) {
                         filePath = configName;
                     }
                     properties = PropertiesUtils.loadPropertiesInFilepath(filePath);
-                } catch (Exception e3) {
+                } catch (Throwable e3) {
                     try {
                         if (!StringUtils.startsWith(configPath, "classpath:")) {
                             throw new IllegalArgumentException();
                         }
                         String path = StringUtils.removeStart(configPath, "classpath:");
                         properties = PropertiesUtils.loadPropertiesInClasspath(path + configName);
-                    } catch (Exception e4) {
+                    } catch (Throwable e4) {
                         try {
                             properties = PropertiesUtils.loadPropertiesInClasspath("config/" + configName);
-                        } catch (Exception e5) {
+                        } catch (Throwable e5) {
                             try {
                                 properties = PropertiesUtils.loadPropertiesInClasspath(configName);
-                            } catch (Exception e6) {
+                            } catch (Throwable e6) {
                                 throw new NotFoundConfigFileException("监控程序找不到监控配置文件！");
                             }
                         }
