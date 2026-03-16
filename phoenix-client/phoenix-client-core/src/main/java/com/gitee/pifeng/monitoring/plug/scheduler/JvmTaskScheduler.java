@@ -43,7 +43,7 @@ public class JvmTaskScheduler {
         if (jvmInfoEnable) {
             // 发送Java虚拟机的频率
             long rate = ConfigLoader.getMonitoringProperties().getJvmInfo().getRate();
-            ThreadPoolAcquirer.getJvmScheduledThreadPoolExecutor().scheduleWithFixedDelay(new JvmThread(), 45, rate, TimeUnit.SECONDS);
+            ThreadPoolAcquirer.getInstanceScheduledThreadPoolExecutor().scheduleWithFixedDelay(new JvmThread(), 45, rate, TimeUnit.SECONDS);
         }
     }
 

@@ -17,14 +17,9 @@ import java.util.concurrent.ThreadPoolExecutor;
 public class ThreadPoolAcquirer {
 
     /**
-     * 心跳任务调度 延迟/周期执行线程池
+     * 应用实例任务调度 延迟/周期执行线程池
      */
-    private static volatile MonitoredScheduledThreadPoolExecutor heartbeatScheduledThreadPoolExecutor;
-
-    /**
-     * Java虚拟机信息任务调度 延迟/周期执行线程池
-     */
-    private static volatile MonitoredScheduledThreadPoolExecutor jvmScheduledThreadPoolExecutor;
+    private static volatile MonitoredScheduledThreadPoolExecutor instanceScheduledThreadPoolExecutor;
 
     /**
      * 服务器信息任务调度 延迟/周期执行线程池
@@ -44,58 +39,30 @@ public class ThreadPoolAcquirer {
 
     /**
      * <p>
-     * 获取 心跳任务调度 延迟/周期执行线程池
+     * 获取 应用实例任务调度 延迟/周期执行线程池
      * </p>
      *
-     * @return {@link MonitoredScheduledThreadPoolExecutor} 心跳任务调度 延迟/周期执行线程池
+     * @return {@link MonitoredScheduledThreadPoolExecutor} 应用实例任务调度 延迟/周期执行线程池
      * @custom.date 2025/2/9 22:37
      */
-    public static MonitoredScheduledThreadPoolExecutor getHeartbeatScheduledThreadPoolExecutor() {
-        if (heartbeatScheduledThreadPoolExecutor == null) {
+    public static MonitoredScheduledThreadPoolExecutor getInstanceScheduledThreadPoolExecutor() {
+        if (instanceScheduledThreadPoolExecutor == null) {
             synchronized (ThreadPoolAcquirer.class) {
-                if (heartbeatScheduledThreadPoolExecutor == null) {
-                    heartbeatScheduledThreadPoolExecutor = new MonitoredScheduledThreadPoolExecutor(
+                if (instanceScheduledThreadPoolExecutor == null) {
+                    instanceScheduledThreadPoolExecutor = new MonitoredScheduledThreadPoolExecutor(
                             // 线程数 = Ncpu /（1 - 阻塞系数），IO密集型阻塞系数相对较大
                             (int) (ProcessorsUtils.getAvailableProcessors() / (1 - 0.8)),
                             new BasicThreadFactory.Builder()
                                     // 设置线程名
-                                    .namingPattern("phoenix-heartbeat-scheduled-pool-thread-%d")
+                                    .namingPattern("phoenix-instance-scheduled-pool-thread-%d")
                                     // 设置为守护线程
                                     .daemon(true)
                                     .build(),
-                            new ThreadPoolExecutor.AbortPolicy(), "phoenix-heartbeat-scheduled-pool", true);
+                            new ThreadPoolExecutor.AbortPolicy(), "phoenix-instance-scheduled-pool", true);
                 }
             }
         }
-        return heartbeatScheduledThreadPoolExecutor;
-    }
-
-    /**
-     * <p>
-     * 获取 Java虚拟机信息任务调度 延迟/周期执行线程池
-     * </p>
-     *
-     * @return {@link MonitoredScheduledThreadPoolExecutor} Java虚拟机信息任务调度 延迟/周期执行线程池
-     * @custom.date 2025/2/9 22:37
-     */
-    public static MonitoredScheduledThreadPoolExecutor getJvmScheduledThreadPoolExecutor() {
-        if (jvmScheduledThreadPoolExecutor == null) {
-            synchronized (ThreadPoolAcquirer.class) {
-                if (jvmScheduledThreadPoolExecutor == null) {
-                    jvmScheduledThreadPoolExecutor = new MonitoredScheduledThreadPoolExecutor(
-                            // 线程数 = Ncpu /（1 - 阻塞系数），IO密集型阻塞系数相对较大
-                            (int) (ProcessorsUtils.getAvailableProcessors() / (1 - 0.8)),
-                            new BasicThreadFactory.Builder()
-                                    // 设置线程名
-                                    .namingPattern("phoenix-jvm-scheduled-pool-thread-%d")
-                                    // 设置为守护线程
-                                    .daemon(true)
-                                    .build(),
-                            new ThreadPoolExecutor.AbortPolicy(), "phoenix-jvm-scheduled-pool", true);
-                }
-            }
-        }
-        return jvmScheduledThreadPoolExecutor;
+        return instanceScheduledThreadPoolExecutor;
     }
 
     /**
