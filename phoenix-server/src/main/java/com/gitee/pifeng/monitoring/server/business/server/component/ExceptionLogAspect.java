@@ -87,7 +87,9 @@ public class ExceptionLogAspect {
             org.mybatis.spring.MyBatisSystemException.class,
             org.springframework.dao.DuplicateKeyException.class,
             org.springframework.dao.RecoverableDataAccessException.class,
+            org.springframework.dao.DataIntegrityViolationException.class,
             org.springframework.dao.DataAccessResourceFailureException.class,
+            org.springframework.transaction.TransactionSystemException.class,
             org.springframework.transaction.CannotCreateTransactionException.class,
             org.springframework.jdbc.UncategorizedSQLException.class
     )));
