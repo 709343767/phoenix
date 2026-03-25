@@ -75,6 +75,11 @@ public class ExceptionLogAspect {
     private IInstanceService instanceService;
 
     /**
+     * 防止切面重入的线程局部变量标记，避免切面内部调用的服务方法再次抛异常时触发切面，导致无限递归
+     */
+    private static final ThreadLocal<Boolean> IS_PROCESSING = ThreadLocal.withInitial(() -> Boolean.FALSE);
+
+    /**
      * 要忽略的异常类型，这些异常类型对应的告警将不发送，只保存告警记录
      */
     private static final Set<Class<? extends Throwable>> IGNORE_ALARM_EXCEPTIONS = Collections.unmodifiableSet(new HashSet<>(Arrays.asList(
@@ -111,6 +116,11 @@ public class ExceptionLogAspect {
      */
     @AfterThrowing(pointcut = "exceptionLogPointCut()", throwing = "e")
     public void saveExceptionLog(JoinPoint joinPoint, Throwable e) {
+        // 如果当前线程已经在处理异常日志，则直接返回，防止无限递归
+        if (Boolean.TRUE.equals(IS_PROCESSING.get())) {
+            return;
+        }
+        IS_PROCESSING.set(Boolean.TRUE);
         try {
             HttpServletRequest request;
             try {
@@ -203,6 +213,8 @@ public class ExceptionLogAspect {
             this.alarmService.dealAlarmPackage(alarmPackage);
         } catch (Exception ex) {
             log.error("记录异常日志失败：{}", ex.getMessage(), ex);
+        } finally {
+            IS_PROCESSING.remove();
         }
     }
 
