@@ -316,7 +316,9 @@ bash -c "$(curl -fsSL https://gitee.com/monitoring-platform/phoenix/raw/master/d
 
 ## 使用说明
 
-[https://kacper.fun/types/28](https://kacper.fun/types/28)
+[个人博客](https://kacper.fun/types/28)
+
+[微信公众号](https://mp.weixin.qq.com/mp/appmsgalbum?action=getalbum&__biz=MzYzMzgzNzQ5OQ==&scene=1&album_id=4442806491825356807&count=3#wechat_redirect)
 
 ## 升级日志
 
