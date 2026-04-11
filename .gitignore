@@ -6,6 +6,7 @@
 
 .git
 .idea
+.qoder
 .settings
 liblog4phoenix
 target
