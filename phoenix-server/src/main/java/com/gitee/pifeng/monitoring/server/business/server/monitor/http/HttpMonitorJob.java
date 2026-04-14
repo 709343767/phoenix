@@ -127,7 +127,7 @@ public class HttpMonitorJob extends QuartzJobBean {
                 // 按每个list大小为10拆分成多个list
                 List<List<MonitorHttp>> subMonitorHttpLists = CollectionUtils.split(monitorHttps, 10);
                 for (List<MonitorHttp> subMonitorHttps : subMonitorHttpLists) {
-                    // 使用多线程，加快处理速度
+                    // 使用多线程，加快处理速率
                     this.httpMonitorThreadPoolExecutor.execute(() -> {
                         // 循环处理每一个HTTP信息
                         for (MonitorHttp monitorHttp : subMonitorHttps) {

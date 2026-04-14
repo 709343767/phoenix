@@ -30,10 +30,10 @@ public class ServerDetailPageServerNetworkSpeedChartVo implements ISuperBean {
     @Schema(description = "网卡名字")
     private String name;
 
-    @Schema(description = "下载速度")
+    @Schema(description = "下载速率")
     private Double downloadSpeed;
 
-    @Schema(description = "上传速度")
+    @Schema(description = "上传速率")
     private Double uploadSpeed;
 
     @JsonFormat(pattern = "yyyy/MM/dd HH:mm:ss", timezone = "GMT+8")
