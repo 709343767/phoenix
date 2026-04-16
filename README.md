@@ -18,6 +18,8 @@
 [Gitee](https://gitee.com/monitoring-platform/phoenix) |
 [GitHub](https://github.com/709343767/phoenix)
 
+中文 | [English](README_EN.md)
+
 </div>
 
 ---
