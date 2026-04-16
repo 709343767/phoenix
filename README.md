@@ -45,7 +45,7 @@
 
 **Phoenix** 是一个灵活可配置的开源监控平台，主要用于监控应用程序、服务器、网络设备、Docker、数据库、网络、TCP端口和HTTP接口。通过实时收集、汇聚和分析监控信息，实现在发现异常时立刻推送告警信息，并且提供了可视化系统进行配置、管理和查看。
 
-> 开源不等同于免费，不能基于 Phoenix 二次开发修改 logo、名称、版权等。
+> 开源不等同于免费，允许基于 Phoenix 进行二次开发，但不得修改 logo、名称、版权等。
 
 ### 🏆 G-Star 认证
 
@@ -305,6 +305,10 @@ Maven Central 最新稳定版本：**1.2.7.RELEASE**
 | 数据库设计 | 3 | 表分域与索引策略、实时+历史双表模式、Quartz调度表 |
 
 👉 阅读博客：[个人博客](https://kacper.fun/types/28) | [微信公众号](https://mp.weixin.qq.com/mp/appmsgalbum?action=getalbum&__biz=MzYzMzgzNzQ5OQ==&scene=1&album_id=4442806491825356807&count=3#wechat_redirect)
+
+👉 扫码关注微信公众号，获取更多技术干货
+
+<img src="doc/其它/wx_gzh.jpg" width="300" />
 
 ## 🖥️ 在线演示
 
