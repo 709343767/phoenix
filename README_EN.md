@@ -28,8 +28,8 @@
 
 - [Introduction](#-introduction)
 - [Key Features](#-key-features)
+- [Feature Comparison](#-feature-comparison)
 - [System Architecture](#-system-architecture)
-- [Monitoring Coverage](#-monitoring-coverage)
 - [Tech Stack](#-tech-stack)
 - [Project Structure](#-project-structure)
 - [Quick Start](#-quick-start)
@@ -57,32 +57,57 @@ Phoenix has passed the **GitCode G-Star Graduation Project Certification**.
 
 ## ✨ Key Features
 
-- **🖥️ Full-Stack Monitoring** — Covers applications, servers, network devices, Docker, databases, networks, TCP, HTTP
-- **⚡ Real-Time Alerting** — Supports email, DingTalk, WeCom, Feishu and other multi-channel notifications with four alert levels (INFO/WARN/ERROR/FATAL)
+- **🖥️ Full-Stack Monitoring** — One-stop monitoring from applications to infrastructure, see [Feature Comparison](#-feature-comparison) for details
+- **⚡ Real-Time Alerting** — Multi-channel notifications + four-level alerting mechanism (INFO/WARN/ERROR/FATAL)
 - **🔧 Flexible Configuration** — Flexible alert definition engine with dynamically adjustable monitoring strategies
 - **🌐 Distributed Architecture** — Supports cluster deployment; agents can be deployed on jump servers to bridge network barriers
 - **🔒 Data Security** — Supports encrypted data transmission to ensure monitoring data security
 - **🐳 Containerized Deployment** — One-click deployment with Docker / Docker Compose, installation completed in 10 minutes
 - **📱 Multi-Platform Support** — Web interface supports both desktop and mobile devices
 - **🔄 Dynamic Thread Pool** — View and modify thread pool parameters at runtime, supporting 7 queue types, 6 rejection policies + SPI extension
-- **📡 High Extensibility** — Supports both HTTP and WebSocket dual-channel communication, extensible to monitor programs written in other programming languages
+- **📡 High Extensibility** — Multi-protocol communication architecture, extensible to monitor programs written in other programming languages
+
+## 🔍 Feature Comparison
+
+Phoenix offers two editions: **Open Source (1.x)** and **Commercial (2.x)**. The open source edition includes core monitoring capabilities, suitable for personal learning and small projects. The commercial edition extends with Docker monitoring, network device management, online diagnostics, dynamic thread pool, slow SQL monitoring, enterprise notification channels, business exception log collection, and other advanced features, suitable for enterprise production environments.
+
+> 💰 Marks indicate commercial edition exclusive paid features.
+
+| Module | Feature | Monitoring Content | Open Source (1.x) | Commercial (2.x) |
+|:-------|:--------|:-------------------|:-----------------:|:-----------------:|
+| **Server Monitoring** | Server Resource Monitoring | Online status, OS, CPU, load average, memory, disk, NIC, battery, sensors, processes | ✅ | ✅ |
+| **Java Application Monitoring** | JVM Monitoring | JVM overview, memory, threads, class loading, GC | ✅ | ✅ |
+| | Application Instance Status Monitoring | Online status | ✅ | ✅ |
+| | Business Instrumentation Monitoring | Business instrumentation | ✅ | ✅ |
+| | Dynamic Thread Pool Monitoring & Management | Thread pool parameter viewing and dynamic modification | ❌ | 💰 |
+| | Arthas Online JVM Diagnostics | Online JVM diagnostics | ❌ | 💰 |
+| **Network Monitoring** | HTTP Interface Monitoring | Interface availability | ✅ | ✅ |
+| | TCP Port Monitoring | Telnet port status | ✅ | ✅ |
+| | Ping Network Connectivity Monitoring | Network connectivity | ✅ | ✅ |
+| | Network Device SNMP Monitoring | Switches, routers, etc.: online status, system info, interface info | ❌ | 💰 |
+| **Database Monitoring** | Database Connection Status Monitoring | MySQL, Oracle, Redis, MongoDB online status and sessions | ✅ | ✅ |
+| | Database Slow SQL Monitoring | MySQL slow SQL, Oracle slow SQL and tablespace | ❌ | 💰 |
+| **Docker Monitoring** | Full Docker Monitoring | Service status, containers, images, events, resource statistics | ❌ | 💰 |
+| **Alert System** | Alert Notification (Email / SMS) | Four-level alerts (INFO/WARN/ERROR/FATAL) | ✅ | ✅ |
+| | Alert Notification (DingTalk / WeCom / Feishu) | Multi-channel enterprise notification | ❌ | 💰 |
+| | Alert Count Configuration (Failure / Recovery) | Failure and recovery alert count thresholds | ❌ | 💰 |
+| **Log Management** | Operation Log Management | Operation log recording, viewing, management | ✅ | ✅ |
+| | Exception Log Management | Exception log recording, viewing, management | ✅ | ✅ |
+| | Business Exception Log Collection | Client-side exception log collection | ❌ | 💰 |
+| **Communication Architecture** | HTTP Communication | Basic HTTP communication | ✅ | ✅ |
+| | WebSocket Communication | WebSocket real-time communication | ❌ | 💰 |
+| **Visual Interface** | Basic Monitoring Dashboard | Desktop and mobile monitoring panels | ✅ | ✅ |
+| | Docker Management Interface | Docker management and monitoring pages | ❌ | 💰 |
+| | Network Device Management Interface | Network device management and monitoring pages | ❌ | 💰 |
+| | Network Topology Map | Topology map display | ❌ | 💰 |
+| | Web Terminal Emulation | Online terminal | ❌ | 💰 |
+| | Arthas Diagnostics Interface | Arthas diagnostics operation pages | ❌ | 💰 |
+
+> 📮 **Get Commercial Edition**: To obtain a commercial license or learn more details, please contact the author (WeChat: `pifengeclipse`). For more contact methods, see [Contact Us](#-contact-us).
 
 ## 🏗️ System Architecture
 
 ![System Architecture](doc/系统架构图.png)
-
-## 📊 Monitoring Coverage
-
-| Target | Monitoring Content |
-|:-------|:-------------------|
-| **Java Application** | Online status, JVM (overview/memory/threads/classes/GC), dynamic thread pool, Arthas diagnostics, business instrumentation, exception logs |
-| **Server** | Online status, OS, CPU, load average, memory, disk, NIC, battery, sensors, processes |
-| **Network Device** | SNMP protocol monitoring (switches, routers, etc.): online status, system info, interface info |
-| **Docker** | Service status, containers, images, events, resource statistics |
-| **Database** | MySQL (online status/slow SQL/sessions), Oracle (online status/slow SQL/sessions/tablespace), Redis (online status/full info), MongoDB (online status/full info) |
-| **Network** | Ping (network connectivity) |
-| **TCP** | Telnet (port status) |
-| **HTTP** | Interface availability |
 
 ## 🛠️ Tech Stack
 
