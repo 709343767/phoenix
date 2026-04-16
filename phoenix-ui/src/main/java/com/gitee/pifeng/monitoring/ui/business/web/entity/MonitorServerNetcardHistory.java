@@ -106,11 +106,11 @@ public class MonitorServerNetcardHistory implements Serializable {
     @TableField("TX_DROPPED")
     private Long txDropped;
 
-    @Schema(description = "下载速度")
+    @Schema(description = "下载速率")
     @TableField("DOWNLOAD_BPS")
     private Double downloadBps;
 
-    @Schema(description = "上传速度")
+    @Schema(description = "上传速率")
     @TableField("UPLOAD_BPS")
     private Double uploadBps;
 

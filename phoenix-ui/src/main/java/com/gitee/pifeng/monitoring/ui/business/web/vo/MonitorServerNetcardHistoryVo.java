@@ -92,10 +92,10 @@ public class MonitorServerNetcardHistoryVo implements ISuperBean {
     @Schema(description = "发送时丢弃的包数")
     private Long txDropped;
 
-    @Schema(description = "下载速度")
+    @Schema(description = "下载速率")
     private Double downloadBps;
 
-    @Schema(description = "上传速度")
+    @Schema(description = "上传速率")
     private Double uploadBps;
 
     @JsonFormat(pattern = "yyyy/MM/dd HH:mm:ss", timezone = "GMT+8")

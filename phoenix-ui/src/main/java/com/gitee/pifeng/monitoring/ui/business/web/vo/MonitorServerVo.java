@@ -82,10 +82,10 @@ public class MonitorServerVo implements ISuperBean {
     @Schema(description = "服务器负载")
     private Double loadAverage;
 
-    @Schema(description = "下行带宽")
+    @Schema(description = "下行速率")
     private String downloadBps;
 
-    @Schema(description = "上行带宽")
+    @Schema(description = "上行速率")
     private String uploadBps;
 
     @Schema(description = "监控环境")

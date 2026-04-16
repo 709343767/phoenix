@@ -231,9 +231,9 @@ public class MonitorServerServiceImpl extends ServiceImpl<IMonitorServerDao, Mon
         // 当前时间
         Date currentDateTime = new Date();
         for (MonitorServerVo monitorServerVo : monitorServerVos) {
-            // 下行带宽
+            // 下行速率
             String downloadBps = monitorServerVo.getDownloadBps();
-            // 上行带宽
+            // 上行速率
             String uploadBps = monitorServerVo.getUploadBps();
             if (StringUtils.isNoneBlank(downloadBps)) {
                 String format = DataSizeUtils.format(Double.parseDouble(downloadBps));
@@ -545,9 +545,9 @@ public class MonitorServerServiceImpl extends ServiceImpl<IMonitorServerDao, Mon
         Map<String, MonitorServerVo> result = Maps.newHashMap();
         for (MonitorServerVo monitorServerVo : monitorServerVos) {
             String ip = monitorServerVo.getIp();
-            // 下行带宽
+            // 下行速率
             String downloadBps = monitorServerVo.getDownloadBps();
-            // 上行带宽
+            // 上行速率
             String uploadBps = monitorServerVo.getUploadBps();
             if (StringUtils.isNoneBlank(downloadBps)) {
                 String format = DataSizeUtils.format(Double.parseDouble(downloadBps));

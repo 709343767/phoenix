@@ -118,7 +118,7 @@ public class NetMonitorJob extends QuartzJobBean {
                 // 按每个list大小为10拆分成多个list
                 List<List<MonitorNet>> subMonitorNetLists = CollectionUtils.split(monitorNets, 10);
                 for (List<MonitorNet> subMonitorNets : subMonitorNetLists) {
-                    // 使用多线程，加快处理速度
+                    // 使用多线程，加快处理速率
                     this.netMonitorThreadPoolExecutor.execute(() -> {
                         // 循环处理每一个网络信息
                         for (MonitorNet monitorNet : subMonitorNets) {

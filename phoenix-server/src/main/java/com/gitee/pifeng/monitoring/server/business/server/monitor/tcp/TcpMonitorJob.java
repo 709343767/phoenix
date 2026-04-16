@@ -120,7 +120,7 @@ public class TcpMonitorJob extends QuartzJobBean {
                 // 按每个list大小为10拆分成多个list
                 List<List<MonitorTcp>> subMonitorTcpLists = CollectionUtils.split(monitorTcps, 10);
                 for (List<MonitorTcp> subMonitorTcps : subMonitorTcpLists) {
-                    // 使用多线程，加快处理速度
+                    // 使用多线程，加快处理速率
                     this.tcpMonitorThreadPoolExecutor.execute(() -> {
                         // 循环处理每一个TCP信息
                         for (MonitorTcp monitorTcp : subMonitorTcps) {

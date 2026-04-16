@@ -120,7 +120,7 @@ public class DbMonitorJob extends QuartzJobBean {
                 // 按每个list大小为10拆分成多个list
                 List<List<MonitorDb>> subMonitorDbLists = CollectionUtils.split(monitorDbs, 10);
                 for (List<MonitorDb> subMonitorDbs : subMonitorDbLists) {
-                    // 使用多线程，加快处理速度
+                    // 使用多线程，加快处理速率
                     this.dbMonitorThreadPoolExecutor.execute(() -> {
                         for (MonitorDb monitorDb : subMonitorDbs) {
                             // 是否开启监控（0：不开启监控；1：开启监控）

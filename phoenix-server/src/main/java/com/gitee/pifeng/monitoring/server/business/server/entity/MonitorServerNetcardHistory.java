@@ -147,13 +147,13 @@ public class MonitorServerNetcardHistory {
     private Long txDropped;
 
     /**
-     * 下载速度
+     * 下载速率
      */
     @TableField("DOWNLOAD_BPS")
     private Double downloadBps;
 
     /**
-     * 上传速度
+     * 上传速率
      */
     @TableField("UPLOAD_BPS")
     private Double uploadBps;

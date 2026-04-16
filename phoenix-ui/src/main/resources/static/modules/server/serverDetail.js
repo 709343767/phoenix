@@ -971,10 +971,10 @@
                             '       <label class="label-font-weight">发送时丢弃的包数：</label>' + txDropped + ' 个' +
                             '    </div>' +
                             '    <div class="layui-col-md4">' +
-                            '       <label class="label-font-weight">下行带宽(↓)：</label>' + downloadSpeed +
+                            '       <label class="label-font-weight">下行速率(↓)：</label>' + downloadSpeed +
                             '    </div>' +
                             '    <div class="layui-col-md4">' +
-                            '       <label class="label-font-weight">上行带宽(↑)：</label>' + uploadSpeed +
+                            '       <label class="label-font-weight">上行速率(↑)：</label>' + uploadSpeed +
                             '    </div>';
                         if (i !== data.length - 1) {
                             html += '<hr class="layui-bg-gray hr-padding">';
@@ -1885,27 +1885,27 @@
                     var datetime = data.map(function (item) {
                         return item.insertTime.replace(' ', '\n');
                     });
-                    // 下载速度
+                    // 下载速率
                     var downloadSpeed = data.map(function (item) {
                         return item.downloadSpeed;
                     });
-                    // 上传速度
+                    // 上传速率
                     var uploadSpeed = data.map(function (item) {
                         return item.uploadSpeed;
                     });
-                    // 最新下载速度
+                    // 最新下载速率
                     var lastDownloadSpeed = data.length !== 0 ? convertSize(data[data.length - 1].downloadSpeed) + '/s' : '没数据';
-                    // 最新上传速度
+                    // 最新上传速率
                     var lastUploadSpeed = data.length !== 0 ? convertSize(data[data.length - 1].uploadSpeed) + '/s' : '没数据';
                     var option = {
                         title: {
-                            text: chartAddress + '(' + name + ') 上行/下行 带宽',
+                            text: chartAddress + '(' + name + ') 上行/下行 速率',
                             left: 'center',
                             textStyle: {
                                 color: '#696969',
                                 fontSize: 14
                             },
-                            subtext: '↑ 上行带宽：' + lastUploadSpeed + '，↓ 下行带宽：' + lastDownloadSpeed,
+                            subtext: '↑ 上行速率：' + lastUploadSpeed + '，↓ 下行速率：' + lastDownloadSpeed,
                             subtextStyle: {
                                 color: '#BEBEBE'
                             }
@@ -1925,7 +1925,7 @@
                             }
                         },
                         legend: {
-                            data: ['上行带宽', '下行带宽'],
+                            data: ['上行速率', '下行速率'],
                             orient: 'vertical',
                             x: '80%' //图例位置，设置right发现图例和文字位置反了，设置一个数值就好了
                         },
@@ -1969,7 +1969,7 @@
                         },
                         yAxis: {
                             type: 'value',
-                            name: '带宽',
+                            name: '网速',
                             axisLabel: {
                                 formatter: function (value, index) {
                                     return convertSize(value) + '/s';
@@ -1978,7 +1978,7 @@
                         },
                         // 数据
                         series: [{
-                            name: '下行带宽',
+                            name: '下行速率',
                             data: downloadSpeed,
                             type: 'line',
                             smooth: true,
@@ -2020,7 +2020,7 @@
                                 }
                             }
                         }, {
-                            name: '上行带宽',
+                            name: '上行速率',
                             data: uploadSpeed,
                             type: 'line',
                             smooth: true,

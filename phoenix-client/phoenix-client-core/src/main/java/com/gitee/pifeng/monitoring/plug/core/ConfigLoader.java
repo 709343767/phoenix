@@ -471,10 +471,10 @@ public class ConfigLoader {
         if (StringUtils.isBlank(instanceEndpoint)) {
             instanceEndpoint = EndpointTypeEnums.CLIENT.getNameEn();
         }
-        if (!(StringUtils.equals(instanceEndpoint, EndpointTypeEnums.CLIENT.getNameEn())
-                || StringUtils.equals(instanceEndpoint, EndpointTypeEnums.AGENT.getNameEn())
-                || StringUtils.equals(instanceEndpoint, EndpointTypeEnums.SERVER.getNameEn())
-                || StringUtils.equals(instanceEndpoint, EndpointTypeEnums.UI.getNameEn())
+        if (!(StringUtils.equalsIgnoreCase(instanceEndpoint, EndpointTypeEnums.CLIENT.getNameEn())
+                || StringUtils.equalsIgnoreCase(instanceEndpoint, EndpointTypeEnums.AGENT.getNameEn())
+                || StringUtils.equalsIgnoreCase(instanceEndpoint, EndpointTypeEnums.SERVER.getNameEn())
+                || StringUtils.equalsIgnoreCase(instanceEndpoint, EndpointTypeEnums.UI.getNameEn())
         )) {
             throw new ErrorConfigParamException("实例端点类型只能为（server、agent、client、ui）其中之一！");
         }
