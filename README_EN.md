@@ -103,7 +103,7 @@ Phoenix offers two editions: **Open Source (1.x)** and **Commercial (2.x)**. The
 | | Web Terminal Emulation | Online terminal | ❌ | 💰 |
 | | Arthas Diagnostics Interface | Arthas diagnostics operation pages | ❌ | 💰 |
 
-> 📮 **Get Commercial Edition**: To obtain a commercial license or learn more details, please contact the author (WeChat: `pifengeclipse`). For more contact methods, see [Contact Us](#-contact-us).
+> 📮 **Get Commercial Edition**: To obtain a commercial license or learn more details, please refer to the [《Commercial Pricing Plan》](doc/商用版定价方案.pdf) or contact the author (WeChat: `pifengeclipse`). For more contact methods, see [Contact Us](#-contact-us).
 
 ## 🏗️ System Architecture
 
