@@ -40,6 +40,8 @@ ENTRYPOINT ["java", \
 "java.base/java.lang=ALL-UNNAMED", \
 "--add-opens", \
 "java.base/java.lang.reflect=ALL-UNNAMED", \
+"--add-opens", \
+"java.base/java.util.concurrent=ALL-UNNAMED", \
 "-Djava.security.egd=file:/dev/./urandom", \
 "-Duser.timezone=GMT+08", \
 "-Dspring.profiles.active=prod", \

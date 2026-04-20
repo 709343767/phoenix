@@ -5,7 +5,7 @@ set -e
 echo "Starting to execute remote script..."
 
 # 定义一个远程脚本的 URL
-RUN_CONTAINER_PHOENIX_AGENT_URL="https://gitee.com/monitoring-platform/phoenix/raw/master/doc/Docker/phoenix-agent/run_container.1.2.6.RELEASE-CR5.sh"
+RUN_CONTAINER_PHOENIX_AGENT_URL="https://gitee.com/monitoring-platform/phoenix/raw/master/doc/Docker/phoenix-agent/run_container.1.2.7.RELEASE.sh"
 
 # 执行脚本
 echo "Executing Phoenix Agent container script..."
