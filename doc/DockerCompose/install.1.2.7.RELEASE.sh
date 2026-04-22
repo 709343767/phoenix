@@ -6,8 +6,8 @@ set -e
 # 配置区（可根据需要调整）
 # ==============================
 COMPOSE_FILE_URL="https://gitee.com/monitoring-platform/phoenix/raw/master/doc/DockerCompose/docker-compose.1.2.7.RELEASE.yml"
-LOCAL_COMPOSE_FILE="./docker-compose.yml"
 HOST_DATA_DIR="/data/phoenix"
+LOCAL_COMPOSE_FILE="${HOST_DATA_DIR}/docker-compose.yml"
 
 # 定义 UID/GID
 CONTAINER_UID=999
@@ -43,7 +43,8 @@ fi
 
 log "Using compose command: ${COMPOSE_CMD}"
 
-# 2. 下载 docker-compose.yml
+# 2. 确保目标目录存在并下载 docker-compose.yml
+mkdir -p "${HOST_DATA_DIR}"
 log "Downloading docker-compose.yml from: ${COMPOSE_FILE_URL}"
 if ! curl --retry 3 --retry-delay 2 -fsSL -o "${LOCAL_COMPOSE_FILE}" "${COMPOSE_FILE_URL}"; then
   error_exit "Failed to download docker-compose.yml after 3 retries"
