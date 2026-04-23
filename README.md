@@ -379,4 +379,10 @@ Maven Central 最新稳定版本：**1.2.7.RELEASE**
 
 ## ⭐ Star 历史
 
+### GitHub
+
 [![Star History Chart](https://api.star-history.com/svg?repos=709343767/phoenix&type=Date)](https://star-history.com/#709343767/phoenix&Date)
+
+### GitCode
+
+[![Stargazers over time](https://gitcode.com/monitoring-platform/phoenix/starcharts.svg?variant=adaptive)](https://gitcode.com/monitoring-platform/phoenix)

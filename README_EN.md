@@ -379,4 +379,10 @@ If Phoenix has been helpful to you, feel free to donate to support the project's
 
 ## ⭐ Star History
 
+### GitHub
+
 [![Star History Chart](https://api.star-history.com/svg?repos=709343767/phoenix&type=Date)](https://star-history.com/#709343767/phoenix&Date)
+
+### GitCode
+
+[![Stargazers over time](https://gitcode.com/monitoring-platform/phoenix/starcharts.svg?variant=adaptive)](https://gitcode.com/monitoring-platform/phoenix)
