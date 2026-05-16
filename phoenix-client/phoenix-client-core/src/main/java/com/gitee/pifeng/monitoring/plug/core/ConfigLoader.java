@@ -94,8 +94,8 @@ public class ConfigLoader {
      */
     public static MonitoringProperties load(String configPath, String configName)
             throws NotFoundConfigParamException, NotFoundConfigFileException, ErrorConfigParamException {
-        // 如果没有填写配置文件路径，默认在根路径
-        configPath = StringUtils.defaultIfBlank(configPath, "");
+        // 如果没有填写配置文件路径，默认在根路径，且路径末尾不能有斜杠
+        configPath = StringUtils.removeEnd(StringUtils.defaultIfBlank(configPath, ""), "/");
         // 如果没有写配置文件名字，默认为：monitoring.properties
         configName = StringUtils.defaultIfBlank(configName, "monitoring.properties");
         Properties properties;
