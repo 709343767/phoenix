@@ -17,7 +17,7 @@ public class SecureUtilsTest extends TestCase {
 
     /**
      * <p>
-     * 测试秘钥生成方法
+     * 测试密钥生成方法
      * </p>
      *
      * @author 皮锋

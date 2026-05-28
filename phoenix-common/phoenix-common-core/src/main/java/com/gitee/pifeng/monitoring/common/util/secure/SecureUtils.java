@@ -101,7 +101,7 @@ public class SecureUtils extends InitSecure {
      *
      * @param algorithm 算法，支持PBE算法
      * @param keySize   密钥长度，&lt;0表示不设定密钥长度，即使用默认长度
-     * @return 明文秘钥字符串
+     * @return 明文密钥字符串
      * @author 皮锋
      * @custom.date 2021/8/14 14:41
      */

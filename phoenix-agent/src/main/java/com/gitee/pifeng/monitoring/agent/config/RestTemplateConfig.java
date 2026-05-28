@@ -90,7 +90,7 @@ public class RestTemplateConfig {
     public CloseableHttpClient httpClient() {
         // 注册访问协议相关的Socket工厂
         Registry<ConnectionSocketFactory> socketFactoryRegistry = RegistryBuilder.<ConnectionSocketFactory>create()
-                // 配置同时支持 HTTP 和 HTPPS
+                // 配置同时支持 HTTP 和 HTTPS
                 .register("http", PlainConnectionSocketFactory.INSTANCE)
                 .register("https", SSLConnectionSocketFactory.getSystemSocketFactory())
                 .build();

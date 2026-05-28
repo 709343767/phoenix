@@ -67,19 +67,19 @@
     {
       "sourceType": "com.gitee.pifeng.monitoring.common.property.client.MonitoringSecureAesProperties",
       "name": "phoenix.monitoring.secure.aes.key",
-      "description": "缺省[AES加密算法秘钥，默认：不填写].",
+      "description": "缺省[AES加密算法密钥，默认：不填写].",
       "type": "java.lang.String"
     },
     {
       "sourceType": "com.gitee.pifeng.monitoring.common.property.client.MonitoringSecureDesProperties",
       "name": "phoenix.monitoring.secure.des.key",
-      "description": "缺省[DES加密算法秘钥，默认：不填写].",
+      "description": "缺省[DES加密算法密钥，默认：不填写].",
       "type": "java.lang.String"
     },
     {
       "sourceType": "com.gitee.pifeng.monitoring.common.property.client.MonitoringSecureSm4Properties",
       "name": "phoenix.monitoring.secure.sm4.key",
-      "description": "缺省[SM4加密算法秘钥，默认：不填写].",
+      "description": "缺省[SM4加密算法密钥，默认：不填写].",
       "type": "java.lang.String"
     },
     {

@@ -18,7 +18,7 @@ import javax.validation.constraints.NotNull;
 public class CasConfigurationProperties {
 
     /**
-     * 秘钥
+     * 密钥
      */
     private String key = "phoenix";
 

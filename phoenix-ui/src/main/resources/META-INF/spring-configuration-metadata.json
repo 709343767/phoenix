@@ -29,7 +29,7 @@
     {
       "sourceType": "com.gitee.pifeng.monitoring.ui.property.auth.thirdauth.cas.CasConfigurationProperties",
       "name": "phoenix.auth.third-auth.cas.key",
-      "description": "秘钥",
+      "description": "密钥",
       "type": "java.lang.String"
     },
     {

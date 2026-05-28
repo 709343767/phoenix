@@ -136,7 +136,7 @@ public class EnumPoolingHttpClient {
         }
         // 注册访问协议相关的Socket工厂
         Registry<ConnectionSocketFactory> socketFactoryRegistry = RegistryBuilder.<ConnectionSocketFactory>create()
-                // 配置同时支持 HTTP 和 HTPPS
+                // 配置同时支持 HTTP 和 HTTPS
                 .register("http", PlainConnectionSocketFactory.INSTANCE)
                 // 参考：https://blog.csdn.net/u011537073/article/details/81216229
                 .register("https", sslConnectionSocketFactory)

@@ -249,7 +249,7 @@ public class ConfigLoader {
                                                                                    MonitoringProperties monitoringProperties,
                                                                                    boolean hasMonitoringProperties)
             throws NotFoundConfigParamException, ErrorConfigParamException {
-        // 秘钥
+        // 密钥
         String key;
         if (hasMonitoringProperties) {
             MonitoringSecureProperties secure = monitoringProperties.getSecure() == null ? new MonitoringSecureProperties() : monitoringProperties.getSecure();
@@ -281,7 +281,7 @@ public class ConfigLoader {
                                                                                    MonitoringProperties monitoringProperties,
                                                                                    boolean hasMonitoringProperties)
             throws NotFoundConfigParamException, ErrorConfigParamException {
-        // 秘钥
+        // 密钥
         String key;
         if (hasMonitoringProperties) {
             MonitoringSecureProperties secure = monitoringProperties.getSecure() == null ? new MonitoringSecureProperties() : monitoringProperties.getSecure();
@@ -313,7 +313,7 @@ public class ConfigLoader {
                                                                                    MonitoringProperties monitoringProperties,
                                                                                    boolean hasMonitoringProperties)
             throws NotFoundConfigParamException, ErrorConfigParamException {
-        // 秘钥
+        // 密钥
         String key;
         if (hasMonitoringProperties) {
             MonitoringSecureProperties secure = monitoringProperties.getSecure() == null ? new MonitoringSecureProperties() : monitoringProperties.getSecure();

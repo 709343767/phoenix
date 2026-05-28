@@ -216,7 +216,7 @@ public class SpringSecurityCasConfig extends BaseWebSecurityConfigurerAdapter {
         casAuthenticationProvider.setServiceProperties(this.serviceProperties());
         //设置cas票证验证器
         casAuthenticationProvider.setTicketValidator(this.casTicketValidationFilter());
-        //设置cas秘钥
+        //设置cas密钥
         casAuthenticationProvider.setKey(this.casConfigurationProperties.getKey());
         return casAuthenticationProvider;
     }
