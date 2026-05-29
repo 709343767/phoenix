@@ -104,7 +104,7 @@ public class ConfigLoader {
                 throw new IllegalArgumentException();
             }
             String path = StringUtils.removeStart(configPath, "filepath:");
-            properties = PropertiesUtils.loadPropertiesInFilepath(StringUtils.replace(path + configName, "/", File.separator));
+            properties = PropertiesUtils.loadPropertiesInFilepath(StringUtils.replace(path.isEmpty() ? configName : path + "/" + configName, "/", File.separator));
         } catch (Throwable e1) {
             try {
                 String filePath;
@@ -131,7 +131,7 @@ public class ConfigLoader {
                             throw new IllegalArgumentException();
                         }
                         String path = StringUtils.removeStart(configPath, "classpath:");
-                        properties = PropertiesUtils.loadPropertiesInClasspath(path + configName);
+                        properties = PropertiesUtils.loadPropertiesInClasspath(path.isEmpty() ? configName : path + "/" + configName);
                     } catch (Throwable e4) {
                         try {
                             properties = PropertiesUtils.loadPropertiesInClasspath("config/" + configName);
