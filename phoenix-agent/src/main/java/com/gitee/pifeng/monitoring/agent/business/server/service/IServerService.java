@@ -1,4 +1,4 @@
-package com.gitee.pifeng.monitoring.agent.business.server.service;
+﻿package com.gitee.pifeng.monitoring.agent.business.server.service;
 
 import com.gitee.pifeng.monitoring.common.dto.BaseResponsePackage;
 import com.gitee.pifeng.monitoring.common.dto.ServerPackage;
@@ -18,7 +18,7 @@ public interface IServerService {
 
     /**
      * <p>
-     * 给服务端发服务器信息包
+     * 给服务端发送服务器信息包
      * </p>
      *
      * @param serverPackage 服务器信息包

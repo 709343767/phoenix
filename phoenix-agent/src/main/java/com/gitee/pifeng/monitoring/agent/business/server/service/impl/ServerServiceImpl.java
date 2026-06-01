@@ -1,4 +1,4 @@
-package com.gitee.pifeng.monitoring.agent.business.server.service.impl;
+﻿package com.gitee.pifeng.monitoring.agent.business.server.service.impl;
 
 import com.gitee.pifeng.monitoring.agent.business.server.service.IHttpService;
 import com.gitee.pifeng.monitoring.agent.business.server.service.IServerService;
@@ -34,7 +34,7 @@ public class ServerServiceImpl implements IServerService {
 
     /**
      * <p>
-     * 给服务端发服务器信息包
+     * 给服务端发送服务器信息包
      * </p>
      *
      * @param serverPackage 服务器信息包

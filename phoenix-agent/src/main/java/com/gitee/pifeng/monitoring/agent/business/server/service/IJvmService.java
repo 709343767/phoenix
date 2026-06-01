@@ -1,4 +1,4 @@
-package com.gitee.pifeng.monitoring.agent.business.server.service;
+﻿package com.gitee.pifeng.monitoring.agent.business.server.service;
 
 import com.gitee.pifeng.monitoring.common.dto.BaseResponsePackage;
 import com.gitee.pifeng.monitoring.common.dto.JvmPackage;
@@ -18,7 +18,7 @@ public interface IJvmService {
 
     /**
      * <p>
-     * 给服务端发Java虚拟机信息包
+     * 给服务端发送Java虚拟机信息包
      * </p>
      *
      * @param jvmPackage Java虚拟机信息包

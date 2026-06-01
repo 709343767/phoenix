@@ -33,7 +33,7 @@
     All options in other sections are optional
     -->
 
-    <!-- ID of the service. It should be unique accross the Windows system-->
+    <!-- ID of the service. It should be unique across the Windows system-->
     <id>phoenixAgent</id>
     <!-- Display name of the service -->
     <name>phoenixAgent</name>

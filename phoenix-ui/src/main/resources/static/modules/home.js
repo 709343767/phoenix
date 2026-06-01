@@ -470,7 +470,7 @@
                         '         </p>' +
                         '         <p>未知' +
                         '               <span class="layuiadmin-span-color">' + homeNetVo.netUnsentSum +
-                        '                      <i class="layui-inline layui-icon"><img src="' + ctxPath + 'images/icon16/net-unkown-16.png"></i>' +
+                        '                      <i class="layui-inline layui-icon"><img src="' + ctxPath + 'images/icon16/net-unknown-16.png"></i>' +
                         '               </span>' +
                         '         </p>';
                     $('#ip-card-list').empty().append(htmlIp);
@@ -490,7 +490,7 @@
                         '         </p>' +
                         '         <p>未知' +
                         '               <span class="layuiadmin-span-color">' + homeTcpVo.tcpUnsentSum +
-                        '                      <i class="layui-inline layui-icon"><img src="' + ctxPath + 'images/icon16/tcp-unkown-16.png"></i>' +
+                        '                      <i class="layui-inline layui-icon"><img src="' + ctxPath + 'images/icon16/tcp-unknown-16.png"></i>' +
                         '               </span>' +
                         '         </p>';
                     $('#tcp-card-list').empty().append(htmlTcp);
@@ -510,7 +510,7 @@
                         '         </p>' +
                         '         <p>未知' +
                         '               <span class="layuiadmin-span-color">' + homeHttpVo.httpUnsentSum +
-                        '                      <i class="layui-inline layui-icon"><img src="' + ctxPath + 'images/icon16/http-unkown-16.png"></i>' +
+                        '                      <i class="layui-inline layui-icon"><img src="' + ctxPath + 'images/icon16/http-unknown-16.png"></i>' +
                         '               </span>' +
                         '         </p>';
                     $('#http-card-list').empty().append(htmlHttp);
