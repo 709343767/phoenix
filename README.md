@@ -12,7 +12,7 @@
 [![Gitee Stars](https://gitee.com/monitoring-platform/phoenix/badge/star.svg?theme=dark)](https://gitee.com/monitoring-platform/phoenix/stargazers)
 [![Version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgitee.com%2Fapi%2Fv5%2Frepos%2Fmonitoring-platform%2Fphoenix%2Freleases%2Flatest&query=%24.tag_name&label=Version&color=orange)](https://gitee.com/monitoring-platform/phoenix/releases)
 
-[在线演示](http://124.222.235.43/phoenix-ui/index) |
+[在线演示](http://1.14.155.72/phoenix-ui/index) |
 [微信公众号](https://mp.weixin.qq.com/mp/appmsgalbum?action=getalbum&__biz=MzYzMzgzNzQ5OQ==&scene=1&album_id=4442806491825356807&count=3#wechat_redirect) |
 [GitCode](https://gitcode.com/monitoring-platform/phoenix) |
 [Gitee](https://gitee.com/monitoring-platform/phoenix) |
@@ -341,7 +341,7 @@ Maven Central 最新稳定版本：**1.2.7.RELEASE**
 
 | 演示地址 | 账号 | 密码 |
 |:---------|:-----|:-----|
-| [http://124.222.235.43/phoenix-ui/index](http://124.222.235.43/phoenix-ui/index) | guest | guest123 |
+| [http://1.14.155.72/phoenix-ui/index](http://1.14.155.72/phoenix-ui/index) | guest | guest123 |
 
 > **提示：** 演示环境仅提供查看权限，访问速度受限于服务器带宽。
 
