@@ -37,10 +37,10 @@ public class ShutdownHook {
                     log.info("下线数据包发送结果：{}", result.toJsonString());
                 }
                 // 第二步：释放资源
-                // 1.优雅地关闭所有需要关闭的线程池并且取消注册
-                ThreadPoolManager.shutdownAllGracefullyAndUnregister();
-                // 2.关闭HTTP连接池释放掉连接
+                // 1.关闭HTTP连接池释放掉连接
                 EnumPoolingHttpClient.getInstance().close();
+                // 2.优雅地关闭所有需要关闭的线程池并且取消注册
+                ThreadPoolManager.shutdownAllGracefullyAndUnregister();
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
             }
