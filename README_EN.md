@@ -12,7 +12,7 @@
 [![Gitee Stars](https://gitee.com/monitoring-platform/phoenix/badge/star.svg?theme=dark)](https://gitee.com/monitoring-platform/phoenix/stargazers)
 [![Version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgitee.com%2Fapi%2Fv5%2Frepos%2Fmonitoring-platform%2Fphoenix%2Freleases%2Flatest&query=%24.tag_name&label=Version&color=orange)](https://gitee.com/monitoring-platform/phoenix/releases)
 
-[Live Demo](http://124.222.235.43/phoenix-ui/index) |
+[Live Demo](http://1.14.155.72/phoenix-ui/index) |
 [WeChat](https://mp.weixin.qq.com/mp/appmsgalbum?action=getalbum&__biz=MzYzMzgzNzQ5OQ==&scene=1&album_id=4442806491825356807&count=3#wechat_redirect) |
 [GitCode](https://gitcode.com/monitoring-platform/phoenix) |
 [Gitee](https://gitee.com/monitoring-platform/phoenix) |
@@ -341,7 +341,7 @@ Over **60+** in-depth technical articles (continuously updated), covering archit
 
 | Demo URL | Account | Password |
 |:---------|:--------|:---------|
-| [http://124.222.235.43/phoenix-ui/index](http://124.222.235.43/phoenix-ui/index) | guest | guest123 |
+| [http://1.14.155.72/phoenix-ui/index](http://1.14.155.72/phoenix-ui/index) | guest | guest123 |
 
 > **Note:** The demo environment provides view-only access, and access speed is limited by server bandwidth.
 

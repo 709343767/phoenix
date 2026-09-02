@@ -139,7 +139,7 @@
     {
       "sourceType": "com.gitee.pifeng.monitoring.common.property.client.MonitoringHeartbeatProperties",
       "name": "phoenix.monitoring.heartbeat.rate",
-      "description": "缺省[与服务端或者代理端发心跳包的频率（秒），默认30秒，最小不能小于30秒].",
+      "description": "缺省[与服务端或者代理端发送心跳包的频率（秒），默认30秒，最小不能小于30秒].",
       "type": "java.lang.Long"
     },
     {
@@ -150,14 +150,14 @@
     },
     {
       "sourceType": "com.gitee.pifeng.monitoring.common.property.client.MonitoringServerInfoProperties",
-      "name": "phoenix.monitoring.server-info.user-sigar-enable",
+      "name": "phoenix.monitoring.server-info.use-sigar-enable",
       "description": "缺省[是否使用sigar采集服务器信息，默认：false].",
       "type": "java.lang.Boolean"
     },
     {
       "sourceType": "com.gitee.pifeng.monitoring.common.property.client.MonitoringServerInfoProperties",
       "name": "phoenix.monitoring.server-info.rate",
-      "description": "缺省[与服务端或者代理端发服务器信息包的频率（秒），默认60秒，最小不能小于30秒].",
+      "description": "缺省[与服务端或者代理端发送服务器信息包的频率（秒），默认60秒，最小不能小于30秒].",
       "type": "java.lang.Long"
     },
     {

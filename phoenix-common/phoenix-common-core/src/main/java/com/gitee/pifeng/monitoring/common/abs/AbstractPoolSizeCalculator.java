@@ -10,7 +10,7 @@ import java.util.concurrent.BlockingQueue;
 
 /**
  * A class that calculates the optimal thread pool boundaries. It takes the desired target utilization and the desired
- * work queue memory consumption as input and retuns thread count and work queue capacity.
+ * work queue memory consumption as input and returns thread count and work queue capacity.
  *
  * @author Niklas Schlimm
  */
@@ -25,7 +25,7 @@ public abstract class AbstractPoolSizeCalculator {
      * Accuracy of test run. It must finish within 20ms of the testTime otherwise we retry the test. This could be
      * configurable.
      */
-    private final int EPSYLON = 20;
+    private final int EPSILON = 20;
 
     /**
      * Control variable for the CPU time investigation.
@@ -45,12 +45,12 @@ public abstract class AbstractPoolSizeCalculator {
      */
     public void calculateBoundaries(BigDecimal targetUtilization, BigDecimal targetQueueSizeBytes) {
         calculateOptimalCapacity(targetQueueSizeBytes);
-        Runnable task = creatTask();
+        Runnable task = createTask();
         start(task);
         // warm up phase
         start(task);
         long cputime = getCurrentThreadCPUTime();
-        // test intervall
+        // test interval
         start(task);
         cputime = getCurrentThreadCPUTime() - cputime;
         long waittime = (testtime * 1000000) - cputime;
@@ -61,7 +61,7 @@ public abstract class AbstractPoolSizeCalculator {
         long mem = calculateMemoryUsage();
         BigDecimal queueCapacity = targetQueueSizeBytes.divide(new BigDecimal(mem), RoundingMode.HALF_UP);
         Console.log("Target queue memory usage (bytes): " + targetQueueSizeBytes);
-        Console.log("createTask() produced " + creatTask().getClass().getName() + " which took " + mem
+        Console.log("createTask() produced " + createTask().getClass().getName() + " which took " + mem
                 + " bytes in a queue");
         Console.log("Formula: " + targetQueueSizeBytes + " / " + mem);
         Console.log("* Recommended queue capacity (bytes): " + queueCapacity);
@@ -91,7 +91,7 @@ public abstract class AbstractPoolSizeCalculator {
     }
 
     /**
-     * Runs the {@link Runnable} over a period defined in {@link #testtime}. Based on Heinz Kabbutz' ideas
+     * Runs the {@link Runnable} over a period defined in {@link #testtime}. Based on Heinz Kabutz' ideas
      * (http://www.javaspecialists.eu/archive/Issue124.html).
      *
      * @param task the runnable under investigation
@@ -117,7 +117,7 @@ public abstract class AbstractPoolSizeCalculator {
             }
             start = System.currentTimeMillis() - start;
             timer.cancel();
-        } while (Math.abs(start - testtime) > EPSYLON);
+        } while (Math.abs(start - testtime) > EPSILON);
         collectGarbage(3);
     }
 
@@ -134,7 +134,7 @@ public abstract class AbstractPoolSizeCalculator {
     }
 
     /**
-     * Calculates the memory usage of a single element in a work queue. Based on Heinz Kabbutz' ideas
+     * Calculates the memory usage of a single element in a work queue. Based on Heinz Kabutz' ideas
      * (http://www.javaspecialists.eu/archive/Issue029.html).
      *
      * @return memory usage of a single {@link Runnable} element in the thread pools work queue
@@ -142,7 +142,7 @@ public abstract class AbstractPoolSizeCalculator {
     public long calculateMemoryUsage() {
         BlockingQueue<Runnable> queue = createWorkQueue();
         for (int i = 0; i < SAMPLE_QUEUE_SIZE; i++) {
-            queue.add(creatTask());
+            queue.add(createTask());
         }
         long mem0 = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
         long mem1 = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
@@ -151,7 +151,7 @@ public abstract class AbstractPoolSizeCalculator {
         mem0 = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
         queue = createWorkQueue();
         for (int i = 0; i < SAMPLE_QUEUE_SIZE; i++) {
-            queue.add(creatTask());
+            queue.add(createTask());
         }
         collectGarbage(15);
         mem1 = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
@@ -163,7 +163,7 @@ public abstract class AbstractPoolSizeCalculator {
      *
      * @return an instance of your runnable task under investigation
      */
-    public abstract Runnable creatTask();
+    public abstract Runnable createTask();
 
     /**
      * Return an instance of the queue used in the thread pool.

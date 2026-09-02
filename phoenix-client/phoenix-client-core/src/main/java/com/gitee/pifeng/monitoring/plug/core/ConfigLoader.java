@@ -104,7 +104,7 @@ public class ConfigLoader {
                 throw new IllegalArgumentException();
             }
             String path = StringUtils.removeStart(configPath, "filepath:");
-            properties = PropertiesUtils.loadPropertiesInFilepath(StringUtils.replace(path + configName, "/", File.separator));
+            properties = PropertiesUtils.loadPropertiesInFilepath(StringUtils.replace(path.isEmpty() ? configName : path + "/" + configName, "/", File.separator));
         } catch (Throwable e1) {
             try {
                 String filePath;
@@ -131,7 +131,7 @@ public class ConfigLoader {
                             throw new IllegalArgumentException();
                         }
                         String path = StringUtils.removeStart(configPath, "classpath:");
-                        properties = PropertiesUtils.loadPropertiesInClasspath(path + configName);
+                        properties = PropertiesUtils.loadPropertiesInClasspath(path.isEmpty() ? configName : path + "/" + configName);
                     } catch (Throwable e4) {
                         try {
                             properties = PropertiesUtils.loadPropertiesInClasspath("config/" + configName);
@@ -510,13 +510,13 @@ public class ConfigLoader {
                                                           MonitoringProperties monitoringProperties,
                                                           boolean hasMonitoringProperties)
             throws ErrorConfigParamException {
-        // 缺省[与服务端或者代理端发心跳包的频率（秒），默认30秒，最小不能小于30秒]
+        // 缺省[与服务端或者代理端发送心跳包的频率（秒），默认30秒，最小不能小于30秒]
         long heartbeatRate;
         if (hasMonitoringProperties) {
             MonitoringHeartbeatProperties heartbeat = monitoringProperties.getHeartbeat() == null ? new MonitoringHeartbeatProperties() : monitoringProperties.getHeartbeat();
             heartbeatRate = heartbeat.getRate() == null ? 30L : heartbeat.getRate();
         } else {
-            // 缺省[与服务端或者代理端发心跳包的频率（秒），默认30秒，最小不能小于30秒]
+            // 缺省[与服务端或者代理端发送心跳包的频率（秒），默认30秒，最小不能小于30秒]
             String heartbeatRateStr = StringUtils.trimToNull(properties.getProperty("monitoring.heartbeat.rate"));
             heartbeatRate = StringUtils.isBlank(heartbeatRateStr) ? 30L : Long.parseLong(heartbeatRateStr);
         }
@@ -548,30 +548,30 @@ public class ConfigLoader {
             throws ErrorConfigParamException {
         // 缺省[是否采集服务器信息，默认false]
         boolean serverInfoEnable;
-        // 缺省[与服务端或者代理端发服务器信息包的频率（秒），默认60秒，最小不能小于30秒]
+        // 缺省[与服务端或者代理端发送服务器信息包的频率（秒），默认60秒，最小不能小于30秒]
         long serverInfoRate;
         // 缺省[服务器本机ip地址，默认：自动获取]
         String serverInfoIp;
         // 缺省[是否使用sigar采集服务器信息，默认：false]
-        boolean serverInfoUserSigarEnable;
+        boolean serverInfoUseSigarEnable;
         if (hasMonitoringProperties) {
             MonitoringServerInfoProperties serverInfo = monitoringProperties.getServerInfo() == null ? new MonitoringServerInfoProperties() : monitoringProperties.getServerInfo();
             serverInfoEnable = serverInfo.getEnable() != null && serverInfo.getEnable();
             serverInfoRate = serverInfo.getRate() == null ? 60L : serverInfo.getRate();
             serverInfoIp = serverInfo.getIp();
-            serverInfoUserSigarEnable = serverInfo.getUserSigarEnable() != null && serverInfo.getUserSigarEnable();
+            serverInfoUseSigarEnable = serverInfo.getUseSigarEnable() != null && serverInfo.getUseSigarEnable();
         } else {
             // 缺省[是否采集服务器信息，默认false]
             String serverInfoEnableStr = StringUtils.trimToNull(properties.getProperty("monitoring.server-info.enable"));
             serverInfoEnable = !StringUtils.isBlank(serverInfoEnableStr) && Boolean.parseBoolean(serverInfoEnableStr);
-            // 缺省[与服务端或者代理端发服务器信息包的频率（秒），默认60秒，最小不能小于30秒]
+            // 缺省[与服务端或者代理端发送服务器信息包的频率（秒），默认60秒，最小不能小于30秒]
             String serverInfoRateStr = StringUtils.trimToNull(properties.getProperty("monitoring.server-info.rate"));
             serverInfoRate = StringUtils.isBlank(serverInfoRateStr) ? 60L : Long.parseLong(serverInfoRateStr);
             // 缺省[服务器本机ip地址，默认：自动获取]
             serverInfoIp = StringUtils.trimToNull(properties.getProperty("monitoring.server-info.ip"));
             // 缺省[是否使用sigar采集服务器信息，默认：false]
-            String serverInfoUserSigarEnableStr = StringUtils.trimToNull(properties.getProperty("monitoring.server-info.user-sigar-enable"));
-            serverInfoUserSigarEnable = StringUtils.isNotBlank(serverInfoUserSigarEnableStr) && Boolean.parseBoolean(serverInfoUserSigarEnableStr);
+            String serverInfoUseSigarEnableStr = StringUtils.trimToNull(properties.getProperty("monitoring.server-info.use-sigar-enable"));
+            serverInfoUseSigarEnable = StringUtils.isNotBlank(serverInfoUseSigarEnableStr) && Boolean.parseBoolean(serverInfoUseSigarEnableStr);
         }
         // 频率配置不正确
         long minimum = 30L;
@@ -584,7 +584,7 @@ public class ConfigLoader {
         }
         MonitoringServerInfoProperties monitoringServerInfoProperties = new MonitoringServerInfoProperties();
         monitoringServerInfoProperties.setEnable(serverInfoEnable);
-        monitoringServerInfoProperties.setUserSigarEnable(serverInfoUserSigarEnable);
+        monitoringServerInfoProperties.setUseSigarEnable(serverInfoUseSigarEnable);
         monitoringServerInfoProperties.setRate(serverInfoRate);
         monitoringServerInfoProperties.setIp(serverInfoIp);
         MONITORING_PROPERTIES.setServerInfo(monitoringServerInfoProperties);

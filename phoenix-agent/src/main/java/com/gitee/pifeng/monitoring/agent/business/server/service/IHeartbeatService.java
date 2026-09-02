@@ -18,7 +18,7 @@ public interface IHeartbeatService {
 
     /**
      * <p>
-     * 给服务端发心跳包
+     * 给服务端发送心跳包
      * </p>
      *
      * @param heartbeatPackage 心跳包对象

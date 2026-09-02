@@ -34,7 +34,7 @@ public class JvmServiceImpl implements IJvmService {
 
     /**
      * <p>
-     * 给服务端发Java虚拟机信息包
+     * 给服务端发送Java虚拟机信息包
      * </p>
      *
      * @param jvmPackage Java虚拟机信息包
