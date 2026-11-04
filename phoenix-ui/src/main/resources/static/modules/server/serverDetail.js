@@ -686,7 +686,7 @@
                         // 进程的开始时间
                         var startTime = obj.startTime;
                         // 进程的累积CPU使用率
-                        var cpuLoadCumulative = obj.cpuLoadCumulative;
+                        var cpuLoadCumulative = obj.cpuLoadCumulative * 100;
                         // 进程的位数
                         var bitness = obj.bitness;
                         // 占用内存大小
