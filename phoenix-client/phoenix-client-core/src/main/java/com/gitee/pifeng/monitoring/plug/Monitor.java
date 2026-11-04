@@ -97,8 +97,7 @@ public class Monitor {
      */
     @SneakyThrows
     public static MonitoringProperties start(MonitoringProperties monitoringProperties) {
-        run(null, null, monitoringProperties);
-        return monitoringProperties;
+        return run(null, null, monitoringProperties);
     }
 
     /**
