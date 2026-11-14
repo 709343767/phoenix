@@ -21,6 +21,7 @@ import com.gitee.pifeng.monitoring.plug.core.InstanceGenerator;
 import com.google.common.collect.Sets;
 import lombok.SneakyThrows;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.Charset;
@@ -72,7 +73,7 @@ public class ServerPackageConstructor extends AbstractPackageConstructor {
         if (CollectionUtils.isEmpty(timeChain)) {
             timeChain = Sets.newLinkedHashSet();
         }
-        String ip = ConfigLoader.getMonitoringProperties().getServerInfo().getIp() == null ? NetUtils.getLocalIp() : ConfigLoader.getMonitoringProperties().getServerInfo().getIp();
+        String ip = StringUtils.isBlank(ConfigLoader.getMonitoringProperties().getServerInfo().getIp()) ? NetUtils.getLocalIp() : ConfigLoader.getMonitoringProperties().getServerInfo().getIp();
         networkChain.add(ip);
         chain.setNetworkChain(networkChain);
         instanceChain.add(InstanceGenerator.getInstanceId());
@@ -107,7 +108,7 @@ public class ServerPackageConstructor extends AbstractPackageConstructor {
         // 应用服务器类型
         pkg.setAppServerType(AppServerDetectorUtils.getAppServerTypeEnum());
         // IP地址
-        String ip = ConfigLoader.getMonitoringProperties().getServerInfo().getIp() == null ? NetUtils.getLocalIp() : ConfigLoader.getMonitoringProperties().getServerInfo().getIp();
+        String ip = StringUtils.isBlank(ConfigLoader.getMonitoringProperties().getServerInfo().getIp()) ? NetUtils.getLocalIp() : ConfigLoader.getMonitoringProperties().getServerInfo().getIp();
         pkg.setIp(ip);
         // 计算机名
         pkg.setComputerName(OsUtils.getComputerName());

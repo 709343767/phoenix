@@ -5,6 +5,7 @@ import com.gitee.pifeng.monitoring.common.constant.monitortype.MonitorTypeEnums;
 import com.gitee.pifeng.monitoring.common.dto.HeartbeatPackage;
 import com.gitee.pifeng.monitoring.common.dto.ServerPackage;
 import com.gitee.pifeng.monitoring.common.util.server.NetUtils;
+import com.gitee.pifeng.monitoring.plug.core.ConfigLoader;
 import com.gitee.pifeng.monitoring.plug.core.InstanceGenerator;
 import com.gitee.pifeng.monitoring.server.business.server.component.HeartbeatAspect;
 import com.gitee.pifeng.monitoring.server.business.server.component.ServerAspect;
@@ -131,7 +132,7 @@ public class LinkMonitor implements ILinkListener {
                 return;
             }
             // 服务端IP
-            String ip = NetUtils.getLocalIp();
+            String ip = StringUtils.isBlank(ConfigLoader.getMonitoringProperties().getServerInfo().getIp()) ? NetUtils.getLocalIp() : ConfigLoader.getMonitoringProperties().getServerInfo().getIp();
             String rootNodeTime = String.valueOf(System.currentTimeMillis());
             LinkedHashSet<String> networkChain = serverPackage.getChain().getNetworkChain();
             LinkedHashSet<String> timeChain = serverPackage.getChain().getTimeChain();
