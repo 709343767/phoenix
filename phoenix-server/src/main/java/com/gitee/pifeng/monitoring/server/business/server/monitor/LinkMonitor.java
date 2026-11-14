@@ -132,7 +132,7 @@ public class LinkMonitor implements ILinkListener {
                 return;
             }
             // 服务端IP
-            String ip = ConfigLoader.getMonitoringProperties().getServerInfo().getIp() == null ? NetUtils.getLocalIp() : ConfigLoader.getMonitoringProperties().getServerInfo().getIp();
+            String ip = StringUtils.isBlank(ConfigLoader.getMonitoringProperties().getServerInfo().getIp()) ? NetUtils.getLocalIp() : ConfigLoader.getMonitoringProperties().getServerInfo().getIp();
             String rootNodeTime = String.valueOf(System.currentTimeMillis());
             LinkedHashSet<String> networkChain = serverPackage.getChain().getNetworkChain();
             LinkedHashSet<String> timeChain = serverPackage.getChain().getTimeChain();
