@@ -1,6 +1,6 @@
 <div align="center">
 
-# Phoenix Monitoring Platform
+# Phoenix (Fenix) Monitoring Platform
 
 **A flexible and configurable open-source monitoring platform integrating monitoring, alerting, and notification**
 
@@ -45,7 +45,7 @@
 
 ## 💡 Introduction
 
-**Phoenix** is a flexible and configurable open-source monitoring platform designed for monitoring applications, servers, network devices, Docker, databases, networks, TCP ports, and HTTP interfaces. By collecting, aggregating, and analyzing monitoring data in real time, it pushes alert notifications immediately upon detecting anomalies, and provides a visual system for configuration, management, and viewing.
+**Phoenix (Fenix)** is a flexible and configurable open-source monitoring platform. Open Source (1.x) focuses on applications, servers, databases, network connectivity, TCP ports, and HTTP interfaces; Commercial 2.x extends it with Docker, network device SNMP, network topology, online diagnostics, and more; Commercial 3.x (Fenix) further provides AI-powered analysis, remote commands, and other capabilities. By collecting, aggregating, and analyzing monitoring data in real time, it pushes alert notifications immediately upon detecting anomalies, and provides a visual system for configuration, management, and viewing.
 
 > Open source does not mean free of restrictions. Secondary development based on Phoenix is allowed, but the logo, name, and copyright must not be modified.
 
@@ -57,55 +57,63 @@ Phoenix has passed the **GitCode G-Star Graduation Project Certification**.
 
 ## ✨ Key Features
 
-- **🖥️ Full-Stack Monitoring** — One-stop monitoring from applications to infrastructure, see [Feature Comparison](#-feature-comparison) for details
-- **⚡ Real-Time Alerting** — Multi-channel notifications + four-level alerting mechanism (INFO/WARN/ERROR/FATAL)
-- **🔧 Flexible Configuration** — Flexible alert definition engine with dynamically adjustable monitoring strategies
-- **🌐 Distributed Architecture** — Supports cluster deployment; agents can be deployed on jump servers to bridge network barriers
-- **🔒 Data Security** — Supports encrypted data transmission to ensure monitoring data security
+- **🖥️ Full-Stack Monitoring** — Servers, Java applications (JVM / instance status / business instrumentation), databases, Ping, TCP ports, and HTTP interfaces
+- **⚡ Real-Time Alerting** — Email / SMS notifications + four-level alerting mechanism (INFO/WARN/ERROR/FATAL)
+- **🔧 Flexible Configuration** — Alert definition engine + dynamic monitoring configuration adjustment
+- **🌐 Distributed Architecture** — Server / Agent / UI deployed separately, supporting clustering and distributed locks; agents can relay data from jump servers
+- **🔒 Data Security** — Encrypted message transmission to ensure monitoring data security
 - **🐳 Containerized Deployment** — One-click deployment with Docker / Docker Compose, installation completed in 10 minutes
 - **📱 Multi-Platform Support** — Web interface supports both desktop and mobile devices
-- **🔄 Dynamic Thread Pool** — View and modify thread pool parameters at runtime, supporting 7 queue types, 6 rejection policies + SPI extension
-- **📡 High Extensibility** — Multi-protocol communication architecture, extensible to monitor programs written in other programming languages
+- **📦 Lightweight Integration** — Plain Java, Spring Boot, and Spring MVC client integration
+- **🚀 Commercial Extensions** — Docker, SNMP, topology maps, dynamic thread pool, Arthas, remote commands, AI-powered analysis, etc. See [Feature Comparison](#-feature-comparison)
 
 ## 🔍 Feature Comparison
 
-Phoenix offers two editions: **Open Source (1.x)** and **Commercial (2.x)**. The open source edition includes core monitoring capabilities, suitable for personal learning and small projects. The commercial edition extends with Docker monitoring, network device management, online diagnostics, dynamic thread pool, slow SQL monitoring, enterprise notification channels, business exception log collection, and other advanced features, suitable for enterprise production environments.
+Phoenix offers three editions: **Open Source (1.x)**, **Commercial (2.x)**, and **Commercial (3.x, Fenix)**. The open source edition includes core monitoring capabilities, suitable for personal learning and small projects. Commercial 2.x extends the open source edition with Docker, network devices, topology maps, dynamic thread pool, Arthas online diagnostics, enterprise notification channels, and more. Commercial 3.x (Fenix) is rebuilt on Java 21 / Spring Boot 4 and further adds in-depth server metrics, remote commands and web terminal, AI-powered analysis, gRPC communication, and other advanced features, suitable for enterprise production environments.
 
 > 💰 Marks indicate commercial edition exclusive paid features.
 
-| Module | Feature | Monitoring Content | Open Source (1.x) | Commercial (2.x) |
-|:-------|:--------|:-------------------|:-----------------:|:-----------------:|
-| **Server Monitoring** | Server Resource Monitoring | Online status, OS, CPU, load average, memory, disk, NIC, battery, sensors, processes | ✅ | ✅ |
-| **Java Application Monitoring** | JVM Monitoring | JVM overview, memory, threads, class loading, GC | ✅ | ✅ |
-| | Application Instance Status Monitoring | Online status | ✅ | ✅ |
-| | Business Instrumentation Monitoring | Business instrumentation | ✅ | ✅ |
-| | Dynamic Thread Pool Monitoring & Management | Thread pool parameter viewing and dynamic modification | ❌ | 💰 |
-| | Arthas Online JVM Diagnostics | Online JVM diagnostics | ❌ | 💰 |
-| **Network Monitoring** | HTTP Interface Monitoring | Interface availability | ✅ | ✅ |
-| | TCP Port Monitoring | Telnet port status | ✅ | ✅ |
-| | Ping Network Connectivity Monitoring | Network connectivity | ✅ | ✅ |
-| | Network Device SNMP Monitoring | Switches, routers, etc.: online status, system info, interface info | ❌ | 💰 |
-| **Database Monitoring** | Database Connection Status Monitoring | MySQL, Oracle, Redis, MongoDB online status and sessions | ✅ | ✅ |
-| | Database Slow SQL Monitoring | MySQL slow SQL, Oracle slow SQL and tablespace | ❌ | 💰 |
-| **Docker Monitoring** | Full Docker Monitoring | Service status, containers, images, events, resource statistics | ❌ | 💰 |
-| **Alert System** | Alert Notification (Email / SMS) | Four-level alerts (INFO/WARN/ERROR/FATAL) | ✅ | ✅ |
-| | Alert Notification (DingTalk / WeCom / Feishu) | Multi-channel enterprise notification | ❌ | 💰 |
-| | Alert Count Configuration (Failure / Recovery) | Failure and recovery alert count thresholds | ❌ | 💰 |
-| **Log Management** | Operation Log Management | Operation log recording, viewing, management | ✅ | ✅ |
-| | Exception Log Management | Exception log recording, viewing, management | ✅ | ✅ |
-| | Business Exception Log Collection | Client-side exception log collection | ❌ | 💰 |
-| **Communication Architecture** | HTTP Communication | Basic HTTP communication | ✅ | ✅ |
-| | WebSocket Communication | WebSocket real-time communication | ❌ | 💰 |
-| **Visual Interface** | Basic Monitoring Dashboard | Desktop and mobile monitoring panels | ✅ | ✅ |
-| | Docker Management Interface | Docker management and monitoring pages | ❌ | 💰 |
-| | Network Device Management Interface | Network device management and monitoring pages | ❌ | 💰 |
-| | Network Topology Map | Topology map display | ❌ | 💰 |
-| | Web Terminal Emulation | Online terminal | ❌ | 💰 |
-| | Arthas Diagnostics Interface | Arthas diagnostics operation pages | ❌ | 💰 |
+| Module | Feature | Monitoring Content | Open Source (1.x) | Commercial (2.x) | Commercial (3.x) |
+|:-------|:--------|:-------------------|:-----------------:|:-----------------:|:-----------------:|
+| **Server Monitoring** | Server Resource Monitoring | Online status, OS, CPU, load average, memory, disks and partitions, file systems, NIC, battery, sensors, power supply, GPU, processes | ✅ | ✅ | ✅ |
+| | In-Depth Server Metrics | Physical disks, LVM volume groups/logical volumes, Cgroup, DNS/network parameters, desktop windows, installed applications, services, peripherals (monitors/printers/Bluetooth/USB/sound cards), virtualization, protocol statistics | ❌ | ❌ | 💰 |
+| **Java Application Monitoring** | JVM Monitoring | JVM overview, memory, threads, class loading, GC | ✅ | ✅ | ✅ |
+| | Application Instance Status Monitoring | Online status | ✅ | ✅ | ✅ |
+| | Business Instrumentation Monitoring | Business instrumentation | ✅ | ✅ | ✅ |
+| | Dynamic Thread Pool Monitoring & Management | Thread pool parameter viewing and dynamic modification | ❌ | 💰 | 💰 |
+| | Arthas Online JVM Diagnostics | Online JVM diagnostics | ❌ | 💰 | ❌ |
+| **Network Monitoring** | HTTP Interface Monitoring | Interface availability | ✅ | ✅ | ✅ |
+| | TCP Port Monitoring | Telnet port status | ✅ | ✅ | ✅ |
+| | Ping Network Connectivity Monitoring | Network connectivity | ✅ | ✅ | ✅ |
+| | Network Device SNMP Monitoring | Switches, routers, etc.: online status, system info, interface info | ❌ | 💰 | 💰 |
+| **Database Monitoring** | Database Connection Status Monitoring | MySQL, Oracle, Redis, MongoDB online status, sessions and runtime info | ✅ | ✅ | ✅ |
+| | Database Slow SQL Monitoring | MySQL slow SQL, Oracle slow SQL | ❌ | 💰 | 💰 |
+| | Oracle Tablespace Monitoring | Tablespace usage and alerting | ✅ | ✅ | ✅ |
+| **Docker Monitoring** | Full Docker Monitoring | Service status, containers, images, events, resource statistics | ❌ | 💰 | 💰 |
+| **Alert System** | Alert Notification (Email / SMS) | Four-level alerts (INFO/WARN/ERROR/FATAL) | ✅ | ✅ | ✅ |
+| | Alert Notification (DingTalk / WeCom / Feishu) | Multi-channel enterprise notification | ❌ | 💰 | 💰 |
+| | Alert Count Configuration (Failure / Recovery) | Failure and recovery alert count thresholds | ❌ | 💰 | 💰 |
+| **Log Management** | Operation Log Management | Operation log recording, viewing, management | ✅ | ✅ | ✅ |
+| | Exception Log Management | Exception log recording, viewing, management | ✅ | ✅ | ✅ |
+| | Business Exception Log Collection | Client-side exception log collection | ❌ | 💰 | 💰 |
+| **Remote Operations** | Remote Commands | Active commands, command archive | ❌ | ❌ | 💰 |
+| | Web Terminal Emulation | Online terminal based on xterm.js (remote command execution) | ❌ | ❌ | 💰 |
+| **Topology & Assets** | Topology Maps | Server, application, network, port, and interface topology | ❌ | 💰 | 💰 |
+| **AI Capabilities** | Intelligent Analysis Assistant | AI-powered monitoring analysis based on AgentScope (AG-UI protocol) | ❌ | ❌ | 💰 |
+| **Communication Architecture** | HTTP Communication | Basic HTTP communication | ✅ | ✅ | ✅ |
+| | WebSocket Communication | WebSocket real-time communication | ❌ | 💰 | ❌ |
+| | gRPC Communication | HTTP/2 + Protobuf, switchable with HTTP | ❌ | ❌ | 💰 |
+| | Encrypted Data Transmission | Message encryption/decryption (AES / SM4) | ✅ | ✅ | ✅ |
+| **Visual Interface** | Basic Monitoring Dashboard | Desktop and mobile monitoring panels | ✅ | ✅ | ✅ |
+| | Advanced Management UI | Advanced management pages for Docker, network devices, and topology | ❌ | 💰 | 💰 |
+
+> Commercial 3.x (Fenix) uses gRPC / HTTP dual protocols and no longer provides WebSocket. Its Arthas UI and fields are legacy leftovers with no server-side implementation, so the feature is not actually available. WebSocket and Arthas online diagnostics remain available in commercial 2.x.
 
 > 📮 **Get Commercial Edition**: To obtain a commercial license or learn more details, please refer to the [《Commercial Pricing Plan》](doc/商用版定价方案.pdf) or contact the author (WeChat: `pifengeclipse`). For more contact methods, see [Contact Us](#-contact-us).
 
 ## 🏗️ System Architecture
+
+The open source edition consists of a client SDK and three independently deployable processes: `phoenix-client` (embedded in business applications) collects server, JVM, and business instrumentation data; `phoenix-agent` is an optional data relay proxy that can be deployed on a jump server to bridge network isolation; `phoenix-server` handles data processing, monitoring jobs, and alerting; `phoenix-ui` provides the web management interface. All components communicate over HTTP by default and support clustered deployment.
 
 ![System Architecture](doc/系统架构图.png)
 
@@ -113,18 +121,17 @@ Phoenix offers two editions: **Open Source (1.x)** and **Commercial (2.x)**. The
 
 | Category | Technology |
 |:---------|:-----------|
-| **Core Framework** | Spring Boot, Netty |
+| **Core Framework** | Spring Boot 2.3.12, Spring MVC |
 | **Security Framework** | Spring Security, Spring Session |
 | **Persistence Layer** | MyBatis-Plus, Alibaba Druid |
 | **Task Scheduling** | JUC, Spring Task, Quartz |
 | **Server Monitoring** | Sigar / OSHI |
-| **Network Device Monitoring** | SNMP4J |
-| **Docker Monitoring** | docker-java |
-| **JVM Diagnostics** | Alibaba Arthas |
 | **Encryption** | Bouncy Castle |
-| **Frontend Framework** | Layui, ECharts, jtopo (topology), xterm (terminal emulation) |
-| **Utility Libraries** | Hutool, FastJSON, Jackson, Apache Commons (IO/Collections/Net) |
+| **Frontend Framework** | Layui, ECharts |
+| **Utility Libraries** | Hutool, FastJSON, Jackson, Apache Commons (IO/Net) |
 | **Others** | EasyPOI (export), Knife4j (API documentation) |
+
+> Commercial 2.x additionally uses Netty (WebSocket), SNMP4J, docker-java, Arthas, jtopo, and xterm; Commercial 3.x uses gRPC (built on Netty), SNMP4J, docker-java, jtopo, and xterm, with no WebSocket or Arthas.
 
 ## 📦 Project Structure
 
@@ -132,14 +139,13 @@ Phoenix offers two editions: **Open Source (1.x)** and **Commercial (2.x)**. The
 phoenix (Monitoring Platform)
 ├── phoenix-common (Common Modules)
 │   ├── phoenix-common-core                   -- Core common: thread pool, data models, utilities, encryption/decryption
-│   ├── phoenix-common-netty                  -- Netty communication: WebSocket, persistent connections, reconnection
-│   └── phoenix-common-web                    -- Web common: REST API infrastructure
+│   └── phoenix-common-web                    -- Web common: HTTP message encryption/decryption, Undertow customization, REST infrastructure
 ├── phoenix-client (Client SDK)
-│   ├── phoenix-client-core                   -- Core: data collection, heartbeat, business instrumentation
+│   ├── phoenix-client-core                   -- Core: server/JVM collection, heartbeat, business instrumentation
 │   ├── phoenix-client-spring-boot-starter    -- Spring Boot auto-configuration
 │   └── phoenix-client-spring-mvc-integrator  -- Spring MVC adapter
-├── phoenix-agent                             -- Agent: server/Docker/SNMP data collection
-├── phoenix-server                            -- Server: data processing, alert engine, configuration distribution
+├── phoenix-agent                             -- Agent: client data relay, deployable on jump servers
+├── phoenix-server                            -- Server: data processing, monitoring jobs, alert engine, monitoring configuration management
 ├── phoenix-ui                                -- Visual UI: web management interface
 ├── doc                                       -- Documentation: architecture diagrams, screenshots, DB scripts, deployment scripts, technical blog
 └── mvn                                       -- Maven packaging scripts
@@ -190,7 +196,7 @@ After installation, visit: `http://<ui-ip>/phoenix-ui/index`, default accounts: 
 
 ## 📥 Client Integration
 
-Latest stable version on Maven Central: **1.2.7.RELEASE**
+Latest stable version on Maven Central: **1.2.7.RELEASE** (current source iteration version: `1.2.7.RELEASE-CR1`)
 
 **Plain Java application:**
 ```xml
@@ -218,6 +224,8 @@ Latest stable version on Maven Central: **1.2.7.RELEASE**
     <version>1.2.7.RELEASE</version>
 </dependency>
 ```
+
+Clients report collected data to `phoenix-server` over HTTP, or optionally relay through `phoenix-agent`.
 
 ## 📸 Screenshots
 
