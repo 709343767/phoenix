@@ -341,7 +341,8 @@ Maven Central 最新稳定版本：**1.2.7.RELEASE**
 
 | 演示地址 | 账号 | 密码 |
 |:---------|:-----|:-----|
-| [http://1.14.155.72/phoenix-ui/index](http://1.14.155.72/phoenix-ui/index) | guest | guest123 |
+| 开源版：[http://1.14.155.72/phoenix-ui/index](http://1.14.155.72/phoenix-ui/index) | guest | guest123 |
+| 收费版：[http://43.139.191.106/fenix-ui/index](http://43.139.191.106/fenix-ui/index) | guest | guest123 |
 
 > **提示：** 演示环境仅提供查看权限，访问速度受限于服务器带宽。
 

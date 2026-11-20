@@ -341,7 +341,8 @@ Over **60+** in-depth technical articles (continuously updated), covering archit
 
 | Demo URL | Account | Password |
 |:---------|:--------|:---------|
-| [http://1.14.155.72/phoenix-ui/index](http://1.14.155.72/phoenix-ui/index) | guest | guest123 |
+| Open Source: [http://1.14.155.72/phoenix-ui/index](http://1.14.155.72/phoenix-ui/index) | guest | guest123 |
+| Commercial: [http://43.139.191.106/fenix-ui/index](http://43.139.191.106/fenix-ui/index) | guest | guest123 |
 
 > **Note:** The demo environment provides view-only access, and access speed is limited by server bandwidth.
 
